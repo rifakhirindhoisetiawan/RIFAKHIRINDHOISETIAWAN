@@ -126,9 +126,21 @@
         border: 1px solid #e3e6ec;
         border-radius: 14px;
         padding: 12px 14px;
-        color: #c3c8d1;
+        color: #1f2937;
         font-size: 13px;
         background: #fafbfc;
+      }
+      .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        font-size: 13px;
+        color: #1f2937;
+        font-family: inherit;
+      }
+      .search-box input::placeholder {
+        color: #c3c8d1;
       }
       .search-box svg {
         flex-shrink: 0;
@@ -197,7 +209,7 @@
         }
       }
 
-      /* Modul 1 Aktif */
+      /* Modul Aktif */
       .item.active-modul {
         cursor: pointer;
         text-decoration: none;
@@ -327,34 +339,40 @@
             <circle cx="11" cy="11" r="7" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
-          Cari judul aplikasi
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Cari judul aplikasi..."
+          />
         </div>
       </div>
 
       <div class="menu-wrap">
         <div class="section-label">Modul Tersedia</div>
-        <div class="grid">
-          <!-- Modul 1 Aktif & Terhubung -->
-          <a href="modul01.html" class="item active-modul">
+        <div class="grid" id="moduleGrid">
+          <!-- Modul 1 -->
+          <a href="modul01.html" class="item active-modul" data-name="modul 1">
             <div class="icon-tile g-a">01</div>
             <span>Modul 1</span>
           </a>
 
-          <div class="item">
-            <div class="icon-tile g-b">
-              ＋
-              <div class="soon-tag">soon</div>
-            </div>
+          <!-- Modul 2 -->
+          <a href="modul02.html" class="item active-modul" data-name="modul 2">
+            <div class="icon-tile g-b">02</div>
             <span>Modul 2</span>
-          </div>
-          <div class="item">
+          </a>
+
+          <!-- Modul 3 -->
+          <div class="item" data-name="modul 3">
             <div class="icon-tile g-c">
               ＋
               <div class="soon-tag">soon</div>
             </div>
             <span>Modul 3</span>
           </div>
-          <div class="item">
+
+          <!-- Modul 4 -->
+          <div class="item" data-name="modul 4">
             <div class="icon-tile g-d">
               ＋
               <div class="soon-tag">soon</div>
@@ -362,28 +380,35 @@
             <span>Modul 4</span>
           </div>
 
-          <div class="item">
+          <!-- Modul 5 -->
+          <div class="item" data-name="modul 5">
             <div class="icon-tile g-e">
               ＋
               <div class="soon-tag">soon</div>
             </div>
             <span>Modul 5</span>
           </div>
-          <div class="item">
+
+          <!-- Modul 6 -->
+          <div class="item" data-name="modul 6">
             <div class="icon-tile g-f">
               ＋
               <div class="soon-tag">soon</div>
             </div>
             <span>Modul 6</span>
           </div>
-          <div class="item">
+
+          <!-- Modul 7 -->
+          <div class="item" data-name="modul 7">
             <div class="icon-tile g-g">
               ＋
               <div class="soon-tag">soon</div>
             </div>
             <span>Modul 7</span>
           </div>
-          <div class="item">
+
+          <!-- Modul 8 -->
+          <div class="item" data-name="modul 8">
             <div class="icon-tile g-h">
               ＋
               <div class="soon-tag">soon</div>
@@ -393,5 +418,24 @@
         </div>
       </div>
     </div>
+
+    <script>
+      const searchInput = document.getElementById("searchInput");
+      const moduleGrid = document.getElementById("moduleGrid");
+      const items = moduleGrid.getElementsByClassName("item");
+
+      searchInput.addEventListener("input", function () {
+        const filter = searchInput.value.toLowerCase().trim();
+
+        for (let i = 0; i < items.length; i++) {
+          const name = items[i].getAttribute("data-name").toLowerCase();
+          if (name.includes(filter)) {
+            items[i].style.display = "";
+          } else {
+            items[i].style.display = "none";
+          }
+        }
+      });
+    </script>
   </body>
 </html>
