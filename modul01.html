@@ -226,13 +226,20 @@
       }
       .slot {
         position: relative;
-        background: #ffffff;
+        background: #f3f4f6;
         border-radius: 0px;
         display: flex;
         align-items: center;
         justify-content: center;
         overflow: hidden;
         cursor: pointer;
+        transition:
+          transform 0.1s ease,
+          border 0.1s ease;
+      }
+      .slot.drag-over {
+        border: 2px dashed #6366f1;
+        background: #eef2ff;
       }
       .slot img {
         position: absolute;
@@ -240,8 +247,10 @@
         height: 100%;
         object-fit: cover;
         display: block;
-        user-select: none;
-        -webkit-user-drag: none;
+        cursor: grab;
+      }
+      .slot img:active {
+        cursor: grabbing;
       }
       .slot .placeholder {
         display: flex;
@@ -252,6 +261,7 @@
         font-size: 11px;
         font-weight: 700;
         z-index: 2;
+        pointer-events: none;
       }
       .slot .placeholder svg {
         color: #6366f1;
@@ -316,7 +326,6 @@
         </div>
       </div>
 
-      <!-- Pilihan khusus layout saat jumlah foto = 3 -->
       <div class="layout-picker" id="layoutPicker">
         <button class="layout-btn active" data-layout="left-big">
           Kiri Besar
@@ -385,7 +394,8 @@
       let images = {};
       let activeSlot = null;
       let currentAspect = "1/1";
-      let currentLayout3 = "left-big"; // Pilihan layout khusus 3 foto
+      let currentLayout3 = "left-big";
+      let draggedIdx = null;
 
       const gridFrame = document.getElementById("gridFrame");
       const fileInput = document.getElementById("fileInput");
@@ -429,38 +439,79 @@
           slot.className = "slot";
           slot.dataset.slot = idx;
 
-          // Atur posisi grid khusus jika count === 3
           if (count === 3) {
             if (currentLayout3 === "left-big") {
-              if (idx === 0)
-                slot.style.gridArea = "1 / 1 / 3 / 2"; // Memanjang ke bawah di kiri
+              if (idx === 0) slot.style.gridArea = "1 / 1 / 3 / 2";
               else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
               else if (idx === 2) slot.style.gridArea = "2 / 2 / 3 / 3";
             } else if (currentLayout3 === "right-big") {
               if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 2";
               else if (idx === 1) slot.style.gridArea = "2 / 1 / 3 / 2";
-              else if (idx === 2) slot.style.gridArea = "1 / 2 / 3 / 3"; // Memanjang ke bawah di kanan
+              else if (idx === 2) slot.style.gridArea = "1 / 2 / 3 / 3";
             } else if (currentLayout3 === "top-big") {
-              if (idx === 0)
-                slot.style.gridArea = "1 / 1 / 2 / 3"; // Melebar ke samping di atas
+              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 3";
               else if (idx === 1) slot.style.gridArea = "2 / 1 / 3 / 2";
               else if (idx === 2) slot.style.gridArea = "2 / 2 / 3 / 3";
             } else if (currentLayout3 === "bottom-big") {
               if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 2";
               else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
-              else if (idx === 2) slot.style.gridArea = "2 / 1 / 3 / 3"; // Melebar ke samping di bawah
+              else if (idx === 2) slot.style.gridArea = "2 / 1 / 3 / 3";
             }
           }
 
           if (images[idx]) {
             const img = document.createElement("img");
             img.src = images[idx];
+            img.draggable = true;
+
+            // Event Drag and Drop untuk memindah/menukar posisi foto
+            img.addEventListener("dragstart", (e) => {
+              draggedIdx = idx;
+              e.dataTransfer.setData("text/plain", idx);
+            });
+
+            slot.addEventListener("dragover", (e) => {
+              e.preventDefault();
+              slot.classList.add("drag-over");
+            });
+
+            slot.addEventListener("dragleave", () => {
+              slot.classList.remove("drag-over");
+            });
+
+            slot.addEventListener("drop", (e) => {
+              e.preventDefault();
+              slot.classList.remove("drag-over");
+              let targetIdx = idx;
+              if (draggedIdx !== null && draggedIdx !== targetIdx) {
+                let temp = images[draggedIdx];
+                images[draggedIdx] = images[targetIdx];
+                images[targetIdx] = temp;
+                renderGrid();
+                checkReady();
+              }
+            });
+
             slot.appendChild(img);
           } else {
             const ph = document.createElement("div");
             ph.className = "placeholder";
             ph.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`;
             slot.appendChild(ph);
+
+            slot.addEventListener("dragover", (e) => {
+              e.preventDefault();
+            });
+            slot.addEventListener("drop", (e) => {
+              e.preventDefault();
+              let targetIdx = idx;
+              if (draggedIdx !== null && draggedIdx !== targetIdx) {
+                images[targetIdx] = images[draggedIdx];
+                delete images[draggedIdx];
+                renderGrid();
+                checkReady();
+              }
+            });
           }
 
           slot.addEventListener("click", () => {
