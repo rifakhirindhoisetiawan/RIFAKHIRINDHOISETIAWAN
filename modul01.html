@@ -107,6 +107,7 @@
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
+        flex: 1;
       }
       .grid-frame {
         width: 100%;
@@ -128,7 +129,6 @@
         justify-content: center;
         overflow: hidden;
         cursor: pointer;
-        /* Memastikan setiap slot selalu kotak sempurna (1:1) di dalam grid */
         aspect-ratio: 1 / 1;
       }
       .slot.drag-over {
@@ -177,6 +177,10 @@
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
+        position: sticky;
+        bottom: 0;
+        background: #ffffff;
+        z-index: 10;
       }
       .btn-download {
         width: 100%;
@@ -236,7 +240,7 @@
       const MAX_COUNT = 25;
 
       let count = 4;
-      let images = {}; // slotIndex -> dataURL
+      let images = {};
       let activeSlot = null;
       let dragSrc = null;
 
@@ -255,7 +259,6 @@
 
       function renderGrid() {
         const { cols } = gridDims(count);
-        // Mengatur kolom grid agar rata dan fleksibel
         gridFrame.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
         gridFrame.innerHTML = "";
 
