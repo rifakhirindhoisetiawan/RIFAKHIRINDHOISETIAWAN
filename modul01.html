@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Photo Grid Maker</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #ffffff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 0;
+      }
+
+      .app {
+        width: 100%;
+        max-width: 100%;
+        background: #ffffff;
+        border-radius: 0;
+        box-shadow: none;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      @media (min-width: 768px) {
+        .app {
+          max-width: 800px;
+          margin: 0 auto;
+          min-height: auto;
+          padding: 24px 0;
+        }
+      }
+
+      /* ===== COUNT STEPPER ===== */
+      .stepper-row {
+        padding: 22px 20px 18px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .stepper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1.5px solid #e3e6ec;
+        border-radius: 16px;
+        padding: 10px 14px;
+        background: #fafbfc;
+      }
+      .stepper .label {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: #6b7280;
+      }
+      .stepper .value {
+        font-size: 15px;
+        font-weight: 800;
+        color: #1f2937;
+        min-width: 26px;
+        text-align: center;
+      }
+      .stepper .btns {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .step-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(135deg, #60a5fa, #6366f1);
+        color: #fff;
+        font-size: 16px;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+      }
+      .step-btn:disabled {
+        background: #d9dde3;
+        box-shadow: none;
+        cursor: not-allowed;
+      }
+
+      /* ===== CANVAS AREA ===== */
+      .canvas-wrap {
+        padding: 0 20px 16px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .grid-frame {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 16px;
+        overflow: hidden;
+        background: #f4f5f7;
+        display: grid;
+        gap: 6px;
+        padding: 6px;
+        border: 1.5px solid #e3e6ec;
+      }
+      .slot {
+        position: relative;
+        background: #f4f5f7;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        cursor: pointer;
+        /* Memastikan setiap slot selalu kotak sempurna (1:1) di dalam grid */
+        aspect-ratio: 1 / 1;
+      }
+      .slot.drag-over {
+        outline: 2px dashed #6366f1;
+        outline-offset: -2px;
+      }
+      .slot img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        pointer-events: none;
+      }
+      .slot .placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        color: #b0b5bf;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .slot .placeholder svg {
+        color: #6366f1;
+      }
+      .slot .remove {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.55);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        cursor: pointer;
+        z-index: 2;
+      }
+
+      /* ===== ACTION BUTTON ===== */
+      .actions {
+        padding: 4px 20px 24px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .btn-download {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #60a5fa, #6366f1);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 8px 18px rgba(99, 102, 241, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .btn-download:disabled {
+        background: #d9dde3;
+        box-shadow: none;
+        cursor: not-allowed;
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="stepper-row">
+        <div class="stepper">
+          <span class="label">Jumlah Foto</span>
+          <div class="btns">
+            <button class="step-btn" id="minusBtn">−</button>
+            <span class="value" id="countValue">4</span>
+            <button class="step-btn" id="plusBtn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <div class="grid-frame" id="gridFrame"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-download" id="downloadBtn" disabled>Download</button>
+      </div>
+    </div>
+
+    <input type="file" id="fileInput" accept="image/*" />
+
+    <canvas id="hiddenCanvas" style="display: none"></canvas>
+
+    <script>
+      const MIN_COUNT = 1;
+      const MAX_COUNT = 25;
+
+      let count = 4;
+      let images = {}; // slotIndex -> dataURL
+      let activeSlot = null;
+      let dragSrc = null;
+
+      const gridFrame = document.getElementById("gridFrame");
+      const fileInput = document.getElementById("fileInput");
+      const downloadBtn = document.getElementById("downloadBtn");
+      const countValue = document.getElementById("countValue");
+      const minusBtn = document.getElementById("minusBtn");
+      const plusBtn = document.getElementById("plusBtn");
+
+      function gridDims(n) {
+        const cols = Math.ceil(Math.sqrt(n));
+        const rows = Math.ceil(n / cols);
+        return { cols, rows };
+      }
+
+      function renderGrid() {
+        const { cols } = gridDims(count);
+        // Mengatur kolom grid agar rata dan fleksibel
+        gridFrame.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+        gridFrame.innerHTML = "";
+
+        for (let idx = 0; idx < count; idx++) {
+          const slot = document.createElement("div");
+          slot.className = "slot";
+          slot.dataset.slot = idx;
+          slot.draggable = true;
+
+          if (images[idx]) {
+            const img = document.createElement("img");
+            img.src = images[idx];
+            const removeBtn = document.createElement("div");
+            removeBtn.className = "remove";
+            removeBtn.textContent = "✕";
+            removeBtn.onclick = (e) => {
+              e.stopPropagation();
+              delete images[idx];
+              renderGrid();
+              checkReady();
+            };
+            slot.appendChild(img);
+            slot.appendChild(removeBtn);
+          } else {
+            const ph = document.createElement("div");
+            ph.className = "placeholder";
+            ph.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`;
+            slot.appendChild(ph);
+          }
+
+          slot.onclick = () => {
+            activeSlot = idx;
+            fileInput.click();
+          };
+
+          slot.addEventListener("dragstart", (e) => {
+            dragSrc = idx;
+            e.dataTransfer.effectAllowed = "move";
+          });
+          slot.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            slot.classList.add("drag-over");
+          });
+          slot.addEventListener("dragleave", () => {
+            slot.classList.remove("drag-over");
+          });
+          slot.addEventListener("drop", (e) => {
+            e.preventDefault();
+            slot.classList.remove("drag-over");
+            const targetIdx = idx;
+            if (dragSrc === null || dragSrc === targetIdx) return;
+            const tmp = images[dragSrc];
+            if (images[targetIdx]) {
+              images[dragSrc] = images[targetIdx];
+            } else {
+              delete images[dragSrc];
+            }
+            if (tmp) {
+              images[targetIdx] = tmp;
+            } else {
+              delete images[targetIdx];
+            }
+            dragSrc = null;
+            renderGrid();
+            checkReady();
+          });
+
+          gridFrame.appendChild(slot);
+        }
+      }
+
+      function checkReady() {
+        const filled = Object.keys(images).filter((k) => k < count).length;
+        downloadBtn.disabled = filled === 0;
+      }
+
+      function updateCount(delta) {
+        const next = count + delta;
+        if (next < MIN_COUNT || next > MAX_COUNT) return;
+        count = next;
+        countValue.textContent = count;
+        minusBtn.disabled = count <= MIN_COUNT;
+        plusBtn.disabled = count >= MAX_COUNT;
+        Object.keys(images).forEach((k) => {
+          if (parseInt(k) >= count) delete images[k];
+        });
+        renderGrid();
+        checkReady();
+      }
+
+      minusBtn.addEventListener("click", () => updateCount(-1));
+      plusBtn.addEventListener("click", () => updateCount(1));
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file || activeSlot === null) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          images[activeSlot] = ev.target.result;
+          renderGrid();
+          checkReady();
+        };
+        reader.readAsDataURL(file);
+        fileInput.value = "";
+      });
+
+      downloadBtn.addEventListener("click", async () => {
+        const { cols, rows } = gridDims(count);
+        const size = 1200;
+
+        const canvas = document.getElementById("hiddenCanvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, size, size);
+
+        const cellW = size / cols;
+        const cellH = size / rows;
+
+        async function loadImg(src) {
+          return new Promise((res) => {
+            const img = new Image();
+            img.onload = () => res(img);
+            img.src = src;
+          });
+        }
+
+        for (let idx = 0; idx < count; idx++) {
+          if (!images[idx]) continue;
+          const img = await loadImg(images[idx]);
+          const col = idx % cols;
+          const row = Math.floor(idx / cols);
+
+          const x = col * cellW;
+          const y = row * cellH;
+          const w = cellW;
+          const h = cellH;
+
+          const imgRatio = img.width / img.height;
+          const cellRatio = w / h;
+          let sx, sy, sw, sh;
+          if (imgRatio > cellRatio) {
+            sh = img.height;
+            sw = sh * cellRatio;
+            sx = (img.width - sw) / 2;
+            sy = 0;
+          } else {
+            sw = img.width;
+            sh = sw / cellRatio;
+            sx = 0;
+            sy = (img.height - sh) / 2;
+          }
+
+          ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+        }
+
+        const link = document.createElement("a");
+        link.download = "photo-grid.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+
+      minusBtn.disabled = count <= MIN_COUNT;
+      plusBtn.disabled = count >= MAX_COUNT;
+      renderGrid();
+    </script>
+  </body>
+</html>
