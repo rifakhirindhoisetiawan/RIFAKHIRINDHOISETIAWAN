@@ -5,10 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Landing — Coming Soon</title>
 
-    <!-- Konfigurasi Ikon Home Screen -->
-    <link rel="apple-touch-icon" href="icon.jpg" />
-    <link rel="manifest" href="manifest.json" />
+    <!-- Konfigurasi Ikon Home Screen Menggunakan Foto WhatsApp Terbaru -->
+    <link
+      rel="apple-touch-icon"
+      href="WhatsApp Image 2026-08-02 at 16.12.39_3.jpeg"
+    />
+    <link
+      rel="icon"
+      type="image/jpeg"
+      href="WhatsApp Image 2026-08-02 at 16.12.39_3.jpeg"
+    />
     <meta name="theme-color" content="#ffffff" />
+
+    <!-- Inline Web App Manifest -->
+    <link
+      rel="manifest"
+      href='data:application/manifest+json,{
+      "name": "Landing App",
+      "short_name": "App",
+      "start_url": "index.html",
+      "display": "standalone",
+      "background_color": "#ffffff",
+      "theme_color": "#ffffff",
+      "icons": [{
+        "src": "WhatsApp Image 2026-08-02 at 16.12.39_3.jpeg",
+        "sizes": "512x512",
+        "type": "image/jpeg"
+      }]
+    }'
+    />
 
     <style>
       * {
