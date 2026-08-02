@@ -14,8 +14,9 @@
       html,
       body {
         width: 100%;
-        min-height: 100vh;
+        height: 100%;
         background: #ffffff;
+        overflow: hidden;
       }
 
       body {
@@ -33,31 +34,101 @@
         width: 100%;
         max-width: 480px;
         background: #ffffff;
-        border-radius: 0;
-        box-shadow: none;
-        overflow: hidden;
+        height: 100%;
         display: flex;
         flex-direction: column;
-        min-height: 100vh;
         position: relative;
-        padding-bottom: 70px;
       }
 
-      /* ===== TODO CONTAINER (GRID SYSTEM) ===== */
+      .hidden {
+        display: none !important;
+      }
+
+      /* ===== HALAMAN UTAMA (MENU MODUL) ===== */
+      .menu-view {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px 12px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 8px;
+        align-content: start;
+      }
+
+      @media (max-width: 480px) {
+        .menu-view {
+          padding: 16px 8px;
+          gap: 14px 6px;
+        }
+      }
+
+      .menu-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.15s ease;
+        min-width: 0;
+        border: none;
+        background: none;
+      }
+
+      .menu-item:hover {
+        transform: translateY(-2px);
+      }
+
+      .menu-box {
+        width: 100%;
+        aspect-ratio: 1;
+        max-width: 56px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 6px;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .menu-text {
+        font-size: 10px;
+        font-weight: 700;
+        color: #1f2937;
+        line-height: 1.2;
+        transition: 0.2s;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* ===== HALAMAN ISI TO-DO LIST ===== */
+      .content-view {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+      }
+
       .todo-wrap {
         flex: 1;
         overflow-y: auto;
-        padding: 24px 18px;
+        padding: 16px 12px 90px 12px;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 22px 12px;
+        gap: 16px 8px;
         align-content: start;
       }
 
       @media (max-width: 480px) {
         .todo-wrap {
-          grid-template-columns: repeat(4, 1fr);
-          gap: 18px 8px;
+          padding: 14px 8px 90px 8px;
+          gap: 14px 6px;
         }
       }
 
@@ -68,6 +139,7 @@
         text-align: center;
         cursor: pointer;
         transition: transform 0.15s ease;
+        min-width: 0;
       }
 
       .todo-item:hover {
@@ -80,60 +152,65 @@
 
       /* ===== KOTAK ICON GRADIENT ===== */
       .checkbox-box {
-        width: 60px;
-        height: 60px;
-        border-radius: 14px;
+        width: 100%;
+        aspect-ratio: 1;
+        max-width: 56px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 18px;
+        font-size: 15px;
         font-weight: 700;
         color: #ffffff;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         position: relative;
         transition: all 0.3s ease;
       }
 
       .todo-text {
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 700;
         color: #1f2937;
-        line-height: 1.3;
+        line-height: 1.2;
         transition: 0.2s;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
-      /* Palet Warna Gradient Sesuai Referensi */
-      .g-blue {
+      /* Palet Warna Gradient Berputar */
+      .g-1 {
         background: linear-gradient(135deg, #60a5fa, #6366f1);
-        box-shadow: 0 6px 14px rgba(99, 102, 241, 0.35);
+        box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
       }
-      .g-pink {
+      .g-2 {
         background: linear-gradient(135deg, #f472b6, #ec4899);
-        box-shadow: 0 6px 14px rgba(236, 72, 153, 0.35);
+        box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3);
       }
-      .g-green {
+      .g-3 {
         background: linear-gradient(135deg, #34d399, #10b981);
-        box-shadow: 0 6px 14px rgba(16, 185, 129, 0.35);
+        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
       }
-      .g-orange {
+      .g-4 {
         background: linear-gradient(135deg, #fbbf24, #f59e0b);
-        box-shadow: 0 6px 14px rgba(245, 158, 11, 0.35);
+        box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
       }
-      .g-purple {
+      .g-5 {
         background: linear-gradient(135deg, #a78bfa, #8b5cf6);
-        box-shadow: 0 6px 14px rgba(139, 92, 246, 0.35);
+        box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
       }
-      .g-teal {
+      .g-6 {
         background: linear-gradient(135deg, #2dd4bf, #14b8a6);
-        box-shadow: 0 6px 14px rgba(20, 184, 166, 0.35);
+        box-shadow: 0 4px 10px rgba(20, 184, 166, 0.3);
       }
-      .g-cyan {
+      .g-7 {
         background: linear-gradient(135deg, #22d3ee, #06b6d4);
-        box-shadow: 0 6px 14px rgba(6, 182, 212, 0.35);
+        box-shadow: 0 4px 10px rgba(6, 182, 212, 0.3);
       }
-      .g-red {
+      .g-8 {
         background: linear-gradient(135deg, #f87171, #ef4444);
-        box-shadow: 0 6px 14px rgba(239, 68, 68, 0.35);
+        box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
       }
 
       /* ===== OTOMATIS KE BELAKANG SAAT DIKLIK ===== */
@@ -151,7 +228,7 @@
         color: #94a3b8;
       }
 
-      /* ===== TOMBOL RESET DI BAWAH (TANPA GARIS) ===== */
+      /* ===== TOMBOL BAWAH (TANPA GARIS / BORDER) ===== */
       .reset-container {
         position: absolute;
         bottom: 0;
@@ -159,14 +236,18 @@
         width: 100%;
         padding: 12px 18px;
         background: #ffffff;
-        border-top: none;
+        border: none;
+        box-shadow: none;
+        display: flex;
+        gap: 10px;
+        z-index: 10;
       }
 
       .btn-reset {
-        width: 100%;
+        flex: 1;
         padding: 12px;
         background: #f1f5f9;
-        color: #64748b;
+        color: #475569;
         border: none;
         border-radius: 12px;
         font-size: 13px;
@@ -177,91 +258,362 @@
 
       .btn-reset:hover {
         background: #e2e8f0;
+        transform: translateY(-1px);
+      }
+
+      .btn-add {
+        width: 48px;
+        height: 44px;
+        background: linear-gradient(135deg, #60a5fa, #6366f1);
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        font-size: 20px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 14px rgba(99, 102, 241, 0.35);
+        transition: 0.2s;
+        flex-shrink: 0;
+      }
+
+      .btn-add:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      /* ===== MODAL INPUT ===== */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        padding: 20px;
+      }
+
+      .modal-overlay.active {
+        display: flex;
+      }
+
+      .modal-box {
+        background: #ffffff;
+        width: 100%;
+        max-width: 320px;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .modal-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 12px;
+      }
+
+      .modal-input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        font-size: 13px;
+        outline: none;
+        margin-bottom: 16px;
+      }
+
+      .modal-input:focus {
+        border-color: #6366f1;
+      }
+
+      .modal-buttons {
+        display: flex;
+        gap: 8px;
+      }
+
+      .modal-btn {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .modal-btn-cancel {
+        background: #f1f5f9;
         color: #475569;
+      }
+
+      .modal-btn-submit {
+        background: linear-gradient(135deg, #60a5fa, #6366f1);
+        color: #ffffff;
+        box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <div class="todo-wrap" id="todoWrap">
-        <label class="todo-item">
-          <input type="checkbox" class="todo-checkbox" />
-          <div class="checkbox-box g-blue">
-            <span class="icon-symbol">1</span>
-          </div>
-          <span class="todo-text">Stok Opname</span>
-        </label>
-
-        <label class="todo-item">
-          <input type="checkbox" class="todo-checkbox" />
-          <div class="checkbox-box g-pink">
-            <span class="icon-symbol">2</span>
-          </div>
-          <span class="todo-text">Lapor Bug</span>
-        </label>
-
-        <label class="todo-item">
-          <input type="checkbox" class="todo-checkbox" />
-          <div class="checkbox-box g-orange">
-            <span class="icon-symbol">3</span>
-          </div>
-          <span class="todo-text">Arah Driver</span>
-        </label>
-
-        <label class="todo-item">
-          <input type="checkbox" class="todo-checkbox" />
-          <div class="checkbox-box g-cyan">
-            <span class="icon-symbol">4</span>
-          </div>
-          <span class="todo-text">E-mail</span>
-        </label>
-
-        <label class="todo-item">
-          <input type="checkbox" class="todo-checkbox" />
-          <div class="checkbox-box g-purple">
-            <span class="icon-symbol">5</span>
-          </div>
-          <span class="todo-text">Input Cacat</span>
-        </label>
-
-        <label class="todo-item">
-          <input type="checkbox" class="todo-checkbox" />
-          <div class="checkbox-box g-orange">
-            <span class="icon-symbol">6</span>
-          </div>
-          <span class="todo-text">Foto Bukti</span>
-        </label>
-
-        <label class="todo-item">
-          <input type="checkbox" class="todo-checkbox" />
-          <div class="checkbox-box g-blue">
-            <span class="icon-symbol">7</span>
-          </div>
-          <span class="todo-text">Ambil Diskon</span>
-        </label>
-
-        <label class="todo-item">
-          <input type="checkbox" class="todo-checkbox" />
-          <div class="checkbox-box g-green">
-            <span class="icon-symbol">8</span>
-          </div>
-          <span class="todo-text">Terima Barang</span>
-        </label>
+      <!-- HALAMAN UTAMA: PILIHAN MODUL 1 & MODUL 2 -->
+      <div class="menu-view" id="menuView">
+        <button class="menu-item" id="goToModul1">
+          <div class="menu-box g-1">1</div>
+          <span class="menu-text">Modul 1</span>
+        </button>
+        <button class="menu-item" id="goToModul2">
+          <div class="menu-box g-2">2</div>
+          <span class="menu-text">Modul 2</span>
+        </button>
       </div>
 
-      <div class="reset-container">
-        <button class="btn-reset" id="resetBtn">Reset</button>
+      <!-- HALAMAN ISI TO-DO LIST -->
+      <div id="contentView" class="content-view hidden">
+        <div class="todo-wrap" id="todoWrap">
+          <!-- Item list dimuat via JS -->
+        </div>
+        <div class="reset-container">
+          <button class="btn-reset" id="resetBtn">Reset</button>
+          <button class="btn-add" id="addBtn">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Tambah Item -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-box">
+        <div class="modal-title">Tambah Item Baru</div>
+        <input
+          type="text"
+          class="modal-input"
+          id="itemInput"
+          placeholder="Nama item..."
+          autocomplete="off"
+        />
+        <div class="modal-buttons">
+          <button class="modal-btn modal-btn-cancel" id="cancelBtn">
+            Batal
+          </button>
+          <button class="modal-btn modal-btn-submit" id="submitBtn">
+            Simpan
+          </button>
+        </div>
       </div>
     </div>
 
     <script>
+      const defaultModul1 = [
+        "Wa",
+        "Notion",
+        "Al-Quran",
+        "Digimon",
+        "Email",
+        "Chrome",
+        "Play Store",
+        "YouTube",
+        "Kontak",
+        "Mihon",
+        "Drive",
+        "One Punch Man Cina",
+        "Files",
+        "Galeri",
+        "Akulaku",
+        "Bibit",
+        "Kredivo",
+        "Dana",
+        "Shopee Pay",
+        "One Punch Man Obt",
+        "Sea Bank",
+        "Chorome",
+        "Rider Chek",
+        "Gmail",
+        "Pinterest",
+        "Wa Business",
+        "Rapikan Catatan",
+        "Google Foto",
+        "Rapikan Aplikasi",
+        "Mihon",
+        "Instagram",
+        "Tiktok Mihon",
+        "Tambah Foto Di Tele",
+        "Tiktok",
+        "Tambah Satu",
+        "Aladin",
+        "Pinterest (1)",
+        "Tiktok Mihon (1)",
+        "Email (1)",
+        "Galeri (1)",
+        "Buka",
+        "Tambah Foto Di Tele (1)",
+        "Google Foto (1)",
+        "One Punch Man Cina (1)",
+        "Rapikan Aplikasi (1)",
+        "Kontak (1)",
+        "Tambah Foto Di Tele (2)",
+        "Buka",
+        "Google Foto (1)",
+        "Drive (1)",
+        "Mihon (1)",
+        "Pinterest (1)",
+        "Rapikan Aplikasi (2)",
+        "Galeri (2)",
+        "Pinterest (2)",
+        "Email (1)",
+        "Galeri (1)",
+        "Notion (1)",
+      ];
+
+      const defaultModul2 = [
+        "Tugas 1",
+        "Tugas 2",
+        "Laporan",
+        "Evaluasi",
+        "Belajar",
+        "Coding",
+      ];
+
+      let currentModule = null;
+      let todoData = [];
+
+      const menuView = document.getElementById("menuView");
+      const contentView = document.getElementById("contentView");
+      const goToModul1 = document.getElementById("goToModul1");
+      const goToModul2 = document.getElementById("goToModul2");
+
+      const todoWrap = document.getElementById("todoWrap");
       const resetBtn = document.getElementById("resetBtn");
-      const checkboxes = document.querySelectorAll(".todo-checkbox");
+      const addBtn = document.getElementById("addBtn");
+      const modalOverlay = document.getElementById("modalOverlay");
+      const cancelBtn = document.getElementById("cancelBtn");
+      const submitBtn = document.getElementById("submitBtn");
+      const itemInput = document.getElementById("itemInput");
+
+      function getStoredData(modulKey) {
+        const storageKey = `todo_app_data_${modulKey}`;
+        const defaultData =
+          modulKey === "modul1" ? defaultModul1 : defaultModul2;
+        const data = localStorage.getItem(storageKey);
+        if (data) {
+          return JSON.parse(data);
+        } else {
+          return defaultData.map((text) => ({
+            text: text,
+            checked: false,
+          }));
+        }
+      }
+
+      function saveData() {
+        if (!currentModule) return;
+        const storageKey = `todo_app_data_${currentModule}`;
+        localStorage.setItem(storageKey, JSON.stringify(todoData));
+      }
+
+      function renderTodos() {
+        todoWrap.innerHTML = "";
+        todoData.forEach((item, index) => {
+          const count = index + 1;
+          const colorIndex = ((count - 1) % 8) + 1;
+
+          const label = document.createElement("label");
+          label.className = "todo-item";
+          label.innerHTML = `
+            <input type="checkbox" class="todo-checkbox" data-index="${index}" ${item.checked ? "checked" : ""} />
+            <div class="checkbox-box g-${colorIndex}">${count}</div>
+            <span class="todo-text">${item.text}</span>
+          `;
+
+          const checkbox = label.querySelector(".todo-checkbox");
+          checkbox.addEventListener("change", (e) => {
+            todoData[index].checked = e.target.checked;
+            saveData();
+            renderTodos();
+          });
+
+          todoWrap.appendChild(label);
+        });
+      }
+
+      function openModule(modulName, updateHistory = true) {
+        currentModule = modulName;
+        todoData = getStoredData(modulName);
+        menuView.classList.add("hidden");
+        contentView.classList.remove("hidden");
+        renderTodos();
+
+        if (updateHistory) {
+          history.pushState({ module: modulName }, "", `#${modulName}`);
+        }
+      }
+
+      goToModul1.addEventListener("click", () => openModule("modul1"));
+      goToModul2.addEventListener("click", () => openModule("modul2"));
+
+      // Menangani tombol Back/Refresh browser agar tetap di modul aktif
+      window.addEventListener("popstate", (e) => {
+        if (e.state && e.state.module) {
+          openModule(e.state.module, false);
+        } else {
+          contentView.classList.add("hidden");
+          menuView.classList.remove("hidden");
+          currentModule = null;
+        }
+      });
+
+      // Cek state saat halaman dimuat/refresh
+      window.addEventListener("DOMContentLoaded", () => {
+        const hash = window.location.hash.replace("#", "");
+        if (hash === "modul1" || hash === "modul2") {
+          openModule(hash, false);
+        }
+      });
 
       resetBtn.addEventListener("click", () => {
-        checkboxes.forEach((cb) => {
-          cb.checked = false;
-        });
+        todoData.forEach((item) => (item.checked = false));
+        saveData();
+        renderTodos();
+      });
+
+      addBtn.addEventListener("click", () => {
+        modalOverlay.classList.add("active");
+        itemInput.value = "";
+        itemInput.focus();
+      });
+
+      cancelBtn.addEventListener("click", () => {
+        modalOverlay.classList.remove("active");
+      });
+
+      modalOverlay.addEventListener("click", (e) => {
+        if (e.target === modalOverlay) {
+          modalOverlay.classList.remove("active");
+        }
+      });
+
+      function addNewItem() {
+        const text = itemInput.value.trim();
+        if (!text) return;
+
+        todoData.push({ text: text, checked: false });
+        saveData();
+        renderTodos();
+
+        modalOverlay.classList.remove("active");
+        todoWrap.scrollTop = todoWrap.scrollHeight;
+      }
+
+      submitBtn.addEventListener("click", addNewItem);
+      itemInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          addNewItem();
+        }
       });
     </script>
   </body>
