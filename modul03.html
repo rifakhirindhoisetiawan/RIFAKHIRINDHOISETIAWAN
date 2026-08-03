@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menu Kopi</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+      .phone {
+        width: 100vw;
+        height: 100vh;
+        max-width: 100%;
+        max-height: 100%;
+        background: #ffffff;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      @media (min-width: 480px) {
+        .phone {
+          width: 390px;
+          height: 844px;
+        }
+      }
+
+      .screen {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        inset: 0;
+        background: #fff;
+        z-index: 1;
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateX(100%);
+      }
+      .screen.active {
+        transform: translateX(0);
+        z-index: 2;
+      }
+      .screen.exit-left {
+        transform: translateX(-30%);
+        z-index: 1;
+      }
+
+      .search-row {
+        display: flex;
+        align-items: center;
+        padding: 16px 18px 14px;
+      }
+      .search-box {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e3e6ec;
+        border-radius: 14px;
+        padding: 12px 14px;
+        color: #9aa0ab;
+        font-size: 14px;
+        background: #f8fafc;
+      }
+      .search-box svg {
+        flex-shrink: 0;
+        color: #6f4e37;
+        width: 18px;
+        height: 18px;
+      }
+      .search-box input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 14px;
+        color: #1f2937;
+        width: 100%;
+        font-family: inherit;
+      }
+
+      /* ===== GRID MENU UTAMA (Mengikuti ukuran & jarak referensi) ===== */
+      .menu-wrap {
+        flex: 1;
+        overflow-y: auto;
+        padding: 4px 18px 24px 22px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px 10px;
+      }
+      .empty-msg {
+        text-align: center;
+        color: #9aa0ab;
+        font-size: 13px;
+        padding: 40px 0;
+      }
+
+      .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        background: none;
+        border: none;
+      }
+      .icon-tile {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin-bottom: 6px;
+        color: #fff;
+        position: relative;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+      }
+      .item:active .icon-tile {
+        transform: scale(0.93);
+      }
+      .item span {
+        font-size: 11px;
+        font-weight: 700;
+        color: #1f2937;
+        line-height: 1.2;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      /* Warna-warni gaya pastel lembut */
+      .c-1 {
+        background: linear-gradient(135deg, #a5b4fc, #818cf8);
+        box-shadow: 0 6px 14px rgba(129, 140, 248, 0.35);
+      }
+      .c-2 {
+        background: linear-gradient(135deg, #c4b5fd, #a78bfa);
+        box-shadow: 0 6px 14px rgba(167, 139, 250, 0.35);
+      }
+      .c-3 {
+        background: linear-gradient(135deg, #bae6fd, #7dd3fc);
+        box-shadow: 0 6px 14px rgba(125, 211, 252, 0.35);
+      }
+      .c-4 {
+        background: linear-gradient(135deg, #99f6e4, #5eead4);
+        box-shadow: 0 6px 14px rgba(94, 234, 212, 0.35);
+      }
+      .c-5 {
+        background: linear-gradient(135deg, #a7f3d0, #6ee7b7);
+        box-shadow: 0 6px 14px rgba(110, 231, 183, 0.35);
+      }
+      .c-6 {
+        background: linear-gradient(135deg, #fef08a, #fde047);
+        color: #854d0e;
+        box-shadow: 0 6px 14px rgba(253, 224, 71, 0.35);
+      }
+      .c-7 {
+        background: linear-gradient(135deg, #fecdd3, #fda4af);
+        box-shadow: 0 6px 14px rgba(253, 164, 175, 0.35);
+      }
+      .c-8 {
+        background: linear-gradient(135deg, #f5d0fe, #e879f9);
+        box-shadow: 0 6px 14px rgba(232, 121, 249, 0.35);
+      }
+
+      /* ===== HALAMAN DETAIL ITEM ===== */
+      .detail-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        border-bottom: 1px solid #f1f2f4;
+      }
+      .back-btn {
+        background: #f8fafc;
+        border: 1px solid #e3e6ec;
+        border-radius: 14px;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #1f2937;
+        flex-shrink: 0;
+      }
+      .back-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+      .detail-header-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #1f2937;
+      }
+      .detail-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 22px 22px 28px;
+      }
+      .sheet-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        color: #fff;
+        margin-bottom: 14px;
+      }
+      .detail-content h2 {
+        font-size: 18px;
+        color: #1f2937;
+        margin-bottom: 4px;
+      }
+      .detail-content .tag {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        color: #6f4e37;
+        background: #f4ece5;
+        padding: 3px 9px;
+        border-radius: 999px;
+        margin-bottom: 14px;
+      }
+      .detail-content h3 {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #9aa0ab;
+        margin: 14px 0 8px;
+      }
+      .comp-list {
+        list-style: none;
+      }
+      .comp-list li {
+        font-size: 13.5px;
+        color: #374151;
+        padding: 7px 0;
+        border-bottom: 1px solid #f1f2f4;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .comp-list li .amt {
+        color: #9aa0ab;
+        font-weight: 600;
+      }
+      .steps-list {
+        list-style: none;
+        counter-reset: step;
+      }
+      .steps-list li {
+        counter-increment: step;
+        font-size: 13.5px;
+        color: #374151;
+        padding: 7px 0 7px 26px;
+        position: relative;
+        border-bottom: 1px solid #f1f2f4;
+      }
+      .steps-list li::before {
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        top: 6px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #6f4e37;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .note-box {
+        margin-top: 14px;
+        background: #fdf6ec;
+        border: 1px solid #f0e2cc;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 12.5px;
+        color: #8a6d3b;
+        line-height: 1.5;
+      }
+
+      /* ===== HALAMAN KHUSUS MODUL ===== */
+      .module-screen {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        inset: 0;
+        background: #fff;
+        z-index: 1;
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateX(100%);
+      }
+      .module-screen.active {
+        transform: translateX(0);
+        z-index: 3;
+      }
+      .module-screen.exit-left {
+        transform: translateX(-30%);
+        z-index: 1;
+      }
+
+      .hidden-scroll::-webkit-scrollbar {
+        width: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone">
+      <!-- HALAMAN UTAMA (DASHBOARD GRID MODUL) -->
+      <div class="screen active" id="homeScreen">
+        <div class="search-row">
+          <div class="search-box">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Cari modul..."
+              oninput="renderHomeGrid()"
+            />
+          </div>
+        </div>
+        <div class="menu-wrap hidden-scroll">
+          <div class="grid" id="homeGrid"></div>
+        </div>
+      </div>
+
+      <!-- HALAMAN KHUSUS MODUL -->
+      <div class="module-screen" id="moduleScreen">
+        <div class="search-row" style="padding-bottom: 0">
+          <div class="search-box">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              id="modSearchInput"
+              type="text"
+              placeholder="Cari menu di modul ini"
+              oninput="renderModuleMenu()"
+            />
+          </div>
+        </div>
+        <div class="menu-wrap hidden-scroll" style="margin-top: 4px">
+          <div class="grid" id="modGrid"></div>
+        </div>
+      </div>
+
+      <!-- HALAMAN DETAIL ITEM -->
+      <div class="screen" id="detailScreen">
+        <div class="detail-header">
+          <button class="back-btn" onclick="closeSheet()">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <div class="detail-header-title">Detail Resep Menu</div>
+        </div>
+        <div class="detail-content hidden-scroll">
+          <div class="sheet-icon" id="sheetIcon"></div>
+          <h2 id="sheetName"></h2>
+          <div class="tag" id="sheetTag"></div>
+          <div id="sheetBody"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const modules = [
+        { id: "Modul 01", name: "Modul 1", icon: "01", cls: "c-1" },
+        { id: "Modul 02", name: "Modul 2", icon: "02", cls: "c-2" },
+        { id: "Modul 03", name: "Modul 3", icon: "03", cls: "c-3" },
+        { id: "Modul 04", name: "Modul 4", icon: "04", cls: "c-4" },
+        { id: "Modul 05", name: "Modul 5", icon: "05", cls: "c-5" },
+        { id: "Modul 06", name: "Modul 6", icon: "06", cls: "c-6" },
+        { id: "Modul 07", name: "Modul 7", icon: "07", cls: "c-7" },
+        { id: "Modul 08", name: "Modul 8", icon: "08", cls: "c-8" },
+      ];
+
+      const menuData = [
+        // Modul 01
+        {
+          name: "Premix UHT Dasar",
+          icon: "🧪",
+          cls: "c-1",
+          category: "Modul 01",
+          comp: [
+            ["Krimer", "250 g"],
+            ["Air panas", "250 g"],
+            ["Susu UHT", "1000 g"],
+          ],
+          note: "Stock espresso: 2x pencet",
+        },
+        {
+          name: "Coffee Latte (Ice)",
+          icon: "☕",
+          cls: "c-1",
+          category: "Modul 01",
+          variants: [
+            {
+              label: "Regular 12 oz",
+              items: [
+                ["Stock espresso", "30 g"],
+                ["Es batu", "150 g"],
+                ["Susu UHT", "120 g"],
+              ],
+            },
+            {
+              label: "Upsize 16 oz",
+              items: [
+                ["Stock espresso", "60 g"],
+                ["Es batu", "180 g"],
+                ["Susu UHT", "150 g"],
+              ],
+            },
+          ],
+        },
+        {
+          name: "Vanilla Latte (Ice)",
+          icon: "🌼",
+          cls: "c-1",
+          category: "Modul 01",
+          variants: [
+            {
+              label: "Regular",
+              items: [
+                ["Syrup vanilla", "15 g"],
+                ["Es batu", "150 g"],
+                ["Premix UHT", "140 g"],
+                ["Stock espresso", "30 g"],
+              ],
+            },
+            {
+              label: "Upsize",
+              items: [
+                ["Syrup vanilla", "25 g"],
+                ["Es batu", "180 g"],
+                ["Premix UHT", "150 g"],
+                ["Stock espresso", "60 g"],
+              ],
+            },
+          ],
+        },
+        {
+          name: "Salted Caramel Latte (Ice)",
+          icon: "🍮",
+          cls: "c-1",
+          category: "Modul 01",
+          variants: [
+            {
+              label: "Regular",
+              items: [
+                ["Syrup salted caramel", "15 g"],
+                ["Es batu", "150 g"],
+                ["Premix UHT", "140 g"],
+                ["Stock espresso", "30 g"],
+              ],
+            },
+            {
+              label: "Upsize",
+              items: [
+                ["Syrup salted caramel", "25 g"],
+                ["Es batu", "180 g"],
+                ["Premix UHT", "150 g"],
+                ["Stock espresso", "60 g"],
+              ],
+            },
+          ],
+        },
+        {
+          name: "Butterscotch Latte (Ice)",
+          icon: "🧈",
+          cls: "c-1",
+          category: "Modul 01",
+          variants: [
+            {
+              label: "Regular",
+              items: [
+                ["Syrup butterscotch", "15 g"],
+                ["Es batu", "150 g"],
+                ["Premix UHT", "140 g"],
+                ["Stock espresso", "30 g"],
+              ],
+            },
+            {
+              label: "Upsize",
+              items: [
+                ["Syrup butterscotch", "25 g"],
+                ["Es batu", "180 g"],
+                ["Premix UHT", "150 g"],
+                ["Stock espresso", "60 g"],
+              ],
+            },
+          ],
+        },
+
+        // Modul 02
+        {
+          name: "Hot Espresso",
+          icon: "☕",
+          cls: "c-2",
+          category: "Modul 02",
+          comp: [["Espresso", "*"]],
+        },
+        {
+          name: "Cappuccino (Hot)",
+          icon: "🫧",
+          cls: "c-2",
+          category: "Modul 02",
+          comp: [
+            ["Espresso", "*"],
+            ["Fresh milk", "90 g"],
+          ],
+        },
+        {
+          name: "Caffelatte (Hot)",
+          icon: "🥛",
+          cls: "c-2",
+          category: "Modul 02",
+          comp: [
+            ["Espresso", "*"],
+            ["Fresh milk", "120 g"],
+          ],
+        },
+        {
+          name: "Korean Strawberry Milk (Ice)",
+          icon: "🍓",
+          cls: "c-2",
+          category: "Modul 02",
+          variants: [
+            {
+              label: "Regular",
+              items: [
+                ["Puree strawberry", "50 g"],
+                ["Susu UHT", "130 g"],
+                ["Es batu", "150 g"],
+              ],
+            },
+            {
+              label: "Upsize",
+              items: [
+                ["Puree strawberry", "90 g"],
+                ["Susu UHT", "200 g"],
+                ["Es batu", "180 g"],
+              ],
+            },
+          ],
+        },
+        {
+          name: "Hot Chocolate",
+          icon: "🍫",
+          cls: "c-2",
+          category: "Modul 02",
+          steps: [
+            "Larutkan powder + air panas di paper cup",
+            "Aduk hingga larut",
+            "Steam fresh milk",
+            "Tuang ke paper cup",
+          ],
+        },
+
+        // Modul 03
+        {
+          name: "Menu A Modul 3",
+          icon: "🍹",
+          cls: "c-3",
+          category: "Modul 03",
+          comp: [
+            ["Bahan A", "100 g"],
+            ["Bahan B", "50 g"],
+          ],
+        },
+        {
+          name: "Menu B Modul 3",
+          icon: "🥤",
+          cls: "c-3",
+          category: "Modul 03",
+          comp: [
+            ["Bahan C", "120 g"],
+            ["Bahan D", "60 g"],
+          ],
+        },
+
+        // Modul 04
+        {
+          name: "Menu A Modul 4",
+          icon: "🍧",
+          cls: "c-4",
+          category: "Modul 04",
+          comp: [
+            ["Bahan E", "100 g"],
+            ["Bahan F", "50 g"],
+          ],
+        },
+        {
+          name: "Menu B Modul 4",
+          icon: "🍨",
+          cls: "c-4",
+          category: "Modul 04",
+          comp: [
+            ["Bahan G", "120 g"],
+            ["Bahan H", "60 g"],
+          ],
+        },
+
+        // Modul 05
+        {
+          name: "Menu A Modul 5",
+          icon: "🧃",
+          cls: "c-5",
+          category: "Modul 05",
+          comp: [
+            ["Bahan I", "100 g"],
+            ["Bahan J", "50 g"],
+          ],
+        },
+        {
+          name: "Menu B Modul 5",
+          icon: "🧋",
+          cls: "c-5",
+          category: "Modul 05",
+          comp: [
+            ["Bahan K", "120 g"],
+            ["Bahan L", "60 g"],
+          ],
+        },
+
+        // Modul 06
+        {
+          name: "Menu A Modul 6",
+          icon: "🍵",
+          cls: "c-6",
+          category: "Modul 06",
+          comp: [
+            ["Bahan M", "100 g"],
+            ["Bahan N", "50 g"],
+          ],
+        },
+        {
+          name: "Menu B Modul 6",
+          icon: "🫖",
+          cls: "c-6",
+          category: "Modul 06",
+          comp: [
+            ["Bahan O", "120 g"],
+            ["Bahan P", "60 g"],
+          ],
+        },
+
+        // Modul 07
+        {
+          name: "Menu A Modul 7",
+          icon: "🧉",
+          cls: "c-7",
+          category: "Modul 07",
+          comp: [
+            ["Bahan Q", "100 g"],
+            ["Bahan R", "50 g"],
+          ],
+        },
+        {
+          name: "Menu B Modul 7",
+          icon: "🍸",
+          cls: "c-7",
+          category: "Modul 07",
+          comp: [
+            ["Bahan S", "120 g"],
+            ["Bahan T", "60 g"],
+          ],
+        },
+
+        // Modul 08
+        {
+          name: "Menu A Modul 8",
+          icon: "🍹",
+          cls: "c-8",
+          category: "Modul 08",
+          comp: [
+            ["Bahan U", "100 g"],
+            ["Bahan V", "50 g"],
+          ],
+        },
+        {
+          name: "Menu B Modul 8",
+          icon: "🍾",
+          cls: "c-8",
+          category: "Modul 08",
+          comp: [
+            ["Bahan W", "120 g"],
+            ["Bahan X", "60 g"],
+          ],
+        },
+      ];
+
+      let currentCat = "Modul 01";
+
+      const homeGrid = document.getElementById("homeGrid");
+      const modGrid = document.getElementById("modGrid");
+      const searchInput = document.getElementById("searchInput");
+      const modSearchInput = document.getElementById("modSearchInput");
+      const homeScreen = document.getElementById("homeScreen");
+      const moduleScreen = document.getElementById("moduleScreen");
+      const detailScreen = document.getElementById("detailScreen");
+      const sheetIcon = document.getElementById("sheetIcon");
+      const sheetName = document.getElementById("sheetName");
+      const sheetTag = document.getElementById("sheetTag");
+      const sheetBody = document.getElementById("sheetBody");
+
+      function renderHomeGrid() {
+        const q = searchInput.value.trim().toLowerCase();
+        const filtered = modules.filter(
+          (m) =>
+            !q ||
+            m.id.toLowerCase().includes(q) ||
+            m.name.toLowerCase().includes(q),
+        );
+
+        if (filtered.length === 0) {
+          homeGrid.innerHTML = `<div class="empty-msg" style="grid-column:1/-1">Modul tidak ditemukan</div>`;
+          return;
+        }
+
+        homeGrid.innerHTML = filtered
+          .map((m) => {
+            return `
+        <button class="item" onclick="openModule('${m.id}')">
+          <div class="icon-tile ${m.cls}">
+            ${m.icon}
+          </div>
+          <span>${m.name}</span>
+        </button>
+      `;
+          })
+          .join("");
+      }
+
+      function openModule(catName) {
+        currentCat = catName;
+        modSearchInput.value = "";
+        renderModuleMenu();
+        homeScreen.classList.add("exit-left");
+        moduleScreen.classList.add("active");
+      }
+
+      function closeModule() {
+        moduleScreen.classList.remove("active");
+        homeScreen.classList.remove("exit-left");
+      }
+
+      function renderModuleMenu() {
+        const q = modSearchInput.value.trim().toLowerCase();
+        const filtered = menuData.filter((item) => {
+          const matchCat = item.category === currentCat;
+          const matchQuery = !q || item.name.toLowerCase().includes(q);
+          return matchCat && matchQuery;
+        });
+
+        if (filtered.length === 0) {
+          modGrid.innerHTML = `<div class="empty-msg" style="grid-column:1/-1">Menu tidak ditemukan di modul ini</div>`;
+          return;
+        }
+
+        modGrid.innerHTML = filtered
+          .map((item) => {
+            const realIndex = menuData.indexOf(item);
+            return `
+        <button class="item" onclick="openSheet(${realIndex})">
+          <div class="icon-tile ${item.cls}">
+            ${item.icon}
+          </div>
+          <span>${item.name}</span>
+        </button>
+      `;
+          })
+          .join("");
+      }
+
+      function compListHTML(items) {
+        return `<ul class="comp-list">${items.map(([n, a]) => `<li>${n} <span class="amt">${a}</span></li>`).join("")}</ul>`;
+      }
+
+      function openSheet(index) {
+        const item = menuData[index];
+        sheetIcon.className = `sheet-icon ${item.cls}`;
+        sheetIcon.textContent = item.icon;
+        sheetName.textContent = item.name;
+        sheetTag.textContent = item.category;
+
+        let html = "";
+        if (item.comp) html += `<h3>Komposisi</h3>${compListHTML(item.comp)}`;
+        if (item.variants) {
+          item.variants.forEach((v) => {
+            html += `<h3>${v.label}</h3>${compListHTML(v.items)}`;
+          });
+        }
+        if (item.steps) {
+          html += `<h3>Cara Membuat</h3><ol class="steps-list">${item.steps.map((s) => `<li>${s}</li>`).join("")}</ol>`;
+        }
+        if (item.note) html += `<div class="note-box">${item.note}</div>`;
+
+        sheetBody.innerHTML = html;
+        detailScreen.classList.add("active");
+      }
+
+      function closeSheet() {
+        detailScreen.classList.remove("active");
+      }
+
+      renderHomeGrid();
+    </script>
+  </body>
+</html>
