@@ -464,7 +464,7 @@
             img.src = images[idx];
             img.draggable = true;
 
-            // Event Drag and Drop untuk memindah/menukar posisi foto
+            // Event Drag and Drop untuk Desktop
             img.addEventListener("dragstart", (e) => {
               draggedIdx = idx;
               e.dataTransfer.setData("text/plain", idx);
@@ -490,6 +490,43 @@
                 renderGrid();
                 checkReady();
               }
+            });
+
+            // Event Touch untuk Mobile (Geser/Tahan Foto di HP)
+            img.addEventListener(
+              "touchstart",
+              (e) => {
+                draggedIdx = idx;
+              },
+              { passive: true },
+            );
+
+            slot.addEventListener("touchend", (e) => {
+              e.preventDefault();
+              const touch = e.changedTouches[0];
+              const targetElement = document.elementFromPoint(
+                touch.clientX,
+                touch.clientY,
+              );
+              const targetSlot = targetElement
+                ? targetElement.closest(".slot")
+                : null;
+
+              if (targetSlot) {
+                const targetIdx = parseInt(targetSlot.dataset.slot);
+                if (
+                  draggedIdx !== null &&
+                  draggedIdx !== targetIdx &&
+                  images[draggedIdx]
+                ) {
+                  let temp = images[draggedIdx];
+                  images[draggedIdx] = images[targetIdx];
+                  images[targetIdx] = temp;
+                  renderGrid();
+                  checkReady();
+                }
+              }
+              draggedIdx = null;
             });
 
             slot.appendChild(img);

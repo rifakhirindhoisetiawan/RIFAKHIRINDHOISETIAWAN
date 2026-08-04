@@ -3,13 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Menu Kopi</title>
+    <title>Menu & Resep Resmi JA~DI</title>
     <style>
       * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
       }
+
       body {
         font-family:
           "Segoe UI",
@@ -17,31 +18,30 @@
           -apple-system,
           sans-serif;
         background: #ffffff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         min-height: 100vh;
-        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 0;
       }
+
       .phone {
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
         max-width: 100%;
-        max-height: 100%;
         background: #ffffff;
+        border-radius: 0;
+        box-shadow: none;
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        min-height: 100vh;
         position: relative;
       }
-      @media (min-width: 480px) {
-        .phone {
-          width: 390px;
-          height: 844px;
-        }
-      }
 
-      .screen {
+      /* ===== SCREEN SYSTEM ===== */
+      .screen,
+      .module-screen {
         display: flex;
         flex-direction: column;
         height: 100%;
@@ -50,22 +50,34 @@
         inset: 0;
         background: #fff;
         z-index: 1;
-        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        transform: translateX(100%);
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.2s ease,
+          visibility 0.2s;
       }
-      .screen.active {
-        transform: translateX(0);
+      .screen.active,
+      .module-screen.active {
+        opacity: 1;
+        visibility: visible;
         z-index: 2;
       }
-      .screen.exit-left {
-        transform: translateX(-30%);
-        z-index: 1;
+      #detailScreen.active {
+        z-index: 4;
+      }
+      #moduleScreen.active {
+        z-index: 3;
       }
 
+      /* ===== SEARCH ROW ===== */
       .search-row {
         display: flex;
         align-items: center;
-        padding: 16px 18px 14px;
+        gap: 10px;
+        padding: 10px 18px 14px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
       }
       .search-box {
         flex: 1;
@@ -75,42 +87,59 @@
         border: 1px solid #e3e6ec;
         border-radius: 14px;
         padding: 12px 14px;
-        color: #9aa0ab;
-        font-size: 14px;
-        background: #f8fafc;
-      }
-      .search-box svg {
-        flex-shrink: 0;
-        color: #6f4e37;
-        width: 18px;
-        height: 18px;
+        color: #1f2937;
+        font-size: 13px;
+        background: #fafbfc;
       }
       .search-box input {
         border: none;
-        outline: none;
         background: transparent;
-        font-size: 14px;
-        color: #1f2937;
+        outline: none;
         width: 100%;
+        font-size: 13px;
+        color: #1f2937;
         font-family: inherit;
       }
+      .search-box input::placeholder {
+        color: #c3c8d1;
+      }
+      .search-box svg {
+        flex-shrink: 0;
+        color: #c3c8d1;
+        width: 18px;
+        height: 18px;
+      }
 
-      /* ===== GRID MENU UTAMA (Mengikuti ukuran & jarak referensi) ===== */
+      /* ===== MENU GRID ===== */
       .menu-wrap {
         flex: 1;
         overflow-y: auto;
-        padding: 4px 18px 24px 22px;
+        padding: 4px 18px 20px 22px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
       }
+
+      .section-label {
+        font-size: 11px;
+        font-weight: 800;
+        color: #9aa0ab;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        margin: 4px 0 14px;
+      }
+
       .grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 20px 10px;
+        gap: 22px 12px;
       }
-      .empty-msg {
-        text-align: center;
-        color: #9aa0ab;
-        font-size: 13px;
-        padding: 40px 0;
+
+      @media (min-width: 768px) {
+        .grid {
+          grid-template-columns: repeat(4, 1fr);
+          gap: 28px 20px;
+        }
       }
 
       .item {
@@ -118,106 +147,118 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        cursor: pointer;
+        cursor: default;
         background: none;
         border: none;
       }
+
       .icon-tile {
-        width: 56px;
-        height: 56px;
-        border-radius: 16px;
+        width: 60px;
+        height: 60px;
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 22px;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
         color: #fff;
         position: relative;
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+        opacity: 0.55;
       }
-      .item:active .icon-tile {
-        transform: scale(0.93);
+
+      @media (min-width: 768px) {
+        .icon-tile {
+          width: 72px;
+          height: 72px;
+          border-radius: 18px;
+          font-size: 24px;
+        }
       }
+
+      .item.active-modul {
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .item.active-modul .icon-tile {
+        opacity: 1;
+        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+        transition: transform 0.2s ease;
+      }
+      .item.active-modul:hover .icon-tile,
+      .item.active-modul:active .icon-tile {
+        transform: translateY(-3px);
+      }
+      .item.active-modul span {
+        color: #1f2937;
+        font-weight: 800;
+      }
+
       .item span {
         font-size: 11px;
         font-weight: 700;
-        color: #1f2937;
-        line-height: 1.2;
+        color: #b6bac2;
+        line-height: 1.3;
         display: -webkit-box;
-        -webkit-line-clamp: 1;
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
 
-      /* Warna-warni gaya pastel lembut */
-      .c-1 {
-        background: linear-gradient(135deg, #a5b4fc, #818cf8);
-        box-shadow: 0 6px 14px rgba(129, 140, 248, 0.35);
-      }
-      .c-2 {
-        background: linear-gradient(135deg, #c4b5fd, #a78bfa);
-        box-shadow: 0 6px 14px rgba(167, 139, 250, 0.35);
-      }
-      .c-3 {
-        background: linear-gradient(135deg, #bae6fd, #7dd3fc);
-        box-shadow: 0 6px 14px rgba(125, 211, 252, 0.35);
-      }
-      .c-4 {
-        background: linear-gradient(135deg, #99f6e4, #5eead4);
-        box-shadow: 0 6px 14px rgba(94, 234, 212, 0.35);
-      }
-      .c-5 {
-        background: linear-gradient(135deg, #a7f3d0, #6ee7b7);
-        box-shadow: 0 6px 14px rgba(110, 231, 183, 0.35);
-      }
-      .c-6 {
-        background: linear-gradient(135deg, #fef08a, #fde047);
-        color: #854d0e;
-        box-shadow: 0 6px 14px rgba(253, 224, 71, 0.35);
-      }
-      .c-7 {
-        background: linear-gradient(135deg, #fecdd3, #fda4af);
-        box-shadow: 0 6px 14px rgba(253, 164, 175, 0.35);
-      }
-      .c-8 {
-        background: linear-gradient(135deg, #f5d0fe, #e879f9);
-        box-shadow: 0 6px 14px rgba(232, 121, 249, 0.35);
+      @media (min-width: 768px) {
+        .item span {
+          font-size: 12px;
+        }
       }
 
-      /* ===== HALAMAN DETAIL ITEM ===== */
+      /* PALET GRADIENT */
+      .g-a {
+        background: linear-gradient(135deg, #a5b4fc, #818cf8);
+      }
+      .g-b {
+        background: linear-gradient(135deg, #c4b5fd, #a78bfa);
+      }
+      .g-c {
+        background: linear-gradient(135deg, #93c5fd, #60a5fa);
+      }
+      .g-d {
+        background: linear-gradient(135deg, #67e8f9, #22d3ee);
+      }
+      .g-e {
+        background: linear-gradient(135deg, #6ee7b7, #34d399);
+      }
+      .g-f {
+        background: linear-gradient(135deg, #fcd34d, #fbbf24);
+      }
+      .g-g {
+        background: linear-gradient(135deg, #fca5a5, #f87171);
+      }
+      .g-h {
+        background: linear-gradient(135deg, #f0abfc, #e879f9);
+      }
+
+      /* ===== DETAIL SCREEN ===== */
       .detail-header {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 14px 18px;
+        padding: 16px 18px;
         border-bottom: 1px solid #f1f2f4;
-      }
-      .back-btn {
-        background: #f8fafc;
-        border: 1px solid #e3e6ec;
-        border-radius: 14px;
-        width: 44px;
-        height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        color: #1f2937;
-        flex-shrink: 0;
-      }
-      .back-btn svg {
-        width: 20px;
-        height: 20px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
       }
       .detail-header-title {
         font-size: 15px;
-        font-weight: 700;
+        font-weight: 800;
         color: #1f2937;
       }
+
       .detail-content {
         flex: 1;
         overflow-y: auto;
-        padding: 22px 22px 28px;
+        padding: 22px 18px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
       }
       .sheet-icon {
         width: 64px;
@@ -229,106 +270,65 @@
         font-size: 26px;
         color: #fff;
         margin-bottom: 14px;
+        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
       }
       .detail-content h2 {
         font-size: 18px;
+        font-weight: 800;
         color: #1f2937;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
       }
       .detail-content .tag {
         display: inline-block;
         font-size: 11px;
-        font-weight: 700;
-        color: #6f4e37;
-        background: #f4ece5;
-        padding: 3px 9px;
+        font-weight: 800;
+        color: #818cf8;
+        background: #eeefef;
+        padding: 4px 10px;
         border-radius: 999px;
-        margin-bottom: 14px;
+        margin-bottom: 16px;
       }
       .detail-content h3 {
-        font-size: 12px;
+        font-size: 11px;
+        font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.6px;
         color: #9aa0ab;
-        margin: 14px 0 8px;
+        margin: 18px 0 10px;
       }
       .comp-list {
         list-style: none;
       }
       .comp-list li {
-        font-size: 13.5px;
+        font-size: 13px;
         color: #374151;
-        padding: 7px 0;
+        padding: 10px 0;
         border-bottom: 1px solid #f1f2f4;
         display: flex;
         justify-content: space-between;
         gap: 10px;
       }
       .comp-list li .amt {
+        color: #1f2937;
+        font-weight: 700;
+        text-align: right;
+      }
+      .cara-text {
+        font-size: 13px;
+        color: #374151;
+        line-height: 1.6;
+        background: #fafbfc;
+        border: 1px solid #e3e6ec;
+        padding: 14px;
+        border-radius: 12px;
+      }
+      .empty-msg {
+        text-align: center;
         color: #9aa0ab;
+        font-size: 13px;
+        padding: 40px 0;
         font-weight: 600;
       }
-      .steps-list {
-        list-style: none;
-        counter-reset: step;
-      }
-      .steps-list li {
-        counter-increment: step;
-        font-size: 13.5px;
-        color: #374151;
-        padding: 7px 0 7px 26px;
-        position: relative;
-        border-bottom: 1px solid #f1f2f4;
-      }
-      .steps-list li::before {
-        content: counter(step);
-        position: absolute;
-        left: 0;
-        top: 6px;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        background: #6f4e37;
-        color: #fff;
-        font-size: 10px;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .note-box {
-        margin-top: 14px;
-        background: #fdf6ec;
-        border: 1px solid #f0e2cc;
-        border-radius: 12px;
-        padding: 10px 12px;
-        font-size: 12.5px;
-        color: #8a6d3b;
-        line-height: 1.5;
-      }
-
-      /* ===== HALAMAN KHUSUS MODUL ===== */
-      .module-screen {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        inset: 0;
-        background: #fff;
-        z-index: 1;
-        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        transform: translateX(100%);
-      }
-      .module-screen.active {
-        transform: translateX(0);
-        z-index: 3;
-      }
-      .module-screen.exit-left {
-        transform: translateX(-30%);
-        z-index: 1;
-      }
-
       .hidden-scroll::-webkit-scrollbar {
         width: 0;
       }
@@ -336,7 +336,7 @@
   </head>
   <body>
     <div class="phone">
-      <!-- HALAMAN UTAMA (DASHBOARD GRID MODUL) -->
+      <!-- HALAMAN UTAMA (KATEGORI MODUL) -->
       <div class="screen active" id="homeScreen">
         <div class="search-row">
           <div class="search-box">
@@ -352,19 +352,21 @@
             <input
               id="searchInput"
               type="text"
-              placeholder="Cari modul..."
+              placeholder="Cari kategori modul..."
               oninput="renderHomeGrid()"
             />
           </div>
         </div>
+
         <div class="menu-wrap hidden-scroll">
+          <p class="section-label">KATEGORI MENU</p>
           <div class="grid" id="homeGrid"></div>
         </div>
       </div>
 
-      <!-- HALAMAN KHUSUS MODUL -->
+      <!-- HALAMAN SUB-MENU PER KATEGORI -->
       <div class="module-screen" id="moduleScreen">
-        <div class="search-row" style="padding-bottom: 0">
+        <div class="search-row">
           <div class="search-box">
             <svg
               viewBox="0 0 24 24"
@@ -378,12 +380,14 @@
             <input
               id="modSearchInput"
               type="text"
-              placeholder="Cari menu di modul ini"
+              placeholder="Cari resep menu..."
               oninput="renderModuleMenu()"
             />
           </div>
         </div>
-        <div class="menu-wrap hidden-scroll" style="margin-top: 4px">
+
+        <div class="menu-wrap hidden-scroll">
+          <p class="section-label" id="moduleLabel">DAFTAR RESEP</p>
           <div class="grid" id="modGrid"></div>
         </div>
       </div>
@@ -391,17 +395,7 @@
       <!-- HALAMAN DETAIL ITEM -->
       <div class="screen" id="detailScreen">
         <div class="detail-header">
-          <button class="back-btn" onclick="closeSheet()">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-            >
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-          </button>
-          <div class="detail-header-title">Detail Resep Menu</div>
+          <div class="detail-header-title">Detail Resep Resmi</div>
         </div>
         <div class="detail-content hidden-scroll">
           <div class="sheet-icon" id="sheetIcon"></div>
@@ -414,340 +408,795 @@
 
     <script>
       const modules = [
-        { id: "Modul 01", name: "Modul 1", icon: "01", cls: "c-1" },
-        { id: "Modul 02", name: "Modul 2", icon: "02", cls: "c-2" },
-        { id: "Modul 03", name: "Modul 3", icon: "03", cls: "c-3" },
-        { id: "Modul 04", name: "Modul 4", icon: "04", cls: "c-4" },
-        { id: "Modul 05", name: "Modul 5", icon: "05", cls: "c-5" },
-        { id: "Modul 06", name: "Modul 6", icon: "06", cls: "c-6" },
-        { id: "Modul 07", name: "Modul 7", icon: "07", cls: "c-7" },
-        { id: "Modul 08", name: "Modul 8", icon: "08", cls: "c-8" },
+        { id: "Premix UHT", name: "Premix UHT", icon: "🧃", cls: "g-a" },
+        {
+          id: "Manual / Non-Premix",
+          name: "Manual / Non-Premix",
+          icon: "☕",
+          cls: "g-b",
+        },
+        { id: "Black Coffee", name: "Black Coffee", icon: "☕", cls: "g-c" },
+        { id: "Hot Espresso", name: "Hot Espresso", icon: "🔥", cls: "g-d" },
+        {
+          id: "Chocolate & Matcha",
+          name: "Choco & Matcha",
+          icon: "🍫",
+          cls: "g-e",
+        },
+        {
+          id: "Blended / Frappe",
+          name: "Blended / Frappe",
+          icon: "🥤",
+          cls: "g-f",
+        },
+        {
+          id: "Specialty & Cloud",
+          name: "Specialty & Cloud",
+          icon: "☁️",
+          cls: "g-g",
+        },
+        {
+          id: "Soft Drink & Tea",
+          name: "Soft Drink & Tea",
+          icon: "🧋",
+          cls: "g-h",
+        },
+        { id: "Jus", name: "Jus Segar", icon: "🍹", cls: "g-a" },
       ];
 
       const menuData = [
-        // Modul 01
+        // --- A. PREMIX UHT ---
         {
-          name: "Premix UHT Dasar",
-          icon: "🧪",
-          cls: "c-1",
-          category: "Modul 01",
+          name: "Coffee Latte (Ice) Premix",
+          icon: "🧊",
+          cls: "g-a",
+          category: "Premix UHT",
           comp: [
-            ["Krimer", "250 g"],
-            ["Air panas", "250 g"],
-            ["Susu UHT", "1000 g"],
-          ],
-          note: "Stock espresso: 2x pencet",
-        },
-        {
-          name: "Coffee Latte (Ice)",
-          icon: "☕",
-          cls: "c-1",
-          category: "Modul 01",
-          variants: [
-            {
-              label: "Regular 12 oz",
-              items: [
-                ["Stock espresso", "30 g"],
-                ["Es batu", "150 g"],
-                ["Susu UHT", "120 g"],
-              ],
-            },
-            {
-              label: "Upsize 16 oz",
-              items: [
-                ["Stock espresso", "60 g"],
-                ["Es batu", "180 g"],
-                ["Susu UHT", "150 g"],
-              ],
-            },
+            ["Stock Espresso", "30g (12oz) | 60g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Susu UHT", "120g (12oz) | 150g (16oz)"],
+            ["Request Gula", "+20g (12oz) | +40g (16oz)"],
+            ["Less Gula", "10g (12oz) | 30g (16oz)"],
           ],
         },
         {
-          name: "Vanilla Latte (Ice)",
-          icon: "🌼",
-          cls: "c-1",
-          category: "Modul 01",
-          variants: [
-            {
-              label: "Regular",
-              items: [
-                ["Syrup vanilla", "15 g"],
-                ["Es batu", "150 g"],
-                ["Premix UHT", "140 g"],
-                ["Stock espresso", "30 g"],
-              ],
-            },
-            {
-              label: "Upsize",
-              items: [
-                ["Syrup vanilla", "25 g"],
-                ["Es batu", "180 g"],
-                ["Premix UHT", "150 g"],
-                ["Stock espresso", "60 g"],
-              ],
-            },
+          name: "Vanilla Latte (Premix)",
+          icon: "🍦",
+          cls: "g-b",
+          category: "Premix UHT",
+          comp: [
+            ["Vanilla Syrup", "15g (12oz) | 25g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Premix UHT", "140g (12oz) | 150g (16oz)"],
+            ["Stock Espresso", "30g (12oz) | 60g (16oz)"],
           ],
         },
         {
-          name: "Salted Caramel Latte (Ice)",
+          name: "Salted Caramel Latte (Premix)",
           icon: "🍮",
-          cls: "c-1",
-          category: "Modul 01",
-          variants: [
-            {
-              label: "Regular",
-              items: [
-                ["Syrup salted caramel", "15 g"],
-                ["Es batu", "150 g"],
-                ["Premix UHT", "140 g"],
-                ["Stock espresso", "30 g"],
-              ],
-            },
-            {
-              label: "Upsize",
-              items: [
-                ["Syrup salted caramel", "25 g"],
-                ["Es batu", "180 g"],
-                ["Premix UHT", "150 g"],
-                ["Stock espresso", "60 g"],
-              ],
-            },
+          cls: "g-c",
+          category: "Premix UHT",
+          comp: [
+            ["Salted Caramel Syrup", "15g (12oz) | 25g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Premix UHT", "140g (12oz) | 150g (16oz)"],
+            ["Stock Espresso", "30g (12oz) | 60g (16oz)"],
           ],
         },
         {
-          name: "Butterscotch Latte (Ice)",
+          name: "Butterscotch Latte (Premix)",
           icon: "🧈",
-          cls: "c-1",
-          category: "Modul 01",
-          variants: [
-            {
-              label: "Regular",
-              items: [
-                ["Syrup butterscotch", "15 g"],
-                ["Es batu", "150 g"],
-                ["Premix UHT", "140 g"],
-                ["Stock espresso", "30 g"],
-              ],
-            },
-            {
-              label: "Upsize",
-              items: [
-                ["Syrup butterscotch", "25 g"],
-                ["Es batu", "180 g"],
-                ["Premix UHT", "150 g"],
-                ["Stock espresso", "60 g"],
-              ],
-            },
+          cls: "g-d",
+          category: "Premix UHT",
+          comp: [
+            ["Butterscotch Syrup", "15g (12oz) | 25g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Premix UHT", "140g (12oz) | 150g (16oz)"],
+            ["Stock Espresso", "30g (12oz) | 60g (16oz)"],
+          ],
+        },
+        {
+          name: "Salted Buttercorn Latte (Premix)",
+          icon: "🌽",
+          cls: "g-e",
+          category: "Premix UHT",
+          comp: [
+            ["Sirup Popcorn", "15g (12oz) | 25g (16oz)"],
+            ["Sirup Salted Caramel", "5g (12oz) | 5g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Premix UHT", "140g (12oz) | 150g (16oz)"],
+            ["Stock Espresso", "40g (12oz) | 75g (16oz)"],
+          ],
+        },
+        {
+          name: "Jadi Keren - Kopsu Gula Aren (Premix)",
+          icon: "😎",
+          cls: "g-f",
+          category: "Premix UHT",
+          comp: [
+            ["Gula Aren", "13g (12oz) | 20g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Premix UHT", "140g (12oz) | 150g (16oz)"],
+            ["Stock Espresso", "30g (12oz) | 60g (16oz)"],
+          ],
+        },
+        {
+          name: "Mocha Latte (Premix)",
+          icon: "🍫",
+          cls: "g-g",
+          category: "Premix UHT",
+          comp: [
+            ["Saus Coklat", "15g (12oz) | 25g (16oz)"],
+            ["Stock Espresso", "30g (12oz) | 60g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Premix UHT", "140g (12oz) | 150g (16oz)"],
+          ],
+        },
+        {
+          name: "Jadi Rindu - Kopsu Madu (Premix)",
+          icon: "❤️",
+          cls: "g-h",
+          category: "Premix UHT",
+          comp: [
+            ["Madu", "25g (12oz) | 35g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Premix UHT", "140g (12oz) | 150g (16oz)"],
+            ["Stock Espresso", "30g (12oz) | 60g (16oz)"],
+          ],
+        },
+        {
+          name: "Jadi Macchiatto (Premix)",
+          icon: "🍯",
+          cls: "g-a",
+          category: "Premix UHT",
+          comp: [
+            ["Caramel Sauce", "20g (12oz) | 30g (16oz)"],
+            ["Es Batu", "150g (12oz) | 150g (16oz)"],
+            ["Premix UHT", "140g (12oz) | 140g (16oz)"],
+            ["Stock Espresso", "40g (12oz) | 75g (16oz)"],
           ],
         },
 
-        // Modul 02
+        // --- B. MANUAL / NON-PREMIX ---
         {
-          name: "Hot Espresso",
-          icon: "☕",
-          cls: "c-2",
-          category: "Modul 02",
-          comp: [["Espresso", "*"]],
+          name: "Salted Buttercorn Latte (Manual)",
+          icon: "🌽",
+          cls: "g-b",
+          category: "Manual / Non-Premix",
+          comp: [
+            ["Sirup Popcorn", "15g (12oz) | 25g (16oz)"],
+            ["Sirup Salted Caramel", "5g (12oz) | 5g (16oz)"],
+            ["Krimer", "20g (12oz) | 25g (16oz)"],
+            ["Espresso", "1x (12oz) | 2x (16oz)"],
+            ["Es Batu", "150g (12oz) | 150g (16oz)"],
+            ["Susu UHT", "100g (12oz) | 100g (16oz)"],
+          ],
+          cara: "Pakai Krimer + Espresso langsung, bukan Premix + Stock espresso.",
         },
         {
-          name: "Cappuccino (Hot)",
-          icon: "🫧",
-          cls: "c-2",
-          category: "Modul 02",
+          name: "Jadi Keren - Kopsu Gula Aren (Manual)",
+          icon: "😎",
+          cls: "g-c",
+          category: "Manual / Non-Premix",
           comp: [
-            ["Espresso", "*"],
-            ["Fresh milk", "90 g"],
+            ["Gula Aren", "13g (12oz) | 20g (16oz)"],
+            ["Krimer", "20g (12oz) | 25g (16oz)"],
+            ["Espresso", "1x (12oz) | 2x (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Susu UHT", "100g (12oz) | 100g (16oz)"],
+          ],
+          cara: "Pakai Krimer, bukan Premix.",
+        },
+        {
+          name: "Jadi Rindu - Kopsu Madu (Manual)",
+          icon: "❤️",
+          cls: "g-d",
+          category: "Manual / Non-Premix",
+          comp: [
+            ["Madu", "25g (12oz) | 35g (16oz)"],
+            ["Krimer", "20g (12oz) | 25g (16oz)"],
+            ["Espresso", "1x (12oz) | 2x (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Susu UHT", "100g (12oz) | 100g (16oz)"],
           ],
         },
         {
-          name: "Caffelatte (Hot)",
+          name: "Mocha Latte (Manual)",
+          icon: "🍫",
+          cls: "g-e",
+          category: "Manual / Non-Premix",
+          comp: [
+            ["Saus Coklat", "15g (12oz) | 25g (16oz)"],
+            ["Krimer", "20g (12oz) | 25g (16oz)"],
+            ["Espresso", "1x (12oz) | 2x (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Susu UHT", "100g (12oz) | 100g (16oz)"],
+          ],
+          cara: "+ 5g saus coklat diulir di dinding gelas.",
+        },
+        {
+          name: "Vanilla Latte (Manual)",
+          icon: "🍦",
+          cls: "g-f",
+          category: "Manual / Non-Premix",
+          comp: [
+            ["Vanilla Syrup", "15g (12oz) | 25g (16oz)"],
+            ["Krimer", "20g (12oz) | 25g (16oz)"],
+            ["Espresso", "1x (12oz) | 2x (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Susu UHT", "100g (12oz) | 100g (16oz)"],
+          ],
+        },
+        {
+          name: "Salted Caramel Latte (Manual)",
+          icon: "🍮",
+          cls: "g-g",
+          category: "Manual / Non-Premix",
+          comp: [
+            ["Salted Caramel Syrup", "15g (12oz) | 25g (16oz)"],
+            ["Krimer", "20g (12oz) | 25g (16oz)"],
+            ["Espresso", "1x (12oz) | 2x (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Susu UHT", "100g (12oz) | 100g (16oz)"],
+          ],
+        },
+        {
+          name: "Butterscotch Latte (Manual)",
+          icon: "🧈",
+          cls: "g-h",
+          category: "Manual / Non-Premix",
+          comp: [
+            ["Butterscotch Syrup", "15g (12oz) | 25g (16oz)"],
+            ["Krimer", "20g (12oz) | 25g (16oz)"],
+            ["Espresso", "1x (12oz) | 2x (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Susu UHT", "100g (12oz) | 100g (16oz)"],
+          ],
+        },
+        {
+          name: "JA~DI Macchiatto (Manual)",
+          icon: "🍯",
+          cls: "g-a",
+          category: "Manual / Non-Premix",
+          comp: [
+            ["Caramel Sauce", "20g (12oz) | 30g (16oz)"],
+            ["Krimer", "20g (12oz) | 25g (16oz)"],
+            ["Espresso", "1x (12oz) | 2x (16oz)"],
+            ["Es Batu", "150g (12oz) | 150g (16oz)"],
+            ["Susu UHT", "100g (12oz) | 100g (16oz)"],
+          ],
+        },
+        {
+          name: "Coffee Latte Ice (Manual)",
+          icon: "🧊",
+          cls: "g-b",
+          category: "Manual / Non-Premix",
+          comp: [
+            ["Espresso", "1x (12oz) | 2x (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Susu UHT", "130g (12oz) | 165g (16oz)"],
+            ["Request Gula", "20g (12oz) | 40g (16oz)"],
+            ["Less Gula", "10g (12oz) | 30g (16oz)"],
+          ],
+        },
+        {
+          name: "Cappuccino Ice",
           icon: "🥛",
-          cls: "c-2",
-          category: "Modul 02",
+          cls: "g-c",
+          category: "Manual / Non-Premix",
           comp: [
-            ["Espresso", "*"],
-            ["Fresh milk", "120 g"],
+            ["Espresso", "1x (12oz) | 2x (16oz)"],
+            ["Es Batu", "150g (12oz) | 200g (16oz)"],
+            ["Susu UHT", "120g (12oz) | 150g (16oz)"],
+            ["Request Gula", "30g (12oz) | 45g (16oz)"],
+          ],
+        },
+
+        // --- C. BLACK COFFEE & AMERICANO ---
+        {
+          name: "Americano Hot",
+          icon: "☕",
+          cls: "g-d",
+          category: "Black Coffee",
+          comp: [
+            ["Americano", "1x"],
+            ["Request Gula", "25g"],
+            ["Less Gula", "10g"],
           ],
         },
         {
-          name: "Korean Strawberry Milk (Ice)",
-          icon: "🍓",
-          cls: "c-2",
-          category: "Modul 02",
-          variants: [
-            {
-              label: "Regular",
-              items: [
-                ["Puree strawberry", "50 g"],
-                ["Susu UHT", "130 g"],
-                ["Es batu", "150 g"],
-              ],
-            },
-            {
-              label: "Upsize",
-              items: [
-                ["Puree strawberry", "90 g"],
-                ["Susu UHT", "200 g"],
-                ["Es batu", "180 g"],
-              ],
-            },
+          name: "Americano Ice",
+          icon: "🧊",
+          cls: "g-e",
+          category: "Black Coffee",
+          comp: [
+            ["Espresso", "1x (12oz) | 2x (16oz)"],
+            ["Es Batu", "150g (12oz) | 200g (16oz)"],
+            ["Air", "100g (12oz) | 120g (16oz)"],
+            ["Gula", "25g (12oz) | 40g (16oz)"],
+            ["Less Gula", "10g (12oz) | 25g (16oz)"],
           ],
         },
+        {
+          name: "Black Coffee with Honey",
+          icon: "🍯",
+          cls: "g-f",
+          category: "Black Coffee",
+          comp: [
+            ["Hot", "Madu 30g + Americano 1x"],
+            ["Ice 12oz", "Madu 35g + Espresso 1x + Es 150g + Air 100g"],
+            ["Ice 16oz", "Madu 60g + Espresso 2x + Es 200g + Air 120g"],
+          ],
+        },
+        {
+          name: "Hawaiian Americano (Ice Upsize)",
+          icon: "🌺",
+          cls: "g-g",
+          category: "Black Coffee",
+          comp: [
+            ["Coconut Syrup", "35g"],
+            ["Hydro Coco", "200g"],
+            ["Es Batu", "150g"],
+            ["Espresso", "1x"],
+          ],
+        },
+
+        // --- D. HOT ESPRESSO-BASED ---
+        {
+          name: "Espresso Hot",
+          icon: "☕",
+          cls: "g-h",
+          category: "Hot Espresso",
+          comp: [["Espresso", "1x"]],
+        },
+        {
+          name: "Cappuccino Hot",
+          icon: "🫧",
+          cls: "g-a",
+          category: "Hot Espresso",
+          comp: [
+            ["Espresso", "1x"],
+            ["Fresh Milk", "90g"],
+          ],
+          cara: "Pastikan milk jug terisi Fresh Milk & posisi frothing sebelum pencet tombol.",
+        },
+        {
+          name: "Caffelatte Hot",
+          icon: "🥛",
+          cls: "g-b",
+          category: "Hot Espresso",
+          comp: [
+            ["Espresso", "1x"],
+            ["Fresh Milk", "120g"],
+          ],
+          cara: "Pastikan milk jug terisi Fresh Milk & posisi frothing sebelum pencet tombol.",
+        },
+
+        // --- E. CHOCOLATE & MATCHA ---
         {
           name: "Hot Chocolate",
-          icon: "🍫",
-          cls: "c-2",
-          category: "Modul 02",
-          steps: [
-            "Larutkan powder + air panas di paper cup",
-            "Aduk hingga larut",
-            "Steam fresh milk",
-            "Tuang ke paper cup",
-          ],
-        },
-
-        // Modul 03
-        {
-          name: "Menu A Modul 3",
-          icon: "🍹",
-          cls: "c-3",
-          category: "Modul 03",
+          icon: "☕",
+          cls: "g-c",
+          category: "Chocolate & Matcha",
           comp: [
-            ["Bahan A", "100 g"],
-            ["Bahan B", "50 g"],
+            ["Powder Coklat", "25g"],
+            ["Air Panas", "35g"],
+            ["Fresh Milk", "110g"],
           ],
         },
         {
-          name: "Menu B Modul 3",
-          icon: "🥤",
-          cls: "c-3",
-          category: "Modul 03",
+          name: "Ice Chocolate",
+          icon: "🧊",
+          cls: "g-d",
+          category: "Chocolate & Matcha",
           comp: [
-            ["Bahan C", "120 g"],
-            ["Bahan D", "60 g"],
-          ],
-        },
-
-        // Modul 04
-        {
-          name: "Menu A Modul 4",
-          icon: "🍧",
-          cls: "c-4",
-          category: "Modul 04",
-          comp: [
-            ["Bahan E", "100 g"],
-            ["Bahan F", "50 g"],
+            ["Powder Coklat", "30g (12oz) | 45g (16oz)"],
+            ["Air Panas", "30g (12oz) | 50g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Susu UHT", "100g (12oz) | 140g (16oz)"],
           ],
         },
         {
-          name: "Menu B Modul 4",
-          icon: "🍨",
-          cls: "c-4",
-          category: "Modul 04",
-          comp: [
-            ["Bahan G", "120 g"],
-            ["Bahan H", "60 g"],
-          ],
-        },
-
-        // Modul 05
-        {
-          name: "Menu A Modul 5",
-          icon: "🧃",
-          cls: "c-5",
-          category: "Modul 05",
-          comp: [
-            ["Bahan I", "100 g"],
-            ["Bahan J", "50 g"],
-          ],
-        },
-        {
-          name: "Menu B Modul 5",
-          icon: "🧋",
-          cls: "c-5",
-          category: "Modul 05",
-          comp: [
-            ["Bahan K", "120 g"],
-            ["Bahan L", "60 g"],
-          ],
-        },
-
-        // Modul 06
-        {
-          name: "Menu A Modul 6",
+          name: "Hot Matcha",
           icon: "🍵",
-          cls: "c-6",
-          category: "Modul 06",
+          cls: "g-e",
+          category: "Chocolate & Matcha",
           comp: [
-            ["Bahan M", "100 g"],
-            ["Bahan N", "50 g"],
+            ["Powder Matcha", "15g"],
+            ["Air Panas", "15g"],
+            ["Fresh Milk", "110g"],
           ],
         },
         {
-          name: "Menu B Modul 6",
-          icon: "🫖",
-          cls: "c-6",
-          category: "Modul 06",
+          name: "Ice Matcha",
+          icon: "🍃",
+          cls: "g-f",
+          category: "Chocolate & Matcha",
           comp: [
-            ["Bahan O", "120 g"],
-            ["Bahan P", "60 g"],
-          ],
-        },
-
-        // Modul 07
-        {
-          name: "Menu A Modul 7",
-          icon: "🧉",
-          cls: "c-7",
-          category: "Modul 07",
-          comp: [
-            ["Bahan Q", "100 g"],
-            ["Bahan R", "50 g"],
+            ["Powder Matcha", "20g (12oz) | 35g (16oz)"],
+            ["Air Panas", "20g (12oz) | 35g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+            ["Susu UHT", "100g (12oz) | 140g (16oz)"],
           ],
         },
         {
-          name: "Menu B Modul 7",
-          icon: "🍸",
-          cls: "c-7",
-          category: "Modul 07",
+          name: "Choco Berry (Ice 12oz)",
+          icon: "🍓",
+          cls: "g-g",
+          category: "Chocolate & Matcha",
           comp: [
-            ["Bahan S", "120 g"],
-            ["Bahan T", "60 g"],
+            ["Powder Coklat", "25g"],
+            ["Air Panas", "40g"],
+            ["Strawberry Puree", "15g"],
+            ["Es Batu", "150g"],
+            ["Susu UHT", "100g"],
           ],
         },
 
-        // Modul 08
+        // --- F. BLENDED / FRAPPE ---
         {
-          name: "Menu A Modul 8",
-          icon: "🍹",
-          cls: "c-8",
-          category: "Modul 08",
+          name: "Blended Vanilla Caramel",
+          icon: "🍦",
+          cls: "g-h",
+          category: "Blended / Frappe",
           comp: [
-            ["Bahan U", "100 g"],
-            ["Bahan V", "50 g"],
+            ["Krimer", "40g (12oz) | 45g (16oz)"],
+            ["Susu UHT", "80g (12oz) | 140g (16oz)"],
+            ["Syrup Vanilla", "15g (12oz) | 25g (16oz)"],
+            ["Saus Caramel", "25g (12oz) | 40g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+          ],
+          cara: "Blender 30 detik + ulir saus 3g di dinding gelas.",
+        },
+        {
+          name: "Blended Choco",
+          icon: "🍫",
+          cls: "g-a",
+          category: "Blended / Frappe",
+          comp: [
+            ["Krimer", "40g (12oz) | 45g (16oz)"],
+            ["Susu UHT", "80g (12oz) | 140g (16oz)"],
+            ["Powder Coklat", "20g (12oz) | 35g (16oz)"],
+            ["Saus Coklat", "20g (12oz) | 35g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+          ],
+          cara: "Blender 30 detik.",
+        },
+        {
+          name: "Blended Choco Caramel",
+          icon: "🍮",
+          cls: "g-b",
+          category: "Blended / Frappe",
+          comp: [
+            ["Krimer", "40g (12oz) | 45g (16oz)"],
+            ["Susu UHT", "80g (12oz) | 140g (16oz)"],
+            ["Powder Coklat", "20g (12oz) | 25g (16oz)"],
+            ["Saus Caramel", "20g (12oz) | 35g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
+          ],
+          cara: "Blender 30 detik.",
+        },
+        {
+          name: "Creamy Coconut Frappe (Upsize)",
+          icon: "🥥",
+          cls: "g-c",
+          category: "Blended / Frappe",
+          comp: [
+            ["Krimer", "45g"],
+            ["Coconut Syrup", "25g"],
+            ["Hydro Coco", "100g"],
+            ["Salted Caramel Syrup", "10g"],
+            ["Es Batu", "180g"],
+            ["Brown Sugar Syrup", "3g (diulir)"],
+          ],
+          cara: "Blender 30 detik.",
+        },
+
+        // --- G. SPECIALTY & CLOUD ---
+        {
+          name: "Korean Strawberry Milk",
+          icon: "🍓",
+          cls: "g-d",
+          category: "Specialty & Cloud",
+          comp: [
+            ["Puree Strawberry", "50g (12oz) | 90g (16oz)"],
+            ["Susu UHT", "130g (12oz) | 200g (16oz)"],
+            ["Es Batu", "150g (12oz) | 180g (16oz)"],
           ],
         },
         {
-          name: "Menu B Modul 8",
-          icon: "🍾",
-          cls: "c-8",
-          category: "Modul 08",
+          name: "Affogato",
+          icon: "🍨",
+          cls: "g-e",
+          category: "Specialty & Cloud",
           comp: [
-            ["Bahan W", "120 g"],
-            ["Bahan X", "60 g"],
+            ["Espresso", "1x"],
+            ["Es Krim Vanilla/Mango", "2 scoop"],
+            ["Wafer Roll", "1 pcs"],
+          ],
+        },
+        {
+          name: "Ice Collagen Latte (12oz)",
+          icon: "🌸",
+          cls: "g-f",
+          category: "Specialty & Cloud",
+          comp: [
+            ["Collagen Bearbrand", "120g"],
+            ["Espresso", "1x"],
+            ["Es Batu", "150g"],
+            ["Request Gula", "30g"],
+          ],
+        },
+        {
+          name: "Ice Dolce Latte (12oz)",
+          icon: "🍬",
+          cls: "g-g",
+          category: "Specialty & Cloud",
+          comp: [
+            ["Krimer", "20g"],
+            ["KKM Carnation", "20g"],
+            ["Espresso", "1x"],
+            ["Es Batu", "150g"],
+            ["Susu UHT", "100g"],
+          ],
+        },
+        {
+          name: "Coconut Cloud Latte",
+          icon: "🥥",
+          cls: "g-h",
+          category: "Specialty & Cloud",
+          comp: [
+            ["Sirup Coconut", "15g (12oz) | 30g (16oz)"],
+            ["Macchiato Cloud Foam", "30g (12oz) | 30g (16oz)"],
+            ["Espresso", "1x (12oz) | 2x (16oz)"],
+            ["Es Batu", "150g (12oz) | 150g (16oz)"],
+            ["Susu UHT", "100g (12oz) | 100g (16oz)"],
+          ],
+        },
+        {
+          name: "Pandan Cloud Latte",
+          icon: "🌿",
+          cls: "g-a",
+          category: "Specialty & Cloud",
+          comp: [
+            ["Sirup Pandan", "15g (12oz) | 30g (16oz)"],
+            ["Macchiato Cloud Foam", "30g (12oz) | 30g (16oz)"],
+            ["Espresso", "1x (12oz) | 2x (16oz)"],
+            ["Es Batu", "150g (12oz) | 150g (16oz)"],
+            ["Susu UHT", "100g (12oz) | 100g (16oz)"],
+          ],
+        },
+
+        // --- H. SOFT DRINK & SHAKEN TEA ---
+        {
+          name: "Salted Caramel Coca (12oz)",
+          icon: "🥤",
+          cls: "g-b",
+          category: "Soft Drink & Tea",
+          comp: [
+            ["Salted Caramel Syrup", "20g"],
+            ["Es Batu", "150g"],
+            ["Coca Cola", "125g"],
+            ["Macchiato Cloud Foam", "30g"],
+          ],
+        },
+        {
+          name: "Toffee Popcorn Fanta (12oz)",
+          icon: "🍿",
+          cls: "g-c",
+          category: "Soft Drink & Tea",
+          comp: [
+            ["Toffee Popcorn Syrup", "20g"],
+            ["Es Batu", "150g"],
+            ["Fanta", "125g"],
+            ["Macchiato Cloud Foam", "30g"],
+          ],
+        },
+        {
+          name: "Lychee Sprite (12oz)",
+          icon: "🍋",
+          cls: "g-d",
+          category: "Soft Drink & Tea",
+          comp: [
+            ["Lychee Syrup", "20g"],
+            ["Lychee Jelly", "20g"],
+            ["Es Batu", "150g"],
+            ["Sprite", "125g"],
+            ["Macchiato Cloud Foam", "30g"],
+          ],
+        },
+        {
+          name: "Shaken Lychee Tea",
+          icon: "🫐",
+          cls: "g-e",
+          category: "Soft Drink & Tea",
+          comp: [
+            ["Tea Bag Srwngi", "1 pcs"],
+            ["Air Panas", "100g (12oz) | 150g (16oz)"],
+            ["Sirup Lychee", "30g (12oz) | 50g (16oz)"],
+            ["Es Batu", "150g (12oz) | 200g (16oz)"],
+            ["Lychee Jelly", "20g (12oz) | 25g (16oz)"],
+          ],
+          cara: "Shake es + teh + sirup 10 detik -> tuang ke gelas -> tambah lychee jelly.",
+        },
+        {
+          name: "Shaken Honey Lemon Tea",
+          icon: "🍋",
+          cls: "g-f",
+          category: "Soft Drink & Tea",
+          comp: [
+            ["Tea Bag Tongtji", "1 pcs"],
+            ["Air Panas", "100g (12oz) | 150g (16oz)"],
+            ["Madu", "30g (12oz) | 60g (16oz)"],
+            ["Es Batu", "150g (12oz) | 200g (16oz)"],
+            ["Fresh Lemon", "1 slice"],
+          ],
+          cara: "Shake es + teh + madu 10 detik -> tuang ke gelas -> tambah slice lemon.",
+        },
+
+        // --- I. JUS ---
+        {
+          name: "Green Juice",
+          icon: "🥬",
+          cls: "g-g",
+          category: "Jus",
+          comp: [
+            ["Bayam Hijau", "120g"],
+            ["Nanas Honi", "120g"],
+            ["Timun", "120g"],
+            ["Apel Fuji", "120g"],
+            ["Es Batu", "100g"],
+          ],
+        },
+        {
+          name: "Juice Sirsak",
+          icon: "🍈",
+          cls: "g-h",
+          category: "Jus",
+          comp: [
+            ["RPC Sirsak Frozen", "1 pc"],
+            ["Air", "200g"],
+          ],
+        },
+        {
+          name: "Juice Alpukat",
+          icon: "🥑",
+          cls: "g-a",
+          category: "Jus",
+          comp: [
+            ["Alpukat", "175g"],
+            ["Air", "165g"],
+            ["Es Batu", "50g"],
+          ],
+        },
+        {
+          name: "Juice Buah Naga",
+          icon: "🐲",
+          cls: "g-b",
+          category: "Jus",
+          comp: [
+            ["Buah Naga Merah", "290g"],
+            ["Es Batu", "80g"],
+          ],
+        },
+        {
+          name: "Juice Jambu",
+          icon: "🍒",
+          cls: "g-c",
+          category: "Jus",
+          comp: [
+            ["Jambu Klutuk Merah", "250g"],
+            ["Air", "100g"],
+            ["Es Batu", "50g"],
+          ],
+        },
+        {
+          name: "Juice Semangka",
+          icon: "🍉",
+          cls: "g-d",
+          category: "Jus",
+          comp: [
+            ["Semangka Merah Tanpa Biji", "500g"],
+            ["Es Batu", "100g"],
+          ],
+        },
+        {
+          name: "Juice Melon",
+          icon: "🍈",
+          cls: "g-e",
+          category: "Jus",
+          comp: [
+            ["Melon Sky Rocket", "400g"],
+            ["Es Batu", "100g"],
+          ],
+        },
+        {
+          name: "Juice Pisang Strawberry",
+          icon: "🍌",
+          cls: "g-f",
+          category: "Jus",
+          comp: [
+            ["Pisang Cavendish", "150g"],
+            ["Strawberry Frozen", "100g"],
+            ["Es Batu", "100g"],
+          ],
+        },
+        {
+          name: "Juice Mangga Harum Manis",
+          icon: "🥭",
+          cls: "g-g",
+          category: "Jus",
+          comp: [
+            ["Daging Mangga HM", "250g"],
+            ["Es Batu", "150g"],
+          ],
+        },
+        {
+          name: "Juice Apel Mix",
+          icon: "🍎",
+          cls: "g-h",
+          category: "Jus",
+          comp: [
+            ["Nanas Honi/Madu", "145g"],
+            ["Apel Fuji", "1 pack"],
+            ["Lemon Impor", "50g"],
+            ["Air", "75g"],
+          ],
+        },
+        {
+          name: "Juice Carrot Mixed Fruit",
+          icon: "🥕",
+          cls: "g-a",
+          category: "Jus",
+          comp: [
+            ["Wortel Lokal Super", "280g"],
+            ["Nanas Honi", "100g"],
+            ["Apel Fuji", "200g"],
+            ["Es Batu", "100g"],
+          ],
+        },
+        {
+          name: "Juice Jeruk",
+          icon: "🍊",
+          cls: "g-b",
+          category: "Jus",
+          comp: [
+            ["Jeruk Peras", "400g"],
+            ["Es Batu", "100g"],
+          ],
+        },
+        {
+          name: "Juice Jeruk Navel",
+          icon: "🍊",
+          cls: "g-c",
+          category: "Jus",
+          comp: [
+            ["Jeruk Navel", "770g"],
+            ["Es Batu", "100g"],
+          ],
+        },
+        {
+          name: "Juice Jeruk Navel Cara Cara",
+          icon: "🍊",
+          cls: "g-d",
+          category: "Jus",
+          comp: [
+            ["Jeruk Navel Cara Cara", "770g"],
+            ["Es Batu", "100g"],
           ],
         },
       ];
 
-      let currentCat = "Modul 01";
+      let currentCat = "Premix UHT";
 
       const homeGrid = document.getElementById("homeGrid");
       const modGrid = document.getElementById("modGrid");
       const searchInput = document.getElementById("searchInput");
       const modSearchInput = document.getElementById("modSearchInput");
-      const homeScreen = document.getElementById("homeScreen");
       const moduleScreen = document.getElementById("moduleScreen");
       const detailScreen = document.getElementById("detailScreen");
+      const moduleLabel = document.getElementById("moduleLabel");
+
       const sheetIcon = document.getElementById("sheetIcon");
       const sheetName = document.getElementById("sheetName");
       const sheetTag = document.getElementById("sheetTag");
@@ -763,35 +1212,29 @@
         );
 
         if (filtered.length === 0) {
-          homeGrid.innerHTML = `<div class="empty-msg" style="grid-column:1/-1">Modul tidak ditemukan</div>`;
+          homeGrid.innerHTML = `<div class="empty-msg" style="grid-column:1/-1">Kategori tidak ditemukan</div>`;
           return;
         }
 
         homeGrid.innerHTML = filtered
-          .map((m) => {
-            return `
-        <button class="item" onclick="openModule('${m.id}')">
-          <div class="icon-tile ${m.cls}">
-            ${m.icon}
-          </div>
-          <span>${m.name}</span>
-        </button>
-      `;
-          })
+          .map(
+            (m) => `
+            <button class="item active-modul" onclick="openModule('${m.id}')">
+              <div class="icon-tile ${m.cls}">${m.icon}</div>
+              <span>${m.name}</span>
+            </button>
+          `,
+          )
           .join("");
       }
 
       function openModule(catName) {
         currentCat = catName;
+        moduleLabel.textContent = catName.toUpperCase();
         modSearchInput.value = "";
         renderModuleMenu();
-        homeScreen.classList.add("exit-left");
         moduleScreen.classList.add("active");
-      }
-
-      function closeModule() {
-        moduleScreen.classList.remove("active");
-        homeScreen.classList.remove("exit-left");
+        history.pushState({ screen: "module" }, "");
       }
 
       function renderModuleMenu() {
@@ -803,7 +1246,7 @@
         });
 
         if (filtered.length === 0) {
-          modGrid.innerHTML = `<div class="empty-msg" style="grid-column:1/-1">Menu tidak ditemukan di modul ini</div>`;
+          modGrid.innerHTML = `<div class="empty-msg" style="grid-column:1/-1">Menu tidak ditemukan</div>`;
           return;
         }
 
@@ -811,19 +1254,17 @@
           .map((item) => {
             const realIndex = menuData.indexOf(item);
             return `
-        <button class="item" onclick="openSheet(${realIndex})">
-          <div class="icon-tile ${item.cls}">
-            ${item.icon}
-          </div>
-          <span>${item.name}</span>
-        </button>
-      `;
+              <button class="item active-modul" onclick="openSheet(${realIndex})">
+                <div class="icon-tile ${item.cls}">${item.icon}</div>
+                <span>${item.name}</span>
+              </button>
+            `;
           })
           .join("");
       }
 
       function compListHTML(items) {
-        return `<ul class="comp-list">${items.map(([n, a]) => `<li>${n} <span class="amt">${a}</span></li>`).join("")}</ul>`;
+        return `<ul class="comp-list">${items.map(([n, a]) => `<li><span>${n}</span> <span class="amt">${a}</span></li>`).join("")}</ul>`;
       }
 
       function openSheet(index) {
@@ -834,24 +1275,24 @@
         sheetTag.textContent = item.category;
 
         let html = "";
-        if (item.comp) html += `<h3>Komposisi</h3>${compListHTML(item.comp)}`;
-        if (item.variants) {
-          item.variants.forEach((v) => {
-            html += `<h3>${v.label}</h3>${compListHTML(v.items)}`;
-          });
-        }
-        if (item.steps) {
-          html += `<h3>Cara Membuat</h3><ol class="steps-list">${item.steps.map((s) => `<li>${s}</li>`).join("")}</ol>`;
-        }
-        if (item.note) html += `<div class="note-box">${item.note}</div>`;
+        if (item.comp)
+          html += `<h3>Komposisi & Takaran</h3>${compListHTML(item.comp)}`;
+        if (item.cara)
+          html += `<h3>Catatan / Cara Membuat</h3><div class="cara-text">${item.cara}</div>`;
 
         sheetBody.innerHTML = html;
         detailScreen.classList.add("active");
+        history.pushState({ screen: "detail" }, "");
       }
 
-      function closeSheet() {
-        detailScreen.classList.remove("active");
-      }
+      // INTEGRASI TOMBOL BACK BAWAAN HP
+      window.addEventListener("popstate", function () {
+        if (detailScreen.classList.contains("active")) {
+          detailScreen.classList.remove("active");
+        } else if (moduleScreen.classList.contains("active")) {
+          moduleScreen.classList.remove("active");
+        }
+      });
 
       renderHomeGrid();
     </script>
