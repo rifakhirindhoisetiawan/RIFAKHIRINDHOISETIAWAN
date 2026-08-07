@@ -18,7 +18,11 @@
       body {
         height: 100%;
         height: 100dvh;
+        height: 100svh; /* fallback lebih aman di mobile (small viewport) */
+        max-height: 100dvh;
+        max-height: 100svh;
         overflow: hidden;
+        position: relative;
       }
 
       body {
@@ -34,6 +38,9 @@
         align-items: stretch;
         padding: 0;
         margin: 0;
+        /* Cegah bounce scroll di iOS yang bikin layout loncat */
+        overscroll-behavior: none;
+        -webkit-overflow-scrolling: touch;
       }
 
       .app {
@@ -47,6 +54,43 @@
         flex-direction: column;
         height: 100%;
         height: 100dvh;
+        height: 100svh;
+        max-height: 100dvh;
+        max-height: 100svh;
+        /* Pastikan actions selalu di bawah dan terlihat */
+        min-height: 0;
+      }
+
+      /* Layar sangat pendek (mobile landscape / browser UI tinggi) */
+      @media (max-height: 520px) {
+        .stepper-row {
+          padding: 4px 10px 2px;
+        }
+        .stepper {
+          padding: 4px 8px;
+        }
+        .layout-picker {
+          padding: 0 10px 2px;
+        }
+        .layout-btn {
+          height: 24px;
+          font-size: 9px;
+        }
+        .canvas-wrap {
+          padding: 0 8px 4px;
+        }
+        .actions {
+          padding: 4px 10px 8px;
+        }
+        .add-photo-btn,
+        .trash-btn {
+          width: 40px;
+          height: 40px;
+        }
+        .btn-download {
+          padding: 10px;
+          font-size: 13px;
+        }
       }
 
       @media (min-width: 768px) {
@@ -54,12 +98,14 @@
         body {
           height: auto;
           overflow: auto;
+          max-height: none;
         }
         .app {
           max-width: 800px;
           margin: 0 auto;
           height: auto;
           min-height: auto;
+          max-height: none;
           padding: 24px 0;
         }
         .stepper-row {
@@ -77,6 +123,7 @@
         }
         .actions {
           padding: 4px 20px 24px;
+          box-shadow: none;
         }
         .add-photo-btn,
         .trash-btn {
@@ -92,10 +139,11 @@
 
       /* ===== CONTROLS ROW ===== */
       .stepper-row {
-        padding: 10px 12px 8px;
+        padding: 8px 12px 6px;
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
+        flex: 0 0 auto;
         flex-shrink: 0;
       }
       .stepper {
@@ -217,12 +265,13 @@
 
       /* Panel Layout Khusus 3 Foto */
       .layout-picker {
-        padding: 0 12px 6px;
+        padding: 0 12px 4px;
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
         display: none;
         gap: 6px;
+        flex: 0 0 auto;
         flex-shrink: 0;
       }
       .layout-picker.show {
@@ -251,16 +300,20 @@
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
-        flex: 1;
+        flex: 1 1 0;
         min-height: 0;
+        max-height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
         overflow: hidden;
+        /* Cegah child overflow mendorong tombol keluar layar */
+        position: relative;
       }
       .grid-frame {
-        /* Muat di sisa ruang: tidak pernah memaksa scroll */
+        /* Muat di sisa ruang: tidak pernah memaksa scroll / dorong actions */
         width: 100%;
+        max-width: 100%;
         max-height: 100%;
         aspect-ratio: 1 / 1;
         height: auto;
@@ -273,6 +326,10 @@
         border: none;
         transition: aspect-ratio 0.2s ease;
         position: relative;
+        /* Pastikan grid tidak melebihi container di mobile */
+        min-width: 0;
+        min-height: 0;
+        box-sizing: border-box;
       }
       .slot {
         position: relative;
@@ -286,12 +343,19 @@
         transition:
           transform 0.1s ease,
           border 0.1s ease;
+        /* Pastikan slot punya ukuran minimal di mobile */
+        min-width: 0;
+        min-height: 0;
+        width: 100%;
+        height: 100%;
       }
       .slot img {
         position: absolute;
+        inset: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center;
         display: block;
         cursor: grab;
         -webkit-user-select: none;
@@ -299,6 +363,10 @@
         -webkit-user-drag: element;
         -webkit-touch-callout: none;
         touch-action: none;
+        /* Cegah gambar “hilang” karena sizing aneh di beberapa browser mobile */
+        max-width: none;
+        max-height: none;
+        pointer-events: auto;
       }
       .slot img:active {
         cursor: grabbing;
@@ -344,22 +412,26 @@
 
       /* ===== ACTION BUTTONS ===== */
       .actions {
-        padding: 6px 12px 12px;
+        padding: 8px 12px 12px;
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
+        flex: 0 0 auto;
         flex-shrink: 0;
         background: #ffffff;
-        z-index: 10;
+        z-index: 20;
         display: flex;
         gap: 10px;
         align-items: center;
+        /* Pastikan selalu terlihat di bawah layar mobile */
+        position: relative;
+        box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
       }
 
       /* Safe area untuk iPhone notch / home indicator */
       @supports (padding-bottom: env(safe-area-inset-bottom)) {
         .actions {
-          padding-bottom: max(12px, env(safe-area-inset-bottom));
+          padding-bottom: max(14px, calc(env(safe-area-inset-bottom) + 6px));
         }
       }
 
@@ -882,10 +954,11 @@
         let fileIdx = 0;
         for (let i = 0; i < count && fileIdx < files.length; i++) {
           if (!images[i]) {
+            const slotIdx = i; // capture index agar aman di callback async
             const file = files[fileIdx++];
             const reader = new FileReader();
             reader.onload = (ev) => {
-              images[i] = ev.target.result;
+              images[slotIdx] = ev.target.result;
               renderGrid();
               checkReady();
             };
