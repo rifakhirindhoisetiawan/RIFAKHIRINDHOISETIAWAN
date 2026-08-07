@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modul Aplikasi</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #ffffff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 0;
+      }
+
+      .phone {
+        width: 100%;
+        max-width: 100%;
+        background: #ffffff;
+        border-radius: 0;
+        box-shadow: none;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      /* ===== SEARCH ROW ===== */
+      .search-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 18px 14px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .search-box {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e3e6ec;
+        border-radius: 14px;
+        padding: 12px 14px;
+        color: #1f2937;
+        font-size: 13px;
+        background: #fafbfc;
+      }
+      .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        font-size: 13px;
+        color: #1f2937;
+        font-family: inherit;
+      }
+      .search-box input::placeholder {
+        color: #c3c8d1;
+      }
+      .search-box svg {
+        flex-shrink: 0;
+        color: #c3c8d1;
+      }
+
+      /* ===== MENU GRID ===== */
+      .menu-wrap {
+        flex: 1;
+        overflow-y: auto;
+        padding: 4px 18px 20px 22px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .section-label {
+        font-size: 11px;
+        font-weight: 800;
+        color: #9aa0ab;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        margin: 4px 0 14px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 22px 12px;
+      }
+
+      @media (min-width: 768px) {
+        .grid {
+          grid-template-columns: repeat(4, 1fr);
+          gap: 28px 20px;
+        }
+      }
+
+      .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        cursor: default;
+      }
+
+      .icon-tile {
+        width: 60px;
+        height: 60px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin-bottom: 8px;
+        color: #fff;
+        position: relative;
+        opacity: 0.55;
+      }
+
+      @media (min-width: 768px) {
+        .icon-tile {
+          width: 72px;
+          height: 72px;
+          border-radius: 18px;
+          font-size: 24px;
+        }
+      }
+
+      .icon-photo {
+        padding: 0;
+        overflow: hidden;
+      }
+      .icon-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: inherit;
+      }
+
+      /* Modul Aktif */
+      .item.active-modul {
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .item.active-modul .icon-tile {
+        opacity: 1;
+        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+        transition: transform 0.2s ease;
+      }
+      .item.active-modul:hover .icon-tile {
+        transform: translateY(-3px);
+      }
+      .item.active-modul span {
+        color: #1f2937;
+        font-weight: 800;
+      }
+
+      .item span {
+        font-size: 11px;
+        font-weight: 700;
+        color: #b6bac2;
+        line-height: 1.3;
+      }
+
+      @media (min-width: 768px) {
+        .item span {
+          font-size: 12px;
+        }
+      }
+
+      .soon-tag {
+        position: absolute;
+        bottom: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #fff;
+        border: 1px solid #eceff3;
+        border-radius: 999px;
+        font-size: 7.5px;
+        font-weight: 800;
+        color: #9aa0ab;
+        padding: 1px 6px;
+        white-space: nowrap;
+      }
+
+      @media (min-width: 768px) {
+        .soon-tag {
+          font-size: 9px;
+          padding: 2px 8px;
+        }
+      }
+
+      /* palet gradient netral */
+      .g-a {
+        background: linear-gradient(135deg, #a5b4fc, #818cf8);
+      }
+      .g-b {
+        background: linear-gradient(135deg, #c4b5fd, #a78bfa);
+      }
+      .g-c {
+        background: linear-gradient(135deg, #93c5fd, #60a5fa);
+      }
+      .g-d {
+        background: linear-gradient(135deg, #67e8f9, #22d3ee);
+      }
+      .g-e {
+        background: linear-gradient(135deg, #6ee7b7, #34d399);
+      }
+      .g-f {
+        background: linear-gradient(135deg, #fcd34d, #fbbf24);
+      }
+      .g-g {
+        background: linear-gradient(135deg, #fca5a5, #f87171);
+      }
+      .g-h {
+        background: linear-gradient(135deg, #f0abfc, #e879f9);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone">
+      <!-- Search -->
+      <div class="search-row">
+        <div class="search-box">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" placeholder="Cari judul aplikasi..." />
+        </div>
+      </div>
+
+      <!-- Menu Grid -->
+      <div class="menu-wrap">
+        <p class="section-label">MODUL TERSEDIA</p>
+        <div class="grid">
+          <!-- A -->
+          <a class="item active-modul" href="rak-a.html">
+            <div class="icon-tile g-a">A</div>
+            <span>Rak A</span>
+          </a>
+          <!-- B -->
+          <a class="item active-modul" href="rak-b.html">
+            <div class="icon-tile g-b">B</div>
+            <span>Rak B</span>
+          </a>
+          <!-- C -->
+          <a class="item active-modul" href="rak-c.html">
+            <div class="icon-tile g-c">C</div>
+            <span>Rak C</span>
+          </a>
+          <!-- D -->
+          <a class="item active-modul" href="rak-d.html">
+            <div class="icon-tile g-d">D</div>
+            <span>Rak D</span>
+          </a>
+          <!-- E -->
+          <a class="item active-modul" href="rak-e.html">
+            <div class="icon-tile g-e">E</div>
+            <span>Rak E</span>
+          </a>
+          <!-- F -->
+          <a class="item active-modul" href="rak-f.html">
+            <div class="icon-tile g-f">F</div>
+            <span>Rak F</span>
+          </a>
+          <!-- G -->
+          <a class="item active-modul" href="rak-g.html">
+            <div class="icon-tile g-g">G</div>
+            <span>Rak G</span>
+          </a>
+          <!-- H -->
+          <a class="item active-modul" href="rak-h.html">
+            <div class="icon-tile g-h">H</div>
+            <span>Rak H</span>
+          </a>
+          <!-- I -->
+          <a class="item active-modul" href="rak-i.html">
+            <div class="icon-tile g-a">I</div>
+            <span>Rak I</span>
+          </a>
+          <!-- J -->
+          <a class="item active-modul" href="rak-j.html">
+            <div class="icon-tile g-b">J</div>
+            <span>Rak J</span>
+          </a>
+          <!-- K -->
+          <a class="item active-modul" href="rak-k.html">
+            <div class="icon-tile g-c">K</div>
+            <span>Rak K</span>
+          </a>
+          <!-- L -->
+          <a class="item active-modul" href="rak-l.html">
+            <div class="icon-tile g-d">L</div>
+            <span>Rak L</span>
+          </a>
+          <!-- M -->
+          <a class="item active-modul" href="rak-m.html">
+            <div class="icon-tile g-e">M</div>
+            <span>Rak M</span>
+          </a>
+          <!-- N -->
+          <a class="item active-modul" href="rak-n.html">
+            <div class="icon-tile g-f">N</div>
+            <span>Rak N</span>
+          </a>
+          <!-- O -->
+          <a class="item active-modul" href="rak-o.html">
+            <div class="icon-tile g-g">O</div>
+            <span>Rak O</span>
+          </a>
+          <!-- P -->
+          <a class="item active-modul" href="rak-p.html">
+            <div class="icon-tile g-h">P</div>
+            <span>Rak P</span>
+          </a>
+          <!-- Q -->
+          <a class="item active-modul" href="rak-q.html">
+            <div class="icon-tile g-a">Q</div>
+            <span>Rak Q</span>
+          </a>
+          <!-- R -->
+          <a class="item active-modul" href="rak-r.html">
+            <div class="icon-tile g-b">R</div>
+            <span>Rak R</span>
+          </a>
+          <!-- S -->
+          <a class="item active-modul" href="rak-s.html">
+            <div class="icon-tile g-c">S</div>
+            <span>Rak S</span>
+          </a>
+          <!-- T -->
+          <a class="item active-modul" href="rak-t.html">
+            <div class="icon-tile g-d">T</div>
+            <span>Rak T</span>
+          </a>
+          <!-- U -->
+          <a class="item active-modul" href="rak-u.html">
+            <div class="icon-tile g-e">U</div>
+            <span>Rak U</span>
+          </a>
+          <!-- V -->
+          <a class="item active-modul" href="rak-v.html">
+            <div class="icon-tile g-f">V</div>
+            <span>Rak V</span>
+          </a>
+          <!-- W -->
+          <a class="item active-modul" href="rak-w.html">
+            <div class="icon-tile g-g">W</div>
+            <span>Rak W</span>
+          </a>
+          <!-- X -->
+          <a class="item active-modul" href="rak-x.html">
+            <div class="icon-tile g-h">X</div>
+            <span>Rak X</span>
+          </a>
+          <!-- Y -->
+          <a class="item active-modul" href="rak-y.html">
+            <div class="icon-tile g-a">Y</div>
+            <span>Rak Y</span>
+          </a>
+          <!-- Z -->
+          <a class="item active-modul" href="rak-z.html">
+            <div class="icon-tile g-b">Z</div>
+            <span>Rak Z</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
