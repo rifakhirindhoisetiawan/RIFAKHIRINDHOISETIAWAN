@@ -263,20 +263,41 @@
     </div>
 
     <script>
-      let tasks = [
-        { id: 1, text: "Tugas 1", done: false },
-        { id: 2, text: "Tugas 2", done: false },
-        { id: 3, text: "Laporan", done: false },
-        { id: 4, text: "Evaluasi", done: false },
-        { id: 5, text: "Belajar", done: false },
-        { id: 6, text: "Coding", done: false },
-      ];
+      const STORAGE_KEY = "todo-minggu";
+
+      function loadTasks() {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) return JSON.parse(saved);
+        } catch (e) {
+          console.error("Gagal memuat data:", e);
+        }
+        return [
+          { id: 1, text: "Tugas 1", done: false },
+          { id: 2, text: "Tugas 2", done: false },
+          { id: 3, text: "Laporan", done: false },
+          { id: 4, text: "Evaluasi", done: false },
+          { id: 5, text: "Belajar", done: false },
+          { id: 6, text: "Coding", done: false },
+        ];
+      }
+
+      function saveTasks() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+        } catch (e) {
+          console.error("Gagal menyimpan data:", e);
+        }
+      }
+
+      let tasks = loadTasks();
 
       const todoList = document.getElementById("todoList");
       const emptyState = document.getElementById("emptyState");
       const taskInput = document.getElementById("taskInput");
 
       function render() {
+        saveTasks();
         todoList.innerHTML = "";
         if (tasks.length === 0) {
           emptyState.style.display = "block";
