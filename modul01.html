@@ -340,7 +340,6 @@
         width: 100%;
         max-width: 100%;
         max-height: 100%;
-        aspect-ratio: 1 / 1;
         height: auto;
         border-radius: 0px;
         overflow: hidden;
@@ -499,10 +498,22 @@
         </div>
       </div>
 
-      <div class="layout-picker" id="layoutPicker">
-        <button class="layout-btn active" data-layout="left-big">
-          Kiri Besar
-        </button>
+      <div class="layout-picker" id="layoutPicker3">
+        <button class="layout-btn active" data-layout="left-big">Kiri Besar</button>
+        <button class="layout-btn" data-layout="right-big">Kanan Besar</button>
+        <button class="layout-btn" data-layout="top-big">Atas Besar</button>
+        <button class="layout-btn" data-layout="bottom-big">Bawah Besar</button>
+      </div>
+
+      <div class="layout-picker" id="layoutPicker4">
+        <button class="layout-btn active" data-layout="left-big">Kiri Besar</button>
+        <button class="layout-btn" data-layout="right-big">Kanan Besar</button>
+        <button class="layout-btn" data-layout="top-big">Atas Besar</button>
+        <button class="layout-btn" data-layout="bottom-big">Bawah Besar</button>
+      </div>
+
+      <div class="layout-picker" id="layoutPicker5">
+        <button class="layout-btn active" data-layout="left-big">Kiri Besar</button>
         <button class="layout-btn" data-layout="right-big">Kanan Besar</button>
         <button class="layout-btn" data-layout="top-big">Atas Besar</button>
         <button class="layout-btn" data-layout="bottom-big">Bawah Besar</button>
@@ -569,6 +580,8 @@
       let activeSlot = null;
       let currentAspect = "1/1";
       let currentLayout3 = "left-big";
+      let currentLayout4 = "left-big";
+      let currentLayout5 = "left-big";
       let draggedIdx = null;
 
       // State untuk touch drag di mobile
@@ -589,7 +602,9 @@
       const trashBtn = document.getElementById("trashBtn");
       const addPhotoBtn = document.getElementById("addPhotoBtn");
       const aspectButtons = document.querySelectorAll(".aspect-btn");
-      const layoutPicker = document.getElementById("layoutPicker");
+      const layoutPicker3 = document.getElementById("layoutPicker3");
+      const layoutPicker4 = document.getElementById("layoutPicker4");
+      const layoutPicker5 = document.getElementById("layoutPicker5");
       const layoutButtons = document.querySelectorAll(".layout-btn");
       dragGhost = document.getElementById("dragGhost");
 
@@ -764,9 +779,19 @@
         gridFrame.innerHTML = "";
 
         if (count === 3) {
-          layoutPicker.classList.add("show");
+          layoutPicker3.classList.add("show");
         } else {
-          layoutPicker.classList.remove("show");
+          layoutPicker3.classList.remove("show");
+        }
+        if (count === 4) {
+          layoutPicker4.classList.add("show");
+        } else {
+          layoutPicker4.classList.remove("show");
+        }
+        if (count === 5) {
+          layoutPicker5.classList.add("show");
+        } else {
+          layoutPicker5.classList.remove("show");
         }
 
         let cols = 2,
@@ -776,6 +801,36 @@
           rows = 2;
           gridFrame.style.gridTemplateColumns = "repeat(2, 1fr)";
           gridFrame.style.gridTemplateRows = "repeat(2, 1fr)";
+        } else if (count === 4) {
+          if (
+            currentLayout4 === "left-big" ||
+            currentLayout4 === "right-big"
+          ) {
+            cols = 2;
+            rows = 3;
+            gridFrame.style.gridTemplateColumns = "repeat(2, 1fr)";
+            gridFrame.style.gridTemplateRows = "repeat(3, 1fr)";
+          } else {
+            cols = 3;
+            rows = 2;
+            gridFrame.style.gridTemplateColumns = "repeat(3, 1fr)";
+            gridFrame.style.gridTemplateRows = "repeat(2, 1fr)";
+          }
+        } else if (count === 5) {
+          if (
+            currentLayout5 === "left-big" ||
+            currentLayout5 === "right-big"
+          ) {
+            cols = 3;
+            rows = 2;
+            gridFrame.style.gridTemplateColumns = "repeat(3, 1fr)";
+            gridFrame.style.gridTemplateRows = "repeat(2, 1fr)";
+          } else {
+            cols = 4;
+            rows = 2;
+            gridFrame.style.gridTemplateColumns = "repeat(4, 1fr)";
+            gridFrame.style.gridTemplateRows = "repeat(2, 1fr)";
+          }
         } else {
           cols = Math.ceil(Math.sqrt(count));
           rows = Math.ceil(count / cols);
@@ -805,6 +860,54 @@
               if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 2";
               else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
               else if (idx === 2) slot.style.gridArea = "2 / 1 / 3 / 3";
+            }
+          } else if (count === 4) {
+            if (currentLayout4 === "left-big") {
+              if (idx === 0) slot.style.gridArea = "1 / 1 / 4 / 2";
+              else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
+              else if (idx === 2) slot.style.gridArea = "2 / 2 / 3 / 3";
+              else if (idx === 3) slot.style.gridArea = "3 / 2 / 4 / 3";
+            } else if (currentLayout4 === "right-big") {
+              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 2";
+              else if (idx === 1) slot.style.gridArea = "2 / 1 / 3 / 2";
+              else if (idx === 2) slot.style.gridArea = "3 / 1 / 4 / 2";
+              else if (idx === 3) slot.style.gridArea = "1 / 2 / 4 / 3";
+            } else if (currentLayout4 === "top-big") {
+              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 4";
+              else if (idx === 1) slot.style.gridArea = "2 / 1 / 3 / 2";
+              else if (idx === 2) slot.style.gridArea = "2 / 2 / 3 / 3";
+              else if (idx === 3) slot.style.gridArea = "2 / 3 / 3 / 4";
+            } else if (currentLayout4 === "bottom-big") {
+              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 2";
+              else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
+              else if (idx === 2) slot.style.gridArea = "1 / 3 / 2 / 4";
+              else if (idx === 3) slot.style.gridArea = "2 / 1 / 4 / 4";
+            }
+          } else if (count === 5) {
+            if (currentLayout5 === "left-big") {
+              if (idx === 0) slot.style.gridArea = "1 / 1 / 3 / 2";
+              else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
+              else if (idx === 2) slot.style.gridArea = "2 / 2 / 3 / 3";
+              else if (idx === 3) slot.style.gridArea = "1 / 3 / 2 / 4";
+              else if (idx === 4) slot.style.gridArea = "2 / 3 / 3 / 4";
+            } else if (currentLayout5 === "right-big") {
+              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 2";
+              else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
+              else if (idx === 2) slot.style.gridArea = "2 / 1 / 3 / 2";
+              else if (idx === 3) slot.style.gridArea = "2 / 2 / 3 / 3";
+              else if (idx === 4) slot.style.gridArea = "1 / 3 / 3 / 4";
+            } else if (currentLayout5 === "top-big") {
+              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 5";
+              else if (idx === 1) slot.style.gridArea = "2 / 1 / 3 / 2";
+              else if (idx === 2) slot.style.gridArea = "2 / 2 / 3 / 3";
+              else if (idx === 3) slot.style.gridArea = "2 / 3 / 3 / 4";
+              else if (idx === 4) slot.style.gridArea = "2 / 4 / 3 / 5";
+            } else if (currentLayout5 === "bottom-big") {
+              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 2";
+              else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
+              else if (idx === 2) slot.style.gridArea = "1 / 3 / 2 / 4";
+              else if (idx === 3) slot.style.gridArea = "1 / 4 / 2 / 5";
+              else if (idx === 4) slot.style.gridArea = "2 / 1 / 3 / 5";
             }
           }
 
@@ -935,10 +1038,17 @@
       });
 
       layoutButtons.forEach((btn) => {
+        const picker = btn.closest(".layout-picker");
         btn.addEventListener("click", () => {
-          layoutButtons.forEach((b) => b.classList.remove("active"));
+          const allBtns = picker.querySelectorAll(".layout-btn");
+          allBtns.forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
-          currentLayout3 = btn.dataset.layout;
+          const layout = btn.dataset.layout;
+
+          if (picker.id === "layoutPicker3") currentLayout3 = layout;
+          else if (picker.id === "layoutPicker4") currentLayout4 = layout;
+          else if (picker.id === "layoutPicker5") currentLayout5 = layout;
+
           renderGrid();
         });
       });
@@ -1054,6 +1164,129 @@
               let c = coords[idx];
               const imgObj = await loadImg(images[idx]);
               drawCover(ctx, imgObj, c.x, c.y, c.w, c.h);
+            }
+          }
+        } else if (count === 4) {
+          if (
+            currentLayout4 === "left-big" ||
+            currentLayout4 === "right-big"
+          ) {
+            let halfW = canvasW / 2;
+            let thirdH = canvasH / 3;
+            let coords = [];
+
+            if (currentLayout4 === "left-big") {
+              coords = [
+                { x: 0, y: 0, w: halfW, h: canvasH },
+                { x: halfW, y: 0, w: halfW, h: thirdH },
+                { x: halfW, y: thirdH, w: halfW, h: thirdH },
+                { x: halfW, y: thirdH * 2, w: halfW, h: thirdH },
+              ];
+            } else if (currentLayout4 === "right-big") {
+              coords = [
+                { x: 0, y: 0, w: halfW, h: thirdH },
+                { x: 0, y: thirdH, w: halfW, h: thirdH },
+                { x: 0, y: thirdH * 2, w: halfW, h: thirdH },
+                { x: halfW, y: 0, w: halfW, h: canvasH },
+              ];
+            }
+
+            for (let idx = 0; idx < 4; idx++) {
+              if (images[idx]) {
+                let c = coords[idx];
+                const imgObj = await loadImg(images[idx]);
+                drawCover(ctx, imgObj, c.x, c.y, c.w, c.h);
+              }
+            }
+          } else {
+            let thirdW = canvasW / 3;
+            let halfH = canvasH / 2;
+            let coords = [];
+
+            if (currentLayout4 === "top-big") {
+              coords = [
+                { x: 0, y: 0, w: canvasW, h: halfH },
+                { x: 0, y: halfH, w: thirdW, h: halfH },
+                { x: thirdW, y: halfH, w: thirdW, h: halfH },
+                { x: thirdW * 2, y: halfH, w: thirdW, h: halfH },
+              ];
+            } else if (currentLayout4 === "bottom-big") {
+              coords = [
+                { x: 0, y: 0, w: thirdW, h: halfH },
+                { x: thirdW, y: 0, w: thirdW, h: halfH },
+                { x: thirdW * 2, y: 0, w: thirdW, h: halfH },
+                { x: 0, y: halfH, w: canvasW, h: halfH },
+              ];
+            }
+
+            for (let idx = 0; idx < 4; idx++) {
+              if (images[idx]) {
+                let c = coords[idx];
+                const imgObj = await loadImg(images[idx]);
+                drawCover(ctx, imgObj, c.x, c.y, c.w, c.h);
+              }
+            }
+          }
+        } else if (count === 5) {
+          if (currentLayout5 === "left-big" || currentLayout5 === "right-big") {
+            let thirdW = canvasW / 3;
+            let halfH = canvasH / 2;
+            let coords = [];
+
+            if (currentLayout5 === "left-big") {
+              coords = [
+                { x: 0, y: 0, w: thirdW, h: canvasH },
+                { x: thirdW, y: 0, w: thirdW, h: halfH },
+                { x: thirdW * 2, y: 0, w: thirdW, h: halfH },
+                { x: thirdW, y: halfH, w: thirdW, h: halfH },
+                { x: thirdW * 2, y: halfH, w: thirdW, h: halfH },
+              ];
+            } else if (currentLayout5 === "right-big") {
+              coords = [
+                { x: 0, y: 0, w: thirdW, h: halfH },
+                { x: thirdW, y: 0, w: thirdW, h: halfH },
+                { x: 0, y: halfH, w: thirdW, h: halfH },
+                { x: thirdW, y: halfH, w: thirdW, h: halfH },
+                { x: thirdW * 2, y: 0, w: thirdW, h: canvasH },
+              ];
+            }
+
+            for (let idx = 0; idx < 5; idx++) {
+              if (images[idx]) {
+                let c = coords[idx];
+                const imgObj = await loadImg(images[idx]);
+                drawCover(ctx, imgObj, c.x, c.y, c.w, c.h);
+              }
+            }
+          } else {
+            let fourthW = canvasW / 4;
+            let halfH = canvasH / 2;
+            let coords = [];
+
+            if (currentLayout5 === "top-big") {
+              coords = [
+                { x: 0, y: 0, w: canvasW, h: halfH },
+                { x: 0, y: halfH, w: fourthW, h: halfH },
+                { x: fourthW, y: halfH, w: fourthW, h: halfH },
+                { x: fourthW * 2, y: halfH, w: fourthW, h: halfH },
+                { x: fourthW * 3, y: halfH, w: fourthW, h: halfH },
+              ];
+            } else if (currentLayout5 === "bottom-big") {
+              coords = [
+                { x: 0, y: 0, w: fourthW, h: halfH },
+                { x: fourthW, y: 0, w: fourthW, h: halfH },
+                { x: fourthW * 2, y: 0, w: fourthW, h: halfH },
+                { x: fourthW * 3, y: 0, w: fourthW, h: halfH },
+                { x: 0, y: halfH, w: canvasW, h: halfH },
+              ];
+            }
+
+            for (let idx = 0; idx < 5; idx++) {
+              if (images[idx]) {
+                let c = coords[idx];
+                const imgObj = await loadImg(images[idx]);
+                drawCover(ctx, imgObj, c.x, c.y, c.w, c.h);
+              }
             }
           }
         } else {
