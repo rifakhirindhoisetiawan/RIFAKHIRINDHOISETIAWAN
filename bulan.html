@@ -385,7 +385,7 @@
       document.getElementById("resetAllBtn").addEventListener("click", () => {
         if (confirm("Yakin ingin reset semua data?")) {
           localStorage.removeItem(STORAGE_KEY);
-          tasks = [];
+          tasks = loadTasks();
           render();
         }
       });
