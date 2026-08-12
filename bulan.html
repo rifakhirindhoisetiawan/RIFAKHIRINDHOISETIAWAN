@@ -150,7 +150,7 @@
       }
 
       .todo-item:hover .todo-card {
-        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
       }
 
       /* Palet gradient (sama seperti style guide) */
@@ -381,6 +381,14 @@
       }
 
       let tasks = loadTasks();
+
+      document.getElementById("resetAllBtn").addEventListener("click", () => {
+        if (confirm("Yakin ingin reset semua data?")) {
+          localStorage.removeItem(STORAGE_KEY);
+          tasks = [];
+          render();
+        }
+      });
 
       const todoList = document.getElementById("todoList");
       const emptyState = document.getElementById("emptyState");
