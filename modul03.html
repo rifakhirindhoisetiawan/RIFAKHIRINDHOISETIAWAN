@@ -515,6 +515,10 @@
         { type: "item", name: "Juice Jeruk", icon: "🍊", cls: "g-b", slug: "juice-jeruk" },
         { type: "item", name: "Juice Jeruk Navel", icon: "🍊", cls: "g-c", slug: "juice-jeruk-navel" },
         { type: "item", name: "Juice Jeruk Navel Cara Cara", icon: "🍊", cls: "g-d", slug: "juice-jeruk-navel-cara-cara" },
+        { type: "item", name: "Kolak Latte", icon: "🍮", cls: "g-e", slug: "kolak-latte" },
+        { type: "item", name: "Watermelon Cooler", icon: "🍉", cls: "g-f", slug: "watermelon-cooler" },
+        { type: "item", name: "Pisang Ijo Latte", icon: "🍌", cls: "g-g", slug: "pisang-ijo-latte" },
+        { type: "item", name: "PRODUK JA-DI", icon: "", cls: "g-e", slug: "ja-di" },
       ];
 
       const homeGrid = document.getElementById("homeGrid");
@@ -528,15 +532,26 @@
         const q = searchInput.value.trim().toLowerCase();
 
         if (!q) {
-          homeGrid.innerHTML = categories
-            .map(
+          homeGrid.innerHTML = [
+            ...categories.map(
               (m) => `
               <a class="item active-modul" href="cat-${m.slug}.html">
                 <div class="icon-tile ${m.cls}"><img src="${LOGO_SRC}" alt="${m.name} logo" /></div>
                 <span>${m.name}</span>
               </a>
             `,
-            )
+            ),
+            allItems
+              .filter((entry) => entry.type === "item" && entry.slug === "ja-di")
+              .map(
+                (entry) => `
+                <a class="item active-modul" href="produk-ja-di.html">
+                  <div class="icon-tile ${entry.cls}"><img src="${LOGO_SRC}" alt="${entry.name}" /></div>
+                  <span>${entry.name}</span>
+                </a>
+              `,
+              ),
+          ]
             .join("");
           return;
         }
