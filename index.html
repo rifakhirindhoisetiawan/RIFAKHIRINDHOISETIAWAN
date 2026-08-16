@@ -14,15 +14,13 @@
     <meta name="apple-mobile-web-app-title" content="MYLOVE" />
     <link rel="icon" type="image/jpeg" href="icon.jpg" />
     <link rel="apple-touch-icon" href="icon.jpg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="icon.jpg" />
     <link rel="apple-touch-icon" sizes="192x192" href="icon.jpg" />
     <link rel="apple-touch-icon" sizes="512x512" href="icon.jpg" />
     <script>
-      // Manifest langsung di HTML (tanpa file terpisah)
       const manifest = {
         name: "MYLOVE",
         short_name: "MYLOVE",
-        start_url: "./index.html",
+        start_url: "./",
         display: "standalone",
         background_color: "#ffffff",
         theme_color: "#ffffff",
@@ -45,10 +43,9 @@
       const blob = new Blob([JSON.stringify(manifest)], {
         type: "application/json",
       });
-      const manifestURL = URL.createObjectURL(blob);
       const link = document.createElement("link");
       link.rel = "manifest";
-      link.href = manifestURL;
+      link.href = URL.createObjectURL(blob);
       document.head.appendChild(link);
     </script>
     <style>
@@ -57,7 +54,6 @@
         padding: 0;
         box-sizing: border-box;
       }
-
       html,
       body {
         height: 100%;
@@ -66,21 +62,6 @@
         margin: 0;
         padding: 0;
       }
-
-      ::-webkit-scrollbar {
-        width: 4px;
-      }
-      ::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #ccc;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #999;
-      }
-
       body {
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -90,20 +71,15 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 0;
-        margin: 0;
         overflow-y: auto;
         overflow-x: hidden;
       }
-
       .container {
         width: 100%;
         max-width: 420px;
         aspect-ratio: 9 / 16;
         max-height: 100vh;
         background: #ffffff;
-        border-radius: 0;
-        box-shadow: none;
         padding: 24px 14px 40px;
         overflow-y: auto;
         overflow-x: hidden;
@@ -111,7 +87,6 @@
         flex-direction: column;
         justify-content: flex-start;
       }
-
       .grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -119,7 +94,6 @@
         width: 100%;
         align-content: start;
       }
-
       .item {
         display: flex;
         flex-direction: column;
@@ -129,11 +103,9 @@
         cursor: pointer;
         transition: transform 0.15s ease;
       }
-
       .item:active {
         transform: scale(0.96);
       }
-
       .icon-box {
         width: 100%;
         max-width: 110px;
@@ -149,14 +121,12 @@
         margin-bottom: 8px;
         overflow: hidden;
       }
-
       .icon-box img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
       }
-
       .label {
         font-size: 11px;
         font-weight: 600;
@@ -166,7 +136,6 @@
         max-width: 100%;
         letter-spacing: -0.2px;
       }
-
       @media (max-width: 360px) {
         .icon-box {
           max-width: 95px;
@@ -182,86 +151,51 @@
     <div class="container">
       <div class="grid">
         <a class="item" href="modul01.html">
-          <div class="icon-box">
-            <img src="icon.jpg" alt="GRID" />
-          </div>
+          <div class="icon-box"><img src="icon.jpg" alt="GRID" /></div>
           <span class="label">GRID</span>
         </a>
-
         <a class="item" href="modul02.html">
-          <div class="icon-box">
-            <img src="icon.jpg" alt="DAILY TASK" />
-          </div>
+          <div class="icon-box"><img src="icon.jpg" alt="DAILY TASK" /></div>
           <span class="label">DAILY TASK</span>
         </a>
-
         <a class="item" href="produk-ja-di.html">
-          <div class="icon-box">
-            <img src="icon.jpg" alt="JA-DI" />
-          </div>
+          <div class="icon-box"><img src="icon.jpg" alt="JA-DI" /></div>
           <span class="label">JA-DI</span>
         </a>
-
         <a class="item" href="#">
-          <div class="icon-box">
-            <img src="icon.jpg" alt="PLU JA-DI" />
-          </div>
+          <div class="icon-box"><img src="icon.jpg" alt="PLU JA-DI" /></div>
           <span class="label">PLU JA-DI</span>
         </a>
-
         <a class="item" href="#">
-          <div class="icon-box">
-            <img src="icon.jpg" alt="PLANO" />
-          </div>
+          <div class="icon-box"><img src="icon.jpg" alt="PLANO" /></div>
           <span class="label">PLANO</span>
         </a>
-
         <a class="item" href="modul03.html">
-          <div class="icon-box">
-            <img src="icon.jpg" alt="TIME CAMERA" />
-          </div>
+          <div class="icon-box"><img src="icon.jpg" alt="TIME CAMERA" /></div>
           <span class="label">TIME CAMERA</span>
         </a>
-
         <a class="item" href="#">
-          <div class="icon-box">
-            <img src="icon.jpg" alt="EXP" />
-          </div>
+          <div class="icon-box"><img src="icon.jpg" alt="EXP" /></div>
           <span class="label">EXP</span>
         </a>
-
         <a class="item" href="#">
-          <div class="icon-box">
-            <img src="icon.jpg" alt="PULANG" />
-          </div>
+          <div class="icon-box"><img src="icon.jpg" alt="PULANG" /></div>
           <span class="label">PULANG</span>
         </a>
-
         <a class="item" href="#">
-          <div class="icon-box">
-            <img src="icon.jpg" alt="PAGI" />
-          </div>
+          <div class="icon-box"><img src="icon.jpg" alt="PAGI" /></div>
           <span class="label">PAGI</span>
         </a>
-
         <a class="item" href="#">
-          <div class="icon-box">
-            <img src="icon.jpg" alt="SIANG" />
-          </div>
+          <div class="icon-box"><img src="icon.jpg" alt="SIANG" /></div>
           <span class="label">SIANG</span>
         </a>
-
         <a class="item" href="#">
-          <div class="icon-box">
-            <img src="icon.jpg" alt="MALAM" />
-          </div>
+          <div class="icon-box"><img src="icon.jpg" alt="MALAM" /></div>
           <span class="label">MALAM</span>
         </a>
-
         <a class="item" href="modul05.html">
-          <div class="icon-box">
-            <img src="icon.jpg" alt="SELANJUTNYA" />
-          </div>
+          <div class="icon-box"><img src="icon.jpg" alt="SELANJUTNYA" /></div>
           <span class="label">SELANJUTNYA</span>
         </a>
       </div>
