@@ -206,9 +206,26 @@
           font-size: 10px;
         }
       }
+
+      .splash-fullscreen {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #ffffff url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/2wBDAQYGBgkICREJCREkGBQYJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/wAARCAGQAOEDASIAAhEBAxEB/8QAHAAAAQUBAQEAAAAAAAAAAAAABQIDBAYHAAEI/8QAQRAAAgEDAgQEAwYFAgQFBQAAAQIDAAQRBSESMUFRBhMiYXGBkQcUMkKhsRUjUsHRYuEWM1NyJENjgpIlorLw8f/EABoBAAIDAQEAAAAAAAAAAAAAAAIDAAEEBQb/xAAmEQACAgICAgIDAQADAAAAAAAAAQIRAyESMQRBE1EiMmEFFDNS/9oADAMBAAIRAxEAPwCg+JmBuHO5ySDtQS10e91i48mxgaVupx6V+J6VqcnhLTJZS9yklwzH8LNgH2wKMw2K2kIjghigQclRQAKnk/6MX+iEeF/i5I/9rpfwpHh/7OLPTitzqjrdXA34APQh/v8AOrmkEjjCLwJ/VT6RxRnMjAn/AFUp7sDaJeI/pXHyZZZHcj0WHBDFHjBCGMVquMb/AL1Fk825PqHAg6CnfKJbjkJJ/amLm4CKcGgHDEjKuRgDFQbm6ZhwJgL7U1NM8rFV3FMSOIELSMAoHOrBbPXcjkaivfETrbQRPcXUh4UiTck0FfWru+uDbWSnhLcIYDdjy2961nwV4Qi8O2ouJx5moTL/ADHbcoD+Uf3NaI4X7M8/I/8AJB8P/Z+paO/8QcFxOPUlqN44vj/Uf0q6qAowoAA2AHSvc5pDMM4FaIpJUjJKTk7YuvVGNzjekA1xcDbNECPDGK82z3pvzMkdvalZFUQbdeInBOBTMlqW3yfhT7OpOx+NecYO4wahQOktmGwG9R5ImXORRiTHDy3NR5oFcbgmrRQGZSpwetR5U4wVdRv3oncQcBG2396gTKcDHWiIZF4++zEKZdV0KH1HLTWi8m7lPf2rKJIyCSQRkkEHmp7GvqmQekg1lf2keBePzNa0uL+aPVcwqP8AmD+sDv3702M/TEziuzJ/wkc9jmn2/nqZF2kG7AfvTUg3BXJB614shjZSNyDTBdDjMCONOY5gUohZkEirv1FeOq+qdAAjfiHak+qJvMjPpqikJ4H7n6V1O/eP9C11Siz6mt5OG6JJB4dvnTt5ehV4RjiNCY5DnzSd2Oa8MjSyZ5npXFkjvRYXihTywxwzHfNIMgRsAAjvTBuDDDw/vUY3GTv9aChiZKuZdsDnQe9kwN84p52Dk4nKn60J1S9exjZ5hxx4/Ev96KMd0VKVI6OZpnZbdS5UFnYnCoo6k9BVR1DVJtSmZQ38oHAC8j714davGtbm0Rkit7mQO4VcFgOQJ7e1Hvs+8Mrruq+ZOpNpbEPJ2c9F+f7Vux4VDbObkzObpFu+zbwgLK3j1i9jHnSDMEZH4F/q+J6VoGcU3xqijOFAGw7VGknMp2yAKLsHokvOASARTatg8RNRy6x7sd6cigkuPW7CGHu3WroGxUlxvgb+wpSJcSjiEYUd22qBeeIdP0oFYMSyDYuTnFVbUvH8rFlRm35KnOqbSIk30XwhEz5s4UgZ2qO17p6bmbf/ALqy+bXtQuFLHKHs7ZPzqHJf6jINnCDmSRzoXNB8JGrnVNNB2dPia46jZvurj4Csae61F5uCC6zgZLEDAr1NQ1lH9EokwcZK4q+aJ8bNpW7iIwkvwyc0sXGdlYECsfj8V6lakebEWH+g/wCaMab9oEEjhJXMbdn2zU5L0C4tGiu6OpDAZoVdRlGBHLGfhTNnrkV0gIYMpGc5qS0izDZsimJgSRAkPEMD47VCuFHDgYz3py6la3kPPhzzpqWQMoIOxG") center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.5s ease;
+      }
+
+      .splash-fullscreen.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
     </style>
   </head>
   <body>
+    <div class="splash-fullscreen"></div>
     <div class="container">
       <div class="grid">
         <a class="item" href="modul01.html">
@@ -321,5 +338,13 @@
         </a>
       </div>
     </div>
+    <script>
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const splash = document.querySelector('.splash-fullscreen');
+          if (splash) splash.classList.add('hidden');
+        }, 500);
+      });
+    </script>
   </body>
 </html>
