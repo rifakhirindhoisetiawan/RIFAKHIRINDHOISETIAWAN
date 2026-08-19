@@ -150,7 +150,36 @@
         align-content: start;
       }
 
-      .item {
+      .search-wrapper {
+        width: 100%;
+        margin-bottom: 12px;
+      }
+
+      .search-wrapper input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        font-size: 14px;
+        outline: none;
+        background: #f9f9f9;
+        color: #222;
+      }
+
+      .search-wrapper input:focus {
+        border-color: #888;
+        background: #fff;
+      }
+
+      .menu-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px 10px;
+        width: 100%;
+        align-content: start;
+      }
+
+      .menu-item {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -160,11 +189,11 @@
         transition: transform 0.15s ease;
       }
 
-      .item:active {
+      .menu-item:active {
         transform: scale(0.96);
       }
 
-      .icon-box {
+      .menu-item .icon-box {
         width: 100%;
         max-width: 110px;
         aspect-ratio: 9 / 16;
@@ -180,14 +209,14 @@
         overflow: hidden;
       }
 
-      .icon-box img {
+      .menu-item .icon-box img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
       }
 
-      .label {
+      .menu-item .label {
         font-size: 11px;
         font-weight: 600;
         text-align: center;
@@ -195,6 +224,10 @@
         color: #222;
         max-width: 100%;
         letter-spacing: -0.2px;
+      }
+
+      .hidden-item {
+        display: none !important;
       }
 
       @media (max-width: 360px) {
@@ -211,11 +244,15 @@
         position: fixed;
         inset: 0;
         z-index: 9999;
-        background: #ffffff url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/2wBDAQYGBgkICREJCREkGBQYJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/wAARCAGQAOEDASIAAhEBAxEB/8QAHAAAAQUBAQEAAAAAAAAAAAAABQIDBAYHAAEI/8QAQRAAAgEDAgQEAwYFAgQFBQAAAQIDAAQRBSESMUFRBhMiYXGBkQcUMkKhsRUjUsHRYuEWM1NyJENjgpIlorLw8f/EABoBAAIDAQEAAAAAAAAAAAAAAAIDAAEEBQb/xAAmEQACAgICAgIDAQADAAAAAAAAAQIRAyESMQRBE1EiMmEFFDNS/9oADAMBAAIRAxEAPwCg+JmBuHO5ySDtQS10e91i48mxgaVupx6V+J6VqcnhLTJZS9yklwzH8LNgH2wKMw2K2kIjghigQclRQAKnk/6MX+iEeF/i5I/9rpfwpHh/7OLPTitzqjrdXA34APQh/v8AOrmkEjjCLwJ/VT6RxRnMjAn/AFUp7sDaJeI/pXHyZZZHcj0WHBDFHjBCGMVquMb/AL1Fk825PqHAg6CnfKJbjkJJ/amLm4CKcGgHDEjKuRgDFQbm6ZhwJgL7U1NM8rFV3FMSOIELSMAoHOrBbPXcjkaivfETrbQRPcXUh4UiTck0FfWru+uDbWSnhLcIYDdjy2961nwV4Qi8O2ouJx5moTL/ADHbcoD+Uf3NaI4X7M8/I/8AJB8P/Z+paO/8QcFxOPUlqN44vj/Uf0q6qAowoAA2AHSvc5pDMM4FaIpJUjJKTk7YuvVGNzjekA1xcDbNECPDGK82z3pvzMkdvalZFUQbdeInBOBTMlqW3yfhT7OpOx+NecYO4wahQOktmGwG9R5ImXORRiTHDy3NR5oFcbgmrRQGZSpwetR5U4wVdRv3oncQcBG2396gTKcDHWiIZF4++zEKZdV0KH1HLTWi8m7lPf2rKJIyCSQRkkEHmp7GvqmQekg1lf2keBePzNa0uL+aPVcwqP8AmD+sDv3702M/TEziuzJ/wkc9jmn2/nqZF2kG7AfvTUg3BXJB614shjZSNyDTBdDjMCONOY5gUohZkEirv1FeOq+qdAAjfiHak+qJvMjPpqikJ4H7n6V1O/eP9C11Siz6mt5OG6JJB4dvnTt5ehV4RjiNCY5DnzSd2Oa8MjSyZ5npXFkjvRYXihTywxwzHfNIMgRsAAjvTBuDDDw/vUY3GTv9aChiZKuZdsDnQe9kwN84p52Dk4nKn60J1S9exjZ5hxx4/Ev96KMd0VKVI6OZpnZbdS5UFnYnCoo6k9BVR1DVJtSmZQ38oHAC8j714davGtbm0Rkit7mQO4VcFgOQJ7e1Hvs+8Mrruq+ZOpNpbEPJ2c9F+f7Vux4VDbObkzObpFu+zbwgLK3j1i9jHnSDMEZH4F/q+J6VoGcU3xqijOFAGw7VGknMp2yAKLsHokvOASARTatg8RNRy6x7sd6cigkuPW7CGHu3WroGxUlxvgb+wpSJcSjiEYUd22qBeeIdP0oFYMSyDYuTnFVbUvH8rFlRm35KnOqbSIk30XwhEz5s4UgZ2qO17p6bmbf/ALqy+bXtQuFLHKHs7ZPzqHJf6jINnCDmSRzoXNB8JGrnVNNB2dPia46jZvurj4Csae61F5uCC6zgZLEDAr1NQ1lH9EokwcZK4q+aJ8bNpW7iIwkvwyc0sXGdlYECsfj8V6lakebEWH+g/wCaMab9oEEjhJXMbdn2zU5L0C4tGiu6OpDAZoVdRlGBHLGfhTNnrkV0gIYMpGc5qS0izDZsimJgSRAkPEMD47VCuFHDgYz3py6la3kPPhzzpqWQMoIOxG") center/cover no-repeat;
+        background: #ffffff
+          url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/2wBDAQYGBgkICREJCREkGBQYJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/wAARCAGQAOEDASIAAhEBAxEB/8QAHAAAAQUBAQEAAAAAAAAAAAAABQIDBAYHAAEI/8QAQRAAAgEDAgQEAwYFAgQFBQAAAQIDAAQRBSESMUFRBhMiYXGBkQcUMkKhsRUjUsHRYuEWM1NyJENjgpIlorLw8f/EABoBAAIDAQEAAAAAAAAAAAAAAAIDAAEEBQb/xAAmEQACAgICAgIDAQADAAAAAAAAAQIRAyESMQRBE1EiMmEFFDNS/9oADAMBAAIRAxEAPwCg+JmBuHO5ySDtQS10e91i48mxgaVupx6V+J6VqcnhLTJZS9yklwzH8LNgH2wKMw2K2kIjghigQclRQAKnk/6MX+iEeF/i5I/9rpfwpHh/7OLPTitzqjrdXA34APQh/v8AOrmkEjjCLwJ/VT6RxRnMjAn/AFUp7sDaJeI/pXHyZZZHcj0WHBDFHjBCGMVquMb/AL1Fk825PqHAg6CnfKJbjkJJ/amLm4CKcGgHDEjKuRgDFQbm6ZhwJgL7U1NM8rFV3FMSOIELSMAoHOrBbPXcjkaivfETrbQRPcXUh4UiTck0FfWru+uDbWSnhLcIYDdjy2961nwV4Qi8O2ouJx5moTL/ADHbcoD+Uf3NaI4X7M8/I/8AJB8P/Z+paO/8QcFxOPUlqN44vj/Uf0q6qAowoAA2AHSvc5pDMM4FaIpJUjJKTk7YuvVGNzjekA1xcDbNECPDGK82z3pvzMkdvalZFUQbdeInBOBTMlqW3yfhT7OpOx+NecYO4wahQOktmGwG9R5ImXORRiTHDy3NR5oFcbgmrRQGZSpwetR5U4wVdRv3oncQcBG2396gTKcDHWiIZF4++zEKZdV0KH1HLTWi8m7lPf2rKJIyCSQRkkEHmp7GvqmQekg1lf2keBePzNa0uL+aPVcwqP8AmD+sDv3702M/TEziuzJ/wkc9jmn2/nqZF2kG7AfvTUg3BXJB614shjZSNyDTBdDjMCONOY5gUohZkEirv1FeOq+qdAAjfiHak+qJvMjPpqikJ4H7n6V1O/eP9C11Siz6mt5OG6JJB4dvnTt5ehV4RjiNCY5DnzSd2Oa8MjSyZ5npXFkjvRYXihTywxwzHfNIMgRsAAjvTBuDDDw/vUY3GTv9aChiZKuZdsDnQe9kwN84p52Dk4nKn60J1S9exjZ5hxx4/Ev96KMd0VKVI6OZpnZbdS5UFnYnCoo6k9BVR1DVJtSmZQ38oHAC8j714davGtbm0Rkit7mQO4VcFgOQJ7e1Hvs+8Mrruq+ZOpNpbEPJ2c9F+f7Vux4VDbObkzObpFu+zbwgLK3j1i9jHnSDMEZH4F/q+J6VoGcU3xqijOFAGw7VGknMp2yAKLsHokvOASARTatg8RNRy6x7sd6cigkuPW7CGHu3WroGxUlxvgb+wpSJcSjiEYUd22qBeeIdP0oFYMSyDYuTnFVbUvH8rFlRm35KnOqbSIk30XwhEz5s4UgZ2qO17p6bmbf/ALqy+bXtQuFLHKHs7ZPzqHJf6jINnCDmSRzoXNB8JGrnVNNB2dPia46jZvurj4Csae61F5uCC6zgZLEDAr1NQ1lH9EokwcZK4q+aJ8bNpW7iIwkvwyc0sXGdlYECsfj8V6lakebEWH+g/wCaMab9oEEjhJXMbdn2zU5L0C4tGiu6OpDAZoVdRlGBHLGfhTNnrkV0gIYMpGc5qS0izDZsimJgSRAkPEMD47VCuFHDgYz3py6la3kPPhzzpqWQMoIOxG")
+          center/cover no-repeat;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: opacity 0.5s ease;
+        will-change: opacity;
+        border-radius: 0;
+        transition: opacity 0.6s ease;
       }
 
       .splash-fullscreen.hidden {
@@ -227,8 +264,16 @@
   <body>
     <div class="splash-fullscreen"></div>
     <div class="container">
-      <div class="grid">
-        <a class="item" href="modul01.html">
+      <div class="search-wrapper">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Cari menu..."
+          autocomplete="off"
+        />
+      </div>
+      <div class="menu-list" id="menuList">
+        <a class="menu-item" href="modul01.html">
           <div class="icon-box">
             <img
               alt="GRID"
@@ -237,7 +282,7 @@
           </div>
           <span class="label">GRID</span>
         </a>
-        <a class="item" href="modul02.html">
+        <a class="menu-item" href="modul02.html">
           <div class="icon-box">
             <img
               alt="DAILY TASK"
@@ -246,7 +291,7 @@
           </div>
           <span class="label">DAILY TASK</span>
         </a>
-        <a class="item" href="produk-ja-di.html">
+        <a class="menu-item" href="produk-ja-di.html">
           <div class="icon-box">
             <img
               alt="JA-DI"
@@ -255,7 +300,7 @@
           </div>
           <span class="label">JA-DI</span>
         </a>
-        <a class="item" href="#">
+        <a class="menu-item" href="#">
           <div class="icon-box">
             <img
               alt="PLU JA-DI"
@@ -264,7 +309,7 @@
           </div>
           <span class="label">PLU JA-DI</span>
         </a>
-        <a class="item" href="#">
+        <a class="menu-item" href="#">
           <div class="icon-box">
             <img
               alt="PLANO"
@@ -273,7 +318,7 @@
           </div>
           <span class="label">PLANO</span>
         </a>
-        <a class="item" href="modul03.html">
+        <a class="menu-item" href="modul03.html">
           <div class="icon-box">
             <img
               alt="TIME CAMERA"
@@ -282,7 +327,7 @@
           </div>
           <span class="label">TIME CAMERA</span>
         </a>
-        <a class="item" href="#">
+        <a class="menu-item" href="#">
           <div class="icon-box">
             <img
               alt="EXP"
@@ -291,7 +336,7 @@
           </div>
           <span class="label">EXP</span>
         </a>
-        <a class="item" href="#">
+        <a class="menu-item" href="#">
           <div class="icon-box">
             <img
               alt="PULANG"
@@ -300,7 +345,7 @@
           </div>
           <span class="label">PULANG</span>
         </a>
-        <a class="item" href="#">
+        <a class="menu-item" href="#">
           <div class="icon-box">
             <img
               alt="PAGI"
@@ -309,7 +354,7 @@
           </div>
           <span class="label">PAGI</span>
         </a>
-        <a class="item" href="#">
+        <a class="menu-item" href="#">
           <div class="icon-box">
             <img
               alt="SIANG"
@@ -318,7 +363,7 @@
           </div>
           <span class="label">SIANG</span>
         </a>
-        <a class="item" href="#">
+        <a class="menu-item" href="#">
           <div class="icon-box">
             <img
               alt="MALAM"
@@ -327,7 +372,7 @@
           </div>
           <span class="label">MALAM</span>
         </a>
-        <a class="item" href="modul05.html">
+        <a class="menu-item" href="modul05.html">
           <div class="icon-box">
             <img
               alt="SELANJUTNYA"
@@ -339,11 +384,29 @@
       </div>
     </div>
     <script>
-      window.addEventListener('load', () => {
-        setTimeout(() => {
-          const splash = document.querySelector('.splash-fullscreen');
-          if (splash) splash.classList.add('hidden');
-        }, 500);
+      const searchInput = document.getElementById("searchInput");
+      const menuItems = document.querySelectorAll(".menu-item");
+
+      searchInput.addEventListener("input", (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        menuItems.forEach((item) => {
+          const label = item.querySelector(".label");
+          const text = label ? label.textContent.toLowerCase() : "";
+          if (text.includes(query)) {
+            item.classList.remove("hidden-item");
+          } else {
+            item.classList.add("hidden-item");
+          }
+        });
+      });
+
+      window.addEventListener("load", () => {
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            const splash = document.querySelector(".splash-fullscreen");
+            if (splash) splash.classList.add("hidden");
+          }, 600);
+        });
       });
     </script>
   </body>
