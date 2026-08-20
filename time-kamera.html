@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIME KAMERA</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#000000" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: #111827;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+      padding: 0;
+      color: #ffffff;
+    }
+
+    .phone {
+      width: 100%;
+      max-width: 100%;
+      background: #111827;
+      border-radius: 0;
+      box-shadow: none;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    @media (min-width: 800px) {
+      .phone {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+    }
+
+    .top {
+      padding: 16px 18px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .title {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+    }
+
+    .status {
+      font-size: 10px;
+      font-weight: 700;
+      color: #34d399;
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .viewfinder {
+      position: relative;
+      margin: 0 18px;
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 18px;
+      overflow: hidden;
+      aspect-ratio: 9 / 16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .viewfinder video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .viewfinder .fallback {
+      font-size: 56px;
+      opacity: 0.4;
+    }
+
+    .watermark {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 14px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
+      font-family: "Consolas", "SF Mono", monospace;
+    }
+
+    .wm-time {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .wm-loc {
+      font-size: 11px;
+      color: #d1d5db;
+      margin-top: 2px;
+      word-break: break-all;
+    }
+
+    .controls {
+      padding: 14px 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .shutter {
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      border: 4px solid #ffffff;
+      background: #ffffff;
+      cursor: pointer;
+      position: relative;
+      outline: none;
+    }
+
+    .shutter::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 50%;
+      background: #ffffff;
+    }
+
+    .shutter:active {
+      transform: scale(0.92);
+    }
+
+    .shot-preview {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 20px;
+      z-index: 10;
+    }
+
+    .shot-preview.show {
+      display: flex;
+    }
+
+    .shot-preview canvas {
+      max-width: 100%;
+      max-height: 70vh;
+      border-radius: 12px;
+      background: #000;
+    }
+
+    .shot-btns {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 10px 22px;
+      border-radius: 12px;
+      border: none;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: #fff;
+    }
+
+    .btn-ghost {
+      background: #374151;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="top">
+      <span class="title">📷 TIME KAMERA</span>
+      <span class="status" id="locStatus">Mencari lokasi...</span>
+    </div>
+
+    <div class="viewfinder" id="viewfinder">
+      <video id="video" autoplay playsinline muted></video>
+      <div class="fallback" id="fallback">📷</div>
+      <div class="watermark">
+        <div class="wm-time" id="wmTime">--:--:--</div>
+        <div class="wm-loc" id="wmLoc">lokasi belum tersedia</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="shutter" id="shutter" title="Ambil foto"></button>
+    </div>
+  </div>
+
+  <div class="shot-preview" id="shotPreview">
+    <canvas id="shotCanvas"></canvas>
+    <div class="shot-btns">
+      <button class="btn btn-primary" id="saveShot">Simpan</button>
+      <button class="btn btn-ghost" id="closeShot">Tutup</button>
+    </div>
+  </div>
+
+  <script>
+    let lat = null;
+    let lng = null;
+    let place = "lokasi belum tersedia";
+
+    const wmTime = document.getElementById("wmTime");
+    const wmLoc = document.getElementById("wmLoc");
+    const locStatus = document.getElementById("locStatus");
+
+    function fmt(n) {
+      return String(n).padStart(2, "0");
+    }
+
+    function tick() {
+      const d = new Date();
+      wmTime.textContent = `${fmt(d.getHours())}:${fmt(d.getMinutes())}:${fmt(d.getSeconds())}`;
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          lat = pos.coords.latitude.toFixed(6);
+          lng = pos.coords.longitude.toFixed(6);
+          place = `${lat}, ${lng}`;
+          wmLoc.textContent = place;
+          locStatus.textContent = "Lokasi aktif";
+          locStatus.style.color = "#34d399";
+        },
+        () => {
+          locStatus.textContent = "Lokasi tidak aktif";
+          locStatus.style.color = "#f87171";
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    } else {
+      locStatus.textContent = "Geolokasi tidak didukung";
+      locStatus.style.color = "#f87171";
+    }
+
+    const video = document.getElementById("video");
+    const fallback = document.getElementById("fallback");
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: { facingMode: "environment" }, audio: false })
+        .then((stream) => {
+          video.srcObject = stream;
+          fallback.style.display = "none";
+        })
+        .catch(() => {
+          video.style.display = "none";
+          fallback.style.display = "flex";
+        });
+    } else {
+      video.style.display = "none";
+      fallback.style.display = "flex";
+    }
+
+    const shotPreview = document.getElementById("shotPreview");
+    const shotCanvas = document.getElementById("shotCanvas");
+    const W = 720;
+    const H = 1280;
+
+    document.getElementById("shutter").addEventListener("click", () => {
+      const d = new Date();
+      const stamp =
+        `${fmt(d.getDate())}/${fmt(d.getMonth() + 1)}/${d.getFullYear()} ` +
+        `${fmt(d.getHours())}:${fmt(d.getMinutes())}:${fmt(d.getSeconds())}`;
+      const loc = place;
+
+      shotCanvas.width = W;
+      shotCanvas.height = H;
+      const ctx = shotCanvas.getContext("2d");
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, W, H);
+
+      if (video.videoWidth) {
+        const vw = video.videoWidth;
+        const vh = video.videoHeight;
+        const scale = Math.max(W / vw, H / vh);
+        const sw = vw * scale;
+        const sh = vh * scale;
+        ctx.drawImage(video, (W - sw) / 2, (H - sh) / 2, sw, sh);
+      } else {
+        ctx.font = "90px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("📷", W / 2, H / 2 - 40);
+      }
+
+      ctx.fillStyle = "rgba(0,0,0,0.55)";
+      ctx.fillRect(0, H - 130, W, 130);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 46px Consolas, monospace";
+      ctx.textAlign = "left";
+      ctx.fillText(stamp, 24, H - 66);
+      ctx.font = "20px Consolas, monospace";
+      ctx.fillStyle = "#d1d5db";
+      ctx.fillText(loc, 24, H - 30);
+
+      shotPreview.classList.add("show");
+    });
+
+    document.getElementById("closeShot").addEventListener("click", () => {
+      shotPreview.classList.remove("show");
+    });
+
+    document.getElementById("saveShot").addEventListener("click", () => {
+      const a = document.createElement("a");
+      a.href = shotCanvas.toDataURL("image/jpeg", 0.92);
+      a.download = `time-kamera-${Date.now()}.jpg`;
+      a.click();
+    });
+  </script>
+</body>
+</html>
