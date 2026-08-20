@@ -1,0 +1,1100 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PLU JA-DI — Daftar Produk</title>
+    <style>
+      :root {
+        --bg-color: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --primary: #3b82f6;
+        --primary-hover: #2563eb;
+        --accent: #10b981;
+        --border: #e2e8f0;
+        --radius: 12px;
+        --shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        line-height: 1.6;
+        padding: 40px 20px;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--text-main);
+        margin-bottom: 10px;
+        letter-spacing: -0.025em;
+      }
+
+      header p {
+        font-size: 1.125rem;
+        color: var(--text-muted);
+      }
+
+      .card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .toolbar {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .search {
+        flex: 1;
+        min-width: 200px;
+        padding: 10px 16px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 0.95rem;
+        font-family: inherit;
+        color: var(--text-main);
+        background: var(--card-bg);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .search:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      }
+
+      .search::placeholder {
+        color: var(--text-muted);
+      }
+
+      .stats {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+        font-weight: 500;
+      }
+
+      .table-wrap {
+        max-height: 70vh;
+        overflow: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+      }
+
+      thead {
+        background: var(--bg-color);
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+
+      th {
+        text-align: left;
+        padding: 14px 20px;
+        font-weight: 600;
+        color: var(--text-muted);
+        border-bottom: 2px solid var(--border);
+        white-space: nowrap;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      td {
+        padding: 13px 20px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-main);
+      }
+
+      tbody tr:hover td {
+        background: #f1f5f9;
+      }
+
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .plu {
+        font-family: "SF Mono", "Consolas", "Monaco", monospace;
+        font-weight: 600;
+        color: var(--primary);
+        font-size: 0.9rem;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .badge-rte {
+        background-color: #d1fae5;
+        color: #065f46;
+      }
+      .badge-kopi {
+        background-color: #fef3c7;
+        color: #92400e;
+      }
+      .badge-nonkopi {
+        background-color: #fce7f3;
+        color: #9d174d;
+      }
+      .badge-juice {
+        background-color: #ffedd5;
+        color: #9a3412;
+      }
+      .badge-ice {
+        background-color: #cffafe;
+        color: #0e7490;
+      }
+      .badge-empty {
+        background-color: #f1f5f9;
+        color: var(--text-muted);
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 32px;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 20px 12px;
+        }
+        header h1 {
+          font-size: 1.75rem;
+        }
+        header p {
+          font-size: 1rem;
+        }
+        th,
+        td {
+          padding: 10px 12px;
+          font-size: 0.85rem;
+        }
+        .toolbar {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>PLU JA-DI</h1>
+        <p>Daftar Produk &amp; Kategori (Gabungan)</p>
+      </header>
+
+      <div class="card">
+        <div class="toolbar">
+          <input
+            type="text"
+            class="search"
+            id="search"
+            placeholder="Cari PLU / Nama / Kategori..."
+            oninput="filterTable(this.value)"
+          />
+          <span class="stats" id="stats">164 item</span>
+        </div>
+        <div class="table-wrap">
+          <table id="table">
+            <thead>
+              <tr>
+                <th style="width: 120px">PLU</th>
+                <th>Deskripsi</th>
+                <th style="width: 140px">Kategori</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="plu">115816</td>
+                <td>JOLLY TIME FUN MANIA 100G</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">115818</td>
+                <td>JOLLY TIME BLASTO BUTTER 100G</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">115819</td>
+                <td>JOLLY TIME THE BIG CHEEZ 100G</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">416088</td>
+                <td>SUKI ONIGIRI 110G</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">441529</td>
+                <td>JD ICE CREAM CONE</td>
+                <td><span class="badge badge-ice">ICE SCOOP</span></td>
+              </tr>
+              <tr>
+                <td class="plu">441537</td>
+                <td>JD ICE CREAM CUP</td>
+                <td><span class="badge badge-ice">ICE SCOOP</span></td>
+              </tr>
+              <tr>
+                <td class="plu">441671</td>
+                <td>JD ICE CREAM CONE 2 SCOOP</td>
+                <td><span class="badge badge-ice">ICE SCOOP</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443770</td>
+                <td>JD ICE BLACK COFFEE R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443771</td>
+                <td>JD ICE BLACK COFFEE L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443772</td>
+                <td>JD HOT BLACK HONEY</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443773</td>
+                <td>JD BLACK HONEY R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443774</td>
+                <td>JD BLACK HONEY L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443775</td>
+                <td>JD HOT COFFEE LATTE</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443776</td>
+                <td>JD ICE COFFEE LATTE R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443779</td>
+                <td>JD JADI KEREN R (KOPSU AREN)</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443780</td>
+                <td>JD JADI KEREN L (KOPSU AREN)</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443781</td>
+                <td>JD JADI RINDU R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443782</td>
+                <td>JD JADI RINDU L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443783</td>
+                <td>JD ICE MOCCA R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443784</td>
+                <td>JD ICE MOCCA L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443786</td>
+                <td>JD ICE SALTED CARAMEL R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443787</td>
+                <td>JD ICE SALTED CARAMEL L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443788</td>
+                <td>JD ICE BUTTERSCOTCH R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443789</td>
+                <td>JD ICE BUTTERSCOTCH L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443790</td>
+                <td>JD ICE VANILLA LATTE R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443791</td>
+                <td>JD ICE VANILLA LATTE L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443792</td>
+                <td>JD ICE MATCHA LATTE R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443793</td>
+                <td>JD ICE BLEND CHOCO CARAMEL L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443794</td>
+                <td>JD ICE MATCHA LATTE L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443795</td>
+                <td>JD HOT CHOCOLATE</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443796</td>
+                <td>JD ICE BLEND CHOCO R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443797</td>
+                <td>JD ICE BLEND CHOCO L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443798</td>
+                <td>JD ICE BLEND VANILLA CARAMEL R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443799</td>
+                <td>JD ICE BLEND VANILLA CARAMEL L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443800</td>
+                <td>JD ICE BLEND CHOCO CARAMEL R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443804</td>
+                <td>JD ICE KOREAN STRAWBERRY MILK R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443805</td>
+                <td>JD ICE KOREAN STRAWBERRY MILK L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443806</td>
+                <td>JD ICE LYCHEE TEA REG</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443807</td>
+                <td>JD ICE LYCHEE TEA L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443808</td>
+                <td>JD ICE HONEY LEMON TEA R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443809</td>
+                <td>JD ICE HONEY LEMON TEA L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443810</td>
+                <td>JD HOT BLACK COFFEE</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443835</td>
+                <td>JD ICE COFFEE LATTE L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443838</td>
+                <td>JD FRESH JUICE SEMANGKA</td>
+                <td><span class="badge badge-juice">FRESH JUICE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443839</td>
+                <td>JD FRESH JUICE MELON SKY</td>
+                <td><span class="badge badge-juice">FRESH JUICE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443842</td>
+                <td>JD FRESH JUICE SIRSAK</td>
+                <td><span class="badge badge-juice">FRESH JUICE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443843</td>
+                <td>JD FRESH JUICE JAMBU</td>
+                <td><span class="badge badge-juice">FRESH JUICE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443844</td>
+                <td>JD FRESH JUICE ALPUKAT</td>
+                <td><span class="badge badge-juice">FRESH JUICE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443845</td>
+                <td>JD FRESH JUICE BUAH NAGA</td>
+                <td><span class="badge badge-juice">FRESH JUICE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443847</td>
+                <td>JD FRESH JUICE JERUK</td>
+                <td><span class="badge badge-juice">FRESH JUICE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443848</td>
+                <td>JD HOT MATCHA LATTE</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443910</td>
+                <td>JD ICE CHOCOLATE R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">443911</td>
+                <td>JD ICE CHOCOLATE L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">444571</td>
+                <td>JD ESPRESSO</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">444572</td>
+                <td>JD EXT SHOT ESPRESSO</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">444987</td>
+                <td>JD FRESH JUICE PISANG STRAW2</td>
+                <td><span class="badge badge-juice">FRESH JUICE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">445073</td>
+                <td>JD HOT CAPUCCINO</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">445992</td>
+                <td>JD FRESH JUICE GREEN3</td>
+                <td><span class="badge badge-juice">FRESH JUICE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446279</td>
+                <td>JD FRESH JUICE CARROT MIX FR 4</td>
+                <td><span class="badge badge-juice">FRESH JUICE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446322</td>
+                <td>JD FRESH JUICE MANGGA</td>
+                <td><span class="badge badge-juice">FRESH JUICE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446417</td>
+                <td>JD MINI STEAM CHEESE FILLING35G</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446418</td>
+                <td>JD MINI STEAM CAKE MATCHA35G</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446419</td>
+                <td>JD MINI STEAM CAKE CHOCO35G</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446420</td>
+                <td>JD MINI BLUDER CHOCO35G</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446421</td>
+                <td>JD MINI BLUDER CHEESE35G</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446422</td>
+                <td>JD MINI CREAM MESSES50G</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446688</td>
+                <td>JD BAPAO KACANG HIJAU BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446689</td>
+                <td>JD BAPAO COKLAT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446690</td>
+                <td>JD BAPAO STRAWBERRY BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446691</td>
+                <td>JD BAPAO AYAM BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446692</td>
+                <td>JD CHIFFON DONUT KEJU BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446693</td>
+                <td>JD CHIFFON DONUT PANDAN BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446694</td>
+                <td>JD CHIFFON DONUT COKLAT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446695</td>
+                <td>JD BOMBOLONI CHOCO PEANUT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446696</td>
+                <td>JD BOMBOLONI STRAWBERRY BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446697</td>
+                <td>JD BOMBOLONI DOUBLE CHOCOLATE B</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446698</td>
+                <td>JD LONG JOHN KEJU BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446699</td>
+                <td>JD LONG JOHN MESES BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446700</td>
+                <td>JD ROTI DAGING AYAM BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446701</td>
+                <td>JD PIZZA BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446702</td>
+                <td>JD ABON GULUNG AYAM BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446704</td>
+                <td>JD ROTI PISANG COKLAT KEJU BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446705</td>
+                <td>JD ROTI PISANG COKLAT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446706</td>
+                <td>JD DIMSUM AYAM WORTEL BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446707</td>
+                <td>JD DIMSUM AYAM UDANG BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446708</td>
+                <td>JD DIMSUM AYAM JAMUR BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446709</td>
+                <td>JD DIMSUM AYAM TELUR BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446710</td>
+                <td>JD DIMSUM AYAM CUMI BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446711</td>
+                <td>JD RISOLES BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446712</td>
+                <td>JD SOSIS SOLO BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446713</td>
+                <td>JD PLAIN CROISSANT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446714</td>
+                <td>JD ALMOND CROISSANT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446715</td>
+                <td>JD CHEESE CROISSANT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446716</td>
+                <td>JD CINNAMON ROLL CROISSANT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446717</td>
+                <td>JD DANISH RAISIN CROISSANT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446718</td>
+                <td>JD PAIN AU CHOCO CROISSANT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446719</td>
+                <td>JD MARTABAK CROISSANT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446720</td>
+                <td>JD PAIN SUISSE CROISSANT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446721</td>
+                <td>JD CROFFLE BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446722</td>
+                <td>JD BEEF SAUSAGE CROISSANT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446723</td>
+                <td>JD SMOKE BEEF CROISSANT BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446724</td>
+                <td>JD TUNA PUFF BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446725</td>
+                <td>JD SAUSAGE PUFF BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446726</td>
+                <td>JD CHICKEN CURRY PUFF BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">446995</td>
+                <td>JD ES BATU R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">447411</td>
+                <td>SUKI ONIGIRI TUNA MAYO</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">447412</td>
+                <td>SUKI ONIGIRI HOT CHICKEN</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">447413</td>
+                <td>SUKI ONIGIRI HOT TUNA</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">447414</td>
+                <td>SUKI ONIGIRI CHICKEN MAYO</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">449485</td>
+                <td>JD JADI KEREN JUMBO 1L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">449486</td>
+                <td>JD ICE MATCHALATTE 1L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">449489</td>
+                <td>JD ICE MATCHA LATTE2 R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">449492</td>
+                <td>JD ICE MATCHA LATTE2 L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">449493</td>
+                <td>JD HOT MATCHA LATTE 2</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">449494</td>
+                <td>JD ESBATU L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">451305</td>
+                <td>JD HAWAIIAN AMERICANO L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">451306</td>
+                <td>JD CREAMY COCONUT FRAPPE L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">452161</td>
+                <td>JD COLA CARAMELA R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">452162</td>
+                <td>JD POPPY BERRY R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">452163</td>
+                <td>JD CLOUDY LYCHEE R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">452794</td>
+                <td>JD ICE CHOCO BERRY R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">452795</td>
+                <td>JD ICE CAPPUCCINO R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">452796</td>
+                <td>JD ICE CAPPUCCINO L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">452797</td>
+                <td>JD PANDAN CLOUD LATTE R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">452798</td>
+                <td>JD PANDAN CLOUD LATTE L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">452799</td>
+                <td>JD COCONUT CLOUD LATTE R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">452800</td>
+                <td>JD COCONUT CLOUD LATTE L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">453432</td>
+                <td>JD COLAGEN LATTE</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">453433</td>
+                <td>JD DOLCE LATTE</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">453434</td>
+                <td>JD JADI ASIK</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">453435</td>
+                <td>JD JADI SUKA</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">453436</td>
+                <td>JD JADI SERU</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">454102</td>
+                <td>JD ES TEH JUMBO 1L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">459029</td>
+                <td>JD BOLU BUN ABON BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">459030</td>
+                <td>JD ABON ROLL BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">459031</td>
+                <td>JD BOLOGNA MAYO BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">459032</td>
+                <td>JD BOLU BUN CHOCOLATE CHIPS BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">459033</td>
+                <td>JD BOLU BUN CREAM CHEESE BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">459034</td>
+                <td>JD BOLU BUN DURIAN BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">459035</td>
+                <td>JD BOLU BUN KOPI BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">459036</td>
+                <td>JD BOLU BUN OREO CREAM BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">459037</td>
+                <td>JD BOLU BUN PINPPLE CHEESE BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">459038</td>
+                <td>JD BOLU BUN PINEEAPPLE CHCO BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">459039</td>
+                <td>JD BOLU BUN UBE CRUMBLE BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">459040</td>
+                <td>JD SALT BREAD BYI</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">460953</td>
+                <td>JD PINK BERRY SODA R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">460954</td>
+                <td>JD GREEN GRAPE FRUITYCANO R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">460957</td>
+                <td>JD TROPICAL APPLE AMERICANO R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">460958</td>
+                <td>JD MANGO COLADA R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">461283</td>
+                <td>PLU K JADI X ROMA ARDEN CKL270G</td>
+                <td><span class="badge badge-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="plu">465840</td>
+                <td>JD KOLAK LATTE R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">465842</td>
+                <td>JD PISANG IJO LATTE R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">465843</td>
+                <td>JD PISANG IJO LATTE L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">465844</td>
+                <td>JD WATERMELLON COOLER R</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">465845</td>
+                <td>JD WATERMELLON COOLER L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">465855</td>
+                <td>JD KOLAK LATTE L</td>
+                <td><span class="badge badge-nonkopi">NON KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">466060</td>
+                <td>JOLLY TIME MALLOW MAGIC 125G</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">466229</td>
+                <td>JD JADI MACCHIATO R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">466230</td>
+                <td>JD JADI MACCHIATO L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">466231</td>
+                <td>JD SALTED BUTTERCORN R</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">466232</td>
+                <td>JD SALTED BUTTERCORN L</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">466233</td>
+                <td>JD AFFOGATO</td>
+                <td><span class="badge badge-kopi">KOPI</span></td>
+              </tr>
+              <tr>
+                <td class="plu">894858</td>
+                <td>PLU K 5DAYS MINI CROISSANT (PC)</td>
+                <td><span class="badge badge-rte">RTE</span></td>
+              </tr>
+              <tr>
+                <td class="plu">895439</td>
+                <td>JA-DI SUNPRIDE BLIND BOX</td>
+                <td><span class="badge badge-empty">—</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <footer>
+        Generated from PLU JA-DI.xlsx · Data digabung jadi 1 tabel
+      </footer>
+    </div>
+
+    <script>
+      function filterTable(query) {
+        const q = query.toLowerCase().trim();
+        const rows = document.querySelectorAll("#table tbody tr");
+        let visible = 0;
+        rows.forEach((row) => {
+          const text = row.textContent.toLowerCase();
+          const show = !q || text.includes(q);
+          row.style.display = show ? "" : "none";
+          if (show) visible++;
+        });
+        document.getElementById("stats").textContent = visible + " item";
+      }
+    </script>
+  </body>
+</html>
