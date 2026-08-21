@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>MYLOVE</title>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#ffffff" />
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { -ms-overflow-style: none; scrollbar-width: none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: #ffffff; min-height: 100vh;
+}
+.wrap { max-width: 800px; margin: 0 auto; }
+.back-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 10px;
+  background: #fafbfc; border: 1px solid #e3e6ec; color: #1f2937;
+  text-decoration: none; flex-shrink: 0;
+}
+.back-btn svg { width: 18px; height: 18px; }
+.detail-content { padding: 22px 18px; }
+.sheet-icon {
+  width: 100%;
+  max-width: 110px;
+  aspect-ratio: 9 / 16;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  color: #fff;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(21, 82, 99, 0.35);
+  background: #155263;
+}
+.sheet-icon img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: inherit;
+}
+.detail-content h2 { font-size: 18px; font-weight: 800; color: #1f2937; margin-bottom: 6px; }
+.detail-content .tag {
+  display: inline-block; font-size: 11px; font-weight: 800; color: #818cf8;
+  background: #eeefef; padding: 4px 10px; border-radius: 999px; margin-bottom: 16px;
+}
+.detail-content h3 {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.6px; color: #9aa0ab; margin: 18px 0 10px;
+}
+.comp-list { list-style: none; }
+.comp-list li {
+  font-size: 13px; color: #374151; padding: 10px 0;
+  border-bottom: 1px solid #f1f2f4; display: flex;
+  justify-content: space-between; gap: 10px;
+}
+.comp-list li .amt { color: #1f2937; font-weight: 700; text-align: right; white-space: nowrap; }
+.cara-text {
+  font-size: 13px; color: #374151; line-height: 1.6; background: #fafbfc;
+  border: 1px solid #e3e6ec; padding: 14px; border-radius: 12px;
+}
+.g-a { background: linear-gradient(135deg, #a5b4fc, #818cf8); }
+.g-b { background: linear-gradient(135deg, #c4b5fd, #a78bfa); }
+.g-c { background: linear-gradient(135deg, #93c5fd, #60a5fa); }
+.g-d { background: linear-gradient(135deg, #67e8f9, #22d3ee); }
+.g-e { background: linear-gradient(135deg, #6ee7b7, #34d399); }
+.g-f { background: linear-gradient(135deg, #fcd34d, #fbbf24); }
+.g-g { background: linear-gradient(135deg, #fca5a5, #f87171); }
+.g-h { background: linear-gradient(135deg, #f0abfc, #e879f9); }
+
+/* --- size grouping (new) --- */
+.size-block { margin-bottom: 22px; }
+.size-block:last-child { margin-bottom: 0; }
+.size-title {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, #818cf8, #6366f1);
+  padding: 5px 14px; border-radius: 8px; margin-bottom: 8px;
+  letter-spacing: 0.3px;
+}
+.size-block .comp-list { border: 1px solid #f1f2f4; border-radius: 12px; padding: 0 12px; }
+.size-block .comp-list li:last-child { border-bottom: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="detail-content">
+    <h2>Juice Sirsak</h2>
+    <div class="tag">Jus</div>
+    <h3>Komposisi &amp; Takaran</h3><ul class="comp-list"><li><span>RPC Sirsak Frozen</span> <span class="amt">1 pc</span></li><li><span>Air</span> <span class="amt">200g</span></li></ul>
+  </div>
+</div>
+</body>
+</html>
+
+
+
