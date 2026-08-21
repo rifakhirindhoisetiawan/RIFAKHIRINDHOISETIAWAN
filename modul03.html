@@ -109,7 +109,7 @@
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
-        -ms-overroll-style: none;
+        -ms-overflow-style: none;
         scrollbar-width: none;
       }
       .menu-wrap::-webkit-scrollbar {
@@ -281,7 +281,6 @@
           icon: "🧃",
           cls: "g-a",
           cat: "PREMIX",
-          link: "cat-premix-uht.html",
           isCategory: true,
         },
         {
@@ -342,7 +341,7 @@
         },
 
         { name: "COFFEE LATTE PREMIX", icon: "🧊", cls: "g-a", cat: "PREMIX", link: "item-coffee-latte-ice-premix.html", plu: "443775" },
-        { name: "VANILA LATTE PREMIX", icon: "🍦", cls: "g-b", cat: "PREMIX", link: "item-vanilla-latte-premix.html", plu: "443790 / 443791" },
+        { name: "VANILLA LATTE PREMIX", icon: "🍦", cls: "g-b", cat: "PREMIX", link: "item-vanilla-latte-premix.html", plu: "443790 / 443791" },
         { name: "SALTED CARAMEL LATTE PREMIX", icon: "🍮", cls: "g-c", cat: "PREMIX", link: "item-salted-caramel-latte-premix.html", plu: "443786 / 443787" },
         { name: "BUTTERSCOTCH LATTE PREMIX", icon: "🧈", cls: "g-d", cat: "PREMIX", link: "item-butterscotch-latte-premix.html", plu: "443788 / 443789" },
         { name: "SALTED BUTTERCORN LATTE PREMIX", icon: "🌽", cls: "g-e", cat: "PREMIX", link: "item-salted-buttercorn-latte-premix.html", plu: "466231 / 466232" },
@@ -355,7 +354,7 @@
         { name: "JADI KEREN - KOPSU GULA AREN MANUAL", icon: "😎", cls: "g-c", cat: "MANUAL", link: "item-jadi-keren-kopsu-gula-aren-manual.html", plu: "443780" },
         { name: "JADI RINDU - KOPSU MADU MANUAL", icon: "❤️", cls: "g-d", cat: "MANUAL", link: "item-jadi-rindu-kopsu-madu-manual.html", plu: "443782" },
         { name: "MOCHA LATTE MANUAL", icon: "🍫", cls: "g-e", cat: "MANUAL", link: "item-mocha-latte-manual.html", plu: "443783 / 443784" },
-        { name: "VANILA LATTE MANUAL", icon: "🍦", cls: "g-f", cat: "MANUAL", link: "item-vanilla-latte-manual.html", plu: "443790 / 443791" },
+        { name: "VANILLA LATTE MANUAL", icon: "🍦", cls: "g-f", cat: "MANUAL", link: "item-vanilla-latte-manual.html", plu: "443790 / 443791" },
         { name: "SALTED CARAMEL LATTE MANUAL", icon: "🍮", cls: "g-g", cat: "MANUAL", link: "item-salted-caramel-latte-manual.html", plu: "443786 / 443787" },
         { name: "BUTTERSCOTCH LATTE MANUAL", icon: "🧈", cls: "g-h", cat: "MANUAL", link: "item-butterscotch-latte-manual.html", plu: "443788 / 443789" },
         { name: "SALTED BUTTERCORN LATTE MANUAL", icon: "🌽", cls: "g-b", cat: "MANUAL", link: "item-salted-buttercorn-latte-manual.html" },
@@ -453,7 +452,7 @@
         menuGrid.innerHTML = filtered
           .map(
             (m) => `
-              <a class="item active-modul" href="${m.link}">
+              <a class="item active-modul" ${m.isCategory ? '' : `href="${m.link}"`}>
                 <div class="icon-tile ${m.cls} icon-photo"><img src="${LOGO_SRC}" alt="${m.name}" /></div>
                 <span>${m.plu ? `<span class="plu-tag">PLU: ${m.plu}</span>` : ""}${m.name}</span>
               </a>
