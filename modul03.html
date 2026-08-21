@@ -57,7 +57,6 @@
         }
       }
 
-      /* ===== SEARCH ROW ===== */
       .search-row {
         display: flex;
         align-items: center;
@@ -102,7 +101,6 @@
         height: 18px;
       }
 
-      /* ===== MENU GRID ===== */
       .menu-wrap {
         flex: 1;
         overflow-y: auto;
@@ -111,7 +109,7 @@
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
-        -ms-overflow-style: none;
+        -ms-overroll-style: none;
         scrollbar-width: none;
       }
       .menu-wrap::-webkit-scrollbar {
@@ -214,7 +212,6 @@
         }
       }
 
-      /* ===== PALET GRADIENT ===== */
       .g-a {
         background: linear-gradient(135deg, #a5b4fc, #818cf8);
       }
@@ -279,11 +276,11 @@
 
     <script>
       const menus = [
-        // ===== KATEGORI =====
         {
           name: "PREMIX",
           icon: "🧃",
           cls: "g-a",
+          cat: "PREMIX",
           link: "cat-premix-uht.html",
           isCategory: true,
         },
@@ -291,612 +288,147 @@
           name: "MANUAL",
           icon: "☕",
           cls: "g-b",
-          filterCls: "g-b",
+          cat: "MANUAL",
           isCategory: true,
         },
         {
           name: "BLACK COFFEE",
           icon: "☕",
           cls: "g-c",
-          filterCls: "g-c",
+          cat: "BLACK COFFEE",
           isCategory: true,
         },
         {
           name: "ESPRESSO",
           icon: "🔥",
           cls: "g-d",
-          filterCls: "g-d",
+          cat: "ESPRESSO",
           isCategory: true,
         },
         {
           name: "CHOCO & MATCHA",
           icon: "🍫",
           cls: "g-e",
-          filterCls: "g-e",
+          cat: "CHOCO & MATCHA",
           isCategory: true,
         },
         {
           name: "BLENDED",
           icon: "🥤",
           cls: "g-f",
-          filterCls: "g-f",
+          cat: "BLENDED",
           isCategory: true,
         },
         {
           name: "SPECIALTY & CLOUD",
           icon: "☁️",
           cls: "g-g",
-          filterCls: "g-g",
+          cat: "SPECIALTY & CLOUD",
           isCategory: true,
         },
         {
           name: "SOFT DRINK",
           icon: "🧋",
           cls: "g-h",
-          filterCls: "g-h",
+          cat: "SOFT DRINK",
           isCategory: true,
         },
         {
           name: "JUS",
           icon: "🍹",
           cls: "g-a",
-          filterCls: "g-a",
+          cat: "JUS",
           isCategory: true,
         },
 
-        {
-          name: "COFFEE LATTE PREMIX",
-          icon: "🧊",
-          cls: "g-a",
-          link: "item-coffee-latte-ice-premix.html",
-          plu: "443775",
-        },
-        {
-          name: "VANILA LATTE PREMIX",
-          icon: "🍦",
-          cls: "g-b",
-          link: "item-vanilla-latte-premix.html",
-          plu: "443790 / 443791",
-        },
-        {
-          name: "SALTED CARAMEL LATTE PREMIX",
-          icon: "🍮",
-          cls: "g-c",
-          link: "item-salted-caramel-latte-premix.html",
-          plu: "443786 / 443787",
-        },
-        {
-          name: "BUTTERSCOTCH LATTE PREMIX",
-          icon: "🧈",
-          cls: "g-d",
-          link: "item-butterscotch-latte-premix.html",
-          plu: "443788 / 443789",
-        },
-        {
-          name: "SALTED BUTTERCORN LATTE PREMIX",
-          icon: "🌽",
-          cls: "g-e",
-          link: "item-salted-buttercorn-latte-premix.html",
-          plu: "466231 / 466232",
-        },
-        {
-          name: "JADI KEREN - KOPSU GULA AREN PREMIX",
-          icon: "😎",
-          cls: "g-f",
-          link: "item-jadi-keren-kopsu-gula-aren-premix.html",
-          plu: "443779 / 443780",
-        },
-        {
-          name: "MOCHA LATTE PREMIX",
-          icon: "🍫",
-          cls: "g-g",
-          link: "item-mocha-latte-premix.html",
-          plu: "443783 / 443784",
-        },
-        {
-          name: "JADI RINDU - KOPSU MADU PREMIX",
-          icon: "❤️",
-          cls: "g-h",
-          link: "item-jadi-rindu-kopsu-madu-premix.html",
-          plu: "443781 / 443782",
-        },
-        {
-          name: "JADI MACCHIATTO PREMIX",
-          icon: "🍯",
-          cls: "g-a",
-          link: "item-jadi-macchiatto-premix.html",
-          plu: "466229 / 466230",
-        },
-        {
-          name: "SALTED BUTTERCORN LATTE MANUAL",
-          icon: "🌽",
-          cls: "g-b",
-          link: "item-salted-buttercorn-latte-manual.html",
-          plu: "466231 / 466232",
-        },
-        {
-          name: "JADI KEREN - KOPSU GULA AREN MANUAL",
-          icon: "😎",
-          cls: "g-c",
-          link: "item-jadi-keren-kopsu-gula-aren-manual.html",
-          plu: "443780",
-        },
-        {
-          name: "JADI RINDU - KOPSU MADU MANUAL",
-          icon: "❤️",
-          cls: "g-d",
-          link: "item-jadi-rindu-kopsu-madu-manual.html",
-          plu: "443782",
-        },
-        {
-          name: "MOCHA LATTE MANUAL",
-          icon: "🍫",
-          cls: "g-e",
-          link: "item-mocha-latte-manual.html",
-          plu: "443783 / 443784",
-        },
-        {
-          name: "VANILA LATTE MANUAL",
-          icon: "🍦",
-          cls: "g-f",
-          link: "item-vanilla-latte-manual.html",
-          plu: "443790 / 443791",
-        },
-        {
-          name: "SALTED CARAMEL LATTE MANUAL",
-          icon: "🍮",
-          cls: "g-g",
-          link: "item-salted-caramel-latte-manual.html",
-          plu: "443786 / 443787",
-        },
-        {
-          name: "BUTTERSCOTCH LATTE MANUAL",
-          icon: "🧈",
-          cls: "g-h",
-          link: "item-butterscotch-latte-manual.html",
-          plu: "443788 / 443789",
-        },
-        {
-          name: "SALTED BUTTERCORN LATTE MANUAL",
-          icon: "🌽",
-          cls: "g-b",
-          link: "item-salted-buttercorn-latte-manual.html",
-        },
-        {
-          name: "JA~DI MACCHIATTO MANUAL",
-          icon: "🍯",
-          cls: "g-a",
-          link: "item-jadi-macchiatto.html",
-          plu: "466230",
-        },
-        {
-          name: "COFFEE LATTE ICE MANUAL",
-          icon: "🧊",
-          cls: "g-b",
-          link: "item-coffee-latte-ice-manual.html",
-          plu: "443776 / 443835",
-        },
-        {
-          name: "CAPPUCCINO ICE",
-          icon: "🥛",
-          cls: "g-c",
-          link: "item-cappuccino-ice.html",
-          plu: "452795 / 452796",
-        },
-        {
-          name: "AMERICANO HOT",
-          icon: "☕",
-          cls: "g-d",
-          link: "item-americano-hot.html",
-        },
-        {
-          name: "AMERICANO ICE",
-          icon: "🧊",
-          cls: "g-e",
-          link: "item-americano-ice.html",
-        },
-        {
-          name: "BLACK COFFEE WITH HONEY",
-          icon: "🍯",
-          cls: "g-f",
-          link: "item-black-coffee-with-honey.html",
-          plu: "443772",
-        },
-        {
-          name: "HAWAIIAN AMERICANO (ICE UPSIZE)",
-          icon: "🌺",
-          cls: "g-g",
-          link: "item-hawaiian-americano-ice-upsize.html",
-        },
-        {
-          name: "ESPRESSO HOT",
-          icon: "☕",
-          cls: "g-h",
-          link: "item-espresso-hot.html",
-          plu: "444571",
-        },
-        {
-          name: "CAPPUCCINO HOT",
-          icon: "🫧",
-          cls: "g-a",
-          link: "item-cappuccino-hot.html",
-          plu: "445073",
-        },
-        {
-          name: "CAFFELATTE HOT",
-          icon: "🥛",
-          cls: "g-b",
-          link: "item-caffelatte-hot.html",
-        },
-        {
-          name: "HOT CHOCOLATE",
-          icon: "☕",
-          cls: "g-c",
-          link: "item-hot-chocolate.html",
-          plu: "443795",
-        },
-        {
-          name: "ICE CHOCOLATE",
-          icon: "🧊",
-          cls: "g-d",
-          link: "item-ice-chocolate.html",
-          plu: "443910 / 443911",
-        },
-        {
-          name: "HOT MATCHA",
-          icon: "🍵",
-          cls: "g-e",
-          link: "item-ice-matcha.html",
-          plu: "443848",
-        },
-        {
-          name: "ICE MATCHA",
-          icon: "🍃",
-          cls: "g-f",
-          link: "item-ice-matcha.html",
-          plu: "443792",
-        },
-        {
-          name: "CHOCO BERRY (ICE 12OZ)",
-          icon: "🍓",
-          cls: "g-g",
-          link: "item-choco-berry-ice-12oz.html",
-          plu: "452794",
-        },
-        {
-          name: "BLENDED VANILLA CARAMEL",
-          icon: "🍦",
-          cls: "g-h",
-          link: "item-blended-vanilla-caramel.html",
-        },
-        {
-          name: "BLENDED CHOCO",
-          icon: "🍫",
-          cls: "g-a",
-          link: "item-blended-choco.html",
-        },
-        {
-          name: "BLENDED CHOCO CARAMEL",
-          icon: "🍮",
-          cls: "g-b",
-          link: "item-blended-choco-caramel.html",
-          plu: "443793",
-        },
-        {
-          name: "CREAMY COCONUT FRAPPE (UPSIZE)",
-          icon: "🥥",
-          cls: "g-c",
-          link: "item-creamy-coconut-frappe-upsize.html",
-        },
-        {
-          name: "KOREAN STRAWBERRY MILK",
-          icon: "🍓",
-          cls: "g-d",
-          link: "item-korean-strawberry-milk.html",
-          plu: "443804 / 443805",
-        },
-        {
-          name: "AFFOGATO",
-          icon: "🍨",
-          cls: "g-e",
-          link: "item-affogato.html",
-          plu: "466233",
-        },
-        {
-          name: "ICE COLLAGEN LATTE (12OZ)",
-          icon: "🌸",
-          cls: "g-f",
-          link: "item-ice-collagen-latte-12oz.html",
-          plu: "453432",
-        },
-        {
-          name: "ICE DOLCE LATTE (12OZ)",
-          icon: "🍬",
-          cls: "g-g",
-          link: "item-ice-dolce-latte-12oz.html",
-          plu: "453433",
-        },
-        {
-          name: "COCONUT CLOUD LATTE",
-          icon: "🥥",
-          cls: "g-h",
-          link: "item-coconut-cloud-latte.html",
-          plu: "452799 / 452800",
-        },
-        {
-          name: "PANDAN CLOUD LATTE",
-          icon: "🌿",
-          cls: "g-a",
-          link: "item-pandan-cloud-latte.html",
-          plu: "452797 / 452798",
-        },
-        {
-          name: "SALTED CARAMEL COCA (12OZ)",
-          icon: "🥤",
-          cls: "g-b",
-          link: "item-salted-caramel-coca-12oz.html",
-        },
-        {
-          name: "TOFFEE POPCORN FANTA (12OZ)",
-          icon: "🍿",
-          cls: "g-c",
-          link: "item-toffee-popcorn-fanta-12oz.html",
-        },
-        {
-          name: "LYCHEE SPRITE (12OZ)",
-          icon: "🍋",
-          cls: "g-d",
-          link: "item-lychee-sprite-12oz.html",
-        },
-        {
-          name: "SHAKEN LYCHEE TEA",
-          icon: "🫐",
-          cls: "g-e",
-          link: "item-shaken-lychee-tea.html",
-          plu: "443806 / 443807",
-        },
-        {
-          name: "SHAKEN HONEY LEMON TEA",
-          icon: "🍋",
-          cls: "g-f",
-          link: "item-shaken-honey-lemon-tea.html",
-          plu: "443808 / 443809",
-        },
-        {
-          name: "GREEN JUICE",
-          icon: "🥬",
-          cls: "g-g",
-          link: "item-green-juice.html",
-        },
-        {
-          name: "JUICE SIRSAK",
-          icon: "🍈",
-          cls: "g-h",
-          link: "item-juice-sirsak.html",
-          plu: "443842",
-        },
-        {
-          name: "JUICE ALPUKAT",
-          icon: "🥑",
-          cls: "g-a",
-          link: "item-juice-alpukat.html",
-          plu: "443844",
-        },
-        {
-          name: "JUICE BUAH NAGA",
-          icon: "🐲",
-          cls: "g-b",
-          link: "item-juice-buah-naga.html",
-          plu: "443845",
-        },
-        {
-          name: "JUICE JAMBU",
-          icon: "🍒",
-          cls: "g-c",
-          link: "item-juice-jambu.html",
-          plu: "443843",
-        },
-        {
-          name: "JUICE SEMANGKA",
-          icon: "🍉",
-          cls: "g-d",
-          link: "item-juice-semangka.html",
-          plu: "443838",
-        },
-        {
-          name: "JUICE MELON",
-          icon: "🍈",
-          cls: "g-e",
-          link: "item-juice-melon.html",
-          plu: "443839",
-        },
-        {
-          name: "JUICE PISANG STRAWBERRY",
-          icon: "🍌",
-          cls: "g-f",
-          link: "item-juice-pisang-strawberry.html",
-          plu: "444987",
-        },
-        {
-          name: "JUICE MANGGA HARUM MANIS",
-          icon: "🥭",
-          cls: "g-g",
-          link: "item-juice-mangga-harum-manis.html",
-          plu: "446322",
-        },
-        {
-          name: "JUICE APEL MIX",
-          icon: "🍎",
-          cls: "g-h",
-          link: "item-juice-apel-mix.html",
-        },
-        {
-          name: "JUICE CARROT MIXED FRUIT",
-          icon: "🥕",
-          cls: "g-a",
-          link: "item-juice-carrot-mixed-fruit.html",
-          plu: "446279",
-        },
-        {
-          name: "JUICE JERUK",
-          icon: "🍊",
-          cls: "g-b",
-          link: "item-juice-jeruk.html",
-          plu: "443847",
-        },
-        {
-          name: "JUICE JERUK NAVEL",
-          icon: "🍊",
-          cls: "g-c",
-          link: "item-juice-jeruk-navel.html",
-        },
-        {
-          name: "JUICE JERUK NAVEL CARA CARA",
-          icon: "🍊",
-          cls: "g-d",
-          link: "item-juice-jeruk-navel-cara-cara.html",
-        },
-        {
-          name: "KOLAK LATTE",
-          icon: "🍮",
-          cls: "g-e",
-          link: "item-kolak-latte.html",
-          plu: "465840 / 465855",
-        },
-        {
-          name: "WATERMELON COOLER",
-          icon: "🍉",
-          cls: "g-f",
-          link: "item-watermelon-cooler.html",
-          plu: "465844 / 465845",
-        },
-        {
-          name: "PISANG IJO LATTE",
-          icon: "🍌",
-          cls: "g-g",
-          link: "item-pisang-ijo-latte.html",
-          plu: "465842 / 465843",
-        },
+        { name: "COFFEE LATTE PREMIX", icon: "🧊", cls: "g-a", cat: "PREMIX", link: "item-coffee-latte-ice-premix.html", plu: "443775" },
+        { name: "VANILA LATTE PREMIX", icon: "🍦", cls: "g-b", cat: "PREMIX", link: "item-vanilla-latte-premix.html", plu: "443790 / 443791" },
+        { name: "SALTED CARAMEL LATTE PREMIX", icon: "🍮", cls: "g-c", cat: "PREMIX", link: "item-salted-caramel-latte-premix.html", plu: "443786 / 443787" },
+        { name: "BUTTERSCOTCH LATTE PREMIX", icon: "🧈", cls: "g-d", cat: "PREMIX", link: "item-butterscotch-latte-premix.html", plu: "443788 / 443789" },
+        { name: "SALTED BUTTERCORN LATTE PREMIX", icon: "🌽", cls: "g-e", cat: "PREMIX", link: "item-salted-buttercorn-latte-premix.html", plu: "466231 / 466232" },
+        { name: "JADI KEREN - KOPSU GULA AREN PREMIX", icon: "😎", cls: "g-f", cat: "PREMIX", link: "item-jadi-keren-kopsu-gula-aren-premix.html", plu: "443779 / 443780" },
+        { name: "MOCHA LATTE PREMIX", icon: "🍫", cls: "g-g", cat: "PREMIX", link: "item-mocha-latte-premix.html", plu: "443783 / 443784" },
+        { name: "JADI RINDU - KOPSU MADU PREMIX", icon: "❤️", cls: "g-h", cat: "PREMIX", link: "item-jadi-rindu-kopsu-madu-premix.html", plu: "443781 / 443782" },
+        { name: "JADI MACCHIATTO PREMIX", icon: "🍯", cls: "g-a", cat: "PREMIX", link: "item-jadi-macchiatto-premix.html", plu: "466229 / 466230" },
+
+        { name: "SALTED BUTTERCORN LATTE MANUAL", icon: "🌽", cls: "g-b", cat: "MANUAL", link: "item-salted-buttercorn-latte-manual.html", plu: "466231 / 466232" },
+        { name: "JADI KEREN - KOPSU GULA AREN MANUAL", icon: "😎", cls: "g-c", cat: "MANUAL", link: "item-jadi-keren-kopsu-gula-aren-manual.html", plu: "443780" },
+        { name: "JADI RINDU - KOPSU MADU MANUAL", icon: "❤️", cls: "g-d", cat: "MANUAL", link: "item-jadi-rindu-kopsu-madu-manual.html", plu: "443782" },
+        { name: "MOCHA LATTE MANUAL", icon: "🍫", cls: "g-e", cat: "MANUAL", link: "item-mocha-latte-manual.html", plu: "443783 / 443784" },
+        { name: "VANILA LATTE MANUAL", icon: "🍦", cls: "g-f", cat: "MANUAL", link: "item-vanilla-latte-manual.html", plu: "443790 / 443791" },
+        { name: "SALTED CARAMEL LATTE MANUAL", icon: "🍮", cls: "g-g", cat: "MANUAL", link: "item-salted-caramel-latte-manual.html", plu: "443786 / 443787" },
+        { name: "BUTTERSCOTCH LATTE MANUAL", icon: "🧈", cls: "g-h", cat: "MANUAL", link: "item-butterscotch-latte-manual.html", plu: "443788 / 443789" },
+        { name: "SALTED BUTTERCORN LATTE MANUAL", icon: "🌽", cls: "g-b", cat: "MANUAL", link: "item-salted-buttercorn-latte-manual.html" },
+        { name: "JA~DI MACCHIATTO MANUAL", icon: "🍯", cls: "g-a", cat: "MANUAL", link: "item-jadi-macchiatto.html", plu: "466230" },
+        { name: "COFFEE LATTE ICE MANUAL", icon: "🧊", cls: "g-b", cat: "MANUAL", link: "item-coffee-latte-ice-manual.html", plu: "443776 / 443835" },
+        { name: "CAPPUCCINO ICE", icon: "🥛", cls: "g-c", cat: "MANUAL", link: "item-cappuccino-ice.html", plu: "452795 / 452796" },
+        { name: "AMERICANO HOT", icon: "☕", cls: "g-d", cat: "MANUAL", link: "item-americano-hot.html" },
+        { name: "AMERICANO ICE", icon: "🧊", cls: "g-e", cat: "MANUAL", link: "item-americano-ice.html" },
+        { name: "BLACK COFFEE WITH HONEY", icon: "🍯", cls: "g-f", cat: "MANUAL", link: "item-black-coffee-with-honey.html", plu: "443772" },
+        { name: "HAWAIIAN AMERICANO (ICE UPSIZE)", icon: "🌺", cls: "g-g", cat: "BLACK COFFEE", link: "item-hawaiian-americano-ice-upsize.html" },
+        { name: "ESPRESSO HOT", icon: "☕", cls: "g-h", cat: "ESPRESSO", link: "item-espresso-hot.html", plu: "444571" },
+        { name: "CAPPUCCINO HOT", icon: "🫧", cls: "g-a", cat: "MANUAL", link: "item-cappuccino-hot.html", plu: "445073" },
+        { name: "CAFFELATTE HOT", icon: "🥛", cls: "g-b", cat: "MANUAL", link: "item-caffelatte-hot.html" },
+        { name: "HOT CHOCOLATE", icon: "☕", cls: "g-c", cat: "CHOCO & MATCHA", link: "item-hot-chocolate.html", plu: "443795" },
+        { name: "ICE CHOCOLATE", icon: "🧊", cls: "g-d", cat: "CHOCO & MATCHA", link: "item-ice-chocolate.html", plu: "443910 / 443911" },
+        { name: "HOT MATCHA", icon: "🍵", cls: "g-e", cat: "CHOCO & MATCHA", link: "item-ice-matcha.html", plu: "443848" },
+        { name: "ICE MATCHA", icon: "🍃", cls: "g-f", cat: "CHOCO & MATCHA", link: "item-ice-matcha.html", plu: "443792" },
+        { name: "CHOCO BERRY (ICE 12OZ)", icon: "🍓", cls: "g-g", cat: "CHOCO & MATCHA", link: "item-choco-berry-ice-12oz.html", plu: "452794" },
+        { name: "BLENDED VANILLA CARAMEL", icon: "🍦", cls: "g-h", cat: "BLENDED", link: "item-blended-vanilla-caramel.html" },
+        { name: "BLENDED CHOCO", icon: "🍫", cls: "g-a", cat: "BLENDED", link: "item-blended-choco.html" },
+        { name: "BLENDED CHOCO CARAMEL", icon: "🍮", cls: "g-b", cat: "BLENDED", link: "item-blended-choco-caramel.html", plu: "443793" },
+        { name: "CREAMY COCONUT FRAPPE (UPSIZE)", icon: "🥥", cls: "g-c", cat: "BLENDED", link: "item-creamy-coconut-frappe-upsize.html" },
+        { name: "KOREAN STRAWBERRY MILK", icon: "🍓", cls: "g-d", cat: "BLENDED", link: "item-korean-strawberry-milk.html", plu: "443804 / 443805" },
+        { name: "AFFOGATO", icon: "🍨", cls: "g-e", cat: "BLENDED", link: "item-affogato.html", plu: "466233" },
+        { name: "ICE COLLAGEN LATTE (12OZ)", icon: "🌸", cls: "g-f", cat: "BLENDED", link: "item-ice-collagen-latte-12oz.html", plu: "453432" },
+        { name: "ICE DOLCE LATTE (12OZ)", icon: "🍬", cls: "g-g", cat: "BLENDED", link: "item-ice-dolce-latte-12oz.html", plu: "453433" },
+        { name: "COCONUT CLOUD LATTE", icon: "🥥", cls: "g-h", cat: "BLENDED", link: "item-coconut-cloud-latte.html", plu: "452799 / 452800" },
+        { name: "PANDAN CLOUD LATTE", icon: "🌿", cls: "g-a", cat: "BLENDED", link: "item-pandan-cloud-latte.html", plu: "452797 / 452798" },
+        { name: "SALTED CARAMEL COCA (12OZ)", icon: "🥤", cls: "g-b", cat: "SOFT DRINK", link: "item-salted-caramel-coca-12oz.html" },
+        { name: "TOFFEE POPCORN FANTA (12OZ)", icon: "🍿", cls: "g-c", cat: "SOFT DRINK", link: "item-toffee-popcorn-fanta-12oz.html" },
+        { name: "LYCHEE SPRITE (12OZ)", icon: "🍋", cls: "g-d", cat: "SOFT DRINK", link: "item-lychee-sprite-12oz.html" },
+        { name: "SHAKEN LYCHEE TEA", icon: "🫐", cls: "g-e", cat: "JUS", link: "item-shaken-lychee-tea.html", plu: "443806 / 443807" },
+        { name: "SHAKEN HONEY LEMON TEA", icon: "🍋", cls: "g-f", cat: "JUS", link: "item-shaken-honey-lemon-tea.html", plu: "443808 / 443809" },
+        { name: "GREEN JUICE", icon: "🥬", cls: "g-g", cat: "JUS", link: "item-green-juice.html" },
+        { name: "JUICE SIRSAK", icon: "🍈", cls: "g-h", cat: "JUS", link: "item-juice-sirsak.html", plu: "443842" },
+        { name: "JUICE ALPUKAT", icon: "🥑", cls: "g-a", cat: "JUS", link: "item-juice-alpukat.html", plu: "443844" },
+        { name: "JUICE BUAH NAGA", icon: "🐲", cls: "g-b", cat: "JUS", link: "item-juice-buah-naga.html", plu: "443845" },
+        { name: "JUICE JAMBU", icon: "🍒", cls: "g-c", cat: "JUS", link: "item-juice-jambu.html", plu: "443843" },
+        { name: "JUICE SEMANGKA", icon: "🍉", cls: "g-d", cat: "JUS", link: "item-juice-semangka.html", plu: "443838" },
+        { name: "JUICE MELON", icon: "🍈", cls: "g-e", cat: "JUS", link: "item-juice-melon.html", plu: "443839" },
+        { name: "JUICE PISANG STRAWBERRY", icon: "🍌", cls: "g-f", cat: "JUS", link: "item-juice-pisang-strawberry.html", plu: "444987" },
+        { name: "JUICE MANGGA HARUM MANIS", icon: "🥭", cls: "g-g", cat: "JUS", link: "item-juice-mangga-harum-manis.html", plu: "446322" },
+        { name: "JUICE APEL MIX", icon: "🍎", cls: "g-h", cat: "JUS", link: "item-juice-apel-mix.html" },
+        { name: "JUICE CARROT MIXED FRUIT", icon: "🥕", cls: "g-a", cat: "JUS", link: "item-juice-carrot-mixed-fruit.html", plu: "446279" },
+        { name: "JUICE JERUK", icon: "🍊", cls: "g-b", cat: "JUS", link: "item-juice-jeruk.html", plu: "443847" },
+        { name: "JUICE JERUK NAVEL", icon: "🍊", cls: "g-c", cat: "JUS", link: "item-juice-jeruk-navel.html" },
+        { name: "JUICE JERUK NAVEL CARA CARA", icon: "🍊", cls: "g-d", cat: "JUS", link: "item-juice-jeruk-navel-cara-cara.html" },
+        { name: "KOLAK LATTE", icon: "🍮", cls: "g-e", cat: "BLENDED", link: "item-kolak-latte.html", plu: "465840 / 465855" },
+        { name: "WATERMELON COOLER", icon: "🍉", cls: "g-f", cat: "BLENDED", link: "item-watermelon-cooler.html", plu: "465844 / 465845" },
+        { name: "PISANG IJO LATTE", icon: "🍌", cls: "g-g", cat: "BLENDED", link: "item-pisang-ijo-latte.html", plu: "465842 / 465843" },
         { name: "PLU JA-DI", icon: "📋", cls: "g-e", link: "plu-ja-di.html" },
         { name: "PLANO", icon: "🗄️", cls: "g-h", link: "plano.html" },
         { name: "TIME KAMERA", icon: "📷", cls: "g-c", link: "time-kamera.html" },
-        {
-          name: "COFFEE LATTE",
-          icon: "☕",
-          cls: "g-a",
-          link: "item-coffee-latte.html",
-        },
-        {
-          name: "CHOCO BERRY",
-          icon: "🍓",
-          cls: "g-g",
-          link: "item-choco-berry.html",
-        },
-        {
-          name: "GREEN GRAPE FRUITYCANO",
-          icon: "🍇",
-          cls: "g-e",
-          link: "item-green-grape-fruitycano.html",
-        },
-        {
-          name: "TROPICAL APPLE AMERICANO",
-          icon: "🍎",
-          cls: "g-g",
-          link: "item-tropical-apple-americano.html",
-        },
-        {
-          name: "KOPI BOTOL JADI ASIK",
-          icon: "🍾",
-          cls: "g-e",
-          link: "item-kopi-botol-jadi-asik.html",
-          plu: "453434",
-        },
-        {
-          name: "KOPI BOTOL JADI SERU",
-          icon: "🍾",
-          cls: "g-c",
-          link: "item-kopi-botol-jadi-seru.html",
-          plu: "453436",
-        },
-        {
-          name: "KOPI BOTOL JADI SUKA",
-          icon: "🍾",
-          cls: "g-h",
-          link: "item-kopi-botol-jadi-suka.html",
-          plu: "453435",
-        },
-        {
-          name: "CREAMY COCONUT FRAPPE",
-          icon: "🥥",
-          cls: "g-d",
-          link: "item-creamy-coconut-frappe.html",
-          plu: "451306",
-        },
-        {
-          name: "PANDAN CLOUD LATTE",
-          icon: "🌿",
-          cls: "g-e",
-          link: "item-pandan-cloud-latte.html",
-          plu: "452797 / 452798",
-        },
-        {
-          name: "PINK BERRY SODA",
-          icon: "🍒",
-          cls: "g-g",
-          link: "item-pink-berry-soda.html",
-          plu: "460953",
-        },
-        {
-          name: "HAWAIIAN AMERICANO",
-          icon: "🌺",
-          cls: "g-c",
-          link: "item-hawaiian-americano.html",
-          plu: "451305",
-        },
-        {
-          name: "ICE COLLAGEN LATTE",
-          icon: "🌸",
-          cls: "g-h",
-          link: "item-ice-collagen-latte.html",
-          plu: "453432",
-        },
-        {
-          name: "MANGO COLADA",
-          icon: "🥭",
-          cls: "g-f",
-          link: "item-mango-colada.html",
-          plu: "460958",
-        },
-        {
-          name: "CLOUDY LYCHEE",
-          icon: "🫐",
-          cls: "g-d",
-          link: "item-cloudy-lychee.html",
-          plu: "452163",
-        },
-        {
-          name: "COLA CARAMELA",
-          icon: "🥤",
-          cls: "g-a",
-          link: "item-cola-caramela.html",
-          plu: "452161",
-        },
-        {
-          name: "POPPY BERRY",
-          icon: "🌸",
-          cls: "g-h",
-          link: "item-poppy-berry.html",
-          plu: "452162",
-        },
-        {
-          name: "MACCHIATO CLOUD FOAM",
-          icon: "☁️",
-          cls: "g-b",
-          link: "item-macchiato-cloud-foam.html",
-        },
+        { name: "COFFEE LATTE", icon: "☕", cls: "g-a", cat: "SPECIALTY & CLOUD", link: "item-coffee-latte.html" },
+        { name: "CHOCO BERRY", icon: "🍓", cls: "g-g", cat: "CHOCO & MATCHA", link: "item-choco-berry.html" },
+        { name: "GREEN GRAPE FRUITYCANO", icon: "🍇", cls: "g-e", cat: "SPECIALTY & CLOUD", link: "item-green-grape-fruitycano.html" },
+        { name: "TROPICAL APPLE AMERICANO", icon: "🍎", cls: "g-g", cat: "BLACK COFFEE", link: "item-tropical-apple-americano.html" },
+        { name: "KOPI BOTOL JADI ASIK", icon: "🍾", cls: "g-e", cat: "SPECIALTY & CLOUD", link: "item-kopi-botol-jadi-asik.html", plu: "453434" },
+        { name: "KOPI BOTOL JADI SERU", icon: "🍾", cls: "g-c", cat: "SPECIALTY & CLOUD", link: "item-kopi-botol-jadi-seru.html", plu: "453436" },
+        { name: "KOPI BOTOL JADI SUKA", icon: "🍾", cls: "g-h", cat: "SPECIALTY & CLOUD", link: "item-kopi-botol-jadi-suka.html", plu: "453435" },
+        { name: "CREAMY COCONUT FRAPPE", icon: "🥥", cls: "g-d", cat: "BLENDED", link: "item-creamy-coconut-frappe.html", plu: "451306" },
+        { name: "PANDAN CLOUD LATTE", icon: "🌿", cls: "g-e", cat: "BLENDED", link: "item-pandan-cloud-latte.html", plu: "452797 / 452798" },
+        { name: "PINK BERRY SODA", icon: "🍒", cls: "g-g", cat: "SPECIALTY & CLOUD", link: "item-pink-berry-soda.html", plu: "460953" },
+        { name: "HAWAIIAN AMERICANO", icon: "🌺", cls: "g-c", cat: "BLACK COFFEE", link: "item-hawaiian-americano.html", plu: "451305" },
+        { name: "ICE COLLAGEN LATTE", icon: "🌸", cls: "g-h", cat: "SPECIALTY & CLOUD", link: "item-ice-collagen-latte.html", plu: "453432" },
+        { name: "MANGO COLADA", icon: "🥭", cls: "g-f", cat: "SPECIALTY & CLOUD", link: "item-mango-colada.html", plu: "460958" },
+        { name: "CLOUDY LYCHEE", icon: "🫐", cls: "g-d", cat: "SPECIALTY & CLOUD", link: "item-cloudy-lychee.html", plu: "452163" },
+        { name: "COLA CARAMELA", icon: "🥤", cls: "g-a", cat: "SPECIALTY & CLOUD", link: "item-cola-caramela.html", plu: "452161" },
+        { name: "POPPY BERRY", icon: "🌸", cls: "g-h", cat: "SPECIALTY & CLOUD", link: "item-poppy-berry.html", plu: "452162" },
+        { name: "MACCHIATO CLOUD FOAM", icon: "☁️", cls: "g-b", cat: "SPECIALTY & CLOUD", link: "item-macchiato-cloud-foam.html" },
       ];
       const LOGO_SRC =
-        "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAFjAMgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDyyiiius/NwooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACijsc5x7da6bR/h/411iAT6d4a1GeIjIfysD9aLrqXCnObtFNnM0V2o+E/wAR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k967j4I+M/8AhCfHFvqE7N9hnXyLoDshPDfgea4ejuDjPse9KWqNKVV0pqceh+iNjdwX1pFdWsqywyqHR0OQQehFZXizwf4b8UwrFrulwXgThWcYZfoRyK+Rfhj8WfEnggLaxsuoaaD/AMes7fc/3D2r2fTv2kvCUsAa/wBL1O2k7qqK4/A5rHkaeh9bRzPDVqdqjseqeE/CHhzwrbtDoOlwWSv98qCWb6seTW8T614HfftJ6H9vt4rHRL42zOPPmlKgqvqFBOa1/wDhozwIf+WWqEZP/LuP8aXK2dEMdhVpGRyf7Z5zN4e+klaf7GB/4p7Xv+vuP/0A151+0N8RNC8eyaUdFW5X7JvEvnJtxnp3q7+z38TPD/gLSdTttaS7Ml1Oskfkx7uAuK05XynjrE0vr7qc2h9cE8V+f/xD/wCR98Qf9hGf/wBDNfTL/tF+BNpxFqv4W4/xr5c8WX0Op+KdV1G23eVdXkssYYYOC2efzpU00Gd4inVpxUHdozKKKK2PnnboFFFFIAo/zx2oooBWQE560UUUBYKOO+fwoNJmgHqL2xk0ent0pM0ZoAUAAYxQf1zk0maM0ALRSZozQFxaKTNGaAFozgcDH0pM0ooAQjjApTz/AEoooAOuM9umKM9ffrRRQC0Ckx68/wCNLRQC0CiiigAooooAKKKKACiiigA/Gj8aKKAD8aPxoooAPxo/GiigA/GiiigAo/GiigA/Gj8aKKAEpaKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/Z";
+        "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAFjAMgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDyyiiius/NwooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACijsc5x7da6bR/h/411iAT6d4a1GeIjIfysD9aLrqXCnObtFNnM0V2o+E/wARs/8AIpah/wB8r/jS/wDCpviN/wBClqH/AHyP8aLxNHhq38r+44miu2Pwn+IwH/IpX/8A3yP8a5bXNK1LRNTk03VbR7W7iA8yNuqn/wDUaLroROjVgryiUqKKKDNW6BRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFHHfpRR149aasNJPQ+j/ANmP4ZWU2mR+MddtUuJJGP2GKVcqig/fI7knp7V9FIgUBVAUDoBXzR4V/aI07Q/D2n6Qvhm4ZbS3SHImUAlQAa0/+GnLD/oV7n/v+tYSUmz63CYvB0KSipI+hwBnpSnFfPH/AA05Yf8AQr3P/f8AWmTftO2nlnyvDE+/Hy7rhQM+5qeRnT/aeF/mPf8AVL2107T5768lSG3gQvI7nAAFfBnxD13/AISbxrqmuYKrdTsYwRzsHC/oBXQfEv4s+JvHERs7hlsdMJ5tITkP/vN/FXAVpCDPn80zGOJtGnsgooorVnkPuFFFFIAooooAKKKKACiiigAooooAKKKKACiiigAooooAKQ8ckAgckHuBS0Ubhdo+yvA/w/8Ahzr3hTTNVTw1YSC5tkkZsH7xAznnrmtr/hU/w7/6FWx/I/4186/Az4uSeCM6Rq6SXGiyOShj5a3PcjP3hmvpLR/iV4I1K1S4t/E2nKjDpLMI2/JsGueSaeh9jg62Fq01dK5APhP8PP8AoVrEfgf8aD8KPh2Bx4Wsc+wP+Naj+OvB20/8VRpAx3+1p/jWtpl/Y6lALiwu4LuE";
 
       const menuGrid = document.getElementById("menuGrid");
       const searchInput = document.getElementById("searchInput");
@@ -907,7 +439,7 @@
         const q = searchInput.value.trim().toLowerCase();
         let filtered = menus.filter((m) => {
           const matchSearch = !q || m.name.toLowerCase().includes(q);
-          const matchCategory = !currentCategory || m.cls === currentCategory;
+          const matchCategory = !currentCategory || m.cat === currentCategory;
           if (!matchSearch) return false;
           if (currentCategory) return matchCategory && !m.isCategory;
           return true;
@@ -930,11 +462,11 @@
           .join("");
       }
 
-      function setCategory(cls) {
-        if (currentCategory === cls) {
+      function setCategory(cat) {
+        if (currentCategory === cat) {
           currentCategory = null;
         } else {
-          currentCategory = cls;
+          currentCategory = cat;
         }
         searchInput.value = "";
         renderMenu();
@@ -943,16 +475,14 @@
 
       function updateCategoryUI() {
         document.querySelectorAll(".item.active-modul").forEach((el) => {
-          const cat = el.querySelector(".icon-tile");
-          if (cat) {
-            const cls = Array.from(cat.classList).find((c) =>
-              c.startsWith("g-"),
-            );
-            if (cls === currentCategory) {
-              el.style.outline = "2px solid #818cf8";
-            } else {
-              el.style.outline = "";
-            }
+          const tile = el.querySelector(".icon-tile");
+          if (!tile) return;
+          const cat = Array.from(tile.classList).find((c) => c.startsWith("g-"));
+          if (!cat) return;
+          if (cat === currentCategory) {
+            el.style.outline = "";
+          } else {
+            el.style.outline = "";
           }
         });
       }
@@ -966,9 +496,9 @@
         if (!nameEl) return;
         const name = nameEl.textContent;
         const catItem = menus.find((m) => m.name === name && m.isCategory);
-        if (catItem && catItem.filterCls) {
+        if (catItem && catItem.cat) {
           e.preventDefault();
-          setCategory(catItem.filterCls);
+          setCategory(catItem.cat);
         }
       });
 
