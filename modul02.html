@@ -160,13 +160,19 @@
         color: #fff;
         position: relative;
         opacity: 0.55;
+        background-size: cover;
+        background-position: center;
       }
-      .icon-tile img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+      .icon-tile .tile-icon {
         display: block;
-        border-radius: inherit;
+        z-index: 1;
+        pointer-events: none;
+      }
+      .icon-tile.has-photo {
+        opacity: 1;
+      }
+      .icon-tile.has-photo .tile-icon {
+        display: none;
       }
 
       @media (max-width: 360px) {
@@ -265,9 +271,9 @@
 
     <script>
       const periods = [
-        { name: "HARI", icon: "☀️", cls: "g-a", href: "hari.html" },
-        { name: "MINGGU", icon: "📅", cls: "g-b", href: "minggu.html" },
-        { name: "BULAN", icon: "🌙", cls: "g-c", href: "bulan.html" },
+        { name: "HARI", icon: "☀️", cls: "g-a", href: "utility/hari.html", slug: "hari" },
+        { name: "MINGGU", icon: "📅", cls: "g-b", href: "utility/minggu.html", slug: "minggu" },
+        { name: "BULAN", icon: "🌙", cls: "g-c", href: "utility/bulan.html", slug: "bulan" },
       ];
 
       const homeGrid = document.getElementById("homeGrid");
@@ -287,12 +293,98 @@
           .map(
             (p) => `
               <a class="item active-modul" href="${p.href}">
-                <div class="icon-tile ${p.cls}">${p.icon}</div>
+                <div class="icon-tile ${p.cls}" data-slug="${p.slug}"><span class="tile-icon">${p.icon}</span></div>
                 <span>${p.name}</span>
               </a>
             `,
           )
           .join("");
+
+        loadPeriodPhotos();
+      }
+
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          loadPeriodPhotos();
+        }
+      });
+
+      function loadPeriodPhotos() {
+        const dayNames = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
+        const monthNames = ['januari', 'februari', 'maret', 'april', 'mei', 'juni', 'juli', 'agustus', 'september', 'oktober', 'november', 'desember'];
+
+        const now = new Date();
+        const dayName = dayNames[now.getDay()];
+        const monthName = monthNames[now.getMonth()];
+
+        document.querySelectorAll('.icon-tile[data-slug]').forEach((tile) => {
+          const slug = tile.dataset.slug;
+          let baseFolder = '';
+
+          if (slug === 'hari') {
+            baseFolder = `images/modul02-photos/hari/`;
+          } else if (slug === 'minggu') {
+            baseFolder = `images/modul02-photos/minggu/`;
+          } else if (slug === 'bulan') {
+            baseFolder = `images/modul02-photos/bulan/`;
+          }
+
+          const folders = [baseFolder];
+          let folderIndex = 0;
+          let itemFolders = [];
+          let itemIndex = 0;
+          const exts = ['.jpg', '.jpeg', '.png', '.svg', '.webp'];
+          let extIndex = 0;
+
+          function tryFolder() {
+            if (folderIndex >= folders.length) {
+              tile.style.backgroundImage = '';
+              tile.classList.remove('has-photo');
+              tile.style.opacity = '0.55';
+              return;
+            }
+
+            const folder = folders[folderIndex];
+            const num = Math.floor(Math.random() * 20) + 1;
+
+            const img = new Image();
+            img.onload = () => {
+              tile.style.backgroundImage = `url(${folder}${num}.jpg)`;
+              tile.style.backgroundSize = 'cover';
+              tile.style.backgroundPosition = 'center';
+              tile.classList.add('has-photo');
+              tile.style.opacity = '1';
+            };
+            img.onerror = () => {
+              folderIndex++;
+              tryFolder();
+            };
+            img.src = `${folder}${num}.jpg`;
+          }
+
+          // Try to get item folders list first
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', baseFolder, true);
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+              if (xhr.status === 200 || xhr.status === 0) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(xhr.responseText, 'text/html');
+                const links = doc.querySelectorAll('a');
+                itemFolders = Array.from(links)
+                  .map(a => a.getAttribute('href'))
+                  .filter(href => href && href !== '../' && !href.includes('.'));
+                
+                if (itemFolders.length > 0) {
+                  const randomItem = itemFolders[Math.floor(Math.random() * itemFolders.length)];
+                  folders[0] = baseFolder + randomItem + '/';
+                }
+              }
+              tryFolder();
+            }
+          };
+          xhr.send();
+        });
       }
 
       renderGrid();

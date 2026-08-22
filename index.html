@@ -298,6 +298,7 @@
           <div class="icon-box">
             <img
               alt="GRID"
+              data-menu="grid"
               src="images/index-images/grid.jpg"
             />
           </div>
@@ -307,6 +308,7 @@
           <div class="icon-box">
             <img
               alt="DAILY TASK"
+              data-menu="daily-task"
               src="images/index-images/daily-task.jpg"
             />
           </div>
@@ -316,6 +318,7 @@
           <div class="icon-box">
             <img
               alt="JA-DI"
+              data-menu="ja-di"
               src="images/index-images/ja-di.png"
             />
           </div>
@@ -325,6 +328,7 @@
           <div class="icon-box">
             <img
               alt="PLU JA-DI"
+              data-menu="plu-ja-di"
               src="images/index-images/plu-ja-di.jpg"
             />
           </div>
@@ -334,6 +338,7 @@
           <div class="icon-box">
             <img
               alt="PLANO"
+              data-menu="plano"
               src="images/index-images/plano.jpg"
             />
           </div>
@@ -343,6 +348,7 @@
           <div class="icon-box">
             <img
               alt="TIME KAMERA"
+              data-menu="time-kamera"
               src="images/index-images/time-kamera.png"
             />
           </div>
@@ -353,6 +359,7 @@
           <div class="icon-box">
             <img
               alt="EXP"
+              data-menu="exp"
               src="images/index-images/exp.png"
             />
           </div>
@@ -362,6 +369,7 @@
           <div class="icon-box">
             <img
               alt="PULANG"
+              data-menu="pulang"
               src="images/index-images/pulang.png"
             />
           </div>
@@ -371,6 +379,7 @@
           <div class="icon-box">
             <img
               alt="PAGI"
+              data-menu="pagi"
               src="images/index-images/pagi.png"
             />
           </div>
@@ -380,6 +389,7 @@
           <div class="icon-box">
             <img
               alt="SIANG"
+              data-menu="siang"
               src="images/index-images/siang.png"
             />
           </div>
@@ -389,6 +399,7 @@
           <div class="icon-box">
             <img
               alt="MALAM"
+              data-menu="malam"
               src="images/index-images/malam.png"
             />
           </div>
@@ -398,6 +409,7 @@
           <div class="icon-box">
             <img
               alt="SELANJUTNYA"
+              data-menu="selanjutnya"
               src="images/index-images/selanjutnya.jpg"
             />
           </div>
@@ -418,6 +430,58 @@
             item.classList.remove("hidden-item");
           } else {
             item.classList.add("hidden-item");
+          }
+        });
+      });
+
+      document.querySelectorAll('img[data-menu]').forEach((img) => {
+        const menu = img.dataset.menu;
+        const originalSrc = img.getAttribute('src');
+        const ext = originalSrc.split('.').pop();
+
+        const dayNames = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
+        const monthNames = ['januari', 'februari', 'maret', 'april', 'mei', 'juni', 'juli', 'agustus', 'september', 'oktober', 'november', 'desember'];
+
+        const now = new Date();
+        const dayName = dayNames[now.getDay()];
+        const monthName = monthNames[now.getMonth()];
+
+        const folders = [
+          `images/index-photos/${menu}/days/${dayName}/`,
+          `images/index-photos/${menu}/months/${monthName}/`,
+          `images/index-photos/${menu}/`
+        ];
+
+        function loadPhoto() {
+          let folderIndex = 0;
+
+          function tryFolder() {
+            if (folderIndex >= folders.length) {
+              img.src = originalSrc;
+              return;
+            }
+
+            const folder = folders[folderIndex];
+            const num = Math.floor(Math.random() * 20) + 1;
+            const url = `${folder}${num}.${ext}`;
+
+            const temp = new Image();
+            temp.onload = () => { img.src = url; };
+            temp.onerror = () => {
+              folderIndex++;
+              tryFolder();
+            };
+            temp.src = url;
+          }
+
+          tryFolder();
+        }
+
+        loadPhoto();
+
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) {
+            loadPhoto();
           }
         });
       });
