@@ -299,7 +299,7 @@
             <img
               alt="GRID"
               data-menu="grid"
-              src="images/index-images/grid.jpg"
+              src="images/index-photos/grid/grid.jpg"
             />
           </div>
           <span class="label">GRID</span>
@@ -309,7 +309,7 @@
             <img
               alt="DAILY TASK"
               data-menu="daily-task"
-              src="images/index-images/daily-task.jpg"
+              src="images/index-photos/daily-task/daily-task.jpg"
             />
           </div>
           <span class="label">DAILY TASK</span>
@@ -319,7 +319,7 @@
             <img
               alt="JA-DI"
               data-menu="ja-di"
-              src="images/index-images/ja-di.png"
+              src="images/index-photos/ja-di/ja-di.png"
             />
           </div>
           <span class="label">JA-DI</span>
@@ -329,7 +329,7 @@
             <img
               alt="PLU JA-DI"
               data-menu="plu-ja-di"
-              src="images/index-images/plu-ja-di.jpg"
+              src="images/index-photos/plu-ja-di/plu-ja-di.jpg"
             />
           </div>
           <span class="label">PLU JA-DI</span>
@@ -339,7 +339,7 @@
             <img
               alt="PLANO"
               data-menu="plano"
-              src="images/index-images/plano.jpg"
+              src="images/index-photos/plano/plano.jpg"
             />
           </div>
           <span class="label">PLANO</span>
@@ -349,7 +349,7 @@
             <img
               alt="TIME KAMERA"
               data-menu="time-kamera"
-              src="images/index-images/time-kamera.png"
+              src="images/index-photos/time-kamera/time-kamera.png"
             />
           </div>
           <span class="label">TIME KAMERA</span>
@@ -360,7 +360,7 @@
             <img
               alt="EXP"
               data-menu="exp"
-              src="images/index-images/exp.png"
+              src="images/index-photos/exp/exp.png"
             />
           </div>
           <span class="label">EXP</span>
@@ -370,7 +370,7 @@
             <img
               alt="PULANG"
               data-menu="pulang"
-              src="images/index-images/pulang.png"
+              src="images/index-photos/pulang/pulang.png"
             />
           </div>
           <span class="label">PULANG</span>
@@ -380,7 +380,7 @@
             <img
               alt="PAGI"
               data-menu="pagi"
-              src="images/index-images/pagi.png"
+              src="images/index-photos/pagi/pagi.png"
             />
           </div>
           <span class="label">PAGI</span>
@@ -390,7 +390,7 @@
             <img
               alt="SIANG"
               data-menu="siang"
-              src="images/index-images/siang.png"
+              src="images/index-photos/siang/siang.png"
             />
           </div>
           <span class="label">SIANG</span>
@@ -400,7 +400,7 @@
             <img
               alt="MALAM"
               data-menu="malam"
-              src="images/index-images/malam.png"
+              src="images/index-photos/malam/malam.png"
             />
           </div>
           <span class="label">MALAM</span>
@@ -410,7 +410,7 @@
             <img
               alt="SELANJUTNYA"
               data-menu="selanjutnya"
-              src="images/index-images/selanjutnya.jpg"
+              src="images/index-photos/selanjutnya/selanjutnya.jpg"
             />
           </div>
           <span class="label">SELANJUTNYA</span>
@@ -436,19 +436,10 @@
 
       document.querySelectorAll('img[data-menu]').forEach((img) => {
         const menu = img.dataset.menu;
-        const originalSrc = img.getAttribute('src');
+        const originalSrc = img.src;
         const ext = originalSrc.split('.').pop();
 
-        const dayNames = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
-        const monthNames = ['januari', 'februari', 'maret', 'april', 'mei', 'juni', 'juli', 'agustus', 'september', 'oktober', 'november', 'desember'];
-
-        const now = new Date();
-        const dayName = dayNames[now.getDay()];
-        const monthName = monthNames[now.getMonth()];
-
         const folders = [
-          `images/index-photos/${menu}/days/${dayName}/`,
-          `images/index-photos/${menu}/months/${monthName}/`,
           `images/index-photos/${menu}/`
         ];
 

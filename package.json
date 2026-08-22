@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "axios": "^1.19.0",
+    "image-search": "^0.0.1"
+  }
+}

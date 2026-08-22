@@ -172,6 +172,13 @@
         border-radius: inherit;
         display: block;
       }
+      .icon-photo.has-photo {
+        background-size: cover;
+        background-position: center;
+      }
+      .icon-photo.has-photo img {
+        display: none;
+      }
 
       @media (max-width: 360px) {
         .icon-tile {
@@ -911,17 +918,63 @@
 
         menuGrid.innerHTML = filtered
           .map(
-            (m) => `
-              <a class="item active-modul" href="${m.link}">
-                <div class="icon-tile ${m.cls} icon-photo"><img src="${LOGO_SRC}" alt="${m.name}" /></div>
-                <span>${m.plu ? `<span class="plu-tag">PLU: ${m.plu}</span>` : ""}${m.name}</span>
-              </a>
-            `,
+            (m) => {
+              const slug = m.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+              return `
+                <a class="item active-modul" href="${m.link}">
+                  <div class="icon-tile ${m.cls} icon-photo" data-slug="${slug}"><img src="${LOGO_SRC}" alt="${m.name}" /></div>
+                  <span>${m.plu ? `<span class="plu-tag">PLU: ${m.plu}</span>` : ""}${m.name}</span>
+                </a>
+              `;
+            },
           )
           .join("");
+
+        loadMenuPhotos();
       }
 
-      searchInput.addEventListener("input", renderMenu);
+      function toSlug(name) {
+        return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      }
+
+      function loadMenuPhotos() {
+        const exts = ['.jpg', '.jpeg', '.png', '.svg', '.webp'];
+
+        document.querySelectorAll('.icon-photo[data-slug]').forEach((tile) => {
+          const slug = tile.dataset.slug;
+          const folder = `images/modul03-photos/${slug}/`;
+          const num = Math.floor(Math.random() * 20) + 1;
+
+          const img = new Image();
+          let extIndex = 0;
+
+          function tryExt() {
+            if (extIndex >= exts.length) {
+              tile.classList.remove('has-photo');
+              return;
+            }
+
+            const ext = exts[extIndex];
+            img.onload = () => {
+              tile.style.backgroundImage = `url(${folder}${num}${ext})`;
+              tile.classList.add('has-photo');
+            };
+            img.onerror = () => {
+              extIndex++;
+              tryExt();
+            };
+            img.src = `${folder}${num}${ext}`;
+          }
+
+          tryExt();
+        });
+      }
+
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          loadMenuPhotos();
+        }
+      });
 
       renderMenu();
     </script>
