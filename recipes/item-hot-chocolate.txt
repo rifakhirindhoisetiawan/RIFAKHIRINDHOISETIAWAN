@@ -1,0 +1,3 @@
+pages/item-hot-chocolate.html
+---
+Hot Chocolate

@@ -1,0 +1,3 @@
+pages/item-coffee-latte-ice-manual.html
+---
+COFFEE LATTE ICE MANUAL

@@ -1,0 +1,566 @@
+COFFEE LATTE PREMIX
+🧊
+g-a
+PREMIX
+pages/item-coffee-latte-ice-premix.html
+443775
+---
+VANILLA LATTE PREMIX
+🍦
+g-b
+PREMIX
+pages/item-vanilla-latte-premix.html
+443790 / 443791
+---
+SALTED CARAMEL LATTE PREMIX
+🍮
+g-c
+PREMIX
+pages/item-salted-caramel-latte-premix.html
+443786 / 443787
+---
+BUTTERSCOTCH LATTE PREMIX
+🧈
+g-d
+PREMIX
+pages/item-butterscotch-latte-premix.html
+443788 / 443789
+---
+SALTED BUTTERCORN LATTE PREMIX
+🌽
+g-e
+PREMIX
+pages/item-salted-buttercorn-latte-premix.html
+466231 / 466232
+---
+JADI KEREN - KOPSU GULA AREN PREMIX
+😎
+g-f
+PREMIX
+pages/item-jadi-keren-kopsu-gula-aren-premix.html
+443779 / 443780
+---
+MOCHA LATTE PREMIX
+🍫
+g-g
+PREMIX
+pages/item-mocha-latte-premix.html
+443783 / 443784
+---
+JADI RINDU - KOPSU MADU PREMIX
+❤️
+g-h
+PREMIX
+pages/item-jadi-rindu-kopsu-madu-premix.html
+443781 / 443782
+---
+JADI MACCHIATTO PREMIX
+🍯
+g-a
+PREMIX
+pages/item-jadi-macchiatto-premix.html
+466229 / 466230
+---
+SALTED BUTTERCORN LATTE MANUAL
+🌽
+g-b
+MANUAL
+pages/item-salted-buttercorn-latte-manual.html
+466231 / 466232
+---
+JADI KEREN - KOPSU GULA AREN MANUAL
+😎
+g-c
+MANUAL
+pages/item-jadi-keren-kopsu-gula-aren-manual.html
+443780
+---
+JADI RINDU - KOPSU MADU MANUAL
+❤️
+g-d
+MANUAL
+pages/item-jadi-rindu-kopsu-madu-manual.html
+443782
+---
+MOCHA LATTE MANUAL
+🍫
+g-e
+MANUAL
+pages/item-mocha-latte-manual.html
+443783 / 443784
+---
+VANILLA LATTE MANUAL
+🍦
+g-f
+MANUAL
+pages/item-vanilla-latte-manual.html
+443790 / 443791
+---
+SALTED CARAMEL LATTE MANUAL
+🍮
+g-g
+MANUAL
+pages/item-salted-caramel-latte-manual.html
+443786 / 443787
+---
+BUTTERSCOTCH LATTE MANUAL
+🧈
+g-h
+MANUAL
+pages/item-butterscotch-latte-manual.html
+443788 / 443789
+---
+JA~DI MACCHIATTO MANUAL
+🍯
+g-a
+MANUAL
+pages/item-jadi-macchiatto.html
+466230
+---
+COFFEE LATTE ICE MANUAL
+🧊
+g-b
+MANUAL
+pages/item-coffee-latte-ice-manual.html
+443776 / 443835
+---
+CAPPUCCINO ICE
+🥛
+g-c
+MANUAL
+pages/item-cappuccino-ice.html
+452795 / 452796
+---
+AMERICANO HOT
+☕
+g-d
+MANUAL
+pages/item-americano-hot.html
+
+---
+AMERICANO ICE
+🧊
+g-e
+MANUAL
+pages/item-americano-ice.html
+
+---
+BLACK COFFEE WITH HONEY
+🍯
+g-f
+MANUAL
+pages/item-black-coffee-with-honey.html
+443772
+---
+HAWAIIAN AMERICANO (ICE UPSIZE)
+🌺
+g-g
+BLACK COFFEE
+pages/item-hawaiian-americano-ice-upsize.html
+
+---
+ESPRESSO HOT
+☕
+g-h
+ESPRESSO
+pages/item-espresso-hot.html
+444571
+---
+CAPPUCCINO HOT
+🫧
+g-a
+MANUAL
+pages/item-cappuccino-hot.html
+445073
+---
+CAFFELATTE HOT
+🥛
+g-b
+MANUAL
+pages/item-caffelatte-hot.html
+
+---
+HOT CHOCOLATE
+☕
+g-c
+CHOCO & MATCHA
+pages/item-hot-chocolate.html
+443795
+---
+ICE CHOCOLATE
+🧊
+g-d
+CHOCO & MATCHA
+pages/item-ice-chocolate.html
+443910 / 443911
+---
+ICE MATCHA
+🍃
+g-f
+CHOCO & MATCHA
+pages/item-ice-matcha.html
+443792
+---
+CHOCO BERRY (ICE 12OZ)
+🍓
+g-g
+CHOCO & MATCHA
+pages/item-choco-berry-ice-12oz.html
+452794
+---
+BLENDED VANILLA CARAMEL
+🍦
+g-h
+BLENDED
+pages/item-blended-vanilla-caramel.html
+
+---
+BLENDED CHOCO
+🍫
+g-a
+BLENDED
+pages/item-blended-choco.html
+
+---
+BLENDED CHOCO CARAMEL
+🍮
+g-b
+BLENDED
+pages/item-blended-choco-caramel.html
+443793
+---
+CREAMY COCONUT FRAPPE (UPSIZE)
+🥥
+g-c
+BLENDED
+pages/item-creamy-coconut-frappe-upsize.html
+
+---
+KOREAN STRAWBERRY MILK
+🍓
+g-d
+BLENDED
+pages/item-korean-strawberry-milk.html
+443804 / 443805
+---
+AFFOGATO
+🍨
+g-e
+BLENDED
+pages/item-affogato.html
+466233
+---
+ICE COLLAGEN LATTE (12OZ)
+🌸
+g-f
+BLENDED
+pages/item-ice-collagen-latte-12oz.html
+453432
+---
+ICE DOLCE LATTE (12OZ)
+🍬
+g-g
+BLENDED
+pages/item-ice-dolce-latte-12oz.html
+453433
+---
+COCONUT CLOUD LATTE
+🥥
+g-h
+BLENDED
+pages/item-coconut-cloud-latte.html
+452799 / 452800
+---
+PANDAN CLOUD LATTE
+🌿
+g-a
+BLENDED
+pages/item-pandan-cloud-latte.html
+452797 / 452798
+---
+SALTED CARAMEL COCA (12OZ)
+🥤
+g-b
+SOFT DRINK
+pages/item-salted-caramel-coca-12oz.html
+
+---
+TOFFEE POPCORN FANTA (12OZ)
+🍿
+g-c
+SOFT DRINK
+pages/item-toffee-popcorn-fanta-12oz.html
+
+---
+LYCHEE SPRITE (12OZ)
+🍋
+g-d
+SOFT DRINK
+pages/item-lychee-sprite-12oz.html
+
+---
+SHAKEN LYCHEE TEA
+🫐
+g-e
+JUS
+pages/item-shaken-lychee-tea.html
+443806 / 443807
+---
+SHAKEN HONEY LEMON TEA
+🍋
+g-f
+JUS
+pages/item-shaken-honey-lemon-tea.html
+443808 / 443809
+---
+GREEN JUICE
+🥬
+g-g
+JUS
+pages/item-green-juice.html
+
+---
+JUICE SIRSAK
+🍈
+g-h
+JUS
+pages/item-juice-sirsak.html
+443842
+---
+JUICE ALPUKAT
+🥑
+g-a
+JUS
+pages/item-juice-alpukat.html
+443844
+---
+JUICE BUAH NAGA
+🐲
+g-b
+JUS
+pages/item-juice-buah-naga.html
+443845
+---
+JUICE JAMBU
+🍒
+g-c
+JUS
+pages/item-juice-jambu.html
+443843
+---
+JUICE SEMANGKA
+🍉
+g-d
+JUS
+pages/item-juice-semangka.html
+443838
+---
+JUICE MELON
+🍈
+g-e
+JUS
+pages/item-juice-melon.html
+443839
+---
+JUICE PISANG STRAWBERRY
+🍌
+g-f
+JUS
+pages/item-juice-pisang-strawberry.html
+444987
+---
+JUICE MANGGA HARUM MANIS
+🥭
+g-g
+JUS
+pages/item-juice-mangga-harum-manis.html
+446322
+---
+JUICE APEL MIX
+🍎
+g-h
+JUS
+pages/item-juice-apel-mix.html
+
+---
+JUICE CARROT MIXED FRUIT
+🥕
+g-a
+JUS
+pages/item-juice-carrot-mixed-fruit.html
+446279
+---
+JUICE JERUK
+🍊
+g-b
+JUS
+pages/item-juice-jeruk.html
+443847
+---
+JUICE JERUK NAVEL
+🍊
+g-c
+JUS
+pages/item-juice-jeruk-navel.html
+
+---
+JUICE JERUK NAVEL CARA CARA
+🍊
+g-d
+JUS
+pages/item-juice-jeruk-navel-cara-cara.html
+
+---
+KOLAK LATTE
+🍮
+g-e
+BLENDED
+pages/item-kolak-latte.html
+465840 / 465855
+---
+WATERMELON COOLER
+🍉
+g-f
+BLENDED
+pages/item-watermelon-cooler.html
+465844 / 465845
+---
+PISANG IJO LATTE
+🍌
+g-g
+BLENDED
+pages/item-pisang-ijo-latte.html
+465842 / 465843
+---
+PLU JA-DI
+📋
+g-e
+UTILITY
+plu-ja-di.html
+
+---
+PLANO
+🗄️
+g-h
+
+plano.html
+
+---
+TIME KAMERA
+📷
+g-c
+
+time-kamera.html
+
+---
+COFFEE LATTE
+☕
+g-a
+SPECIALTY & CLOUD
+pages/item-coffee-latte.html
+
+---
+CHOCO BERRY
+🍓
+g-g
+CHOCO & MATCHA
+pages/item-choco-berry.html
+
+---
+GREEN GRAPE FRUITYCANO
+🍇
+g-e
+SPECIALTY & CLOUD
+pages/item-green-grape-fruitycano.html
+
+---
+TROPICAL APPLE AMERICANO
+🍎
+g-g
+BLACK COFFEE
+pages/item-tropical-apple-americano.html
+
+---
+KOPI BOTOL JADI ASIK
+🍾
+g-e
+SPECIALTY & CLOUD
+pages/item-kopi-botol-jadi-asik.html
+453434
+---
+KOPI BOTOL JADI SERU
+🍾
+g-c
+SPECIALTY & CLOUD
+pages/item-kopi-botol-jadi-seru.html
+453436
+---
+KOPI BOTOL JADI SUKA
+🍾
+g-h
+SPECIALTY & CLOUD
+pages/item-kopi-botol-jadi-suka.html
+453435
+---
+CREAMY COCONUT FRAPPE
+🥥
+g-d
+BLENDED
+pages/item-creamy-coconut-frappe.html
+451306
+---
+PINK BERRY SODA
+🍒
+g-g
+SPECIALTY & CLOUD
+pages/item-pink-berry-soda.html
+460953
+---
+HAWAIIAN AMERICANO
+🌺
+g-c
+BLACK COFFEE
+pages/item-hawaiian-americano.html
+451305
+---
+ICE COLLAGEN LATTE
+🌸
+g-h
+SPECIALTY & CLOUD
+pages/item-ice-collagen-latte.html
+453432
+---
+MANGO COLADA
+🥭
+g-f
+SPECIALTY & CLOUD
+pages/item-mango-colada.html
+460958
+---
+CLOUDY LYCHEE
+🫐
+g-d
+SPECIALTY & CLOUD
+pages/item-cloudy-lychee.html
+452163
+---
+COLA CARAMELA
+🥤
+g-a
+SPECIALTY & CLOUD
+pages/item-cola-caramela.html
+452161
+---
+POPPY BERRY
+🌸
+g-h
+SPECIALTY & CLOUD
+pages/item-poppy-berry.html
+452162
+---
+MACCHIATO CLOUD FOAM
+☁️
+g-b
+SPECIALTY & CLOUD
+pages/item-macchiato-cloud-foam.html
+

@@ -1,0 +1,3 @@
+pages/item-vanilla-latte-manual.html
+---
+VANILA LATTE MANUAL
