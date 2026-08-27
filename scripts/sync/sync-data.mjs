@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const txtPath = path.join(process.cwd(), 'modul03-data.txt');
+const txtPath = path.join(process.cwd(), 'data', 'modul03-data.txt');
 const htmlPath = path.join(process.cwd(), 'modul03.html');
 
 // Parse text file
