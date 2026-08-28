@@ -1228,12 +1228,35 @@
       const dlCancelBtn = document.getElementById("dlCancelBtn");
       let dlDataUrl = "";
 
-      dlSaveBtn.addEventListener("click", () => {
+      dlSaveBtn.addEventListener("click", async () => {
         if (!dlDataUrl) return;
-        const a = document.createElement("a");
-        a.download = "photo-grid.png";
-        a.href = dlDataUrl;
-        a.click();
+        try {
+          const res = await fetch(dlDataUrl);
+          const blob = await res.blob();
+          const file = new File([blob], "photo-grid.png", { type: "image/png" });
+
+          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: "photo-grid.png" });
+          } else {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.download = "photo-grid.png";
+            a.href = url;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 5000);
+          }
+        } catch (err) {
+          if (err.name !== "AbortError") {
+            const a = document.createElement("a");
+            a.download = "photo-grid.png";
+            a.href = dlDataUrl;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
+        }
         dlOverlay.classList.remove("show");
       });
 
