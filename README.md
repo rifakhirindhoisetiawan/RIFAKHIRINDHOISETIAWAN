@@ -6,28 +6,36 @@ Proyek modul resep & menu (halaman HTML statis + skrip bantu).
 
 ```
 .
-├── index.html, modul01–05.html   # Halaman utama situs
-├── plano.html, plu-ja-di.html    # Halaman pendukung
-│   produk-ja-di.html, time-kamera.html
-├── pages/                        # Halaman kategori & item menu (dihasilkan)
-├── recipes/                      # Sumber resep (file .txt per item)
-├── images/                       # Gambar (index, modul02, modul03, ...)
-├── utility/                      # Halaman utilitas (hari/minggu/bulan/periode)
-├── data/                         # Data sumber teks (modul03-data, modul03-menus)
-├── scripts/                      # Semua skrip Node (.mjs), jalankan dari root proyek
-│   ├── download/                 # Unduh foto (banyak versi eksperimen)
-│   ├── sync/                     # Sinkronkan data/resep ke HTML
-│   ├── debug/                    # Skrip debug
-│   ├── test/                     # Skrip uji
-│   └── utils/                    # Ekstrak, validasi, list gagal
+├── index.html                      # Halaman utama (PWA)
+├── grid.html                       # Photo grid tool
+├── plano.html                      # Halaman_PLANO (rak)
+├── plu-ja-di.html                  # Daftar produk PLU
+├── produk-ja-di.html               # Detail produk
+├── time-kamera.html                # Utility kamera/waktu
+├── modul/                          # Halaman modul
+│   ├── modul02.html                # Daily Task
+│   ├── modul03.html                # JA-DI (menu & resep)
+│   └── modul05.html                # Shelving/Rak
+├── pages/                          # Halaman kategori & item (dihasilkan)
+│   ├── cat-*.html                  # Kategori menu
+│   ├── item-*.html                 # Item menu
+│   ├── rak/                        # Layout rak
+│   └── shelving/                   # Detail shelving
+├── utility/                        # Halaman utilitas
+├── images/                         # Gambar
+├── data/                           # Data sumber teks
+├── recipes/                        # Sumber resep (.txt)
+├── scripts/                        # Skrip Node (.mjs)
+│   ├── download/                   # Download foto
+│   ├── sync/                       # Sinkron data/resep ke HTML
+│   └── utils/                      # Ekstrak, validasi
 ├── package.json
 └── manifest.json
 ```
 
 ## Cara Menjalankan Skrip
 
-Semua skrip menggunakan `process.cwd()` (jalur relatif terhadap root proyek),
-sehingga **jalankan dari root proyek**, bukan dari dalam `scripts/`.
+Semua skrip menggunakan `process.cwd()`, jalankan dari **root proyek**.
 
 ```bash
 # Sinkronkan resep .txt -> pages/*.html
@@ -37,15 +45,15 @@ node scripts/sync/sync-recipes.mjs
 node scripts/sync/sync-data.mjs
 node scripts/sync/sync-menus.mjs
 
-# Unduh foto (pilih versi yang masih dipakai, mis. yang _final)
-node scripts/download/download_photos_final.mjs
+# Download foto (Wikimedia Commons)
+node scripts/download/download_all.mjs
+
+# Download foto (Google fallback)
+node scripts/download/download_with_google.mjs
 ```
 
-## Catatan Maintenance
+## Catatan
 
-- Folder `scripts/download/` berisi banyak varian eksperimen
-  (`_v2`, `_v3`, `_google`, `_wiki2`, `_remaining`, dll). Setelah versi
-  final terbukti stabil, pertimbangkan menghapus yang sudah tidak dipakai
-  agar tidak membingungkan.
-- Skrip `sync-*` membaca `data/*.txt` dan menulis ke `modul03.html` /
-  `pages/*.html`. Jangan pindahkan file data tanpa memperbarui jalurnya.
+- `scripts/download/download_all.mjs` — primary downloader (Wikimedia Commons)
+- `scripts/download/download_with_google.mjs` — fallback untuk item yang gagal
+- `scripts/sync/*` membaca `data/*.txt` dan menulis ke `modul/modul03.html` & `pages/*.html`
