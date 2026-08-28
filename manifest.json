@@ -1,7 +1,7 @@
 {
   "name": "MYLOVE",
   "short_name": "MYLOVE",
-  "start_url": "index.html",
+  "start_url": "loading.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",

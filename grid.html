@@ -980,6 +980,26 @@
           }
         }
         countValue.textContent = count;
+
+        const frameR = gridFrame.getBoundingClientRect();
+        const tolerance = 2;
+        document.querySelectorAll(".slot").forEach((slot) => {
+          const r = slot.getBoundingClientRect();
+          const onTop = Math.abs(r.top - frameR.top) < tolerance;
+          const onBottom = Math.abs(r.bottom - frameR.bottom) < tolerance;
+          const onLeft = Math.abs(r.left - frameR.left) < tolerance;
+          const onRight = Math.abs(r.right - frameR.right) < tolerance;
+
+          if (!onTop && !onBottom && !onLeft && !onRight) return;
+
+          const isCorner = (onTop || onBottom) && (onLeft || onRight);
+          const radius = isCorner ? "12px" : "6px";
+
+          if (onTop && onLeft) slot.style.borderTopLeftRadius = radius;
+          if (onTop && onRight) slot.style.borderTopRightRadius = radius;
+          if (onBottom && onLeft) slot.style.borderBottomLeftRadius = radius;
+          if (onBottom && onRight) slot.style.borderBottomRightRadius = radius;
+        });
       }
 
       function checkReady() {
