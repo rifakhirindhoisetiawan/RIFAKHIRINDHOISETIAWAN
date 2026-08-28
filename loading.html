@@ -100,63 +100,8 @@
     </style>
   </head>
   <body>
-    <div class="splash" id="splash">
-      <div class="load-row">
-        <div class="icon-photo">
-          <img
-            id="loadingIconImg"
-            src="images/loading/loading-icon.jpg"
-            alt="MYLOVE"
-            onerror="this.style.display='none'"
-          />
-        </div>
-        <div class="load-col">
-          <div class="brand">My Love</div>
-        </div>
-      </div>
-    </div>
-
     <script>
-      // Set icon loading dari luar (foto/file gambar apa pun)
-      const loadingIconImg = document.getElementById("loadingIconImg");
-
-      // Bisa dipanggil nanti: window.setLoadingIcon("foto.jpg")
-      window.setLoadingIcon = (src) => {
-        if (src) loadingIconImg.src = src;
-      };
-
-      // Ambil dari URL (?icon=foto.jpg) atau localStorage bila ada
-      try {
-        const params = new URLSearchParams(location.search);
-        const fromUrl = params.get("icon");
-        const fromStore = localStorage.getItem("loadingIcon");
-        if (fromUrl) loadingIconImg.src = fromUrl;
-        else if (fromStore) loadingIconImg.src = fromStore;
-      } catch (e) {}
-
-      // Durasi minimal tampil splash (ms) agar tidak kelap-kelip
-      const MIN_SHOW = 1400;
-      const start = Date.now();
-
-      function go() {
-        const elapsed = Date.now() - start;
-        const wait = Math.max(0, MIN_SHOW - elapsed);
-        setTimeout(() => {
-          window.location.replace("./index.html");
-        }, wait);
-      }
-
-      // Alihkan begitu jendela selesai load (atau langsung kalau sudah)
-      if (document.readyState === "complete") {
-        go();
-      } else {
-        window.addEventListener("load", go);
-      }
-
-      // Agar bisa di-tap untuk langsung masuk
-      document.getElementById("splash").addEventListener("click", () => {
-        window.location.replace("./index.html");
-      });
+      window.location.replace("./index.html");
     </script>
   </body>
 </html>
