@@ -411,6 +411,101 @@
       input[type="file"] {
         display: none;
       }
+
+      .dl-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: rgba(0, 0, 0, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.25s ease, visibility 0.25s ease;
+      }
+      .dl-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .dl-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px;
+        width: 100%;
+        max-width: 340px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        transform: translateY(20px) scale(0.95);
+        transition: transform 0.25s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+      .dl-overlay.show .dl-card {
+        transform: translateY(0) scale(1);
+      }
+      .dl-preview {
+        width: 100%;
+        max-height: 55vh;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #f3f4f6;
+      }
+      .dl-preview img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: contain;
+      }
+      .dl-info {
+        text-align: center;
+      }
+      .dl-info .dl-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #1f2937;
+      }
+      .dl-info .dl-size {
+        font-size: 12px;
+        color: #9ca3af;
+        margin-top: 3px;
+      }
+      .dl-actions {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+      }
+      .dl-btn-save {
+        flex: 1;
+        padding: 12px 0;
+        border: none;
+        border-radius: 12px;
+        background: #6366f1;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .dl-btn-save:active {
+        background: #4f46e5;
+      }
+      .dl-btn-cancel {
+        padding: 12px 18px;
+        border: none;
+        border-radius: 12px;
+        background: #f3f4f6;
+        color: #6b7280;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .dl-btn-cancel:active {
+        background: #e5e7eb;
+      }
     </style>
   </head>
   <body>
@@ -554,6 +649,19 @@
     <input type="file" id="multiFileInput" accept="image/*" multiple />
     <canvas id="hiddenCanvas" style="display: none"></canvas>
     <div id="dragGhost"></div>
+    <div class="dl-overlay" id="dlOverlay">
+      <div class="dl-card">
+        <div class="dl-preview"><img id="dlPreviewImg" src="" alt="Preview" /></div>
+        <div class="dl-info">
+          <div class="dl-title">photo-grid.png</div>
+          <div class="dl-size" id="dlSize"></div>
+        </div>
+        <div class="dl-actions">
+          <button class="dl-btn-cancel" id="dlCancelBtn">Batal</button>
+          <button class="dl-btn-save" id="dlSaveBtn">Download</button>
+        </div>
+      </div>
+    </div>
 
     <script>
       const MIN_COUNT = 1;
@@ -1113,6 +1221,30 @@
         multiFileInput.value = "";
       });
 
+      const dlOverlay = document.getElementById("dlOverlay");
+      const dlPreviewImg = document.getElementById("dlPreviewImg");
+      const dlSize = document.getElementById("dlSize");
+      const dlSaveBtn = document.getElementById("dlSaveBtn");
+      const dlCancelBtn = document.getElementById("dlCancelBtn");
+      let dlDataUrl = "";
+
+      dlSaveBtn.addEventListener("click", () => {
+        if (!dlDataUrl) return;
+        const a = document.createElement("a");
+        a.download = "photo-grid.png";
+        a.href = dlDataUrl;
+        a.click();
+        dlOverlay.classList.remove("show");
+      });
+
+      dlCancelBtn.addEventListener("click", () => {
+        dlOverlay.classList.remove("show");
+      });
+
+      dlOverlay.addEventListener("click", (e) => {
+        if (e.target === dlOverlay) dlOverlay.classList.remove("show");
+      });
+
       downloadBtn.addEventListener("click", async () => {
         let baseSize = 1200;
         let canvasW = baseSize;
@@ -1318,10 +1450,13 @@
           }
         }
 
-        const link = document.createElement("a");
-        link.download = "photo-grid.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
+        dlDataUrl = canvas.toDataURL("image/png");
+        dlPreviewImg.src = dlDataUrl;
+        const sizeKB = Math.round((dlDataUrl.length * 3) / 4 / 1024);
+        dlSize.textContent = sizeKB > 1024
+          ? (sizeKB / 1024).toFixed(1) + " MB"
+          : sizeKB + " KB";
+        dlOverlay.classList.add("show");
       });
 
       function drawCover(ctx, img, x, y, w, h, idx) {
