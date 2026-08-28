@@ -324,6 +324,7 @@
         min-width: 0;
         min-height: 0;
         box-sizing: border-box;
+        touch-action: none;
       }
       .slot {
         position: relative;
@@ -341,6 +342,7 @@
         min-height: 0;
         width: 100%;
         height: 100%;
+        touch-action: none;
       }
       .slot img {
         position: absolute;
@@ -756,7 +758,25 @@
               }
               e.preventDefault();
             } else if (Math.abs(dx) + Math.abs(dy) > DRAG_THRESHOLD) {
-              gMode = "pan";
+              const tx = getTx(gIdx);
+              if (tx && tx.scale > 1) {
+                gMode = "pan";
+              } else {
+                gMode = "reorder";
+                const srcSlot = document.querySelector(
+                  `.slot[data-slot="${gIdx}"]`,
+                );
+                if (srcSlot) {
+                  srcSlot.classList.add("dragging");
+                  const rect = srcSlot.getBoundingClientRect();
+                  showGhost(
+                    images[gIdx],
+                    Math.min(rect.width, rect.height) * 0.55,
+                    t.clientX,
+                    t.clientY,
+                  );
+                }
+              }
               suppressClick = true;
               e.preventDefault();
             }
@@ -862,7 +882,25 @@
                 );
               }
             } else if (Math.abs(dx) + Math.abs(dy) > DRAG_THRESHOLD) {
-              gMode = "pan";
+              const tx = getTx(gIdx);
+              if (tx && tx.scale > 1) {
+                gMode = "pan";
+              } else {
+                gMode = "reorder";
+                const srcSlot = document.querySelector(
+                  `.slot[data-slot="${gIdx}"]`,
+                );
+                if (srcSlot) {
+                  srcSlot.classList.add("dragging");
+                  const rect = srcSlot.getBoundingClientRect();
+                  showGhost(
+                    images[gIdx],
+                    Math.min(rect.width, rect.height) * 0.55,
+                    e.clientX,
+                    e.clientY,
+                  );
+                }
+              }
               suppressClick = true;
             }
           }
@@ -1099,6 +1137,7 @@
                 gLastY = t.clientY;
                 gPinchDist = 0;
                 suppressClick = false;
+                e.preventDefault();
               },
               { passive: false },
             );
