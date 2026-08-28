@@ -56,6 +56,10 @@
         bottom: 0;
         padding-bottom: env(safe-area-inset-bottom, 0px);
         box-sizing: border-box;
+        touch-action: none;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
       }
 
       @media (max-height: 520px) {
@@ -589,7 +593,12 @@
       const layoutCycleBtn = document.getElementById("layoutCycleBtn");
       dragGhost = document.getElementById("dragGhost");
 
-      const DRAG_THRESHOLD = 10;
+      const DRAG_THRESHOLD = 8;
+
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchStartIdx = null;
+      let touchStarted = false;
 
       function clearDragHighlights() {
         document
@@ -686,12 +695,30 @@
         return s ? parseInt(s.dataset.slot, 10) : null;
       }
 
+      function nearestSlot(x, y) {
+        const slots = document.querySelectorAll(".slot");
+        let best = null;
+        let bestDist = Infinity;
+        slots.forEach((s) => {
+          const r = s.getBoundingClientRect();
+          const cx = r.left + r.width / 2;
+          const cy = r.top + r.height / 2;
+          const d = Math.hypot(x - cx, y - cy);
+          if (d < bestDist) {
+            bestDist = d;
+            best = parseInt(s.dataset.slot, 10);
+          }
+        });
+        return best;
+      }
+
       function endGesture() {
         const wasReorder = gMode === "reorder";
         const fromIdx = gIdx;
         gIdx = null;
         gMode = null;
         gPinchDist = 0;
+        touchStarted = false;
         hideGhost();
         clearDragHighlights();
         return wasReorder ? fromIdx : null;
@@ -721,6 +748,7 @@
             gPinchDist = d;
             gMode = "zoom";
             suppressClick = true;
+            touchStarted = false;
             e.preventDefault();
             return;
           }
@@ -733,36 +761,18 @@
           gLastY = t.clientY;
           gPinchDist = 0;
 
-          if (!gMode || gMode === "zoom") {
-            const targetIdx = elementSlot(t.clientX, t.clientY);
-            if (gMode === "zoom") {
-              gMode = "pan";
-              suppressClick = true;
-              gLastX = t.clientX;
-              gLastY = t.clientY;
-            } else if (targetIdx !== null && targetIdx !== gIdx) {
-              gMode = "reorder";
-              suppressClick = true;
-              const srcSlot = document.querySelector(
-                `.slot[data-slot="${gIdx}"]`,
-              );
-              if (srcSlot) {
-                srcSlot.classList.add("dragging");
-                const rect = srcSlot.getBoundingClientRect();
-                showGhost(
-                  images[gIdx],
-                  Math.min(rect.width, rect.height) * 0.55,
-                  t.clientX,
-                  t.clientY,
-                );
-              }
-              e.preventDefault();
-            } else if (Math.abs(dx) + Math.abs(dy) > DRAG_THRESHOLD) {
+          if (touchStarted && gMode !== "reorder" && gMode !== "pan") {
+            const totalDx = t.clientX - touchStartX;
+            const totalDy = t.clientY - touchStartY;
+            if (Math.abs(totalDx) + Math.abs(totalDy) > DRAG_THRESHOLD) {
+              touchStarted = false;
               const tx = getTx(gIdx);
               if (tx && tx.scale > 1) {
                 gMode = "pan";
+                suppressClick = true;
               } else {
                 gMode = "reorder";
+                suppressClick = true;
                 const srcSlot = document.querySelector(
                   `.slot[data-slot="${gIdx}"]`,
                 );
@@ -777,9 +787,9 @@
                   );
                 }
               }
-              suppressClick = true;
               e.preventDefault();
             }
+            return;
           }
 
           if (gMode === "pan") {
@@ -795,7 +805,7 @@
             e.preventDefault();
           } else if (gMode === "reorder") {
             e.preventDefault();
-            if (dragGhost && dragGhost.style.display === "block") {
+            if (dragGhost) {
               dragGhost.style.left = t.clientX + "px";
               dragGhost.style.top = t.clientY + "px";
             }
@@ -804,11 +814,7 @@
               `.slot[data-slot="${gIdx}"]`,
             );
             if (srcSlot) srcSlot.classList.add("dragging");
-            const ghostShown =
-              dragGhost && dragGhost.style.display === "block";
-            if (ghostShown) dragGhost.style.display = "none";
-            const targetIdx = elementSlot(t.clientX, t.clientY);
-            if (ghostShown) dragGhost.style.display = "block";
+            const targetIdx = nearestSlot(t.clientX, t.clientY);
             if (targetIdx !== null && targetIdx !== gIdx) {
               const ts = document.querySelector(
                 `.slot[data-slot="${targetIdx}"]`,
@@ -827,7 +833,7 @@
           const wasReorder = gMode === "reorder";
           if (wasReorder) {
             if (dragGhost) dragGhost.style.display = "none";
-            const targetIdx = elementSlot(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+            const targetIdx = nearestSlot(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
             if (targetIdx !== null && targetIdx !== gIdx) {
               swapSlots(gIdx, targetIdx);
             }
@@ -849,6 +855,7 @@
       document.addEventListener(
         "touchcancel",
         () => {
+          touchStarted = false;
           endGesture();
         },
         { passive: true },
@@ -1131,15 +1138,18 @@
               (e) => {
                 if (e.touches.length !== 1) return;
                 const t = e.touches[0];
+                touchStartX = t.clientX;
+                touchStartY = t.clientY;
+                touchStartIdx = idx;
+                touchStarted = true;
                 gIdx = idx;
                 gMode = null;
                 gLastX = t.clientX;
                 gLastY = t.clientY;
                 gPinchDist = 0;
                 suppressClick = false;
-                e.preventDefault();
               },
-              { passive: false },
+              { passive: true },
             );
 
             slot.appendChild(img);
