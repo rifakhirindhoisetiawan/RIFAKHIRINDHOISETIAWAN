@@ -438,34 +438,23 @@
         const menu = img.dataset.menu;
         const originalSrc = img.src;
         const ext = originalSrc.split('.').pop();
-
-        const folders = [
-          `images/index-photos/${menu}/`
-        ];
+        const folder = `images/index-photos/${menu}/`;
+        const exts = ['.jpg', '.jpeg', '.png', '.svg', '.webp'];
 
         function loadPhoto() {
-          let folderIndex = 0;
-
-          function tryFolder() {
-            if (folderIndex >= folders.length) {
-              img.src = originalSrc;
-              return;
+          function tryNum(num) {
+            if (num > 20) { img.src = originalSrc; return; }
+            function tryExt(extIdx) {
+              if (extIdx >= exts.length) { tryNum(num + 1); return; }
+              const url = folder + num + exts[extIdx];
+              const temp = new Image();
+              temp.onload = () => { img.src = url; };
+              temp.onerror = () => tryExt(extIdx + 1);
+              temp.src = url;
             }
-
-            const folder = folders[folderIndex];
-            const num = Math.floor(Math.random() * 20) + 1;
-            const url = `${folder}${num}.${ext}`;
-
-            const temp = new Image();
-            temp.onload = () => { img.src = url; };
-            temp.onerror = () => {
-              folderIndex++;
-              tryFolder();
-            };
-            temp.src = url;
+            tryExt(0);
           }
-
-          tryFolder();
+          tryNum(1);
         }
 
         loadPhoto();

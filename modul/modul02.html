@@ -310,80 +310,40 @@
       });
 
       function loadPeriodPhotos() {
-        const dayNames = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
-        const monthNames = ['januari', 'februari', 'maret', 'april', 'mei', 'juni', 'juli', 'agustus', 'september', 'oktober', 'november', 'desember'];
-
-        const now = new Date();
-        const dayName = dayNames[now.getDay()];
-        const monthName = monthNames[now.getMonth()];
+        const items = [
+          { slug: 'hari', folder: '../images/modul02-photos/hari/' },
+          { slug: 'minggu', folder: '../images/modul02-photos/minggu/' },
+          { slug: 'bulan', folder: '../images/modul02-photos/bulan/' },
+        ];
+        const exts = ['.jpg', '.jpeg', '.png', '.svg', '.webp'];
 
         document.querySelectorAll('.icon-tile[data-slug]').forEach((tile) => {
           const slug = tile.dataset.slug;
-          let baseFolder = '';
+          const item = items.find(i => i.slug === slug);
+          if (!item) return;
 
-          if (slug === 'hari') {
-            baseFolder = `images/modul02-photos/hari/`;
-          } else if (slug === 'minggu') {
-            baseFolder = `images/modul02-photos/minggu/`;
-          } else if (slug === 'bulan') {
-            baseFolder = `images/modul02-photos/bulan/`;
-          }
-
-          const folders = [baseFolder];
-          let folderIndex = 0;
-          let itemFolders = [];
-          let itemIndex = 0;
-          const exts = ['.jpg', '.jpeg', '.png', '.svg', '.webp'];
-          let extIndex = 0;
-
-          function tryFolder() {
-            if (folderIndex >= folders.length) {
-              tile.style.backgroundImage = '';
-              tile.classList.remove('has-photo');
+          function tryNum(num) {
+            if (num > 20) {
               tile.style.opacity = '0.55';
               return;
             }
-
-            const folder = folders[folderIndex];
-            const num = Math.floor(Math.random() * 20) + 1;
-
-            const img = new Image();
-            img.onload = () => {
-              tile.style.backgroundImage = `url(${folder}${num}.jpg)`;
-              tile.style.backgroundSize = 'cover';
-              tile.style.backgroundPosition = 'center';
-              tile.classList.add('has-photo');
-              tile.style.opacity = '1';
-            };
-            img.onerror = () => {
-              folderIndex++;
-              tryFolder();
-            };
-            img.src = `${folder}${num}.jpg`;
-          }
-
-          // Try to get item folders list first
-          const xhr = new XMLHttpRequest();
-          xhr.open('GET', baseFolder, true);
-          xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-              if (xhr.status === 200 || xhr.status === 0) {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(xhr.responseText, 'text/html');
-                const links = doc.querySelectorAll('a');
-                itemFolders = Array.from(links)
-                  .map(a => a.getAttribute('href'))
-                  .filter(href => href && href !== '../' && !href.includes('.'));
-                
-                if (itemFolders.length > 0) {
-                  const randomItem = itemFolders[Math.floor(Math.random() * itemFolders.length)];
-                  folders[0] = baseFolder + randomItem + '/';
-                }
-              }
-              tryFolder();
+            function tryExt(extIdx) {
+              if (extIdx >= exts.length) { tryNum(num + 1); return; }
+              const url = item.folder + num + exts[extIdx];
+              const img = new Image();
+              img.onload = () => {
+                tile.style.backgroundImage = `url(${url})`;
+                tile.style.backgroundSize = 'cover';
+                tile.style.backgroundPosition = 'center';
+                tile.classList.add('has-photo');
+                tile.style.opacity = '1';
+              };
+              img.onerror = () => tryExt(extIdx + 1);
+              img.src = url;
             }
-          };
-          xhr.send();
+            tryExt(0);
+          }
+          tryNum(1);
         });
       }
 

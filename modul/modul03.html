@@ -942,31 +942,27 @@
 
         document.querySelectorAll('.icon-photo[data-slug]').forEach((tile) => {
           const slug = tile.dataset.slug;
-          const folder = `images/modul03-photos/${slug}/`;
-          const num = Math.floor(Math.random() * 20) + 1;
+          const folder = `../images/modul03-photos/${slug}/`;
 
-          const img = new Image();
-          let extIndex = 0;
-
-          function tryExt() {
-            if (extIndex >= exts.length) {
+          function tryNum(num) {
+            if (num > 20) {
               tile.classList.remove('has-photo');
               return;
             }
-
-            const ext = exts[extIndex];
-            img.onload = () => {
-              tile.style.backgroundImage = `url(${folder}${num}${ext})`;
-              tile.classList.add('has-photo');
-            };
-            img.onerror = () => {
-              extIndex++;
-              tryExt();
-            };
-            img.src = `${folder}${num}${ext}`;
+            function tryExt(extIdx) {
+              if (extIdx >= exts.length) { tryNum(num + 1); return; }
+              const url = folder + num + exts[extIdx];
+              const img = new Image();
+              img.onload = () => {
+                tile.style.backgroundImage = `url(${url})`;
+                tile.classList.add('has-photo');
+              };
+              img.onerror = () => tryExt(extIdx + 1);
+              img.src = url;
+            }
+            tryExt(0);
           }
-
-          tryExt();
+          tryNum(1);
         });
       }
 
