@@ -152,27 +152,16 @@
         max-width: 110px;
         aspect-ratio: 9 / 16;
         border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 34px;
+        overflow: hidden;
         margin-bottom: 8px;
-        color: #fff;
         position: relative;
-        opacity: 0.55;
-        background-size: cover;
-        background-position: center;
+        background: #f3f4f6;
       }
-      .icon-tile .tile-icon {
+      .icon-tile img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
         display: block;
-        z-index: 1;
-        pointer-events: none;
-      }
-      .icon-tile.has-photo {
-        opacity: 1;
-      }
-      .icon-tile.has-photo .tile-icon {
-        display: none;
       }
 
       @media (max-width: 360px) {
@@ -185,9 +174,6 @@
       .item.active-modul {
         cursor: pointer;
         text-decoration: none;
-      }
-      .item.active-modul .icon-tile {
-        opacity: 1;
       }
       .item.active-modul span {
         color: #1f2937;
@@ -271,9 +257,9 @@
 
     <script>
       const periods = [
-        { name: "HARI", icon: "☀️", cls: "g-a", href: "utility/hari.html", slug: "hari" },
-        { name: "MINGGU", icon: "📅", cls: "g-b", href: "utility/minggu.html", slug: "minggu" },
-        { name: "BULAN", icon: "🌙", cls: "g-c", href: "utility/bulan.html", slug: "bulan" },
+        { name: "HARI", icon: "☀️", cls: "g-a", href: "../utility/hari.html", slug: "hari" },
+        { name: "MINGGU", icon: "📅", cls: "g-b", href: "../utility/minggu.html", slug: "minggu" },
+        { name: "BULAN", icon: "🌙", cls: "g-c", href: "../utility/bulan.html", slug: "bulan" },
       ];
 
       const homeGrid = document.getElementById("homeGrid");
@@ -293,7 +279,9 @@
           .map(
             (p) => `
               <a class="item active-modul" href="${p.href}">
-                <div class="icon-tile ${p.cls}" data-slug="${p.slug}"><span class="tile-icon">${p.icon}</span></div>
+                <div class="icon-tile">
+                  <img data-slug="${p.slug}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="${p.name}" />
+                </div>
                 <span>${p.name}</span>
               </a>
             `,
@@ -310,40 +298,34 @@
       });
 
       function loadPeriodPhotos() {
-        const items = [
-          { slug: 'hari', folder: '../images/modul02-photos/hari/' },
-          { slug: 'minggu', folder: '../images/modul02-photos/minggu/' },
-          { slug: 'bulan', folder: '../images/modul02-photos/bulan/' },
-        ];
+        const folders = {
+          hari: '../images/modul02-photos/hari/',
+          minggu: '../images/modul02-photos/minggu/',
+          bulan: '../images/modul02-photos/bulan/',
+        };
         const exts = ['.jpg', '.jpeg', '.png', '.svg', '.webp'];
 
-        document.querySelectorAll('.icon-tile[data-slug]').forEach((tile) => {
-          const slug = tile.dataset.slug;
-          const item = items.find(i => i.slug === slug);
-          if (!item) return;
+        document.querySelectorAll('img[data-slug]').forEach((img) => {
+          const slug = img.dataset.slug;
+          const folder = folders[slug];
+          if (!folder) return;
 
-          function tryNum(num) {
-            if (num > 20) {
-              tile.style.opacity = '0.55';
-              return;
+          let num = 0;
+          function tryNext() {
+            num++;
+            if (num > 20) return;
+            let extIdx = 0;
+            function tryExt() {
+              if (extIdx >= exts.length) { tryNext(); return; }
+              const url = folder + num + exts[extIdx];
+              const temp = new Image();
+              temp.onload = () => { img.src = url; };
+              temp.onerror = () => { extIdx++; tryExt(); };
+              temp.src = url;
             }
-            function tryExt(extIdx) {
-              if (extIdx >= exts.length) { tryNum(num + 1); return; }
-              const url = item.folder + num + exts[extIdx];
-              const img = new Image();
-              img.onload = () => {
-                tile.style.backgroundImage = `url(${url})`;
-                tile.style.backgroundSize = 'cover';
-                tile.style.backgroundPosition = 'center';
-                tile.classList.add('has-photo');
-                tile.style.opacity = '1';
-              };
-              img.onerror = () => tryExt(extIdx + 1);
-              img.src = url;
-            }
-            tryExt(0);
+            tryExt();
           }
-          tryNum(1);
+          tryNext();
         });
       }
 
