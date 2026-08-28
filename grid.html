@@ -727,9 +727,11 @@
                   t.clientY,
                 );
               }
+              e.preventDefault();
             } else if (Math.abs(dx) + Math.abs(dy) > DRAG_THRESHOLD) {
               gMode = "pan";
               suppressClick = true;
+              e.preventDefault();
             }
           }
 
@@ -777,9 +779,8 @@
           if (gIdx === null) return;
           const wasReorder = gMode === "reorder";
           if (wasReorder) {
-            const t = e.changedTouches[0];
             if (dragGhost) dragGhost.style.display = "none";
-            const targetIdx = elementSlot(t.clientX, t.clientY);
+            const targetIdx = elementSlot(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
             if (targetIdx !== null && targetIdx !== gIdx) {
               swapSlots(gIdx, targetIdx);
             }
@@ -1072,7 +1073,7 @@
                 gPinchDist = 0;
                 suppressClick = false;
               },
-              { passive: true },
+              { passive: false },
             );
 
             slot.appendChild(img);
