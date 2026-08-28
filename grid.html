@@ -595,10 +595,10 @@
 
       const DRAG_THRESHOLD = 8;
 
-      let touchStartX = 0;
-      let touchStartY = 0;
-      let touchStartIdx = null;
-      let touchStarted = false;
+      let pStartX = 0;
+      let pStartY = 0;
+      let pStarted = false;
+      let pPointerId = null;
 
       function clearDragHighlights() {
         document
@@ -620,6 +620,7 @@
         dragGhost.innerHTML = "";
         const gImg = document.createElement("img");
         gImg.src = src;
+        gImg.appendChild ? 0 : 0;
         dragGhost.appendChild(gImg);
         dragGhost.style.width = size + "px";
         dragGhost.style.height = size + "px";
@@ -649,7 +650,7 @@
       function applyTx(img, idx) {
         const t = getTx(idx);
         const r = img.getBoundingClientRect();
-        img.style.transform = `translate(${t.fx * r.width}px, ${t.fy * r.height}px) scale(${t.scale})`;
+        img.style.transform = "translate(" + (t.fx * r.width) + "px," + (t.fy * r.height) + "px) scale(" + t.scale + ")";
         img.style.transformOrigin = "center center";
       }
 
@@ -682,17 +683,8 @@
         t.fy = ay - (ay - t.fy) * ratio;
         t.scale = s1;
         clampTx(idx);
-        const img = document.querySelector(
-          `.slot[data-slot="${idx}"] .slot-img`,
-        );
+        const img = document.querySelector('.slot[data-slot="' + idx + '"] .slot-img');
         if (img) applyTx(img, idx);
-      }
-
-      function elementSlot(x, y) {
-        const el = document.elementFromPoint(x, y);
-        if (!el) return null;
-        const s = el.closest(".slot");
-        return s ? parseInt(s.dataset.slot, 10) : null;
       }
 
       function nearestSlot(x, y) {
@@ -714,260 +706,126 @@
 
       function endGesture() {
         const wasReorder = gMode === "reorder";
-        const fromIdx = gIdx;
         gIdx = null;
         gMode = null;
         gPinchDist = 0;
-        touchStarted = false;
+        pStarted = false;
+        pPointerId = null;
         hideGhost();
         clearDragHighlights();
-        return wasReorder ? fromIdx : null;
+        return wasReorder;
       }
 
-      document.addEventListener(
-        "touchmove",
-        (e) => {
-          if (gIdx === null) return;
+      gridFrame.addEventListener("pointerdown", (e) => {
+        if (e.button && e.button !== 0) return;
+        const slot = e.target.closest(".slot");
+        if (!slot) return;
+        const idx = parseInt(slot.dataset.slot, 10);
 
-          if (e.touches.length === 2) {
-            const t0 = e.touches[0];
-            const t1 = e.touches[1];
-            const d = Math.hypot(
-              t0.clientX - t1.clientX,
-              t0.clientY - t1.clientY,
-            );
-            if (gPinchDist > 0 && d > 0) {
-              const img = document.querySelector(
-                `.slot[data-slot="${gIdx}"] .slot-img`,
-              );
-              const mx = (t0.clientX + t1.clientX) / 2;
-              const my = (t0.clientY + t1.clientY) / 2;
-              const a = anchorFromPoint(img, mx, my);
-              zoomAt(gIdx, getTx(gIdx).scale * (d / gPinchDist), a.ax, a.ay);
-            }
-            gPinchDist = d;
-            gMode = "zoom";
-            suppressClick = true;
-            touchStarted = false;
-            e.preventDefault();
-            return;
-          }
+        if (suppressClick) return;
 
-          if (e.touches.length !== 1) return;
-          const t = e.touches[0];
-          const dx = t.clientX - gLastX;
-          const dy = t.clientY - gLastY;
-          gLastX = t.clientX;
-          gLastY = t.clientY;
-          gPinchDist = 0;
+        if (!images[idx]) {
+          activeSlot = idx;
+          fileInput.click();
+          return;
+        }
 
-          if (touchStarted && gMode !== "reorder" && gMode !== "pan") {
-            const totalDx = t.clientX - touchStartX;
-            const totalDy = t.clientY - touchStartY;
-            if (Math.abs(totalDx) + Math.abs(totalDy) > DRAG_THRESHOLD) {
-              touchStarted = false;
-              const tx = getTx(gIdx);
-              if (tx && tx.scale > 1) {
-                gMode = "pan";
-                suppressClick = true;
-              } else {
-                gMode = "reorder";
-                suppressClick = true;
-                const srcSlot = document.querySelector(
-                  `.slot[data-slot="${gIdx}"]`,
-                );
-                if (srcSlot) {
-                  srcSlot.classList.add("dragging");
-                  const rect = srcSlot.getBoundingClientRect();
-                  showGhost(
-                    images[gIdx],
-                    Math.min(rect.width, rect.height) * 0.55,
-                    t.clientX,
-                    t.clientY,
-                  );
-                }
-              }
-              e.preventDefault();
-            }
-            return;
-          }
+        e.preventDefault();
+        gIdx = idx;
+        gMode = null;
+        gLastX = e.clientX;
+        gLastY = e.clientY;
+        gPinchDist = 0;
+        pStartX = e.clientX;
+        pStartY = e.clientY;
+        pStarted = true;
+        pPointerId = e.pointerId;
+        suppressClick = false;
 
-          if (gMode === "pan") {
-            const tx = getTx(gIdx);
-            const img = document.querySelector(
-              `.slot[data-slot="${gIdx}"] .slot-img`,
-            );
-            const r = img ? img.getBoundingClientRect() : { width: 1, height: 1 };
-            tx.fx += dx / (r.width || 1);
-            tx.fy += dy / (r.height || 1);
-            clampTx(gIdx);
-            if (img) applyTx(img, gIdx);
-            e.preventDefault();
-          } else if (gMode === "reorder") {
-            e.preventDefault();
-            if (dragGhost) {
-              dragGhost.style.left = t.clientX + "px";
-              dragGhost.style.top = t.clientY + "px";
-            }
-            clearDragHighlights();
-            const srcSlot = document.querySelector(
-              `.slot[data-slot="${gIdx}"]`,
-            );
-            if (srcSlot) srcSlot.classList.add("dragging");
-            const targetIdx = nearestSlot(t.clientX, t.clientY);
-            if (targetIdx !== null && targetIdx !== gIdx) {
-              const ts = document.querySelector(
-                `.slot[data-slot="${targetIdx}"]`,
-              );
-              if (ts) ts.classList.add("drag-over");
-            }
-          }
-        },
-        { passive: false },
-      );
+        try { slot.setPointerCapture(e.pointerId); } catch (ex) {}
+      });
 
-      document.addEventListener(
-        "touchend",
-        (e) => {
-          if (gIdx === null) return;
-          const wasReorder = gMode === "reorder";
-          if (wasReorder) {
-            if (dragGhost) dragGhost.style.display = "none";
-            const targetIdx = nearestSlot(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
-            if (targetIdx !== null && targetIdx !== gIdx) {
-              swapSlots(gIdx, targetIdx);
-            }
-            suppressClick = true;
-            setTimeout(() => {
-              suppressClick = false;
-            }, 300);
-          } else if (gMode) {
-            suppressClick = true;
-            setTimeout(() => {
-              suppressClick = false;
-            }, 200);
-          }
-          endGesture();
-        },
-        { passive: true },
-      );
-
-      document.addEventListener(
-        "touchcancel",
-        () => {
-          touchStarted = false;
-          endGesture();
-        },
-        { passive: true },
-      );
-
-      document.addEventListener(
-        "mousemove",
-        (e) => {
-          if (gIdx === null || gMode === "zoom") return;
-          const dx = e.clientX - gLastX;
-          const dy = e.clientY - gLastY;
-          gLastX = e.clientX;
-          gLastY = e.clientY;
-
-          if (!gMode) {
-            const targetIdx = elementSlot(e.clientX, e.clientY);
-            if (targetIdx !== null && targetIdx !== gIdx) {
-              gMode = "reorder";
-              suppressClick = true;
-              const srcSlot = document.querySelector(
-                `.slot[data-slot="${gIdx}"]`,
-              );
-              if (srcSlot) {
-                srcSlot.classList.add("dragging");
-                const rect = srcSlot.getBoundingClientRect();
-                showGhost(
-                  images[gIdx],
-                  Math.min(rect.width, rect.height) * 0.55,
-                  e.clientX,
-                  e.clientY,
-                );
-              }
-            } else if (Math.abs(dx) + Math.abs(dy) > DRAG_THRESHOLD) {
-              const tx = getTx(gIdx);
-              if (tx && tx.scale > 1) {
-                gMode = "pan";
-              } else {
-                gMode = "reorder";
-                const srcSlot = document.querySelector(
-                  `.slot[data-slot="${gIdx}"]`,
-                );
-                if (srcSlot) {
-                  srcSlot.classList.add("dragging");
-                  const rect = srcSlot.getBoundingClientRect();
-                  showGhost(
-                    images[gIdx],
-                    Math.min(rect.width, rect.height) * 0.55,
-                    e.clientX,
-                    e.clientY,
-                  );
-                }
-              }
-              suppressClick = true;
-            }
-          }
-
-          if (gMode === "pan") {
-            const tx = getTx(gIdx);
-            const img = document.querySelector(
-              `.slot[data-slot="${gIdx}"] .slot-img`,
-            );
-            const r = img ? img.getBoundingClientRect() : { width: 1, height: 1 };
-            tx.fx += dx / (r.width || 1);
-            tx.fy += dy / (r.height || 1);
-            clampTx(gIdx);
-            if (img) applyTx(img, gIdx);
-          } else if (gMode === "reorder") {
-            if (dragGhost && dragGhost.style.display === "block") {
-              dragGhost.style.left = e.clientX + "px";
-              dragGhost.style.top = e.clientY + "px";
-            }
-            clearDragHighlights();
-            const srcSlot = document.querySelector(
-              `.slot[data-slot="${gIdx}"]`,
-            );
-            if (srcSlot) srcSlot.classList.add("dragging");
-            const ghostShown =
-              dragGhost && dragGhost.style.display === "block";
-            if (ghostShown) dragGhost.style.display = "none";
-            const targetIdx = elementSlot(e.clientX, e.clientY);
-            if (ghostShown) dragGhost.style.display = "block";
-            if (targetIdx !== null && targetIdx !== gIdx) {
-              const ts = document.querySelector(
-                `.slot[data-slot="${targetIdx}"]`,
-              );
-              if (ts) ts.classList.add("drag-over");
-            }
-          }
-        },
-      );
-
-      document.addEventListener("mouseup", (e) => {
+      document.addEventListener("pointermove", (e) => {
         if (gIdx === null) return;
+        if (pPointerId !== null && e.pointerId !== pPointerId) return;
+
+        const dx = e.clientX - gLastX;
+        const dy = e.clientY - gLastY;
+        gLastX = e.clientX;
+        gLastY = e.clientY;
+
+        if (pStarted && !gMode) {
+          const totalDx = e.clientX - pStartX;
+          const totalDy = e.clientY - pStartY;
+          if (Math.abs(totalDx) + Math.abs(totalDy) > DRAG_THRESHOLD) {
+            pStarted = false;
+            suppressClick = true;
+            gMode = "reorder";
+            const srcSlot = document.querySelector('.slot[data-slot="' + gIdx + '"]');
+            if (srcSlot) {
+              srcSlot.classList.add("dragging");
+              const rect = srcSlot.getBoundingClientRect();
+              showGhost(
+                images[gIdx],
+                Math.min(rect.width, rect.height) * 0.55,
+                e.clientX,
+                e.clientY,
+              );
+            }
+          }
+          return;
+        }
+
+        if (gMode === "reorder") {
+          e.preventDefault();
+          if (dragGhost) {
+            dragGhost.style.left = e.clientX + "px";
+            dragGhost.style.top = e.clientY + "px";
+          }
+          clearDragHighlights();
+          const srcSlot = document.querySelector('.slot[data-slot="' + gIdx + '"]');
+          if (srcSlot) srcSlot.classList.add("dragging");
+          const targetIdx = nearestSlot(e.clientX, e.clientY);
+          if (targetIdx !== null && targetIdx !== gIdx) {
+            const ts = document.querySelector('.slot[data-slot="' + targetIdx + '"]');
+            if (ts) ts.classList.add("drag-over");
+          }
+        }
+      });
+
+      document.addEventListener("pointerup", (e) => {
+        if (gIdx === null) return;
+        if (pPointerId !== null && e.pointerId !== pPointerId) return;
+
         const wasReorder = gMode === "reorder";
         if (wasReorder) {
           if (dragGhost) dragGhost.style.display = "none";
-          const targetIdx = elementSlot(e.clientX, e.clientY);
+          const targetIdx = nearestSlot(e.clientX, e.clientY);
           if (targetIdx !== null && targetIdx !== gIdx) {
             swapSlots(gIdx, targetIdx);
           }
-          suppressClick = true;
-          setTimeout(() => {
-            suppressClick = false;
-          }, 300);
-        } else if (gMode) {
-          suppressClick = true;
-          setTimeout(() => {
-            suppressClick = false;
-          }, 200);
         }
+        suppressClick = wasReorder;
+        endGesture();
+        if (suppressClick) {
+          setTimeout(() => { suppressClick = false; }, 300);
+        }
+      });
+
+      document.addEventListener("pointercancel", () => {
         endGesture();
       });
+
+      gridFrame.addEventListener("wheel", (e) => {
+        const slot = e.target.closest(".slot");
+        if (!slot) return;
+        const idx = parseInt(slot.dataset.slot, 10);
+        if (!images[idx]) return;
+        e.preventDefault();
+        const img = slot.querySelector(".slot-img");
+        const a = anchorFromPoint(img, e.clientX, e.clientY);
+        zoomAt(idx, getTx(idx).scale + (e.deltaY < 0 ? 0.12 : -0.12), a.ax, a.ay);
+      }, { passive: false });
 
       document.addEventListener(
         "contextmenu",
@@ -1107,51 +965,6 @@
             img.draggable = false;
             img.style.touchAction = "none";
 
-            img.addEventListener("mousedown", (e) => {
-              if (e.button !== 0) return;
-              e.preventDefault();
-              gIdx = idx;
-              gMode = null;
-              gLastX = e.clientX;
-              gLastY = e.clientY;
-              gPinchDist = 0;
-              suppressClick = false;
-            });
-
-            img.addEventListener(
-              "wheel",
-              (e) => {
-                e.preventDefault();
-                const a = anchorFromPoint(img, e.clientX, e.clientY);
-                zoomAt(
-                  idx,
-                  getTx(idx).scale + (e.deltaY < 0 ? 0.12 : -0.12),
-                  a.ax,
-                  a.ay,
-                );
-              },
-              { passive: false },
-            );
-
-            img.addEventListener(
-              "touchstart",
-              (e) => {
-                if (e.touches.length !== 1) return;
-                const t = e.touches[0];
-                touchStartX = t.clientX;
-                touchStartY = t.clientY;
-                touchStartIdx = idx;
-                touchStarted = true;
-                gIdx = idx;
-                gMode = null;
-                gLastX = t.clientX;
-                gLastY = t.clientY;
-                gPinchDist = 0;
-                suppressClick = false;
-              },
-              { passive: true },
-            );
-
             slot.appendChild(img);
           } else {
             const ph = document.createElement("div");
@@ -1159,17 +972,6 @@
             ph.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`;
             slot.appendChild(ph);
           }
-
-          slot.addEventListener("click", (e) => {
-            if (suppressClick) {
-              suppressClick = false;
-              e.preventDefault();
-              e.stopPropagation();
-              return;
-            }
-            activeSlot = idx;
-            fileInput.click();
-          });
 
           gridFrame.appendChild(slot);
           if (images[idx]) {
