@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>MYLOVE</title>
+    <title>DAILY TASK</title>
     <link rel="manifest" href="../manifest.json" />
     <meta name="theme-color" content="#ffffff" />
     <style>
@@ -259,7 +259,7 @@
       const periods = [
         { name: "HARI", icon: "☀️", cls: "g-a", href: "../utility/hari.html", slug: "hari" },
         { name: "MINGGU", icon: "📅", cls: "g-b", href: "../utility/minggu.html", slug: "minggu" },
-        { name: "BULAN", icon: "🌙", cls: "g-c", href: "../utility/bulan.html", slug: "bulan" },
+        { name: "BULAN", icon: "🌙", cls: "g-c", href: "../utility/bulan.html", slug: "bulan" }
       ];
 
       const homeGrid = document.getElementById("homeGrid");
@@ -291,17 +291,11 @@
         loadPeriodPhotos();
       }
 
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
-          loadPeriodPhotos();
-        }
-      });
-
       function loadPeriodPhotos() {
         const folders = {
-          hari: '../images/modul02-photos/hari/',
-          minggu: '../images/modul02-photos/minggu/',
-          bulan: '../images/modul02-photos/bulan/',
+          hari: '../images/daily-task-photos/hari/',
+          minggu: '../images/daily-task-photos/minggu/',
+          bulan: '../images/daily-task-photos/bulan/',
         };
         const exts = ['.jpg', '.jpeg', '.png', '.svg', '.webp'];
 
@@ -328,6 +322,12 @@
           tryNext();
         });
       }
+
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          loadPeriodPhotos();
+        }
+      });
 
       renderGrid();
     </script>

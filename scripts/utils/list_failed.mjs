@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const PHOTOS_DIR = path.join(process.cwd(), 'images', 'modul03-photos');
+const PHOTOS_DIR = path.join(process.cwd(), 'images', 'ja-di-photos');
 fs.mkdirSync(PHOTOS_DIR, { recursive: true });
 
 const failedItems = [

@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-const html = fs.readFileSync('modul03.html', 'utf8');
+const html = fs.readFileSync('modul/ja-di.html', 'utf8');
 const scriptMatch = html.match(/<script>([\s\S]*?)<\/script>/);
 if (!scriptMatch) {
   console.log('No script found');

@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-const txtPath = path.join(process.cwd(), 'data', 'modul03-menus.txt');
-const htmlPath = path.join(process.cwd(), 'modul03.html');
+const txtPath = path.join(process.cwd(), 'data', 'ja-di-menus.txt');
+const htmlPath = path.join(process.cwd(), 'modul', 'ja-di.html');
 
 const txtLines = fs.readFileSync(txtPath, 'utf8')
   .split('\n')
@@ -64,4 +64,4 @@ const newArrayContent = updatedBlocks.join('\n        ');
 const newHtml = beforeArray + '\n        ' + newArrayContent + '\n      ' + afterArray;
 
 fs.writeFileSync(htmlPath, newHtml);
-console.log(`Synced ${txtLines.length} menu names from modul03-menus.txt to modul03.html`);
+console.log(`Synced ${txtLines.length} menu names from ja-di-menus.txt to ja-di.html`);

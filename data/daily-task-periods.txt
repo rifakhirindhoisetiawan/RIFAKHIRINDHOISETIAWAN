@@ -1,0 +1,17 @@
+HARI
+☀️
+g-a
+../utility/hari.html
+hari
+---
+MINGGU
+📅
+g-b
+../utility/minggu.html
+minggu
+---
+BULAN
+🌙
+g-c
+../utility/bulan.html
+bulan

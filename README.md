@@ -13,9 +13,9 @@ Proyek modul resep & menu (halaman HTML statis + skrip bantu).
 ├── produk-ja-di.html               # Detail produk
 ├── time-kamera.html                # Utility kamera/waktu
 ├── modul/                          # Halaman modul
-│   ├── modul02.html                # Daily Task
-│   ├── modul03.html                # JA-DI (menu & resep)
-│   └── modul05.html                # Shelving/Rak
+│   ├── daily-task.html             # Daily Task
+│   ├── ja-di.html                  # JA-DI (menu & resep)
+│   └── selanjutnya.html            # Shelving/Rak
 ├── pages/                          # Halaman kategori & item (dihasilkan)
 │   ├── cat-*.html                  # Kategori menu
 │   ├── item-*.html                 # Item menu
@@ -41,7 +41,7 @@ Semua skrip menggunakan `process.cwd()`, jalankan dari **root proyek**.
 # Sinkronkan resep .txt -> pages/*.html
 node scripts/sync/sync-recipes.mjs
 
-# Sinkronkan data modul03
+# Sinkronkan data JA-DI
 node scripts/sync/sync-data.mjs
 node scripts/sync/sync-menus.mjs
 
@@ -56,4 +56,4 @@ node scripts/download/download_with_google.mjs
 
 - `scripts/download/download_all.mjs` — primary downloader (Wikimedia Commons)
 - `scripts/download/download_with_google.mjs` — fallback untuk item yang gagal
-- `scripts/sync/*` membaca `data/*.txt` dan menulis ke `modul/modul03.html` & `pages/*.html`
+- `scripts/sync/*` membaca `data/*.txt` dan menulis ke `modul/ja-di.html` & `pages/*.html`
