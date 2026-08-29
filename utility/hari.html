@@ -233,7 +233,7 @@
 
     <script>
       const STORAGE_KEY = "todo-hari";
-      const PHOTO_FOLDER = "../images/utility-photos/hari/";
+      const PHOTO_FOLDER = "../images/daily-task-photos/hari/";
       const photoExts = [".jpg", ".jpeg", ".png", ".svg", ".webp"];
 
       const GRADIENTS = ["g-a", "g-b", "g-c", "g-d", "g-e", "g-f", "g-g", "g-h"];
@@ -242,15 +242,31 @@
       const EMOJIS = ["☀️", "📅", "🌙", "⭐", "🌸", "🔥", "💡", "🎯", "📌", "✨", "🍀", "🌈", "💫", "🌟", "🍎", "🐱"];
       function emojiFor(id) { return EMOJIS[Math.abs(id) % EMOJIS.length]; }
 
-      function loadTilePhoto(tile, id, emojiEl) {
+      function slugify(s) {
+        return s.toString().trim().toLowerCase().replace(/[^a-z0-9\u00C0-\uFFFF]+/g, "-").replace(/^-+|-+$/g, "");
+      }
+
+      const FALLBACK_PHOTO = "../images/daily-task-photos/" + PHOTO_FOLDER.split("/")[3] + "/1.jpg";
+
+      function loadTilePhoto(tile, task, emojiEl) {
+        const slug = slugify(task.text);
         tile.style.opacity = "0";
         let extIdx = 0;
         function tryExt() {
           if (extIdx >= photoExts.length) {
-            tile.style.opacity = "1";
+            const fb = new Image();
+            fb.onload = () => {
+              tile.style.backgroundImage = "url(" + FALLBACK_PHOTO + ")";
+              tile.style.backgroundSize = "cover";
+              tile.style.backgroundPosition = "center";
+              tile.style.opacity = "1";
+              if (emojiEl) emojiEl.style.display = "none";
+            };
+            fb.onerror = () => { tile.style.opacity = "1"; };
+            fb.src = FALLBACK_PHOTO;
             return;
           }
-          const url = PHOTO_FOLDER + id + "/" + "1" + photoExts[extIdx];
+          const url = encodeURI(PHOTO_FOLDER + slug + "/" + "1" + photoExts[extIdx]);
           const img = new Image();
           img.onload = () => {
             tile.style.backgroundImage = "url(" + url + ")";
@@ -375,7 +391,7 @@
         return array;
       }
 
-      let tasks = shuffle(loadTasks());
+      let tasks = loadTasks();
 
       const todoList = document.getElementById("todoList");
       const emptyState = document.getElementById("emptyState");
@@ -402,7 +418,7 @@
           emoji.textContent = emojiFor(task.id);
           tile.appendChild(emoji);
 
-          loadTilePhoto(tile, task.id, emoji);
+          loadTilePhoto(tile, task, emoji);
 
           const text = document.createElement("div");
           text.className = "todo-text";

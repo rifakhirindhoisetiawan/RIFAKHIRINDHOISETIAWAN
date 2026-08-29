@@ -280,7 +280,7 @@
             (p) => `
               <a class="item active-modul" href="${p.href}">
                 <div class="icon-tile">
-                  <img data-slug="${p.slug}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="${p.name}" />
+                  <img data-slug="${p.slug}" src="../images/daily-task-photos/${p.slug}/1.jpg" alt="${p.name}" onerror="dtProbe(this)" />
                 </div>
                 <span>${p.name}</span>
               </a>
@@ -288,46 +288,23 @@
           )
           .join("");
 
-        loadPeriodPhotos();
       }
 
-      function loadPeriodPhotos() {
-        const folders = {
-          hari: '../images/daily-task-photos/hari/',
-          minggu: '../images/daily-task-photos/minggu/',
-          bulan: '../images/daily-task-photos/bulan/',
-        };
-        const exts = ['.jpg', '.jpeg', '.png', '.svg', '.webp'];
-
-        document.querySelectorAll('img[data-slug]').forEach((img) => {
-          const slug = img.dataset.slug;
-          const folder = folders[slug];
-          if (!folder) return;
-
-          let num = 0;
-          function tryNext() {
-            num++;
-            if (num > 20) return;
-            let extIdx = 0;
-            function tryExt() {
-              if (extIdx >= exts.length) { tryNext(); return; }
-              const url = folder + num + exts[extIdx];
-              const temp = new Image();
-              temp.onload = () => { img.src = url; };
-              temp.onerror = () => { extIdx++; tryExt(); };
-              temp.src = url;
-            }
-            tryExt();
-          }
-          tryNext();
-        });
-      }
-
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
-          loadPeriodPhotos();
+      function dtProbe(img) {
+        const slug = img.dataset.slug;
+        const folder = '../images/daily-task-photos/' + slug + '/';
+        const exts = ['.jpg', '.jpeg', '.webp', '.svg'];
+        let i = 0;
+        function next() {
+          if (i >= exts.length) return;
+          const url = folder + '1' + exts[i++];
+          const t = new Image();
+          t.onload = () => { img.src = url; };
+          t.onerror = next;
+          t.src = url;
         }
-      });
+        next();
+      }
 
       renderGrid();
     </script>

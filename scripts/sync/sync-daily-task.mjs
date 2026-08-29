@@ -45,50 +45,30 @@ const newScriptContent =
   '            (p) => `\n' +
   '              <a class="item active-modul" href="${p.href}">\n' +
   '                <div class="icon-tile">\n' +
-  '                  <img data-slug="${p.slug}" src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\'/%3E" alt="${p.name}" />\n' +
+      '                  <img data-slug="${p.slug}" src="../images/daily-task-photos/${p.slug}/1.jpg" alt="${p.name}" onerror="dtProbe(this)" />\n' +
   '                </div>\n' +
   '                <span>${p.name}</span>\n' +
   '              </a>\n' +
   '            `,\n' +
   '          )\n' +
   '          .join("");\n\n' +
-  '        loadPeriodPhotos();\n' +
-  '      }\n\n' +
-  '      function loadPeriodPhotos() {\n' +
-  '        const folders = {\n' +
-  '          hari: \'../images/daily-task-photos/hari/\',\n' +
-  '          minggu: \'../images/daily-task-photos/minggu/\',\n' +
-  '          bulan: \'../images/daily-task-photos/bulan/\',\n' +
-  '        };\n' +
-  '        const exts = [\'.jpg\', \'.jpeg\', \'.png\', \'.svg\', \'.webp\'];\n\n' +
-  '        document.querySelectorAll(\'img[data-slug]\').forEach((img) => {\n' +
-  '          const slug = img.dataset.slug;\n' +
-  '          const folder = folders[slug];\n' +
-  '          if (!folder) return;\n\n' +
-  '          let num = 0;\n' +
-  '          function tryNext() {\n' +
-  '            num++;\n' +
-  '            if (num > 20) return;\n' +
-  '            let extIdx = 0;\n' +
-  '            function tryExt() {\n' +
-  '              if (extIdx >= exts.length) { tryNext(); return; }\n' +
-  '              const url = folder + num + exts[extIdx];\n' +
-  '              const temp = new Image();\n' +
-  '              temp.onload = () => { img.src = url; };\n' +
-  '              temp.onerror = () => { extIdx++; tryExt(); };\n' +
-  '              temp.src = url;\n' +
-  '            }\n' +
-  '            tryExt();\n' +
-  '          }\n' +
-  '          tryNext();\n' +
-  '        });\n' +
-  '      }\n\n' +
-  '      document.addEventListener(\'visibilitychange\', () => {\n' +
-  '        if (!document.hidden) {\n' +
-  '          loadPeriodPhotos();\n' +
-  '        }\n' +
-  '      });\n\n' +
-  '      renderGrid();';
+      '      }\n\n' +
+      '      function dtProbe(img) {\n' +
+      '        const slug = img.dataset.slug;\n' +
+      '        const folder = \'../images/daily-task-photos/\' + slug + \'/\';\n' +
+      '        const exts = [\'.jpg\', \'.jpeg\', \'.webp\', \'.svg\'];\n' +
+      '        let i = 0;\n' +
+      '        function next() {\n' +
+      '          if (i >= exts.length) return;\n' +
+      '          const url = folder + \'1\' + exts[i++];\n' +
+      '          const t = new Image();\n' +
+      '          t.onload = () => { img.src = url; };\n' +
+      '          t.onerror = next;\n' +
+      '          t.src = url;\n' +
+      '        }\n' +
+      '        next();\n' +
+      '      }\n\n' +
+      '      renderGrid();';
 
 // Find and replace the entire script tag
 const scriptStart = html.indexOf('<script>');
