@@ -3,6 +3,7 @@
 // Jalankan: node scripts/sync-to-supabase.mjs
 import fs from 'fs';
 import path from 'path';
+import { createClient } from '@supabase/supabase-js';
 
 // load .env
 try {
@@ -14,6 +15,133 @@ try {
 } catch {}
 
 const { supabaseAdmin } = await import('./lib/supabase.mjs');
+
+const DATA_FILE = path.join(process.cwd(), 'data', 'menus-new.json');
+
+function tanya(pertanyaan) {
+  return new Promise((resolve, reject) => {
+    process.stdin.resume();
+    process.stdin.setEncoding('utf8');
+    process.stdout.write(pertanyaan + ' ');
+    const collector = (data) => {
+      process.stdin.off('data', collector);
+      process.stdin.pause();
+      const jawaban = data.trim();
+      resolve(jawaban);
+    };
+    process.stdin.on('data', collector);
+    // Timeout after 30 detik
+    setTimeout(() => {
+      process.stdin.off('data', collector);
+      process.stdin.pause();
+      resolve(null);
+    }, 30000);
+  });
+}
+
+async function tambahMenuInteraktif() {
+  const items = [];
+  let lagi = 'y';
+
+  while (lagi.toLowerCase() === 'y') {
+    console.log('\n--- Input menu baru ---');
+    const nama = await tanya('Nama menu: ');
+    if (!nama.trim()) {
+      console.log('⚠️ Nama tidak boleh kosong, menu di-skip');
+      continue;
+    }
+
+    const icon = await tanya('Icon (tekan Enter untuk "🆕"): ') || '🆕';
+    const cls = await tanya('Class (tekan Enter untuk "g-a"): ') || 'g-a';
+    const cat = await tanya('Kategori (cat): ');
+    const link = await tanya('Link (tekan Enter untuk kosongkan): ') || '';
+    const plu = await tanya('PLU (tekan Enter untuk kosongkan): ') || '';
+
+    items.push({
+      name: nama.trim(),
+      icon: icon.trim(),
+      cls: cls.trim(),
+      cat: cat.trim(),
+      link: link.trim(),
+      plu: plu.trim() ? Number(plu.trim()) : null,
+    });
+
+    lagi = await tanya('\nMau input menu lagi? (y/n): ');
+  }
+
+  if (items.length === 0) {
+    console.log('Tidak ada menu baru ditambahkan.');
+    return;
+  }
+
+  // Simpan ke file menus-new.json
+  fs.writeFileSync(DATA_FILE, JSON.stringify(items, null, 2));
+  console.log(`\n✅ ${items.length} menu disimpan ke ${DATA_FILE}`);
+
+  // Sync ke Supabase (deduplicasi by name/plu)
+  try {
+    const { data: existingData } = await supabaseAdmin
+      .from('ja_di_menus')
+      .select('id, name, plu');
+
+    const existingNames = new Set((existingData || []).map(r => r.name));
+    const existingPlus = new Set((existingData || []).map(r => r.plu).filter(Boolean));
+
+    const toInsert = [];
+    const skipped = [];
+
+    for (const item of items) {
+      const payload = {
+        name: item.name,
+        icon: item.icon || '',
+        cls: item.cls || 'g-a',
+        cat: item.cat || '',
+        link: item.link || '',
+        plu: item.plu || null,
+      };
+
+      if (existingNames.has(payload.name)) {
+        skipped.push({ name: payload.name, reason: 'sudah ada (nama)' });
+        continue;
+      }
+      if (payload.plu && existingPlus.has(payload.plu)) {
+        skipped.push({ name: payload.name, reason: 'sudah ada (PLU)' });
+        continue;
+      }
+
+      toInsert.push(payload);
+    }
+
+    if (toInsert.length === 0 && skipped.length > 0) {
+      console.log('\n⏭️ Semua item sudah ada di database:');
+      skipped.forEach(s => console.log(`   "${s.name}" → ${s.reason}`));
+      return;
+    }
+
+    if (toInsert.length > 0) {
+      console.log(`\nMasukkan ${toInsert.length} item(s) baru ke ja_di_menus...`);
+      for (let i = 0; i < toInsert.length; i += 20) {
+        const batch = toInsert.slice(i, i + 20);
+        const { error } = await supabaseAdmin.from('ja_di_menus').insert(batch);
+        if (error) {
+          console.error(`Batch ${i / 20 + 1} gagal:`, error.message);
+        } else {
+          console.log(`  Batch ${i / 20 + 1} OK (${batch.length} rows)`);
+        }
+      }
+    }
+
+    const { data: finalData } = await supabaseAdmin
+      .from('ja_di_menus')
+      .select('count', { count: 'exact', head: true });
+
+    console.log(`\n✅ Selesai! Total ja_di_menus: ${finalData} rows`);
+    console.log(`   Baru ditambahkan: ${toInsert.length}`);
+    if (skipped.length > 0) console.log(`   Di-skip: ${skipped.length}`);
+  } catch (e) {
+    console.error('❌ Error saat sync ke Supabase:', e.message);
+  }
+}
 
 async function syncJaDi() {
   const txtPath = path.join(process.cwd(), 'data', 'ja-di-data.txt');
@@ -36,7 +164,6 @@ async function syncJaDi() {
   }).filter(r => r.name);
 
   console.log(`Sync ${rows.length} rows to ja_di_menus...`);
-  // hapus dulu biar sync ulang (optional)
   await supabaseAdmin.from('ja_di_menus').delete().neq('id', 0);
   const { error } = await supabaseAdmin.from('ja_di_menus').insert(rows);
   if (error) console.error('ja_di_menus error:', error.message);
@@ -51,16 +178,19 @@ async function syncDailyTask() {
   }
   const txt = fs.readFileSync(txtPath, 'utf8');
   console.log('daily-task-periods.txt preview:', txt.slice(0, 200));
-  // TODO: parse sesuai format file kamu, contoh simple:
-  // const rows = txt.split('\n').filter(Boolean).map(title => ({ title }));
-  // await supabaseAdmin.from('daily_tasks').delete().neq('id', 0);
-  // await supabaseAdmin.from('daily_tasks').insert(rows);
   console.log('ℹ️ daily_tasks sync skipped - sesuaikan parser dulu');
 }
 
 async function main() {
   await syncJaDi();
   await syncDailyTask();
+
+  // Tanyakan apakah mau input menu baru interaktif
+  const tambah = await tanya('\nMau menambah menu baru interaktif? (y/n): ');
+  if (tambah && tambah.toLowerCase() === 'y') {
+    await tambahMenuInteraktif();
+  }
+
   console.log('Done');
 }
 
