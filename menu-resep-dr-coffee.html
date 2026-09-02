@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Resep Dr. Coffee</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --paper: #ffffff;
+    --paper-dark: #eef5fd;
+    --ink: #0d2847;
+    --accent: #1565c0;
+    --accent-light: #64b5f6;
+    --gold: #1e88e5;
+    --cream: #ffffff;
+    --shadow: rgba(13, 71, 161, 0.35);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html {
+    height: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    height: 100%;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 12px 10px 8px;
+    overflow: hidden;
+  }
+  h1.main-title {
+    color: var(--accent);
+    font-size: 1.25rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .subtitle {
+    color: var(--accent-light);
+    font-size: 0.75rem;
+    margin-bottom: 10px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .book-wrapper {
+    width: 100%;
+    max-width: 900px;
+    flex: 1 1 auto;
+    min-height: 0;
+    position: relative;
+  }
+  .book {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  .page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--paper) 0%, var(--paper-dark) 100%);
+    border-radius: 8px 12px 12px 8px;
+    box-shadow: none;
+    padding: 20px 22px 20px 22px;
+    border-left: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .page::before {
+    display: none;
+  }
+  .page.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .page.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 10;
+  }
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+  }
+  .page-header h2 {
+    font-size: 1.35rem;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .page-num {
+    font-size: 0.75rem;
+    color: #1565c0;
+    background: #e3f2fd;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .category-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .recipe {
+    margin-bottom: 22px;
+    padding: 14px 16px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #bbdefb;
+  }
+  .recipe h3 {
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .recipe .note {
+    font-size: 0.78rem;
+    color: #5b6b7d;
+    font-style: italic;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .sizes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .size-block {
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #bbdefb;
+    overflow: hidden;
+  }
+  .size-block h4 {
+    font-size: 0.8rem;
+    color: #ffffff;
+    background: var(--accent);
+    padding: 8px 12px;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .size-block ul {
+    list-style: none;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin: 0;
+    padding: 4px 0;
+  }
+  .size-block li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid #e3f2fd;
+    padding: 6px 12px;
+  }
+  .size-block li:last-child { border-bottom: none; }
+  .size-block .amt { font-weight: 600; color: var(--accent); white-space: nowrap; }
+  .single-size .sizes { grid-template-columns: 1fr; }
+  .method {
+    font-size: 0.8rem;
+    background: #e3f2fd;
+    border: 1px dashed var(--gold);
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-top: 8px;
+    line-height: 1.45;
+  }
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 14px;
+    margin-top: 10px;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 8px 4px 4px;
+    z-index: 20;
+  }
+  .nav button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    font-size: 1.6rem;
+    line-height: 1;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav button:hover:not(:disabled) {
+    background: #0d47a1;
+  }
+  .nav button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .page-indicator {
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 56px;
+    text-align: center;
+  }
+  .toc {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.9rem;
+  }
+  .toc-group {
+    border: 1px solid #bbdefb;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .toc-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: #e3f2fd;
+    color: var(--accent);
+    border: none;
+    padding: 12px 14px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .toc-toggle .chev {
+    font-size: 0.85rem;
+    transition: transform 0.25s ease;
+    color: var(--accent);
+  }
+  .toc-group:not(.open) .toc-toggle .chev {
+    transform: rotate(-90deg);
+  }
+  .toc-items {
+    display: none;
+    flex-direction: column;
+    padding: 4px 0;
+  }
+  .toc-group.open .toc-items {
+    display: flex;
+  }
+  .toc a {
+    color: var(--ink);
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: 0;
+    transition: background 0.2s;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    border-top: 1px solid #e3f2fd;
+  }
+  .toc a:hover, .toc a:active { background: #e3f2fd; color: var(--accent); }
+  .keterangan {
+    font-size: 0.82rem;
+    background: #fff;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #bbdefb;
+    margin-top: 12px;
+  }
+  .keterangan strong { color: var(--accent); }
+  @media (max-width: 640px) {
+    body { padding: 8px 6px 6px; }
+    .page { padding: 14px 12px 18px 16px; }
+    .page::before { width: 10px; }
+    .sizes { grid-template-columns: 1fr; }
+    h1.main-title { font-size: 1.1rem; letter-spacing: 2px; }
+    .subtitle { font-size: 0.7rem; margin-bottom: 8px; }
+    .page-header h2 { font-size: 1.1rem; }
+    .recipe { padding: 12px; margin-bottom: 12px; }
+    .recipe h3 { font-size: 0.95rem; }
+    .nav { gap: 12px; margin-top: 8px; }
+    .nav button { width: 44px; height: 44px; font-size: 1.5rem; flex: none; max-width: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="book-wrapper">
+  <div class="book" id="book">
+
+    <!-- PAGE 0: Cover / Daftar Isi -->
+    <div class="page active" data-page="0">
+      <div class="page-header">
+        <h2>Daftar Isi</h2>
+        <span class="page-num">01</span>
+      </div>
+      <div class="toc">
+        <div class="toc-group open">
+          <button type="button" class="toc-toggle" onclick="toggleToc(this)">BLACK <span class="chev">▾</span></button>
+          <div class="toc-items">
+            <a onclick="goTo(1)">Espresso · Black Coffee · Black Coffee with Honey</a>
+            <a onclick="goTo(2)">Hawaiian Americano · Green Grape Fruitycano · Pink Berry Soda · Affogato</a>
+          </div>
+        </div>
+
+        <div class="toc-group">
+          <button type="button" class="toc-toggle" onclick="toggleToc(this)">WHITE / MILK BASED <span class="chev">▾</span></button>
+          <div class="toc-items">
+            <a onclick="goTo(3)">Cappuccino · Caffelatte</a>
+            <a onclick="goTo(4)">Jadi Macchiatto · Jadi Keren · Jadi Rindu</a>
+            <a onclick="goTo(5)">Salted Buttercorn Latte · Vanilla / Salted Caramel / Butterscotch Latte · Mocha Latte</a>
+            <a onclick="goTo(6)">Pandan Cloud Latte · Coconut Cloud Latte · Ice Dolce Latte · Ice Collagen Latte</a>
+          </div>
+        </div>
+
+        <div class="toc-group">
+          <button type="button" class="toc-toggle" onclick="toggleToc(this)">MILK BASED (Non-Coffee) <span class="chev">▾</span></button>
+          <div class="toc-items">
+            <a onclick="goTo(7)">Korean Strawberry Milk · Chocolate · Matcha</a>
+            <a onclick="goTo(8)">Choco Berry · Premix UHT Coffee Latte</a>
+          </div>
+        </div>
+
+        <div class="toc-group">
+          <button type="button" class="toc-toggle" onclick="toggleToc(this)">BLENDED <span class="chev">▾</span></button>
+          <div class="toc-items">
+            <a onclick="goTo(9)">Blended Vanilla Caramel · Blended Choco · Blended Choco Caramel · Creamy Coconut Frappe</a>
+          </div>
+        </div>
+
+        <div class="toc-group">
+          <button type="button" class="toc-toggle" onclick="toggleToc(this)">NEW ITEMS &amp; SPECIAL <span class="chev">▾</span></button>
+          <div class="toc-items">
+            <a onclick="goTo(10)">Cola Caramela · Poppy Berry · Cloudy Lychee</a>
+          </div>
+        </div>
+
+        <div class="toc-group">
+          <button type="button" class="toc-toggle" onclick="toggleToc(this)">TEA BASED <span class="chev">▾</span></button>
+          <div class="toc-items">
+            <a onclick="goTo(11)">Shaken Lychee Tea · Shaken Honey Lemon Tea</a>
+          </div>
+        </div>
+
+        <div class="toc-group">
+          <button type="button" class="toc-toggle" onclick="toggleToc(this)">JUICE <span class="chev">▾</span></button>
+          <div class="toc-items">
+            <a onclick="goTo(12)">Juice Blender</a>
+            <a onclick="goTo(13)">Juice Juicer &amp; Manual</a>
+          </div>
+        </div>
+      </div>
+      <div class="keterangan" style="margin-top:20px">
+        <strong>*</strong> = Tombol terdapat di mesin<br>
+        Gunakan panah atau tombol navigasi untuk membalik halaman.
+      </div>
+    </div>
+
+    <!-- PAGE 1: BLACK - Espresso & Black Coffee -->
+    <div class="page hidden" data-page="1">
+      <div class="page-header">
+        <h2>Black</h2>
+        <span class="page-num">02</span>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">Hot</span>
+        <h3>Espresso</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Hot</h4>
+            <ul>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Hot / Ice</span>
+        <h3>Black Coffee (Americano)</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz) Ice</h4>
+            <ul>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Air</span><span class="amt">100 g</span></li>
+            </ul>
+            <div class="method">*Jika request gula: gula cair 25 g · less sugar 10 g</div>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz) Ice</h4>
+            <ul>
+              <li><span>Espresso*</span><span class="amt">2×</span></li>
+              <li><span>Es Batu</span><span class="amt">200 g</span></li>
+              <li><span>Air</span><span class="amt">120 g</span></li>
+            </ul>
+            <div class="method">*Jika request gula: gula cair 40 g · less sugar 25 g</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Hot / Ice</span>
+        <h3>Black Coffee with Honey</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Hot</h4>
+            <ul>
+              <li><span>Madu</span><span class="amt">30 g</span></li>
+              <li><span>Americano*</span><span class="amt">1×</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Regular (12oz) Ice</h4>
+            <ul>
+              <li><span>Madu</span><span class="amt">35 g</span></li>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Air</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="sizes" style="margin-top:12px">
+          <div class="size-block">
+            <h4>Upsize (16oz) Ice</h4>
+            <ul>
+              <li><span>Madu</span><span class="amt">60 g</span></li>
+              <li><span>Espresso*</span><span class="amt">2×</span></li>
+              <li><span>Es Batu</span><span class="amt">200 g</span></li>
+              <li><span>Air</span><span class="amt">120 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: BLACK specials -->
+    <div class="page hidden" data-page="2">
+      <div class="page-header">
+        <h2>Black · Specials</h2>
+        <span class="page-num">03</span>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">New · Oktober 2025 · Ice</span>
+        <h3>Hawaiian Americano</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Coconut syrup</span><span class="amt">35 g</span></li>
+              <li><span>Hydro Coco</span><span class="amt">200 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">New · Juni 2026 · Ice</span>
+        <h3>Green Grape Fruitycano</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Wall's Ice Ball Grape</span><span class="amt">2 pcs</span></li>
+              <li><span>Sirup Green Apple</span><span class="amt">20 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Air Mineral</span><span class="amt">100 g</span></li>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Wall's Ice Ball Grape (top)</span><span class="amt">2 pcs</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">New · Juni 2026 · Ice</span>
+        <h3>Pink Berry Soda</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Wall's Ice Ball Grape</span><span class="amt">2 pcs</span></li>
+              <li><span>Bobaking White Peach</span><span class="amt">20 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Polaris Soda Water</span><span class="amt">165 g</span></li>
+              <li><span>Wall's Ice Ball Grape (top)</span><span class="amt">2 pcs</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">Ice</span>
+        <h3>Affogato</h3>
+        <p class="note">Es cream scoop hanya pakai vanilla dan mango, bisa mix varian</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>1 porsi</h4>
+            <ul>
+              <li><span>Espresso</span><span class="amt">1×</span></li>
+              <li><span>Es krim vanilla/mango</span><span class="amt">2 scoop</span></li>
+              <li><span>Wafer roll</span><span class="amt">1 buah</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 3: Cappuccino & Caffelatte -->
+    <div class="page hidden" data-page="3">
+      <div class="page-header">
+        <h2>White · Classic</h2>
+        <span class="page-num">04</span>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Hot</span>
+        <h3>Cappuccino</h3>
+        <p class="note">Pastikan milkjug terisi Fresh Milk dan sudah dalam posisi frothing sebelum memencet tombol frothing</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Hot</h4>
+            <ul>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Fresh milk</span><span class="amt">90 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Ice</span>
+        <h3>Cappuccino Ice</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">120 g</span></li>
+            </ul>
+            <div class="method">*Jika request gula: gula cair 30 g</div>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Espresso*</span><span class="amt">2×</span></li>
+              <li><span>Es Batu</span><span class="amt">200 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">150 g</span></li>
+            </ul>
+            <div class="method">*Jika request gula: gula cair 45 g</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Hot / Ice</span>
+        <h3>Caffelatte / Coffee Latte</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Hot</h4>
+            <ul>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Fresh milk</span><span class="amt">120 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Regular (12oz) Ice</h4>
+            <ul>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">130 g</span></li>
+            </ul>
+            <div class="method">*Gula: 20 g · less sugar 10 g</div>
+          </div>
+        </div>
+        <div class="sizes" style="margin-top:12px">
+          <div class="size-block">
+            <h4>Upsize (16oz) Ice</h4>
+            <ul>
+              <li><span>Espresso*</span><span class="amt">2×</span></li>
+              <li><span>Es Batu</span><span class="amt">180 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">165 g</span></li>
+            </ul>
+            <div class="method">*Gula: 40 g · less sugar 30 g</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 4: Jadi series -->
+    <div class="page hidden" data-page="4">
+      <div class="page-header">
+        <h2>White · Jadi Series</h2>
+        <span class="page-num">05</span>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">New · Juli 2025 · Ice</span>
+        <h3>Jadi Macchiatto</h3>
+        <p class="note">Larutkan krimer dan caramel sauce dengan espresso panas di dalam milk jug, aduk hingga semua larut!</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Caramel Sauce</span><span class="amt">20 g</span></li>
+              <li><span>Krimer</span><span class="amt">20 g</span></li>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Caramel Sauce</span><span class="amt">30 g</span></li>
+              <li><span>Krimer</span><span class="amt">25 g</span></li>
+              <li><span>Espresso*</span><span class="amt">2×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Ice</span>
+        <h3>Jadi Keren (Kopsu Gula Aren)</h3>
+        <p class="note">Larutkan krimer dan gula aren dengan espresso panas di dalam milk jug, aduk hingga semua larut!</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Gula Aren</span><span class="amt">13 g</span></li>
+              <li><span>Krimer</span><span class="amt">20 g</span></li>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Gula Aren</span><span class="amt">20 g</span></li>
+              <li><span>Krimer</span><span class="amt">25 g</span></li>
+              <li><span>Espresso*</span><span class="amt">2×</span></li>
+              <li><span>Es Batu</span><span class="amt">180 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Ice</span>
+        <h3>Jadi Rindu (Kopsu Madu)</h3>
+        <p class="note">Larutkan krimer dan madu dengan espresso panas di dalam milk jug, aduk hingga semua larut!</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Madu</span><span class="amt">25 g</span></li>
+              <li><span>Krimer</span><span class="amt">20 g</span></li>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Madu</span><span class="amt">35 g</span></li>
+              <li><span>Krimer</span><span class="amt">25 g</span></li>
+              <li><span>Espresso*</span><span class="amt">2×</span></li>
+              <li><span>Es Batu</span><span class="amt">180 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 5: Flavored Lattes -->
+    <div class="page hidden" data-page="5">
+      <div class="page-header">
+        <h2>White · Flavored Latte</h2>
+        <span class="page-num">06</span>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Ice</span>
+        <h3>Salted Buttercorn Latte</h3>
+        <p class="note">Larutkan krimer, sirup popcorn dan sirup salted caramel dengan espresso panas di dalam milk jug, aduk hingga semua larut!</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Sirup popcorn</span><span class="amt">15 g</span></li>
+              <li><span>Sirup salted caramel</span><span class="amt">5 g</span></li>
+              <li><span>Krimer</span><span class="amt">20 g</span></li>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT / Premix UHT</span><span class="amt">100–140 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Sirup popcorn</span><span class="amt">25 g</span></li>
+              <li><span>Sirup salted caramel</span><span class="amt">5 g</span></li>
+              <li><span>Krimer</span><span class="amt">25 g</span></li>
+              <li><span>Espresso*</span><span class="amt">2×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Ice</span>
+        <h3>Vanilla / Salted Caramel / Butterscotch Latte</h3>
+        <p class="note">Larutkan krimer dan sirup dengan espresso panas di dalam milk jug, aduk hingga semua larut!</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Syrup</span><span class="amt">15 g</span></li>
+              <li><span>Krimer</span><span class="amt">20 g</span></li>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT / Premix</span><span class="amt">100–140 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Syrup</span><span class="amt">25 g</span></li>
+              <li><span>Krimer</span><span class="amt">25 g</span></li>
+              <li><span>Espresso*</span><span class="amt">2×</span></li>
+              <li><span>Es Batu</span><span class="amt">180 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Ice</span>
+        <h3>Mocha Latte</h3>
+        <p class="note">Larutkan krimer dan saus coklat dengan espresso panas di dalam milk jug, aduk hingga semua larut! · 5 g saus coklat diulirkan di gelas</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Saus Coklat</span><span class="amt">15 g</span></li>
+              <li><span>Krimer</span><span class="amt">20 g</span></li>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT / Premix</span><span class="amt">100–140 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Saus Coklat</span><span class="amt">25 g</span></li>
+              <li><span>Krimer</span><span class="amt">25 g</span></li>
+              <li><span>Espresso*</span><span class="amt">2×</span></li>
+              <li><span>Es Batu</span><span class="amt">180 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 6: Cloud & Kolaborasi -->
+    <div class="page hidden" data-page="6">
+      <div class="page-header">
+        <h2>White · Cloud &amp; Kolaborasi</h2>
+        <span class="page-num">07</span>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">New · Februari 2026 · Ice</span>
+        <h3>Pandan Cloud Latte</h3>
+        <p class="note">Larutkan sirup pandan dengan susu UHT, beri es batu, tuang espresso, lalu tuang macchiato cloud foam</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Sirup pandan</span><span class="amt">15 g</span></li>
+              <li><span>Macchiato Cloud Foam</span><span class="amt">30 g</span></li>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Sirup pandan</span><span class="amt">30 g</span></li>
+              <li><span>Macchiato Cloud Foam</span><span class="amt">30 g</span></li>
+              <li><span>Espresso*</span><span class="amt">2×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">New · Februari 2026 · Ice</span>
+        <h3>Coconut Cloud Latte</h3>
+        <p class="note">Larutkan sirup coconut dengan susu UHT, beri es batu, tuang espresso, lalu tuang macchiato cloud foam</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Sirup coconut</span><span class="amt">15 g</span></li>
+              <li><span>Macchiato Cloud Foam</span><span class="amt">30 g</span></li>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Sirup coconut</span><span class="amt">30 g</span></li>
+              <li><span>Macchiato Cloud Foam</span><span class="amt">30 g</span></li>
+              <li><span>Espresso*</span><span class="amt">2×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">Kolaborasi · April 2026 · Ice</span>
+        <h3>Ice Dolce Latte</h3>
+        <p class="note">Larutkan krimer dan KKM carnation dengan espresso, masukkan es batu ke dalam gelas, dan tuangkan campuran</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Krimer</span><span class="amt">20 g</span></li>
+              <li><span>KKM carnation</span><span class="amt">20 g</span></li>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">Kolaborasi · April 2026 · Ice</span>
+        <h3>Ice Collagen Latte</h3>
+        <p class="note">Tuang es batu dan collagen bearbrand pada gelas, lalu tuangkan espresso. Sajikan bersama sisa collagen bearbrand pada kaleng</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Collagen bearbrand</span><span class="amt">120 g</span></li>
+              <li><span>Espresso*</span><span class="amt">1×</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+            </ul>
+            <div class="method">*Jika request gula: gula cair 30 g</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 7: Milk Based non-coffee -->
+    <div class="page hidden" data-page="7">
+      <div class="page-header">
+        <h2>Milk Based</h2>
+        <span class="page-num">08</span>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Ice</span>
+        <h3>Korean Strawberry Milk</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Puree Strawberry</span><span class="amt">50 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">130 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Puree Strawberry</span><span class="amt">90 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">200 g</span></li>
+              <li><span>Es Batu</span><span class="amt">180 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Hot / Ice</span>
+        <h3>Chocolate</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Hot</h4>
+            <ul>
+              <li><span>Powder Coklat</span><span class="amt">25 g</span></li>
+              <li><span>Air Panas</span><span class="amt">35 g</span></li>
+              <li><span>Fresh milk</span><span class="amt">110 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Regular (12oz) Ice</h4>
+            <ul>
+              <li><span>Powder Coklat</span><span class="amt">30 g</span></li>
+              <li><span>Air Panas</span><span class="amt">30 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="sizes" style="margin-top:12px">
+          <div class="size-block">
+            <h4>Upsize (16oz) Ice</h4>
+            <ul>
+              <li><span>Powder Coklat</span><span class="amt">45 g</span></li>
+              <li><span>Air Panas</span><span class="amt">50 g</span></li>
+              <li><span>Es Batu</span><span class="amt">180 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">140 g</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="method" style="margin-top:10px">
+          <strong>Hot:</strong> 1. Larutkan powder dengan air panas dalam paper cup → 2. Aduk hingga larut → 3. Steam fresh milk → 4. Tuang ke paper cup<br>
+          <strong>Ice:</strong> 1. Larutkan powder dengan air panas dalam milk jug → 2. Aduk → 3. Campur dengan susu, aduk rata
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Hot / Ice</span>
+        <h3>Matcha</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Hot</h4>
+            <ul>
+              <li><span>Powder Matcha</span><span class="amt">15 g</span></li>
+              <li><span>Air Panas</span><span class="amt">15 g</span></li>
+              <li><span>Fresh milk</span><span class="amt">110 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Regular (12oz) Ice</h4>
+            <ul>
+              <li><span>Powder Matcha</span><span class="amt">20 g</span></li>
+              <li><span>Air Panas</span><span class="amt">20 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="sizes" style="margin-top:12px">
+          <div class="size-block">
+            <h4>Upsize (16oz) Ice</h4>
+            <ul>
+              <li><span>Powder Matcha</span><span class="amt">35 g</span></li>
+              <li><span>Air Panas</span><span class="amt">35 g</span></li>
+              <li><span>Es Batu</span><span class="amt">180 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">140 g</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="method" style="margin-top:10px">Metode sama seperti Chocolate (Hot &amp; Ice)</div>
+      </div>
+    </div>
+
+    <!-- PAGE 8: Choco Berry & Premix -->
+    <div class="page hidden" data-page="8">
+      <div class="page-header">
+        <h2>Milk Based · New &amp; Premix</h2>
+        <span class="page-num">09</span>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">New · Januari 2026 · Ice</span>
+        <h3>Choco Berry</h3>
+        <p class="note">Larutkan bubuk coklat dengan air panas, tuang strawberry pada dinding gelas, beri es batu, dan tuang larutan cokelat dan susu UHT</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Powder Coklat</span><span class="amt">25 g</span></li>
+              <li><span>Air Panas</span><span class="amt">40 g</span></li>
+              <li><span>Strawberry Puree</span><span class="amt">15 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">Premix UHT · Ice</span>
+        <h3>Coffee Latte (Premix)</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Stock espresso</span><span class="amt">40 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">120 g</span></li>
+            </ul>
+            <div class="method">*Jika request gula: gula cair 20 g · less sugar 10 g</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">Premix UHT</span>
+        <h3>Premix UHT Base</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Batch</h4>
+            <ul>
+              <li><span>Krimer</span><span class="amt">200 g</span></li>
+              <li><span>Air Panas</span><span class="amt">200 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">1000 g</span></li>
+              <li><span>Stock Espresso</span><span class="amt">2× pencet</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Premix · Ice</span>
+        <h3>Jadi Keren / Jadi Rindu / Mocha (Premix version)</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Jadi Keren Regular</h4>
+            <ul>
+              <li><span>Gula Aren</span><span class="amt">13 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Premix UHT</span><span class="amt">140 g</span></li>
+              <li><span>Stock espresso</span><span class="amt">40 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Jadi Rindu Regular</h4>
+            <ul>
+              <li><span>Madu</span><span class="amt">25 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Premix UHT</span><span class="amt">140 g</span></li>
+              <li><span>Stock espresso</span><span class="amt">40 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 9: Blended -->
+    <div class="page hidden" data-page="9">
+      <div class="page-header">
+        <h2>Blended</h2>
+        <span class="page-num">10</span>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Ice · Blender 30 dtk</span>
+        <h3>Blended Vanilla Caramel</h3>
+        <p class="note">Yang diblender: krimer, sirup vanilla, es batu, susu UHT, saus caramel. Ulir saus ke dalam dinding cup 3 g</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Krimer</span><span class="amt">40 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">80 g</span></li>
+              <li><span>Syrup Vanilla</span><span class="amt">15 g</span></li>
+              <li><span>Saus Caramel</span><span class="amt">25 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Krimer</span><span class="amt">45 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">140 g</span></li>
+              <li><span>Syrup Vanilla</span><span class="amt">25 g</span></li>
+              <li><span>Saus Caramel</span><span class="amt">40 g</span></li>
+              <li><span>Es Batu</span><span class="amt">180 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Ice · Blender 30 dtk</span>
+        <h3>Blended Choco</h3>
+        <p class="note">Yang diblender: krimer, powder coklat, es batu, susu UHT, saus coklat. Ulir saus ke dalam dinding cup 3 g</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Krimer</span><span class="amt">40 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">80 g</span></li>
+              <li><span>Powder Coklat</span><span class="amt">20 g</span></li>
+              <li><span>Saus Coklat</span><span class="amt">20 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Krimer</span><span class="amt">45 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">140 g</span></li>
+              <li><span>Powder Coklat</span><span class="amt">35 g</span></li>
+              <li><span>Saus Coklat</span><span class="amt">35 g</span></li>
+              <li><span>Es Batu</span><span class="amt">180 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Ice · Blender 30 dtk</span>
+        <h3>Blended Choco Caramel</h3>
+        <p class="note">Yang diblender: krimer, powder coklat, es batu, susu UHT, saus caramel. Ulir saus ke dalam dinding cup 3 g</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Krimer</span><span class="amt">40 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">80 g</span></li>
+              <li><span>Powder Coklat</span><span class="amt">20 g</span></li>
+              <li><span>Saus Caramel</span><span class="amt">20 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Krimer</span><span class="amt">45 g</span></li>
+              <li><span>Susu UHT</span><span class="amt">140 g</span></li>
+              <li><span>Powder Coklat</span><span class="amt">25 g</span></li>
+              <li><span>Saus Caramel</span><span class="amt">35 g</span></li>
+              <li><span>Es Batu</span><span class="amt">180 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">New · Oktober 2025 · Ice</span>
+        <h3>Creamy Coconut Frappe</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Krimer</span><span class="amt">45 g</span></li>
+              <li><span>Coconut syrup</span><span class="amt">25 g</span></li>
+              <li><span>Hydro Coco</span><span class="amt">100 g</span></li>
+              <li><span>Salted caramel syrup</span><span class="amt">10 g</span></li>
+              <li><span>Es Batu</span><span class="amt">180 g</span></li>
+              <li><span>Brown sugar syrup (diulir)</span><span class="amt">3 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 10: New soda-style -->
+    <div class="page hidden" data-page="10">
+      <div class="page-header">
+        <h2>New Item · Soda Style</h2>
+        <span class="page-num">11</span>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">New · Desember 2025 · Ice</span>
+        <h3>Cola Caramela</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Salted Caramel Syrup</span><span class="amt">20 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Coca Cola</span><span class="amt">125 g</span></li>
+              <li><span>Macchiato Cloud Foam</span><span class="amt">30 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">Ice</span>
+        <h3>Poppy Berry</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Toffee Popcorn Syrup</span><span class="amt">20 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Fanta</span><span class="amt">125 g</span></li>
+              <li><span>Macchiato Cloud Foam</span><span class="amt">30 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <span class="category-tag">Ice</span>
+        <h3>Cloudy Lychee</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Lychee Syrup</span><span class="amt">20 g</span></li>
+              <li><span>Lychee Jelly</span><span class="amt">20 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Sprite</span><span class="amt">125 g</span></li>
+              <li><span>Macchiato Cloud Foam</span><span class="amt">30 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 11: Tea -->
+    <div class="page hidden" data-page="11">
+      <div class="page-header">
+        <h2>Tea Based</h2>
+        <span class="page-num">12</span>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Ice</span>
+        <h3>Shaken Lychee Tea</h3>
+        <p class="note">Shake es batu, teh, dan sirup leci selama 10 dtk. Lychee jelly ditambah setelah hasil shake dituang ke gelas</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Tea Bag Srwngi</span><span class="amt">1 pcs</span></li>
+              <li><span>Air Panas</span><span class="amt">100 g</span></li>
+              <li><span>Sirup Lychee</span><span class="amt">30 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Lychee Jelly</span><span class="amt">20 g</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Tea Bag Srwngi</span><span class="amt">1 pcs</span></li>
+              <li><span>Air Panas</span><span class="amt">150 g</span></li>
+              <li><span>Sirup Lychee</span><span class="amt">50 g</span></li>
+              <li><span>Es Batu</span><span class="amt">200 g</span></li>
+              <li><span>Lychee Jelly</span><span class="amt">25 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <span class="category-tag">Ice</span>
+        <h3>Shaken Honey Lemon Tea</h3>
+        <p class="note">Shake es batu, teh, dan madu selama 10 dtk. Slice fresh lemon ditambah setelah hasil shake dituang ke gelas</p>
+        <div class="sizes">
+          <div class="size-block">
+            <h4>Regular (12oz)</h4>
+            <ul>
+              <li><span>Tea Bag Tongtji</span><span class="amt">1 pcs</span></li>
+              <li><span>Air Panas</span><span class="amt">100 g</span></li>
+              <li><span>Madu</span><span class="amt">30 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+              <li><span>Fresh Lemon</span><span class="amt">1 slice</span></li>
+            </ul>
+          </div>
+          <div class="size-block">
+            <h4>Upsize (16oz)</h4>
+            <ul>
+              <li><span>Tea Bag Tongtji</span><span class="amt">1 pcs</span></li>
+              <li><span>Air Panas</span><span class="amt">150 g</span></li>
+              <li><span>Madu</span><span class="amt">60 g</span></li>
+              <li><span>Es Batu</span><span class="amt">200 g</span></li>
+              <li><span>Fresh Lemon</span><span class="amt">1 slice</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 12: Juice Blender -->
+    <div class="page hidden" data-page="12">
+      <div class="page-header">
+        <h2>Juice · Blender</h2>
+        <span class="page-num">13</span>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Juice Sirsak</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>RPC Sirsak frozen</span><span class="amt">1 pc (180 g)</span></li>
+              <li><span>Air</span><span class="amt">200 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Juice Alpukat</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>Alpukat</span><span class="amt">175 g</span></li>
+              <li><span>Air</span><span class="amt">165 g</span></li>
+              <li><span>Es Batu</span><span class="amt">50 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Juice Buah Naga</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>Buah Naga Merah</span><span class="amt">290 g</span></li>
+              <li><span>Es Batu</span><span class="amt">80 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Juice Jambu</h3>
+        <p class="note">Juice disaring sebelum disajikan</p>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>Jambu Klutuk Merah</span><span class="amt">250 g</span></li>
+              <li><span>Air</span><span class="amt">100 g</span></li>
+              <li><span>Es Batu</span><span class="amt">50 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Juice Pisang Strawberry</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>Pisang Cavendish</span><span class="amt">150 g</span></li>
+              <li><span>Strawberry Frozen</span><span class="amt">100 g</span></li>
+              <li><span>Es Batu</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Juice Mangga Harum Manis</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>Daging Buah Mangga HM</span><span class="amt">250 g</span></li>
+              <li><span>Es Batu</span><span class="amt">150 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Juice Apel Mix</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>Nanas Honi/Madu</span><span class="amt">145 g</span></li>
+              <li><span>Apel Fuji</span><span class="amt">1 pack</span></li>
+              <li><span>Lemon Impor</span><span class="amt">50 g</span></li>
+              <li><span>Air</span><span class="amt">75 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 13: Juice Juicer -->
+    <div class="page hidden" data-page="13">
+      <div class="page-header">
+        <h2>Juice · Juicer &amp; Manual</h2>
+        <span class="page-num">14</span>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Green Juice</h3>
+        <p class="note">Potong batang bayam dan kedua ujung timun. Cuci bayam, timun, apel. Potong apel dan buang bijinya</p>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>RPC Bayam Hijau</span><span class="amt">120 g</span></li>
+              <li><span>RPC Nanas Honi</span><span class="amt">120 g</span></li>
+              <li><span>Timun</span><span class="amt">120 g</span></li>
+              <li><span>Apel Fuji</span><span class="amt">120 g</span></li>
+              <li><span>Es Batu</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Juice Carrot Mixed Fruit</h3>
+        <p class="note">Kupas kulit wortel. Cuci wortel dan apel. Potong apel fuji dan buang bijinya</p>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>Wortel Lokal Super</span><span class="amt">280 g</span></li>
+              <li><span>RPC Nanas Honi</span><span class="amt">100 g</span></li>
+              <li><span>Apel Fuji</span><span class="amt">200 g</span></li>
+              <li><span>Es Batu</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Juice Semangka</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>Semangka Merah Tanpa Biji</span><span class="amt">500 g</span></li>
+              <li><span>Es Batu</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Juice Melon</h3>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>Melon Sky Rocket</span><span class="amt">400 g</span></li>
+              <li><span>Es Batu</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Juice Jeruk (Manual)</h3>
+        <p class="note">Cuci dan belah Jeruk menjadi 2 bagian</p>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>Jeruk Peras</span><span class="amt">400 g</span></li>
+              <li><span>Es Batu</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Juice Jeruk Navel</h3>
+        <p class="note">Cuci dan belah Jeruk menjadi 2 bagian</p>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>Jeruk Navel</span><span class="amt">770 g</span></li>
+              <li><span>Es Batu</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe single-size">
+        <h3>Juice Jeruk Navel Cara Cara</h3>
+        <p class="note">Cuci dan belah Jeruk menjadi 2 bagian</p>
+        <div class="sizes">
+          <div class="size-block">
+            <ul>
+              <li><span>Jeruk Navel Cara Cara</span><span class="amt">770 g</span></li>
+              <li><span>Es Batu</span><span class="amt">100 g</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="nav">
+  <button id="prevBtn" onclick="prevPage()" aria-label="Sebelumnya">‹</button>
+  <span class="page-indicator" id="indicator">1 / 14</span>
+  <button id="nextBtn" onclick="nextPage()" aria-label="Berikutnya">›</button>
+</div>
+
+<script>
+  const totalPages = 14;
+  let current = 0;
+  const pages = document.querySelectorAll('.page');
+
+  function update() {
+    pages.forEach((p, i) => {
+      p.classList.toggle('active', i === current);
+      p.classList.toggle('hidden', i !== current);
+    });
+    document.getElementById('indicator').textContent = `${current + 1} / ${totalPages}`;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === totalPages - 1;
+    // Scroll isi halaman ke atas saat ganti halaman
+    const active = pages[current];
+    if (active) active.scrollTop = 0;
+  }
+
+  function nextPage() {
+    if (current < totalPages - 1) { current++; update(); }
+  }
+  function prevPage() {
+    if (current > 0) { current--; update(); }
+  }
+  function goTo(n) {
+    current = n;
+    update();
+  }
+
+  function toggleToc(btn) {
+    const group = btn.closest('.toc-group');
+    if (!group) return;
+    group.classList.toggle('open');
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextPage();
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevPage();
+  });
+
+  // Swipe support
+  let touchX = 0;
+  document.querySelector('.book-wrapper').addEventListener('touchstart', e => {
+    touchX = e.changedTouches[0].screenX;
+  });
+  document.querySelector('.book-wrapper').addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchX;
+    if (dx < -50) nextPage();
+    if (dx > 50) prevPage();
+  });
+
+  update();
+</script>
+</body>
+</html>

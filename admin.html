@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — JA-DI Supabase</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Segoe UI",system-ui,sans-serif;background:#f8fafc;color:#1f2937;padding:16px}
+    .wrap{max-width:1000px;margin:0 auto}
+    h1{font-size:22px;margin-bottom:4px}
+    .sub{color:#64748b;font-size:13px;margin-bottom:16px}
+    .status{padding:10px 14px;border-radius:10px;background:#fff;border:1px solid #e2e8f0;margin-bottom:16px;font-size:13px}
+    .status.ok{border-color:#10b981;color:#065f46;background:#ecfdf5}
+    .status.err{border-color:#ef4444;color:#991b1b;background:#fef2f2}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:16px}
+    @media(max-width:800px){.grid{grid-template-columns:1fr}}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px}
+    .card h2{font-size:15px;margin-bottom:12px}
+    .form{display:grid;gap:10px}
+    .form label{font-size:12px;font-weight:700;color:#475569}
+    .form input, .form select{width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;outline:none}
+    .form input:focus{border-color:#6366f1}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .btn{padding:10px 16px;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px}
+    .btn-primary{background:#6366f1;color:#fff}
+    .btn-ghost{background:#f1f5f9;color:#475569}
+    .btn-danger{background:#ef4444;color:#fff}
+    .btn-small{padding:6px 10px;font-size:12px}
+    .search{width:100%;padding:10px 14px;border:1px solid #cbd5e1;border-radius:10px;margin-bottom:12px}
+    .list{max-height:70vh;overflow:auto;display:grid;gap:8px}
+    .item{border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .item-info{flex:1;min-width:0}
+    .item-name{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .item-meta{font-size:11px;color:#64748b}
+    .item-actions{display:flex;gap:6px;flex-shrink:0}
+    .badge{font-size:10px;padding:2px 6px;border-radius:6px;background:#f1f5f9;color:#475569}
+    .empty{padding:40px;text-align:center;color:#94a3b8}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🛠️ Admin JA-DI</h1>
+  <p class="sub">Kelola <code>ja_di_menus</code> di Supabase • Project: xsacwgxxoptdrgbbzzib • <a href="https://supabase.com/dashboard/project/xsacwgxxoptdrgbbzzib/editor" target="_blank">Buka Table Editor</a></p>
+  <div id="status" class="status">Menghubungkan ke Supabase...</div>
+  <div class="grid">
+    <div class="card">
+      <h2>📋 Daftar Menu (<span id="count">0</span>)</h2>
+      <input id="search" class="search" placeholder="Cari nama / kategori / PLU..." />
+      <div id="list" class="list"><div class="empty">Memuat...</div></div>
+    </div>
+    <div class="card">
+      <h2 id="formTitle">➕ Tambah Menu</h2>
+      <form id="form" class="form" onsubmit="return false">
+        <input type="hidden" id="editId" />
+        <label>Nama *<input id="f_name" placeholder="COFFEE LATTE PREMIX" required /></label>
+        <div class="row">
+          <label>Icon <input id="f_icon" placeholder="🧊" /></label>
+          <label>Gradient <select id="f_cls"><option value="g-a">g-a ungu</option><option value="g-b">g-b pink</option><option value="g-c">g-c biru</option><option value="g-d">g-d cyan</option><option value="g-e">g-e hijau</option><option value="g-f">g-f kuning</option><option value="g-g">g-g merah</option><option value="g-h">g-h magenta</option></select></label>
+        </div>
+        <label>Kategori <input id="f_cat" placeholder="PREMIX / MANUAL / JUS / BLENDED" /></label>
+        <label>Link <input id="f_link" placeholder="pages/item-...html" /></label>
+        <label>PLU <input id="f_plu" placeholder="443775" /></label>
+        <div style="display:flex;gap:8px">
+          <button id="btnSave" class="btn btn-primary" style="flex:1">Simpan</button>
+          <button id="btnCancel" class="btn btn-ghost" type="button">Batal</button>
+        </div>
+        <button id="btnSyncTxt" class="btn btn-ghost" type="button" style="width:100%">🔄 Export ke TXT (download)</button>
+        <p style="font-size:11px;color:#94a3b8">* Setelah simpan, <code>modul/ja-di.html</code> otomatis update (Supabase live). PLU boleh kosong.</p>
+      </form>
+    </div>
+  </div>
+</div>
+<script type="module">
+  import { supabase } from './js/supabase.js';
+
+  const statusEl = document.getElementById('status');
+  const listEl = document.getElementById('list');
+  const countEl = document.getElementById('count');
+  const searchEl = document.getElementById('search');
+  const form = document.getElementById('form');
+  const editId = document.getElementById('editId');
+  const f_name = document.getElementById('f_name');
+  const f_icon = document.getElementById('f_icon');
+  const f_cls = document.getElementById('f_cls');
+  const f_cat = document.getElementById('f_cat');
+  const f_link = document.getElementById('f_link');
+  const f_plu = document.getElementById('f_plu');
+  const btnSave = document.getElementById('btnSave');
+  const btnCancel = document.getElementById('btnCancel');
+  const formTitle = document.getElementById('formTitle');
+
+  // simple auth - ganti password sesuai kebutuhan
+  const PASS = 'admin123';
+  if (sessionStorage.getItem('admin_ok') !== '1') {
+    const p = prompt('Password Admin (default: admin123):');
+    if (p !== PASS) { document.body.innerHTML = '<div style="padding:40px;text-align:center">❌ Password salah. Refresh untuk coba lagi.</div>'; throw new Error('auth fail'); }
+    sessionStorage.setItem('admin_ok','1');
+  }
+
+  let all = [];
+
+  function setStatus(msg, ok=true) {
+    statusEl.textContent = msg;
+    statusEl.className = 'status ' + (ok ? 'ok' : 'err');
+  }
+
+  async function load() {
+    setStatus('Memuat ja_di_menus...');
+    const { data, error } = await supabase.from('ja_di_menus').select('*').order('id');
+    if (error) { setStatus('Error: ' + error.message, false); return; }
+    all = data || [];
+    setStatus('✅ Terhubung — ' + all.length + ' menu dari Supabase');
+    render();
+  }
+
+  function render() {
+    const q = searchEl.value.trim().toLowerCase();
+    const filtered = all.filter(m => !q || m.name.toLowerCase().includes(q) || (m.cat&&m.cat.toLowerCase().includes(q)) || (m.plu&&m.plu.toLowerCase().includes(q)));
+    countEl.textContent = filtered.length;
+    if (!filtered.length) { listEl.innerHTML = '<div class="empty">Tidak ada data</div>'; return; }
+    listEl.innerHTML = filtered.map(m => `
+      <div class="item">
+        <div class="item-info">
+          <div class="item-name">${m.icon||''} ${m.name}</div>
+          <div class="item-meta"><span class="badge">${m.cat||'-'}</span> ${m.plu||''} • ${m.cls||''}</div>
+          <div class="item-meta" style="font-size:10px;color:#94a3b8">${m.link||''}</div>
+        </div>
+        <div class="item-actions">
+          <button class="btn btn-ghost btn-small" onclick="editRow(${m.id})">Edit</button>
+          <button class="btn btn-danger btn-small" onclick="delRow(${m.id})">Hapus</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  window.editRow = (id) => {
+    const m = all.find(x=>x.id===id);
+    if (!m) return;
+    editId.value = m.id;
+    f_name.value = m.name;
+    f_icon.value = m.icon||'';
+    f_cls.value = m.cls||'g-a';
+    f_cat.value = m.cat||'';
+    f_link.value = m.link||'';
+    f_plu.value = m.plu||'';
+    formTitle.textContent = '✏️ Edit Menu #' + id;
+    btnSave.textContent = 'Update';
+    window.scrollTo({top:0, behavior:'smooth'});
+  };
+
+  window.delRow = async (id) => {
+    if (!confirm('Hapus menu #' + id + '?')) return;
+    const { error } = await supabase.from('ja_di_menus').delete().eq('id', id);
+    if (error) alert('Gagal hapus: ' + error.message);
+    else { setStatus('🗑️ Dihapus #' + id); await load(); }
+  };
+
+  btnCancel.onclick = () => {
+    editId.value = '';
+    form.reset();
+    formTitle.textContent = '➕ Tambah Menu';
+    btnSave.textContent = 'Simpan';
+  };
+
+  btnSave.onclick = async () => {
+    if (!f_name.value.trim()) { alert('Nama wajib'); return; }
+    const payload = {
+      name: f_name.value.trim(),
+      icon: f_icon.value.trim() || '☕',
+      cls: f_cls.value,
+      cat: f_cat.value.trim(),
+      link: f_link.value.trim(),
+      plu: f_plu.value.trim() || null
+    };
+    btnSave.disabled = true; btnSave.textContent = 'Menyimpan...';
+    let error;
+    if (editId.value) {
+      const res = await supabase.from('ja_di_menus').update(payload).eq('id', parseInt(editId.value));
+      error = res.error;
+    } else {
+      const res = await supabase.from('ja_di_menus').insert([payload]);
+      error = res.error;
+    }
+    btnSave.disabled = false; btnSave.textContent = editId.value ? 'Update' : 'Simpan';
+    if (error) { alert('Gagal simpan: ' + error.message + '\n\nJika RLS error, cek SQL Editor: policy insert harus allow public.'); setStatus('Gagal: ' + error.message, false); }
+    else { setStatus('✅ Tersimpan: ' + payload.name); btnCancel.onclick(); await load(); }
+  };
+
+  document.getElementById('btnSyncTxt').onclick = async () => {
+    // export Supabase -> txt format ja-di-data.txt
+    const lines = all.map(m => [m.name, m.icon||'', m.cls||'', m.cat||'', m.link||'', m.plu||''].join('\n')).join('\n---\n');
+    const blob = new Blob([lines], {type:'text/plain'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href=url; a.download='ja-di-data.txt'; a.click(); URL.revokeObjectURL(url);
+  };
+
+  searchEl.addEventListener('input', render);
+
+  // realtime
+  supabase.channel('admin_ja_di').on('postgres_changes',{event:'*',schema:'public',table:'ja_di_menus'},()=>load()).subscribe();
+
+  load();
+</script>
+</body>
+</html>

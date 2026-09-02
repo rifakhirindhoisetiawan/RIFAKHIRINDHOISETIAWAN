@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "@supabase/supabase-js": "^2.114.0",
     "axios": "^1.19.0",
-    "image-search": "^0.0.1"
+    "image-search": "^0.0.1",
+    "pg": "^8.23.0"
   }
 }
