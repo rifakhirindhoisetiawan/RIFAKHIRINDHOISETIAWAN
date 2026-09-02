@@ -1,0 +1,10 @@
+[
+  {
+    "name": "NAMA MENU BARU",
+    "icon": "🆕",
+    "cls": "g-a",
+    "cat": "KATEGORI",
+    "link": "pages/item-contoh.html",
+    "plu": "123456"
+  }
+]

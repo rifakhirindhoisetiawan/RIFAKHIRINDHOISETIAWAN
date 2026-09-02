@@ -13,7 +13,7 @@ try {
   });
 } catch {}
 
-import { supabase, supabaseAdmin } from './lib/supabase.mjs';
+const { supabase, supabaseAdmin } = await import('./lib/supabase.mjs');
 
 async function tableExists(name) {
   const { error } = await supabase.from(name).select('id').limit(1);

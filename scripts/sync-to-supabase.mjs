@@ -13,7 +13,7 @@ try {
   });
 } catch {}
 
-import { supabaseAdmin } from './lib/supabase.mjs';
+const { supabaseAdmin } = await import('./lib/supabase.mjs');
 
 async function syncJaDi() {
   const txtPath = path.join(process.cwd(), 'data', 'ja-di-data.txt');

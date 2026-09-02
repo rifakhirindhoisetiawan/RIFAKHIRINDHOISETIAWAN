@@ -13,7 +13,7 @@ try {
   });
 } catch {}
 
-import { supabase, supabaseAdmin, SUPABASE_URL } from './lib/supabase.mjs';
+const { supabase, supabaseAdmin, SUPABASE_URL } = await import('./lib/supabase.mjs');
 
 console.log('Testing Supabase connection...');
 console.log('URL:', SUPABASE_URL);
