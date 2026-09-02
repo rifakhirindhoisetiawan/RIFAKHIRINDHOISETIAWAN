@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JA-DI - Tambah Menu Baru</title>
+  <link rel="stylesheet" href="js/supabase.css" />
+  <style>
+    :root {
+      --primary: #ff6b35;
+      --primary-dark: #e65a2e;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --text: #212529;
+      --success: #28a745;
+      --danger: #dc3545;
+    }
+    
+    * { box-sizing: border-box; }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    h1 { color: var(--primary); text-align: center; margin-bottom: 20px; }
+    
+    .form-card {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .form-group { margin-bottom: 15px; }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #495057;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15);
+    }
+    
+    .hint { color: #6c757d; font-size: 12px; margin-top: 5px; }
+    
+    .icon-preview {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 5px;
+      font-size: 18px;
+      background: white;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      width: 100%;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+      margin-top: 10px;
+      width: 100%;
+    }
+    
+    .btn-secondary:hover {
+      opacity: 0.9;
+    }
+    
+    .btn-info {
+      background: #17a2b8;
+      color: white;
+      width: 100%;
+      margin-top: 15px;
+    }
+    
+    .btn-info:hover {
+      opacity: 0.9;
+    }
+    
+    .status { padding: 10px; border-radius: 4px; margin-top: 15px; display: none; }
+    .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    
+    .examples { background: #e9ecef; padding: 15px; border-radius: 4px; margin-top: 20px; }
+    .examples h4 { margin-top: 0; color: #495057; }
+    .examples ul { margin: 10px 0 0 18px; }
+    .examples li { margin-bottom: 5px; }
+    
+    .footer { text-align: center; margin-top: 30px; color: #6c757d; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>JA-DI - Tambah Menu Baru</h1>
+  
+  <div class="form-card">
+    <form id="menuForm">
+      <div class="form-group">
+        <label for="name">Nama Menu <span class="text-danger">*</span></label>
+        <input type="text" id="name" required placeholder="Misal: Kopi Susu">
+      </div>
+      
+      <div class="form-group">
+        <label for="icon">Icon <span class="hint">Contoh: 🆕 ☕ 🌱 🌿 ⭐</span></label>
+        <input type="text" id="icon" placeholder="🆕">
+        <div class="icon-preview" id="iconPreview">🆕</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="cls">Class <span class="hint">Contoh: g-a g-b g-h</span></label>
+        <input type="text" id="cls" placeholder="g-a">
+        <div class="hint">Contoh: g-a (grid item), g-b, g-h</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="cat">Kategori <span class="hint">Contoh: MINUMAN, PREMIX, SPECIALTY</span></label>
+        <input type="text" id="cat" placeholder="MINUMAN">
+      </div>
+      
+      <div class="form-group">
+        <label for="link">Link <span class="hint">Contoh: pages/item-kopisusu.html</span></label>
+        <input type="text" id="link" placeholder="pages/item-kopisusu.html">
+      </div>
+      
+      <div class="form-group">
+        <label for="plu">PLU (opsional) <span class="hunt">Barcode/nomor produk</span></label>
+        <input type="text" id="plu" placeholder="123456">
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Simpan Menu</button>
+    </form>
+    
+    <div id="status" class="status"></div>
+  </div>
+  
+  <div class="examples">
+    <h4>Contoh Data Menu</h4>
+    <ul>
+      <li><strong>MACCHIATO CLOUD FOAM</strong> — Icon: ☁️, Class: g-b, Cat: SPECIALTY & CLOUD, Link: pages/item-contoh.html, PLU: </li>
+      <li><strong>VANILLA LATTE PREMIX</strong> — Icon: ☕, Class: g-a, Cat: PREMIX, PLU: 443775</li>
+    </ul>
+  </div>
+  
+  <div class="footer">
+    Data disimpan ke <code>data/menus-new.json</code><br>
+    Jalankan <code>node scripts/sync-new-menus.mjs</code> di terminal untuk sync ke Supabase
+  </div>
+  
+  <script>
+    // Simpan icon preview
+    const iconInput = document.getElementById('icon');
+    const iconPreview = document.getElementById('iconPreview');
+    iconInput.addEventListener('input', function() {
+      iconPreview.textContent = this.value || '🆕';
+    });
+    
+    // Form submission
+    document.getElementById('menuForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = {
+        name: document.getElementById('name').value.trim(),
+        icon: document.getElementById('icon').value.trim() || '🆕',
+        cls: document.getElementById('cls').value.trim() || 'g-a',
+        cat: document.getElementById('cat').value.trim() || '',
+        link: document.getElementById('link').value.trim() || '',
+        plu: document.getElementById('plu').value.trim() || ''
+      };
+      
+      // Validasi
+      if (!formData.name) {
+        showStatus('Nama menu wajib diisi!', 'error');
+        return;
+      }
+      
+      // Simpan ke file JSON (pakai fetch ke endpoint lokal atau localStorage)
+      // Karena cannot write file langsung dari browser, kita gunakan localStorage temporarily
+      // lalu user export/import atau jalankan script Node
+      
+      // Opsi 1: Simpan ke localStorage dan tunjukkan cara sync
+      const existing = JSON.parse(localStorage.getItem('ja-di-menus-temp') || '[]');
+      existing.push(formData);
+      localStorage.setItem('ja-di-menus-temp', JSON.stringify(existing));
+      
+      showStatus('✅ Data disimpan ke localStorage!', 'success');
+      
+      // Clear form
+      this.reset();
+      iconPreview.textContent = '🆕';
+    });
+    
+    function showStatus(message, type) {
+      const status = document.getElementById('status');
+      status.removeAttribute('class');
+      status.classList.add('status', type);
+      status.querySelector('span').textContent = message;
+      status.style.display = 'block';
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        status.style.display = 'none';
+      }, 5000);
+    }
+    
+    // Load examples
+    document.addEventListener('DOMContentLoaded', function() {
+      // Contoh data sudah dihardcode di HTML di atas
+    });
+  </script>
+</body>
+</html>
