@@ -69,7 +69,7 @@
         <input type="hidden" id="editId" />
         <label>Nama *<input id="f_name" placeholder="COFFEE LATTE PREMIX" required /></label>
         <div class="row">
-          <label>Icon <input id="f_icon" placeholder="🧊 atau URL gambar" />
+          <label>Foto
           <input id="f_icon_img" type="file" accept="image/*" style="width:100%;margin-top:6px"/>
           <div id="icon_preview" style="margin-top:6px"></div>
         </label>
@@ -98,7 +98,7 @@
   const form = document.getElementById('form');
   const editId = document.getElementById('editId');
   const f_name = document.getElementById('f_name');
-  const f_icon = document.getElementById('f_icon');
+  let existingIcon = '';
   const f_cls = document.getElementById('f_cls');
   const f_cat = document.getElementById('f_cat');
   const f_link = document.getElementById('f_link');
@@ -174,7 +174,7 @@
     if (!m) return;
     editId.value = m.id;
     f_name.value = m.name;
-    f_icon.value = m.icon||'';
+    existingIcon = m.icon||'';
     f_cls.value = m.cls||'g-a';
     f_cat.value = m.cat||'';
     f_link.value = m.link||'';
@@ -199,6 +199,7 @@
 
   btnCancel.onclick = () => {
     editId.value = '';
+    existingIcon = '';
     form.reset();
     iconPreview.innerHTML = '';
     formTitle.textContent = '➕ Tambah Menu';
@@ -208,7 +209,7 @@
   btnSave.onclick = async () => {
     if (!f_name.value.trim()) { alert('Nama wajib'); return; }
     btnSave.disabled = true; btnSave.textContent = 'Menyimpan...';
-    let iconValue = f_icon.value.trim() || '☕';
+    let iconValue = existingIcon || '☕';
     if (f_icon_img.files[0]) {
       try {
         iconValue = await uploadIcon(f_icon_img.files[0]);
