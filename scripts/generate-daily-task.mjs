@@ -1,5 +1,5 @@
 import fs from 'fs';
-let head = fs.readFileSync('C:\\Users\\T480S\\AppData\\Local\\Temp\\opencode\\daily-head.html','utf8');
+let head = fs.readFileSync('scripts/templates/daily-head.html','utf8');
 // fallback periods from txt
 const fallback = `const fallbackPeriods = [
         { name: "HARI", icon: "☀️", cls: "g-a", href: "../utility/hari.html", slug: "hari" },
