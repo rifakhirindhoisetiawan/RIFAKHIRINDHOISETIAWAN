@@ -53,29 +53,32 @@ async function syncNewMenus() {
 
   const { data: existingData } = await supabaseAdmin
     .from('ja_di_menus')
-    .select('id, name, plu');
+    .select('id, name, plu_12oz, plu_16oz');
 
   const existingNames = new Set((existingData || []).map(r => r.name));
-  const existingPlus = new Set((existingData || []).map(r => r.plu).filter(Boolean));
+  const existingPlus = new Set((existingData || []).map(r => [r.plu_12oz, r.plu_16oz].filter(Boolean).join(' / ')).filter(Boolean));
 
   const toInsert = [];
   const skipped = [];
-
   for (const item of validItems) {
+    const pluParts = String(item.plu_12oz || item.plu || '').split('/').map(s => s.trim()).filter(Boolean);
     const payload = {
       name: item.name.trim(),
-      icon: item.icon || '',
+      foto: item.foto || item.icon || '',
       cls: item.cls || 'g-a',
       cat: item.cat || '',
       link: item.link || '',
-      plu: item.plu || null,
+      plu_12oz: pluParts[0] || item.plu_12oz || null,
+      plu_16oz: pluParts.slice(1).join(' / ') || item.plu_16oz || null,
     };
 
     if (existingNames.has(payload.name)) {
       skipped.push({ name: payload.name, reason: 'sudah ada (nama)' });
       continue;
     }
-    if (payload.plu && existingPlus.has(payload.plu)) {
+
+    const pluKey = [payload.plu_12oz, payload.plu_16oz].filter(Boolean).join(' / ');
+    if (pluKey && existingPlus.has(pluKey)) {
       skipped.push({ name: payload.name, reason: 'sudah ada (PLU)' });
       continue;
     }

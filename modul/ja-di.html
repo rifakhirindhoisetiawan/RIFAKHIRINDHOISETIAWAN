@@ -253,6 +253,164 @@
         padding: 40px 0;
         font-weight: 600;
       }
+
+      .sheet-bg {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 50;
+        align-items: flex-end;
+        justify-content: center;
+      }
+      .sheet-bg.open {
+        display: flex;
+      }
+      .sheet {
+        background: #fff;
+        width: 100%;
+        max-width: 800px;
+        max-height: 88vh;
+        overflow-y: auto;
+        border-radius: 20px 20px 0 0;
+        padding: 10px 18px 32px;
+        animation: sheetUp 0.22s ease;
+      }
+      @keyframes sheetUp {
+        from { transform: translateY(40px); opacity: 0.5; }
+        to { transform: none; opacity: 1; }
+      }
+      .sheet-handle {
+        width: 40px;
+        height: 4px;
+        border-radius: 4px;
+        background: #e5e5e5;
+        margin: 2px auto 14px;
+      }
+      .sheet-photo {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 16px;
+        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        color: #fff;
+      }
+      .sheet-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .sheet-name {
+        font-size: 16px;
+        font-weight: 800;
+        color: #1f2937;
+        margin: 12px 0 6px;
+        line-height: 1.35;
+      }
+      .sheet-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+      .sheet-badge {
+        font-size: 10px;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 6px;
+        background: #f5f5f5;
+        color: #6b7280;
+        letter-spacing: 0.4px;
+      }
+      .sheet-plu {
+        font-size: 11px;
+        font-weight: 700;
+        color: #3b82f6;
+      }
+      .sheet-sec {
+        font-size: 11px;
+        font-weight: 800;
+        color: #9aa0ab;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        margin: 14px 0 8px;
+      }
+      .sheet-bahans {
+        display: grid;
+        gap: 8px;
+      }
+      .bahan-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        background: #f9f9f9;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 9px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #1f2937;
+      }
+      .bahan-num {
+        flex-shrink: 0;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #1a1a1a;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .sheet-note {
+        background: #f9f9f9;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 13px;
+        color: #374151;
+        line-height: 1.5;
+      }
+      .sheet-empty {
+        text-align: center;
+        color: #9aa0ab;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 20px 0;
+      }
+      .sheet-btn {
+        display: block;
+        text-align: center;
+        margin-top: 16px;
+        background: #1a1a1a;
+        color: #fff;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 12px;
+        border-radius: 10px;
+        text-decoration: none;
+      }
+      .sheet-close {
+        display: block;
+        width: 100%;
+        margin-top: 8px;
+        background: #f5f5f5;
+        color: #1a1a1a;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: inherit;
+      }
     </style>
   </head>
   <body>
@@ -282,13 +440,20 @@
       </div>
     </div>
 
-    
+    <div class="sheet-bg" id="sheetBg">
+      <div class="sheet" role="dialog" aria-modal="true">
+        <div class="sheet-handle"></div>
+        <div id="sheetBody"></div>
+      </div>
+    </div>
+
+
     <script type="module">
       import { supabase } from '../js/supabase.js';
       const fallbackMenus = [
         {
           name: "COFFEE LATTE PREMIX",
-          icon: "🧊",
+          foto: "🧊",
           cls: "g-a",
           cat: "PREMIX",
           link: "pages/item-coffee-latte-ice-premix.html",
@@ -297,7 +462,7 @@
         
         {
           name: "VANILLA LATTE PREMIX",
-          icon: "🍦",
+          foto: "🍦",
           cls: "g-b",
           cat: "PREMIX",
           link: "pages/item-vanilla-latte-premix.html",
@@ -306,7 +471,7 @@
         
         {
           name: "SALTED CARAMEL LATTE PREMIX",
-          icon: "🍮",
+          foto: "🍮",
           cls: "g-c",
           cat: "PREMIX",
           link: "pages/item-salted-caramel-latte-premix.html",
@@ -315,7 +480,7 @@
         
         {
           name: "BUTTERSCOTCH LATTE PREMIX",
-          icon: "🧈",
+          foto: "🧈",
           cls: "g-d",
           cat: "PREMIX",
           link: "pages/item-butterscotch-latte-premix.html",
@@ -324,7 +489,7 @@
         
         {
           name: "SALTED BUTTERCORN LATTE PREMIX",
-          icon: "🌽",
+          foto: "🌽",
           cls: "g-e",
           cat: "PREMIX",
           link: "pages/item-salted-buttercorn-latte-premix.html",
@@ -333,7 +498,7 @@
         
         {
           name: "JADI KEREN - KOPSU GULA AREN PREMIX",
-          icon: "😎",
+          foto: "😎",
           cls: "g-f",
           cat: "PREMIX",
           link: "pages/item-jadi-keren-kopsu-gula-aren-premix.html",
@@ -342,7 +507,7 @@
         
         {
           name: "MOCHA LATTE PREMIX",
-          icon: "🍫",
+          foto: "🍫",
           cls: "g-g",
           cat: "PREMIX",
           link: "pages/item-mocha-latte-premix.html",
@@ -351,7 +516,7 @@
         
         {
           name: "JADI RINDU - KOPSU MADU PREMIX",
-          icon: "❤️",
+          foto: "❤️",
           cls: "g-h",
           cat: "PREMIX",
           link: "pages/item-jadi-rindu-kopsu-madu-premix.html",
@@ -360,7 +525,7 @@
         
         {
           name: "JADI MACCHIATTO PREMIX",
-          icon: "🍯",
+          foto: "🍯",
           cls: "g-a",
           cat: "PREMIX",
           link: "pages/item-jadi-macchiatto-premix.html",
@@ -369,7 +534,7 @@
         
         {
           name: "SALTED BUTTERCORN LATTE MANUAL",
-          icon: "🌽",
+          foto: "🌽",
           cls: "g-b",
           cat: "MANUAL",
           link: "pages/item-salted-buttercorn-latte-manual.html",
@@ -378,7 +543,7 @@
         
         {
           name: "JADI KEREN - KOPSU GULA AREN MANUAL",
-          icon: "😎",
+          foto: "😎",
           cls: "g-c",
           cat: "MANUAL",
           link: "pages/item-jadi-keren-kopsu-gula-aren-manual.html",
@@ -387,7 +552,7 @@
         
         {
           name: "JADI RINDU - KOPSU MADU MANUAL",
-          icon: "❤️",
+          foto: "❤️",
           cls: "g-d",
           cat: "MANUAL",
           link: "pages/item-jadi-rindu-kopsu-madu-manual.html",
@@ -396,7 +561,7 @@
         
         {
           name: "MOCHA LATTE MANUAL",
-          icon: "🍫",
+          foto: "🍫",
           cls: "g-e",
           cat: "MANUAL",
           link: "pages/item-mocha-latte-manual.html",
@@ -405,7 +570,7 @@
         
         {
           name: "VANILLA LATTE MANUAL",
-          icon: "🍦",
+          foto: "🍦",
           cls: "g-f",
           cat: "MANUAL",
           link: "pages/item-vanilla-latte-manual.html",
@@ -414,7 +579,7 @@
         
         {
           name: "SALTED CARAMEL LATTE MANUAL",
-          icon: "🍮",
+          foto: "🍮",
           cls: "g-g",
           cat: "MANUAL",
           link: "pages/item-salted-caramel-latte-manual.html",
@@ -423,7 +588,7 @@
         
         {
           name: "BUTTERSCOTCH LATTE MANUAL",
-          icon: "🧈",
+          foto: "🧈",
           cls: "g-h",
           cat: "MANUAL",
           link: "pages/item-butterscotch-latte-manual.html",
@@ -432,7 +597,7 @@
         
         {
           name: "JA~DI MACCHIATTO MANUAL",
-          icon: "🍯",
+          foto: "🍯",
           cls: "g-a",
           cat: "MANUAL",
           link: "pages/item-jadi-macchiatto.html",
@@ -441,7 +606,7 @@
         
         {
           name: "COFFEE LATTE ICE MANUAL",
-          icon: "🧊",
+          foto: "🧊",
           cls: "g-b",
           cat: "MANUAL",
           link: "pages/item-coffee-latte-ice-manual.html",
@@ -450,7 +615,7 @@
         
         {
           name: "CAPPUCCINO ICE",
-          icon: "🥛",
+          foto: "🥛",
           cls: "g-c",
           cat: "MANUAL",
           link: "pages/item-cappuccino-ice.html",
@@ -459,7 +624,7 @@
         
         {
           name: "AMERICANO HOT",
-          icon: "☕",
+          foto: "☕",
           cls: "g-d",
           cat: "MANUAL",
           link: "pages/item-americano-hot.html",
@@ -467,7 +632,7 @@
         
         {
           name: "AMERICANO ICE",
-          icon: "🧊",
+          foto: "🧊",
           cls: "g-e",
           cat: "MANUAL",
           link: "pages/item-americano-ice.html",
@@ -475,7 +640,7 @@
         
         {
           name: "BLACK COFFEE WITH HONEY",
-          icon: "🍯",
+          foto: "🍯",
           cls: "g-f",
           cat: "MANUAL",
           link: "pages/item-black-coffee-with-honey.html",
@@ -484,7 +649,7 @@
         
         {
           name: "HAWAIIAN AMERICANO (ICE UPSIZE)",
-          icon: "🌺",
+          foto: "🌺",
           cls: "g-g",
           cat: "BLACK COFFEE",
           link: "pages/item-hawaiian-americano-ice-upsize.html",
@@ -492,7 +657,7 @@
         
         {
           name: "ESPRESSO HOT",
-          icon: "☕",
+          foto: "☕",
           cls: "g-h",
           cat: "ESPRESSO",
           link: "pages/item-espresso-hot.html",
@@ -501,7 +666,7 @@
         
         {
           name: "CAPPUCCINO HOT",
-          icon: "🫧",
+          foto: "🫧",
           cls: "g-a",
           cat: "MANUAL",
           link: "pages/item-cappuccino-hot.html",
@@ -510,7 +675,7 @@
         
         {
           name: "CAFFELATTE HOT",
-          icon: "🥛",
+          foto: "🥛",
           cls: "g-b",
           cat: "MANUAL",
           link: "pages/item-caffelatte-hot.html",
@@ -518,7 +683,7 @@
         
         {
           name: "HOT CHOCOLATE",
-          icon: "☕",
+          foto: "☕",
           cls: "g-c",
           cat: "CHOCO & MATCHA",
           link: "pages/item-hot-chocolate.html",
@@ -527,7 +692,7 @@
         
         {
           name: "ICE CHOCOLATE",
-          icon: "🧊",
+          foto: "🧊",
           cls: "g-d",
           cat: "CHOCO & MATCHA",
           link: "pages/item-ice-chocolate.html",
@@ -537,7 +702,7 @@
         
         {
           name: "ICE MATCHA",
-          icon: "🍃",
+          foto: "🍃",
           cls: "g-f",
           cat: "CHOCO & MATCHA",
           link: "pages/item-ice-matcha.html",
@@ -546,7 +711,7 @@
         
         {
           name: "CHOCO BERRY (ICE 12OZ)",
-          icon: "🍓",
+          foto: "🍓",
           cls: "g-g",
           cat: "CHOCO & MATCHA",
           link: "pages/item-choco-berry-ice-12oz.html",
@@ -555,7 +720,7 @@
         
         {
           name: "BLENDED VANILLA CARAMEL",
-          icon: "🍦",
+          foto: "🍦",
           cls: "g-h",
           cat: "BLENDED",
           link: "pages/item-blended-vanilla-caramel.html",
@@ -563,7 +728,7 @@
         
         {
           name: "BLENDED CHOCO",
-          icon: "🍫",
+          foto: "🍫",
           cls: "g-a",
           cat: "BLENDED",
           link: "pages/item-blended-choco.html",
@@ -571,7 +736,7 @@
         
         {
           name: "BLENDED CHOCO CARAMEL",
-          icon: "🍮",
+          foto: "🍮",
           cls: "g-b",
           cat: "BLENDED",
           link: "pages/item-blended-choco-caramel.html",
@@ -580,7 +745,7 @@
         
         {
           name: "CREAMY COCONUT FRAPPE (UPSIZE)",
-          icon: "🥥",
+          foto: "🥥",
           cls: "g-c",
           cat: "BLENDED",
           link: "pages/item-creamy-coconut-frappe-upsize.html",
@@ -588,7 +753,7 @@
         
         {
           name: "KOREAN STRAWBERRY MILK",
-          icon: "🍓",
+          foto: "🍓",
           cls: "g-d",
           cat: "BLENDED",
           link: "pages/item-korean-strawberry-milk.html",
@@ -597,7 +762,7 @@
         
         {
           name: "AFFOGATO",
-          icon: "🍨",
+          foto: "🍨",
           cls: "g-e",
           cat: "BLENDED",
           link: "pages/item-affogato.html",
@@ -606,7 +771,7 @@
         
         {
           name: "ICE COLLAGEN LATTE (12OZ)",
-          icon: "🌸",
+          foto: "🌸",
           cls: "g-f",
           cat: "BLENDED",
           link: "pages/item-ice-collagen-latte-12oz.html",
@@ -615,7 +780,7 @@
         
         {
           name: "ICE DOLCE LATTE (12OZ)",
-          icon: "🍬",
+          foto: "🍬",
           cls: "g-g",
           cat: "BLENDED",
           link: "pages/item-ice-dolce-latte-12oz.html",
@@ -624,7 +789,7 @@
         
         {
           name: "COCONUT CLOUD LATTE",
-          icon: "🥥",
+          foto: "🥥",
           cls: "g-h",
           cat: "BLENDED",
           link: "pages/item-coconut-cloud-latte.html",
@@ -633,7 +798,7 @@
         
         {
           name: "PANDAN CLOUD LATTE",
-          icon: "🌿",
+          foto: "🌿",
           cls: "g-a",
           cat: "BLENDED",
           link: "pages/item-pandan-cloud-latte.html",
@@ -642,7 +807,7 @@
         
         {
           name: "SALTED CARAMEL COCA (12OZ)",
-          icon: "🥤",
+          foto: "🥤",
           cls: "g-b",
           cat: "SOFT DRINK",
           link: "pages/item-salted-caramel-coca-12oz.html",
@@ -650,7 +815,7 @@
         
         {
           name: "TOFFEE POPCORN FANTA (12OZ)",
-          icon: "🍿",
+          foto: "🍿",
           cls: "g-c",
           cat: "SOFT DRINK",
           link: "pages/item-toffee-popcorn-fanta-12oz.html",
@@ -658,7 +823,7 @@
         
         {
           name: "LYCHEE SPRITE (12OZ)",
-          icon: "🍋",
+          foto: "🍋",
           cls: "g-d",
           cat: "SOFT DRINK",
           link: "pages/item-lychee-sprite-12oz.html",
@@ -666,7 +831,7 @@
         
         {
           name: "SHAKEN LYCHEE TEA",
-          icon: "🫐",
+          foto: "🫐",
           cls: "g-e",
           cat: "JUS",
           link: "pages/item-shaken-lychee-tea.html",
@@ -675,7 +840,7 @@
         
         {
           name: "SHAKEN HONEY LEMON TEA",
-          icon: "🍋",
+          foto: "🍋",
           cls: "g-f",
           cat: "JUS",
           link: "pages/item-shaken-honey-lemon-tea.html",
@@ -684,7 +849,7 @@
         
         {
           name: "GREEN JUICE",
-          icon: "🥬",
+          foto: "🥬",
           cls: "g-g",
           cat: "JUS",
           link: "pages/item-green-juice.html",
@@ -692,7 +857,7 @@
         
         {
           name: "JUICE SIRSAK",
-          icon: "🍈",
+          foto: "🍈",
           cls: "g-h",
           cat: "JUS",
           link: "pages/item-juice-sirsak.html",
@@ -701,7 +866,7 @@
         
         {
           name: "JUICE ALPUKAT",
-          icon: "🥑",
+          foto: "🥑",
           cls: "g-a",
           cat: "JUS",
           link: "pages/item-juice-alpukat.html",
@@ -710,7 +875,7 @@
         
         {
           name: "JUICE BUAH NAGA",
-          icon: "🐲",
+          foto: "🐲",
           cls: "g-b",
           cat: "JUS",
           link: "pages/item-juice-buah-naga.html",
@@ -719,7 +884,7 @@
         
         {
           name: "JUICE JAMBU",
-          icon: "🍒",
+          foto: "🍒",
           cls: "g-c",
           cat: "JUS",
           link: "pages/item-juice-jambu.html",
@@ -728,7 +893,7 @@
         
         {
           name: "JUICE SEMANGKA",
-          icon: "🍉",
+          foto: "🍉",
           cls: "g-d",
           cat: "JUS",
           link: "pages/item-juice-semangka.html",
@@ -737,7 +902,7 @@
         
         {
           name: "JUICE MELON",
-          icon: "🍈",
+          foto: "🍈",
           cls: "g-e",
           cat: "JUS",
           link: "pages/item-juice-melon.html",
@@ -746,7 +911,7 @@
         
         {
           name: "JUICE PISANG STRAWBERRY",
-          icon: "🍌",
+          foto: "🍌",
           cls: "g-f",
           cat: "JUS",
           link: "pages/item-juice-pisang-strawberry.html",
@@ -755,7 +920,7 @@
         
         {
           name: "JUICE MANGGA HARUM MANIS",
-          icon: "🥭",
+          foto: "🥭",
           cls: "g-g",
           cat: "JUS",
           link: "pages/item-juice-mangga-harum-manis.html",
@@ -764,7 +929,7 @@
         
         {
           name: "JUICE APEL MIX",
-          icon: "🍎",
+          foto: "🍎",
           cls: "g-h",
           cat: "JUS",
           link: "pages/item-juice-apel-mix.html",
@@ -772,7 +937,7 @@
         
         {
           name: "JUICE CARROT MIXED FRUIT",
-          icon: "🥕",
+          foto: "🥕",
           cls: "g-a",
           cat: "JUS",
           link: "pages/item-juice-carrot-mixed-fruit.html",
@@ -781,7 +946,7 @@
         
         {
           name: "JUICE JERUK",
-          icon: "🍊",
+          foto: "🍊",
           cls: "g-b",
           cat: "JUS",
           link: "pages/item-juice-jeruk.html",
@@ -790,7 +955,7 @@
         
         {
           name: "JUICE JERUK NAVEL",
-          icon: "🍊",
+          foto: "🍊",
           cls: "g-c",
           cat: "JUS",
           link: "pages/item-juice-jeruk-navel.html",
@@ -798,7 +963,7 @@
         
         {
           name: "JUICE JERUK NAVEL CARA CARA",
-          icon: "🍊",
+          foto: "🍊",
           cls: "g-d",
           cat: "JUS",
           link: "pages/item-juice-jeruk-navel-cara-cara.html",
@@ -806,7 +971,7 @@
         
         {
           name: "KOLAK LATTE",
-          icon: "🍮",
+          foto: "🍮",
           cls: "g-e",
           cat: "BLENDED",
           link: "pages/item-kolak-latte.html",
@@ -815,7 +980,7 @@
         
         {
           name: "WATERMELON COOLER",
-          icon: "🍉",
+          foto: "🍉",
           cls: "g-f",
           cat: "BLENDED",
           link: "pages/item-watermelon-cooler.html",
@@ -824,21 +989,21 @@
         
         {
           name: "PISANG IJO LATTE",
-          icon: "🍌",
+          foto: "🍌",
           cls: "g-g",
           cat: "BLENDED",
           link: "pages/item-pisang-ijo-latte.html",
           plu: "465842 / 465843",
         },
         
-        { name: "PLU JA-DI", icon: "📋", cls: "g-e", cat: "UTILITY", link: "plu-ja-di.html" },
+        { name: "PLU JA-DI", foto: "📋", cls: "g-e", cat: "UTILITY", link: "plu-ja-di.html" },
         
-        { name: "PLANO", icon: "🗄️", cls: "g-h",
+        { name: "PLANO", foto: "🗄️", cls: "g-h",
           cat: "plano.html", link: "" },
         
         {
           name: "TIME KAMERA",
-          icon: "📷",
+          foto: "📷",
           cls: "g-c",
           cat: "time-kamera.html",
           link: "",
@@ -846,7 +1011,7 @@
         
         {
           name: "COFFEE LATTE",
-          icon: "☕",
+          foto: "☕",
           cls: "g-a",
           cat: "SPECIALTY & CLOUD",
           link: "pages/item-coffee-latte.html",
@@ -854,7 +1019,7 @@
         
         {
           name: "CHOCO BERRY",
-          icon: "🍓",
+          foto: "🍓",
           cls: "g-g",
           cat: "CHOCO & MATCHA",
           link: "pages/item-choco-berry.html",
@@ -862,7 +1027,7 @@
         
         {
           name: "GREEN GRAPE FRUITYCANO",
-          icon: "🍇",
+          foto: "🍇",
           cls: "g-e",
           cat: "SPECIALTY & CLOUD",
           link: "pages/item-green-grape-fruitycano.html",
@@ -870,7 +1035,7 @@
         
         {
           name: "TROPICAL APPLE AMERICANO",
-          icon: "🍎",
+          foto: "🍎",
           cls: "g-g",
           cat: "BLACK COFFEE",
           link: "pages/item-tropical-apple-americano.html",
@@ -878,7 +1043,7 @@
         
         {
           name: "KOPI BOTOL JADI ASIK",
-          icon: "🍾",
+          foto: "🍾",
           cls: "g-e",
           cat: "SPECIALTY & CLOUD",
           link: "pages/item-kopi-botol-jadi-asik.html",
@@ -887,7 +1052,7 @@
         
         {
           name: "KOPI BOTOL JADI SERU",
-          icon: "🍾",
+          foto: "🍾",
           cls: "g-c",
           cat: "SPECIALTY & CLOUD",
           link: "pages/item-kopi-botol-jadi-seru.html",
@@ -896,7 +1061,7 @@
         
         {
           name: "KOPI BOTOL JADI SUKA",
-          icon: "🍾",
+          foto: "🍾",
           cls: "g-h",
           cat: "SPECIALTY & CLOUD",
           link: "pages/item-kopi-botol-jadi-suka.html",
@@ -905,7 +1070,7 @@
         
         {
           name: "CREAMY COCONUT FRAPPE",
-          icon: "🥥",
+          foto: "🥥",
           cls: "g-d",
           cat: "BLENDED",
           link: "pages/item-creamy-coconut-frappe.html",
@@ -914,7 +1079,7 @@
         
         {
           name: "PINK BERRY SODA",
-          icon: "🍒",
+          foto: "🍒",
           cls: "g-g",
           cat: "SPECIALTY & CLOUD",
           link: "pages/item-pink-berry-soda.html",
@@ -923,7 +1088,7 @@
         
         {
           name: "HAWAIIAN AMERICANO",
-          icon: "🌺",
+          foto: "🌺",
           cls: "g-c",
           cat: "BLACK COFFEE",
           link: "pages/item-hawaiian-americano.html",
@@ -932,7 +1097,7 @@
         
         {
           name: "ICE COLLAGEN LATTE",
-          icon: "🌸",
+          foto: "🌸",
           cls: "g-h",
           cat: "SPECIALTY & CLOUD",
           link: "pages/item-ice-collagen-latte.html",
@@ -941,7 +1106,7 @@
         
         {
           name: "MANGO COLADA",
-          icon: "🥭",
+          foto: "🥭",
           cls: "g-f",
           cat: "SPECIALTY & CLOUD",
           link: "pages/item-mango-colada.html",
@@ -950,7 +1115,7 @@
         
         {
           name: "CLOUDY LYCHEE",
-          icon: "🫐",
+          foto: "🫐",
           cls: "g-d",
           cat: "SPECIALTY & CLOUD",
           link: "pages/item-cloudy-lychee.html",
@@ -959,7 +1124,7 @@
         
         {
           name: "COLA CARAMELA",
-          icon: "🥤",
+          foto: "🥤",
           cls: "g-a",
           cat: "SPECIALTY & CLOUD",
           link: "pages/item-cola-caramela.html",
@@ -968,7 +1133,7 @@
         
         {
           name: "POPPY BERRY",
-          icon: "🌸",
+          foto: "🌸",
           cls: "g-h",
           cat: "SPECIALTY & CLOUD",
           link: "pages/item-poppy-berry.html",
@@ -977,17 +1142,20 @@
         
         {
           name: "MACCHIATO CLOUD FOAM",
-          icon: "☁️",
+          foto: "☁️",
           cls: "g-b",
           cat: "SPECIALTY & CLOUD",
           link: "pages/item-macchiato-cloud-foam.html",
         },
       ];
       let menus = [...fallbackMenus];
+      let shownMenus = [];
       let isSupabase = false;
       const menuGrid = document.getElementById('menuGrid');
       const searchInput = document.getElementById('searchInput');
       const statusEl = document.getElementById('status');
+      const sheetBg = document.getElementById('sheetBg');
+      const sheetBody = document.getElementById('sheetBody');
       function slugify(str) {
         return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
       }
@@ -1014,27 +1182,74 @@
           if (!q) return true;
           return m.name.toLowerCase().includes(q) ||
                  (m.cat && m.cat.toLowerCase().includes(q)) ||
-                 (m.plu && m.plu.toLowerCase().includes(q));
+                 (m.plu && m.plu.toLowerCase().includes(q)) ||
+                 (m.catatan && m.catatan.toLowerCase().includes(q));
         });
         if (filtered.length === 0) {
+          shownMenus = [];
           menuGrid.innerHTML = '<div class="empty-msg">Tidak ditemukan</div>';
           return;
         }
-        menuGrid.innerHTML = filtered.map(m => {
+        shownMenus = filtered;
+        menuGrid.innerHTML = filtered.map((m, i) => {
           const slug = slugify(m.name);
           const hasLink = m.link && m.link.length > 0;
           const tag = hasLink ? 'a' : 'div';
           const href = hasLink ? ' href="' + m.link + '"' : '';
           const plu = m.plu ? '<span class="plu-tag">' + m.plu + '</span>' : '';
-          const isImgIcon = !!(m.icon && typeof m.icon === 'string' && /^(https?:|data:|blob:)/i.test(m.icon));
-          const iconHtml = isImgIcon ? '<img src="' + m.icon + '" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>' : '<span style="font-size:32px">' + (m.icon||'☕') + '</span>';
-          return '<' + tag + ' class="item' + (hasLink ? ' active-modul' : '') + '"' + href + '>' +
+          const isImgIcon = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
+          const iconHtml = isImgIcon ? '<img src="' + m.foto + '" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>' : '<span style="font-size:32px">' + (m.foto||'☕') + '</span>';
+          return '<' + tag + ' class="item js-detail' + (hasLink ? ' active-modul' : '') + '"' + href + ' data-idx="' + i + '">' +
                    '<div class="icon-tile ' + (m.cls||'g-a') + ' icon-photo" data-slug="' + slug + '"' + (isImgIcon ? ' data-hasimg="1"' : '') + '>' + iconHtml + '</div>' +
                    '<span>' + m.name + plu + '</span>' +
                  '</' + tag + '>';
         }).join('');
+        menuGrid.querySelectorAll('.js-detail').forEach(el => {
+          el.addEventListener('click', (e) => {
+            const m = shownMenus[parseInt(el.dataset.idx)];
+            if (m && m.link) return; // ada halaman resep -> pindah halaman normal
+            e.preventDefault();
+            openSheet(m);
+          });
+        });
         loadMenuPhotos();
       }
+      function openSheet(m) {
+        if (!m) return;
+        const b12 = [1, 2, 3, 4, 5, 6].map(i => m['bahan_12oz_' + i]).filter(Boolean);
+        const b16 = [1, 2, 3, 4, 5, 6].map(i => m['bahan_16oz_' + i]).filter(Boolean);
+        const bHot = [1, 2, 3, 4, 5, 6].map(i => m['bahan_hot_' + i]).filter(Boolean);
+        const bahans = [...b12, ...b16, ...bHot];
+        const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
+        const photo = isImg ? '<img src="' + m.foto + '" alt=""/>' : '<span style="font-size:48px">' + (m.foto||'☕') + '</span>';
+        let html = '<div class="sheet-photo ' + (m.cls||'g-a') + '">' + photo + '</div>';
+        html += '<div class="sheet-name">' + m.name + '</div>';
+        html += '<div class="sheet-meta">';
+        if (m.cat) html += '<span class="sheet-badge">' + m.cat + '</span>';
+        if (m.plu) html += '<span class="sheet-plu">' + m.plu + '</span>';
+        html += '</div>';
+        function bahanGroup(title, list) {
+          return '<div class="sheet-sec">' + title + '</div><div class="sheet-bahans">' +
+            list.map((b, i) => '<div class="bahan-row"><span class="bahan-num">' + (i+1) + '</span><span>' + b + '</span></div>').join('') +
+            '</div>';
+        }
+        if (bHot.length) html += bahanGroup('Bahan HOT', bHot);
+        if (b12.length) html += bahanGroup('Bahan 12OZ', b12);
+        if (b16.length) html += bahanGroup('Bahan 16OZ', b16);
+        if (m.catatan) html += '<div class="sheet-sec">Catatan</div><div class="sheet-note">' + m.catatan + '</div>';
+        if (!bahans.length && !m.catatan) html += '<div class="sheet-empty">Belum ada data bahan.</div>';
+        if (m.link) html += '<a class="sheet-btn" href="' + m.link + '">Buka Halaman Resep</a>';
+        html += '<button class="sheet-close" id="sheetClose" type="button">Tutup</button>';
+        sheetBody.innerHTML = html;
+        sheetBg.classList.add('open');
+        document.getElementById('sheetClose').addEventListener('click', closeSheet);
+      }
+      function closeSheet() {
+        sheetBg.classList.remove('open');
+      }
+      sheetBg.addEventListener('click', (e) => {
+        if (e.target === sheetBg) closeSheet();
+      });
       function loadMenuPhotos() {
         const exts = ['.jpg', '.jpeg', '.png', '.svg', '.webp'];
         document.querySelectorAll('.icon-photo[data-slug]').forEach((tile) => {
@@ -1070,7 +1285,7 @@
           const { data, error } = await supabase.from('ja_di_menus').select('*').order('id', { ascending: true });
           if (error) throw error;
           if (data && data.length > 0) {
-            menus = data;
+            menus = data.map(m => ({ ...m, plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || m.plu || '' }));
             isSupabase = true;
             statusEl.textContent = '✅ ' + data.length + ' menu dari Supabase';
             statusEl.style.color = '#10b981';

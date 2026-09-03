@@ -59,7 +59,7 @@ async function tambahMenuInteraktif() {
 
     items.push({
       name: nama.trim(),
-      icon: icon.trim(),
+      foto: icon.trim(),
       cls: cls.trim(),
       cat: cat.trim(),
       link: link.trim(),
@@ -82,29 +82,32 @@ async function tambahMenuInteraktif() {
   try {
     const { data: existingData } = await supabaseAdmin
       .from('ja_di_menus')
-      .select('id, name, plu');
+      .select('id, name, plu_12oz, plu_16oz');
 
     const existingNames = new Set((existingData || []).map(r => r.name));
-    const existingPlus = new Set((existingData || []).map(r => r.plu).filter(Boolean));
+    const existingPlus = new Set((existingData || []).map(r => [r.plu_12oz, r.plu_16oz].filter(Boolean).join(' / ')).filter(Boolean));
 
     const toInsert = [];
     const skipped = [];
 
     for (const item of items) {
+      const pluParts = String(item.plu_12oz || item.plu || '').split('/').map(s => s.trim()).filter(Boolean);
       const payload = {
         name: item.name,
-        icon: item.icon || '',
+        foto: item.foto || item.icon || '',
         cls: item.cls || 'g-a',
         cat: item.cat || '',
         link: item.link || '',
-        plu: item.plu || null,
+        plu_12oz: pluParts[0] || item.plu_12oz || null,
+        plu_16oz: pluParts.slice(1).join(' / ') || item.plu_16oz || null,
       };
 
       if (existingNames.has(payload.name)) {
         skipped.push({ name: payload.name, reason: 'sudah ada (nama)' });
         continue;
       }
-      if (payload.plu && existingPlus.has(payload.plu)) {
+      const pluKey = [payload.plu_12oz, payload.plu_16oz].filter(Boolean).join(' / ');
+      if (pluKey && existingPlus.has(pluKey)) {
         skipped.push({ name: payload.name, reason: 'sudah ada (PLU)' });
         continue;
       }
@@ -153,13 +156,15 @@ async function syncJaDi() {
   const blocks = txt.split('---').map(b => b.trim()).filter(Boolean);
   const rows = blocks.map(b => {
     const lines = b.split('\n').map(l => l.trim()).filter(Boolean);
+    const pluParts = String(lines[5] || '').split('/').map(s => s.trim()).filter(Boolean);
     return {
       name: lines[0] || '',
-      icon: lines[1] || '',
+      foto: lines[1] || '',
       cls: lines[2] || '',
       cat: lines[3] || '',
       link: lines[4] || '',
-      plu: lines[5] || ''
+      plu_12oz: pluParts[0] || null,
+      plu_16oz: pluParts.slice(1).join(' / ') || null
     };
   }).filter(r => r.name);
 

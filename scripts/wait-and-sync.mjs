@@ -29,14 +29,16 @@ async function syncJaDi() {
   const blocks = txt.split('---').map(b => b.trim()).filter(Boolean);
   const rows = blocks.map(b => {
     const lines = b.split('\n').map(l => l.trim());
-    // format: name, icon, cls, cat, link, plu (plu bisa kosong)
+    // format: name, foto, cls, cat, link, plu (plu bisa kosong, "12oz / 16oz")
+    const pluParts = String(lines[5] || '').split('/').map(s => s.trim()).filter(Boolean);
     return {
       name: lines[0] || '',
-      icon: lines[1] || '',
+      foto: lines[1] || '',
       cls: lines[2] || '',
       cat: lines[3] || '',
       link: lines[4] || '',
-      plu: lines[5] || null
+      plu_12oz: pluParts[0] || null,
+      plu_16oz: pluParts.slice(1).join(' / ') || null
     };
   }).filter(r => r.name);
 
@@ -88,10 +90,10 @@ async function main() {
   await syncJaDi();
 
   // verifikasi
-  const { data, error } = await supabase.from('ja_di_menus').select('name,cat,plu').limit(5);
+  const { data, error } = await supabase.from('ja_di_menus').select('name,cat,plu_12oz,plu_16oz').limit(5);
   if (!error) {
     console.log('\nVerifikasi 5 data pertama dari Supabase:');
-    data.forEach((r, i) => console.log(`  ${i+1}. ${r.name} | ${r.cat} | ${r.plu}`));
+    data.forEach((r, i) => console.log(`  ${i+1}. ${r.name} | ${r.cat} | ${[r.plu_12oz, r.plu_16oz].filter(Boolean).join(' / ')}`));
     const { count } = await supabase.from('ja_di_menus').select('*', { count: 'exact', head: true });
     console.log(`\nTotal di Supabase: ${count} rows`);
   }

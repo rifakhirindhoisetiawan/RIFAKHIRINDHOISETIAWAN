@@ -5,53 +5,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin — JA-DI Supabase</title>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
+    *{margin:0;padding:0;box-sizing:border-box}
     html,body{max-width:100%;overflow-x:hidden}
-    body{font-family:"Segoe UI",system-ui,sans-serif;background:#f8fafc;color:#1f2937;padding:16px}
-    .wrap{max-width:1000px;width:100%;margin:0 auto;min-width:0}
-    h1{font-size:22px;margin-bottom:4px}
-    .sub{color:#64748b;font-size:13px;margin-bottom:16px}
-    .status{padding:10px 14px;border-radius:10px;background:#fff;border:1px solid #e2e8f0;margin-bottom:16px;font-size:13px}
-    .status.ok{border-color:#10b981;color:#065f46;background:#ecfdf5}
-    .status.err{border-color:#ef4444;color:#991b1b;background:#fef2f2}
-    .grid{display:grid;grid-template-columns:1fr 360px;gap:16px}
-    @media(max-width:800px){
-      body{padding:10px}
-      .card{padding:12px}
-      .item{padding:8px 10px}
-      .grid{grid-template-columns:1fr; gap:12px;max-width:100%}
-      .search,.list,.empty,
-      .form input,.form select,.btn,.form label{
-         font-size:13px
-      }
-      .form{padding:6px 10px}
-      h1{font-size:20px}
-   }
-    .card{background:transparent;border:none;border-radius:0;padding:4px 0;max-width:100%;min-width:0}
-    .card h2{font-size:15px;margin-bottom:12px}
-    .form{display:grid;gap:10px;max-width:100%}
-    .form label{font-size:12px;font-weight:700;color:#475569;display:block;min-width:0;max-width:100%}
-    .form input, .form select{width:100%;max-width:100%;min-width:0;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;outline:none}
-    .form input:focus{border-color:#6366f1}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:100%}
-    .row>*{min-width:0}
-    @media(max-width:400px){.row{grid-template-columns:1fr}}
-    .btn{padding:10px 16px;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px}
-    .btn-primary{background:#6366f1;color:#fff}
-    .btn-ghost{background:#f1f5f9;color:#475569}
-    .btn-danger{background:#ef4444;color:#fff}
-    .btn-small{padding:6px 10px;font-size:12px}
-    .search{width:100%;padding:10px 14px;border:1px solid #cbd5e1;border-radius:10px;margin-bottom:12px}
-    .list{display:grid;gap:8px;max-height:none;overflow:visible}
+    html,body{width:100%;height:100%;background:#ffffff}
+    body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;background:#ffffff;color:#1a1a1a;min-height:100vh;overflow-x:hidden}
     ::-webkit-scrollbar{width:0;height:0}
     *{scrollbar-width:none;-ms-overflow-style:none}
-    .item{border:none;border-radius:0;background:transparent;padding:10px 2px;display:flex;justify-content:space-between;align-items:center;gap:10px;max-width:100%;min-width:0}
+    .wrap{width:100%;max-width:800px;min-height:100vh;margin:0 auto;background:#ffffff;padding:12px 18px 40px;min-width:0}
+    .status{display:none}
+    .grid{display:grid;grid-template-columns:1fr;gap:20px;max-width:100%}
+    .card{background:transparent;border:none;padding:0;max-width:100%;min-width:0}
+    .section-label{font-size:11px;font-weight:800;color:#9aa0ab;letter-spacing:0.6px;text-transform:uppercase;margin:4px 0 14px}
+    .search-wrapper{display:flex;align-items:center;gap:10px;width:100%;margin-bottom:14px}
+    .search-box{flex:1;display:flex;align-items:center;gap:8px;border:1px solid #ddd;border-radius:10px;padding:10px 14px;color:#222;font-size:14px;background:#f9f9f9;min-width:0}
+    .search-box:focus-within{border-color:#888;background:#fff}
+    .search-box svg{flex-shrink:0;color:#c3c8d1;width:18px;height:18px}
+    .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:#222;font-family:inherit;min-width:0;-webkit-appearance:none;appearance:none;border-radius:0}
+    .search-box input::placeholder{color:#c3c8d1}
+    .form{display:grid;gap:12px;max-width:100%}
+    .form label{font-size:11px;font-weight:700;color:#1f2937;display:block;min-width:0;max-width:100%}
+    .form input,.form select{display:block;width:100%;max-width:100%;min-width:0;margin-top:6px;padding:10px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;color:#222;background:#f9f9f9;outline:none;font-family:inherit}
+    .form input:focus,.form select:focus{border-color:#888;background:#fff}
+    .form input::placeholder{color:#c3c8d1}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:100%}
+    .row>*{min-width:0}
+    .btn{padding:10px 16px;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;font-family:inherit}
+    .btn-primary{background:#1a1a1a;color:#fff}
+    .btn-ghost{background:#f5f5f5;color:#1a1a1a}
+    .btn-danger{background:#fff;color:#ef4444;border:1px solid #fecaca}
+    .btn-small{padding:6px 12px;font-size:12px}
+    .btn:disabled{opacity:0.5}
+    .list{display:grid;gap:4px;max-width:100%}
+    .item{display:flex;align-items:center;gap:12px;padding:8px 0;max-width:100%;min-width:0;background:transparent;border:none}
+    .thumb{width:52px;aspect-ratio:9/16;border-radius:12px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-size:22px;color:#fff}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
     .item-info{flex:1;min-width:0;max-width:100%}
-    .item-name{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-    .item-meta{font-size:11px;color:#64748b;overflow-wrap:anywhere;word-break:break-word;max-width:100%}
+    .item-name{font-size:12px;font-weight:700;color:#1f2937;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+    .item-meta{font-size:11px;color:#9aa0ab;margin-top:2px;overflow-wrap:anywhere;word-break:break-word;max-width:100%}
+    .item-meta a{color:#9aa0ab;text-decoration:none}
+    .badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;background:#f5f5f5;color:#6b7280}
+    .group-head{font-size:11px;font-weight:800;color:#9aa0ab;letter-spacing:0.6px;text-transform:uppercase;margin:14px 0 4px}
+    .group-head:first-child{margin-top:0}
+    .vbadge{font-size:9px;font-weight:800;padding:1px 6px;border-radius:4px;background:#1a1a1a;color:#fff;margin-left:6px;vertical-align:1px;white-space:nowrap}
     .item-actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
-    .badge{font-size:10px;padding:2px 6px;border-radius:6px;background:#f1f5f9;color:#475569}
-    .empty{padding:40px;text-align:center;color:#94a3b8}
+    .empty{text-align:center;color:#9aa0ab;font-size:13px;font-weight:600;padding:40px 0}
+    .hint{font-size:11px;color:#9aa0ab}
+    .foto-title,.field-title{font-size:11px;font-weight:700;color:#1f2937}
+    .select-box{position:relative;margin-top:6px;max-width:100%}
+    .select-box select{display:block;width:100%;max-width:100%;min-width:0;margin-top:0;padding:10px 40px 10px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-weight:600;color:#222;background:#f9f9f9;outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;cursor:pointer}
+    .select-box select:focus{border-color:#888;background:#fff}
+    .select-box svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#9aa0ab;pointer-events:none}
+    .foto-box{position:relative;margin-top:6px;border:1.5px dashed #ddd;border-radius:16px;background:#f9f9f9;min-height:140px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;max-width:100%}
+    .foto-box:active{background:#f1f1f1}
+    .foto-empty{display:flex;flex-direction:column;align-items:center;gap:6px;color:#c3c8d1;padding:20px;text-align:center}
+    .foto-empty svg{width:32px;height:32px}
+    .foto-empty span{font-size:13px;font-weight:700;color:#6b7280}
+    .foto-empty small{font-size:11px;color:#c3c8d1}
+    #icon_preview{display:none;position:absolute;inset:0;width:100%;height:100%}
+    #icon_preview img{width:100%;height:100%;object-fit:cover;display:block}
+    .foto-change{display:none;position:absolute;right:10px;bottom:10px;background:rgba(26,26,26,0.75);color:#fff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px}
+    .foto-box.has-photo #icon_preview{display:block}
+    .foto-box.has-photo .foto-empty{display:none}
+    .foto-box.has-photo .foto-change{display:block}
+    #f_icon_img{display:none !important}
+    .g-a{background:linear-gradient(135deg,#a5b4fc,#818cf8)}
+    .g-b{background:linear-gradient(135deg,#c4b5fd,#a78bfa)}
+    .g-c{background:linear-gradient(135deg,#93c5fd,#60a5fa)}
+    .g-d{background:linear-gradient(135deg,#67e8f9,#22d3ee)}
+    .g-e{background:linear-gradient(135deg,#6ee7b7,#34d399)}
+    .g-f{background:linear-gradient(135deg,#fcd34d,#fbbf24)}
+    .g-g{background:linear-gradient(135deg,#fca5a5,#f87171)}
+    .g-h{background:linear-gradient(135deg,#f0abfc,#e879f9)}
   </style>
 </head>
 <body>
@@ -59,31 +83,104 @@
   <div id="status" class="status" style="display:none">Menghubungkan ke Supabase...</div>
   <div class="grid">
     <div class="card" style="order:2">
-      <h2>📋 Daftar Menu (<span id="count">0</span>)</h2>
-      <input id="search" class="search" placeholder="Cari nama / kategori / PLU..." />
+      <div class="section-label">Daftar Menu (<span id="count">0</span>)</div>
+      <div class="search-wrapper">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+          <input id="search" type="text" placeholder="Cari menu..." autocomplete="off" />
+        </div>
+      </div>
       <div id="list" class="list"><div class="empty">Memuat...</div></div>
     </div>
     <div class="card" style="order:1">
-      <h2 id="formTitle">➕ Tambah Menu</h2>
+      <div class="section-label" id="formTitle">Tambah Menu</div>
       <form id="form" class="form" onsubmit="return false">
         <input type="hidden" id="editId" />
         <label>Nama *<input id="f_name" placeholder="COFFEE LATTE PREMIX" required /></label>
-        <div class="row">
-          <label>Foto
-          <input id="f_icon_img" type="file" accept="image/*" style="width:100%;margin-top:6px"/>
-          <div id="icon_preview" style="margin-top:6px"></div>
-        </label>
-          <label>Gradient <select id="f_cls"><option value="g-a">g-a ungu</option><option value="g-b">g-b pink</option><option value="g-c">g-c biru</option><option value="g-d">g-d cyan</option><option value="g-e">g-e hijau</option><option value="g-f">g-f kuning</option><option value="g-g">g-g merah</option><option value="g-h">g-h magenta</option></select></label>
+        <div>
+          <div class="foto-title">Foto</div>
+          <div class="foto-box" id="fotoBox">
+            <input id="f_icon_img" type="file" accept="image/*" hidden />
+            <div class="foto-empty">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="3" /><circle cx="12" cy="13" r="3.5" /><path d="M8 7l1.5-2.5h5L16 7" /></svg>
+            </div>
+            <div id="icon_preview"></div>
+            <div class="foto-change">Ganti</div>
+          </div>
         </div>
-        <label>Kategori <input id="f_cat" placeholder="PREMIX / MANUAL / JUS / BLENDED" /></label>
+        <div>
+          <div class="field-title">Kategori</div>
+          <div class="select-box">
+            <select id="f_cat">
+              <option value="PREMIX">PREMIX</option>
+              <option value="MANUAL">MANUAL</option>
+              <option value="BLACK COFFEE">BLACK COFFEE</option>
+              <option value="ESPRESSO">ESPRESSO</option>
+              <option value="CHOCO &amp; MATCHA">CHOCO &amp; MATCHA</option>
+              <option value="BLENDED">BLENDED</option>
+              <option value="SOFT DRINK">SOFT DRINK</option>
+              <option value="JUS">JUS</option>
+              <option value="SPECIALTY &amp; CLOUD">SPECIALTY &amp; CLOUD</option>
+              <option value="UTILITY">UTILITY</option>
+            </select>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9" /></svg>
+          </div>
+        </div>
         <label>Link <input id="f_link" placeholder="pages/item-...html" /></label>
-        <label>PLU <input id="f_plu" placeholder="443775" /></label>
+        <div class="row" style="grid-template-columns:1fr 1fr 1fr">
+          <label>PLU 12OZ <input id="f_plu12" placeholder="443775" /></label>
+          <label>PLU 16OZ <input id="f_plu16" placeholder="443776" /></label>
+          <label>PLU HOT <input id="f_pluHot" placeholder="445073" /></label>
+        </div>
+        <div>
+          <div class="field-title">Bahan 12OZ</div>
+          <div class="row" style="margin-top:6px">
+            <label>Bahan 1 <input id="f_bahan12_1" placeholder="Bahan 1" /></label>
+            <label>Bahan 2 <input id="f_bahan12_2" placeholder="Bahan 2" /></label>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <label>Bahan 3 <input id="f_bahan12_3" placeholder="Bahan 3" /></label>
+            <label>Bahan 4 <input id="f_bahan12_4" placeholder="Bahan 4" /></label>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <label>Bahan 5 <input id="f_bahan12_5" placeholder="Bahan 5" /></label>
+            <label>Bahan 6 <input id="f_bahan12_6" placeholder="Bahan 6" /></label>
+          </div>
+        </div>
+        <div>
+          <div class="field-title">Bahan 16OZ</div>
+          <div class="row" style="margin-top:6px">
+            <label>Bahan 1 <input id="f_bahan16_1" placeholder="Bahan 1" /></label>
+            <label>Bahan 2 <input id="f_bahan16_2" placeholder="Bahan 2" /></label>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <label>Bahan 3 <input id="f_bahan16_3" placeholder="Bahan 3" /></label>
+            <label>Bahan 4 <input id="f_bahan16_4" placeholder="Bahan 4" /></label>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <label>Bahan 5 <input id="f_bahan16_5" placeholder="Bahan 5" /></label>
+            <label>Bahan 6 <input id="f_bahan16_6" placeholder="Bahan 6" /></label>
+          </div>
+        </div>
+        <div>
+          <div class="field-title">Bahan HOT</div>
+          <div class="row" style="margin-top:6px">
+            <label>Bahan 1 <input id="f_bahanHot_1" placeholder="Bahan 1" /></label>
+            <label>Bahan 2 <input id="f_bahanHot_2" placeholder="Bahan 2" /></label>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <label>Bahan 3 <input id="f_bahanHot_3" placeholder="Bahan 3" /></label>
+            <label>Bahan 4 <input id="f_bahanHot_4" placeholder="Bahan 4" /></label>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <label>Bahan 5 <input id="f_bahanHot_5" placeholder="Bahan 5" /></label>
+            <label>Bahan 6 <input id="f_bahanHot_6" placeholder="Bahan 6" /></label>
+          </div>
+        </div>
+        <label>Catatan <input id="f_catatan" placeholder="Catatan..." /></label>
         <div style="display:flex;gap:8px">
           <button id="btnSave" class="btn btn-primary" style="flex:1">Simpan</button>
-          <button id="btnCancel" class="btn btn-ghost" type="button">Batal</button>
         </div>
-        <button id="btnSyncTxt" class="btn btn-ghost" type="button" style="width:100%">🔄 Export ke TXT (download)</button>
-        <p style="font-size:11px;color:#94a3b8">* Setelah simpan, <code>modul/ja-di.html</code> otomatis update (Supabase live). PLU boleh kosong.</p>
       </form>
     </div>
   </div>
@@ -99,21 +196,36 @@
   const editId = document.getElementById('editId');
   const f_name = document.getElementById('f_name');
   let existingIcon = '';
-  const f_cls = document.getElementById('f_cls');
+  let existingCls = 'g-a';
   const f_cat = document.getElementById('f_cat');
   const f_link = document.getElementById('f_link');
-  const f_plu = document.getElementById('f_plu');
+  const f_plu12 = document.getElementById('f_plu12');
+  const f_plu16 = document.getElementById('f_plu16');
+  const f_bahan12 = [1,2,3,4,5,6].map(n => document.getElementById('f_bahan12_' + n));
+  const f_bahan16 = [1,2,3,4,5,6].map(n => document.getElementById('f_bahan16_' + n));
+  const f_bahanHot = [1,2,3,4,5,6].map(n => document.getElementById('f_bahanHot_' + n));
+  const f_pluHot = document.getElementById('f_pluHot');
+  const f_catatan = document.getElementById('f_catatan');
   const btnSave = document.getElementById('btnSave');
-  const btnCancel = document.getElementById('btnCancel');
   const formTitle = document.getElementById('formTitle');
   const f_icon_img = document.getElementById('f_icon_img');
   const iconPreview = document.getElementById('icon_preview');
+  const fotoBox = document.getElementById('fotoBox');
+
+  function syncFotoBox() {
+    fotoBox.classList.toggle('has-photo', iconPreview.innerHTML.trim() !== '');
+  }
+
+
+
+  fotoBox.addEventListener('click', () => f_icon_img.click());
 
   f_icon_img.addEventListener('change', () => {
     const file = f_icon_img.files[0];
-    if (!file) { iconPreview.innerHTML = ''; return; }
+    if (!file) { iconPreview.innerHTML = ''; syncFotoBox(); return; }
     const url = URL.createObjectURL(file);
-    iconPreview.innerHTML = '<img src="'+url+'" style="width:48px;height:48px;object-fit:cover;border-radius:8px"/>';
+    iconPreview.innerHTML = '<img src="'+url+'" alt=""/>';
+    syncFotoBox();
   });
 
   async function uploadIcon(file) {
@@ -138,29 +250,57 @@
     setStatus('Memuat ja_di_menus...');
     const { data, error } = await supabase.from('ja_di_menus').select('*').order('id');
     if (error) { setStatus('Error: ' + error.message, false); return; }
-    all = data || [];
+    all = (data || []).map(m => ({ ...m, plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || m.plu || '' }));
     setStatus('✅ Terhubung — ' + all.length + ' menu dari Supabase');
     render();
   }
 
-  function render() {
-    const q = searchEl.value.trim().toLowerCase();
-    const filtered = all.filter(m => !q || m.name.toLowerCase().includes(q) || (m.cat&&m.cat.toLowerCase().includes(q)) || (m.plu&&m.plu.toLowerCase().includes(q)));
-    countEl.textContent = filtered.length;
-    if (!filtered.length) { listEl.innerHTML = '<div class="empty">Tidak ada data</div>'; return; }
-    listEl.innerHTML = filtered.map(m => `
+  function baseName(n) {
+    return (n || '').toUpperCase().replace(/\(.*?\)/g, ' ').replace(/\b(HOT|ICE|MANUAL|PREMIX|12OZ|16OZ|UPSIZE|REGULAR)\b/g, ' ').replace(/[^A-Z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+  function variantOf(n) {
+    const v = [];
+    if (/\bPREMIX\b/i.test(n)) v.push('PREMIX');
+    else if (/\bMANUAL\b/i.test(n)) v.push('MANUAL');
+    if (/\bHOT\b/i.test(n)) v.push('HOT');
+    else if (/\bICE\b/i.test(n)) v.push('ICE');
+    return v.join(' • ');
+  }
+  function itemHtml(m) {
+    const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
+    const thumb = isImg ? '<img src="'+m.foto+'" alt=""/>' : '<span>'+(m.foto||'☕')+'</span>';
+    const v = variantOf(m.name);
+    return `
       <div class="item">
+        <div class="thumb ${m.cls||''}">${thumb}</div>
         <div class="item-info">
-          <div class="item-name">${m.icon && m.icon.startsWith('http') ? '<img src="'+m.icon+'" style="width:24px;height:24px;border-radius:6px;vertical-align:middle;margin-right:4px"/> ' : (m.icon||'')} ${m.name}</div>
-          <div class="item-meta"><span class="badge">${m.cat||'-'}</span> ${m.plu||''} • ${m.cls||''}</div>
-          <div class="item-meta" style="font-size:10px;color:#94a3b8">${m.link ? '<a href="'+m.link+'" target="_blank" style="color:#6366f1">'+m.link+'</a>' : ''}</div>
+          <div class="item-name">${m.name}${v ? '<span class="vbadge">'+v+'</span>' : ''}</div>
+          <div class="item-meta"><span class="badge">${m.cat||'-'}</span>${m.plu ? ' ' + m.plu : ''}</div>
+          ${m.link ? '<div class="item-meta"><a href="'+m.link+'" target="_blank">'+m.link+'</a></div>' : ''}
         </div>
         <div class="item-actions">
           <button class="btn btn-ghost btn-small" data-edit="${m.id}">Edit</button>
           <button class="btn btn-danger btn-small" data-del="${m.id}">Hapus</button>
         </div>
-      </div>
-    `).join('');
+      </div>`;
+  }
+  function render() {
+    const q = searchEl.value.trim().toLowerCase();
+    const filtered = all.filter(m => !q || m.name.toLowerCase().includes(q) || (m.cat&&m.cat.toLowerCase().includes(q)) || (m.plu&&m.plu.toLowerCase().includes(q)));
+    countEl.textContent = filtered.length;
+    if (!filtered.length) { listEl.innerHTML = '<div class="empty">Tidak ada data</div>'; return; }
+    const groups = {};
+    filtered.forEach(m => {
+      const b = baseName(m.name) || m.name;
+      (groups[b] = groups[b] || []).push(m);
+    });
+    const names = Object.keys(groups).sort((a, b) => a.localeCompare(b));
+    listEl.innerHTML = names.map(b => {
+      const members = groups[b];
+      members.sort((x, y) => x.id - y.id);
+      const head = members.length > 1 ? '<div class="group-head">' + b + ' (' + members.length + ')</div>' : '';
+      return head + members.map(itemHtml).join('');
+    }).join('');
     listEl.querySelectorAll('[data-edit]').forEach(btn => {
       btn.addEventListener('click', () => editRow(parseInt(btn.dataset.edit)));
     });
@@ -174,18 +314,30 @@
     if (!m) return;
     editId.value = m.id;
     f_name.value = m.name;
-    existingIcon = m.icon||'';
-    f_cls.value = m.cls||'g-a';
-    f_cat.value = m.cat||'';
+    existingIcon = m.foto||'';
+    existingCls = m.cls||'g-a';
+    if (m.cat && ![...f_cat.options].some(o => o.value === m.cat)) {
+      const o = document.createElement('option');
+      o.value = m.cat; o.textContent = m.cat;
+      f_cat.appendChild(o);
+    }
+    f_cat.value = m.cat||'PREMIX';
     f_link.value = m.link||'';
-    f_plu.value = m.plu||'';
+    f_plu12.value = m.plu_12oz||'';
+    f_plu16.value = m.plu_16oz||'';
+    f_pluHot.value = m.plu_hot||'';
+    f_bahan12.forEach((inp, i) => { inp.value = m['bahan_12oz_' + (i+1)] || ''; });
+    f_bahan16.forEach((inp, i) => { inp.value = m['bahan_16oz_' + (i+1)] || ''; });
+    f_bahanHot.forEach((inp, i) => { inp.value = m['bahan_hot_' + (i+1)] || ''; });
+    f_catatan.value = m.catatan || '';
     f_icon_img.value = '';
-    if (m.icon && m.icon.startsWith('http')) {
-      iconPreview.innerHTML = '<img src="'+m.icon+'" style="width:48px;height:48px;object-fit:cover;border-radius:8px"/>';
+    if (m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto)) {
+      iconPreview.innerHTML = '<img src="'+m.foto+'" alt=""/>';
     } else {
       iconPreview.innerHTML = '';
     }
-    formTitle.textContent = '✏️ Edit Menu #' + id;
+    syncFotoBox();
+    formTitle.textContent = 'Edit Menu #' + id;
     btnSave.textContent = 'Update';
     window.scrollTo({top:0, behavior:'smooth'});
   };
@@ -197,14 +349,16 @@
     else { setStatus('🗑️ Dihapus #' + id); await load(); }
   };
 
-  btnCancel.onclick = () => {
+  function resetForm() {
     editId.value = '';
     existingIcon = '';
+    existingCls = 'g-a';
     form.reset();
     iconPreview.innerHTML = '';
-    formTitle.textContent = '➕ Tambah Menu';
+    syncFotoBox();
+    formTitle.textContent = 'Tambah Menu';
     btnSave.textContent = 'Simpan';
-  };
+  }
 
   btnSave.onclick = async () => {
     if (!f_name.value.trim()) { alert('Nama wajib'); return; }
@@ -221,11 +375,32 @@
     }
     const payload = {
       name: f_name.value.trim(),
-      icon: iconValue,
-      cls: f_cls.value,
+      foto: iconValue,
+      cls: existingCls,
       cat: f_cat.value.trim(),
       link: f_link.value.trim(),
-      plu: f_plu.value.trim() || null
+      plu_12oz: f_plu12.value.trim() || null,
+      plu_16oz: f_plu16.value.trim() || null,
+      plu_hot: f_pluHot.value.trim() || null,
+      bahan_hot_1: f_bahanHot[0].value.trim() || null,
+      bahan_hot_2: f_bahanHot[1].value.trim() || null,
+      bahan_hot_3: f_bahanHot[2].value.trim() || null,
+      bahan_hot_4: f_bahanHot[3].value.trim() || null,
+      bahan_hot_5: f_bahanHot[4].value.trim() || null,
+      bahan_hot_6: f_bahanHot[5].value.trim() || null,
+      bahan_12oz_1: f_bahan12[0].value.trim() || null,
+      bahan_12oz_2: f_bahan12[1].value.trim() || null,
+      bahan_12oz_3: f_bahan12[2].value.trim() || null,
+      bahan_12oz_4: f_bahan12[3].value.trim() || null,
+      bahan_12oz_5: f_bahan12[4].value.trim() || null,
+      bahan_12oz_6: f_bahan12[5].value.trim() || null,
+      bahan_16oz_1: f_bahan16[0].value.trim() || null,
+      bahan_16oz_2: f_bahan16[1].value.trim() || null,
+      bahan_16oz_3: f_bahan16[2].value.trim() || null,
+      bahan_16oz_4: f_bahan16[3].value.trim() || null,
+      bahan_16oz_5: f_bahan16[4].value.trim() || null,
+      bahan_16oz_6: f_bahan16[5].value.trim() || null,
+      catatan: f_catatan.value.trim() || null
     };
     let error;
     if (editId.value) {
@@ -237,15 +412,7 @@
     }
     btnSave.disabled = false; btnSave.textContent = editId.value ? 'Update' : 'Simpan';
     if (error) { alert('Gagal simpan: ' + error.message + '\n\nJika RLS error, cek SQL Editor: policy insert harus allow public.'); setStatus('Gagal: ' + error.message, false); }
-    else { setStatus('✅ Tersimpan: ' + payload.name); btnCancel.onclick(); await load(); }
-  };
-
-  document.getElementById('btnSyncTxt').onclick = async () => {
-    // export Supabase -> txt format ja-di-data.txt
-    const lines = all.map(m => [m.name, m.icon||'', m.cls||'', m.cat||'', m.link||'', m.plu||''].join('\n')).join('\n---\n');
-    const blob = new Blob([lines], {type:'text/plain'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href=url; a.download='ja-di-data.txt'; a.click(); URL.revokeObjectURL(url);
+    else { setStatus('✅ Tersimpan: ' + payload.name); resetForm(); await load(); }
   };
 
   searchEl.addEventListener('input', render);

@@ -40,7 +40,7 @@ const tail = `
           const href = hasLink ? ' href="' + m.link + '"' : '';
           const plu = m.plu ? '<span class="plu-tag">' + m.plu + '</span>' : '';
           return '<' + tag + ' class="item' + (hasLink ? ' active-modul' : '') + '"' + href + '>' +
-                   '<div class="icon-tile ' + (m.cls||'g-a') + ' icon-photo" data-slug="' + slug + '"><span style="font-size:32px">' + (m.icon||'☕') + '</span></div>' +
+                   '<div class="icon-tile ' + (m.cls||'g-a') + ' icon-photo" data-slug="' + slug + '"><span style="font-size:32px">' + (m.foto||m.icon||'☕') + '</span></div>' +
                    '<span>' + m.name + plu + '</span>' +
                  '</' + tag + '>';
         }).join('');

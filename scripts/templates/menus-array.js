@@ -1,164 +1,83 @@
 const menus = [
         {
-          name: "COFFEE LATTE PREMIX",
+          name: "COFFEE LATTE",
           icon: "🧊",
           cls: "g-a",
-          cat: "PREMIX",
+          cat: "MANUAL & PREMIX",
           link: "pages/item-coffee-latte-ice-premix.html",
-          plu: "443775",
+          plu: "443775 / 443776 / 443835",
         },
         
         {
-          name: "VANILLA LATTE PREMIX",
+          name: "VANILLA LATTE",
           icon: "🍦",
           cls: "g-b",
-          cat: "PREMIX",
+          cat: "MANUAL & PREMIX",
           link: "pages/item-vanilla-latte-premix.html",
           plu: "443790 / 443791",
         },
         
         {
-          name: "SALTED CARAMEL LATTE PREMIX",
+          name: "SALTED CARAMEL LATTE",
           icon: "🍮",
           cls: "g-c",
-          cat: "PREMIX",
+          cat: "MANUAL & PREMIX",
           link: "pages/item-salted-caramel-latte-premix.html",
           plu: "443786 / 443787",
         },
         
         {
-          name: "BUTTERSCOTCH LATTE PREMIX",
+          name: "BUTTERSCOTCH LATTE",
           icon: "🧈",
           cls: "g-d",
-          cat: "PREMIX",
+          cat: "MANUAL & PREMIX",
           link: "pages/item-butterscotch-latte-premix.html",
           plu: "443788 / 443789",
         },
         
         {
-          name: "SALTED BUTTERCORN LATTE PREMIX",
+          name: "SALTED BUTTERCORN LATTE",
           icon: "🌽",
           cls: "g-e",
-          cat: "PREMIX",
+          cat: "MANUAL & PREMIX",
           link: "pages/item-salted-buttercorn-latte-premix.html",
           plu: "466231 / 466232",
         },
         
         {
-          name: "JADI KEREN - KOPSU GULA AREN PREMIX",
+          name: "JADI KEREN - KOPSU GULA AREN",
           icon: "😎",
           cls: "g-f",
-          cat: "PREMIX",
+          cat: "MANUAL & PREMIX",
           link: "pages/item-jadi-keren-kopsu-gula-aren-premix.html",
           plu: "443779 / 443780",
         },
         
         {
-          name: "MOCHA LATTE PREMIX",
+          name: "MOCHA LATTE",
           icon: "🍫",
           cls: "g-g",
-          cat: "PREMIX",
+          cat: "MANUAL & PREMIX",
           link: "pages/item-mocha-latte-premix.html",
           plu: "443783 / 443784",
         },
         
         {
-          name: "JADI RINDU - KOPSU MADU PREMIX",
+          name: "JADI RINDU - KOPSU MADU",
           icon: "❤️",
           cls: "g-h",
-          cat: "PREMIX",
+          cat: "MANUAL & PREMIX",
           link: "pages/item-jadi-rindu-kopsu-madu-premix.html",
           plu: "443781 / 443782",
         },
         
         {
-          name: "JADI MACCHIATTO PREMIX",
+          name: "JADI MACCHIATTO",
           icon: "🍯",
           cls: "g-a",
-          cat: "PREMIX",
+          cat: "MANUAL & PREMIX",
           link: "pages/item-jadi-macchiatto-premix.html",
           plu: "466229 / 466230",
-        },
-        
-        {
-          name: "SALTED BUTTERCORN LATTE MANUAL",
-          icon: "🌽",
-          cls: "g-b",
-          cat: "MANUAL",
-          link: "pages/item-salted-buttercorn-latte-manual.html",
-          plu: "466231 / 466232",
-        },
-        
-        {
-          name: "JADI KEREN - KOPSU GULA AREN MANUAL",
-          icon: "😎",
-          cls: "g-c",
-          cat: "MANUAL",
-          link: "pages/item-jadi-keren-kopsu-gula-aren-manual.html",
-          plu: "443780",
-        },
-        
-        {
-          name: "JADI RINDU - KOPSU MADU MANUAL",
-          icon: "❤️",
-          cls: "g-d",
-          cat: "MANUAL",
-          link: "pages/item-jadi-rindu-kopsu-madu-manual.html",
-          plu: "443782",
-        },
-        
-        {
-          name: "MOCHA LATTE MANUAL",
-          icon: "🍫",
-          cls: "g-e",
-          cat: "MANUAL",
-          link: "pages/item-mocha-latte-manual.html",
-          plu: "443783 / 443784",
-        },
-        
-        {
-          name: "VANILLA LATTE MANUAL",
-          icon: "🍦",
-          cls: "g-f",
-          cat: "MANUAL",
-          link: "pages/item-vanilla-latte-manual.html",
-          plu: "443790 / 443791",
-        },
-        
-        {
-          name: "SALTED CARAMEL LATTE MANUAL",
-          icon: "🍮",
-          cls: "g-g",
-          cat: "MANUAL",
-          link: "pages/item-salted-caramel-latte-manual.html",
-          plu: "443786 / 443787",
-        },
-        
-        {
-          name: "BUTTERSCOTCH LATTE MANUAL",
-          icon: "🧈",
-          cls: "g-h",
-          cat: "MANUAL",
-          link: "pages/item-butterscotch-latte-manual.html",
-          plu: "443788 / 443789",
-        },
-        
-        {
-          name: "JA~DI MACCHIATTO MANUAL",
-          icon: "🍯",
-          cls: "g-a",
-          cat: "MANUAL",
-          link: "pages/item-jadi-macchiatto.html",
-          plu: "466230",
-        },
-        
-        {
-          name: "COFFEE LATTE ICE MANUAL",
-          icon: "🧊",
-          cls: "g-b",
-          cat: "MANUAL",
-          link: "pages/item-coffee-latte-ice-manual.html",
-          plu: "443776 / 443835",
         },
         
         {
@@ -695,8 +614,7 @@ const menus = [
           cat: "SPECIALTY & CLOUD",
           link: "pages/item-macchiato-cloud-foam.html",
         },
-      ]+/g, '-').replace(/^-+|-+$/g, '');
-      }
+      ];
 
       function loadMenuPhotos() {
         const exts = ['.jpg', '.jpeg', '.png', '.svg', '.webp'];
