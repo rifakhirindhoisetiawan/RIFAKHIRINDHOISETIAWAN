@@ -14,7 +14,15 @@
     .status.ok{border-color:#10b981;color:#065f46;background:#ecfdf5}
     .status.err{border-color:#ef4444;color:#991b1b;background:#fef2f2}
     .grid{display:grid;grid-template-columns:1fr 360px;gap:16px}
-    @media(max-width:800px){.grid{grid-template-columns:1fr}}
+    @media(max-width:800px){
+      .grid{grid-template-columns:1fr; gap:12px}
+      .search,.list,.empty,
+      .form input,.form select,.btn,.form label{
+         font-size:13px
+      }
+      .form{padding:6px 10px}
+      h1{font-size:20px}
+   }
     .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px}
     .card h2{font-size:15px;margin-bottom:12px}
     .form{display:grid;gap:10px}
@@ -44,18 +52,21 @@
   <p class="sub">Kelola <code>ja_di_menus</code> di Supabase • Project: xsacwgxxoptdrgbbzzib • <a href="https://supabase.com/dashboard/project/xsacwgxxoptdrgbbzzib/editor" target="_blank">Buka Table Editor</a></p>
   <div id="status" class="status">Menghubungkan ke Supabase...</div>
   <div class="grid">
-    <div class="card">
+    <div class="card" style="order:2">
       <h2>📋 Daftar Menu (<span id="count">0</span>)</h2>
       <input id="search" class="search" placeholder="Cari nama / kategori / PLU..." />
       <div id="list" class="list"><div class="empty">Memuat...</div></div>
     </div>
-    <div class="card">
+    <div class="card" style="order:1">
       <h2 id="formTitle">➕ Tambah Menu</h2>
       <form id="form" class="form" onsubmit="return false">
         <input type="hidden" id="editId" />
         <label>Nama *<input id="f_name" placeholder="COFFEE LATTE PREMIX" required /></label>
         <div class="row">
-          <label>Icon <input id="f_icon" placeholder="🧊" /></label>
+          <label>Icon <input id="f_icon" placeholder="🧊 atau URL gambar" />
+          <input id="f_icon_img" type="file" accept="image/*" style="width:100%;margin-top:6px"/>
+          <div id="icon_preview" style="margin-top:6px"></div>
+        </label>
           <label>Gradient <select id="f_cls"><option value="g-a">g-a ungu</option><option value="g-b">g-b pink</option><option value="g-c">g-c biru</option><option value="g-d">g-d cyan</option><option value="g-e">g-e hijau</option><option value="g-f">g-f kuning</option><option value="g-g">g-g merah</option><option value="g-h">g-h magenta</option></select></label>
         </div>
         <label>Kategori <input id="f_cat" placeholder="PREMIX / MANUAL / JUS / BLENDED" /></label>
@@ -89,14 +100,26 @@
   const btnSave = document.getElementById('btnSave');
   const btnCancel = document.getElementById('btnCancel');
   const formTitle = document.getElementById('formTitle');
+  const f_icon_img = document.getElementById('f_icon_img');
+  const iconPreview = document.getElementById('icon_preview');
 
-  // simple auth - ganti password sesuai kebutuhan
-  const PASS = 'admin123';
-  if (sessionStorage.getItem('admin_ok') !== '1') {
-    const p = prompt('Password Admin (default: admin123):');
-    if (p !== PASS) { document.body.innerHTML = '<div style="padding:40px;text-align:center">❌ Password salah. Refresh untuk coba lagi.</div>'; throw new Error('auth fail'); }
-    sessionStorage.setItem('admin_ok','1');
+  f_icon_img.addEventListener('change', () => {
+    const file = f_icon_img.files[0];
+    if (!file) { iconPreview.innerHTML = ''; return; }
+    const url = URL.createObjectURL(file);
+    iconPreview.innerHTML = '<img src="'+url+'" style="width:48px;height:48px;object-fit:cover;border-radius:8px"/>';
+  });
+
+  async function uploadIcon(file) {
+    const ext = file.name.split('.').pop();
+    const name = Date.now() + '-' + Math.random().toString(36).slice(2,8) + '.' + ext;
+    const { data, error } = await supabase.storage.from('admin-icons').upload(name, file, { cacheControl: '3600', upsert: false });
+    if (error) throw error;
+    const { data: pub } = supabase.storage.from('admin-icons').getPublicUrl(name);
+    return pub.publicUrl;
   }
+
+  // auth disabled
 
   let all = [];
 
@@ -122,19 +145,25 @@
     listEl.innerHTML = filtered.map(m => `
       <div class="item">
         <div class="item-info">
-          <div class="item-name">${m.icon||''} ${m.name}</div>
+          <div class="item-name">${m.icon && m.icon.startsWith('http') ? '<img src="'+m.icon+'" style="width:24px;height:24px;border-radius:6px;vertical-align:middle;margin-right:4px"/> ' : (m.icon||'')} ${m.name}</div>
           <div class="item-meta"><span class="badge">${m.cat||'-'}</span> ${m.plu||''} • ${m.cls||''}</div>
-          <div class="item-meta" style="font-size:10px;color:#94a3b8">${m.link||''}</div>
+          <div class="item-meta" style="font-size:10px;color:#94a3b8">${m.link ? '<a href="'+m.link+'" target="_blank" style="color:#6366f1">'+m.link+'</a>' : ''}</div>
         </div>
         <div class="item-actions">
-          <button class="btn btn-ghost btn-small" onclick="editRow(${m.id})">Edit</button>
-          <button class="btn btn-danger btn-small" onclick="delRow(${m.id})">Hapus</button>
+          <button class="btn btn-ghost btn-small" data-edit="${m.id}">Edit</button>
+          <button class="btn btn-danger btn-small" data-del="${m.id}">Hapus</button>
         </div>
       </div>
     `).join('');
+    listEl.querySelectorAll('[data-edit]').forEach(btn => {
+      btn.addEventListener('click', () => editRow(parseInt(btn.dataset.edit)));
+    });
+    listEl.querySelectorAll('[data-del]').forEach(btn => {
+      btn.addEventListener('click', () => delRow(parseInt(btn.dataset.del)));
+    });
   }
 
-  window.editRow = (id) => {
+  function editRow(id) {
     const m = all.find(x=>x.id===id);
     if (!m) return;
     editId.value = m.id;
@@ -144,12 +173,18 @@
     f_cat.value = m.cat||'';
     f_link.value = m.link||'';
     f_plu.value = m.plu||'';
+    f_icon_img.value = '';
+    if (m.icon && m.icon.startsWith('http')) {
+      iconPreview.innerHTML = '<img src="'+m.icon+'" style="width:48px;height:48px;object-fit:cover;border-radius:8px"/>';
+    } else {
+      iconPreview.innerHTML = '';
+    }
     formTitle.textContent = '✏️ Edit Menu #' + id;
     btnSave.textContent = 'Update';
     window.scrollTo({top:0, behavior:'smooth'});
   };
 
-  window.delRow = async (id) => {
+  async function delRow(id) {
     if (!confirm('Hapus menu #' + id + '?')) return;
     const { error } = await supabase.from('ja_di_menus').delete().eq('id', id);
     if (error) alert('Gagal hapus: ' + error.message);
@@ -159,21 +194,32 @@
   btnCancel.onclick = () => {
     editId.value = '';
     form.reset();
+    iconPreview.innerHTML = '';
     formTitle.textContent = '➕ Tambah Menu';
     btnSave.textContent = 'Simpan';
   };
 
   btnSave.onclick = async () => {
     if (!f_name.value.trim()) { alert('Nama wajib'); return; }
+    btnSave.disabled = true; btnSave.textContent = 'Menyimpan...';
+    let iconValue = f_icon.value.trim() || '☕';
+    if (f_icon_img.files[0]) {
+      try {
+        iconValue = await uploadIcon(f_icon_img.files[0]);
+      } catch (e) {
+        alert('Gagal upload gambar: ' + e.message);
+        btnSave.disabled = false; btnSave.textContent = editId.value ? 'Update' : 'Simpan';
+        return;
+      }
+    }
     const payload = {
       name: f_name.value.trim(),
-      icon: f_icon.value.trim() || '☕',
+      icon: iconValue,
       cls: f_cls.value,
       cat: f_cat.value.trim(),
       link: f_link.value.trim(),
       plu: f_plu.value.trim() || null
     };
-    btnSave.disabled = true; btnSave.textContent = 'Menyimpan...';
     let error;
     if (editId.value) {
       const res = await supabase.from('ja_di_menus').update(payload).eq('id', parseInt(editId.value));

@@ -1016,8 +1016,9 @@
           const tag = hasLink ? 'a' : 'div';
           const href = hasLink ? ' href="' + m.link + '"' : '';
           const plu = m.plu ? '<span class="plu-tag">' + m.plu + '</span>' : '';
+          const iconHtml = (m.icon && m.icon.startsWith('http')) ? '<img src="' + m.icon + '" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>' : '<span style="font-size:32px">' + (m.icon||'☕') + '</span>';
           return '<' + tag + ' class="item' + (hasLink ? ' active-modul' : '') + '"' + href + '>' +
-                   '<div class="icon-tile ' + (m.cls||'g-a') + ' icon-photo" data-slug="' + slug + '"><span style="font-size:32px">' + (m.icon||'☕') + '</span></div>' +
+                   '<div class="icon-tile ' + (m.cls||'g-a') + ' icon-photo" data-slug="' + slug + '">' + iconHtml + '</div>' +
                    '<span>' + m.name + plu + '</span>' +
                  '</' + tag + '>';
         }).join('');
