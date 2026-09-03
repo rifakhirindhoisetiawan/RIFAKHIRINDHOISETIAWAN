@@ -6,8 +6,9 @@
   <title>Admin — JA-DI Supabase</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
+    html,body{max-width:100%;overflow-x:hidden}
     body{font-family:"Segoe UI",system-ui,sans-serif;background:#f8fafc;color:#1f2937;padding:16px}
-    .wrap{max-width:1000px;margin:0 auto}
+    .wrap{max-width:1000px;width:100%;margin:0 auto;min-width:0}
     h1{font-size:22px;margin-bottom:4px}
     .sub{color:#64748b;font-size:13px;margin-bottom:16px}
     .status{padding:10px 14px;border-radius:10px;background:#fff;border:1px solid #e2e8f0;margin-bottom:16px;font-size:13px}
@@ -15,7 +16,10 @@
     .status.err{border-color:#ef4444;color:#991b1b;background:#fef2f2}
     .grid{display:grid;grid-template-columns:1fr 360px;gap:16px}
     @media(max-width:800px){
-      .grid{grid-template-columns:1fr; gap:12px}
+      body{padding:10px}
+      .card{padding:12px}
+      .item{padding:8px 10px}
+      .grid{grid-template-columns:1fr; gap:12px;max-width:100%}
       .search,.list,.empty,
       .form input,.form select,.btn,.form label{
          font-size:13px
@@ -23,34 +27,36 @@
       .form{padding:6px 10px}
       h1{font-size:20px}
    }
-    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px;max-width:100%;min-width:0}
     .card h2{font-size:15px;margin-bottom:12px}
-    .form{display:grid;gap:10px}
-    .form label{font-size:12px;font-weight:700;color:#475569}
-    .form input, .form select{width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;outline:none}
+    .form{display:grid;gap:10px;max-width:100%}
+    .form label{font-size:12px;font-weight:700;color:#475569;display:block;min-width:0;max-width:100%}
+    .form input, .form select{width:100%;max-width:100%;min-width:0;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;outline:none}
     .form input:focus{border-color:#6366f1}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:100%}
+    .row>*{min-width:0}
+    @media(max-width:400px){.row{grid-template-columns:1fr}}
     .btn{padding:10px 16px;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px}
     .btn-primary{background:#6366f1;color:#fff}
     .btn-ghost{background:#f1f5f9;color:#475569}
     .btn-danger{background:#ef4444;color:#fff}
     .btn-small{padding:6px 10px;font-size:12px}
     .search{width:100%;padding:10px 14px;border:1px solid #cbd5e1;border-radius:10px;margin-bottom:12px}
-    .list{max-height:70vh;overflow:auto;display:grid;gap:8px}
-    .item{border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .item-info{flex:1;min-width:0}
-    .item-name{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .item-meta{font-size:11px;color:#64748b}
-    .item-actions{display:flex;gap:6px;flex-shrink:0}
+    .list{display:grid;gap:8px;max-height:none;overflow:visible}
+    ::-webkit-scrollbar{width:0;height:0}
+    *{scrollbar-width:none;-ms-overflow-style:none}
+    .item{border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;max-width:100%;min-width:0}
+    .item-info{flex:1;min-width:0;max-width:100%}
+    .item-name{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+    .item-meta{font-size:11px;color:#64748b;overflow-wrap:anywhere;word-break:break-word;max-width:100%}
+    .item-actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
     .badge{font-size:10px;padding:2px 6px;border-radius:6px;background:#f1f5f9;color:#475569}
     .empty{padding:40px;text-align:center;color:#94a3b8}
   </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>🛠️ Admin JA-DI</h1>
-  <p class="sub">Kelola <code>ja_di_menus</code> di Supabase • Project: xsacwgxxoptdrgbbzzib • <a href="https://supabase.com/dashboard/project/xsacwgxxoptdrgbbzzib/editor" target="_blank">Buka Table Editor</a></p>
-  <div id="status" class="status">Menghubungkan ke Supabase...</div>
+  <div id="status" class="status" style="display:none">Menghubungkan ke Supabase...</div>
   <div class="grid">
     <div class="card" style="order:2">
       <h2>📋 Daftar Menu (<span id="count">0</span>)</h2>
