@@ -236,6 +236,14 @@
     const { data: pub } = supabase.storage.from('admin-icons').getPublicUrl(name);
     return pub.publicUrl;
   }
+  function fileToDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(r.result);
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
 
   // auth disabled
 
@@ -365,12 +373,33 @@
     btnSave.disabled = true; btnSave.textContent = 'Menyimpan...';
     let iconValue = existingIcon || '☕';
     if (f_icon_img.files[0]) {
+      const file = f_icon_img.files[0];
+      // validasi ukuran (max 3MB biar base64 tidak kebesaran)
+      if (file.size > 3 * 1024 * 1024) { alert('Foto kebesaran, max 3MB. Kompres dulu ya.'); btnSave.disabled=false; btnSave.textContent = editId.value ? 'Update' : 'Simpan'; return; }
       try {
-        iconValue = await uploadIcon(f_icon_img.files[0]);
+        iconValue = await uploadIcon(file);
       } catch (e) {
-        alert('Gagal upload gambar: ' + e.message);
-        btnSave.disabled = false; btnSave.textContent = editId.value ? 'Update' : 'Simpan';
-        return;
+        const msg = e.message || '';
+        const isRLS = msg.includes('row-level security') || msg.includes('AccessDenied') || msg.includes('403') || msg.includes('violates');
+        if (isRLS) {
+          // FALLBACK: simpan sebagai base64 dataURL langsung ke kolom foto (tanpa storage)
+          // Tetap bisa edit, hanya butuh fix SQL nanti biar pakai storage URL
+          if (!confirm('Upload ke Storage gagal (RLS belum di-set).\n\nDetail: ' + msg + '\n\nMau simpan foto sebagai base64 sementara biar tetap kesimpan?\n(Disarankan tetap RUN scripts/fix-storage-rls.sql nanti)')) {
+            btnSave.disabled = false; btnSave.textContent = editId.value ? 'Update' : 'Simpan';
+            return;
+          }
+          try {
+            iconValue = await fileToDataURL(file);
+          } catch (err2) {
+            alert('Gagal convert foto: ' + err2.message);
+            btnSave.disabled = false; btnSave.textContent = editId.value ? 'Update' : 'Simpan';
+            return;
+          }
+        } else {
+          alert('Gagal upload gambar: ' + msg);
+          btnSave.disabled = false; btnSave.textContent = editId.value ? 'Update' : 'Simpan';
+          return;
+        }
       }
     }
     const payload = {

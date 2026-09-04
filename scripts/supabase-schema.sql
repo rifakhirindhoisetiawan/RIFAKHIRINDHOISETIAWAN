@@ -64,3 +64,17 @@ create table if not exists recipes (
 alter table recipes enable row level security;
 create policy "Allow public read" on recipes for select using (true);
 create policy "Allow all for service" on recipes for all using (true) with check (true);
+
+-- 4. Storage bucket untuk foto menu (admin.html)
+insert into storage.buckets (id, name, public)
+values ('admin-icons', 'admin-icons', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists "Public read admin-icons" on storage.objects;
+drop policy if exists "Allow upload admin-icons" on storage.objects;
+drop policy if exists "Allow update admin-icons" on storage.objects;
+drop policy if exists "Allow delete admin-icons" on storage.objects;
+create policy "Public read admin-icons" on storage.objects for select using (bucket_id = 'admin-icons');
+create policy "Allow upload admin-icons" on storage.objects for insert with check (bucket_id = 'admin-icons');
+create policy "Allow update admin-icons" on storage.objects for update using (bucket_id = 'admin-icons') with check (bucket_id = 'admin-icons');
+create policy "Allow delete admin-icons" on storage.objects for delete using (bucket_id = 'admin-icons');
