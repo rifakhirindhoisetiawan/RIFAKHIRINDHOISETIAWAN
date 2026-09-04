@@ -1213,9 +1213,8 @@
         }).join('');
         menuGrid.querySelectorAll('.js-detail').forEach(el => {
           el.addEventListener('click', (e) => {
-            const m = shownMenus[parseInt(el.dataset.idx)];
-            if (m && m.link) return; // ada halaman resep -> pindah halaman normal
             e.preventDefault();
+            const m = shownMenus[parseInt(el.dataset.idx)];
             openSheet(m);
           });
         });
@@ -1223,10 +1222,11 @@
       }
       function openSheet(m) {
         if (!m) return;
-        const b12 = [1, 2, 3, 4, 5, 6].map(i => m['bahan_12oz_' + i]).filter(Boolean);
-        const b16 = [1, 2, 3, 4, 5, 6].map(i => m['bahan_16oz_' + i]).filter(Boolean);
-        const bHot = [1, 2, 3, 4, 5, 6].map(i => m['bahan_hot_' + i]).filter(Boolean);
-        const bahans = [...b12, ...b16, ...bHot];
+        const b12 = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_12oz_' + i]).filter(Boolean);
+        const b16 = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_16oz_' + i]).filter(Boolean);
+        const bHot = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_hot_' + i]).filter(Boolean);
+        const bHot16 = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_hot_16oz_' + i]).filter(Boolean);
+        const bahans = [...b12, ...b16, ...bHot, ...bHot16];
         const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
         const photo = isImg ? '<img src="' + m.foto + '" alt=""/>' : '<span style="font-size:48px">' + (m.foto||'☕') + '</span>';
         let html = '<div class="sheet-photo ' + (m.cls||'g-a') + '">' + photo + '</div>';
@@ -1245,7 +1245,8 @@
           const parts = text.split('+').map(s=>s.trim()).filter(Boolean);
           return bahanGroup(title, parts);
         }
-        if (bHot.length) html += bahanGroup('Bahan HOT', bHot);
+        if (bHot.length) html += bahanGroup('Bahan HOT 12OZ', bHot);
+        if (bHot16.length) html += bahanGroup('Bahan HOT 16OZ', bHot16);
         if (b12.length) html += bahanGroup('Bahan 12OZ', b12);
         if (b16.length) html += bahanGroup('Bahan 16OZ', b16);
         if (m.catatan) html += '<div class="sheet-sec">Catatan</div><div class="sheet-note">' + m.catatan + '</div>';

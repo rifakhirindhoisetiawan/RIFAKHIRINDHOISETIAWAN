@@ -35,27 +35,40 @@
     .btn-danger{background:#fff;color:#ef4444;border:1px solid #fecaca}
     .btn-small{padding:6px 12px;font-size:12px}
     .btn:disabled{opacity:0.5}
-    .list{display:grid;gap:4px;max-width:100%}
-    .item{display:flex;align-items:center;gap:12px;padding:8px 0;max-width:100%;min-width:0;background:transparent;border:none}
-    .thumb{width:52px;aspect-ratio:9/16;border-radius:12px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-size:22px;color:#fff}
+    .list{display:grid;gap:0;max-width:100%;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#fff}
+    .list-head{display:grid;grid-template-columns:52px 1fr 90px 110px;gap:8px;padding:8px 10px;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-size:10px;font-weight:800;color:#6b7280;letter-spacing:0.5px;text-transform:uppercase}
+    .list-head span{text-align:left}
+    .list-head span:last-child{text-align:right}
+    .item{display:grid;grid-template-columns:52px 1fr 90px 110px;gap:8px;align-items:center;padding:8px 10px;max-width:100%;min-width:0;background:#fff;border-bottom:1px solid #f3f4f6}
+    .item:last-child{border-bottom:none}
+    .thumb{width:42px;aspect-ratio:1;border-radius:8px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-size:18px;color:#fff}
     .thumb img{width:100%;height:100%;object-fit:cover;display:block}
-    .item-info{flex:1;min-width:0;max-width:100%}
+    .item-info{min-width:0;max-width:100%}
     .item-name{font-size:12px;font-weight:700;color:#1f2937;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-    .item-meta{font-size:11px;color:#9aa0ab;margin-top:2px;overflow-wrap:anywhere;word-break:break-word;max-width:100%}
+    .item-meta{font-size:11px;color:#9aa0ab;margin-top:2px;overflow-wrap:anywhere;word-break:break-word;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .item-meta a{color:#9aa0ab;text-decoration:none}
     .badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;background:#f5f5f5;color:#6b7280}
-    .group-head{font-size:11px;font-weight:800;color:#9aa0ab;letter-spacing:0.6px;text-transform:uppercase;margin:14px 0 4px}
-    .group-head:first-child{margin-top:0}
+    .group-head{grid-column:1/-1;font-size:11px;font-weight:800;color:#9aa0ab;letter-spacing:0.6px;text-transform:uppercase;padding:10px 10px 4px;background:#f9fafb;border-bottom:1px solid #e5e7eb;margin:0}
     .vbadge{font-size:9px;font-weight:800;padding:1px 6px;border-radius:4px;background:#1a1a1a;color:#fff;margin-left:6px;vertical-align:1px;white-space:nowrap}
-    .item-actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+    .item-actions{display:flex;gap:6px;flex-shrink:0;justify-content:flex-end}
+    .col-plu{font-size:11px;font-weight:600;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    @media(max-width:640px){.list-head,.item{grid-template-columns:42px 1fr 70px 90px;gap:6px;padding:6px 8px}.col-plu{font-size:10px}}
     .empty{text-align:center;color:#9aa0ab;font-size:13px;font-weight:600;padding:40px 0}
     .hint{font-size:11px;color:#9aa0ab}
     .foto-title,.field-title{font-size:11px;font-weight:700;color:#1f2937}
+.form-table{width:100%;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#fff;margin-bottom:6px}
+.form-table .tr{display:flex;align-items:stretch;border-bottom:1px solid #e5e7eb;min-height:32px}
+.form-table .tr:last-child{border-bottom:none}
+.form-table .th{min-width:48px;display:flex;align-items:center;padding:0 6px;font-size:10px;font-weight:700;color:#4b5563;background:#f8fafc;border-right:1px solid #e5e7eb;white-space:nowrap;letter-spacing:0}
+.form-table .td{flex:1;display:flex;align-items:center;padding:2px 6px}
+.form-table .td input{width:100%;margin:0 !important;padding:6px 8px;border:1px solid transparent;border-radius:4px;font-size:12px;font-weight:500;color:#111827;background:transparent;outline:none;font-family:inherit;line-height:1.2}
+    .form-table .td input:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 1px #3b82f6}
+    .form-table .td input::placeholder{color:#9ca3af;font-weight:400}
     .select-box{position:relative;margin-top:6px;max-width:100%}
     .select-box select{display:block;width:100%;max-width:100%;min-width:0;margin-top:0;padding:10px 40px 10px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-weight:600;color:#222;background:#f9f9f9;outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;cursor:pointer}
     .select-box select:focus{border-color:#888;background:#fff}
     .select-box svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#9aa0ab;pointer-events:none}
-    .foto-box{position:relative;margin-top:6px;border:1.5px dashed #ddd;border-radius:16px;background:#f9f9f9;min-height:140px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;max-width:100%}
+    .foto-box{position:relative;border:1px solid #e5e7eb;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;max-width:100%}
     .foto-box:active{background:#f1f1f1}
     .foto-empty{display:flex;flex-direction:column;align-items:center;gap:6px;color:#c3c8d1;padding:20px;text-align:center}
     .foto-empty svg{width:32px;height:32px}
@@ -76,6 +89,8 @@
     .g-f{background:linear-gradient(135deg,#fcd34d,#fbbf24)}
     .g-g{background:linear-gradient(135deg,#fca5a5,#f87171)}
     .g-h{background:linear-gradient(135deg,#f0abfc,#e879f9)}
+    .form-table .tr.hidden{display:none}
+    .bahan-add{margin-top:6px;padding:6px 10px;border:1px dashed #d1d5db;border-radius:6px;background:#f9fafb;color:#6b7280;font-size:11px;font-weight:700;cursor:pointer;width:100%}
   </style>
 </head>
 <body>
@@ -95,13 +110,32 @@
     <div class="card" style="order:1">
       <form id="form" class="form" onsubmit="return false">
         <input type="hidden" id="editId" />
-        <div>
-          <div class="field-title">Nama *</div>
-          <input id="f_name" placeholder="COFFEE LATTE PREMIX" required style="margin-top:3px" />
+        <div class="form-table">
+          <div class="tr">
+            <div class="th">Nama</div>
+            <div class="td"><input id="f_name" placeholder="COFFEE LATTE PREMIX" required /></div>
+          </div>
         </div>
-        <div>
-          <div class="foto-title">Foto</div>
-          <div class="foto-box" id="fotoBox">
+        <div style="display:grid;grid-template-columns:1fr 70%;gap:10px;align-items:stretch;margin-top:0;height:148px">
+          <div class="form-table" style="height:100%;display:grid;grid-template-rows:repeat(4,1fr)">
+            <div class="tr">
+              <div class="th">12OZ</div>
+              <div class="td"><input id="f_plu12" placeholder="443775" /></div>
+            </div>
+            <div class="tr">
+              <div class="th">16OZ</div>
+              <div class="td"><input id="f_plu16" placeholder="443776" /></div>
+            </div>
+            <div class="tr">
+              <div class="th">HOT</div>
+              <div class="td"><input id="f_pluHot" placeholder="PLU HOT" /></div>
+            </div>
+            <div class="tr">
+              <div class="th">ICE</div>
+              <div class="td"><input id="f_pluIce" placeholder="PLU ICE" /></div>
+            </div>
+          </div>
+          <div class="foto-box" id="fotoBox" style="height:100%;min-height:0;aspect-ratio:auto;width:100%;display:flex;align-items:center;justify-content:center">
             <input id="f_icon_img" type="file" accept="image/*" hidden />
             <div class="foto-empty">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="3" /><circle cx="12" cy="13" r="3.5" /><path d="M8 7l1.5-2.5h5L16 7" /></svg>
@@ -110,84 +144,109 @@
             <div class="foto-change">Ganti</div>
           </div>
         </div>
-        <label>Link <input id="f_link" placeholder="pages/item-...html" /></label>
-        <div class="row" style="grid-template-columns:1fr 1fr">
-          <label>PLU 12OZ <input id="f_plu12" placeholder="443775" /></label>
-          <label>PLU 16OZ <input id="f_plu16" placeholder="443776" /></label>
+        <input type="hidden" id="f_link" />
+        <div class="form-table">
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_1" placeholder="Bahan 1" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_2" placeholder="Bahan 2" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_3" placeholder="Bahan 3" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_4" placeholder="Bahan 4" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_5" placeholder="Bahan 5" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_6" placeholder="Bahan 6" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_7" placeholder="Bahan 7" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_8" placeholder="Bahan 8" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_9" placeholder="Bahan 9" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_10" placeholder="Bahan 10" /></div></div>
         </div>
-        <div>
-          <div class="field-title">Bahan 12OZ</div>
-          <div class="row" style="margin-top:6px">
-            <label>Bahan 1 <input id="f_bahan12_1" placeholder="Bahan 1" /></label>
-            <label>Bahan 2 <input id="f_bahan12_2" placeholder="Bahan 2" /></label>
-          </div>
-          <div class="row" style="margin-top:10px">
-            <label>Bahan 3 <input id="f_bahan12_3" placeholder="Bahan 3" /></label>
-            <label>Bahan 4 <input id="f_bahan12_4" placeholder="Bahan 4" /></label>
-          </div>
-          <div class="row" style="margin-top:10px">
-            <label>Bahan 5 <input id="f_bahan12_5" placeholder="Bahan 5" /></label>
-            <label>Bahan 6 <input id="f_bahan12_6" placeholder="Bahan 6" /></label>
+        <div class="form-table">
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_1" placeholder="Bahan 1" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_2" placeholder="Bahan 2" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_3" placeholder="Bahan 3" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_4" placeholder="Bahan 4" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_5" placeholder="Bahan 5" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_6" placeholder="Bahan 6" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_7" placeholder="Bahan 7" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_8" placeholder="Bahan 8" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_9" placeholder="Bahan 9" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_10" placeholder="Bahan 10" /></div></div>
+        </div>
+        <div class="form-table">
+          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_1" placeholder="Bahan 1" /></div></div>
+          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_2" placeholder="Bahan 2" /></div></div>
+          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_3" placeholder="Bahan 3" /></div></div>
+          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_4" placeholder="Bahan 4" /></div></div>
+          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_5" placeholder="Bahan 5" /></div></div>
+          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_6" placeholder="Bahan 6" /></div></div>
+          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_7" placeholder="Bahan 7" /></div></div>
+          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_8" placeholder="Bahan 8" /></div></div>
+          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_9" placeholder="Bahan 9" /></div></div>
+          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_10" placeholder="Bahan 10" /></div></div>
+        </div>
+        <div class="form-table">
+          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_1" placeholder="Bahan 1" /></div></div>
+          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_2" placeholder="Bahan 2" /></div></div>
+          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_3" placeholder="Bahan 3" /></div></div>
+          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_4" placeholder="Bahan 4" /></div></div>
+          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_5" placeholder="Bahan 5" /></div></div>
+          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_6" placeholder="Bahan 6" /></div></div>
+          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_7" placeholder="Bahan 7" /></div></div>
+          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_8" placeholder="Bahan 8" /></div></div>
+          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_9" placeholder="Bahan 9" /></div></div>
+          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_10" placeholder="Bahan 10" /></div></div>
+        </div>
+        <div class="form-table">
+          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_1" placeholder="Bahan 1" /></div></div>
+          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_2" placeholder="Bahan 2" /></div></div>
+          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_3" placeholder="Bahan 3" /></div></div>
+          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_4" placeholder="Bahan 4" /></div></div>
+          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_5" placeholder="Bahan 5" /></div></div>
+          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_6" placeholder="Bahan 6" /></div></div>
+          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_7" placeholder="Bahan 7" /></div></div>
+          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_8" placeholder="Bahan 8" /></div></div>
+          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_9" placeholder="Bahan 9" /></div></div>
+          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_10" placeholder="Bahan 10" /></div></div>
+        </div>
+        <div class="form-table">
+          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_1" placeholder="Bahan 1" /></div></div>
+          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_2" placeholder="Bahan 2" /></div></div>
+          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_3" placeholder="Bahan 3" /></div></div>
+          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_4" placeholder="Bahan 4" /></div></div>
+          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_5" placeholder="Bahan 5" /></div></div>
+          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_6" placeholder="Bahan 6" /></div></div>
+          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_7" placeholder="Bahan 7" /></div></div>
+          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_8" placeholder="Bahan 8" /></div></div>
+          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_9" placeholder="Bahan 9" /></div></div>
+          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_10" placeholder="Bahan 10" /></div></div>
+        </div>
+        <div class="form-table">
+          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_1" placeholder="Bahan 1" /></div></div>
+          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_2" placeholder="Bahan 2" /></div></div>
+          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_3" placeholder="Bahan 3" /></div></div>
+          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_4" placeholder="Bahan 4" /></div></div>
+          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_5" placeholder="Bahan 5" /></div></div>
+          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_6" placeholder="Bahan 6" /></div></div>
+          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_7" placeholder="Bahan 7" /></div></div>
+          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_8" placeholder="Bahan 8" /></div></div>
+          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_9" placeholder="Bahan 9" /></div></div>
+          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_10" placeholder="Bahan 10" /></div></div>
+        </div>
+        <div class="form-table">
+          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_1" placeholder="Bahan 1" /></div></div>
+          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_2" placeholder="Bahan 2" /></div></div>
+          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_3" placeholder="Bahan 3" /></div></div>
+          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_4" placeholder="Bahan 4" /></div></div>
+          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_5" placeholder="Bahan 5" /></div></div>
+          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_6" placeholder="Bahan 6" /></div></div>
+          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_7" placeholder="Bahan 7" /></div></div>
+          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_8" placeholder="Bahan 8" /></div></div>
+          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_9" placeholder="Bahan 9" /></div></div>
+          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_10" placeholder="Bahan 10" /></div></div>
+        </div>
+        <div class="form-table">
+          <div class="tr">
+            <div class="th">Catatan</div>
+            <div class="td"><input id="f_catatan" placeholder="Catatan..." /></div>
           </div>
         </div>
-        <div>
-          <div class="field-title">Bahan 16OZ</div>
-          <div class="row" style="margin-top:6px">
-            <label>Bahan 1 <input id="f_bahan16_1" placeholder="Bahan 1" /></label>
-            <label>Bahan 2 <input id="f_bahan16_2" placeholder="Bahan 2" /></label>
-          </div>
-          <div class="row" style="margin-top:10px">
-            <label>Bahan 3 <input id="f_bahan16_3" placeholder="Bahan 3" /></label>
-            <label>Bahan 4 <input id="f_bahan16_4" placeholder="Bahan 4" /></label>
-          </div>
-          <div class="row" style="margin-top:10px">
-            <label>Bahan 5 <input id="f_bahan16_5" placeholder="Bahan 5" /></label>
-            <label>Bahan 6 <input id="f_bahan16_6" placeholder="Bahan 6" /></label>
-          </div>
-        </div>
-        <div>
-          <div class="field-title">Bahan HOT 12OZ</div>
-          <div class="row" style="margin-top:6px">
-            <label>Bahan 1 <input id="f_bahanHot_1" placeholder="Bahan 1" /></label>
-            <label>Bahan 2 <input id="f_bahanHot_2" placeholder="Bahan 2" /></label>
-          </div>
-          <div class="row" style="margin-top:10px">
-            <label>Bahan 3 <input id="f_bahanHot_3" placeholder="Bahan 3" /></label>
-            <label>Bahan 4 <input id="f_bahanHot_4" placeholder="Bahan 4" /></label>
-          </div>
-          <div class="row" style="margin-top:10px">
-            <label>Bahan 5 <input id="f_bahanHot_5" placeholder="Bahan 5" /></label>
-            <label>Bahan 6 <input id="f_bahanHot_6" placeholder="Bahan 6" /></label>
-          </div>
-        </div>
-        <div>
-          <div class="field-title">Bahan HOT 16OZ</div>
-          <div class="row" style="margin-top:6px">
-            <label>Bahan 1 <input id="f_bahanHot16_1" placeholder="Bahan 1" /></label>
-            <label>Bahan 2 <input id="f_bahanHot16_2" placeholder="Bahan 2" /></label>
-          </div>
-          <div class="row" style="margin-top:10px">
-            <label>Bahan 3 <input id="f_bahanHot16_3" placeholder="Bahan 3" /></label>
-            <label>Bahan 4 <input id="f_bahanHot16_4" placeholder="Bahan 4" /></label>
-          </div>
-          <div class="row" style="margin-top:10px">
-            <label>Bahan 5 <input id="f_bahanHot16_5" placeholder="Bahan 5" /></label>
-            <label>Bahan 6 <input id="f_bahanHot16_6" placeholder="Bahan 6" /></label>
-          </div>
-        </div>
-        <div style="border:1px solid #a5d6a7;border-radius:10px;padding:12px;background:#f0faf0">
-          <div class="field-title" style="margin-bottom:8px;color:#2e7d32">Kolom Khusus Percepatan — Supabase <span style="font-weight:400;color:#689f63">baru</span></div>
-          <label>Percepatan (umum) <input id="f_percepatan" placeholder="Metode percepatan..." /></label>
-          <div class="row" style="margin-top:8px">
-            <label>Percepatan 12OZ <input id="f_percepatan12" placeholder="Percepatan 12oz..." /></label>
-            <label>Percepatan 16OZ <input id="f_percepatan16" placeholder="Percepatan 16oz..." /></label>
-          </div>
-          <div class="row" style="margin-top:8px">
-            <label>Percepatan HOT <input id="f_percepatanHot" placeholder="Percepatan HOT..." /></label>
-            <label style="opacity:0;pointer-events:none">-</label>
-          </div>
-        </div>
-        <label>Catatan <input id="f_catatan" placeholder="Catatan..." /></label>
         <div style="display:flex;gap:8px">
           <button id="btnSave" class="btn btn-primary" style="flex:1">Simpan</button>
         </div>
@@ -210,15 +269,22 @@
   const f_link = document.getElementById('f_link');
   const f_plu12 = document.getElementById('f_plu12');
   const f_plu16 = document.getElementById('f_plu16');
-  const f_bahan12 = [1,2,3,4,5,6].map(n => document.getElementById('f_bahan12_' + n));
-  const f_bahan16 = [1,2,3,4,5,6].map(n => document.getElementById('f_bahan16_' + n));
-  const f_bahanHot = [1,2,3,4,5,6].map(n => document.getElementById('f_bahanHot_' + n));
-  const f_bahanHot16 = [1,2,3,4,5,6].map(n => document.getElementById('f_bahanHot16_' + n));
+  const f_pluHot = document.getElementById('f_pluHot');
+  const f_pluIce = document.getElementById('f_pluIce');
+  const f_bahan12 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahan12_' + n));
+  const f_bahan16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahan16_' + n));
+  const f_bahanHot = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahanHot_' + n));
+  const f_bahanHot16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahanHot16_' + n));
+  const f_percepatan12 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_percepatan12_' + n));
+  const f_percepatan16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_percepatan16_' + n));
+  const f_bahanIce12 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahanIce12_' + n));
+  const f_bahanIce16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahanIce16_' + n));
   const f_catatan = document.getElementById('f_catatan');
   const btnSave = document.getElementById('btnSave');
   const f_icon_img = document.getElementById('f_icon_img');
   const iconPreview = document.getElementById('icon_preview');
   const fotoBox = document.getElementById('fotoBox');
+  const fotoName = document.getElementById('fotoName');
   let currentTable = 'ja_di_menus';
   let existingCat = 'PREMIX';
   function syncFotoBox() {
@@ -231,9 +297,10 @@
 
   f_icon_img.addEventListener('change', () => {
     const file = f_icon_img.files[0];
-    if (!file) { iconPreview.innerHTML = ''; syncFotoBox(); return; }
+    if (!file) { iconPreview.innerHTML = ''; if(fotoName) fotoName.textContent = 'Belum ada foto'; syncFotoBox(); return; }
     const url = URL.createObjectURL(file);
     iconPreview.innerHTML = '<img src="'+url+'" alt=""/>';
+    if(fotoName) fotoName.textContent = file.name;
     syncFotoBox();
   });
 
@@ -276,7 +343,7 @@
       }
       setStatus('Error: ' + error.message, false); return;
     }
-    all = (data || []).map(m => ({ ...m, plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu || '' }));
+    all = (data || []).map(m => ({ ...m, plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || m.plu_ice || m.plu || '' }));
     setStatus('✅ ' + label + ' — ' + all.length + ' menu dari Supabase');
     render();
   }
@@ -292,6 +359,7 @@
     else if (/\bICE\b/i.test(n)) v.push('ICE');
     return v.join(' • ');
   }
+  function slugify(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
   function itemHtml(m) {
     const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
     const thumb = isImg ? '<img src="'+m.foto+'" alt=""/>' : '<span>'+(m.foto||'☕')+'</span>';
@@ -301,9 +369,9 @@
         <div class="thumb ${m.cls||''}">${thumb}</div>
         <div class="item-info">
           <div class="item-name">${m.name}${v ? '<span class="vbadge">'+v+'</span>' : ''}</div>
-          <div class="item-meta"><span class="badge">${m.cat||'-'}</span>${m.plu ? ' ' + m.plu : ''}</div>
-          ${m.link ? '<div class="item-meta"><a href="'+m.link+'" target="_blank">'+m.link+'</a></div>' : ''}
+          <div class="item-meta"><span class="badge">${m.cat||'-'}</span></div>
         </div>
+        <div class="col-plu">${m.plu||'-'}</div>
         <div class="item-actions">
           <button class="btn btn-ghost btn-small" data-edit="${m.id}">Edit</button>
           <button class="btn btn-danger btn-small" data-del="${m.id}">Hapus</button>
@@ -322,7 +390,8 @@
       (groups[b] = groups[b] || []).push(m);
     });
     const names = Object.keys(groups).sort((a, b) => a.localeCompare(b));
-    listEl.innerHTML = names.map(b => {
+    const header = '<div class="list-head"><span></span><span>Nama</span><span>PLU</span><span>Aksi</span></div>';
+    listEl.innerHTML = header + names.map(b => {
       const members = groups[b];
       members.sort((x, y) => x.id - y.id);
       const head = members.length > 1 ? '<div class="group-head">' + b + ' (' + members.length + ')</div>' : '';
@@ -347,16 +416,24 @@
     f_link.value = m.link||'';
     f_plu12.value = m.plu_12oz||'';
     f_plu16.value = m.plu_16oz||'';
+    if(f_pluHot) f_pluHot.value = m.plu_hot||'';
+    if(f_pluIce) f_pluIce.value = m.plu_ice||'';
     f_bahan12.forEach((inp, i) => { inp.value = m['bahan_12oz_' + (i+1)] || ''; });
     f_bahan16.forEach((inp, i) => { inp.value = m['bahan_16oz_' + (i+1)] || ''; });
     f_bahanHot.forEach((inp, i) => { inp.value = m['bahan_hot_' + (i+1)] || ''; });
     f_bahanHot16.forEach((inp, i) => { inp.value = m['bahan_hot_16oz_' + (i+1)] || ''; });
+    f_percepatan12.forEach((inp, i) => { inp.value = m['percepatan_12oz_' + (i+1)] || ''; });
+    f_percepatan16.forEach((inp, i) => { inp.value = m['percepatan_16oz_' + (i+1)] || ''; });
+    f_bahanIce12.forEach((inp, i) => { inp.value = m['bahan_ice_12oz_' + (i+1)] || ''; });
+    f_bahanIce16.forEach((inp, i) => { inp.value = m['bahan_ice_16oz_' + (i+1)] || ''; });
     f_catatan.value = m.catatan || '';
     f_icon_img.value = '';
     if (m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto)) {
       iconPreview.innerHTML = '<img src="'+m.foto+'" alt=""/>';
+      if(fotoName) fotoName.textContent = m.foto.split('/').pop().slice(0,24);
     } else {
       iconPreview.innerHTML = '';
+      if(fotoName) fotoName.textContent = m.foto || 'Belum ada foto';
     }
     syncFotoBox();
     btnSave.textContent = 'Update';
@@ -376,6 +453,7 @@
     existingCls = 'g-a';
     form.reset();
     iconPreview.innerHTML = '';
+    if(fotoName) fotoName.textContent = 'Belum ada foto';
     syncFotoBox();
     btnSave.textContent = 'Simpan';
   }
@@ -414,38 +492,76 @@
         }
       }
     }
+    const autoLink = 'pages/item-' + slugify(f_name.value.trim()) + '.html';
     const payload = {
       name: f_name.value.trim(),
       foto: iconValue,
       cls: existingCls,
-      cat: existingCat,
-      link: f_link.value.trim(),
+      link: f_link.value.trim() || autoLink,
       plu_12oz: f_plu12.value.trim() || null,
       plu_16oz: f_plu16.value.trim() || null,
-      bahan_hot_1: f_bahanHot[0].value.trim() || null,
-      bahan_hot_2: f_bahanHot[1].value.trim() || null,
-      bahan_hot_3: f_bahanHot[2].value.trim() || null,
-      bahan_hot_4: f_bahanHot[3].value.trim() || null,
-      bahan_hot_5: f_bahanHot[4].value.trim() || null,
-      bahan_hot_6: f_bahanHot[5].value.trim() || null,
-      bahan_hot_16oz_1: f_bahanHot16[0].value.trim() || null,
-      bahan_hot_16oz_2: f_bahanHot16[1].value.trim() || null,
-      bahan_hot_16oz_3: f_bahanHot16[2].value.trim() || null,
-      bahan_hot_16oz_4: f_bahanHot16[3].value.trim() || null,
-      bahan_hot_16oz_5: f_bahanHot16[4].value.trim() || null,
-      bahan_hot_16oz_6: f_bahanHot16[5].value.trim() || null,
+      plu_hot: f_pluHot ? f_pluHot.value.trim() || null : null,
+      plu_ice: f_pluIce ? f_pluIce.value.trim() || null : null,
+      percepatan_12oz_1: f_percepatan12[0].value.trim() || null,
+      percepatan_12oz_2: f_percepatan12[1].value.trim() || null,
+      percepatan_12oz_3: f_percepatan12[2].value.trim() || null,
+      percepatan_12oz_4: f_percepatan12[3].value.trim() || null,
+      percepatan_12oz_5: f_percepatan12[4].value.trim() || null,
+      percepatan_12oz_6: f_percepatan12[5].value.trim() || null,
+      percepatan_12oz_7: f_percepatan12[6].value.trim() || null,
+      percepatan_12oz_8: f_percepatan12[7].value.trim() || null,
+      percepatan_12oz_9: f_percepatan12[8].value.trim() || null,
+      percepatan_12oz_10: f_percepatan12[9].value.trim() || null,
+      percepatan_16oz_1: f_percepatan16[0].value.trim() || null,
+      percepatan_16oz_2: f_percepatan16[1].value.trim() || null,
+      percepatan_16oz_3: f_percepatan16[2].value.trim() || null,
+      percepatan_16oz_4: f_percepatan16[3].value.trim() || null,
+      percepatan_16oz_5: f_percepatan16[4].value.trim() || null,
+      percepatan_16oz_6: f_percepatan16[5].value.trim() || null,
+      percepatan_16oz_7: f_percepatan16[6].value.trim() || null,
+      percepatan_16oz_8: f_percepatan16[7].value.trim() || null,
+      percepatan_16oz_9: f_percepatan16[8].value.trim() || null,
+      percepatan_16oz_10: f_percepatan16[9].value.trim() || null,
+      bahan_ice_12oz_1: f_bahanIce12[0].value.trim() || null,
+      bahan_ice_12oz_2: f_bahanIce12[1].value.trim() || null,
+      bahan_ice_12oz_3: f_bahanIce12[2].value.trim() || null,
+      bahan_ice_12oz_4: f_bahanIce12[3].value.trim() || null,
+      bahan_ice_12oz_5: f_bahanIce12[4].value.trim() || null,
+      bahan_ice_12oz_6: f_bahanIce12[5].value.trim() || null,
+      bahan_ice_12oz_7: f_bahanIce12[6].value.trim() || null,
+      bahan_ice_12oz_8: f_bahanIce12[7].value.trim() || null,
+      bahan_ice_12oz_9: f_bahanIce12[8].value.trim() || null,
+      bahan_ice_12oz_10: f_bahanIce12[9].value.trim() || null,
+      bahan_ice_16oz_1: f_bahanIce16[0].value.trim() || null,
+      bahan_ice_16oz_2: f_bahanIce16[1].value.trim() || null,
+      bahan_ice_16oz_3: f_bahanIce16[2].value.trim() || null,
+      bahan_ice_16oz_4: f_bahanIce16[3].value.trim() || null,
+      bahan_ice_16oz_5: f_bahanIce16[4].value.trim() || null,
+      bahan_ice_16oz_6: f_bahanIce16[5].value.trim() || null,
+      bahan_ice_16oz_7: f_bahanIce16[6].value.trim() || null,
+      bahan_ice_16oz_8: f_bahanIce16[7].value.trim() || null,
+      bahan_ice_16oz_9: f_bahanIce16[8].value.trim() || null,
+      bahan_ice_16oz_10: f_bahanIce16[9].value.trim() || null,
       bahan_12oz_1: f_bahan12[0].value.trim() || null,
       bahan_12oz_2: f_bahan12[1].value.trim() || null,
       bahan_12oz_3: f_bahan12[2].value.trim() || null,
       bahan_12oz_4: f_bahan12[3].value.trim() || null,
       bahan_12oz_5: f_bahan12[4].value.trim() || null,
       bahan_12oz_6: f_bahan12[5].value.trim() || null,
+      bahan_12oz_7: f_bahan12[6].value.trim() || null,
+      bahan_12oz_8: f_bahan12[7].value.trim() || null,
+      bahan_12oz_9: f_bahan12[8].value.trim() || null,
+      bahan_12oz_10: f_bahan12[9].value.trim() || null,
       bahan_16oz_1: f_bahan16[0].value.trim() || null,
       bahan_16oz_2: f_bahan16[1].value.trim() || null,
       bahan_16oz_3: f_bahan16[2].value.trim() || null,
       bahan_16oz_4: f_bahan16[3].value.trim() || null,
       bahan_16oz_5: f_bahan16[4].value.trim() || null,
       bahan_16oz_6: f_bahan16[5].value.trim() || null,
+      bahan_16oz_7: f_bahan16[6].value.trim() || null,
+      bahan_16oz_8: f_bahan16[7].value.trim() || null,
+      bahan_16oz_9: f_bahan16[8].value.trim() || null,
+      bahan_16oz_10: f_bahan16[9].value.trim() || null,
       catatan: f_catatan.value.trim() || null
     };
     // tambahkan has_percepatan untuk dr_coffee jika perlu
@@ -457,19 +573,25 @@
     if (editId.value) {
       res = await supabase.from(currentTable).update(payload).eq('id', parseInt(editId.value));
       error = res.error;
-      // fallback kalau kolom hot16 belum ada (belum RUN migrate)
-      if (error && /bahan_hot_16oz|PGRST204/i.test(error.message)) {
-        alert('Kolom HOT16 belum ada di Supabase.\n\nRUN dulu: scripts/add-hot-16oz.sql\nLink: https://supabase.com/dashboard/project/xsacwgxxoptdrgbbzzib/sql/new\n\nMencoba simpan tanpa kolom baru...');
+      // fallback kalau kolom hot16/hotAll/plu/percepatan/ice belum ada (belum RUN migrate)
+      if (error && /bahan_hot_16oz|bahan_hot_all|plu_hot|plu_ice|percepatan|bahan_ice|PGRST204/i.test(error.message)) {
+        alert('Kolom HOT16/HOT/PLU/Percepatan/ICE belum ada di Supabase.\n\nRUN dulu:\n- scripts/add-hot-16oz.sql\n- scripts/add-hot-all.sql\n- scripts/add-percepatan-column.sql\n- scripts/add-ice-12-16.sql\nLink: https://supabase.com/dashboard/project/xsacwgxxoptdrgbbzzib/sql/new\n\nMencoba simpan tanpa kolom baru...');
         delete payload.bahan_hot_16oz_1; delete payload.bahan_hot_16oz_2; delete payload.bahan_hot_16oz_3; delete payload.bahan_hot_16oz_4; delete payload.bahan_hot_16oz_5; delete payload.bahan_hot_16oz_6;
+        delete payload.bahan_hot_all_1; delete payload.bahan_hot_all_2; delete payload.bahan_hot_all_3; delete payload.bahan_hot_all_4; delete payload.bahan_hot_all_5; delete payload.bahan_hot_all_6;
+        delete payload.plu_hot; delete payload.plu_ice;
+        for(let i=1;i<=6;i++){ delete payload['percepatan_12oz_'+i]; delete payload['percepatan_16oz_'+i]; delete payload['bahan_ice_12oz_'+i]; delete payload['bahan_ice_16oz_'+i]; }
         const retry = await supabase.from(currentTable).update(payload).eq('id', parseInt(editId.value));
         error = retry.error; res = retry;
       }
     } else {
       res = await supabase.from(currentTable).insert([payload]);
       error = res.error;
-      if (error && /bahan_hot_16oz|PGRST204/i.test(error.message)) {
-        alert('Kolom HOT16 belum ada di Supabase.\n\nRUN dulu: scripts/add-hot-16oz.sql\n\nMencoba simpan tanpa kolom baru...');
+      if (error && /bahan_hot_16oz|bahan_hot_all|plu_hot|plu_ice|percepatan|bahan_ice|PGRST204/i.test(error.message)) {
+        alert('Kolom HOT16/HOT/PLU/Percepatan/ICE belum ada di Supabase.\n\nRUN dulu:\n- scripts/add-hot-16oz.sql\n- scripts/add-hot-all.sql\n- scripts/add-percepatan-column.sql\n- scripts/add-ice-12-16.sql\n\nMencoba simpan tanpa kolom baru...');
         delete payload.bahan_hot_16oz_1; delete payload.bahan_hot_16oz_2; delete payload.bahan_hot_16oz_3; delete payload.bahan_hot_16oz_4; delete payload.bahan_hot_16oz_5; delete payload.bahan_hot_16oz_6;
+        delete payload.bahan_hot_all_1; delete payload.bahan_hot_all_2; delete payload.bahan_hot_all_3; delete payload.bahan_hot_all_4; delete payload.bahan_hot_all_5; delete payload.bahan_hot_all_6;
+        delete payload.plu_hot; delete payload.plu_ice;
+        for(let i=1;i<=6;i++){ delete payload['percepatan_12oz_'+i]; delete payload['percepatan_16oz_'+i]; delete payload['bahan_ice_12oz_'+i]; delete payload['bahan_ice_16oz_'+i]; }
         const retry = await supabase.from(currentTable).insert([payload]);
         error = retry.error; res = retry;
       }
@@ -481,10 +603,45 @@
 
   searchEl.addEventListener('input', render);
 
+  // bahan cuma 1 baris tampil, plus nambah baris biar nyatu ke tabel 1
+  function initBahanTables(){
+    document.querySelectorAll('.form-table').forEach(table=>{
+      if(table.querySelector('#f_name') || table.querySelector('[id^="f_plu"]')) return;
+      const rows = Array.from(table.querySelectorAll('.tr'));
+      const isBahan = rows.length>1;
+      if(!isBahan) return;
+      if(table.querySelector('.bahan-add')) return;
+      let visible = 1;
+      rows.forEach((r,i)=>{
+        const inp=r.querySelector('input');
+        if(inp && inp.value.trim() && i+1>visible) visible=i+1;
+        if(i>=visible) r.classList.add('hidden');
+      });
+      const trPlus = document.createElement('div');
+      trPlus.className='tr'; trPlus.style.background='#f9fafb';
+      const btn = document.createElement('button');
+      btn.type='button'; btn.className='bahan-add'; btn.style.margin='0'; btn.style.width='100%'; btn.style.border='none'; btn.style.background='transparent';
+      btn.textContent='+ Bahan '+(visible+1);
+      if(visible>=10) trPlus.style.display='none';
+      if(!table.querySelector('.tr.hidden')) trPlus.style.display='none';
+      btn.onclick=()=>{
+        const hidden = table.querySelector('.tr.hidden');
+        if(hidden){ hidden.classList.remove('hidden'); visible++; btn.textContent='+ Bahan '+(visible+1); if(visible>=10 || !table.querySelector('.tr.hidden')) trPlus.style.display='none'; }
+      };
+      trPlus.appendChild(btn);
+      table.appendChild(trPlus);
+    });
+  }
+  const _origReset5 = resetForm;
+  resetForm = function(){ document.querySelectorAll('.bahan-add').forEach(b=>{ const tr=b.closest('.tr'); if(tr) tr.remove(); }); document.querySelectorAll('.form-table .tr.hidden').forEach(r=>r.classList.remove('hidden')); _origReset5(); setTimeout(initBahanTables, 0); };
+  const _origEdit5 = editRow;
+  editRow = function(id){ _origEdit5(id); setTimeout(()=>{ document.querySelectorAll('.bahan-add').forEach(b=>{ const tr=b.closest('.tr'); if(tr) tr.remove(); }); document.querySelectorAll('.form-table .tr.hidden').forEach(r=>r.classList.remove('hidden')); initBahanTables(); }, 50); };
+
   // realtime JA-DI aja (udah sama kayak Dr Coffee, gak pakai tab atas)
   supabase.channel('admin_ja_di').on('postgres_changes',{event:'*',schema:'public',table:'ja_di_menus'},()=>load()).subscribe();
 
   load();
+  setTimeout(initBahanTables, 500);
 </script>
 </body>
 </html>
