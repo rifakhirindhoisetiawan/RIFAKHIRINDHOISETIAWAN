@@ -356,6 +356,13 @@
         font-weight: 600;
         color: #1f2937;
       }
+      .dual-methods{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+      .method-col h4{font-size:11px;margin:0 0 6px;padding:6px 10px;border-radius:6px 6px 0 0;text-transform:uppercase;letter-spacing:0.4px;color:#fff}
+      .method-col.normal h4{background:#1565c0}
+      .method-col.accel h4{background:#2e7d32}
+      .method-col .sheet-bahans{margin-top:0}
+      .method-col .sheet-sec{margin-top:0}
+      @media(max-width:640px){.dual-methods{grid-template-columns:1fr}}
       .bahan-num {
         flex-shrink: 0;
         width: 22px;
@@ -1220,6 +1227,10 @@
         const b16 = [1, 2, 3, 4, 5, 6].map(i => m['bahan_16oz_' + i]).filter(Boolean);
         const bHot = [1, 2, 3, 4, 5, 6].map(i => m['bahan_hot_' + i]).filter(Boolean);
         const bahans = [...b12, ...b16, ...bHot];
+        // kolom tabel baru Manual vs Premix (bukan catatan)
+        const mManual12 = m.manual_bahan_12oz, mManual16 = m.manual_bahan_16oz, mManualHot = m.manual_bahan_hot;
+        const mPremix12 = m.premix_bahan_12oz, mPremix16 = m.premix_bahan_16oz, mPremixHot = m.premix_bahan_hot;
+        const hasManualPremix = !!(mManual12 || mManual16 || mManualHot || mPremix12 || mPremix16 || mPremixHot);
         const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
         const photo = isImg ? '<img src="' + m.foto + '" alt=""/>' : '<span style="font-size:48px">' + (m.foto||'☕') + '</span>';
         let html = '<div class="sheet-photo ' + (m.cls||'g-a') + '">' + photo + '</div>';
@@ -1233,11 +1244,35 @@
             list.map((b, i) => '<div class="bahan-row"><span class="bahan-num">' + (i+1) + '</span><span>' + b + '</span></div>').join('') +
             '</div>';
         }
-        if (bHot.length) html += bahanGroup('Bahan HOT', bHot);
-        if (b12.length) html += bahanGroup('Bahan 12OZ', b12);
-        if (b16.length) html += bahanGroup('Bahan 16OZ', b16);
-        if (m.catatan) html += '<div class="sheet-sec">Catatan</div><div class="sheet-note">' + m.catatan + '</div>';
-        if (!bahans.length && !m.catatan) html += '<div class="sheet-empty">Belum ada data bahan.</div>';
+        function bahanTextGroup(title, text) {
+          if (!text) return '';
+          const parts = text.split('+').map(s=>s.trim()).filter(Boolean);
+          return bahanGroup(title, parts);
+        }
+        const mPercepatan = m.percepatan, mPercepatan12 = m.percepatan_12oz, mPercepatan16 = m.percepatan_16oz, mPercepatanHot = m.percepatan_hot;
+        const hasPercepatan = !!(mPercepatan || mPercepatan12 || mPercepatan16 || mPercepatanHot);
+        if (hasManualPremix || hasPercepatan) {
+          // dual kayak Dr Coffee — Manual biru vs Premix/Percepatan hijau
+          let leftHtml = '', rightHtml = '';
+          if (mManualHot) leftHtml += bahanTextGroup('Manual HOT', mManualHot);
+          if (mManual12) leftHtml += bahanTextGroup('Manual 12OZ', mManual12);
+          if (mManual16) leftHtml += bahanTextGroup('Manual 16OZ', mManual16);
+          if (!mManual12 && !mManual16 && !mManualHot && b12.length) leftHtml += bahanGroup('Bahan 12OZ', b12);
+          if (!leftHtml && bHot.length) leftHtml += bahanGroup('Bahan HOT', bHot);
+          if (mPremixHot || mPercepatanHot) rightHtml += bahanTextGroup('Percepatan HOT', mPremixHot || mPercepatanHot || mPercepatan);
+          if (mPremix12 || mPercepatan12) rightHtml += bahanTextGroup('Percepatan 12OZ', mPremix12 || mPercepatan12 || mPercepatan);
+          if (mPremix16 || mPercepatan16) rightHtml += bahanTextGroup('Percepatan 16OZ', mPremix16 || mPercepatan16 || mPercepatan);
+          if (!rightHtml && mPercepatan) rightHtml += '<div class="sheet-sec">Percepatan — Tabel</div><div class="sheet-note">'+mPercepatan+'</div>';
+          html += '<div class="dual-methods"><div class="method-col normal"><h4>Manual — Tabel</h4>' + (leftHtml || '<div class="sheet-empty">-</div>') + '</div><div class="method-col accel"><h4>Percepatan — Tabel</h4>' + (rightHtml || '<div class="sheet-empty">-</div>') + '</div></div>';
+          // fallback bahan lama kalau masih ada yang belum ke-cover
+          if (bHot.length && !mManualHot && !mPremixHot && !mPercepatanHot) html += bahanGroup('Bahan HOT (lama)', bHot);
+        } else {
+          if (bHot.length) html += bahanGroup('Bahan HOT', bHot);
+          if (b12.length) html += bahanGroup('Bahan 12OZ', b12);
+          if (b16.length) html += bahanGroup('Bahan 16OZ', b16);
+        }
+        if (m.catatan && !hasManualPremix) html += '<div class="sheet-sec">Catatan</div><div class="sheet-note">' + m.catatan + '</div>';
+        if (!bahans.length && !m.catatan && !hasManualPremix) html += '<div class="sheet-empty">Belum ada data bahan.</div>';
         if (m.link) html += '<a class="sheet-btn" href="' + m.link + '">Buka Halaman Resep</a>';
         html += '<button class="sheet-close" id="sheetClose" type="button">Tutup</button>';
         sheetBody.innerHTML = html;

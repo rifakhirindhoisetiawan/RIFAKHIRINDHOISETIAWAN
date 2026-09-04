@@ -315,6 +315,88 @@
     .nav { gap: 12px; margin-top: 8px; }
     .nav button { width: 44px; height: 44px; font-size: 1.5rem; flex: none; max-width: none; }
   }
+
+  .plu-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    align-items: center;
+    margin: 6px 0 10px;
+    padding: 8px 10px;
+    background: #fff8f0;
+    border: 1px solid #ffcc80;
+    border-radius: 6px;
+    font-size: 0.78rem;
+  }
+  .plu-row .plu-label {
+    font-weight: 700;
+    color: #e65100;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .plu-row .plu-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .plu-row .plu-item span.size {
+    color: #5d4037;
+    font-weight: 600;
+  }
+  .plu-row .plu-item span.code {
+    min-width: 72px;
+    padding: 2px 8px;
+    border: 1px dashed #ffb74d;
+    border-radius: 4px;
+    background: #fff;
+    color: #999;
+    font-family: ui-monospace, monospace;
+    font-size: 0.75rem;
+  }
+  .dual-methods {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .method-col h4 {
+    font-size: 0.75rem;
+    margin: 0 0 6px;
+    padding: 6px 10px;
+    border-radius: 6px 6px 0 0;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #fff;
+  }
+  .method-col.normal h4 { background: #1565c0; }
+  .method-col.accel h4 { background: #2e7d32; }
+  .method-col .size-block {
+    border-radius: 0 0 8px 8px;
+    margin: 0;
+  }
+  .method-col.accel .size-block {
+    border-color: #a5d6a7;
+  }
+  .method-col.accel .size-block h4 {
+    background: #43a047;
+  }
+  .method-col.accel .amt { color: #2e7d32; }
+  .accel-tag {
+    display: inline-block;
+    background: #2e7d32;
+    color: #fff;
+    font-size: 0.6rem;
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  @media (max-width: 640px) {
+    .dual-methods { grid-template-columns: 1fr; }
+  }
+
 </style>
 </head>
 <body>
@@ -351,7 +433,7 @@
           <button type="button" class="toc-toggle" onclick="toggleToc(this)">MILK BASED (Non-Coffee) <span class="chev">▾</span></button>
           <div class="toc-items">
             <a onclick="goTo(7)">Korean Strawberry Milk · Chocolate · Matcha</a>
-            <a onclick="goTo(8)">Choco Berry · Premix UHT Coffee Latte</a>
+            <a onclick="goTo(8)">Choco Berry · Coffee Latte (Normal + Percepatan) · Premix Base</a>
           </div>
         </div>
 
@@ -386,6 +468,8 @@
       </div>
       <div class="keterangan" style="margin-top:20px">
         <strong>*</strong> = Tombol terdapat di mesin<br>
+        <strong style="color:#2e7d32">+ Percepatan</strong> = ada metode Premix UHT (hijau) di samping resep normal<br>
+        <strong style="color:#e65100">PLU</strong> = isi nomor PLU 12oz / 16oz<br>
         Gunakan panah atau tombol navigasi untuk membalik halaman.
       </div>
     </div>
@@ -397,10 +481,15 @@
         <span class="page-num">02</span>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Espresso">
         <span class="category-tag">Hot</span>
         <h3>Espresso</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Hot</h4>
             <ul>
@@ -410,10 +499,15 @@
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Black Coffee (Americano)">
         <span class="category-tag">Hot / Ice</span>
         <h3>Black Coffee (Americano)</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz) Ice</h4>
             <ul>
@@ -435,10 +529,15 @@
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Black Coffee with Honey">
         <span class="category-tag">Hot / Ice</span>
         <h3>Black Coffee with Honey</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Hot</h4>
             <ul>
@@ -477,10 +576,15 @@
         <span class="page-num">03</span>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Hawaiian Americano">
         <span class="category-tag">New · Oktober 2025 · Ice</span>
         <h3>Hawaiian Americano</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Upsize (16oz)</h4>
             <ul>
@@ -493,10 +597,15 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Green Grape Fruitycano">
         <span class="category-tag">New · Juni 2026 · Ice</span>
         <h3>Green Grape Fruitycano</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -511,10 +620,15 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Pink Berry Soda">
         <span class="category-tag">New · Juni 2026 · Ice</span>
         <h3>Pink Berry Soda</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -528,11 +642,16 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Affogato">
         <span class="category-tag">Ice</span>
         <h3>Affogato</h3>
         <p class="note">Es cream scoop hanya pakai vanilla dan mango, bisa mix varian</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>1 porsi</h4>
             <ul>
@@ -552,11 +671,16 @@
         <span class="page-num">04</span>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Cappuccino">
         <span class="category-tag">Hot</span>
         <h3>Cappuccino</h3>
         <p class="note">Pastikan milkjug terisi Fresh Milk dan sudah dalam posisi frothing sebelum memencet tombol frothing</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Hot</h4>
             <ul>
@@ -567,9 +691,14 @@
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Cappuccino Ice">
         <span class="category-tag">Ice</span>
         <h3>Cappuccino Ice</h3>
+        <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
         <div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
@@ -592,10 +721,15 @@
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Caffelatte / Coffee Latte">
         <span class="category-tag">Hot / Ice</span>
         <h3>Caffelatte / Coffee Latte</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Hot</h4>
             <ul>
@@ -627,187 +761,308 @@
       </div>
     </div>
 
-    <!-- PAGE 4: Jadi series -->
+    <!-- PAGE 4: Jadi series (Normal + Percepatan digabung) -->
     <div class="page hidden" data-page="4">
       <div class="page-header">
         <h2>White · Jadi Series</h2>
         <span class="page-num">05</span>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Jadi Macchiatto">
         <span class="category-tag">New · Juli 2025 · Ice</span>
-        <h3>Jadi Macchiatto</h3>
-        <p class="note">Larutkan krimer dan caramel sauce dengan espresso panas di dalam milk jug, aduk hingga semua larut!</p>
-        <div class="sizes">
-          <div class="size-block">
-            <h4>Regular (12oz)</h4>
-            <ul>
-              <li><span>Caramel Sauce</span><span class="amt">20 g</span></li>
-              <li><span>Krimer</span><span class="amt">20 g</span></li>
-              <li><span>Espresso*</span><span class="amt">1×</span></li>
-              <li><span>Es Batu</span><span class="amt">150 g</span></li>
-              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
-            </ul>
+        <h3>Jadi Macchiatto <span class="accel-tag">+ Percepatan</span></h3>
+        <p class="note">Normal: larutkan krimer + caramel sauce dengan espresso panas di milk jug. Percepatan: pakai Premix UHT.</p>
+        <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+        <div class="dual-methods">
+          <div class="method-col normal">
+            <h4>Resep Normal</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Caramel Sauce</span><span class="amt">20 g</span></li>
+                <li><span>Krimer</span><span class="amt">20 g</span></li>
+                <li><span>Espresso*</span><span class="amt">1×</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+              </ul>
+            </div>
+            <div class="size-block" style="margin-top:8px">
+              <h4>Upsize (16oz)</h4>
+              <ul>
+                <li><span>Caramel Sauce</span><span class="amt">30 g</span></li>
+                <li><span>Krimer</span><span class="amt">25 g</span></li>
+                <li><span>Espresso*</span><span class="amt">2×</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+              </ul>
+            </div>
           </div>
-          <div class="size-block">
-            <h4>Upsize (16oz)</h4>
-            <ul>
-              <li><span>Caramel Sauce</span><span class="amt">30 g</span></li>
-              <li><span>Krimer</span><span class="amt">25 g</span></li>
-              <li><span>Espresso*</span><span class="amt">2×</span></li>
-              <li><span>Es Batu</span><span class="amt">150 g</span></li>
-              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
-            </ul>
+          <div class="method-col accel">
+            <h4>Metode Percepatan</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Caramel sauce</span><span class="amt">20 g</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Premix UHT</span><span class="amt">140 g</span></li>
+                <li><span>Stock espresso</span><span class="amt">40 g</span></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Jadi Keren (Kopsu Gula Aren)">
         <span class="category-tag">Ice</span>
-        <h3>Jadi Keren (Kopsu Gula Aren)</h3>
-        <p class="note">Larutkan krimer dan gula aren dengan espresso panas di dalam milk jug, aduk hingga semua larut!</p>
-        <div class="sizes">
-          <div class="size-block">
-            <h4>Regular (12oz)</h4>
-            <ul>
-              <li><span>Gula Aren</span><span class="amt">13 g</span></li>
-              <li><span>Krimer</span><span class="amt">20 g</span></li>
-              <li><span>Espresso*</span><span class="amt">1×</span></li>
-              <li><span>Es Batu</span><span class="amt">150 g</span></li>
-              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
-            </ul>
+        <h3>Jadi Keren (Kopsu Gula Aren) <span class="accel-tag">+ Percepatan</span></h3>
+        <p class="note">Normal: larutkan krimer + gula aren dengan espresso panas di milk jug. Percepatan: pakai Premix UHT.</p>
+        <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+        <div class="dual-methods">
+          <div class="method-col normal">
+            <h4>Resep Normal</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Gula Aren</span><span class="amt">13 g</span></li>
+                <li><span>Krimer</span><span class="amt">20 g</span></li>
+                <li><span>Espresso*</span><span class="amt">1×</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+              </ul>
+            </div>
+            <div class="size-block" style="margin-top:8px">
+              <h4>Upsize (16oz)</h4>
+              <ul>
+                <li><span>Gula Aren</span><span class="amt">20 g</span></li>
+                <li><span>Krimer</span><span class="amt">25 g</span></li>
+                <li><span>Espresso*</span><span class="amt">2×</span></li>
+                <li><span>Es Batu</span><span class="amt">180 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+              </ul>
+            </div>
           </div>
-          <div class="size-block">
-            <h4>Upsize (16oz)</h4>
-            <ul>
-              <li><span>Gula Aren</span><span class="amt">20 g</span></li>
-              <li><span>Krimer</span><span class="amt">25 g</span></li>
-              <li><span>Espresso*</span><span class="amt">2×</span></li>
-              <li><span>Es Batu</span><span class="amt">180 g</span></li>
-              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
-            </ul>
+          <div class="method-col accel">
+            <h4>Metode Percepatan</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Gula Aren</span><span class="amt">13 g</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Premix UHT</span><span class="amt">140 g</span></li>
+                <li><span>Stock espresso</span><span class="amt">40 g</span></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Jadi Rindu (Kopsu Madu)">
         <span class="category-tag">Ice</span>
-        <h3>Jadi Rindu (Kopsu Madu)</h3>
-        <p class="note">Larutkan krimer dan madu dengan espresso panas di dalam milk jug, aduk hingga semua larut!</p>
-        <div class="sizes">
-          <div class="size-block">
-            <h4>Regular (12oz)</h4>
-            <ul>
-              <li><span>Madu</span><span class="amt">25 g</span></li>
-              <li><span>Krimer</span><span class="amt">20 g</span></li>
-              <li><span>Espresso*</span><span class="amt">1×</span></li>
-              <li><span>Es Batu</span><span class="amt">150 g</span></li>
-              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
-            </ul>
+        <h3>Jadi Rindu (Kopsu Madu) <span class="accel-tag">+ Percepatan</span></h3>
+        <p class="note">Normal: larutkan krimer + madu dengan espresso panas di milk jug. Percepatan: pakai Premix UHT.</p>
+        <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+        <div class="dual-methods">
+          <div class="method-col normal">
+            <h4>Resep Normal</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Madu</span><span class="amt">25 g</span></li>
+                <li><span>Krimer</span><span class="amt">20 g</span></li>
+                <li><span>Espresso*</span><span class="amt">1×</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+              </ul>
+            </div>
+            <div class="size-block" style="margin-top:8px">
+              <h4>Upsize (16oz)</h4>
+              <ul>
+                <li><span>Madu</span><span class="amt">35 g</span></li>
+                <li><span>Krimer</span><span class="amt">25 g</span></li>
+                <li><span>Espresso*</span><span class="amt">2×</span></li>
+                <li><span>Es Batu</span><span class="amt">180 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+              </ul>
+            </div>
           </div>
-          <div class="size-block">
-            <h4>Upsize (16oz)</h4>
-            <ul>
-              <li><span>Madu</span><span class="amt">35 g</span></li>
-              <li><span>Krimer</span><span class="amt">25 g</span></li>
-              <li><span>Espresso*</span><span class="amt">2×</span></li>
-              <li><span>Es Batu</span><span class="amt">180 g</span></li>
-              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
-            </ul>
+          <div class="method-col accel">
+            <h4>Metode Percepatan</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Madu</span><span class="amt">25 g</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Premix UHT</span><span class="amt">140 g</span></li>
+                <li><span>Stock espresso</span><span class="amt">40 g</span></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- PAGE 5: Flavored Lattes -->
+    <!-- PAGE 5: Flavored Lattes (Normal + Percepatan digabung) -->
     <div class="page hidden" data-page="5">
       <div class="page-header">
         <h2>White · Flavored Latte</h2>
         <span class="page-num">06</span>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Salted Buttercorn Latte">
         <span class="category-tag">Ice</span>
-        <h3>Salted Buttercorn Latte</h3>
-        <p class="note">Larutkan krimer, sirup popcorn dan sirup salted caramel dengan espresso panas di dalam milk jug, aduk hingga semua larut!</p>
-        <div class="sizes">
-          <div class="size-block">
-            <h4>Regular (12oz)</h4>
-            <ul>
-              <li><span>Sirup popcorn</span><span class="amt">15 g</span></li>
-              <li><span>Sirup salted caramel</span><span class="amt">5 g</span></li>
-              <li><span>Krimer</span><span class="amt">20 g</span></li>
-              <li><span>Espresso*</span><span class="amt">1×</span></li>
-              <li><span>Es Batu</span><span class="amt">150 g</span></li>
-              <li><span>Susu UHT / Premix UHT</span><span class="amt">100–140 g</span></li>
-            </ul>
+        <h3>Salted Buttercorn Latte <span class="accel-tag">+ Percepatan</span></h3>
+        <p class="note">Normal: larutkan krimer + sirup popcorn + sirup salted caramel dengan espresso panas di milk jug. Percepatan: pakai Premix UHT.</p>
+        <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+        <div class="dual-methods">
+          <div class="method-col normal">
+            <h4>Resep Normal</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Sirup popcorn</span><span class="amt">15 g</span></li>
+                <li><span>Sirup salted caramel</span><span class="amt">5 g</span></li>
+                <li><span>Krimer</span><span class="amt">20 g</span></li>
+                <li><span>Espresso*</span><span class="amt">1×</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+              </ul>
+            </div>
+            <div class="size-block" style="margin-top:8px">
+              <h4>Upsize (16oz)</h4>
+              <ul>
+                <li><span>Sirup popcorn</span><span class="amt">25 g</span></li>
+                <li><span>Sirup salted caramel</span><span class="amt">5 g</span></li>
+                <li><span>Krimer</span><span class="amt">25 g</span></li>
+                <li><span>Espresso*</span><span class="amt">2×</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+              </ul>
+            </div>
           </div>
-          <div class="size-block">
-            <h4>Upsize (16oz)</h4>
-            <ul>
-              <li><span>Sirup popcorn</span><span class="amt">25 g</span></li>
-              <li><span>Sirup salted caramel</span><span class="amt">5 g</span></li>
-              <li><span>Krimer</span><span class="amt">25 g</span></li>
-              <li><span>Espresso*</span><span class="amt">2×</span></li>
-              <li><span>Es Batu</span><span class="amt">150 g</span></li>
-              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
-            </ul>
+          <div class="method-col accel">
+            <h4>Metode Percepatan</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Sirup popcorn</span><span class="amt">15 g</span></li>
+                <li><span>Sirup salted caramel</span><span class="amt">5 g</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Premix UHT</span><span class="amt">140 g</span></li>
+                <li><span>Stock espresso</span><span class="amt">40 g</span></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Vanilla / Salted Caramel / Butterscotch Latte">
         <span class="category-tag">Ice</span>
-        <h3>Vanilla / Salted Caramel / Butterscotch Latte</h3>
-        <p class="note">Larutkan krimer dan sirup dengan espresso panas di dalam milk jug, aduk hingga semua larut!</p>
-        <div class="sizes">
-          <div class="size-block">
-            <h4>Regular (12oz)</h4>
-            <ul>
-              <li><span>Syrup</span><span class="amt">15 g</span></li>
-              <li><span>Krimer</span><span class="amt">20 g</span></li>
-              <li><span>Espresso*</span><span class="amt">1×</span></li>
-              <li><span>Es Batu</span><span class="amt">150 g</span></li>
-              <li><span>Susu UHT / Premix</span><span class="amt">100–140 g</span></li>
-            </ul>
+        <h3>Vanilla / Salted Caramel / Butterscotch Latte <span class="accel-tag">+ Percepatan</span></h3>
+        <p class="note">Normal: larutkan krimer + sirup dengan espresso panas di milk jug. Percepatan: pakai Premix UHT. Pilih 1 rasa.</p>
+        <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+        <div class="dual-methods">
+          <div class="method-col normal">
+            <h4>Resep Normal</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Syrup (pilih rasa)</span><span class="amt">15 g</span></li>
+                <li><span>Krimer</span><span class="amt">20 g</span></li>
+                <li><span>Espresso*</span><span class="amt">1×</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+              </ul>
+            </div>
+            <div class="size-block" style="margin-top:8px">
+              <h4>Upsize (16oz)</h4>
+              <ul>
+                <li><span>Syrup (pilih rasa)</span><span class="amt">25 g</span></li>
+                <li><span>Krimer</span><span class="amt">25 g</span></li>
+                <li><span>Espresso*</span><span class="amt">2×</span></li>
+                <li><span>Es Batu</span><span class="amt">180 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+              </ul>
+            </div>
           </div>
-          <div class="size-block">
-            <h4>Upsize (16oz)</h4>
-            <ul>
-              <li><span>Syrup</span><span class="amt">25 g</span></li>
-              <li><span>Krimer</span><span class="amt">25 g</span></li>
-              <li><span>Espresso*</span><span class="amt">2×</span></li>
-              <li><span>Es Batu</span><span class="amt">180 g</span></li>
-              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
-            </ul>
+          <div class="method-col accel">
+            <h4>Metode Percepatan</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Syrup (pilih rasa)</span><span class="amt">15 g</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Premix UHT</span><span class="amt">140 g</span></li>
+                <li><span>Stock espresso</span><span class="amt">40 g</span></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Mocha Latte">
         <span class="category-tag">Ice</span>
-        <h3>Mocha Latte</h3>
-        <p class="note">Larutkan krimer dan saus coklat dengan espresso panas di dalam milk jug, aduk hingga semua larut! · 5 g saus coklat diulirkan di gelas</p>
-        <div class="sizes">
-          <div class="size-block">
-            <h4>Regular (12oz)</h4>
-            <ul>
-              <li><span>Saus Coklat</span><span class="amt">15 g</span></li>
-              <li><span>Krimer</span><span class="amt">20 g</span></li>
-              <li><span>Espresso*</span><span class="amt">1×</span></li>
-              <li><span>Es Batu</span><span class="amt">150 g</span></li>
-              <li><span>Susu UHT / Premix</span><span class="amt">100–140 g</span></li>
-            </ul>
+        <h3>Mocha Latte <span class="accel-tag">+ Percepatan</span></h3>
+        <p class="note">Normal: larutkan krimer + saus coklat di milk jug + ulir 5 g saus di gelas. Percepatan: pakai Premix UHT.</p>
+        <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+        <div class="dual-methods">
+          <div class="method-col normal">
+            <h4>Resep Normal</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Saus Coklat</span><span class="amt">15 g</span></li>
+                <li><span>Krimer</span><span class="amt">20 g</span></li>
+                <li><span>Espresso*</span><span class="amt">1×</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+              </ul>
+            </div>
+            <div class="size-block" style="margin-top:8px">
+              <h4>Upsize (16oz)</h4>
+              <ul>
+                <li><span>Saus Coklat</span><span class="amt">25 g</span></li>
+                <li><span>Krimer</span><span class="amt">25 g</span></li>
+                <li><span>Espresso*</span><span class="amt">2×</span></li>
+                <li><span>Es Batu</span><span class="amt">180 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">100 g</span></li>
+              </ul>
+            </div>
           </div>
-          <div class="size-block">
-            <h4>Upsize (16oz)</h4>
-            <ul>
-              <li><span>Saus Coklat</span><span class="amt">25 g</span></li>
-              <li><span>Krimer</span><span class="amt">25 g</span></li>
-              <li><span>Espresso*</span><span class="amt">2×</span></li>
-              <li><span>Es Batu</span><span class="amt">180 g</span></li>
-              <li><span>Susu UHT</span><span class="amt">100 g</span></li>
-            </ul>
+          <div class="method-col accel">
+            <h4>Metode Percepatan</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Saus Coklat</span><span class="amt">15 g</span></li>
+                <li><span>Stock espresso</span><span class="amt">40 g</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Premix UHT</span><span class="amt">140 g</span></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -820,11 +1075,16 @@
         <span class="page-num">07</span>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Pandan Cloud Latte">
         <span class="category-tag">New · Februari 2026 · Ice</span>
         <h3>Pandan Cloud Latte</h3>
         <p class="note">Larutkan sirup pandan dengan susu UHT, beri es batu, tuang espresso, lalu tuang macchiato cloud foam</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -848,11 +1108,16 @@
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Coconut Cloud Latte">
         <span class="category-tag">New · Februari 2026 · Ice</span>
         <h3>Coconut Cloud Latte</h3>
         <p class="note">Larutkan sirup coconut dengan susu UHT, beri es batu, tuang espresso, lalu tuang macchiato cloud foam</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -876,11 +1141,16 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Ice Dolce Latte">
         <span class="category-tag">Kolaborasi · April 2026 · Ice</span>
         <h3>Ice Dolce Latte</h3>
         <p class="note">Larutkan krimer dan KKM carnation dengan espresso, masukkan es batu ke dalam gelas, dan tuangkan campuran</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -894,11 +1164,16 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Ice Collagen Latte">
         <span class="category-tag">Kolaborasi · April 2026 · Ice</span>
         <h3>Ice Collagen Latte</h3>
         <p class="note">Tuang es batu dan collagen bearbrand pada gelas, lalu tuangkan espresso. Sajikan bersama sisa collagen bearbrand pada kaleng</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -919,10 +1194,15 @@
         <span class="page-num">08</span>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Korean Strawberry Milk">
         <span class="category-tag">Ice</span>
         <h3>Korean Strawberry Milk</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -942,10 +1222,15 @@
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Chocolate">
         <span class="category-tag">Hot / Ice</span>
         <h3>Chocolate</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Hot</h4>
             <ul>
@@ -981,10 +1266,15 @@
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Matcha">
         <span class="category-tag">Hot / Ice</span>
         <h3>Matcha</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Hot</h4>
             <ul>
@@ -1018,17 +1308,22 @@
       </div>
     </div>
 
-    <!-- PAGE 8: Choco Berry & Premix -->
+    <!-- PAGE 8: Choco Berry & Premix Base -->
     <div class="page hidden" data-page="8">
       <div class="page-header">
         <h2>Milk Based · New &amp; Premix</h2>
         <span class="page-num">09</span>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Choco Berry">
         <span class="category-tag">New · Januari 2026 · Ice</span>
         <h3>Choco Berry</h3>
         <p class="note">Larutkan bubuk coklat dengan air panas, tuang strawberry pada dinding gelas, beri es batu, dan tuang larutan cokelat dan susu UHT</p>
+        <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
         <div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
@@ -1043,59 +1338,65 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe" data-menu="Coffee Latte">
         <span class="category-tag">Premix UHT · Ice</span>
-        <h3>Coffee Latte (Premix)</h3>
-        <div class="sizes">
-          <div class="size-block">
-            <h4>Regular (12oz)</h4>
-            <ul>
-              <li><span>Stock espresso</span><span class="amt">40 g</span></li>
-              <li><span>Es Batu</span><span class="amt">150 g</span></li>
-              <li><span>Susu UHT</span><span class="amt">120 g</span></li>
-            </ul>
-            <div class="method">*Jika request gula: gula cair 20 g · less sugar 10 g</div>
+        <h3>Coffee Latte <span class="accel-tag">+ Percepatan</span></h3>
+        <p class="note">Metode percepatan pakai Premix UHT + Stock espresso. Resep normal ada di halaman White · Caffelatte.</p>
+        <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+        <div class="dual-methods">
+          <div class="method-col normal">
+            <h4>Resep Normal (Ice)</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Espresso*</span><span class="amt">1×</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">130 g</span></li>
+              </ul>
+              <div class="method">*Gula: 20 g · less sugar 10 g</div>
+            </div>
+            <div class="size-block" style="margin-top:8px">
+              <h4>Upsize (16oz)</h4>
+              <ul>
+                <li><span>Espresso*</span><span class="amt">2×</span></li>
+                <li><span>Es Batu</span><span class="amt">180 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">165 g</span></li>
+              </ul>
+              <div class="method">*Gula: 40 g · less sugar 30 g</div>
+            </div>
+          </div>
+          <div class="method-col accel">
+            <h4>Metode Percepatan</h4>
+            <div class="size-block">
+              <h4>Regular (12oz)</h4>
+              <ul>
+                <li><span>Stock espresso</span><span class="amt">40 g</span></li>
+                <li><span>Es Batu</span><span class="amt">150 g</span></li>
+                <li><span>Susu UHT</span><span class="amt">120 g</span></li>
+              </ul>
+              <div class="method">*Gula: 20 g · less sugar 10 g</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="recipe single-size">
-        <span class="category-tag">Premix UHT</span>
-        <h3>Premix UHT Base</h3>
+      <div class="recipe single-size" data-menu="Cara Buat Premix UHT">
+        <span class="category-tag">Premix UHT · Batch</span>
+        <h3>Cara Buat Premix UHT</h3>
+        <p class="note">Dibuat sekali, dipakai untuk banyak order percepatan. Stock Espresso = tekan 2× di mesin.</p>
         <div class="sizes">
           <div class="size-block">
-            <h4>Batch</h4>
+            <h4>Batch Premix</h4>
             <ul>
               <li><span>Krimer</span><span class="amt">200 g</span></li>
               <li><span>Air Panas</span><span class="amt">200 g</span></li>
               <li><span>Susu UHT</span><span class="amt">1000 g</span></li>
-              <li><span>Stock Espresso</span><span class="amt">2× pencet</span></li>
             </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="recipe">
-        <span class="category-tag">Premix · Ice</span>
-        <h3>Jadi Keren / Jadi Rindu / Mocha (Premix version)</h3>
-        <div class="sizes">
-          <div class="size-block">
-            <h4>Jadi Keren Regular</h4>
-            <ul>
-              <li><span>Gula Aren</span><span class="amt">13 g</span></li>
-              <li><span>Es Batu</span><span class="amt">150 g</span></li>
-              <li><span>Premix UHT</span><span class="amt">140 g</span></li>
-              <li><span>Stock espresso</span><span class="amt">40 g</span></li>
-            </ul>
-          </div>
-          <div class="size-block">
-            <h4>Jadi Rindu Regular</h4>
-            <ul>
-              <li><span>Madu</span><span class="amt">25 g</span></li>
-              <li><span>Es Batu</span><span class="amt">150 g</span></li>
-              <li><span>Premix UHT</span><span class="amt">140 g</span></li>
-              <li><span>Stock espresso</span><span class="amt">40 g</span></li>
-            </ul>
+            <div class="method">Aduk hingga homogen → simpan. Saat order: Premix 140 g + Stock espresso 40 g + Es Batu + bahan rasa.</div>
           </div>
         </div>
       </div>
@@ -1108,11 +1409,16 @@
         <span class="page-num">10</span>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Blended Vanilla Caramel">
         <span class="category-tag">Ice · Blender 30 dtk</span>
         <h3>Blended Vanilla Caramel</h3>
         <p class="note">Yang diblender: krimer, sirup vanilla, es batu, susu UHT, saus caramel. Ulir saus ke dalam dinding cup 3 g</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -1136,11 +1442,16 @@
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Blended Choco">
         <span class="category-tag">Ice · Blender 30 dtk</span>
         <h3>Blended Choco</h3>
         <p class="note">Yang diblender: krimer, powder coklat, es batu, susu UHT, saus coklat. Ulir saus ke dalam dinding cup 3 g</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -1164,11 +1475,16 @@
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Blended Choco Caramel">
         <span class="category-tag">Ice · Blender 30 dtk</span>
         <h3>Blended Choco Caramel</h3>
         <p class="note">Yang diblender: krimer, powder coklat, es batu, susu UHT, saus caramel. Ulir saus ke dalam dinding cup 3 g</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -1192,10 +1508,15 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Creamy Coconut Frappe">
         <span class="category-tag">New · Oktober 2025 · Ice</span>
         <h3>Creamy Coconut Frappe</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Upsize (16oz)</h4>
             <ul>
@@ -1218,10 +1539,15 @@
         <span class="page-num">11</span>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Cola Caramela">
         <span class="category-tag">New · Desember 2025 · Ice</span>
         <h3>Cola Caramela</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -1234,10 +1560,15 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Poppy Berry">
         <span class="category-tag">Ice</span>
         <h3>Poppy Berry</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -1250,10 +1581,15 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Cloudy Lychee">
         <span class="category-tag">Ice</span>
         <h3>Cloudy Lychee</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -1275,11 +1611,16 @@
         <span class="page-num">12</span>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Shaken Lychee Tea">
         <span class="category-tag">Ice</span>
         <h3>Shaken Lychee Tea</h3>
         <p class="note">Shake es batu, teh, dan sirup leci selama 10 dtk. Lychee jelly ditambah setelah hasil shake dituang ke gelas</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -1303,11 +1644,16 @@
         </div>
       </div>
 
-      <div class="recipe">
+      <div class="recipe" data-menu="Shaken Honey Lemon Tea">
         <span class="category-tag">Ice</span>
         <h3>Shaken Honey Lemon Tea</h3>
         <p class="note">Shake es batu, teh, dan madu selama 10 dtk. Slice fresh lemon ditambah setelah hasil shake dituang ke gelas</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <h4>Regular (12oz)</h4>
             <ul>
@@ -1339,9 +1685,14 @@
         <span class="page-num">13</span>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Juice Sirsak">
         <h3>Juice Sirsak</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>RPC Sirsak frozen</span><span class="amt">1 pc (180 g)</span></li>
@@ -1351,9 +1702,14 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Juice Alpukat">
         <h3>Juice Alpukat</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>Alpukat</span><span class="amt">175 g</span></li>
@@ -1364,9 +1720,14 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Juice Buah Naga">
         <h3>Juice Buah Naga</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>Buah Naga Merah</span><span class="amt">290 g</span></li>
@@ -1376,10 +1737,15 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Juice Jambu">
         <h3>Juice Jambu</h3>
         <p class="note">Juice disaring sebelum disajikan</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>Jambu Klutuk Merah</span><span class="amt">250 g</span></li>
@@ -1390,9 +1756,14 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Juice Pisang Strawberry">
         <h3>Juice Pisang Strawberry</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>Pisang Cavendish</span><span class="amt">150 g</span></li>
@@ -1403,9 +1774,14 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Juice Mangga Harum Manis">
         <h3>Juice Mangga Harum Manis</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>Daging Buah Mangga HM</span><span class="amt">250 g</span></li>
@@ -1415,9 +1791,14 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Juice Apel Mix">
         <h3>Juice Apel Mix</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>Nanas Honi/Madu</span><span class="amt">145 g</span></li>
@@ -1437,10 +1818,15 @@
         <span class="page-num">14</span>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Green Juice">
         <h3>Green Juice</h3>
         <p class="note">Potong batang bayam dan kedua ujung timun. Cuci bayam, timun, apel. Potong apel dan buang bijinya</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>RPC Bayam Hijau</span><span class="amt">120 g</span></li>
@@ -1453,10 +1839,15 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Juice Carrot Mixed Fruit">
         <h3>Juice Carrot Mixed Fruit</h3>
         <p class="note">Kupas kulit wortel. Cuci wortel dan apel. Potong apel fuji dan buang bijinya</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>Wortel Lokal Super</span><span class="amt">280 g</span></li>
@@ -1468,9 +1859,14 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Juice Semangka">
         <h3>Juice Semangka</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>Semangka Merah Tanpa Biji</span><span class="amt">500 g</span></li>
@@ -1480,9 +1876,14 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Juice Melon">
         <h3>Juice Melon</h3>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>Melon Sky Rocket</span><span class="amt">400 g</span></li>
@@ -1492,10 +1893,15 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Juice Jeruk (Manual)">
         <h3>Juice Jeruk (Manual)</h3>
         <p class="note">Cuci dan belah Jeruk menjadi 2 bagian</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>Jeruk Peras</span><span class="amt">400 g</span></li>
@@ -1505,10 +1911,15 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Juice Jeruk Navel">
         <h3>Juice Jeruk Navel</h3>
         <p class="note">Cuci dan belah Jeruk menjadi 2 bagian</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>Jeruk Navel</span><span class="amt">770 g</span></li>
@@ -1518,10 +1929,15 @@
         </div>
       </div>
 
-      <div class="recipe single-size">
+      <div class="recipe single-size" data-menu="Juice Jeruk Navel Cara Cara">
         <h3>Juice Jeruk Navel Cara Cara</h3>
         <p class="note">Cuci dan belah Jeruk menjadi 2 bagian</p>
-        <div class="sizes">
+                <div class="plu-row">
+          <span class="plu-label">PLU</span>
+          <span class="plu-item"><span class="size">12oz (REG)</span><span class="code">…………</span></span>
+          <span class="plu-item"><span class="size">16oz (UPS)</span><span class="code">…………</span></span>
+        </div>
+<div class="sizes">
           <div class="size-block">
             <ul>
               <li><span>Jeruk Navel Cara Cara</span><span class="amt">770 g</span></li>
@@ -1593,6 +2009,35 @@
   });
 
   update();
+</script>
+
+<script type="module">
+  import { supabase } from './js/supabase.js';
+  async function loadPLU() {
+    try {
+      const { data, error } = await supabase.from('dr_coffee_menus').select('name,plu_12oz,plu_16oz,plu_hot');
+      if (error) { console.warn('PLU load error', error.message); return; }
+      if (!data || !data.length) return;
+      const map = {};
+      data.forEach(r => { map[r.name.trim().toLowerCase()] = r; });
+      document.querySelectorAll('.recipe[data-menu]').forEach(recipe => {
+        const name = recipe.getAttribute('data-menu')?.trim().toLowerCase();
+        if (!name || !map[name]) return;
+        const row = map[name];
+        const codes = recipe.querySelectorAll('.plu-row .code');
+        if (codes[0]) {
+          const v = row.plu_12oz || row.plu_hot || '';
+          if (v) { codes[0].textContent = v; codes[0].style.color = '#1a1a1a'; codes[0].style.borderColor = '#1565c0'; }
+        }
+        if (codes[1]) {
+          const v = row.plu_16oz || '';
+          if (v) { codes[1].textContent = v; codes[1].style.color = '#1a1a1a'; codes[1].style.borderColor = '#1565c0'; }
+        }
+      });
+    } catch(e){ console.warn('PLU exception', e.message); }
+  }
+  loadPLU();
+  try { supabase.channel('dr_coffee_plu').on('postgres_changes',{event:'*',schema:'public',table:'dr_coffee_menus'},()=>loadPLU()).subscribe(); } catch(e){}
 </script>
 </body>
 </html>

@@ -177,6 +177,33 @@
             <label>Bahan 6 <input id="f_bahanHot_6" placeholder="Bahan 6" /></label>
           </div>
         </div>
+        <div style="border:1px solid #e5e7eb;border-radius:10px;padding:12px;background:#f9fafb">
+          <div class="field-title" style="margin-bottom:8px">Manual vs Premix — Tabel Supabase (bukan catatan) <span style="font-weight:400;color:#9aa0ab">khusus JA-DI MANUAL & PREMIX</span></div>
+          <div class="row">
+            <label>Manual 12OZ <input id="f_manual12" placeholder="Manual 12oz bahan..." /></label>
+            <label>Premix 12OZ <input id="f_premix12" placeholder="Premix 12oz bahan..." /></label>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <label>Manual 16OZ <input id="f_manual16" placeholder="Manual 16oz..." /></label>
+            <label>Premix 16OZ <input id="f_premix16" placeholder="Premix 16oz..." /></label>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <label>Manual HOT <input id="f_manualHot" placeholder="Manual HOT..." /></label>
+            <label>Premix HOT <input id="f_premixHot" placeholder="Premix HOT..." /></label>
+          </div>
+        </div>
+        <div style="border:1px solid #a5d6a7;border-radius:10px;padding:12px;background:#f0faf0;margin-top:12px">
+          <div class="field-title" style="margin-bottom:8px;color:#2e7d32">Kolom Khusus Percepatan — Supabase <span style="font-weight:400;color:#689f63">baru</span></div>
+          <label>Percepatan (umum) <input id="f_percepatan" placeholder="Metode percepatan..." /></label>
+          <div class="row" style="margin-top:8px">
+            <label>Percepatan 12OZ <input id="f_percepatan12" placeholder="Percepatan 12oz..." /></label>
+            <label>Percepatan 16OZ <input id="f_percepatan16" placeholder="Percepatan 16oz..." /></label>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <label>Percepatan HOT <input id="f_percepatanHot" placeholder="Percepatan HOT..." /></label>
+            <label style="opacity:0;pointer-events:none">-</label>
+          </div>
+        </div>
         <label>Catatan <input id="f_catatan" placeholder="Catatan..." /></label>
         <div style="display:flex;gap:8px">
           <button id="btnSave" class="btn btn-primary" style="flex:1">Simpan</button>
@@ -206,11 +233,26 @@
   const f_bahanHot = [1,2,3,4,5,6].map(n => document.getElementById('f_bahanHot_' + n));
   const f_pluHot = document.getElementById('f_pluHot');
   const f_catatan = document.getElementById('f_catatan');
+  const f_manual12 = document.getElementById('f_manual12');
+  const f_manual16 = document.getElementById('f_manual16');
+  const f_manualHot = document.getElementById('f_manualHot');
+  const f_premix12 = document.getElementById('f_premix12');
+  const f_premix16 = document.getElementById('f_premix16');
+  const f_premixHot = document.getElementById('f_premixHot');
+  const f_percepatan = document.getElementById('f_percepatan');
+  const f_percepatan12 = document.getElementById('f_percepatan12');
+  const f_percepatan16 = document.getElementById('f_percepatan16');
+  const f_percepatanHot = document.getElementById('f_percepatanHot');
   const btnSave = document.getElementById('btnSave');
   const formTitle = document.getElementById('formTitle');
   const f_icon_img = document.getElementById('f_icon_img');
   const iconPreview = document.getElementById('icon_preview');
   const fotoBox = document.getElementById('fotoBox');
+  let currentTable = 'ja_di_menus';
+  const CAT_JADI = ['PREMIX','MANUAL','BLACK COFFEE','ESPRESSO','CHOCO & MATCHA','BLENDED','SOFT DRINK','JUS','SPECIALTY & CLOUD','UTILITY'];
+  function updateCatOptions() {
+    f_cat.innerHTML = CAT_JADI.map(c => `<option value="${c}">${c}</option>`).join('');
+  }
 
   function syncFotoBox() {
     fotoBox.classList.toggle('has-photo', iconPreview.innerHTML.trim() !== '');
@@ -255,11 +297,20 @@
   }
 
   async function load() {
-    setStatus('Memuat ja_di_menus...');
-    const { data, error } = await supabase.from('ja_di_menus').select('*').order('id');
-    if (error) { setStatus('Error: ' + error.message, false); return; }
+    const label = currentTable === 'ja_di_menus' ? 'JA-DI' : 'Dr Coffee';
+    setStatus('Memuat ' + currentTable + '...');
+    const { data, error } = await supabase.from(currentTable).select('*').order('id');
+    if (error) {
+      if (error.code === 'PGRST205' || error.message.includes('Could not find the table')) {
+        setStatus('❌ Tabel ' + currentTable + ' belum ada. Jalankan scripts/supabase-dr-coffee.sql di SQL Editor', false);
+        listEl.innerHTML = '<div class="empty">Tabel belum ada. RUN SQL: <a href="https://supabase.com/dashboard/project/xsacwgxxoptdrgbbzzib/sql/new" target="_blank">SQL Editor</a> lalu paste scripts/supabase-dr-coffee.sql</div>';
+        countEl.textContent = '0';
+        return;
+      }
+      setStatus('Error: ' + error.message, false); return;
+    }
     all = (data || []).map(m => ({ ...m, plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || m.plu || '' }));
-    setStatus('✅ Terhubung — ' + all.length + ' menu dari Supabase');
+    setStatus('✅ ' + label + ' — ' + all.length + ' menu dari Supabase');
     render();
   }
 
@@ -296,7 +347,8 @@
     const q = searchEl.value.trim().toLowerCase();
     const filtered = all.filter(m => !q || m.name.toLowerCase().includes(q) || (m.cat&&m.cat.toLowerCase().includes(q)) || (m.plu&&m.plu.toLowerCase().includes(q)));
     countEl.textContent = filtered.length;
-    if (!filtered.length) { listEl.innerHTML = '<div class="empty">Tidak ada data</div>'; return; }
+    const label = currentTable === 'ja_di_menus' ? 'JA-DI' : 'Dr Coffee';
+    if (!filtered.length) { listEl.innerHTML = '<div class="empty">Tidak ada data — ' + label + ' konek Supabase OK (0 menu)</div>'; return; }
     const groups = {};
     filtered.forEach(m => {
       const b = baseName(m.name) || m.name;
@@ -337,6 +389,16 @@
     f_bahan12.forEach((inp, i) => { inp.value = m['bahan_12oz_' + (i+1)] || ''; });
     f_bahan16.forEach((inp, i) => { inp.value = m['bahan_16oz_' + (i+1)] || ''; });
     f_bahanHot.forEach((inp, i) => { inp.value = m['bahan_hot_' + (i+1)] || ''; });
+    if (f_manual12) f_manual12.value = m.manual_bahan_12oz || '';
+    if (f_manual16) f_manual16.value = m.manual_bahan_16oz || '';
+    if (f_manualHot) f_manualHot.value = m.manual_bahan_hot || '';
+    if (f_premix12) f_premix12.value = m.premix_bahan_12oz || '';
+    if (f_premix16) f_premix16.value = m.premix_bahan_16oz || '';
+    if (f_premixHot) f_premixHot.value = m.premix_bahan_hot || '';
+    if (f_percepatan) f_percepatan.value = m.percepatan || '';
+    if (f_percepatan12) f_percepatan12.value = m.percepatan_12oz || '';
+    if (f_percepatan16) f_percepatan16.value = m.percepatan_16oz || '';
+    if (f_percepatanHot) f_percepatanHot.value = m.percepatan_hot || '';
     f_catatan.value = m.catatan || '';
     f_icon_img.value = '';
     if (m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto)) {
@@ -351,8 +413,8 @@
   };
 
   async function delRow(id) {
-    if (!confirm('Hapus menu #' + id + '?')) return;
-    const { error } = await supabase.from('ja_di_menus').delete().eq('id', id);
+    if (!confirm('Hapus menu #' + id + ' (' + currentTable + ')?')) return;
+    const { error } = await supabase.from(currentTable).delete().eq('id', id);
     if (error) alert('Gagal hapus: ' + error.message);
     else { setStatus('🗑️ Dihapus #' + id); await load(); }
   };
@@ -431,25 +493,60 @@
       bahan_16oz_6: f_bahan16[5].value.trim() || null,
       catatan: f_catatan.value.trim() || null
     };
+    // kolom tabel baru untuk Manual vs Premix + Percepatan khusus (bukan catatan)
+    if (currentTable === 'ja_di_menus') {
+      payload.manual_bahan_12oz = f_manual12.value.trim() || null;
+      payload.manual_bahan_16oz = f_manual16.value.trim() || null;
+      payload.manual_bahan_hot = f_manualHot.value.trim() || null;
+      payload.premix_bahan_12oz = f_premix12.value.trim() || null;
+      payload.premix_bahan_16oz = f_premix16.value.trim() || null;
+      payload.premix_bahan_hot = f_premixHot.value.trim() || null;
+      payload.percepatan = f_percepatan.value.trim() || null;
+      payload.percepatan_12oz = f_percepatan12.value.trim() || null;
+      payload.percepatan_16oz = f_percepatan16.value.trim() || null;
+      payload.percepatan_hot = f_percepatanHot.value.trim() || null;
+    }
+    // tambahkan has_percepatan untuk dr_coffee jika perlu
+    if (currentTable === 'dr_coffee_menus') {
+      payload.has_percepatan = payload.name && (payload.name.includes('Jadi') || payload.name.includes('Coffee Latte') || payload.name.includes('Latte'));
+    }
     let error;
+    let res;
     if (editId.value) {
-      const res = await supabase.from('ja_di_menus').update(payload).eq('id', parseInt(editId.value));
+      res = await supabase.from(currentTable).update(payload).eq('id', parseInt(editId.value));
       error = res.error;
+      // fallback kalau kolom manual/premix/percepatan belum ada (belum RUN migrate)
+      if (error && /manual_bahan|premix_bahan|percepatan|PGRST204/i.test(error.message)) {
+        alert('Kolom Manual/Premix/Percepatan belum ada di Supabase.\n\nRUN dulu:\n- scripts/migrate-ja-di-dual.sql\n- scripts/add-percepatan-column.sql\nLink: https://supabase.com/dashboard/project/xsacwgxxoptdrgbbzzib/sql/new\n\nMencoba simpan tanpa kolom baru...');
+        delete payload.manual_bahan_12oz; delete payload.manual_bahan_16oz; delete payload.manual_bahan_hot;
+        delete payload.premix_bahan_12oz; delete payload.premix_bahan_16oz; delete payload.premix_bahan_hot;
+        delete payload.percepatan; delete payload.percepatan_12oz; delete payload.percepatan_16oz; delete payload.percepatan_hot;
+        const retry = await supabase.from(currentTable).update(payload).eq('id', parseInt(editId.value));
+        error = retry.error; res = retry;
+      }
     } else {
-      const res = await supabase.from('ja_di_menus').insert([payload]);
+      res = await supabase.from(currentTable).insert([payload]);
       error = res.error;
+      if (error && /manual_bahan|premix_bahan|percepatan|PGRST204/i.test(error.message)) {
+        alert('Kolom Manual/Premix/Percepatan belum ada di Supabase.\n\nRUN dulu:\n- scripts/migrate-ja-di-dual.sql\n- scripts/add-percepatan-column.sql\n\nMencoba simpan tanpa kolom baru...');
+        delete payload.manual_bahan_12oz; delete payload.manual_bahan_16oz; delete payload.manual_bahan_hot;
+        delete payload.premix_bahan_12oz; delete payload.premix_bahan_16oz; delete payload.premix_bahan_hot;
+        delete payload.percepatan; delete payload.percepatan_12oz; delete payload.percepatan_16oz; delete payload.percepatan_hot;
+        const retry = await supabase.from(currentTable).insert([payload]);
+        error = retry.error; res = retry;
+      }
     }
     btnSave.disabled = false; btnSave.textContent = editId.value ? 'Update' : 'Simpan';
     if (error) { alert('Gagal simpan: ' + error.message + '\n\nJika RLS error, cek SQL Editor: policy insert harus allow public.'); setStatus('Gagal: ' + error.message, false); }
-    else { setStatus('✅ Tersimpan: ' + payload.name); resetForm(); await load(); }
+    else { setStatus('✅ Tersimpan (' + currentTable + '): ' + payload.name); resetForm(); await load(); }
   };
 
   searchEl.addEventListener('input', render);
 
-  // realtime
+  // realtime JA-DI aja (udah sama kayak Dr Coffee, gak pakai tab atas)
   supabase.channel('admin_ja_di').on('postgres_changes',{event:'*',schema:'public',table:'ja_di_menus'},()=>load()).subscribe();
 
-  load();
+  updateCatOptions(); load();
 </script>
 </body>
 </html>

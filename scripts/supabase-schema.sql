@@ -32,6 +32,16 @@ create table if not exists ja_di_menus (
   bahan_16oz_5 text,
   bahan_16oz_6 text,
   catatan text,
+  manual_bahan_12oz text,
+  manual_bahan_16oz text,
+  manual_bahan_hot text,
+  premix_bahan_12oz text,
+  premix_bahan_16oz text,
+  premix_bahan_hot text,
+  percepatan text,
+  percepatan_12oz text,
+  percepatan_16oz text,
+  percepatan_hot text,
   created_at timestamp with time zone default now()
 );
 alter table ja_di_menus enable row level security;
