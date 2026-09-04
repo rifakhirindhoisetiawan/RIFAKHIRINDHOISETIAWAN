@@ -22,12 +22,12 @@
     .search-box svg{flex-shrink:0;color:#c3c8d1;width:18px;height:18px}
     .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:#222;font-family:inherit;min-width:0;-webkit-appearance:none;appearance:none;border-radius:0}
     .search-box input::placeholder{color:#c3c8d1}
-    .form{display:grid;gap:12px;max-width:100%}
-    .form label{font-size:11px;font-weight:700;color:#1f2937;display:block;min-width:0;max-width:100%}
-    .form input,.form select{display:block;width:100%;max-width:100%;min-width:0;margin-top:6px;padding:10px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;color:#222;background:#f9f9f9;outline:none;font-family:inherit}
-    .form input:focus,.form select:focus{border-color:#888;background:#fff}
-    .form input::placeholder{color:#c3c8d1}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:100%}
+    .form{display:grid;gap:6px;max-width:100%}
+    .form label{font-size:10px;font-weight:700;color:#374151;display:block;min-width:0;max-width:100%;line-height:1.2}
+    .form input,.form select{display:block;width:100%;max-width:100%;min-width:0;margin-top:3px;padding:6px 8px;border:1px solid #d1d5db;border-radius:4px;font-size:12px;color:#111827;background:#fff;outline:none;font-family:inherit}
+    .form input:focus,.form select:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 1px #3b82f6}
+    .form input::placeholder{color:#9ca3af;font-size:11px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-width:100%}
     .row>*{min-width:0}
     .btn{padding:10px 16px;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;font-family:inherit}
     .btn-primary{background:#1a1a1a;color:#fff}
@@ -93,10 +93,12 @@
       <div id="list" class="list"><div class="empty">Memuat...</div></div>
     </div>
     <div class="card" style="order:1">
-      <div class="section-label" id="formTitle">Tambah Menu</div>
       <form id="form" class="form" onsubmit="return false">
         <input type="hidden" id="editId" />
-        <label>Nama *<input id="f_name" placeholder="COFFEE LATTE PREMIX" required /></label>
+        <div>
+          <div class="field-title">Nama *</div>
+          <input id="f_name" placeholder="COFFEE LATTE PREMIX" required style="margin-top:3px" />
+        </div>
         <div>
           <div class="foto-title">Foto</div>
           <div class="foto-box" id="fotoBox">
@@ -214,7 +216,6 @@
   const f_bahanHot16 = [1,2,3,4,5,6].map(n => document.getElementById('f_bahanHot16_' + n));
   const f_catatan = document.getElementById('f_catatan');
   const btnSave = document.getElementById('btnSave');
-  const formTitle = document.getElementById('formTitle');
   const f_icon_img = document.getElementById('f_icon_img');
   const iconPreview = document.getElementById('icon_preview');
   const fotoBox = document.getElementById('fotoBox');
@@ -358,7 +359,6 @@
       iconPreview.innerHTML = '';
     }
     syncFotoBox();
-    formTitle.textContent = 'Edit Menu #' + id;
     btnSave.textContent = 'Update';
     window.scrollTo({top:0, behavior:'smooth'});
   };
@@ -377,7 +377,6 @@
     form.reset();
     iconPreview.innerHTML = '';
     syncFotoBox();
-    formTitle.textContent = 'Tambah Menu';
     btnSave.textContent = 'Simpan';
   }
 
