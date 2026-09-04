@@ -147,7 +147,7 @@
 
       .grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 16px 10px;
         width: 100%;
         align-content: start;
@@ -205,7 +205,7 @@
 
       .menu-list {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 16px 10px;
         width: 100%;
         align-content: start;
@@ -255,6 +255,17 @@
 
       .hidden-item {
         display: none !important;
+      }
+      .menu-item.disabled {
+        opacity: 0.35;
+        pointer-events: none;
+        filter: grayscale(1);
+      }
+      .menu-item.disabled .icon-box {
+        background: #e5e7eb;
+      }
+      .menu-item.disabled .label {
+        color: #9aa0ab;
       }
 
       @media (max-width: 360px) {
@@ -309,11 +320,14 @@
         { label: "DAILY TASK", href: "modul/daily-task.html", folder: "admin", ext: "png" },
       ];
 
+      const disabledFrom = menuItems.findIndex(m => m.label === "PLANO");
       const menuList = document.getElementById("menuList");
-      menuItems.forEach((item) => {
-        const a = document.createElement("a");
-        a.className = "menu-item";
-        a.href = item.href;
+      menuItems.forEach((item, idx) => {
+        const isDisabled = disabledFrom !== -1 && idx >= disabledFrom;
+        const a = document.createElement(isDisabled ? "div" : "a");
+        a.className = "menu-item" + (isDisabled ? " disabled" : "");
+        if (!isDisabled) a.href = item.href;
+        if (isDisabled) a.setAttribute("aria-disabled", "true");
         a.innerHTML = `
           <div class="icon-box">
             <img
