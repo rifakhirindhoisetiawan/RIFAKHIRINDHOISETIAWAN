@@ -318,33 +318,31 @@
 
   .plu-row {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px 14px;
+    gap: 10px;
     align-items: center;
     margin: 6px 0 10px;
-    padding: 8px 10px;
+    padding: 6px 10px;
     background: #fff8f0;
     border: 1px solid #ffcc80;
     border-radius: 6px;
     font-size: 0.78rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow-x: auto;
   }
-  .plu-row .plu-label {
-    font-weight: 700;
-    color: #e65100;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
+  .plu-row .plu-label { display: none; }
   .plu-row .plu-item {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    white-space: nowrap;
   }
   .plu-row .plu-item span.size {
     color: #5d4037;
     font-weight: 600;
   }
   .plu-row .plu-item span.code {
-    min-width: 72px;
+    min-width: 62px;
     padding: 2px 8px;
     border: 1px dashed #ffb74d;
     border-radius: 4px;
