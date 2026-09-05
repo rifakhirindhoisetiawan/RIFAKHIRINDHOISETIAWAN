@@ -55,14 +55,19 @@
     .empty{text-align:center;color:#9aa0ab;font-size:13px;font-weight:600;padding:40px 0}
     .hint{font-size:11px;color:#9aa0ab}
     .foto-title,.field-title{font-size:11px;font-weight:700;color:#1f2937}
-.form-table{width:100%;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#fff;margin-bottom:6px}
-.form-table .tr{display:flex;align-items:stretch;border-bottom:1px solid #e5e7eb;min-height:32px}
-.form-table .tr:last-child{border-bottom:none}
-.form-table .th{min-width:48px;display:flex;align-items:center;padding:0 6px;font-size:10px;font-weight:700;color:#4b5563;background:#f8fafc;border-right:1px solid #e5e7eb;white-space:nowrap;letter-spacing:0}
-.form-table .td{flex:1;display:flex;align-items:center;padding:2px 6px}
-.form-table .td input{width:100%;margin:0 !important;padding:6px 8px;border:1px solid transparent;border-radius:4px;font-size:12px;font-weight:500;color:#111827;background:transparent;outline:none;font-family:inherit;line-height:1.2}
-    .form-table .td input:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 1px #3b82f6}
-    .form-table .td input::placeholder{color:#9ca3af;font-weight:400}
+ .form-table{width:100%;border:1px solid #c7d2fe;border-radius:8px;overflow:hidden;background:#fff;margin-bottom:6px}
+ .form-table .tr{display:flex;align-items:stretch;border-bottom:1px solid #e5e7eb;min-height:32px}
+ .form-table .tr:last-child{border-bottom:none}
+ .form-table .th{min-width:48px;display:flex;align-items:center;justify-content:center;padding:0 6px;font-size:9px;font-weight:700;color:#4f46e5;background:#eef2ff;border-right:1px solid #e5e7eb;white-space:normal;text-align:center;letter-spacing:0;text-transform:uppercase;line-height:1.15}
+ .form-table .td{flex:1;display:flex;align-items:center;padding:2px 6px}
+ .form-table .td input{width:100%;margin:0 !important;padding:6px 8px;border:1px solid transparent;border-radius:4px;font-size:10px;font-weight:500;color:#111827;background:transparent;outline:none;font-family:inherit;line-height:1.2;text-transform:uppercase}
+ .form-table .td input:focus{border-color:#6366f1;background:#fff;box-shadow:0 0 0 1px #6366f1}
+ .form-table .td input::placeholder{color:#9ca3af;font-weight:400}
+ @media(max-width:640px){
+    .form-table .th{font-size:8px;padding:0 4px;min-width:40px}
+    .form-table .td{padding:2px 4px}
+    .form-table .td input{font-size:12px;padding:8px 6px}
+  }
     .select-box{position:relative;margin-top:6px;max-width:100%}
     .select-box select{display:block;width:100%;max-width:100%;min-width:0;margin-top:0;padding:10px 40px 10px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-weight:600;color:#222;background:#f9f9f9;outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;cursor:pointer}
     .select-box select:focus{border-color:#888;background:#fff}
@@ -112,26 +117,26 @@
         <div class="form-table">
           <div class="tr">
             <div class="th">Nama</div>
-            <div class="td"><input id="f_name" placeholder="COFFEE LATTE PREMIX" required /></div>
+            <div class="td"><input id="f_name" required /></div>
           </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 70%;gap:10px;align-items:stretch;margin-top:0;height:148px">
           <div class="form-table" style="height:100%;display:grid;grid-template-rows:repeat(4,1fr)">
             <div class="tr">
               <div class="th">12OZ</div>
-              <div class="td"><input id="f_plu12" placeholder="443775" /></div>
+              <div class="td"><input id="f_plu12" /></div>
             </div>
             <div class="tr">
               <div class="th">16OZ</div>
-              <div class="td"><input id="f_plu16" placeholder="443776" /></div>
+              <div class="td"><input id="f_plu16" /></div>
             </div>
             <div class="tr">
               <div class="th">HOT</div>
-              <div class="td"><input id="f_pluHot" placeholder="PLU HOT" /></div>
+              <div class="td"><input id="f_pluHot" /></div>
             </div>
             <div class="tr">
               <div class="th">ICE</div>
-              <div class="td"><input id="f_pluIce" placeholder="PLU ICE" /></div>
+              <div class="td"><input id="f_pluIce" /></div>
             </div>
           </div>
           <div class="foto-box" id="fotoBox" style="height:100%;min-height:0;aspect-ratio:auto;width:100%;display:flex;align-items:center;justify-content:center">
@@ -145,105 +150,105 @@
         </div>
         <input type="hidden" id="f_link" />
         <div class="form-table">
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_1" placeholder="Bahan 1" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_2" placeholder="Bahan 2" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_3" placeholder="Bahan 3" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_4" placeholder="Bahan 4" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_5" placeholder="Bahan 5" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_6" placeholder="Bahan 6" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_7" placeholder="Bahan 7" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_8" placeholder="Bahan 8" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_9" placeholder="Bahan 9" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_10" placeholder="Bahan 10" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_1" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_2" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_3" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_4" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_5" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_6" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_7" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_8" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_9" /></div></div>
+          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_10" /></div></div>
         </div>
         <div class="form-table">
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_1" placeholder="Bahan 1" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_2" placeholder="Bahan 2" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_3" placeholder="Bahan 3" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_4" placeholder="Bahan 4" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_5" placeholder="Bahan 5" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_6" placeholder="Bahan 6" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_7" placeholder="Bahan 7" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_8" placeholder="Bahan 8" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_9" placeholder="Bahan 9" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_10" placeholder="Bahan 10" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_1" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_2" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_3" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_4" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_5" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_6" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_7" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_8" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_9" /></div></div>
+          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_10" /></div></div>
         </div>
         <div class="form-table">
-          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_1" placeholder="Bahan 1" /></div></div>
-          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_2" placeholder="Bahan 2" /></div></div>
-          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_3" placeholder="Bahan 3" /></div></div>
-          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_4" placeholder="Bahan 4" /></div></div>
-          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_5" placeholder="Bahan 5" /></div></div>
-          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_6" placeholder="Bahan 6" /></div></div>
-          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_7" placeholder="Bahan 7" /></div></div>
-          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_8" placeholder="Bahan 8" /></div></div>
-          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_9" placeholder="Bahan 9" /></div></div>
-          <div class="tr"><div class="th">HOT 12OZ</div><div class="td"><input id="f_bahanHot_10" placeholder="Bahan 10" /></div></div>
+          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_1" /></div></div>
+          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_2" /></div></div>
+          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_3" /></div></div>
+          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_4" /></div></div>
+          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_5" /></div></div>
+          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_6" /></div></div>
+          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_7" /></div></div>
+          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_8" /></div></div>
+          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_9" /></div></div>
+          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_10" /></div></div>
         </div>
         <div class="form-table">
-          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_1" placeholder="Bahan 1" /></div></div>
-          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_2" placeholder="Bahan 2" /></div></div>
-          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_3" placeholder="Bahan 3" /></div></div>
-          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_4" placeholder="Bahan 4" /></div></div>
-          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_5" placeholder="Bahan 5" /></div></div>
-          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_6" placeholder="Bahan 6" /></div></div>
-          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_7" placeholder="Bahan 7" /></div></div>
-          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_8" placeholder="Bahan 8" /></div></div>
-          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_9" placeholder="Bahan 9" /></div></div>
-          <div class="tr"><div class="th">HOT 16OZ</div><div class="td"><input id="f_bahanHot16_10" placeholder="Bahan 10" /></div></div>
+          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_1" /></div></div>
+          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_2" /></div></div>
+          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_3" /></div></div>
+          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_4" /></div></div>
+          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_5" /></div></div>
+          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_6" /></div></div>
+          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_7" /></div></div>
+          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_8" /></div></div>
+          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_9" /></div></div>
+          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_10" /></div></div>
         </div>
         <div class="form-table">
-          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_1" placeholder="Bahan 1" /></div></div>
-          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_2" placeholder="Bahan 2" /></div></div>
-          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_3" placeholder="Bahan 3" /></div></div>
-          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_4" placeholder="Bahan 4" /></div></div>
-          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_5" placeholder="Bahan 5" /></div></div>
-          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_6" placeholder="Bahan 6" /></div></div>
-          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_7" placeholder="Bahan 7" /></div></div>
-          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_8" placeholder="Bahan 8" /></div></div>
-          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_9" placeholder="Bahan 9" /></div></div>
-          <div class="tr"><div class="th">ICE 12OZ</div><div class="td"><input id="f_bahanIce12_10" placeholder="Bahan 10" /></div></div>
+          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_1" /></div></div>
+          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_2" /></div></div>
+          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_3" /></div></div>
+          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_4" /></div></div>
+          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_5" /></div></div>
+          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_6" /></div></div>
+          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_7" /></div></div>
+          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_8" /></div></div>
+          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_9" /></div></div>
+          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_10" /></div></div>
         </div>
         <div class="form-table">
-          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_1" placeholder="Bahan 1" /></div></div>
-          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_2" placeholder="Bahan 2" /></div></div>
-          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_3" placeholder="Bahan 3" /></div></div>
-          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_4" placeholder="Bahan 4" /></div></div>
-          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_5" placeholder="Bahan 5" /></div></div>
-          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_6" placeholder="Bahan 6" /></div></div>
-          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_7" placeholder="Bahan 7" /></div></div>
-          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_8" placeholder="Bahan 8" /></div></div>
-          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_9" placeholder="Bahan 9" /></div></div>
-          <div class="tr"><div class="th">ICE 16OZ</div><div class="td"><input id="f_bahanIce16_10" placeholder="Bahan 10" /></div></div>
+          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_1" /></div></div>
+          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_2" /></div></div>
+          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_3" /></div></div>
+          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_4" /></div></div>
+          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_5" /></div></div>
+          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_6" /></div></div>
+          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_7" /></div></div>
+          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_8" /></div></div>
+          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_9" /></div></div>
+          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_10" /></div></div>
         </div>
         <div class="form-table">
-          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_1" placeholder="Bahan 1" /></div></div>
-          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_2" placeholder="Bahan 2" /></div></div>
-          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_3" placeholder="Bahan 3" /></div></div>
-          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_4" placeholder="Bahan 4" /></div></div>
-          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_5" placeholder="Bahan 5" /></div></div>
-          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_6" placeholder="Bahan 6" /></div></div>
-          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_7" placeholder="Bahan 7" /></div></div>
-          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_8" placeholder="Bahan 8" /></div></div>
-          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_9" placeholder="Bahan 9" /></div></div>
-          <div class="tr"><div class="th">Percepatan 12OZ</div><div class="td"><input id="f_percepatan12_10" placeholder="Bahan 10" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_1" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_2" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_3" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_4" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_5" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_6" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_7" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_8" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_9" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_10" /></div></div>
         </div>
         <div class="form-table">
-          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_1" placeholder="Bahan 1" /></div></div>
-          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_2" placeholder="Bahan 2" /></div></div>
-          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_3" placeholder="Bahan 3" /></div></div>
-          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_4" placeholder="Bahan 4" /></div></div>
-          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_5" placeholder="Bahan 5" /></div></div>
-          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_6" placeholder="Bahan 6" /></div></div>
-          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_7" placeholder="Bahan 7" /></div></div>
-          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_8" placeholder="Bahan 8" /></div></div>
-          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_9" placeholder="Bahan 9" /></div></div>
-          <div class="tr"><div class="th">Percepatan 16OZ</div><div class="td"><input id="f_percepatan16_10" placeholder="Bahan 10" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_1" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_2" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_3" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_4" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_5" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_6" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_7" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_8" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_9" /></div></div>
+          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_10" /></div></div>
         </div>
         <div class="form-table">
           <div class="tr">
             <div class="th">Catatan</div>
-            <div class="td"><input id="f_catatan" placeholder="Catatan..." /></div>
+            <div class="td"><input id="f_catatan" /></div>
           </div>
         </div>
         <div style="display:flex;gap:8px">
@@ -629,3 +634,6 @@
 </script>
 </body>
 </html>
+
+
+
