@@ -275,6 +275,13 @@
         border-radius: 20px 20px 0 0;
         padding: 10px 18px 32px;
         animation: sheetUp 0.22s ease;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .sheet::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        display: none;
       }
       @keyframes sheetUp {
         from { transform: translateY(40px); opacity: 0.5; }
@@ -289,7 +296,7 @@
       }
       .sheet-photo {
         width: 100%;
-        aspect-ratio: 16 / 9;
+        aspect-ratio: 9 / 16;
         border-radius: 16px;
         background: #f5f5f5;
         display: flex;
@@ -298,6 +305,73 @@
         overflow: hidden;
         color: #fff;
       }
+      .sheet-top {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .sheet-top .sheet-photo {
+        width: 42%;
+        flex-shrink: 0;
+        max-height: 52vh;
+      }
+      .sheet-side {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .sheet-side .sheet-name {
+        margin: 0;
+      }
+      .sheet-side .sheet-meta {
+        margin-bottom: 0;
+      }
+      .sheet-side .sheet-btn {
+        margin-top: 0;
+        padding: 10px;
+        font-size: 13px;
+      }
+      .sheet-side .sheet-close {
+        margin-top: 0;
+        padding: 10px;
+        font-size: 13px;
+      }
+      .plu-table {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .plu-row {
+        display: flex;
+        align-items: stretch;
+      }
+      .plu-row + .plu-row {
+        border-top: 1px solid #eee;
+      }
+      .plu-th {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 6px 8px;
+        font-size: 9px;
+        font-weight: 800;
+        color: #4f46e5;
+        background: #eef2ff;
+        min-width: 62px;
+      }
+      .plu-td {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        padding: 6px 10px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #1f2937;
+      }
       .sheet-photo img {
         width: 100%;
         height: 100%;
@@ -305,7 +379,7 @@
         display: block;
       }
       .sheet-name {
-        font-size: 12px;
+        font-size: 16px;
         font-weight: 800;
         color: #1f2937;
         margin: 8px 0 6px;
@@ -323,19 +397,14 @@
         font-weight: 800;
         padding: 3px 8px;
         border-radius: 6px;
-        background: #f5f5f5;
-        color: #6b7280;
+        background: #eef2ff;
+        color: #4f46e5;
         letter-spacing: 0.4px;
-      }
-      .sheet-plu {
-        font-size: 11px;
-        font-weight: 700;
-        color: #3b82f6;
       }
       .sheet-sec {
         font-size: 11px;
         font-weight: 800;
-        color: #9aa0ab;
+        color: #4f46e5;
         letter-spacing: 0.6px;
         text-transform: uppercase;
         margin: 14px 0 8px;
@@ -348,8 +417,8 @@
         display: flex;
         gap: 10px;
         align-items: center;
-        background: #f9f9f9;
-        border: 1px solid #eee;
+        background: #fff;
+        border: 1px solid #c7d2fe;
         border-radius: 10px;
         padding: 9px 12px;
         font-size: 13px;
@@ -363,22 +432,9 @@
       .method-col .sheet-bahans{margin-top:0}
       .method-col .sheet-sec{margin-top:0}
       @media(max-width:640px){.dual-methods{grid-template-columns:1fr}}
-      .bahan-num {
-        flex-shrink: 0;
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        background: #1a1a1a;
-        color: #fff;
-        font-size: 11px;
-        font-weight: 800;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
       .sheet-note {
-        background: #f9f9f9;
-        border: 1px solid #eee;
+        background: #fff;
+        border: 1px solid #c7d2fe;
         border-radius: 10px;
         padding: 10px 12px;
         font-size: 13px;
@@ -396,7 +452,7 @@
         display: block;
         text-align: center;
         margin-top: 16px;
-        background: #1a1a1a;
+        background: #6366f1;
         color: #fff;
         font-weight: 700;
         font-size: 14px;
@@ -1225,18 +1281,25 @@
         const b16 = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_16oz_' + i]).filter(Boolean);
         const bHot = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_hot_' + i]).filter(Boolean);
         const bHot16 = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_hot_16oz_' + i]).filter(Boolean);
-        const bahans = [...b12, ...b16, ...bHot, ...bHot16];
+        const p12 = [1,2,3,4,5,6,7,8,9,10].map(i => m['percepatan_12oz_' + i]).filter(Boolean);
+        const p16 = [1,2,3,4,5,6,7,8,9,10].map(i => m['percepatan_16oz_' + i]).filter(Boolean);
+        const bahans = [...b12, ...b16, ...bHot, ...bHot16, ...p12, ...p16];
         const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
         const photo = isImg ? '<img src="' + m.foto + '" alt=""/>' : '<span style="font-size:48px">' + (m.foto||'☕') + '</span>';
-        let html = '<div class="sheet-photo ' + (m.cls||'g-a') + '">' + photo + '</div>';
+        const pluRows = [['PLU 12OZ', m.plu_12oz || '-'], ['PLU 16OZ', m.plu_16oz || '-'], ['PLU HOT', m.plu_hot || '-']];
+        if (!m.plu_12oz && !m.plu_16oz && !m.plu_hot && m.plu) pluRows.push(['PLU', m.plu]);
+        let html = '<div class="sheet-top"><div class="sheet-photo ' + (m.cls||'g-a') + '">' + photo + '</div><div class="sheet-side">';
         html += '<div class="sheet-name">' + m.name + '</div>';
         html += '<div class="sheet-meta">';
         if (m.cat) html += '<span class="sheet-badge">' + m.cat + '</span>';
-        if (m.plu) html += '<span class="sheet-plu">' + m.plu + '</span>';
         html += '</div>';
+        if (pluRows.length) html += '<div class="plu-table">' + pluRows.map(function(r){ return '<div class="plu-row"><div class="plu-th">' + r[0] + '</div><div class="plu-td">' + r[1] + '</div></div>'; }).join('') + '</div>';
+        if (m.link) html += '<a class="sheet-btn" href="' + m.link + '">Buka Halaman Resep</a>';
+        html += '<button class="sheet-close" id="sheetClose" type="button">Tutup</button>';
+        html += '</div></div>';
         function bahanGroup(title, list) {
           return '<div class="sheet-sec">' + title + '</div><div class="sheet-bahans">' +
-            list.map((b, i) => '<div class="bahan-row"><span class="bahan-num">' + (i+1) + '</span><span>' + b + '</span></div>').join('') +
+            list.map((b) => '<div class="bahan-row"><span>' + b + '</span></div>').join('') +
             '</div>';
         }
         function bahanTextGroup(title, text) {
@@ -1244,14 +1307,14 @@
           const parts = text.split('+').map(s=>s.trim()).filter(Boolean);
           return bahanGroup(title, parts);
         }
-        if (bHot.length) html += bahanGroup('Bahan HOT 12OZ', bHot);
-        if (bHot16.length) html += bahanGroup('Bahan HOT 16OZ', bHot16);
-        if (b12.length) html += bahanGroup('Bahan 12OZ', b12);
-        if (b16.length) html += bahanGroup('Bahan 16OZ', b16);
+        if (bHot.length) html += bahanGroup('HOT', bHot);
+        if (bHot16.length) html += bahanGroup('HOT 16OZ', bHot16);
+        if (p12.length) html += bahanGroup('P12', p12);
+        if (p16.length) html += bahanGroup('P16', p16);
+        if (b12.length) html += bahanGroup('12OZ', b12);
+        if (b16.length) html += bahanGroup('16OZ', b16);
         if (m.catatan) html += '<div class="sheet-sec">Catatan</div><div class="sheet-note">' + m.catatan + '</div>';
         if (!bahans.length && !m.catatan) html += '<div class="sheet-empty">Belum ada data bahan.</div>';
-        if (m.link) html += '<a class="sheet-btn" href="' + m.link + '">Buka Halaman Resep</a>';
-        html += '<button class="sheet-close" id="sheetClose" type="button">Tutup</button>';
         sheetBody.innerHTML = html;
         sheetBg.classList.add('open');
         document.getElementById('sheetClose').addEventListener('click', closeSheet);
@@ -1297,7 +1360,9 @@
           const { data, error } = await supabase.from('ja_di_menus').select('*').order('id', { ascending: true });
           if (error) throw error;
           if (data && data.length > 0) {
-            menus = data.map(m => ({ ...m, plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || m.plu || '' }));
+            const fbCat = {};
+            fallbackMenus.forEach(function(f){ if (f.name && f.cat) fbCat[f.name.toUpperCase().replace(/\s+/g, ' ').trim()] = f.cat; });
+            menus = data.map(m => { const k = (m.name || '').toUpperCase().replace(/\s+/g, ' ').trim(); return { ...m, cat: m.cat || fbCat[k] || '', plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || m.plu || '' }; });
             isSupabase = true;
             statusEl.textContent = '✅ ' + data.length + ' menu dari Supabase';
             statusEl.style.color = '#10b981';

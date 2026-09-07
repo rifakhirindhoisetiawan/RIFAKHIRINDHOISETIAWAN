@@ -126,7 +126,7 @@
   <div id="status" class="status" style="display:none">Menghubungkan ke Supabase...</div>
   <div class="grid">
     <div class="card" style="order:2">
-      <div class="section-label">Daftar Menu (<span id="count">0</span>)</div>
+      <span id="count" style="display:none">0</span>
       <div class="search-wrapper">
         <div class="search-box">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
@@ -581,6 +581,7 @@
     editId.value = '';
     existingIcon = '';
     existingCls = 'g-a';
+    existingCat = 'PREMIX';
     form.reset();
     iconPreview.innerHTML = '';
     if(fotoName) fotoName.textContent = 'Belum ada foto';
@@ -631,6 +632,16 @@
       plu_12oz: f_plu12.value.trim() || null,
       plu_16oz: f_plu16.value.trim() || null,
       plu_hot: f_pluHot ? f_pluHot.value.trim() || null : null,
+      bahan_hot_1: f_bahanHot[0].value.trim() || null,
+      bahan_hot_2: f_bahanHot[1].value.trim() || null,
+      bahan_hot_3: f_bahanHot[2].value.trim() || null,
+      bahan_hot_4: f_bahanHot[3].value.trim() || null,
+      bahan_hot_5: f_bahanHot[4].value.trim() || null,
+      bahan_hot_6: f_bahanHot[5].value.trim() || null,
+      bahan_hot_7: f_bahanHot[6].value.trim() || null,
+      bahan_hot_8: f_bahanHot[7].value.trim() || null,
+      bahan_hot_9: f_bahanHot[8].value.trim() || null,
+      bahan_hot_10: f_bahanHot[9].value.trim() || null,
       percepatan_12oz_1: f_percepatan12[0].value.trim() || null,
       percepatan_12oz_2: f_percepatan12[1].value.trim() || null,
       percepatan_12oz_3: f_percepatan12[2].value.trim() || null,
@@ -683,22 +694,22 @@
       res = await supabase.from(currentTable).update(payload).eq('id', parseInt(editId.value));
       error = res.error;
       // fallback kalau kolom hot16/hotAll/plu/percepatan/ice belum ada (belum RUN migrate)
-      if (error && /bahan_hot_16oz|bahan_hot_all|plu|percepatan|PGRST204/i.test(error.message)) {
+      if (error && /bahan_hot|plu|percepatan|PGRST204/i.test(error.message)) {
         alert('Kolom form belum lengkap di Supabase.\n\nRUN dulu:\n- scripts/sync-form-columns.sql\nLink: https://supabase.com/dashboard/project/xsacwgxxoptdrgbbzzib/sql/new\n\nMencoba simpan tanpa kolom baru...');
         delete payload.bahan_hot_16oz_1; delete payload.bahan_hot_16oz_2; delete payload.bahan_hot_16oz_3; delete payload.bahan_hot_16oz_4; delete payload.bahan_hot_16oz_5; delete payload.bahan_hot_16oz_6;
         delete payload.bahan_hot_all_1; delete payload.bahan_hot_all_2; delete payload.bahan_hot_all_3; delete payload.bahan_hot_all_4; delete payload.bahan_hot_all_5; delete payload.bahan_hot_all_6;
-        for(let i=1;i<=6;i++){ delete payload['percepatan_12oz_'+i]; delete payload['percepatan_16oz_'+i]; }
+        for(let i=1;i<=6;i++){ delete payload['percepatan_12oz_'+i]; delete payload['percepatan_16oz_'+i]; } for(let i=1;i<=10;i++){ delete payload['bahan_hot_'+i]; }
         const retry = await supabase.from(currentTable).update(payload).eq('id', parseInt(editId.value));
         error = retry.error; res = retry;
       }
     } else {
       res = await supabase.from(currentTable).insert([payload]);
       error = res.error;
-      if (error && /bahan_hot_16oz|bahan_hot_all|plu|percepatan|PGRST204/i.test(error.message)) {
-        alert('Kolom HOT16/HOT/PLU/Percepatan/ICE belum ada di Supabase.\n\nRUN dulu:\n- scripts/add-hot-16oz.sql\n- scripts/add-hot-all.sql\n- scripts/add-percepatan-column.sql\n- scripts/add-ice-12-16.sql\n\nMencoba simpan tanpa kolom baru...');
+      if (error && /bahan_hot|plu|percepatan|PGRST204/i.test(error.message)) {
+        alert('Kolom form belum lengkap di Supabase.\n\nRUN dulu:\n- scripts/sync-form-columns.sql\nLink: https://supabase.com/dashboard/project/xsacwgxxoptdrgbbzzib/sql/new\n\nMencoba simpan tanpa kolom baru...');
         delete payload.bahan_hot_16oz_1; delete payload.bahan_hot_16oz_2; delete payload.bahan_hot_16oz_3; delete payload.bahan_hot_16oz_4; delete payload.bahan_hot_16oz_5; delete payload.bahan_hot_16oz_6;
         delete payload.bahan_hot_all_1; delete payload.bahan_hot_all_2; delete payload.bahan_hot_all_3; delete payload.bahan_hot_all_4; delete payload.bahan_hot_all_5; delete payload.bahan_hot_all_6;
-        for(let i=1;i<=6;i++){ delete payload['percepatan_12oz_'+i]; delete payload['percepatan_16oz_'+i]; }
+        for(let i=1;i<=6;i++){ delete payload['percepatan_12oz_'+i]; delete payload['percepatan_16oz_'+i]; } for(let i=1;i<=10;i++){ delete payload['bahan_hot_'+i]; }
         const retry = await supabase.from(currentTable).insert([payload]);
         error = retry.error; res = retry;
       }

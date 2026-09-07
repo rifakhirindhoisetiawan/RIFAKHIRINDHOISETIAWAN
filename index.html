@@ -309,7 +309,7 @@
         { label: "DAILY TASK", href: "modul/daily-task.html", folder: "admin", ext: "png" },
       ];
 
-      const disabledFrom = menuItems.findIndex(m => m.label === "PLANO");
+      const disabledFrom = menuItems.findIndex(m => m.label === "PLU JA-DI");
       const menuList = document.getElementById("menuList");
       menuItems.forEach((item, idx) => {
         const isDisabled = disabledFrom !== -1 && idx >= disabledFrom;
