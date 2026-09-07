@@ -37,6 +37,7 @@
     .btn-small{padding:6px 12px;font-size:12px}
     .btn-save-icon{width:100%;height:44px;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0;transition:all .15s ease;font-size:14px;font-weight:700;padding:0 16px}
     .btn-save-icon:active{opacity:.85;transform:scale(.93)}
+    .btn-save-icon:disabled{opacity:.6;cursor:not-allowed;transform:none}
     .list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 8px;max-width:100%;background:transparent;border:none;border-radius:0;overflow:visible;align-items:start}
     .list-head{display:none}
     .item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;padding:0;background:transparent;border:none;cursor:default;width:100%}
@@ -63,12 +64,20 @@
  .form-table .td{flex:1;display:flex;align-items:center;padding:2px 6px}
  .form-table .td input{width:100%;margin:0 !important;padding:6px 8px;border:1px solid transparent;border-radius:4px;font-size:10px;font-weight:500;color:#111827;background:transparent;outline:none;font-family:inherit;line-height:1.2;text-transform:uppercase}
  .form-table .td input:focus{border-color:#6366f1;background:#fff;box-shadow:0 0 0 1px #6366f1}
- .form-table .td input::placeholder{color:#9ca3af;font-weight:400}
- @media(max-width:640px){
-    .form-table .th{font-size:8px;padding:0 4px;min-width:40px}
-    .form-table .td{padding:2px 4px}
-    .form-table .td input{font-size:12px;padding:8px 6px}
-    .plu-photo-grid .form-table .td input{font-size:14px;padding:10px 8px;letter-spacing:0.5px}
+  .form-table .td input::placeholder{color:#9ca3af;font-weight:400}
+  .form-table .tr.plu-head{gap:6px;padding:6px 6px 0 6px;border-bottom:none}
+  .form-table .tr.plu-head .th{flex:1;min-width:0;border:1px solid #e5e7eb;border-radius:6px;padding:6px 4px}
+  .form-table .tr.plu-input{gap:6px;padding:6px}
+  .form-table .tr.plu-input .td{flex:1;min-width:0;border:1px solid #e5e7eb;border-radius:6px;justify-content:center}
+  .form-table .tr.plu-input .td input{text-align:center;padding:6px 4px}
+  @media(max-width:640px){
+     .form-table .th{font-size:8px;padding:0 4px;min-width:40px}
+     .form-table .td{padding:2px 4px}
+     .form-table .td input{font-size:12px;padding:8px 6px}
+     .plu-photo-grid .form-table .td input{font-size:14px;padding:10px 8px;letter-spacing:0.5px}
+     .form-table .tr.plu-head .th{font-size:8px;padding:6px 2px;min-width:0}
+     .form-table .tr.plu-input .td{padding:2px 2px}
+     .form-table .tr.plu-input .td input{font-size:12px;padding:8px 2px}
   }
     .select-box{position:relative;margin-top:6px;max-width:100%}
     .select-box select{display:block;width:100%;max-width:100%;min-width:0;margin-top:0;padding:10px 40px 10px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-weight:600;color:#222;background:#f9f9f9;outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;cursor:pointer}
@@ -76,8 +85,8 @@
     .select-box svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#9aa0ab;pointer-events:none}
     .foto-box{position:relative;border:1px solid #e5e7eb;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;max-width:100%}
     .foto-box:active{background:#f1f1f1}
-    .foto-empty{display:flex;flex-direction:column;align-items:center;gap:6px;color:#c3c8d1;padding:20px;text-align:center}
-    .foto-empty svg{width:32px;height:32px}
+    .foto-empty{display:flex;flex-direction:column;align-items:center;gap:6px;color:#b0b5bf;padding:20px;text-align:center}
+    .foto-empty svg{width:22px;height:22px;color:#6366f1}
     .foto-empty span{font-size:13px;font-weight:700;color:#6b7280}
     .foto-empty small{font-size:11px;color:#c3c8d1}
     #icon_preview{display:none;position:absolute;inset:0;width:100%;height:100%}
@@ -96,7 +105,20 @@
     .g-g{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
     .g-h{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
     .form-table .tr.hidden{display:none}
-    .bahan-add{margin-top:6px;padding:6px 10px;border:1px dashed #d1d5db;border-radius:6px;background:#f9fafb;color:#6b7280;font-size:11px;font-weight:700;cursor:pointer;width:100%}
+    .form-table .tr.tr-plus{background:transparent;justify-content:center;align-items:center;padding:6px}
+    .bahan-add{width:100%;height:32px;padding:0;margin:0;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;outline:none;transition:all .15s ease;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .bahan-add:active{opacity:.85;transform:scale(.93)}
+    .crop-overlay{position:fixed;inset:0;z-index:9999;background:rgba(17,24,39,0.5);display:none;align-items:center;justify-content:center;padding:12px}
+    .crop-overlay.show{display:flex}
+    .crop-card{background:#fff;border:1px solid #c7d2fe;border-radius:12px;padding:12px;width:auto;max-width:94vw;max-height:92vh;max-height:92dvh;overflow-y:auto;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 4px 18px rgba(99,102,241,0.18);font-family:inherit}
+    .crop-stage{position:relative;height:min(56vh,460px);height:min(56dvh,460px);aspect-ratio:9/16;width:auto;max-width:78vw;border-radius:8px;overflow:hidden;background:#f3f4f6;border:1px solid #e5e7eb;touch-action:none;cursor:grab;flex-shrink:0}
+    .crop-stage:active{cursor:grabbing}
+    .crop-stage img{position:absolute;left:50%;top:50%;max-width:none;max-height:none;user-select:none;-webkit-user-drag:none;touch-action:none;pointer-events:none}
+    .crop-stage::after{content:'';position:absolute;inset:0;border:1px solid #c7d2fe;border-radius:8px;pointer-events:none}
+    .crop-actions{display:flex;gap:12px;justify-content:center;align-items:center}
+    .crop-icon-btn{width:40px;height:40px;padding:0;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;outline:none;transition:all .15s ease;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .crop-icon-btn:active{opacity:.85;transform:scale(.93)}
+    @media(min-width:641px){.crop-stage{height:min(60vh,520px)}}
   </style>
 </head>
 <body>
@@ -118,39 +140,68 @@
         <input type="hidden" id="editId" />
         <div class="form-table">
           <div class="tr">
-            <div class="th">Nama</div>
+            <div class="th">Menu</div>
             <div class="td"><input id="f_name" required /></div>
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 70%;gap:10px;align-items:stretch;margin-top:0;height:148px">
-          <div class="form-table" style="height:100%;display:grid;grid-template-rows:repeat(4,1fr)">
-            <div class="tr">
-              <div class="th">12OZ</div>
-              <div class="td"><input id="f_plu12" /></div>
-            </div>
-            <div class="tr">
-              <div class="th">16OZ</div>
-              <div class="td"><input id="f_plu16" /></div>
-            </div>
-            <div class="tr">
-              <div class="th">HOT</div>
-              <div class="td"><input id="f_pluHot" /></div>
-            </div>
-            <div class="tr">
-              <div class="th">ICE</div>
-              <div class="td"><input id="f_pluIce" /></div>
-            </div>
-          </div>
-          <div class="foto-box" id="fotoBox" style="height:100%;min-height:0;aspect-ratio:auto;width:100%;display:flex;align-items:center;justify-content:center">
+        <div class="foto-box" id="fotoBox" style="height:120px;min-height:0;aspect-ratio:auto;width:100%;display:flex;align-items:center;justify-content:center;margin-top:5px">
             <input id="f_icon_img" type="file" accept="image/*" hidden />
             <div class="foto-empty">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="3" /><circle cx="12" cy="13" r="3.5" /><path d="M8 7l1.5-2.5h5L16 7" /></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
             </div>
             <div id="icon_preview"></div>
             <div class="foto-change">Ganti</div>
+            <span id="fotoName" style="display:none"></span>
+          </div>
+        <div class="form-table">
+          <div class="tr plu-head">
+            <div class="th">PLU 12OZ</div>
+            <div class="th">PLU 16OZ</div>
+            <div class="th">PLU HOT</div>
+          </div>
+          <div class="tr plu-input">
+            <div class="td"><input id="f_plu12" /></div>
+            <div class="td"><input id="f_plu16" /></div>
+            <div class="td"><input id="f_pluHot" /></div>
           </div>
         </div>
         <input type="hidden" id="f_link" />
+        <div class="form-table">
+          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_1" /></div></div>
+          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_2" /></div></div>
+          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_3" /></div></div>
+          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_4" /></div></div>
+          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_5" /></div></div>
+          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_6" /></div></div>
+          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_7" /></div></div>
+          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_8" /></div></div>
+          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_9" /></div></div>
+          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_10" /></div></div>
+        </div>
+        <div class="form-table">
+          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_1" /></div></div>
+          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_2" /></div></div>
+          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_3" /></div></div>
+          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_4" /></div></div>
+          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_5" /></div></div>
+          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_6" /></div></div>
+          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_7" /></div></div>
+          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_8" /></div></div>
+          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_9" /></div></div>
+          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_10" /></div></div>
+        </div>
+        <div class="form-table">
+          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_1" /></div></div>
+          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_2" /></div></div>
+          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_3" /></div></div>
+          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_4" /></div></div>
+          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_5" /></div></div>
+          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_6" /></div></div>
+          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_7" /></div></div>
+          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_8" /></div></div>
+          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_9" /></div></div>
+          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_10" /></div></div>
+        </div>
         <div class="form-table">
           <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_1" /></div></div>
           <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_2" /></div></div>
@@ -176,87 +227,27 @@
           <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_10" /></div></div>
         </div>
         <div class="form-table">
-          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_1" /></div></div>
-          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_2" /></div></div>
-          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_3" /></div></div>
-          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_4" /></div></div>
-          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_5" /></div></div>
-          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_6" /></div></div>
-          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_7" /></div></div>
-          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_8" /></div></div>
-          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_9" /></div></div>
-          <div class="tr"><div class="th">HOT<br>12OZ</div><div class="td"><input id="f_bahanHot_10" /></div></div>
+          <div class="tr"><div class="th">Catatan</div><div class="td"><input id="f_catatan" /></div></div>
         </div>
-        <div class="form-table">
-          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_1" /></div></div>
-          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_2" /></div></div>
-          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_3" /></div></div>
-          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_4" /></div></div>
-          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_5" /></div></div>
-          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_6" /></div></div>
-          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_7" /></div></div>
-          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_8" /></div></div>
-          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_9" /></div></div>
-          <div class="tr"><div class="th">HOT<br>16OZ</div><div class="td"><input id="f_bahanHot16_10" /></div></div>
-        </div>
-        <div class="form-table">
-          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_1" /></div></div>
-          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_2" /></div></div>
-          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_3" /></div></div>
-          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_4" /></div></div>
-          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_5" /></div></div>
-          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_6" /></div></div>
-          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_7" /></div></div>
-          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_8" /></div></div>
-          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_9" /></div></div>
-          <div class="tr"><div class="th">ICE<br>12OZ</div><div class="td"><input id="f_bahanIce12_10" /></div></div>
-        </div>
-        <div class="form-table">
-          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_1" /></div></div>
-          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_2" /></div></div>
-          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_3" /></div></div>
-          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_4" /></div></div>
-          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_5" /></div></div>
-          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_6" /></div></div>
-          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_7" /></div></div>
-          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_8" /></div></div>
-          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_9" /></div></div>
-          <div class="tr"><div class="th">ICE<br>16OZ</div><div class="td"><input id="f_bahanIce16_10" /></div></div>
-        </div>
-        <div class="form-table">
-          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_1" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_2" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_3" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_4" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_5" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_6" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_7" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_8" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_9" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>12OZ</div><div class="td"><input id="f_percepatan12_10" /></div></div>
-        </div>
-        <div class="form-table">
-          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_1" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_2" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_3" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_4" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_5" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_6" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_7" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_8" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_9" /></div></div>
-          <div class="tr"><div class="th">Percepatan<br>16OZ</div><div class="td"><input id="f_percepatan16_10" /></div></div>
-        </div>
-        <div class="form-table">
-          <div class="tr">
-            <div class="th">Catatan</div>
-            <div class="td"><input id="f_catatan" /></div>
-          </div>
-        </div>
-        <div style="display:flex;justify-content:flex-end">
-          <button id="btnSave" class="btn-save-icon" title="Simpan">Simpan</button>
+        <div style="display:flex;justify-content:flex-end;margin-top:10px">
+          <button id="btnSave" class="btn-save-icon" title="Simpan" aria-label="Simpan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+<div class="crop-overlay" id="cropOverlay">
+  <div class="crop-card">
+    <div class="crop-stage" id="cropStage">
+      <img id="cropImg" alt="" draggable="false" />
+    </div>
+    <div class="crop-actions">
+      <button type="button" class="crop-icon-btn" id="cropCancel" title="Batal" aria-label="Batal">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <button type="button" class="crop-icon-btn" id="cropApply" title="Pakai" aria-label="Pakai">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </button>
     </div>
   </div>
 </div>
@@ -276,15 +267,11 @@
   const f_plu12 = document.getElementById('f_plu12');
   const f_plu16 = document.getElementById('f_plu16');
   const f_pluHot = document.getElementById('f_pluHot');
-  const f_pluIce = document.getElementById('f_pluIce');
   const f_bahan12 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahan12_' + n));
   const f_bahan16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahan16_' + n));
   const f_bahanHot = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahanHot_' + n));
-  const f_bahanHot16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahanHot16_' + n));
   const f_percepatan12 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_percepatan12_' + n));
   const f_percepatan16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_percepatan16_' + n));
-  const f_bahanIce12 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahanIce12_' + n));
-  const f_bahanIce16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahanIce16_' + n));
   const f_catatan = document.getElementById('f_catatan');
   const btnSave = document.getElementById('btnSave');
   const f_icon_img = document.getElementById('f_icon_img');
@@ -301,13 +288,138 @@
 
   fotoBox.addEventListener('click', () => f_icon_img.click());
 
+  const cropOverlay = document.getElementById('cropOverlay');
+  const cropStage = document.getElementById('cropStage');
+  const cropImg = document.getElementById('cropImg');
+  const cropCancel = document.getElementById('cropCancel');
+  const cropApply = document.getElementById('cropApply');
+  let cropScale = 1, cropTx = 0, cropTy = 0, cropFileName = 'foto.jpg';
+  let cropDragging = false, cropLastX = 0, cropLastY = 0;
+  const cropPointers = new Map();
+  let cropPinchDist = 0, cropPinchScale = 1;
+
+  function applyCropTransform() {
+    cropImg.style.transform = 'translate(-50%,-50%) translate(' + cropTx + 'px,' + cropTy + 'px) scale(' + cropScale + ')';
+  }
+  function clampCrop() {
+    const sR = cropStage.getBoundingClientRect();
+    const iR = cropImg.getBoundingClientRect();
+    let dx = 0, dy = 0;
+    if (iR.left > sR.left) dx = sR.left - iR.left;
+    if (iR.right < sR.right) dx = sR.right - iR.right;
+    if (iR.top > sR.top) dy = sR.top - iR.top;
+    if (iR.bottom < sR.bottom) dy = sR.bottom - iR.bottom;
+    cropTx += dx; cropTy += dy;
+    applyCropTransform();
+  }
+  function fitCropImg() {
+    const sR = cropStage.getBoundingClientRect();
+    const iw = cropImg.naturalWidth, ih = cropImg.naturalHeight;
+    if (!iw || !ih) return;
+    const stageRatio = sR.width / sR.height;
+    const imgRatio = iw / ih;
+    if (imgRatio > stageRatio) { cropImg.style.height = '100%'; cropImg.style.width = 'auto'; }
+    else { cropImg.style.width = '100%'; cropImg.style.height = 'auto'; }
+    cropScale = 1; cropTx = 0; cropTy = 0;
+    requestAnimationFrame(() => { applyCropTransform(); clampCrop(); });
+  }
+  function openCrop(file) {
+    if (!file || !file.type.startsWith('image/')) { alert('Pilih file gambar ya'); return; }
+    cropFileName = file.name || 'foto.jpg';
+    const url = URL.createObjectURL(file);
+    cropImg.onload = () => { fitCropImg(); };
+    cropImg.src = url;
+    cropOverlay.classList.add('show');
+  }
+  function closeCrop() {
+    cropOverlay.classList.remove('show');
+  }
+
   f_icon_img.addEventListener('change', () => {
     const file = f_icon_img.files[0];
-    if (!file) { iconPreview.innerHTML = ''; if(fotoName) fotoName.textContent = 'Belum ada foto'; syncFotoBox(); return; }
-    const url = URL.createObjectURL(file);
-    iconPreview.innerHTML = '<img src="'+url+'" alt=""/>';
-    if(fotoName) fotoName.textContent = file.name;
-    syncFotoBox();
+    if (!file) return;
+    openCrop(file);
+  });
+
+  cropStage.addEventListener('pointerdown', (e) => {
+    cropStage.setPointerCapture(e.pointerId);
+    cropPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (cropPointers.size === 2) {
+      const p = Array.from(cropPointers.values());
+      cropPinchDist = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+      cropPinchScale = cropScale;
+    } else {
+      cropDragging = true; cropLastX = e.clientX; cropLastY = e.clientY;
+    }
+  });
+  cropStage.addEventListener('pointermove', (e) => {
+    if (!cropPointers.has(e.pointerId)) return;
+    cropPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (cropPointers.size === 2) {
+      const p = Array.from(cropPointers.values());
+      const d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+      if (cropPinchDist > 0) {
+        cropScale = Math.min(3, Math.max(1, cropPinchScale * d / cropPinchDist));
+        applyCropTransform();
+      }
+      return;
+    }
+    if (!cropDragging) return;
+    cropTx += e.clientX - cropLastX;
+    cropTy += e.clientY - cropLastY;
+    cropLastX = e.clientX; cropLastY = e.clientY;
+    applyCropTransform();
+  });
+  function endCropPoint(e) {
+    cropPointers.delete(e.pointerId);
+    if (cropPointers.size < 2) cropPinchDist = 0;
+    if (cropPointers.size === 0) cropDragging = false;
+    clampCrop();
+  }
+  cropStage.addEventListener('pointerup', endCropPoint);
+  cropStage.addEventListener('pointercancel', endCropPoint);
+  cropStage.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    cropScale = Math.min(3, Math.max(1, cropScale + (e.deltaY < 0 ? 0.1 : -0.1)));
+    applyCropTransform(); clampCrop();
+  }, { passive: false });
+
+  cropCancel.addEventListener('click', () => {
+    f_icon_img.value = '';
+    closeCrop();
+  });
+  cropOverlay.addEventListener('click', (e) => {
+    if (e.target === cropOverlay) { f_icon_img.value = ''; closeCrop(); }
+  });
+
+  cropApply.addEventListener('click', () => {
+    const sR = cropStage.getBoundingClientRect();
+    const iR = cropImg.getBoundingClientRect();
+    const iw = cropImg.naturalWidth, ih = cropImg.naturalHeight;
+    if (!iw || !ih) { alert('Foto belum kebaca, coba lagi'); return; }
+    const sx = (sR.left - iR.left) / iR.width * iw;
+    const sy = (sR.top - iR.top) / iR.height * ih;
+    const sw = sR.width / iR.width * iw;
+    const sh = sR.height / iR.height * ih;
+    const outW = 720, outH = 1280;
+    const canvas = document.createElement('canvas');
+    canvas.width = outW; canvas.height = outH;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, outW, outH);
+    ctx.drawImage(cropImg, sx, sy, sw, sh, 0, 0, outW, outH);
+    canvas.toBlob((blob) => {
+      if (!blob) { alert('Gagal motong foto'); return; }
+      const ext = (cropFileName.split('.').pop() || 'jpg').split('?')[0];
+      const cropped = new File([blob], cropFileName.replace(/\.[^.]+$/, '') + '-9x16.' + ext, { type: blob.type || 'image/jpeg' });
+      const dt = new DataTransfer();
+      dt.items.add(cropped);
+      f_icon_img.files = dt.files;
+      const url = URL.createObjectURL(cropped);
+      iconPreview.innerHTML = '<img src="' + url + '" alt=""/>';
+      if (fotoName) fotoName.textContent = cropped.name;
+      syncFotoBox();
+      closeCrop();
+    }, 'image/jpeg', 0.92);
   });
 
   async function uploadIcon(file) {
@@ -364,7 +476,7 @@
         const key = m.id + '|' + (m.name || '').toLowerCase().trim();
         if (seen.has(key)) continue;
         seen.add(key);
-        all.push({ ...m, plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || m.plu_ice || m.plu || '' });
+        all.push({ ...m });
       }
       setStatus(label + ' — ' + all.length + ' menu');
       render();
@@ -396,7 +508,7 @@
       <div class="item">
         <div class="thumb ${m.cls||''}">${thumb}</div>
         <div class="item-name">${m.name}</div>
-        <div class="col-plu" style="font-size:8px;line-height:1.2;margin-top:2px"><span>${m.plu_12oz || '-'}</span><span>${m.plu_16oz || '-'}</span></div>
+        <div class="col-plu" style="font-size:8px;line-height:1.2;margin-top:2px"><span>${m.plu_12oz || '-'}</span><span>${m.plu_16oz || '-'}</span><span>${m.plu_hot || '-'}</span></div>
         <div class="item-actions" style="margin-top:4px;gap:4px">
           <button class="btn btn-ghost btn-small" data-edit="${m.id}" title="Edit" aria-label="Edit" style="width:26px;height:26px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:7px;background:#f3f4f6"><svg viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2" style="width:12px;height:12px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
           <button class="btn btn-danger btn-small" data-del="${m.id}" title="Hapus" aria-label="Hapus" style="width:26px;height:26px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:7px;background:#fef2f2;border:1px solid #fecaca"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" style="width:12px;height:12px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
@@ -411,7 +523,7 @@
       const key = m.id + '|' + (m.name || '').toLowerCase().trim();
       if (seen.has(key)) continue;
       seen.add(key);
-      if (q && !m.name.toLowerCase().includes(q) && !(m.cat && m.cat.toLowerCase().includes(q)) && !(m.plu && m.plu.toLowerCase().includes(q))) continue;
+        if (q && !m.name.toLowerCase().includes(q) && !(m.cat && m.cat.toLowerCase().includes(q)) && !(m.plu_12oz && m.plu_12oz.toLowerCase().includes(q)) && !(m.plu_16oz && m.plu_16oz.toLowerCase().includes(q)) && !(m.plu_hot && m.plu_hot.toLowerCase().includes(q))) continue;
       filtered.push(m);
     }
     countEl.textContent = filtered.length;
@@ -439,15 +551,11 @@
     f_plu12.value = m.plu_12oz||'';
     f_plu16.value = m.plu_16oz||'';
     if(f_pluHot) f_pluHot.value = m.plu_hot||'';
-    if(f_pluIce) f_pluIce.value = m.plu_ice||'';
     f_bahan12.forEach((inp, i) => { inp.value = m['bahan_12oz_' + (i+1)] || ''; });
     f_bahan16.forEach((inp, i) => { inp.value = m['bahan_16oz_' + (i+1)] || ''; });
     f_bahanHot.forEach((inp, i) => { inp.value = m['bahan_hot_' + (i+1)] || ''; });
-    f_bahanHot16.forEach((inp, i) => { inp.value = m['bahan_hot_16oz_' + (i+1)] || ''; });
     f_percepatan12.forEach((inp, i) => { inp.value = m['percepatan_12oz_' + (i+1)] || ''; });
     f_percepatan16.forEach((inp, i) => { inp.value = m['percepatan_16oz_' + (i+1)] || ''; });
-    f_bahanIce12.forEach((inp, i) => { inp.value = m['bahan_ice_12oz_' + (i+1)] || ''; });
-    f_bahanIce16.forEach((inp, i) => { inp.value = m['bahan_ice_16oz_' + (i+1)] || ''; });
     f_catatan.value = m.catatan || '';
     f_icon_img.value = '';
     if (m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto)) {
@@ -458,7 +566,7 @@
       if(fotoName) fotoName.textContent = m.foto || 'Belum ada foto';
     }
     syncFotoBox();
-    btnSave.textContent = 'Update';
+    btnSave.title = 'Update'; btnSave.setAttribute('aria-label', 'Update');
     window.scrollTo({top:0, behavior:'smooth'});
   };
 
@@ -477,17 +585,17 @@
     iconPreview.innerHTML = '';
     if(fotoName) fotoName.textContent = 'Belum ada foto';
     syncFotoBox();
-    btnSave.textContent = 'Simpan';
+    btnSave.title = 'Simpan'; btnSave.setAttribute('aria-label', 'Simpan');
   }
 
   btnSave.onclick = async () => {
-    if (!f_name.value.trim()) { alert('Nama wajib'); return; }
-    btnSave.disabled = true; btnSave.textContent = 'Menyimpan...';
+    if (!f_name.value.trim()) { alert('Menu wajib'); return; }
+    btnSave.disabled = true; btnSave.title = 'Menyimpan...'; btnSave.setAttribute('aria-label', 'Menyimpan...');
     let iconValue = existingIcon || '☕';
     if (f_icon_img.files[0]) {
       const file = f_icon_img.files[0];
       // validasi ukuran (max 3MB biar base64 tidak kebesaran)
-      if (file.size > 3 * 1024 * 1024) { alert('Foto kebesaran, max 3MB. Kompres dulu ya.'); btnSave.disabled=false; btnSave.textContent = editId.value ? 'Update' : 'Simpan'; return; }
+      if (file.size > 3 * 1024 * 1024) { alert('Foto kebesaran, max 3MB. Kompres dulu ya.'); btnSave.disabled=false; btnSave.title = editId.value ? 'Update' : 'Simpan'; btnSave.setAttribute('aria-label', btnSave.title); return; }
       try {
         iconValue = await uploadIcon(file);
       } catch (e) {
@@ -497,19 +605,19 @@
           // FALLBACK: simpan sebagai base64 dataURL langsung ke kolom foto (tanpa storage)
           // Tetap bisa edit, hanya butuh fix SQL nanti biar pakai storage URL
           if (!confirm('Upload ke Storage gagal (RLS belum di-set).\n\nDetail: ' + msg + '\n\nMau simpan foto sebagai base64 sementara biar tetap kesimpan?\n(Disarankan tetap RUN scripts/fix-storage-rls.sql nanti)')) {
-            btnSave.disabled = false; btnSave.textContent = editId.value ? 'Update' : 'Simpan';
+            btnSave.disabled = false; btnSave.title = editId.value ? 'Update' : 'Simpan'; btnSave.setAttribute('aria-label', btnSave.title);
             return;
           }
           try {
             iconValue = await fileToDataURL(file);
           } catch (err2) {
             alert('Gagal convert foto: ' + err2.message);
-            btnSave.disabled = false; btnSave.textContent = editId.value ? 'Update' : 'Simpan';
+            btnSave.disabled = false; btnSave.title = editId.value ? 'Update' : 'Simpan'; btnSave.setAttribute('aria-label', btnSave.title);
             return;
           }
         } else {
           alert('Gagal upload gambar: ' + msg);
-          btnSave.disabled = false; btnSave.textContent = editId.value ? 'Update' : 'Simpan';
+          btnSave.disabled = false; btnSave.title = editId.value ? 'Update' : 'Simpan'; btnSave.setAttribute('aria-label', btnSave.title);
           return;
         }
       }
@@ -523,7 +631,6 @@
       plu_12oz: f_plu12.value.trim() || null,
       plu_16oz: f_plu16.value.trim() || null,
       plu_hot: f_pluHot ? f_pluHot.value.trim() || null : null,
-      plu_ice: f_pluIce ? f_pluIce.value.trim() || null : null,
       percepatan_12oz_1: f_percepatan12[0].value.trim() || null,
       percepatan_12oz_2: f_percepatan12[1].value.trim() || null,
       percepatan_12oz_3: f_percepatan12[2].value.trim() || null,
@@ -544,26 +651,6 @@
       percepatan_16oz_8: f_percepatan16[7].value.trim() || null,
       percepatan_16oz_9: f_percepatan16[8].value.trim() || null,
       percepatan_16oz_10: f_percepatan16[9].value.trim() || null,
-      bahan_ice_12oz_1: f_bahanIce12[0].value.trim() || null,
-      bahan_ice_12oz_2: f_bahanIce12[1].value.trim() || null,
-      bahan_ice_12oz_3: f_bahanIce12[2].value.trim() || null,
-      bahan_ice_12oz_4: f_bahanIce12[3].value.trim() || null,
-      bahan_ice_12oz_5: f_bahanIce12[4].value.trim() || null,
-      bahan_ice_12oz_6: f_bahanIce12[5].value.trim() || null,
-      bahan_ice_12oz_7: f_bahanIce12[6].value.trim() || null,
-      bahan_ice_12oz_8: f_bahanIce12[7].value.trim() || null,
-      bahan_ice_12oz_9: f_bahanIce12[8].value.trim() || null,
-      bahan_ice_12oz_10: f_bahanIce12[9].value.trim() || null,
-      bahan_ice_16oz_1: f_bahanIce16[0].value.trim() || null,
-      bahan_ice_16oz_2: f_bahanIce16[1].value.trim() || null,
-      bahan_ice_16oz_3: f_bahanIce16[2].value.trim() || null,
-      bahan_ice_16oz_4: f_bahanIce16[3].value.trim() || null,
-      bahan_ice_16oz_5: f_bahanIce16[4].value.trim() || null,
-      bahan_ice_16oz_6: f_bahanIce16[5].value.trim() || null,
-      bahan_ice_16oz_7: f_bahanIce16[6].value.trim() || null,
-      bahan_ice_16oz_8: f_bahanIce16[7].value.trim() || null,
-      bahan_ice_16oz_9: f_bahanIce16[8].value.trim() || null,
-      bahan_ice_16oz_10: f_bahanIce16[9].value.trim() || null,
       bahan_12oz_1: f_bahan12[0].value.trim() || null,
       bahan_12oz_2: f_bahan12[1].value.trim() || null,
       bahan_12oz_3: f_bahan12[2].value.trim() || null,
@@ -596,29 +683,27 @@
       res = await supabase.from(currentTable).update(payload).eq('id', parseInt(editId.value));
       error = res.error;
       // fallback kalau kolom hot16/hotAll/plu/percepatan/ice belum ada (belum RUN migrate)
-      if (error && /bahan_hot_16oz|bahan_hot_all|plu_hot|plu_ice|percepatan|bahan_ice|PGRST204/i.test(error.message)) {
-        alert('Kolom HOT16/HOT/PLU/Percepatan/ICE belum ada di Supabase.\n\nRUN dulu:\n- scripts/add-hot-16oz.sql\n- scripts/add-hot-all.sql\n- scripts/add-percepatan-column.sql\n- scripts/add-ice-12-16.sql\nLink: https://supabase.com/dashboard/project/xsacwgxxoptdrgbbzzib/sql/new\n\nMencoba simpan tanpa kolom baru...');
+      if (error && /bahan_hot_16oz|bahan_hot_all|plu|percepatan|PGRST204/i.test(error.message)) {
+        alert('Kolom form belum lengkap di Supabase.\n\nRUN dulu:\n- scripts/sync-form-columns.sql\nLink: https://supabase.com/dashboard/project/xsacwgxxoptdrgbbzzib/sql/new\n\nMencoba simpan tanpa kolom baru...');
         delete payload.bahan_hot_16oz_1; delete payload.bahan_hot_16oz_2; delete payload.bahan_hot_16oz_3; delete payload.bahan_hot_16oz_4; delete payload.bahan_hot_16oz_5; delete payload.bahan_hot_16oz_6;
         delete payload.bahan_hot_all_1; delete payload.bahan_hot_all_2; delete payload.bahan_hot_all_3; delete payload.bahan_hot_all_4; delete payload.bahan_hot_all_5; delete payload.bahan_hot_all_6;
-        delete payload.plu_hot; delete payload.plu_ice;
-        for(let i=1;i<=6;i++){ delete payload['percepatan_12oz_'+i]; delete payload['percepatan_16oz_'+i]; delete payload['bahan_ice_12oz_'+i]; delete payload['bahan_ice_16oz_'+i]; }
+        for(let i=1;i<=6;i++){ delete payload['percepatan_12oz_'+i]; delete payload['percepatan_16oz_'+i]; }
         const retry = await supabase.from(currentTable).update(payload).eq('id', parseInt(editId.value));
         error = retry.error; res = retry;
       }
     } else {
       res = await supabase.from(currentTable).insert([payload]);
       error = res.error;
-      if (error && /bahan_hot_16oz|bahan_hot_all|plu_hot|plu_ice|percepatan|bahan_ice|PGRST204/i.test(error.message)) {
+      if (error && /bahan_hot_16oz|bahan_hot_all|plu|percepatan|PGRST204/i.test(error.message)) {
         alert('Kolom HOT16/HOT/PLU/Percepatan/ICE belum ada di Supabase.\n\nRUN dulu:\n- scripts/add-hot-16oz.sql\n- scripts/add-hot-all.sql\n- scripts/add-percepatan-column.sql\n- scripts/add-ice-12-16.sql\n\nMencoba simpan tanpa kolom baru...');
         delete payload.bahan_hot_16oz_1; delete payload.bahan_hot_16oz_2; delete payload.bahan_hot_16oz_3; delete payload.bahan_hot_16oz_4; delete payload.bahan_hot_16oz_5; delete payload.bahan_hot_16oz_6;
         delete payload.bahan_hot_all_1; delete payload.bahan_hot_all_2; delete payload.bahan_hot_all_3; delete payload.bahan_hot_all_4; delete payload.bahan_hot_all_5; delete payload.bahan_hot_all_6;
-        delete payload.plu_hot; delete payload.plu_ice;
-        for(let i=1;i<=6;i++){ delete payload['percepatan_12oz_'+i]; delete payload['percepatan_16oz_'+i]; delete payload['bahan_ice_12oz_'+i]; delete payload['bahan_ice_16oz_'+i]; }
+        for(let i=1;i<=6;i++){ delete payload['percepatan_12oz_'+i]; delete payload['percepatan_16oz_'+i]; }
         const retry = await supabase.from(currentTable).insert([payload]);
         error = retry.error; res = retry;
       }
     }
-    btnSave.disabled = false; btnSave.textContent = editId.value ? 'Update' : 'Simpan';
+    btnSave.disabled = false; btnSave.title = editId.value ? 'Update' : 'Simpan'; btnSave.setAttribute('aria-label', btnSave.title);
     if (error) { alert('Gagal simpan: ' + error.message + '\n\nJika RLS error, cek SQL Editor: policy insert harus allow public.'); setStatus('Gagal: ' + error.message, false); }
     else { setStatus('✅ Tersimpan (' + currentTable + '): ' + payload.name); resetForm(); await load(); }
   };
@@ -640,15 +725,16 @@
         if(i>=visible) r.classList.add('hidden');
       });
       const trPlus = document.createElement('div');
-      trPlus.className='tr'; trPlus.style.background='#f9fafb';
+      trPlus.className='tr tr-plus';
       const btn = document.createElement('button');
-      btn.type='button'; btn.className='bahan-add'; btn.style.margin='0'; btn.style.width='100%'; btn.style.border='none'; btn.style.background='transparent';
-      btn.textContent='+ Bahan '+(visible+1);
+      btn.type='button'; btn.className='bahan-add';
+      btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>';
+      btn.title='Tambah bahan '+(visible+1); btn.setAttribute('aria-label','Tambah bahan '+(visible+1));
       if(visible>=10) trPlus.style.display='none';
       if(!table.querySelector('.tr.hidden')) trPlus.style.display='none';
       btn.onclick=()=>{
         const hidden = table.querySelector('.tr.hidden');
-        if(hidden){ hidden.classList.remove('hidden'); visible++; btn.textContent='+ Bahan '+(visible+1); if(visible>=10 || !table.querySelector('.tr.hidden')) trPlus.style.display='none'; }
+        if(hidden){ hidden.classList.remove('hidden'); visible++; btn.title='Tambah bahan '+(visible+1); btn.setAttribute('aria-label','Tambah bahan '+(visible+1)); if(visible>=10 || !table.querySelector('.tr.hidden')) trPlus.style.display='none'; }
       };
       trPlus.appendChild(btn);
       table.appendChild(trPlus);
