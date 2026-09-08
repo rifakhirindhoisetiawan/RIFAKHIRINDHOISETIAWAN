@@ -402,6 +402,7 @@
     const sw = sR.width / iR.width * iw;
     const sh = sR.height / iR.height * ih;
     const outW = 720, outH = 1280;
+  const thumbW = 120, thumbH = 214; // 9:16 thumb
     const canvas = document.createElement('canvas');
     canvas.width = outW; canvas.height = outH;
     const ctx = canvas.getContext('2d');
@@ -503,7 +504,16 @@
   function slugify(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
   function itemHtml(m) {
     const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
-    const thumb = isImg ? '<img src="'+m.foto+'" alt=""/>' : '<span>'+(m.foto||'☕')+'</span>';
+    let thumb;
+    if (isImg) {
+      const url = m.foto;
+      const thumbUrl = url.includes('supabase.co/storage') && !url.includes('?')
+        ? url + '?width=120&height=214&quality=70&format=webp'
+        : url;
+      thumb = '<img src="' + thumbUrl + '" alt="" loading="lazy" decoding="async"/>';
+    } else {
+      thumb = '<span>' + (m.foto || '☕') + '</span>';
+    }
     return `
       <div class="item">
         <div class="thumb ${m.cls||''}">${thumb}</div>
@@ -559,7 +569,11 @@
     f_catatan.value = m.catatan || '';
     f_icon_img.value = '';
     if (m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto)) {
-      iconPreview.innerHTML = '<img src="'+m.foto+'" alt=""/>';
+      const url = m.foto;
+      const previewUrl = url.includes('supabase.co/storage') && !url.includes('?')
+        ? url + '?width=360&height=640&quality=80'
+        : url;
+      iconPreview.innerHTML = '<img src="' + previewUrl + '" alt="" loading="lazy" decoding="async"/>';
       if(fotoName) fotoName.textContent = m.foto.split('/').pop().slice(0,24);
     } else {
       iconPreview.innerHTML = '';
@@ -757,7 +771,18 @@
   editRow = function(id){ _origEdit5(id); setTimeout(()=>{ document.querySelectorAll('.bahan-add').forEach(b=>{ const tr=b.closest('.tr'); if(tr) tr.remove(); }); document.querySelectorAll('.form-table .tr.hidden').forEach(r=>r.classList.remove('hidden')); initBahanTables(); }, 50); };
 
   // realtime JA-DI aja (udah sama kayak Dr Coffee, gak pakai tab atas)
-  supabase.channel('admin_ja_di').on('postgres_changes',{event:'*',schema:'public',table:'ja_di_menus'},()=>load()).subscribe();
+  let realtimeChannel = null;
+  function subscribeRealtime() {
+    if (realtimeChannel) {
+      supabase.removeChannel(realtimeChannel);
+    }
+    const channelName = 'admin_ja_di_' + Math.random().toString(36).slice(2);
+    realtimeChannel = supabase.channel(channelName).on('postgres_changes', { event: '*', schema: 'public', table: 'ja_di_menus' }, () => load()).subscribe();
+  }
+  window.addEventListener('beforeunload', () => {
+    if (realtimeChannel) supabase.removeChannel(realtimeChannel);
+  });
+  subscribeRealtime();
 
   initBahanTables();
   load();
