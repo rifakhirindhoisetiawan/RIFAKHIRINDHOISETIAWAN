@@ -513,704 +513,13 @@
 
     <script type="module">
       import { supabase } from '../js/supabase.js';
-      const fallbackMenus = [
-        {
-          name: "COFFEE LATTE PREMIX",
-          foto: "🧊",
-          cls: "g-a",
-          cat: "PREMIX",
-          link: "pages/item-coffee-latte-ice-premix.html",
-          plu: "443775",
-        },
-        
-        {
-          name: "VANILLA LATTE PREMIX",
-          foto: "🍦",
-          cls: "g-b",
-          cat: "PREMIX",
-          link: "pages/item-vanilla-latte-premix.html",
-          plu: "443790 / 443791",
-        },
-        
-        {
-          name: "SALTED CARAMEL LATTE PREMIX",
-          foto: "🍮",
-          cls: "g-c",
-          cat: "PREMIX",
-          link: "pages/item-salted-caramel-latte-premix.html",
-          plu: "443786 / 443787",
-        },
-        
-        {
-          name: "BUTTERSCOTCH LATTE PREMIX",
-          foto: "🧈",
-          cls: "g-d",
-          cat: "PREMIX",
-          link: "pages/item-butterscotch-latte-premix.html",
-          plu: "443788 / 443789",
-        },
-        
-        {
-          name: "SALTED BUTTERCORN LATTE PREMIX",
-          foto: "🌽",
-          cls: "g-e",
-          cat: "PREMIX",
-          link: "pages/item-salted-buttercorn-latte-premix.html",
-          plu: "466231 / 466232",
-        },
-        
-        {
-          name: "JADI KEREN - KOPSU GULA AREN PREMIX",
-          foto: "😎",
-          cls: "g-f",
-          cat: "PREMIX",
-          link: "pages/item-jadi-keren-kopsu-gula-aren-premix.html",
-          plu: "443779 / 443780",
-        },
-        
-        {
-          name: "MOCHA LATTE PREMIX",
-          foto: "🍫",
-          cls: "g-g",
-          cat: "PREMIX",
-          link: "pages/item-mocha-latte-premix.html",
-          plu: "443783 / 443784",
-        },
-        
-        {
-          name: "JADI RINDU - KOPSU MADU PREMIX",
-          foto: "❤️",
-          cls: "g-h",
-          cat: "PREMIX",
-          link: "pages/item-jadi-rindu-kopsu-madu-premix.html",
-          plu: "443781 / 443782",
-        },
-        
-        {
-          name: "JADI MACCHIATTO PREMIX",
-          foto: "🍯",
-          cls: "g-a",
-          cat: "PREMIX",
-          link: "pages/item-jadi-macchiatto-premix.html",
-          plu: "466229 / 466230",
-        },
-        
-        {
-          name: "SALTED BUTTERCORN LATTE MANUAL",
-          foto: "🌽",
-          cls: "g-b",
-          cat: "MANUAL",
-          link: "pages/item-salted-buttercorn-latte-manual.html",
-          plu: "466231 / 466232",
-        },
-        
-        {
-          name: "JADI KEREN - KOPSU GULA AREN MANUAL",
-          foto: "😎",
-          cls: "g-c",
-          cat: "MANUAL",
-          link: "pages/item-jadi-keren-kopsu-gula-aren-manual.html",
-          plu: "443780",
-        },
-        
-        {
-          name: "JADI RINDU - KOPSU MADU MANUAL",
-          foto: "❤️",
-          cls: "g-d",
-          cat: "MANUAL",
-          link: "pages/item-jadi-rindu-kopsu-madu-manual.html",
-          plu: "443782",
-        },
-        
-        {
-          name: "MOCHA LATTE MANUAL",
-          foto: "🍫",
-          cls: "g-e",
-          cat: "MANUAL",
-          link: "pages/item-mocha-latte-manual.html",
-          plu: "443783 / 443784",
-        },
-        
-        {
-          name: "VANILLA LATTE MANUAL",
-          foto: "🍦",
-          cls: "g-f",
-          cat: "MANUAL",
-          link: "pages/item-vanilla-latte-manual.html",
-          plu: "443790 / 443791",
-        },
-        
-        {
-          name: "SALTED CARAMEL LATTE MANUAL",
-          foto: "🍮",
-          cls: "g-g",
-          cat: "MANUAL",
-          link: "pages/item-salted-caramel-latte-manual.html",
-          plu: "443786 / 443787",
-        },
-        
-        {
-          name: "BUTTERSCOTCH LATTE MANUAL",
-          foto: "🧈",
-          cls: "g-h",
-          cat: "MANUAL",
-          link: "pages/item-butterscotch-latte-manual.html",
-          plu: "443788 / 443789",
-        },
-        
-        {
-          name: "JA~DI MACCHIATTO MANUAL",
-          foto: "🍯",
-          cls: "g-a",
-          cat: "MANUAL",
-          link: "pages/item-jadi-macchiatto.html",
-          plu: "466230",
-        },
-        
-        {
-          name: "COFFEE LATTE ICE MANUAL",
-          foto: "🧊",
-          cls: "g-b",
-          cat: "MANUAL",
-          link: "pages/item-coffee-latte-ice-manual.html",
-          plu: "443776 / 443835",
-        },
-        
-        {
-          name: "CAPPUCCINO ICE",
-          foto: "🥛",
-          cls: "g-c",
-          cat: "MANUAL",
-          link: "pages/item-cappuccino-ice.html",
-          plu: "452795 / 452796",
-        },
-        
-        {
-          name: "AMERICANO HOT",
-          foto: "☕",
-          cls: "g-d",
-          cat: "MANUAL",
-          link: "pages/item-americano-hot.html",
-        },
-        
-        {
-          name: "AMERICANO ICE",
-          foto: "🧊",
-          cls: "g-e",
-          cat: "MANUAL",
-          link: "pages/item-americano-ice.html",
-        },
-        
-        {
-          name: "BLACK COFFEE WITH HONEY",
-          foto: "🍯",
-          cls: "g-f",
-          cat: "MANUAL",
-          link: "pages/item-black-coffee-with-honey.html",
-          plu: "443772",
-        },
-        
-        {
-          name: "HAWAIIAN AMERICANO (ICE UPSIZE)",
-          foto: "🌺",
-          cls: "g-g",
-          cat: "BLACK COFFEE",
-          link: "pages/item-hawaiian-americano-ice-upsize.html",
-        },
-        
-        {
-          name: "ESPRESSO HOT",
-          foto: "☕",
-          cls: "g-h",
-          cat: "ESPRESSO",
-          link: "pages/item-espresso-hot.html",
-          plu: "444571",
-        },
-        
-        {
-          name: "CAPPUCCINO HOT",
-          foto: "🫧",
-          cls: "g-a",
-          cat: "MANUAL",
-          link: "pages/item-cappuccino-hot.html",
-          plu: "445073",
-        },
-        
-        {
-          name: "CAFFELATTE HOT",
-          foto: "🥛",
-          cls: "g-b",
-          cat: "MANUAL",
-          link: "pages/item-caffelatte-hot.html",
-        },
-        
-        {
-          name: "HOT CHOCOLATE",
-          foto: "☕",
-          cls: "g-c",
-          cat: "CHOCO & MATCHA",
-          link: "pages/item-hot-chocolate.html",
-          plu: "443795",
-        },
-        
-        {
-          name: "ICE CHOCOLATE",
-          foto: "🧊",
-          cls: "g-d",
-          cat: "CHOCO & MATCHA",
-          link: "pages/item-ice-chocolate.html",
-          plu: "443910 / 443911",
-        },
+      import { loadJaDiPhoto, createLazyLoader, toWebPThumb, toWebPLarge } from '../js/image-loader.js';
 
-        
-        {
-          name: "ICE MATCHA",
-          foto: "🍃",
-          cls: "g-f",
-          cat: "CHOCO & MATCHA",
-          link: "pages/item-ice-matcha.html",
-          plu: "443792",
-        },
-        
-        {
-          name: "CHOCO BERRY (ICE 12OZ)",
-          foto: "🍓",
-          cls: "g-g",
-          cat: "CHOCO & MATCHA",
-          link: "pages/item-choco-berry-ice-12oz.html",
-          plu: "452794",
-        },
-        
-        {
-          name: "BLENDED VANILLA CARAMEL",
-          foto: "🍦",
-          cls: "g-h",
-          cat: "BLENDED",
-          link: "pages/item-blended-vanilla-caramel.html",
-        },
-        
-        {
-          name: "BLENDED CHOCO",
-          foto: "🍫",
-          cls: "g-a",
-          cat: "BLENDED",
-          link: "pages/item-blended-choco.html",
-        },
-        
-        {
-          name: "BLENDED CHOCO CARAMEL",
-          foto: "🍮",
-          cls: "g-b",
-          cat: "BLENDED",
-          link: "pages/item-blended-choco-caramel.html",
-          plu: "443793",
-        },
-        
-        {
-          name: "CREAMY COCONUT FRAPPE (UPSIZE)",
-          foto: "🥥",
-          cls: "g-c",
-          cat: "BLENDED",
-          link: "pages/item-creamy-coconut-frappe-upsize.html",
-        },
-        
-        {
-          name: "KOREAN STRAWBERRY MILK",
-          foto: "🍓",
-          cls: "g-d",
-          cat: "BLENDED",
-          link: "pages/item-korean-strawberry-milk.html",
-          plu: "443804 / 443805",
-        },
-        
-        {
-          name: "AFFOGATO",
-          foto: "🍨",
-          cls: "g-e",
-          cat: "BLENDED",
-          link: "pages/item-affogato.html",
-          plu: "466233",
-        },
-        
-        {
-          name: "ICE COLLAGEN LATTE (12OZ)",
-          foto: "🌸",
-          cls: "g-f",
-          cat: "BLENDED",
-          link: "pages/item-ice-collagen-latte-12oz.html",
-          plu: "453432",
-        },
-        
-        {
-          name: "ICE DOLCE LATTE (12OZ)",
-          foto: "🍬",
-          cls: "g-g",
-          cat: "BLENDED",
-          link: "pages/item-ice-dolce-latte-12oz.html",
-          plu: "453433",
-        },
-        
-        {
-          name: "COCONUT CLOUD LATTE",
-          foto: "🥥",
-          cls: "g-h",
-          cat: "BLENDED",
-          link: "pages/item-coconut-cloud-latte.html",
-          plu: "452799 / 452800",
-        },
-        
-        {
-          name: "PANDAN CLOUD LATTE",
-          foto: "🌿",
-          cls: "g-a",
-          cat: "BLENDED",
-          link: "pages/item-pandan-cloud-latte.html",
-          plu: "452797 / 452798",
-        },
-        
-        {
-          name: "SALTED CARAMEL COCA (12OZ)",
-          foto: "🥤",
-          cls: "g-b",
-          cat: "SOFT DRINK",
-          link: "pages/item-salted-caramel-coca-12oz.html",
-        },
-        
-        {
-          name: "TOFFEE POPCORN FANTA (12OZ)",
-          foto: "🍿",
-          cls: "g-c",
-          cat: "SOFT DRINK",
-          link: "pages/item-toffee-popcorn-fanta-12oz.html",
-        },
-        
-        {
-          name: "LYCHEE SPRITE (12OZ)",
-          foto: "🍋",
-          cls: "g-d",
-          cat: "SOFT DRINK",
-          link: "pages/item-lychee-sprite-12oz.html",
-        },
-        
-        {
-          name: "SHAKEN LYCHEE TEA",
-          foto: "🫐",
-          cls: "g-e",
-          cat: "JUS",
-          link: "pages/item-shaken-lychee-tea.html",
-          plu: "443806 / 443807",
-        },
-        
-        {
-          name: "SHAKEN HONEY LEMON TEA",
-          foto: "🍋",
-          cls: "g-f",
-          cat: "JUS",
-          link: "pages/item-shaken-honey-lemon-tea.html",
-          plu: "443808 / 443809",
-        },
-        
-        {
-          name: "GREEN JUICE",
-          foto: "🥬",
-          cls: "g-g",
-          cat: "JUS",
-          link: "pages/item-green-juice.html",
-        },
-        
-        {
-          name: "JUICE SIRSAK",
-          foto: "🍈",
-          cls: "g-h",
-          cat: "JUS",
-          link: "pages/item-juice-sirsak.html",
-          plu: "443842",
-        },
-        
-        {
-          name: "JUICE ALPUKAT",
-          foto: "🥑",
-          cls: "g-a",
-          cat: "JUS",
-          link: "pages/item-juice-alpukat.html",
-          plu: "443844",
-        },
-        
-        {
-          name: "JUICE BUAH NAGA",
-          foto: "🐲",
-          cls: "g-b",
-          cat: "JUS",
-          link: "pages/item-juice-buah-naga.html",
-          plu: "443845",
-        },
-        
-        {
-          name: "JUICE JAMBU",
-          foto: "🍒",
-          cls: "g-c",
-          cat: "JUS",
-          link: "pages/item-juice-jambu.html",
-          plu: "443843",
-        },
-        
-        {
-          name: "JUICE SEMANGKA",
-          foto: "🍉",
-          cls: "g-d",
-          cat: "JUS",
-          link: "pages/item-juice-semangka.html",
-          plu: "443838",
-        },
-        
-        {
-          name: "JUICE MELON",
-          foto: "🍈",
-          cls: "g-e",
-          cat: "JUS",
-          link: "pages/item-juice-melon.html",
-          plu: "443839",
-        },
-        
-        {
-          name: "JUICE PISANG STRAWBERRY",
-          foto: "🍌",
-          cls: "g-f",
-          cat: "JUS",
-          link: "pages/item-juice-pisang-strawberry.html",
-          plu: "444987",
-        },
-        
-        {
-          name: "JUICE MANGGA HARUM MANIS",
-          foto: "🥭",
-          cls: "g-g",
-          cat: "JUS",
-          link: "pages/item-juice-mangga-harum-manis.html",
-          plu: "446322",
-        },
-        
-        {
-          name: "JUICE APEL MIX",
-          foto: "🍎",
-          cls: "g-h",
-          cat: "JUS",
-          link: "pages/item-juice-apel-mix.html",
-        },
-        
-        {
-          name: "JUICE CARROT MIXED FRUIT",
-          foto: "🥕",
-          cls: "g-a",
-          cat: "JUS",
-          link: "pages/item-juice-carrot-mixed-fruit.html",
-          plu: "446279",
-        },
-        
-        {
-          name: "JUICE JERUK",
-          foto: "🍊",
-          cls: "g-b",
-          cat: "JUS",
-          link: "pages/item-juice-jeruk.html",
-          plu: "443847",
-        },
-        
-        {
-          name: "JUICE JERUK NAVEL",
-          foto: "🍊",
-          cls: "g-c",
-          cat: "JUS",
-          link: "pages/item-juice-jeruk-navel.html",
-        },
-        
-        {
-          name: "JUICE JERUK NAVEL CARA CARA",
-          foto: "🍊",
-          cls: "g-d",
-          cat: "JUS",
-          link: "pages/item-juice-jeruk-navel-cara-cara.html",
-        },
-        
-        {
-          name: "KOLAK LATTE",
-          foto: "🍮",
-          cls: "g-e",
-          cat: "BLENDED",
-          link: "pages/item-kolak-latte.html",
-          plu: "465840 / 465855",
-        },
-        
-        {
-          name: "WATERMELON COOLER",
-          foto: "🍉",
-          cls: "g-f",
-          cat: "BLENDED",
-          link: "pages/item-watermelon-cooler.html",
-          plu: "465844 / 465845",
-        },
-        
-        {
-          name: "PISANG IJO LATTE",
-          foto: "🍌",
-          cls: "g-g",
-          cat: "BLENDED",
-          link: "pages/item-pisang-ijo-latte.html",
-          plu: "465842 / 465843",
-        },
-        
-        { name: "PLU JA-DI", foto: "📋", cls: "g-e", cat: "UTILITY", link: "plu-ja-di.html" },
-        
-        { name: "PLANO", foto: "🗄️", cls: "g-h",
-          cat: "plano.html", link: "" },
-        
-        {
-          name: "TIME KAMERA",
-          foto: "📷",
-          cls: "g-c",
-          cat: "time-kamera.html",
-          link: "",
-        },
-        
-        {
-          name: "COFFEE LATTE",
-          foto: "☕",
-          cls: "g-a",
-          cat: "SPECIALTY & CLOUD",
-          link: "pages/item-coffee-latte.html",
-        },
-        
-        {
-          name: "CHOCO BERRY",
-          foto: "🍓",
-          cls: "g-g",
-          cat: "CHOCO & MATCHA",
-          link: "pages/item-choco-berry.html",
-        },
-        
-        {
-          name: "GREEN GRAPE FRUITYCANO",
-          foto: "🍇",
-          cls: "g-e",
-          cat: "SPECIALTY & CLOUD",
-          link: "pages/item-green-grape-fruitycano.html",
-        },
-        
-        {
-          name: "TROPICAL APPLE AMERICANO",
-          foto: "🍎",
-          cls: "g-g",
-          cat: "BLACK COFFEE",
-          link: "pages/item-tropical-apple-americano.html",
-        },
-        
-        {
-          name: "KOPI BOTOL JADI ASIK",
-          foto: "🍾",
-          cls: "g-e",
-          cat: "SPECIALTY & CLOUD",
-          link: "pages/item-kopi-botol-jadi-asik.html",
-          plu: "453434",
-        },
-        
-        {
-          name: "KOPI BOTOL JADI SERU",
-          foto: "🍾",
-          cls: "g-c",
-          cat: "SPECIALTY & CLOUD",
-          link: "pages/item-kopi-botol-jadi-seru.html",
-          plu: "453436",
-        },
-        
-        {
-          name: "KOPI BOTOL JADI SUKA",
-          foto: "🍾",
-          cls: "g-h",
-          cat: "SPECIALTY & CLOUD",
-          link: "pages/item-kopi-botol-jadi-suka.html",
-          plu: "453435",
-        },
-        
-        {
-          name: "CREAMY COCONUT FRAPPE",
-          foto: "🥥",
-          cls: "g-d",
-          cat: "BLENDED",
-          link: "pages/item-creamy-coconut-frappe.html",
-          plu: "451306",
-        },
-        
-        {
-          name: "PINK BERRY SODA",
-          foto: "🍒",
-          cls: "g-g",
-          cat: "SPECIALTY & CLOUD",
-          link: "pages/item-pink-berry-soda.html",
-          plu: "460953",
-        },
-        
-        {
-          name: "HAWAIIAN AMERICANO",
-          foto: "🌺",
-          cls: "g-c",
-          cat: "BLACK COFFEE",
-          link: "pages/item-hawaiian-americano.html",
-          plu: "451305",
-        },
-        
-        {
-          name: "ICE COLLAGEN LATTE",
-          foto: "🌸",
-          cls: "g-h",
-          cat: "SPECIALTY & CLOUD",
-          link: "pages/item-ice-collagen-latte.html",
-          plu: "453432",
-        },
-        
-        {
-          name: "MANGO COLADA",
-          foto: "🥭",
-          cls: "g-f",
-          cat: "SPECIALTY & CLOUD",
-          link: "pages/item-mango-colada.html",
-          plu: "460958",
-        },
-        
-        {
-          name: "CLOUDY LYCHEE",
-          foto: "🫐",
-          cls: "g-d",
-          cat: "SPECIALTY & CLOUD",
-          link: "pages/item-cloudy-lychee.html",
-          plu: "452163",
-        },
-        
-        {
-          name: "COLA CARAMELA",
-          foto: "🥤",
-          cls: "g-a",
-          cat: "SPECIALTY & CLOUD",
-          link: "pages/item-cola-caramela.html",
-          plu: "452161",
-        },
-        
-        {
-          name: "POPPY BERRY",
-          foto: "🌸",
-          cls: "g-h",
-          cat: "SPECIALTY & CLOUD",
-          link: "pages/item-poppy-berry.html",
-          plu: "452162",
-        },
-        
-        {
-          name: "MACCHIATO CLOUD FOAM",
-          foto: "☁️",
-          cls: "g-b",
-          cat: "SPECIALTY & CLOUD",
-          link: "pages/item-macchiato-cloud-foam.html",
-        },
-      ];
+      let fallbackMenus = [];
+      try {
+        const res = await fetch('../data/ja-di-fallback.json');
+        if (res.ok) fallbackMenus = await res.json();
+      } catch(e) { console.warn('Fallback load error:', e.message); }
       let menus = [...fallbackMenus];
       let shownMenus = [];
       let isSupabase = false;
@@ -1262,10 +571,7 @@
           const isImgIcon = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
           let iconHtml;
           if (isImgIcon) {
-            const url = m.foto;
-            const thumbUrl = url.includes('supabase.co/storage') && !url.includes('?')
-              ? url + '?width=80&height=80&quality=70&format=webp'
-              : url;
+            const thumbUrl = toWebPThumb(m.foto, 80, 80, 70);
             iconHtml = '<img src="' + thumbUrl + '" alt="" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>';
           } else {
             iconHtml = '<span style="font-size:32px">' + (m.foto||'☕') + '</span>';
@@ -1282,7 +588,10 @@
             openSheet(m);
           });
         });
-        loadMenuPhotos();
+// Lazy load photos setelah render
+        document.querySelectorAll('.icon-photo[data-slug]').forEach((tile) => {
+          photoLazyLoader.observe(tile);
+        });
       }
       function openSheet(m) {
         if (!m) return;
@@ -1296,10 +605,7 @@
         const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
         let photo;
         if (isImg) {
-          const url = m.foto;
-          const largeUrl = url.includes('supabase.co/storage') && !url.includes('?')
-            ? url + '?width=360&height=640&quality=80'
-            : url;
+          const largeUrl = toWebPLarge(m.foto, 360, 640, 80);
           photo = '<img src="' + largeUrl + '" alt="" loading="lazy" decoding="async"/>';
         } else {
           photo = '<span style="font-size:48px">' + (m.foto||'☕') + '</span>';
@@ -1343,35 +649,18 @@
       sheetBg.addEventListener('click', (e) => {
         if (e.target === sheetBg) closeSheet();
       });
-      function loadMenuPhotos() {
-        const exts = ['.jpg', '.jpeg', '.png', '.svg', '.webp'];
-        document.querySelectorAll('.icon-photo[data-slug]').forEach((tile) => {
-          if (tile.dataset.hasimg === '1') return; // sudah ada gambar upload, jangan ditimpa foto lokal
-          const slug = tile.dataset.slug;
-          const folder = '../images/ja-di-photos/' + slug + '/';
-          function tryNum(num) {
-            if (num > 20) { tile.classList.remove('has-photo'); return; }
-            function tryExt(extIdx) {
-              if (extIdx >= exts.length) { tryNum(num + 1); return; }
-              const url = folder + num + exts[extIdx];
-              const img = new Image();
-              img.onload = () => {
-                tile.style.backgroundImage = 'url(' + url + ')';
-                tile.classList.add('has-photo');
-                tile.innerHTML = '';
-              };
-              img.onerror = () => tryExt(extIdx + 1);
-              img.src = url;
-            }
-            tryExt(0);
-          }
-          tryNum(1);
-        });
-      }
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) loadMenuPhotos();
+      // Lazy load dengan IntersectionObserver
+      const photoLazyLoader = createLazyLoader(async (tile) => {
+        const slug = tile.dataset.slug;
+        await loadJaDiPhoto(slug, tile);
       });
       searchInput.addEventListener('input', renderMenu);
+
+      // First paint: render data lokal DULU, lalu refresh dari Supabase saat sampai.
+      // Sebelumnya halaman menunggu fetch Supabase selesai -> grid kosong berdetik-detikan di HP.
+      renderMenu();
+
+      let lastSig = null;
       async function loadFromSupabase() {
         statusEl.textContent = 'Memuat dari Supabase...';
         try {
@@ -1380,8 +669,14 @@
           if (data && data.length > 0) {
             const fbCat = {};
             fallbackMenus.forEach(function(f){ if (f.name && f.cat) fbCat[f.name.toUpperCase().replace(/\s+/g, ' ').trim()] = f.cat; });
-            menus = data.map(m => { const k = (m.name || '').toUpperCase().replace(/\s+/g, ' ').trim(); return { ...m, cat: m.cat || fbCat[k] || '', plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || m.plu || '' }; });
-            isSupabase = true;
+            const next = data.map(m => { const k = (m.name || '').toUpperCase().replace(/\s+/g, ' ').trim(); return { ...m, cat: m.cat || fbCat[k] || '', plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || m.plu || '' }; });
+            const sig = next.map(m => (m.name || '') + '|' + (m.cat || '') + '|' + (m.plu || '')).join('§');
+            if (sig !== lastSig) {
+              menus = next;
+              isSupabase = true;
+              lastSig = sig;
+              renderMenu();
+            }
             statusEl.textContent = '✅ ' + data.length + ' menu dari Supabase';
             statusEl.style.color = '#10b981';
           } else {
@@ -1392,16 +687,18 @@
           console.warn('Supabase error, fallback:', e.message);
           statusEl.textContent = '⚠️ Offline (' + e.message.slice(0,40) + ')';
           statusEl.style.color = '#ef4444';
-          menus = [...fallbackMenus];
+          if (!isSupabase) renderMenu();
         }
-        renderMenu();
         setTimeout(() => { statusEl.textContent = isSupabase ? '✅ Live dari Supabase' : '📦 Data lokal'; statusEl.style.color = isSupabase ? '#10b981' : '#9aa0ab'; }, 3000);
       }
+      // Realtime di-debounce: kalau banyak event beruntun, cukup fetch sekali,
+      // dan render-ulang hanya kalau data beneran berubah (tidak flicker).
+      let rtTimer = null;
       try {
         supabase.channel('ja_di_menus_changes')
           .on('postgres_changes', { event: '*', schema: 'public', table: 'ja_di_menus' }, () => {
-            console.log('Realtime change, reload...');
-            loadFromSupabase();
+            clearTimeout(rtTimer);
+            rtTimer = setTimeout(() => loadFromSupabase(), 400);
           })
           .subscribe();
       } catch(e) { console.log('Realtime not enabled', e.message); }

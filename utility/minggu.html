@@ -231,10 +231,11 @@
       </div>
     </div>
 
-    <script>
+    <script type="module">
+      import { createDailyLazyLoader } from '../js/image-loader.js';
+
       const STORAGE_KEY = "todo-minggu";
       const PHOTO_FOLDER = "../images/daily-task-photos/minggu/";
-      const photoExts = [".jpg", ".jpeg", ".png", ".svg", ".webp"];
 
       const GRADIENTS = ["g-a", "g-b", "g-c", "g-d", "g-e", "g-f", "g-g", "g-h"];
       function gradientFor(id) { return GRADIENTS[Math.abs(id) % GRADIENTS.length]; }
@@ -242,44 +243,8 @@
       const EMOJIS = ["☀️", "📅", "🌙", "⭐", "🌸", "🔥", "💡", "🎯", "📌", "✨", "🍀", "🌈", "💫", "🌟", "🍎", "🐱"];
       function emojiFor(id) { return EMOJIS[Math.abs(id) % EMOJIS.length]; }
 
-      function slugify(s) {
-        return s.toString().trim().toLowerCase().replace(/[^a-z0-9\u00C0-\uFFFF]+/g, "-").replace(/^-+|-+$/g, "");
-      }
-
-      const FALLBACK_PHOTO = "../images/daily-task-photos/" + PHOTO_FOLDER.split("/")[3] + "/1.jpg";
-
-      function loadTilePhoto(tile, task, emojiEl) {
-        const slug = slugify(task.text);
-        tile.style.opacity = "0";
-        let extIdx = 0;
-        function tryExt() {
-          if (extIdx >= photoExts.length) {
-            const fb = new Image();
-            fb.onload = () => {
-              tile.style.backgroundImage = "url(" + FALLBACK_PHOTO + ")";
-              tile.style.backgroundSize = "cover";
-              tile.style.backgroundPosition = "center";
-              tile.style.opacity = "1";
-              if (emojiEl) emojiEl.style.display = "none";
-            };
-            fb.onerror = () => { tile.style.opacity = "1"; };
-            fb.src = FALLBACK_PHOTO;
-            return;
-          }
-          const url = encodeURI(PHOTO_FOLDER + slug + "/" + "1" + photoExts[extIdx]);
-          const img = new Image();
-          img.onload = () => {
-            tile.style.backgroundImage = "url(" + url + ")";
-            tile.style.backgroundSize = "cover";
-            tile.style.backgroundPosition = "center";
-            tile.style.opacity = "1";
-            if (emojiEl) emojiEl.style.display = "none";
-          };
-          img.onerror = () => { extIdx++; tryExt(); };
-          img.src = url;
-        }
-        tryExt();
-      }
+      // Lazy loader untuk daily task photos
+      const dailyLazyLoader = createDailyLazyLoader(PHOTO_FOLDER);
 
       function loadTasks() {
         try {
@@ -412,13 +377,14 @@
 
           const tile = document.createElement("div");
           tile.className = "todo-card " + gradientFor(task.id);
+          tile.dataset.taskText = task.text;
 
           const emoji = document.createElement("span");
           emoji.className = "todo-emoji";
           emoji.textContent = emojiFor(task.id);
           tile.appendChild(emoji);
 
-          loadTilePhoto(tile, task, emoji);
+          dailyLazyLoader.observe(tile);
 
           const text = document.createElement("div");
           text.className = "todo-text";
