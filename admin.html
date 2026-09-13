@@ -57,6 +57,13 @@
     .empty{text-align:center;color:#9aa0ab;font-size:13px;font-weight:600;padding:40px 0}
     .hint{font-size:11px;color:#9aa0ab}
     .foto-title,.field-title{font-size:11px;font-weight:700;color:#1f2937}
+
+    /* Skeleton shimmer for thumb loading */
+    .thumb{width:100%;aspect-ratio:9/16;border-radius:16px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-size:22px;color:#fff;margin-bottom:8px;align-self:center}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 0.25s ease}
+    .thumb img.loaded{opacity:1}
+    .thumb span{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:clamp(20px,5vw,32px);line-height:1}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
   .form-table{width:100%;border:1px solid #c7d2fe;border-radius:8px;overflow:hidden;background:#fff;margin-bottom:6px;table-layout:fixed}
   .form-table .tr{display:flex;align-items:stretch;border-bottom:1px solid #e5e7eb;min-height:32px;contain:layout}
   .form-table .tr:last-child{border-bottom:none}
@@ -144,13 +151,13 @@
             <div class="td"><input id="f_name" required /></div>
           </div>
         </div>
-        <div class="foto-box" id="fotoBox" style="height:120px;min-height:0;aspect-ratio:auto;width:100%;display:flex;align-items:center;justify-content:center;margin-top:5px">
+        <div class="foto-box" id="fotoBox" style="height:120px;min-height:0;aspect-ratio:auto;width:100%;display:flex;align-items:center;justify-content:center;margin-top:5px;position:relative">
             <input id="f_icon_img" type="file" accept="image/*" hidden />
             <div class="foto-empty">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
             </div>
             <div id="icon_preview"></div>
-            <div class="foto-change">Ganti</div>
+            <div class="foto-change" id="fotoChangeBtn">Ganti Foto</div>
             <span id="fotoName" style="display:none"></span>
           </div>
         <div class="form-table">
@@ -286,7 +293,32 @@
 
 
 
-  fotoBox.addEventListener('click', () => f_icon_img.click());
+  fotoBox.addEventListener('click', (e) => {
+    // Jangan trigger kalau klik tombol "Ganti Foto"
+    if (e.target.id === 'fotoChangeBtn') return;
+    // Kalau sudah ada foto, buka crop overlay dengan foto yang ada
+    const existingImg = iconPreview.querySelector('img');
+    if (existingImg && existingImg.src) {
+      openCropFromUrl(existingImg.src);
+    } else {
+      f_icon_img.click();
+    }
+  });
+
+  // Tombol "Ganti Foto" -> buka file picker untuk upload baru
+  document.getElementById('fotoChangeBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    f_icon_img.click();
+  });
+
+  // Open crop dari URL gambar yang sudah ada
+  function openCropFromUrl(url) {
+    cropFromExisting = true;
+    cropFileName = 'existing-' + Date.now() + '.jpg';
+    cropImg.onload = () => { fitCropImg(); };
+    cropImg.src = url;
+    cropOverlay.classList.add('show');
+  }
 
   const cropOverlay = document.getElementById('cropOverlay');
   const cropStage = document.getElementById('cropStage');
@@ -324,6 +356,7 @@
     requestAnimationFrame(() => { applyCropTransform(); clampCrop(); });
   }
   function openCrop(file) {
+    cropFromExisting = false;
     if (!file || !file.type.startsWith('image/')) { alert('Pilih file gambar ya'); return; }
     cropFileName = file.name || 'foto.jpg';
     const url = URL.createObjectURL(file);
@@ -384,12 +417,14 @@
     applyCropTransform(); clampCrop();
   }, { passive: false });
 
+  let cropFromExisting = false;
+
   cropCancel.addEventListener('click', () => {
-    f_icon_img.value = '';
+    if (!cropFromExisting) f_icon_img.value = '';
     closeCrop();
   });
   cropOverlay.addEventListener('click', (e) => {
-    if (e.target === cropOverlay) { f_icon_img.value = ''; closeCrop(); }
+    if (e.target === cropOverlay) { if (!cropFromExisting) f_icon_img.value = ''; closeCrop(); }
   });
 
   cropApply.addEventListener('click', () => {
@@ -510,7 +545,7 @@
       const thumbUrl = url.includes('supabase.co/storage') && !url.includes('?')
         ? url + '?width=120&height=214&quality=70&format=webp'
         : url;
-      thumb = '<img src="' + thumbUrl + '" alt="" loading="lazy" decoding="async"/>';
+      thumb = '<img data-src="' + thumbUrl + '" alt="" loading="lazy" decoding="async"/>';
     } else {
       thumb = '<span>' + (m.foto || '☕') + '</span>';
     }
@@ -541,6 +576,31 @@
     if (!filtered.length) { listEl.innerHTML = '<div class="empty">Tidak ada data — ' + label + ' konek Supabase OK (0 menu)</div>'; return; }
     filtered.sort((a,b)=> a.name.localeCompare(b.name));
     listEl.innerHTML = filtered.map(itemHtml).join('');
+    
+    // Lazy load images with IntersectionObserver (like index.html)
+    const thumbObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          const src = img.dataset.src;
+          if (src) {
+            img.src = src;
+            img.onload = () => img.classList.add('loaded');
+          }
+          obs.unobserve(img);
+        }
+      });
+    }, { rootMargin: '100px', threshold: 0.01 });
+    
+    listEl.querySelectorAll('img[data-src]').forEach(img => {
+      // If already loaded (cached), mark as loaded immediately
+      if (img.complete && img.src) {
+        img.classList.add('loaded');
+      } else {
+        thumbObserver.observe(img);
+      }
+    });
+
     listEl.querySelectorAll('[data-edit]').forEach(btn => {
       btn.addEventListener('click', () => editRow(parseInt(btn.dataset.edit)));
     });
