@@ -344,13 +344,6 @@
           </div>
           <span class="label">${item.label}</span>
         `;
-        // Add loaded class when image finishes loading (for non-lazy or already loaded)
-        const imgEl = a.querySelector('img');
-        if (imgEl.complete) {
-          imgEl.classList.add('loaded');
-        } else {
-          imgEl.onload = () => imgEl.classList.add('loaded');
-        }
         menuList.appendChild(a);
       });
 

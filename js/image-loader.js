@@ -137,13 +137,18 @@ export async function loadIndexPhoto(menuFolder, imgEl) {
   
   const workingUrl = await findFirstWorkingUrl(urls);
   
-  if (workingUrl) {
+  if (workingUrl && imgEl.src !== workingUrl) {
     imgEl.src = workingUrl;
     imgEl.onload = () => { imgEl.classList.add('loaded'); };
     imgEl.decoding = 'async';
     imgEl.loading = 'lazy';
   } else {
-    imgEl.classList.add('loaded');
+    // Gambar sudah benar (dari HTML src), tinggal tunggu load
+    if (imgEl.complete) {
+      imgEl.classList.add('loaded');
+    } else {
+      imgEl.onload = () => { imgEl.classList.add('loaded'); };
+    }
   }
 }
 

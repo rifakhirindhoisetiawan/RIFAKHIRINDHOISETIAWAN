@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin — JA-DI Supabase</title>
-  <style>
+<style>
     *{margin:0;padding:0;box-sizing:border-box}
     html,body{max-width:100%;overflow-x:hidden}
     html,body{width:100%;height:100%;background:#ffffff}
@@ -57,28 +57,28 @@
     .empty{text-align:center;color:#9aa0ab;font-size:13px;font-weight:600;padding:40px 0}
     .hint{font-size:11px;color:#9aa0ab}
     .foto-title,.field-title{font-size:11px;font-weight:700;color:#1f2937}
- .form-table{width:100%;border:1px solid #c7d2fe;border-radius:8px;overflow:hidden;background:#fff;margin-bottom:6px}
- .form-table .tr{display:flex;align-items:stretch;border-bottom:1px solid #e5e7eb;min-height:32px}
- .form-table .tr:last-child{border-bottom:none}
- .form-table .th{min-width:48px;display:flex;align-items:center;justify-content:center;padding:0 6px;font-size:9px;font-weight:700;color:#4f46e5;background:#eef2ff;border-right:1px solid #e5e7eb;white-space:normal;text-align:center;letter-spacing:0;text-transform:uppercase;line-height:1.15}
- .form-table .td{flex:1;display:flex;align-items:center;padding:2px 6px}
- .form-table .td input{width:100%;margin:0 !important;padding:6px 8px;border:1px solid transparent;border-radius:4px;font-size:10px;font-weight:500;color:#111827;background:transparent;outline:none;font-family:inherit;line-height:1.2;text-transform:uppercase}
- .form-table .td input:focus{border-color:#6366f1;background:#fff;box-shadow:0 0 0 1px #6366f1}
-  .form-table .td input::placeholder{color:#9ca3af;font-weight:400}
-  .form-table .tr.plu-head{gap:6px;padding:6px 6px 0 6px;border-bottom:none}
-  .form-table .tr.plu-head .th{flex:1;min-width:0;border:1px solid #e5e7eb;border-radius:6px;padding:6px 4px}
-  .form-table .tr.plu-input{gap:6px;padding:6px}
-  .form-table .tr.plu-input .td{flex:1;min-width:0;border:1px solid #e5e7eb;border-radius:6px;justify-content:center}
-  .form-table .tr.plu-input .td input{text-align:center;padding:6px 4px}
-  @media(max-width:640px){
-     .form-table .th{font-size:8px;padding:0 4px;min-width:40px}
-     .form-table .td{padding:2px 4px}
-     .form-table .td input{font-size:12px;padding:8px 6px}
-     .plu-photo-grid .form-table .td input{font-size:14px;padding:10px 8px;letter-spacing:0.5px}
-     .form-table .tr.plu-head .th{font-size:8px;padding:6px 2px;min-width:0}
-     .form-table .tr.plu-input .td{padding:2px 2px}
-     .form-table .tr.plu-input .td input{font-size:12px;padding:8px 2px}
-  }
+  .form-table{width:100%;border:1px solid #c7d2fe;border-radius:8px;overflow:hidden;background:#fff;margin-bottom:6px;table-layout:fixed}
+  .form-table .tr{display:flex;align-items:stretch;border-bottom:1px solid #e5e7eb;min-height:32px;contain:layout}
+  .form-table .tr:last-child{border-bottom:none}
+  .form-table .th{min-width:48px;display:flex;align-items:center;justify-content:center;padding:0 6px;font-size:9px;font-weight:700;color:#4f46e5;background:#eef2ff;border-right:1px solid #e5e7eb;white-space:normal;text-align:center;letter-spacing:0;text-transform:uppercase;line-height:1.15;flex-shrink:0}
+  .form-table .td{flex:1;display:flex;align-items:center;padding:2px 6px;min-width:0}
+  .form-table .td input{width:100%;margin:0 !important;padding:6px 8px;border:1px solid transparent;border-radius:4px;font-size:10px;font-weight:500;color:#111827;background:transparent;outline:none;font-family:inherit;line-height:1.2;text-transform:uppercase}
+  .form-table .td input:focus{border-color:#6366f1;background:#fff;box-shadow:0 0 0 1px #6366f1}
+   .form-table .td input::placeholder{color:#9ca3af;font-weight:400}
+   .form-table .tr.plu-head{gap:6px;padding:6px 6px 0 6px;border-bottom:none}
+   .form-table .tr.plu-head .th{flex:1;min-width:0;border:1px solid #e5e7eb;border-radius:6px;padding:6px 4px}
+   .form-table .tr.plu-input{gap:6px;padding:6px}
+   .form-table .tr.plu-input .td{flex:1;min-width:0;border:1px solid #e5e7eb;border-radius:6px;justify-content:center}
+   .form-table .tr.plu-input .td input{text-align:center;padding:6px 4px}
+   @media(max-width:640px){
+      .form-table .th{font-size:8px;padding:0 4px;min-width:40px}
+      .form-table .td{padding:2px 4px}
+      .form-table .td input{font-size:12px;padding:8px 6px}
+      .plu-photo-grid .form-table .td input{font-size:14px;padding:10px 8px;letter-spacing:0.5px}
+      .form-table .tr.plu-head .th{font-size:8px;padding:6px 2px;min-width:0}
+      .form-table .tr.plu-input .td{padding:2px 2px}
+      .form-table .tr.plu-input .td input{font-size:12px;padding:8px 2px}
+   }
     .select-box{position:relative;margin-top:6px;max-width:100%}
     .select-box select{display:block;width:100%;max-width:100%;min-width:0;margin-top:0;padding:10px 40px 10px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-weight:600;color:#222;background:#f9f9f9;outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;cursor:pointer}
     .select-box select:focus{border-color:#888;background:#fff}
