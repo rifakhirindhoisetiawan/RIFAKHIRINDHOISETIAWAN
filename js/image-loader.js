@@ -135,20 +135,15 @@ export async function loadIndexPhoto(menuFolder, imgEl) {
   const folder = `images/index-photos/${menuFolder}/`;
   const urls = generateUrls(folder);
   
-  // Tampilkan placeholder dulu
-  imgEl.style.opacity = '0';
-  imgEl.style.transition = 'opacity 0.2s ease';
-  
   const workingUrl = await findFirstWorkingUrl(urls);
   
   if (workingUrl) {
     imgEl.src = workingUrl;
-    imgEl.onload = () => { imgEl.style.opacity = '1'; };
+    imgEl.onload = () => { imgEl.classList.add('loaded'); };
     imgEl.decoding = 'async';
     imgEl.loading = 'lazy';
   } else {
-    // Semua kandidat gagal: biarkan src bawaan dari HTML (1.ext) apa adanya
-    imgEl.style.opacity = '1';
+    imgEl.classList.add('loaded');
   }
 }
 

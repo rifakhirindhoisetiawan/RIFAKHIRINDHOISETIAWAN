@@ -226,13 +226,16 @@
         width: 100%;
         max-width: 110px;
         aspect-ratio: 9 / 16;
-        background: #f5f5f5;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.2s infinite;
         border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
         margin-bottom: 8px;
         overflow: hidden;
+        position: relative;
       }
 
       .menu-item .icon-box img {
@@ -240,6 +243,17 @@
         height: 100%;
         object-fit: cover;
         display: block;
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+
+      .menu-item .icon-box img.loaded {
+        opacity: 1;
+      }
+
+      @keyframes shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
       }
 
       .menu-item .label {
@@ -330,6 +344,13 @@
           </div>
           <span class="label">${item.label}</span>
         `;
+        // Add loaded class when image finishes loading (for non-lazy or already loaded)
+        const imgEl = a.querySelector('img');
+        if (imgEl.complete) {
+          imgEl.classList.add('loaded');
+        } else {
+          imgEl.onload = () => imgEl.classList.add('loaded');
+        }
         menuList.appendChild(a);
       });
 
@@ -347,6 +368,7 @@
       const lazyLoader = createLazyLoader(async (img) => {
         const menu = img.dataset.menu;
         await loadIndexPhoto(menu, img);
+        img.classList.add('loaded');
       });
 
       document.querySelectorAll('img[data-menu]').forEach((img) => {
