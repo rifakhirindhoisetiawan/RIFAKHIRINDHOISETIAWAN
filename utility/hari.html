@@ -145,11 +145,6 @@
           filter 0.3s ease;
       }
 
-      .todo-emoji {
-        font-size: 34px;
-        line-height: 1;
-      }
-
       @media (max-width: 360px) {
         .todo-card {
           max-width: 95px;
@@ -225,26 +220,20 @@
       <div class="menu-wrap">
         <div class="todo-list" id="todoList"></div>
         <div class="empty-state" id="emptyState" style="display: none">
-          <div style="font-size: 32px">📋</div>
           <p>Belum ada kegiatan.<br />Tambahkan yang pertama yuk!</p>
         </div>
       </div>
     </div>
 
     <script type="module">
-      import { createDailyLazyLoader } from '../js/image-loader.js';
+      import { supabase } from '../js/supabase.js';
 
       const STORAGE_KEY = "todo-hari";
-      const PHOTO_FOLDER = "../images/daily-task-photos/hari/";
+      const PERIOD = "hari";
+      const ITEM_TABLE = "daily_task_items";
 
       const GRADIENTS = ["g-a", "g-b", "g-c", "g-d", "g-e", "g-f", "g-g", "g-h"];
       function gradientFor(id) { return GRADIENTS[Math.abs(id) % GRADIENTS.length]; }
-
-      const EMOJIS = ["☀️", "📅", "🌙", "⭐", "🌸", "🔥", "💡", "🎯", "📌", "✨", "🍀", "🌈", "💫", "🌟", "🍎", "🐱"];
-      function emojiFor(id) { return EMOJIS[Math.abs(id) % EMOJIS.length]; }
-
-      // Lazy loader untuk daily task photos
-      const dailyLazyLoader = createDailyLazyLoader(PHOTO_FOLDER);
 
       function loadTasks() {
         try {
@@ -358,6 +347,30 @@
 
       let tasks = loadTasks();
 
+      async function loadItemsFromSupabase() {
+        try {
+          const { data, error } = await supabase
+            .from(ITEM_TABLE)
+            .select("id, text")
+            .eq("period", PERIOD)
+            .order("sort_order");
+          if (error) throw error;
+          if (!data || !data.length) return;
+          const saved = (() => {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+            catch (e) { return []; }
+          })();
+          const doneByText = {};
+          saved.forEach((t) => { doneByText[t.text] = !!t.done; });
+          const dbTexts = new Set(data.map((d) => d.text));
+          const extras = saved.filter((t) => !dbTexts.has(t.text)).map((t) => ({ id: t.id, text: t.text, done: !!t.done }));
+          tasks = data.map((it) => ({ id: it.id, text: it.text, done: !!doneByText[it.text] })).concat(extras);
+          render();
+        } catch (e) {
+          console.error("Gagal memuat isi dari Supabase:", e);
+        }
+      }
+
       const todoList = document.getElementById("todoList");
       const emptyState = document.getElementById("emptyState");
       const taskInput = document.getElementById("taskInput");
@@ -378,13 +391,6 @@
           const tile = document.createElement("div");
           tile.className = "todo-card " + gradientFor(task.id);
           tile.dataset.taskText = task.text;
-
-          const emoji = document.createElement("span");
-          emoji.className = "todo-emoji";
-          emoji.textContent = emojiFor(task.id);
-          tile.appendChild(emoji);
-
-          dailyLazyLoader.observe(tile);
 
           const text = document.createElement("div");
           text.className = "todo-text";
@@ -434,6 +440,7 @@
       });
 
       render();
+      loadItemsFromSupabase();
     </script>
   </body>
 </html>
