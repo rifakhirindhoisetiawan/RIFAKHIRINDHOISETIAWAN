@@ -65,7 +65,7 @@
     .thumb span{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:clamp(20px,5vw,32px);line-height:1}
     @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
   .form-table{width:100%;border:1px solid #c7d2fe;border-radius:8px;overflow:hidden;background:#fff;margin-bottom:6px;table-layout:fixed}
-  .form-table .tr{display:flex;align-items:stretch;border-bottom:1px solid #e5e7eb;min-height:32px;contain:layout}
+   .form-table .tr{display:flex;align-items:stretch;border-bottom:1px solid #e5e7eb;contain:layout}
   .form-table .tr:last-child{border-bottom:none}
   .form-table .th{min-width:48px;display:flex;align-items:center;justify-content:center;padding:0 6px;font-size:9px;font-weight:700;color:#4f46e5;background:#eef2ff;border-right:1px solid #e5e7eb;white-space:normal;text-align:center;letter-spacing:0;text-transform:uppercase;line-height:1.15;flex-shrink:0}
   .form-table .td{flex:1;display:flex;align-items:center;padding:2px 6px;min-width:0}
@@ -98,7 +98,7 @@
     .foto-empty small{font-size:11px;color:#c3c8d1}
     #icon_preview{display:none;position:absolute;inset:0;width:100%;height:100%}
     #icon_preview img{width:100%;height:100%;object-fit:cover;display:block}
-    .foto-change{display:none;position:absolute;right:10px;bottom:10px;background:rgba(26,26,26,0.75);color:#fff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px}
+    .foto-change{display:none;position:absolute;left:4px;right:4px;bottom:4px;background:#6366f1;color:#fff;font-size:9px;font-weight:800;padding:5px 6px;border-radius:6px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.2);text-transform:uppercase;letter-spacing:0.3px}
     .foto-box.has-photo #icon_preview{display:block}
     .foto-box.has-photo .foto-empty{display:none}
     .foto-box.has-photo .foto-change{display:block}
@@ -112,6 +112,28 @@
     .g-g{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
     .g-h{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
     .form-table .tr.hidden{display:none}
+   .form-compact{font-size:10px;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;width:100%}
+   .form-compact .tr{display:flex;align-items:center;min-height:28px;gap:4px;padding:3px 4px;border-bottom:1px solid #e5e7eb}
+   .form-compact .tr:last-child{border-bottom:none}
+   .form-compact .th{font-size:9px;font-weight:700;padding:2px 8px;min-width:auto;border:1px solid #e5e7eb;border-radius:6px;background:#eef2ff;color:#4f46e5;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+   .form-compact .td{flex:1;display:flex;align-items:center;padding:2px;border:1px solid #e5e7eb;border-radius:6px;min-width:0}
+   .form-compact .td input{width:100%;font-size:10px;padding:4px 6px;border:none;border-radius:4px;color:#111827;background:transparent;outline:none;font-family:inherit}
+   .form-compact .td input:focus{background:#fff}
+   input:focus{outline:none !important;box-shadow:none !important}
+   .tab-bar{display:flex;gap:4px;margin-top:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+   .tab-bar::-webkit-scrollbar{display:none}
+   .tab-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:0;border:1px solid #e5e7eb;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;background:#f3f4f6;color:#6b7280;transition:all .15s ease;white-space:nowrap;font-family:inherit;text-align:center}
+   .tab-btn.active{background:#6366f1;color:#fff;border-color:#6366f1}
+   .tab-btn:active{opacity:.85;transform:scale(.95)}
+   .tab-panel{display:none}
+   .tab-panel.active{display:block}
+   .tab-panel .form-table{border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#f9fafb;padding:2px;display:flex;flex-direction:column;gap:2px}
+   .tab-panel .form-table .tr{display:flex;align-items:stretch;gap:4px;background:#fff;border-radius:6px;padding:4px;min-height:32px;border-bottom:1px solid #e5e7eb}
+   .tab-panel .form-table .tr:last-child{border-bottom:none}
+   .tab-panel .form-table .th{width:72px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25)}
+   .tab-panel .form-table .td{flex:1;border:1px solid #e5e7eb;border-radius:6px;display:flex;align-items:center;padding:0 8px;min-width:0}
+   .tab-panel .form-table .td input{width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit}
+   .tab-panel .form-table .tr.hidden{display:none}
     .form-table .tr.tr-plus{background:transparent;justify-content:center;align-items:center;padding:6px}
     .bahan-add{width:100%;height:32px;padding:0;margin:0;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;outline:none;transition:all .15s ease;display:flex;align-items:center;justify-content:center;flex-shrink:0}
     .bahan-add:active{opacity:.85;transform:scale(.93)}
@@ -145,96 +167,118 @@
     <div class="card" style="order:1">
       <form id="form" class="form" onsubmit="return false">
         <input type="hidden" id="editId" />
-        <div class="form-table">
-          <div class="tr">
-            <div class="th">Menu</div>
-            <div class="td"><input id="f_name" required /></div>
-          </div>
-        </div>
-        <div class="foto-box" id="fotoBox" style="height:120px;min-height:0;aspect-ratio:auto;width:100%;display:flex;align-items:center;justify-content:center;margin-top:5px;position:relative">
+        <div style="display:flex;gap:2px;align-items:stretch">
+          <div class="foto-box" id="fotoBox" style="width:20%;aspect-ratio:9/16;border-radius:8px;overflow:hidden;flex-shrink:0;position:relative;border:1px solid #e5e7eb">
             <input id="f_icon_img" type="file" accept="image/*" hidden />
             <div class="foto-empty">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
             </div>
             <div id="icon_preview"></div>
-            <div class="foto-change" id="fotoChangeBtn">Ganti Foto</div>
+            <div class="foto-change" id="fotoChangeBtn">GANTI FOTO</div>
             <span id="fotoName" style="display:none"></span>
           </div>
-        <div class="form-table">
-          <div class="tr plu-head">
-            <div class="th">PLU 12OZ</div>
-            <div class="th">PLU 16OZ</div>
-            <div class="th">PLU HOT</div>
-          </div>
-          <div class="tr plu-input">
-            <div class="td"><input id="f_plu12" /></div>
-            <div class="td"><input id="f_plu16" /></div>
-            <div class="td"><input id="f_pluHot" /></div>
+          <div style="flex:1;min-width:0;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;gap:0;padding:0;background:#fff">
+            <div style="flex:1;display:flex;align-items:stretch;gap:4px;background:#fff;border-radius:6px;padding:3px;min-height:0;border-bottom:1px solid #e5e7eb">
+              <div style="width:72px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25)">MENU</div>
+              <div style="flex:1;border:1px solid #e5e7eb;border-radius:5px;display:flex;align-items:center;padding:0 4px;min-width:0"><input id="f_name" required style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" /></div>
+            </div>
+            <div style="flex:1;display:flex;align-items:stretch;gap:4px;background:#fff;border-radius:6px;padding:3px;min-height:0;border-bottom:1px solid #e5e7eb">
+              <div style="width:72px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25)">12</div>
+              <div style="flex:1;border:1px solid #e5e7eb;border-radius:5px;display:flex;align-items:center;padding:0 4px;min-width:0"><input id="f_plu12" style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" /></div>
+            </div>
+            <div id="plu16Row" style="flex:1;display:flex;align-items:stretch;gap:4px;background:#fff;border-radius:6px;padding:3px;min-height:0;border-bottom:1px solid #e5e7eb">
+              <div id="plu16Lab" style="width:72px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25)">16</div>
+              <div style="flex:1;border:1px solid #e5e7eb;border-radius:5px;display:flex;align-items:center;padding:0 4px;min-width:0"><input id="f_plu16" style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit" /></div>
+            </div>
+            <div id="pluHotRow" style="flex:1;display:flex;align-items:stretch;gap:4px;background:#fff;border-radius:6px;padding:3px;min-height:0;border-bottom:1px solid #e5e7eb">
+              <div id="pluHotLab" style="width:72px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25)">HOT</div>
+              <div style="flex:1;border:1px solid #e5e7eb;border-radius:5px;display:flex;align-items:center;padding:0 4px;min-width:0"><input id="f_pluHot" style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit" /></div>
+            </div>
+            <div id="tabBar" style="flex:1;display:flex;gap:4px;min-height:0;background:#fff;padding:4px">
+              <button type="button" class="tab-btn active" data-tab="secHot">HOT</button>
+              <button type="button" class="tab-btn" data-tab="secP12">P12</button>
+              <button type="button" class="tab-btn" data-tab="secP16">P16</button>
+              <button type="button" class="tab-btn" data-tab="sec12oz">12OZ</button>
+              <button type="button" class="tab-btn" data-tab="sec16oz">16OZ</button>
+            </div>
           </div>
         </div>
         <input type="hidden" id="f_link" />
-        <div class="form-table">
-          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_1" /></div></div>
-          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_2" /></div></div>
-          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_3" /></div></div>
-          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_4" /></div></div>
-          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_5" /></div></div>
-          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_6" /></div></div>
-          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_7" /></div></div>
-          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_8" /></div></div>
-          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_9" /></div></div>
-          <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_10" /></div></div>
+        <div class="tab-panel active" id="secHot">
+          <div class="form-table">
+            <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_1" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_2" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_3" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_4" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_5" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_6" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_7" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_8" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_9" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_10" /></div></div>
+          </div>
         </div>
-        <div class="form-table">
-          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_1" /></div></div>
-          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_2" /></div></div>
-          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_3" /></div></div>
-          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_4" /></div></div>
-          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_5" /></div></div>
-          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_6" /></div></div>
-          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_7" /></div></div>
-          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_8" /></div></div>
-          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_9" /></div></div>
-          <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_10" /></div></div>
+        <div class="tab-panel" id="secP12">
+          <div class="form-table">
+            <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_1" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_2" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_3" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_4" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_5" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_6" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_7" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_8" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_9" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_10" /></div></div>
+          </div>
         </div>
-        <div class="form-table">
-          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_1" /></div></div>
-          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_2" /></div></div>
-          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_3" /></div></div>
-          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_4" /></div></div>
-          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_5" /></div></div>
-          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_6" /></div></div>
-          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_7" /></div></div>
-          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_8" /></div></div>
-          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_9" /></div></div>
-          <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_10" /></div></div>
+        <div class="tab-panel" id="secP16">
+          <div class="form-table">
+            <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_1" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_2" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_3" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_4" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_5" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_6" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_7" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_8" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_9" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_10" /></div></div>
+          </div>
         </div>
-        <div class="form-table">
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_1" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_2" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_3" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_4" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_5" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_6" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_7" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_8" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_9" /></div></div>
-          <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_10" /></div></div>
+        <div class="tab-panel" id="sec12oz">
+          <div class="form-table">
+            <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_1" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_2" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_3" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_4" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_5" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_6" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_7" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_8" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_9" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_10" /></div></div>
+          </div>
         </div>
-        <div class="form-table">
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_1" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_2" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_3" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_4" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_5" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_6" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_7" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_8" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_9" /></div></div>
-          <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_10" /></div></div>
+        <div class="tab-panel" id="sec16oz">
+          <div class="form-table">
+            <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_1" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_2" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_3" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_4" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_5" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_6" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_7" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_8" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_9" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_10" /></div></div>
+          </div>
         </div>
-        <div class="form-table">
-          <div class="tr"><div class="th">Catatan</div><div class="td"><input id="f_catatan" /></div></div>
+        <div style="height:40px;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#f9fafb;padding:2px;margin-top:6px;display:flex">
+          <div style="flex:1;display:flex;align-items:stretch;gap:4px;background:#fff;border-radius:6px;padding:3px">
+            <div style="width:72px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25)">CATATAN</div>
+            <div style="flex:1;border:1px solid #e5e7eb;border-radius:6px;display:flex;align-items:center;padding:0 8px;min-width:0"><input id="f_catatan" style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit" /></div>
+          </div>
         </div>
         <div style="display:flex;justify-content:flex-end;margin-top:10px">
           <button id="btnSave" class="btn-save-icon" title="Simpan" aria-label="Simpan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button>
@@ -274,6 +318,23 @@
   const f_plu12 = document.getElementById('f_plu12');
   const f_plu16 = document.getElementById('f_plu16');
   const f_pluHot = document.getElementById('f_pluHot');
+  const plu16Row = document.getElementById('plu16Row');
+  const pluHotRow = document.getElementById('pluHotRow');
+  const plu16Lab = document.getElementById('plu16Lab');
+  const pluHotLab = document.getElementById('pluHotLab');
+  function syncPluRows() {
+    const e16 = !f_plu16.value.trim();
+    const eH = !f_pluHot.value.trim();
+    plu16Row.style.opacity = e16 ? '0.5' : '1';
+    pluHotRow.style.opacity = eH ? '0.5' : '1';
+    plu16Row.style.background = e16 ? '#f3f4f6' : '#fff';
+    pluHotRow.style.background = eH ? '#f3f4f6' : '#fff';
+    if (plu16Lab) { plu16Lab.style.background = e16 ? '#9ca3af' : '#6366f1'; plu16Lab.style.color = '#fff'; }
+    if (pluHotLab) { pluHotLab.style.background = eH ? '#9ca3af' : '#6366f1'; pluHotLab.style.color = '#fff'; }
+  }
+  f_plu16.addEventListener('input', syncPluRows);
+  f_pluHot.addEventListener('input', syncPluRows);
+  syncPluRows();
   const f_bahan12 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahan12_' + n));
   const f_bahan16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahan16_' + n));
   const f_bahanHot = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahanHot_' + n));
@@ -418,13 +479,14 @@
   }, { passive: false });
 
   let cropFromExisting = false;
+  let pendingCroppedFile = null;
 
   cropCancel.addEventListener('click', () => {
-    if (!cropFromExisting) f_icon_img.value = '';
+    if (!cropFromExisting) { f_icon_img.value = ''; pendingCroppedFile = null; }
     closeCrop();
   });
   cropOverlay.addEventListener('click', (e) => {
-    if (e.target === cropOverlay) { if (!cropFromExisting) f_icon_img.value = ''; closeCrop(); }
+    if (e.target === cropOverlay) { if (!cropFromExisting) { f_icon_img.value = ''; pendingCroppedFile = null; } closeCrop(); }
   });
 
   cropApply.addEventListener('click', () => {
@@ -447,9 +509,8 @@
       if (!blob) { alert('Gagal motong foto'); return; }
       const ext = (cropFileName.split('.').pop() || 'jpg').split('?')[0];
       const cropped = new File([blob], cropFileName.replace(/\.[^.]+$/, '') + '-9x16.' + ext, { type: blob.type || 'image/jpeg' });
-      const dt = new DataTransfer();
-      dt.items.add(cropped);
-      f_icon_img.files = dt.files;
+      pendingCroppedFile = cropped;
+      try { const dt = new DataTransfer(); dt.items.add(cropped); f_icon_img.files = dt.files; } catch(e) { console.warn('DataTransfer fallback', e); }
       const url = URL.createObjectURL(cropped);
       iconPreview.innerHTML = '<img src="' + url + '" alt=""/>';
       if (fotoName) fotoName.textContent = cropped.name;
@@ -613,20 +674,22 @@
     const m = all.find(x=>x.id===id);
     if (!m) return;
     editId.value = m.id;
-    f_name.value = m.name;
+    f_name.value = (m.name || '').toUpperCase();
     existingIcon = m.foto||'';
     existingCls = m.cls||'g-a';
     existingCat = m.cat || 'PREMIX';
     f_link.value = m.link||'';
-    f_plu12.value = m.plu_12oz||'';
+    f_plu12.value = (m.plu_12oz||'').toUpperCase();
     f_plu16.value = m.plu_16oz||'';
     if(f_pluHot) f_pluHot.value = m.plu_hot||'';
+    syncPluRows();
     f_bahan12.forEach((inp, i) => { inp.value = m['bahan_12oz_' + (i+1)] || ''; });
     f_bahan16.forEach((inp, i) => { inp.value = m['bahan_16oz_' + (i+1)] || ''; });
     f_bahanHot.forEach((inp, i) => { inp.value = m['bahan_hot_' + (i+1)] || ''; });
     f_percepatan12.forEach((inp, i) => { inp.value = m['percepatan_12oz_' + (i+1)] || ''; });
     f_percepatan16.forEach((inp, i) => { inp.value = m['percepatan_16oz_' + (i+1)] || ''; });
     f_catatan.value = m.catatan || '';
+    pendingCroppedFile = null;
     f_icon_img.value = '';
     if (m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto)) {
       const url = m.foto;
@@ -640,6 +703,11 @@
       if(fotoName) fotoName.textContent = m.foto || 'Belum ada foto';
     }
     syncFotoBox();
+    const tabWithData = ['secHot','secP12','secP16','sec12oz','sec16oz'].find(tid => {
+      const p = document.getElementById(tid);
+      return p && p.querySelector('input') && Array.from(p.querySelectorAll('input')).some(i => i.value.trim());
+    });
+    switchTab(tabWithData || 'secHot');
     btnSave.title = 'Update'; btnSave.setAttribute('aria-label', 'Update');
     window.scrollTo({top:0, behavior:'smooth'});
   };
@@ -656,7 +724,10 @@
     existingIcon = '';
     existingCls = 'g-a';
     existingCat = 'PREMIX';
+    pendingCroppedFile = null;
+    f_icon_img.value = '';
     form.reset();
+    syncPluRows();
     iconPreview.innerHTML = '';
     if(fotoName) fotoName.textContent = 'Belum ada foto';
     syncFotoBox();
@@ -667,8 +738,9 @@
     if (!f_name.value.trim()) { alert('Menu wajib'); return; }
     btnSave.disabled = true; btnSave.title = 'Menyimpan...'; btnSave.setAttribute('aria-label', 'Menyimpan...');
     let iconValue = existingIcon || '☕';
-    if (f_icon_img.files[0]) {
-      const file = f_icon_img.files[0];
+    const pendingFile = pendingCroppedFile || f_icon_img.files[0];
+    if (pendingFile) {
+      const file = pendingFile;
       // validasi ukuran (max 3MB biar base64 tidak kebesaran)
       if (file.size > 3 * 1024 * 1024) { alert('Foto kebesaran, max 3MB. Kompres dulu ya.'); btnSave.disabled=false; btnSave.title = editId.value ? 'Update' : 'Simpan'; btnSave.setAttribute('aria-label', btnSave.title); return; }
       try {
@@ -699,11 +771,11 @@
     }
     const autoLink = 'pages/item-' + slugify(f_name.value.trim()) + '.html';
     const payload = {
-      name: f_name.value.trim(),
+      name: f_name.value.trim().toUpperCase(),
       foto: iconValue,
       cls: existingCls,
       link: f_link.value.trim() || autoLink,
-      plu_12oz: f_plu12.value.trim() || null,
+      plu_12oz: f_plu12.value.trim().toUpperCase() || null,
       plu_16oz: f_plu16.value.trim() || null,
       plu_hot: f_pluHot ? f_pluHot.value.trim() || null : null,
       bahan_hot_1: f_bahanHot[0].value.trim() || null,
@@ -796,39 +868,68 @@
   searchEl.addEventListener('input', render);
 
   // bahan cuma 1 baris tampil, plus nambah baris biar nyatu ke tabel 1
+  // tab switching
+  const tabBar = document.getElementById('tabBar');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+  const tabBtns = tabBar.querySelectorAll('.tab-btn');
+  let activeTab = 'secHot';
+
+  function switchTab(tabId) {
+    activeTab = tabId;
+    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+    tabPanels.forEach(p => p.classList.toggle('active', p.id === tabId));
+    const panel = document.getElementById(tabId);
+    if (panel) showFilledRows(panel);
+  }
+  tabBtns.forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
+
+  function showFilledRows(panel) {
+    panel.querySelectorAll('.form-table .tr.hidden').forEach(r => r.classList.remove('hidden'));
+    const inputs = panel.querySelectorAll('.form-table .tr:not(.tr-plus) input');
+    let maxFilled = 0;
+    inputs.forEach((inp, i) => { if (inp.value.trim()) maxFilled = i + 1; });
+    const target = Math.min(10, Math.max(1, maxFilled + 1));
+    let count = 0;
+    panel.querySelectorAll('.form-table .tr:not(.tr-plus)').forEach(r => {
+      count++;
+      if (count > target) r.classList.add('hidden');
+    });
+    const table = panel.querySelector('.form-table');
+    if (table) {
+      const plus = table.querySelector('.tr-plus');
+      const hidden = table.querySelector('.tr.hidden');
+      if (plus) plus.style.display = hidden ? '' : 'none';
+    }
+  }
+
   function initBahanTables(){
-    document.querySelectorAll('.form-table').forEach(table=>{
-      if(table.querySelector('#f_name') || table.querySelector('[id^="f_plu"]')) return;
-      const rows = Array.from(table.querySelectorAll('.tr'));
-      const isBahan = rows.length>1;
-      if(!isBahan) return;
-      if(table.querySelector('.bahan-add')) return;
-      let visible = 1;
-      rows.forEach((r,i)=>{
-        const inp=r.querySelector('input');
-        if(inp && inp.value.trim() && i+1>visible) visible=i+1;
-        if(i>=visible) r.classList.add('hidden');
-      });
+    document.querySelectorAll('.tab-panel').forEach(panel => {
+      showFilledRows(panel);
+      const table = panel.querySelector('.form-table');
+      if (!table || table.querySelector('.bahan-add')) return;
       const trPlus = document.createElement('div');
       trPlus.className='tr tr-plus';
       const btn = document.createElement('button');
       btn.type='button'; btn.className='bahan-add';
       btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>';
-      btn.title='Tambah bahan '+(visible+1); btn.setAttribute('aria-label','Tambah bahan '+(visible+1));
-      if(visible>=10) trPlus.style.display='none';
-      if(!table.querySelector('.tr.hidden')) trPlus.style.display='none';
+      btn.title='Tambah baris'; btn.setAttribute('aria-label','Tambah baris');
+      const updatePlus = () => {
+        const hidden = table.querySelector('.tr.hidden');
+        if (!hidden) { trPlus.style.display='none'; } else { trPlus.style.display=''; }
+      };
       btn.onclick=()=>{
         const hidden = table.querySelector('.tr.hidden');
-        if(hidden){ hidden.classList.remove('hidden'); visible++; btn.title='Tambah bahan '+(visible+1); btn.setAttribute('aria-label','Tambah bahan '+(visible+1)); if(visible>=10 || !table.querySelector('.tr.hidden')) trPlus.style.display='none'; }
+        if(hidden){ hidden.classList.remove('hidden'); updatePlus(); }
       };
       trPlus.appendChild(btn);
       table.appendChild(trPlus);
+      updatePlus();
     });
   }
   const _origReset5 = resetForm;
-  resetForm = function(){ document.querySelectorAll('.bahan-add').forEach(b=>{ const tr=b.closest('.tr'); if(tr) tr.remove(); }); document.querySelectorAll('.form-table .tr.hidden').forEach(r=>r.classList.remove('hidden')); _origReset5(); setTimeout(initBahanTables, 0); };
+  resetForm = function(){ document.querySelectorAll('.bahan-add').forEach(b=>{ const tr=b.closest('.tr'); if(tr) tr.remove(); }); document.querySelectorAll('.tab-panel .tr.hidden').forEach(r=>r.classList.remove('hidden')); _origReset5(); setTimeout(()=>{ initBahanTables(); switchTab('secHot'); }, 0); };
   const _origEdit5 = editRow;
-  editRow = function(id){ _origEdit5(id); setTimeout(()=>{ document.querySelectorAll('.bahan-add').forEach(b=>{ const tr=b.closest('.tr'); if(tr) tr.remove(); }); document.querySelectorAll('.form-table .tr.hidden').forEach(r=>r.classList.remove('hidden')); initBahanTables(); }, 50); };
+  editRow = function(id){ _origEdit5(id); setTimeout(()=>{ document.querySelectorAll('.bahan-add').forEach(b=>{ const tr=b.closest('.tr'); if(tr) tr.remove(); }); document.querySelectorAll('.tab-panel .tr.hidden').forEach(r=>r.classList.remove('hidden')); initBahanTables(); }, 50); };
 
   // realtime JA-DI aja (udah sama kayak Dr Coffee, gak pakai tab atas)
   let realtimeChannel = null;
