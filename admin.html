@@ -38,10 +38,11 @@
     .btn-save-icon{width:100%;height:44px;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0;transition:all .15s ease;font-size:14px;font-weight:700;padding:0 16px}
     .btn-save-icon:active{opacity:.85;transform:scale(.93)}
     .btn-save-icon:disabled{opacity:.6;cursor:not-allowed;transform:none}
+    .btn-save-icon.btn-save-head{flex:0 0 46px;width:46px;height:46px;min-height:46px;padding:0}
     .list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 8px;max-width:100%;background:transparent;border:none;border-radius:0;overflow:visible;align-items:start}
     .list-head{display:none}
     .item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;padding:0;background:transparent;border:none;cursor:default;width:100%}
-    .thumb{width:100%;aspect-ratio:9/16;border-radius:16px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-size:22px;color:#fff;margin-bottom:8px;align-self:center}
+    .thumb{width:100%;aspect-ratio:9/16;border-radius:16px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-size:22px;color:#fff;margin-bottom:8px;align-self:center}
     .thumb img{width:100%;height:100%;object-fit:cover;display:block}
     .thumb span{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:clamp(20px,5vw,32px);line-height:1}
     .item-info{min-width:0;max-width:100%;width:100%}
@@ -59,23 +60,23 @@
     .foto-title,.field-title{font-size:11px;font-weight:700;color:#1f2937}
 
     /* Skeleton shimmer for thumb loading */
-    .thumb{width:100%;aspect-ratio:9/16;border-radius:16px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-size:22px;color:#fff;margin-bottom:8px;align-self:center}
+    .thumb{width:100%;aspect-ratio:9/16;border-radius:16px;background:linear-gradient(90deg,#ffffff 25%,#f1f5f9 50%,#ffffff 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-size:22px;color:#fff;margin-bottom:8px;align-self:center}
     .thumb img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 0.25s ease}
     .thumb img.loaded{opacity:1}
     .thumb span{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:clamp(20px,5vw,32px);line-height:1}
     @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
   .form-table{width:100%;border:1px solid #c7d2fe;border-radius:8px;overflow:hidden;background:#fff;margin-bottom:6px;table-layout:fixed}
-   .form-table .tr{display:flex;align-items:stretch;border-bottom:1px solid #e5e7eb;contain:layout}
+   .form-table .tr{display:flex;align-items:stretch;border-bottom:1px solid #c7d2fe;contain:layout}
   .form-table .tr:last-child{border-bottom:none}
-  .form-table .th{min-width:48px;display:flex;align-items:center;justify-content:center;padding:0 6px;font-size:9px;font-weight:700;color:#4f46e5;background:#eef2ff;border-right:1px solid #e5e7eb;white-space:normal;text-align:center;letter-spacing:0;text-transform:uppercase;line-height:1.15;flex-shrink:0}
+  .form-table .th{min-width:48px;display:flex;align-items:center;justify-content:center;padding:0 6px;font-size:9px;font-weight:700;color:#4f46e5;background:#eef2ff;border-right:1px solid #c7d2fe;white-space:normal;text-align:center;letter-spacing:0;text-transform:uppercase;line-height:1.15;flex-shrink:0}
   .form-table .td{flex:1;display:flex;align-items:center;padding:2px 6px;min-width:0}
   .form-table .td input{width:100%;margin:0 !important;padding:6px 8px;border:1px solid transparent;border-radius:4px;font-size:10px;font-weight:500;color:#111827;background:transparent;outline:none;font-family:inherit;line-height:1.2;text-transform:uppercase}
   .form-table .td input:focus{border-color:#6366f1;background:#fff;box-shadow:0 0 0 1px #6366f1}
    .form-table .td input::placeholder{color:#9ca3af;font-weight:400}
    .form-table .tr.plu-head{gap:6px;padding:6px 6px 0 6px;border-bottom:none}
-   .form-table .tr.plu-head .th{flex:1;min-width:0;border:1px solid #e5e7eb;border-radius:6px;padding:6px 4px}
+   .form-table .tr.plu-head .th{flex:1;min-width:0;border:1px solid #c7d2fe;border-radius:6px;padding:6px 4px}
    .form-table .tr.plu-input{gap:6px;padding:6px}
-   .form-table .tr.plu-input .td{flex:1;min-width:0;border:1px solid #e5e7eb;border-radius:6px;justify-content:center}
+   .form-table .tr.plu-input .td{flex:1;min-width:0;border:1px solid #c7d2fe;border-radius:6px;justify-content:center}
    .form-table .tr.plu-input .td input{text-align:center;padding:6px 4px}
    @media(max-width:640px){
       .form-table .th{font-size:8px;padding:0 4px;min-width:40px}
@@ -90,18 +91,19 @@
     .select-box select{display:block;width:100%;max-width:100%;min-width:0;margin-top:0;padding:10px 40px 10px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-weight:600;color:#222;background:#f9f9f9;outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;cursor:pointer}
     .select-box select:focus{border-color:#888;background:#fff}
     .select-box svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#9aa0ab;pointer-events:none}
-    .foto-box{position:relative;border:1px solid #e5e7eb;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;max-width:100%;aspect-ratio:9/16}
+    .foto-box{position:relative;border:1px solid #c7d2fe;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;max-width:100%;aspect-ratio:9/16}
     .foto-box:active{background:#f1f1f1}
     .foto-empty{display:flex;flex-direction:column;align-items:center;gap:6px;color:#b0b5bf;padding:20px;text-align:center}
-    .foto-empty svg{width:22px;height:22px;color:#6366f1}
-    .foto-empty span{font-size:13px;font-weight:700;color:#6b7280}
+    .foto-empty svg{width:22px;height:22px;color:#cbd5e1}
+    .foto-empty span{font-size:13px;font-weight:700;color:#94a3b8}
     .foto-empty small{font-size:11px;color:#c3c8d1}
     #icon_preview{display:none;position:absolute;inset:0;width:100%;height:100%}
     #icon_preview img{width:100%;height:100%;object-fit:cover;display:block}
-    .foto-change{display:none;position:absolute;left:4px;right:4px;bottom:4px;background:#6366f1;color:#fff;font-size:9px;font-weight:800;padding:5px 6px;border-radius:6px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.2);text-transform:uppercase;letter-spacing:0.3px}
+    #icon_preview{touch-action:none;cursor:grab}
+    #icon_preview:active{cursor:grabbing}
+    #icon_preview img{position:absolute;left:50%;top:50%;max-width:none;max-height:none;user-select:none;-webkit-user-drag:none;touch-action:none;pointer-events:none}
     .foto-box.has-photo #icon_preview{display:block}
     .foto-box.has-photo .foto-empty{display:none}
-    .foto-box.has-photo .foto-change{display:block}
     #f_icon_img{display:none !important}
     .g-a{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
     .g-b{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
@@ -112,34 +114,44 @@
     .g-g{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
     .g-h{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
     .form-table .tr.hidden{display:none}
-   .form-compact{font-size:10px;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;width:100%}
-   .form-compact .tr{display:flex;align-items:center;min-height:28px;gap:4px;padding:3px 4px;border-bottom:1px solid #e5e7eb}
+   .form-compact{font-size:10px;border:1px solid #c7d2fe;border-radius:8px;overflow:hidden;width:100%}
+   .form-compact .tr{display:flex;align-items:center;min-height:28px;gap:4px;padding:3px 4px;border-bottom:1px solid #c7d2fe}
    .form-compact .tr:last-child{border-bottom:none}
-   .form-compact .th{font-size:9px;font-weight:700;padding:2px 8px;min-width:auto;border:1px solid #e5e7eb;border-radius:6px;background:#eef2ff;color:#4f46e5;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-   .form-compact .td{flex:1;display:flex;align-items:center;padding:2px;border:1px solid #e5e7eb;border-radius:6px;min-width:0}
+   .form-compact .th{font-size:9px;font-weight:700;padding:2px 8px;min-width:auto;border:1px solid #c7d2fe;border-radius:6px;background:#eef2ff;color:#4f46e5;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+   .form-compact .td{flex:1;display:flex;align-items:center;padding:2px;border:1px solid #c7d2fe;border-radius:6px;min-width:0}
    .form-compact .td input{width:100%;font-size:10px;padding:4px 6px;border:none;border-radius:4px;color:#111827;background:transparent;outline:none;font-family:inherit}
    .form-compact .td input:focus{background:#fff}
    input:focus{outline:none !important;box-shadow:none !important}
    @media(max-width:640px){
      .top-wrap{gap:4px}
-     .top-wrap .foto-box{width:60% !important}
-     .top-row{padding:2px !important;gap:2px !important}
-     .top-row > div:first-child{width:48px !important;font-size:10px !important}
-     .top-row input{font-size:11px !important}
+       .top-wrap .foto-box{flex:1 1 0 !important;width:100% !important;min-width:0 !important}
+       .top-row{padding:2px !important;gap:6px !important}
+       .top-row > div:first-child{font-size:15px !important}
+      .top-row input{font-size:15px !important;font-weight:800 !important;text-align:left !important}
    }
    .tab-bar{display:flex;gap:4px;margin-top:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
    .tab-bar::-webkit-scrollbar{display:none}
-   .tab-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:0;border:1px solid #e5e7eb;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;background:#f3f4f6;color:#6b7280;transition:all .15s ease;white-space:nowrap;font-family:inherit;text-align:center}
-   .tab-btn.active{background:#6366f1;color:#fff;border-color:#6366f1}
-   .tab-btn:active{opacity:.85;transform:scale(.95)}
+    .tab-btn{flex:1 1 22%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;padding:4px;min-height:0;border:none;border-radius:6px;font-size:13px;font-weight:800;cursor:pointer;background:#eef2ff;color:#4f46e5;transition:all .15s ease;white-space:nowrap;font-family:inherit;text-align:center}
+    .tab-btn.active{background:#6366f1;color:#fff;border-color:#6366f1}
+    .tab-btn:active{opacity:.85;transform:scale(.95)}
+    .tab-empty{flex:1 1 22%;aspect-ratio:1/1;min-height:0;border:none;border-radius:6px;background:transparent;pointer-events:none}
+    .foto-act{flex:1 1 22%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;padding:4px;min-height:0;border-radius:6px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;text-align:center;white-space:nowrap}
+    #btnFotoAdd{background:#eef2ff;color:#4f46e5;border:1px solid #c7d2fe}
+    #btnFotoSave{background:#6366f1;color:#fff;border:none}
+    #btnFotoCancel{background:#fef2f2;color:#ef4444;border:1px solid #fecaca}
    .tab-panel{display:none}
    .tab-panel.active{display:block}
-   .tab-panel .form-table{border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#f9fafb;padding:2px;display:flex;flex-direction:column;gap:2px}
-   .tab-panel .form-table .tr{display:flex;flex-direction:column;align-items:stretch;gap:2px;background:#fff;border-radius:6px;padding:4px;min-height:0;border-bottom:1px solid #e5e7eb}
+    .tab-panel .form-table{border:none;border-radius:0;overflow:visible;background:transparent;padding:0;display:flex;flex-direction:column;gap:2px}
+   .tab-panel .form-table .tr{display:flex;flex-direction:column;align-items:stretch;gap:2px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none}
    .tab-panel .form-table .tr:last-child{border-bottom:none}
-   .tab-panel .form-table .th{width:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:4px 0}
-   .tab-panel .form-table .td{flex:1;border:1px solid #e5e7eb;border-radius:6px;display:flex;align-items:center;padding:0 8px;min-width:0}
-   .tab-panel .form-table .td input{width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit}
+    .tab-panel .form-table .th{width:100%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:6px 0;text-align:center}
+    .tab-panel .form-table .table-title{flex:1;min-width:0;min-height:46px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0;text-align:center}
+    .table-title-row{display:flex;gap:6px;align-items:center}
+    .bahan-add-head{flex:0 0 46px;width:46px;height:46px;min-height:46px;padding:0;margin:0;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;outline:none;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .bahan-add-head:active{opacity:.85;transform:scale(.93)}
+    .tab-panel .form-table .tr .th{display:none}
+    .tab-panel .form-table .td{flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1}
+    .tab-panel .form-table .td input{width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-align:left}
    .tab-panel .form-table .tr.hidden{display:none}
     .form-table .tr.tr-plus{background:transparent;justify-content:center;align-items:center;padding:6px}
     .bahan-add{width:100%;height:32px;padding:0;margin:0;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;outline:none;transition:all .15s ease;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -147,7 +159,7 @@
     .crop-overlay{position:fixed;inset:0;z-index:9999;background:rgba(17,24,39,0.5);display:none;align-items:center;justify-content:center;padding:12px}
     .crop-overlay.show{display:flex}
     .crop-card{background:#fff;border:1px solid #c7d2fe;border-radius:12px;padding:12px;width:auto;max-width:94vw;max-height:92vh;max-height:92dvh;overflow-y:auto;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 4px 18px rgba(99,102,241,0.18);font-family:inherit}
-    .crop-stage{position:relative;aspect-ratio:9/16;width:auto;max-width:78vw;max-height:82vh;border-radius:8px;overflow:hidden;background:#f3f4f6;border:1px solid #e5e7eb;touch-action:none;cursor:grab;flex-shrink:0}
+    .crop-stage{position:relative;aspect-ratio:9/16;width:auto;max-width:78vw;max-height:82vh;border-radius:8px;overflow:hidden;background:#eef2ff;border:1px solid #c7d2fe;touch-action:none;cursor:grab;flex-shrink:0}
     .crop-stage:active{cursor:grabbing}
     .crop-stage img{position:absolute;left:50%;top:50%;max-width:none;max-height:none;user-select:none;-webkit-user-drag:none;touch-action:none;pointer-events:none}
     .crop-stage::after{content:'';position:absolute;inset:0;border:1px solid #c7d2fe;border-radius:8px;pointer-events:none}
@@ -174,45 +186,52 @@
     <div class="card" style="order:1">
       <form id="form" class="form" onsubmit="return false">
         <input type="hidden" id="editId" />
-        <div class="top-wrap" style="display:flex;gap:6px;align-items:stretch">
-          <div class="foto-box" id="fotoBox" style="width:60%;aspect-ratio:9/16;border-radius:8px;overflow:hidden;flex-shrink:0;position:relative;border:1px solid #e5e7eb">
+        <div class="top-wrap" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;justify-content:center;align-items:stretch;width:100%;padding:4px;box-sizing:border-box">
+          <div class="foto-box" id="fotoBox" style="flex:1 1 0;min-width:0;width:100%;height:100%;min-height:100%;align-self:stretch;aspect-ratio:9/16;border-radius:8px;overflow:hidden;position:relative;border:1px solid #c7d2fe">
             <input id="f_icon_img" type="file" accept="image/*" hidden />
             <div class="foto-empty">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
             </div>
             <div id="icon_preview"></div>
-            <div class="foto-change" id="fotoChangeBtn">GANTI FOTO</div>
             <span id="fotoName" style="display:none"></span>
           </div>
-          <div style="flex:1;min-width:0;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;gap:0;padding:0;background:#fff">
-            <div class="top-row" style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:#fff;border-radius:6px;padding:4px;min-height:0;border-bottom:1px solid #e5e7eb">
-              <div style="width:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:4px 0">MENU</div>
-              <div style="flex:1;border:1px solid #e5e7eb;border-radius:5px;display:flex;align-items:center;padding:0 4px;min-width:0"><input id="f_name" required style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" /></div>
+          <div style="flex:1 1 0;min-width:0;width:100%;border:1px solid #c7d2fe;border-radius:8px;overflow:visible;display:flex;flex-direction:column;gap:4px;padding:4px;background:#fff;isolation:isolate">
+            <div class="top-row" style="flex:0 0 auto;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
+              <div style="width:100%;min-height:46px;display:flex;align-items:center;justify-content:flex-start;text-align:left;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0 12px 8px">MENU</div>
+              <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_name" required style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" oninput="this.value=this.value.toUpperCase()" /></div>
             </div>
-            <div class="top-row" style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:#fff;border-radius:6px;padding:4px;min-height:0;border-bottom:1px solid #e5e7eb">
-              <div style="width:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:4px 0">12</div>
-              <div style="flex:1;border:1px solid #e5e7eb;border-radius:5px;display:flex;align-items:center;padding:0 4px;min-width:0"><input id="f_plu12" style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" /></div>
+            <div class="top-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:6px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
+              <div style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0">12</div>
+              <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_plu12" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" oninput="this.value=this.value.toUpperCase()" /></div>
             </div>
-            <div id="plu16Row" class="top-row" style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:#fff;border-radius:6px;padding:4px;min-height:0;border-bottom:1px solid #e5e7eb">
-              <div id="plu16Lab" style="width:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:4px 0">16</div>
-              <div style="flex:1;border:1px solid #e5e7eb;border-radius:5px;display:flex;align-items:center;padding:0 4px;min-width:0"><input id="f_plu16" style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit" /></div>
+            <div id="plu16Row" class="top-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:6px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
+              <div id="plu16Lab" style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0">16</div>
+              <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_plu16" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-align:left" /></div>
             </div>
-            <div id="pluHotRow" class="top-row" style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:#fff;border-radius:6px;padding:4px;min-height:0;border-bottom:1px solid #e5e7eb">
-              <div id="pluHotLab" style="width:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:4px 0">HOT</div>
-              <div style="flex:1;border:1px solid #e5e7eb;border-radius:5px;display:flex;align-items:center;padding:0 4px;min-width:0"><input id="f_pluHot" style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit" /></div>
+            <div id="pluHotRow" class="top-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:6px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
+              <div id="pluHotLab" style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0">HOT</div>
+              <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_pluHot" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-align:left" /></div>
             </div>
-            <div id="tabBar" style="flex:1;display:flex;gap:4px;min-height:0;background:#fff;padding:4px">
+            <div id="tabBar" style="flex:0 0 auto;display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:transparent;padding:2px">
               <button type="button" class="tab-btn active" data-tab="secHot">HOT</button>
               <button type="button" class="tab-btn" data-tab="secP12">P12</button>
               <button type="button" class="tab-btn" data-tab="secP16">P16</button>
               <button type="button" class="tab-btn" data-tab="sec12oz">12OZ</button>
               <button type="button" class="tab-btn" data-tab="sec16oz">16OZ</button>
+              <button type="button" class="foto-act" id="btnFotoAdd" title="Tambah foto" aria-label="Tambah foto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+              <button type="button" class="foto-act" id="btnFotoSave" title="Pakai foto" aria-label="Pakai foto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button>
+              <button type="button" class="foto-act" id="btnFotoCancel" title="Batal" aria-label="Batal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+              <div class="tab-empty" aria-hidden="true"></div>
+              <div class="tab-empty" aria-hidden="true"></div>
+              <div class="tab-empty" aria-hidden="true"></div>
+              <div class="tab-empty" aria-hidden="true"></div>
             </div>
           </div>
         </div>
         <input type="hidden" id="f_link" />
         <div class="tab-panel active" id="secHot">
           <div class="form-table">
+            <div class="table-title-row"><div class="table-title">HOT</div><button type="button" class="bahan-add bahan-add-head" title="Tambah baris" aria-label="Tambah baris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
             <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_1" /></div></div>
             <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_2" /></div></div>
             <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_3" /></div></div>
@@ -227,6 +246,7 @@
         </div>
         <div class="tab-panel" id="secP12">
           <div class="form-table">
+            <div class="table-title-row"><div class="table-title">P12</div><button type="button" class="bahan-add bahan-add-head" title="Tambah baris" aria-label="Tambah baris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
             <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_1" /></div></div>
             <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_2" /></div></div>
             <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_3" /></div></div>
@@ -241,6 +261,7 @@
         </div>
         <div class="tab-panel" id="secP16">
           <div class="form-table">
+            <div class="table-title-row"><div class="table-title">P16</div><button type="button" class="bahan-add bahan-add-head" title="Tambah baris" aria-label="Tambah baris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
             <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_1" /></div></div>
             <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_2" /></div></div>
             <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_3" /></div></div>
@@ -255,6 +276,7 @@
         </div>
         <div class="tab-panel" id="sec12oz">
           <div class="form-table">
+            <div class="table-title-row"><div class="table-title">12OZ</div><button type="button" class="bahan-add bahan-add-head" title="Tambah baris" aria-label="Tambah baris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
             <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_1" /></div></div>
             <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_2" /></div></div>
             <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_3" /></div></div>
@@ -269,6 +291,7 @@
         </div>
         <div class="tab-panel" id="sec16oz">
           <div class="form-table">
+            <div class="table-title-row"><div class="table-title">16OZ</div><button type="button" class="bahan-add bahan-add-head" title="Tambah baris" aria-label="Tambah baris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
             <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_1" /></div></div>
             <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_2" /></div></div>
             <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_3" /></div></div>
@@ -281,14 +304,11 @@
             <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_10" /></div></div>
           </div>
         </div>
-        <div style="height:40px;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#f9fafb;padding:2px;margin-top:6px;display:flex">
-          <div style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:#fff;border-radius:6px;padding:4px">
-            <div style="width:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:4px 0">CATATAN</div>
-            <div style="flex:1;border:1px solid #e5e7eb;border-radius:6px;display:flex;align-items:center;padding:0 8px;min-width:0"><input id="f_catatan" style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit" /></div>
+        <div style="border:none;border-radius:0;overflow:visible;background:transparent;padding:2px 0;margin-top:6px;display:flex">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:transparent;border-radius:0;padding:2px 0">
+            <div class="table-title-row"><div style="flex:1;min-width:0;min-height:46px;display:flex;align-items:center;justify-content:flex-start;text-align:left;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0 12px 8px">CATATAN</div><button id="btnSave" class="btn-save-icon btn-save-head" title="Simpan" aria-label="Simpan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button></div>
+            <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_catatan" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" oninput="this.value=this.value.toUpperCase()" /></div>
           </div>
-        </div>
-        <div style="display:flex;justify-content:flex-end;margin-top:10px">
-          <button id="btnSave" class="btn-save-icon" title="Simpan" aria-label="Simpan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button>
         </div>
       </form>
     </div>
@@ -334,10 +354,10 @@
     const eH = !f_pluHot.value.trim();
     plu16Row.style.opacity = e16 ? '0.5' : '1';
     pluHotRow.style.opacity = eH ? '0.5' : '1';
-    plu16Row.style.background = e16 ? '#f3f4f6' : '#fff';
-    pluHotRow.style.background = eH ? '#f3f4f6' : '#fff';
-    if (plu16Lab) { plu16Lab.style.background = e16 ? '#9ca3af' : '#6366f1'; plu16Lab.style.color = '#fff'; }
-    if (pluHotLab) { pluHotLab.style.background = eH ? '#9ca3af' : '#6366f1'; pluHotLab.style.color = '#fff'; }
+    plu16Row.style.background = 'transparent';
+    pluHotRow.style.background = 'transparent';
+    if (plu16Lab) { plu16Lab.style.background = e16 ? '#a5b4fc' : '#6366f1'; plu16Lab.style.color = '#fff'; }
+    if (pluHotLab) { pluHotLab.style.background = eH ? '#a5b4fc' : '#6366f1'; pluHotLab.style.color = '#fff'; }
   }
   f_plu16.addEventListener('input', syncPluRows);
   f_pluHot.addEventListener('input', syncPluRows);
@@ -361,23 +381,175 @@
 
 
 
-  fotoBox.addEventListener('click', (e) => {
-    // Jangan trigger kalau klik tombol "Ganti Foto"
-    if (e.target.id === 'fotoChangeBtn') return;
-    // Kalau sudah ada foto, buka crop overlay dengan foto yang ada
-    const existingImg = iconPreview.querySelector('img');
-    if (existingImg && existingImg.src) {
-      openCropFromUrl(existingImg.src);
-    } else {
-      f_icon_img.click();
-    }
-  });
-
-  // Tombol "Ganti Foto" -> buka file picker untuk upload baru
-  document.getElementById('fotoChangeBtn').addEventListener('click', (e) => {
-    e.stopPropagation();
+  // Klik kotak foto langsung buka file picker (tombol + di bawah P12 fungsinya sama)
+  // Abaikan klik sesudah drag/cubit-zoom agar tidak buka picker tanpa sengaja
+  fotoBox.addEventListener('click', () => {
+    if (typeof fzMoved !== 'undefined' && fzMoved) { fzMoved = false; return; }
     f_icon_img.click();
   });
+
+  // Preview langsung di kotak foto (9/16) tanpa popup: auto center-crop
+  function autoCropPreview(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    cropFileName = file.name || 'foto.jpg';
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const iw = img.naturalWidth, ih = img.naturalHeight;
+        if (!iw || !ih) { iconPreview.innerHTML = '<img src="' + url + '" alt=""/>'; syncFotoBox(); return; }
+        const target = 9/16;
+        const imgRatio = iw/ih;
+        let sx = 0, sy = 0, sw = iw, sh = ih;
+        if (imgRatio > target) { sw = ih*target; sx = (iw-sw)/2; }
+        else { sh = iw/target; sy = (ih-sh)/2; }
+        const outW = 540, outH = 960;
+        const canvas = document.createElement('canvas');
+        canvas.width = outW; canvas.height = outH;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#000'; ctx.fillRect(0, 0, outW, outH);
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
+        canvas.toBlob((blob) => {
+          URL.revokeObjectURL(url);
+          if (!blob) { iconPreview.innerHTML = '<img src="' + url + '" alt=""/>'; syncFotoBox(); return; }
+          const ext = (cropFileName.split('.').pop() || 'jpg').split('?')[0];
+          const cropped = new File([blob], cropFileName.replace(/\.[^.]+$/, '') + '-9x16.' + ext, { type: blob.type || 'image/jpeg' });
+          pendingCroppedFile = cropped;
+          try { const dt = new DataTransfer(); dt.items.add(cropped); f_icon_img.files = dt.files; } catch(e) {}
+          const purl = URL.createObjectURL(cropped);
+          iconPreview.innerHTML = '<img src="' + purl + '" alt=""/>';
+          if (fotoName) fotoName.textContent = cropped.name;
+          syncFotoBox();
+        }, 'image/jpeg', 0.92);
+      } catch(err) { console.warn('autoCrop gagal', err); iconPreview.innerHTML = '<img src="' + url + '" alt=""/>'; syncFotoBox(); }
+    };
+    img.onerror = () => { alert('Foto tidak terbaca, coba file lain'); f_icon_img.value = ''; };
+    img.src = url;
+  }
+
+  // Tombol bawah foto: tambah / pakai / batal (tanpa popup)
+  document.getElementById('btnFotoAdd').addEventListener('click', (e) => { e.stopPropagation(); f_icon_img.click(); });
+  document.getElementById('btnFotoSave').addEventListener('click', (e) => { e.stopPropagation(); fzCapture(); });
+  document.getElementById('btnFotoCancel').addEventListener('click', (e) => {
+    e.stopPropagation();
+    f_icon_img.value = '';
+    pendingCroppedFile = null;
+    fzReset();
+    if (existingIcon && /^(https?:|data:|blob:)/i.test(existingIcon)) {
+      iconPreview.innerHTML = '<img src="' + existingIcon + '" alt=""/>';
+      if (fotoName) fotoName.textContent = String(existingIcon).split('/').pop().slice(0, 24);
+    } else {
+      iconPreview.innerHTML = '';
+      if (fotoName) fotoName.textContent = '';
+    }
+    syncFotoBox();
+  });
+
+  // Zoom/pan langsung di kotak foto (tanpa popup): scroll=cubit/drag, dobel-klik=reset
+  let fzScale = 1, fzTx = 0, fzTy = 0, fzMoved = false;
+  const fzPtrs = new Map();
+  let fzPinchD = 0, fzPinchS = 1, fzDrag = false, fzDownX = 0, fzDownY = 0;
+  function fzApply() { const im = iconPreview.querySelector('img'); if (!im) return; im.style.transform = 'translate(-50%,-50%) translate(' + fzTx + 'px,' + fzTy + 'px) scale(' + fzScale + ')'; }
+  function fzReset() { fzScale = 1; fzTx = 0; fzTy = 0; fzMoved = false; fzApply(); }
+  function fzClamp() {
+    const im = iconPreview.querySelector('img'); if (!im) return;
+    const bR = fotoBox.getBoundingClientRect(); const iR = im.getBoundingClientRect();
+    let dx = 0, dy = 0;
+    if (iR.left > bR.left) dx = bR.left - iR.left;
+    if (iR.right < bR.right) dx = bR.right - iR.right;
+    if (iR.top > bR.top) dy = bR.top - iR.top;
+    if (iR.bottom < bR.bottom) dy = bR.bottom - iR.bottom;
+    fzTx += dx; fzTy += dy; fzApply();
+  }
+  function fzFit() {
+    const im = iconPreview.querySelector('img'); if (!im) return;
+    const bR = fotoBox.getBoundingClientRect();
+    const iw = im.naturalWidth, ih = im.naturalHeight;
+    if (!iw || !ih || !bR.width || !bR.height) return;
+    if ((iw/ih) > (bR.width/bR.height)) { im.style.height = '100%'; im.style.width = 'auto'; }
+    else { im.style.width = '100%'; im.style.height = 'auto'; }
+    fzReset();
+    requestAnimationFrame(() => { fzApply(); fzClamp(); });
+  }
+  function fzBind() { const im = iconPreview.querySelector('img'); if (!im) return; if (im.complete && im.naturalWidth) { fzFit(); } else { im.onload = () => fzFit(); } }
+  new MutationObserver(() => fzBind()).observe(iconPreview, { childList: true });
+  fotoBox.addEventListener('wheel', (e) => {
+    if (!iconPreview.querySelector('img')) return;
+    e.preventDefault();
+    fzScale = Math.min(3, Math.max(1, fzScale + (e.deltaY < 0 ? 0.1 : -0.1)));
+    fzApply(); fzClamp();
+  }, { passive: false });
+  fotoBox.addEventListener('pointerdown', (e) => {
+    if (!iconPreview.querySelector('img')) return;
+    try { fotoBox.setPointerCapture(e.pointerId); } catch(err) {}
+    fzPtrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    fzMoved = false; fzDownX = e.clientX; fzDownY = e.clientY;
+    if (fzPtrs.size === 2) {
+      const p = Array.from(fzPtrs.values());
+      fzPinchD = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+      fzPinchS = fzScale;
+    } else { fzDrag = true; }
+  });
+  fotoBox.addEventListener('pointermove', (e) => {
+    if (!fzPtrs.has(e.pointerId)) return;
+    const pr = fzPtrs.get(e.pointerId);
+    fzPtrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (Math.hypot(e.clientX - fzDownX, e.clientY - fzDownY) > 4) fzMoved = true;
+    if (fzPtrs.size === 2) {
+      const p = Array.from(fzPtrs.values());
+      const d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+      if (fzPinchD > 0) { fzScale = Math.min(3, Math.max(1, fzPinchS * d / fzPinchD)); fzApply(); }
+      return;
+    }
+    if (!fzDrag) return;
+    fzTx += e.clientX - pr.x; fzTy += e.clientY - pr.y;
+    fzApply();
+  });
+  function fzEnd(e) {
+    fzPtrs.delete(e.pointerId);
+    if (fzPtrs.size < 2) fzPinchD = 0;
+    if (fzPtrs.size === 0) fzDrag = false;
+    fzClamp();
+  }
+  fotoBox.addEventListener('pointerup', fzEnd);
+  fotoBox.addEventListener('pointercancel', fzEnd);
+
+
+  // Tombol centang: kunci tampilan zoom/geser saat ini jadi file 9/16
+  function fzCapture() {
+    const im = iconPreview.querySelector('img');
+    const f = f_icon_img.files[0];
+    if (!im || !im.naturalWidth) { if (f) { autoCropPreview(f); } return; }
+    try {
+      const bR = fotoBox.getBoundingClientRect();
+      const iR = im.getBoundingClientRect();
+      const iw = im.naturalWidth, ih = im.naturalHeight;
+      if (!iw || !ih || !iR.width || !iR.height || !bR.width || !bR.height) { if (f) { autoCropPreview(f); } return; }
+      const sx = (bR.left - iR.left) / iR.width * iw;
+      const sy = (bR.top - iR.top) / iR.height * ih;
+      const sw = bR.width / iR.width * iw;
+      const sh = bR.height / iR.height * ih;
+      const base = (cropFileName || 'foto.jpg').replace(/-9x16(\.[^.]+)$/, '$1');
+      const outW = 540, outH = 960;
+      const canvas = document.createElement('canvas');
+      canvas.width = outW; canvas.height = outH;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, outW, outH);
+      ctx.drawImage(im, sx, sy, sw, sh, 0, 0, outW, outH);
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        const ext = (base.split('.').pop() || 'jpg').split('?')[0];
+        const name = base.replace(/\.[^.]+$/, '') + '-9x16.' + ext;
+        const cropped = new File([blob], name, { type: blob.type || 'image/jpeg' });
+        pendingCroppedFile = cropped;
+        try { const dt = new DataTransfer(); dt.items.add(cropped); f_icon_img.files = dt.files; } catch(e) {}
+        const purl = URL.createObjectURL(cropped);
+        iconPreview.innerHTML = '<img src="' + purl + '" alt=""/>';
+        if (fotoName) fotoName.textContent = name;
+        fzReset(); syncFotoBox();
+      }, 'image/jpeg', 0.92);
+    } catch(err) { console.warn('capture gagal', err); }
+  }
 
   // Open crop dari URL gambar yang sudah ada
   function openCropFromUrl(url) {
@@ -439,7 +611,8 @@
   f_icon_img.addEventListener('change', () => {
     const file = f_icon_img.files[0];
     if (!file) return;
-    openCrop(file);
+    if (!file.type.startsWith('image/')) { alert('Pilih file gambar ya'); f_icon_img.value = ''; return; }
+    autoCropPreview(file);
   });
 
   cropStage.addEventListener('pointerdown', (e) => {
@@ -617,14 +790,17 @@ const outW = 540, outH = 960;
     } else {
       thumb = '<span>' + (m.foto || '☕') + '</span>';
     }
+    let pluHtml = '<span>' + (m.plu_12oz || '-') + '</span>';
+    if (m.plu_16oz) pluHtml += '<span>' + m.plu_16oz + '</span>';
+    if (m.plu_hot) pluHtml += '<span>' + m.plu_hot + '</span>';
     return `
       <div class="item">
-        <div class="thumb ${m.cls||''}">${thumb}</div>
+        <div class="thumb">${thumb}</div>
         <div class="item-name">${m.name}</div>
-        <div class="col-plu" style="font-size:8px;line-height:1.2;margin-top:2px"><span>${m.plu_12oz || '-'}</span><span>${m.plu_16oz || '-'}</span><span>${m.plu_hot || '-'}</span></div>
-        <div class="item-actions" style="margin-top:4px;gap:4px">
-          <button class="btn btn-ghost btn-small" data-edit="${m.id}" title="Edit" aria-label="Edit" style="width:26px;height:26px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:7px;background:#f3f4f6"><svg viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2" style="width:12px;height:12px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-          <button class="btn btn-danger btn-small" data-del="${m.id}" title="Hapus" aria-label="Hapus" style="width:26px;height:26px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:7px;background:#fef2f2;border:1px solid #fecaca"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" style="width:12px;height:12px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+        <div class="col-plu" style="font-size:8px;line-height:1.2;margin-top:2px">${pluHtml}</div>
+        <div class="item-actions" style="margin-top:6px;gap:6px">
+          <button class="btn btn-ghost btn-small" data-edit="${m.id}" title="Edit" aria-label="Edit" style="width:32px;aspect-ratio:1/1;padding:0;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#6366f1;border:none"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="btn btn-danger btn-small" data-del="${m.id}" title="Hapus" aria-label="Hapus" style="width:32px;aspect-ratio:1/1;padding:0;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#fef2f2;border:1px solid #fecaca"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
         </div>
       </div>`;
   }
@@ -695,7 +871,7 @@ const outW = 540, outH = 960;
     f_bahanHot.forEach((inp, i) => { inp.value = m['bahan_hot_' + (i+1)] || ''; });
     f_percepatan12.forEach((inp, i) => { inp.value = m['percepatan_12oz_' + (i+1)] || ''; });
     f_percepatan16.forEach((inp, i) => { inp.value = m['percepatan_16oz_' + (i+1)] || ''; });
-    f_catatan.value = m.catatan || '';
+    f_catatan.value = (m.catatan || '').toUpperCase();
     pendingCroppedFile = null;
     f_icon_img.value = '';
     if (m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto)) {
@@ -835,7 +1011,7 @@ const outW = 540, outH = 960;
       bahan_16oz_8: f_bahan16[7].value.trim() || null,
       bahan_16oz_9: f_bahan16[8].value.trim() || null,
       bahan_16oz_10: f_bahan16[9].value.trim() || null,
-      catatan: f_catatan.value.trim() || null
+      catatan: f_catatan.value.trim().toUpperCase() || null
     };
     // tambahkan has_percepatan untuk dr_coffee jika perlu
     if (currentTable === 'dr_coffee_menus') {
@@ -903,7 +1079,7 @@ const outW = 540, outH = 960;
     });
     const table = panel.querySelector('.form-table');
     if (table) {
-      const plus = table.querySelector('.tr-plus');
+      const plus = table.querySelector('.bahan-add');
       const hidden = table.querySelector('.tr.hidden');
       if (plus) plus.style.display = hidden ? '' : 'none';
     }
@@ -913,23 +1089,17 @@ const outW = 540, outH = 960;
     document.querySelectorAll('.tab-panel').forEach(panel => {
       showFilledRows(panel);
       const table = panel.querySelector('.form-table');
-      if (!table || table.querySelector('.bahan-add')) return;
-      const trPlus = document.createElement('div');
-      trPlus.className='tr tr-plus';
-      const btn = document.createElement('button');
-      btn.type='button'; btn.className='bahan-add';
-      btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>';
-      btn.title='Tambah baris'; btn.setAttribute('aria-label','Tambah baris');
+      if (!table) return;
+      const btn = table.querySelector('.bahan-add');
+      if (!btn) return;
       const updatePlus = () => {
         const hidden = table.querySelector('.tr.hidden');
-        if (!hidden) { trPlus.style.display='none'; } else { trPlus.style.display=''; }
+        btn.style.display = hidden ? '' : 'none';
       };
-      btn.onclick=()=>{
+      btn.onclick = () => {
         const hidden = table.querySelector('.tr.hidden');
-        if(hidden){ hidden.classList.remove('hidden'); updatePlus(); }
+        if (hidden) { hidden.classList.remove('hidden'); updatePlus(); }
       };
-      trPlus.appendChild(btn);
-      table.appendChild(trPlus);
       updatePlus();
     });
   }
