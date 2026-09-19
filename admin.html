@@ -90,7 +90,7 @@
     .select-box select{display:block;width:100%;max-width:100%;min-width:0;margin-top:0;padding:10px 40px 10px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-weight:600;color:#222;background:#f9f9f9;outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;cursor:pointer}
     .select-box select:focus{border-color:#888;background:#fff}
     .select-box svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#9aa0ab;pointer-events:none}
-    .foto-box{position:relative;border:1px solid #e5e7eb;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;max-width:100%}
+    .foto-box{position:relative;border:1px solid #e5e7eb;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;max-width:100%;aspect-ratio:9/16}
     .foto-box:active{background:#f1f1f1}
     .foto-empty{display:flex;flex-direction:column;align-items:center;gap:6px;color:#b0b5bf;padding:20px;text-align:center}
     .foto-empty svg{width:22px;height:22px;color:#6366f1}
@@ -120,6 +120,13 @@
    .form-compact .td input{width:100%;font-size:10px;padding:4px 6px;border:none;border-radius:4px;color:#111827;background:transparent;outline:none;font-family:inherit}
    .form-compact .td input:focus{background:#fff}
    input:focus{outline:none !important;box-shadow:none !important}
+   @media(max-width:640px){
+     .top-wrap{gap:4px}
+     .top-wrap .foto-box{width:32% !important}
+     .top-row{padding:2px !important;gap:2px !important}
+     .top-row > div:first-child{width:48px !important;font-size:10px !important}
+     .top-row input{font-size:11px !important}
+   }
    .tab-bar{display:flex;gap:4px;margin-top:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
    .tab-bar::-webkit-scrollbar{display:none}
    .tab-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:0;border:1px solid #e5e7eb;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;background:#f3f4f6;color:#6b7280;transition:all .15s ease;white-space:nowrap;font-family:inherit;text-align:center}
@@ -128,9 +135,9 @@
    .tab-panel{display:none}
    .tab-panel.active{display:block}
    .tab-panel .form-table{border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#f9fafb;padding:2px;display:flex;flex-direction:column;gap:2px}
-   .tab-panel .form-table .tr{display:flex;align-items:stretch;gap:4px;background:#fff;border-radius:6px;padding:4px;min-height:32px;border-bottom:1px solid #e5e7eb}
+   .tab-panel .form-table .tr{display:flex;flex-direction:column;align-items:stretch;gap:2px;background:#fff;border-radius:6px;padding:4px;min-height:0;border-bottom:1px solid #e5e7eb}
    .tab-panel .form-table .tr:last-child{border-bottom:none}
-   .tab-panel .form-table .th{width:72px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25)}
+   .tab-panel .form-table .th{width:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:4px 0}
    .tab-panel .form-table .td{flex:1;border:1px solid #e5e7eb;border-radius:6px;display:flex;align-items:center;padding:0 8px;min-width:0}
    .tab-panel .form-table .td input{width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit}
    .tab-panel .form-table .tr.hidden{display:none}
@@ -140,14 +147,14 @@
     .crop-overlay{position:fixed;inset:0;z-index:9999;background:rgba(17,24,39,0.5);display:none;align-items:center;justify-content:center;padding:12px}
     .crop-overlay.show{display:flex}
     .crop-card{background:#fff;border:1px solid #c7d2fe;border-radius:12px;padding:12px;width:auto;max-width:94vw;max-height:92vh;max-height:92dvh;overflow-y:auto;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 4px 18px rgba(99,102,241,0.18);font-family:inherit}
-    .crop-stage{position:relative;height:min(56vh,460px);height:min(56dvh,460px);aspect-ratio:9/16;width:auto;max-width:78vw;border-radius:8px;overflow:hidden;background:#f3f4f6;border:1px solid #e5e7eb;touch-action:none;cursor:grab;flex-shrink:0}
+    .crop-stage{position:relative;aspect-ratio:9/16;width:auto;max-width:78vw;max-height:82vh;border-radius:8px;overflow:hidden;background:#f3f4f6;border:1px solid #e5e7eb;touch-action:none;cursor:grab;flex-shrink:0}
     .crop-stage:active{cursor:grabbing}
     .crop-stage img{position:absolute;left:50%;top:50%;max-width:none;max-height:none;user-select:none;-webkit-user-drag:none;touch-action:none;pointer-events:none}
     .crop-stage::after{content:'';position:absolute;inset:0;border:1px solid #c7d2fe;border-radius:8px;pointer-events:none}
     .crop-actions{display:flex;gap:12px;justify-content:center;align-items:center}
     .crop-icon-btn{width:40px;height:40px;padding:0;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;outline:none;transition:all .15s ease;display:flex;align-items:center;justify-content:center;flex-shrink:0}
     .crop-icon-btn:active{opacity:.85;transform:scale(.93)}
-    @media(min-width:641px){.crop-stage{height:min(60vh,520px)}}
+    @media(min-width:641px){.crop-stage{max-height:85vh}}
   </style>
 </head>
 <body>
@@ -167,8 +174,8 @@
     <div class="card" style="order:1">
       <form id="form" class="form" onsubmit="return false">
         <input type="hidden" id="editId" />
-        <div style="display:flex;gap:2px;align-items:stretch">
-          <div class="foto-box" id="fotoBox" style="width:20%;aspect-ratio:9/16;border-radius:8px;overflow:hidden;flex-shrink:0;position:relative;border:1px solid #e5e7eb">
+        <div class="top-wrap" style="display:flex;gap:6px;align-items:stretch">
+          <div class="foto-box" id="fotoBox" style="width:40%;aspect-ratio:9/16;border-radius:8px;overflow:hidden;flex-shrink:0;position:relative;border:1px solid #e5e7eb">
             <input id="f_icon_img" type="file" accept="image/*" hidden />
             <div class="foto-empty">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
@@ -178,20 +185,20 @@
             <span id="fotoName" style="display:none"></span>
           </div>
           <div style="flex:1;min-width:0;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;gap:0;padding:0;background:#fff">
-            <div style="flex:1;display:flex;align-items:stretch;gap:4px;background:#fff;border-radius:6px;padding:3px;min-height:0;border-bottom:1px solid #e5e7eb">
-              <div style="width:72px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25)">MENU</div>
+            <div class="top-row" style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:#fff;border-radius:6px;padding:4px;min-height:0;border-bottom:1px solid #e5e7eb">
+              <div style="width:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:4px 0">MENU</div>
               <div style="flex:1;border:1px solid #e5e7eb;border-radius:5px;display:flex;align-items:center;padding:0 4px;min-width:0"><input id="f_name" required style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" /></div>
             </div>
-            <div style="flex:1;display:flex;align-items:stretch;gap:4px;background:#fff;border-radius:6px;padding:3px;min-height:0;border-bottom:1px solid #e5e7eb">
-              <div style="width:72px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25)">12</div>
+            <div class="top-row" style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:#fff;border-radius:6px;padding:4px;min-height:0;border-bottom:1px solid #e5e7eb">
+              <div style="width:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:4px 0">12</div>
               <div style="flex:1;border:1px solid #e5e7eb;border-radius:5px;display:flex;align-items:center;padding:0 4px;min-width:0"><input id="f_plu12" style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" /></div>
             </div>
-            <div id="plu16Row" style="flex:1;display:flex;align-items:stretch;gap:4px;background:#fff;border-radius:6px;padding:3px;min-height:0;border-bottom:1px solid #e5e7eb">
-              <div id="plu16Lab" style="width:72px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25)">16</div>
+            <div id="plu16Row" class="top-row" style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:#fff;border-radius:6px;padding:4px;min-height:0;border-bottom:1px solid #e5e7eb">
+              <div id="plu16Lab" style="width:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:4px 0">16</div>
               <div style="flex:1;border:1px solid #e5e7eb;border-radius:5px;display:flex;align-items:center;padding:0 4px;min-width:0"><input id="f_plu16" style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit" /></div>
             </div>
-            <div id="pluHotRow" style="flex:1;display:flex;align-items:stretch;gap:4px;background:#fff;border-radius:6px;padding:3px;min-height:0;border-bottom:1px solid #e5e7eb">
-              <div id="pluHotLab" style="width:72px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25)">HOT</div>
+            <div id="pluHotRow" class="top-row" style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:#fff;border-radius:6px;padding:4px;min-height:0;border-bottom:1px solid #e5e7eb">
+              <div id="pluHotLab" style="width:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:4px 0">HOT</div>
               <div style="flex:1;border:1px solid #e5e7eb;border-radius:5px;display:flex;align-items:center;padding:0 4px;min-width:0"><input id="f_pluHot" style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit" /></div>
             </div>
             <div id="tabBar" style="flex:1;display:flex;gap:4px;min-height:0;background:#fff;padding:4px">
@@ -275,8 +282,8 @@
           </div>
         </div>
         <div style="height:40px;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#f9fafb;padding:2px;margin-top:6px;display:flex">
-          <div style="flex:1;display:flex;align-items:stretch;gap:4px;background:#fff;border-radius:6px;padding:3px">
-            <div style="width:72px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25)">CATATAN</div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:#fff;border-radius:6px;padding:4px">
+            <div style="width:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:4px 0">CATATAN</div>
             <div style="flex:1;border:1px solid #e5e7eb;border-radius:6px;display:flex;align-items:center;padding:0 8px;min-width:0"><input id="f_catatan" style="width:100%;font-size:13px;padding:0;border:none;background:transparent;outline:none;font-family:inherit" /></div>
           </div>
         </div>
@@ -498,8 +505,8 @@
     const sy = (sR.top - iR.top) / iR.height * ih;
     const sw = sR.width / iR.width * iw;
     const sh = sR.height / iR.height * ih;
-    const outW = 720, outH = 1280;
-  const thumbW = 120, thumbH = 214; // 9:16 thumb
+const outW = 540, outH = 960;
+   const thumbW = 120, thumbH = 214;
     const canvas = document.createElement('canvas');
     canvas.width = outW; canvas.height = outH;
     const ctx = canvas.getContext('2d');
@@ -508,7 +515,7 @@
     canvas.toBlob((blob) => {
       if (!blob) { alert('Gagal motong foto'); return; }
       const ext = (cropFileName.split('.').pop() || 'jpg').split('?')[0];
-      const cropped = new File([blob], cropFileName.replace(/\.[^.]+$/, '') + '-9x16.' + ext, { type: blob.type || 'image/jpeg' });
+      const cropped = new File([blob], cropFileName.replace(/\.[^.]+$/, '') + '-1x1.' + ext, { type: blob.type || 'image/jpeg' });
       pendingCroppedFile = cropped;
       try { const dt = new DataTransfer(); dt.items.add(cropped); f_icon_img.files = dt.files; } catch(e) { console.warn('DataTransfer fallback', e); }
       const url = URL.createObjectURL(cropped);
