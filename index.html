@@ -313,9 +313,10 @@
         { label: "JA-DI ADMIN", href: "admin.html", folder: "daily-task", ext: "jpg" },
         { label: "JA-DI", href: "modul/ja-di.html", folder: "ja-di", ext: "png" },
         { label: "DAILY TASK", href: "modul/daily-task.html", folder: "admin", ext: "jpg" },
-        { label: "PLU JA-DI", href: "plu-ja-di.html", folder: "plu-ja-di", ext: "jpg" },
+        { label: "NOTE", href: "note.html", folder: "note", ext: "jpg" },
         { label: "PLANO", href: "plano.html", folder: "plano", ext: "jpg" },
         { label: "TIME KAMERA", href: "time-kamera.html", folder: "time-kamera", ext: "png" },
+        { label: "MEMOS", href: "https://demo.usememos.com/", folder: "memos", ext: "png" },
         { label: "EXP", href: "#", folder: "exp", ext: "png" },
         { label: "PULANG", href: "#", folder: "pulang", ext: "png" },
         { label: "PAGI", href: "#", folder: "pagi", ext: "png" },
@@ -324,7 +325,7 @@
         { label: "SELANJUTNYA", href: "modul/selanjutnya.html", folder: "selanjutnya", ext: "jpg" },
       ];
 
-      const disabledLabels = new Set(["PLU JA-DI", "PLANO", "TIME KAMERA", "SELANJUTNYA"]);
+      const disabledLabels = new Set(["PLANO", "TIME KAMERA", "SELANJUTNYA"]);
       const menuList = document.getElementById("menuList");
       menuItems.forEach((item, idx) => {
         const isDisabled = item.href === "#" || disabledLabels.has(item.label);

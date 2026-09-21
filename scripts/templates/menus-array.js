@@ -463,7 +463,7 @@ const menus = [
           plu: "465842 / 465843",
         },
         
-        { name: "PLU JA-DI", icon: "📋", cls: "g-e", cat: "UTILITY", link: "plu-ja-di.html" },
+        { name: "NOTE", icon: "📋", cls: "g-e", cat: "UTILITY", link: "note.html" },
         
         { name: "PLANO", icon: "🗄️", cls: "g-h",
           cat: "plano.html", link: "" },

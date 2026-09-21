@@ -61,7 +61,7 @@
   {"name":"KOLAK LATTE","foto":"🍮","cls":"g-e","cat":"BLENDED","link":"pages/item-kolak-latte.html","plu":"465840 / 465855"},
   {"name":"WATERMELON COOLER","foto":"🍉","cls":"g-f","cat":"BLENDED","link":"pages/item-watermelon-cooler.html","plu":"465844 / 465845"},
   {"name":"PISANG IJO LATTE","foto":"🍌","cls":"g-g","cat":"BLENDED","link":"pages/item-pisang-ijo-latte.html","plu":"465842 / 465843"},
-  {"name":"PLU JA-DI","foto":"📋","cls":"g-e","cat":"UTILITY","link":"plu-ja-di.html"},
+  {"name":"NOTE","foto":"📋","cls":"g-e","cat":"UTILITY","link":"note.html"},
   {"name":"PLANO","foto":"🗄️","cls":"g-h","cat":"","link":"plano.html"},
   {"name":"TIME KAMERA","foto":"📷","cls":"g-c","cat":"","link":"time-kamera.html"},
   {"name":"COFFEE LATTE","foto":"☕","cls":"g-a","cat":"SPECIALTY & CLOUD","link":"pages/item-coffee-latte.html"},

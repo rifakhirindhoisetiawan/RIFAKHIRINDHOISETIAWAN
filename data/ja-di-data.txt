@@ -432,11 +432,11 @@ BLENDED
 pages/item-pisang-ijo-latte.html
 465842 / 465843
 ---
-PLU JA-DI
+NOTE
 📋
 g-e
 UTILITY
-plu-ja-di.html
+note.html
 
 ---
 PLANO

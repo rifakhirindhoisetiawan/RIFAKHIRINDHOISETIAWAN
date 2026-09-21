@@ -54,7 +54,6 @@
     .item-actions{display:flex;gap:6px;flex-shrink:0;justify-content:flex-end}
     .col-plu{font-size:10px;font-weight:700;color:#1f2937;letter-spacing:0.2px;display:flex;flex-direction:column;gap:2px;align-items:flex-start}
     .col-plu span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px}
-    @media(max-width:640px){.list-head,.item{grid-template-columns:42px 1fr 70px 90px;gap:6px;padding:6px 8px}.col-plu{font-size:10px}}
     .empty{text-align:center;color:#9aa0ab;font-size:13px;font-weight:600;padding:40px 0}
     .hint{font-size:11px;color:#9aa0ab}
     .foto-title,.field-title{font-size:11px;font-weight:700;color:#1f2937}
@@ -78,15 +77,7 @@
    .form-table .tr.plu-input{gap:6px;padding:6px}
    .form-table .tr.plu-input .td{flex:1;min-width:0;border:1px solid #c7d2fe;border-radius:6px;justify-content:center}
    .form-table .tr.plu-input .td input{text-align:center;padding:6px 4px}
-   @media(max-width:640px){
-      .form-table .th{font-size:8px;padding:0 4px;min-width:40px}
-      .form-table .td{padding:2px 4px}
-      .form-table .td input{font-size:12px;padding:8px 6px}
-      .plu-photo-grid .form-table .td input{font-size:14px;padding:10px 8px;letter-spacing:0.5px}
-      .form-table .tr.plu-head .th{font-size:8px;padding:6px 2px;min-width:0}
-      .form-table .tr.plu-input .td{padding:2px 2px}
-      .form-table .tr.plu-input .td input{font-size:12px;padding:8px 2px}
-   }
+
     .select-box{position:relative;margin-top:6px;max-width:100%}
     .select-box select{display:block;width:100%;max-width:100%;min-width:0;margin-top:0;padding:10px 40px 10px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-weight:600;color:#222;background:#f9f9f9;outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;cursor:pointer}
     .select-box select:focus{border-color:#888;background:#fff}
@@ -122,20 +113,14 @@
    .form-compact .td input{width:100%;font-size:10px;padding:4px 6px;border:none;border-radius:4px;color:#111827;background:transparent;outline:none;font-family:inherit}
    .form-compact .td input:focus{background:#fff}
    input:focus{outline:none !important;box-shadow:none !important}
-   @media(max-width:640px){
-     .top-wrap{gap:4px}
-       .top-wrap .foto-box{flex:1 1 0 !important;width:100% !important;min-width:0 !important}
-       .top-row{padding:2px !important;gap:6px !important}
-       .top-row > div:first-child{font-size:15px !important}
-      .top-row input{font-size:15px !important;font-weight:800 !important;text-align:left !important}
-   }
+
    .tab-bar{display:flex;gap:4px;margin-top:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
    .tab-bar::-webkit-scrollbar{display:none}
-    .tab-btn{flex:1 1 22%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;padding:4px;min-height:0;border:none;border-radius:6px;font-size:13px;font-weight:800;cursor:pointer;background:#eef2ff;color:#4f46e5;transition:all .15s ease;white-space:nowrap;font-family:inherit;text-align:center}
+    .tab-btn{flex:1 1 22%;display:flex;align-items:center;justify-content:center;padding:8px 12px;min-height:40px;border:none;border-radius:6px;font-size:13px;font-weight:800;cursor:pointer;background:#eef2ff;color:#4f46e5;transition:all .15s ease;white-space:nowrap;font-family:inherit;text-align:center}
     .tab-btn.active{background:#6366f1;color:#fff;border-color:#6366f1}
     .tab-btn:active{opacity:.85;transform:scale(.95)}
-    .tab-empty{flex:1 1 22%;aspect-ratio:1/1;min-height:0;border:none;border-radius:6px;background:transparent;pointer-events:none}
-    .foto-act{flex:1 1 22%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;padding:4px;min-height:0;border-radius:6px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;text-align:center;white-space:nowrap}
+.tab-empty{flex:1 1 22%;min-height:40px;border:none;border-radius:6px;background:transparent;pointer-events:none}
+.foto-act{flex:1 1 22%;display:flex;align-items:center;justify-content:center;padding:8px 12px;min-height:40px;border-radius:6px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;text-align:center;white-space:nowrap}
     #btnFotoAdd{background:#eef2ff;color:#4f46e5;border:1px solid #c7d2fe}
     #btnFotoSave{background:#6366f1;color:#fff;border:none}
     #btnFotoCancel{background:#fef2f2;color:#ef4444;border:1px solid #fecaca}
@@ -167,6 +152,51 @@
     .crop-icon-btn{width:40px;height:40px;padding:0;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;outline:none;transition:all .15s ease;display:flex;align-items:center;justify-content:center;flex-shrink:0}
     .crop-icon-btn:active{opacity:.85;transform:scale(.93)}
     @media(min-width:641px){.crop-stage{max-height:85vh}}
+    /* Bottom sheet pratinjau (gaya JA-DI) */
+    .sheet-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:80;align-items:flex-end;justify-content:center}
+    .sheet-bg.open{display:flex}
+    .sheet{background:#fff;width:100%;max-width:800px;max-height:88vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:10px 18px 32px;animation:sheetUp .22s ease;scrollbar-width:none;-ms-overflow-style:none}
+    .sheet::-webkit-scrollbar{width:0;height:0;display:none}
+    @keyframes sheetUp{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}
+    .sheet-handle{width:40px;height:4px;border-radius:4px;background:#e5e5e5;margin:2px auto 14px}
+    .sheet-top{display:flex;gap:12px;align-items:flex-start}
+    .sheet-photo{width:42%;flex-shrink:0;aspect-ratio:9/16;max-height:52vh;border-radius:16px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff}
+    .sheet-photo img{width:100%;height:100%;object-fit:cover;display:block}
+    .sheet-side{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+    .sheet-name{font-size:16px;font-weight:800;color:#1f2937;line-height:1.25;margin:0}
+    .sheet-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:4px}
+    .sheet-badge{font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;background:#eef2ff;color:#4f46e5;letter-spacing:.4px}
+    .plu-table{border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;background:#fff}
+    .plu-row{display:flex;align-items:stretch}
+    .plu-row + .plu-row{border-top:1px solid #eee}
+    .plu-th{display:flex;align-items:center;justify-content:center;text-align:center;padding:6px 8px;font-size:9px;font-weight:800;color:#4f46e5;background:#eef2ff;min-width:62px}
+    .plu-td{flex:1;display:flex;align-items:center;padding:6px 10px;font-size:12px;font-weight:700;color:#1f2937}
+    .sheet-sec{font-size:11px;font-weight:800;color:#4f46e5;letter-spacing:.6px;text-transform:uppercase;margin:14px 0 8px}
+    .sheet-bahans{display:grid;gap:8px}
+    .bahan-row{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #c7d2fe;border-radius:10px;padding:9px 12px;font-size:13px;font-weight:600;color:#1f2937}
+    .sheet-note{width:100%;border:1px solid #c7d2fe;border-radius:10px;padding:10px 12px;font-size:13px;color:#374151;line-height:1.5;background:#fff}
+    .sheet-empty{text-align:center;padding:24px;color:#9ca3af;font-size:13px}
+    .sheet-close{display:block;width:100%;margin-top:8px;padding:12px;background:#f5f5f5;color:#1a1a1a;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer;font-family:inherit;text-decoration:none}
+    @media(max-width:640px){
+      .top-wrap{display:flex;flex-direction:column;gap:8px;align-items:stretch;padding:8px}
+      .top-wrap .foto-box{flex:1 1 0 !important;width:100% !important;min-width:0 !important;max-width:none;aspect-ratio:9/16;border-radius:12px}
+      .top-row{padding:2px !important;gap:6px !important}
+      .top-row > div:first-child{font-size:15px !important;min-height:40px;padding:10px 8px}
+      .top-row input{font-size:15px !important;font-weight:800 !important;text-align:left !important;padding:10px 4px}
+      .tab-bar{display:flex;flex-wrap:nowrap;gap:6px;padding:8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+      .tab-btn{flex:0 0 auto;min-width:72px;min-height:48px;padding:12px 16px;font-size:14px;aspect-ratio:auto}
+      .tab-empty{flex:0 0 auto;width:48px;height:48px;min-height:48px;aspect-ratio:1/1}
+      .foto-act{flex:0 0 auto;width:48px;height:48px;min-height:48px;aspect-ratio:1/1}
+      .table-title{min-height:46px;padding:10px 0;font-size:15px}
+      .bahan-add-head{width:46px;height:46px;min-height:46px}
+      .form-table .th{font-size:8px;padding:0 4px;min-width:40px}
+      .form-table .td{padding:2px 4px}
+      .form-table .td input{font-size:12px;padding:8px 6px}
+      .plu-photo-grid .form-table .td input{font-size:14px;padding:10px 8px;letter-spacing:0.5px}
+      .form-table .tr.plu-head .th{font-size:8px;padding:6px 2px;min-width:0}
+      .form-table .tr.plu-input .td{padding:2px 2px}
+      .form-table .tr.plu-input .td input{font-size:12px;padding:8px 2px}
+    }
   </style>
 </head>
 <body>
@@ -327,6 +357,12 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
       </button>
     </div>
+  </div>
+</div>
+<div class="sheet-bg" id="sheetBg">
+  <div class="sheet" role="dialog" aria-modal="true">
+    <div class="sheet-handle"></div>
+    <div id="sheetBody"></div>
   </div>
 </div>
 <script type="module">
@@ -794,7 +830,7 @@ const outW = 540, outH = 960;
     if (m.plu_16oz) pluHtml += '<span>' + m.plu_16oz + '</span>';
     if (m.plu_hot) pluHtml += '<span>' + m.plu_hot + '</span>';
     return `
-      <div class="item">
+      <div class="item" data-view="${m.id}" style="cursor:pointer">
         <div class="thumb">${thumb}</div>
         <div class="item-name">${m.name}</div>
         <div class="col-plu" style="font-size:8px;line-height:1.2;margin-top:2px">${pluHtml}</div>
@@ -850,6 +886,13 @@ const outW = 540, outH = 960;
     });
     listEl.querySelectorAll('[data-del]').forEach(btn => {
       btn.addEventListener('click', () => delRow(parseInt(btn.dataset.del)));
+    });
+    listEl.querySelectorAll('.item[data-view]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        if (e.target.closest('[data-edit],[data-del]')) return;
+        const m = all.find(x => String(x.id) === el.dataset.view);
+        if (m) openSheet(m);
+      });
     });
   }
 
@@ -1122,11 +1165,56 @@ const outW = 540, outH = 960;
   });
   subscribeRealtime();
 
+  // ===== Bottom sheet pratinjau (gaya JA-DI) =====
+  const sheetBg = document.getElementById('sheetBg');
+  const sheetBody = document.getElementById('sheetBody');
+  function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function openSheet(m){
+    if (!m) return;
+    const b12 = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_12oz_' + i]).filter(Boolean);
+    const b16 = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_16oz_' + i]).filter(Boolean);
+    const bHot = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_hot_' + i]).filter(Boolean);
+    const p12 = [1,2,3,4,5,6,7,8,9,10].map(i => m['percepatan_12oz_' + i]).filter(Boolean);
+    const p16 = [1,2,3,4,5,6,7,8,9,10].map(i => m['percepatan_16oz_' + i]).filter(Boolean);
+    const bahans = [...b12, ...b16, ...bHot, ...p12, ...p16];
+    const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
+    const photo = isImg ? '<img src="' + m.foto + '" alt="" loading="lazy"/>' : '<span style="font-size:48px">' + (m.foto || '☕') + '</span>';
+    const pluRows = [['PLU 12OZ', m.plu_12oz || '-'], ['PLU 16OZ', m.plu_16oz || '-'], ['PLU HOT', m.plu_hot || '-']];
+    let html = '<div class="sheet-top"><div class="sheet-photo ' + (m.cls || 'g-a') + '">' + photo + '</div><div class="sheet-side">';
+    html += '<div class="sheet-name">' + esc(m.name) + '</div>';
+    html += '<div class="sheet-meta">';
+    if (m.cat) html += '<span class="sheet-badge">' + esc(m.cat) + '</span>';
+    html += '</div>';
+    html += '<div class="plu-table">' + pluRows.map(r => '<div class="plu-row"><div class="plu-th">' + r[0] + '</div><div class="plu-td">' + esc(r[1]) + '</div></div>').join('') + '</div>';
+    html += '<button class="sheet-close" id="sh_close" type="button">Tutup</button>';
+    html += '</div></div>';
+    function bahanGroup(title, list) {
+      return '<div class="sheet-sec">' + title + '</div><div class="sheet-bahans">' +
+        list.map(b => '<div class="bahan-row"><span>' + esc(b) + '</span></div>').join('') + '</div>';
+    }
+    if (bHot.length) html += bahanGroup('HOT', bHot);
+    if (p12.length) html += bahanGroup('P12', p12);
+    if (p16.length) html += bahanGroup('P16', p16);
+    if (b12.length) html += bahanGroup('12OZ', b12);
+    if (b16.length) html += bahanGroup('16OZ', b16);
+    if (m.catatan) html += '<div class="sheet-sec">Catatan</div><div class="sheet-note">' + esc(m.catatan) + '</div>';
+    if (!bahans.length && !m.catatan) html += '<div class="sheet-empty">Belum ada data bahan.</div>';
+    sheetBody.innerHTML = html;
+    sheetBg.classList.add('open');
+    document.getElementById('sh_close').addEventListener('click', closeSheet);
+  }
+  function closeSheet(){
+    sheetBg.classList.remove('open');
+  }
+  sheetBg.addEventListener('click', (e) => { if (e.target === sheetBg) closeSheet(); });
+
   initBahanTables();
   load();
 </script>
 </body>
 </html>
+
+
 
 
 

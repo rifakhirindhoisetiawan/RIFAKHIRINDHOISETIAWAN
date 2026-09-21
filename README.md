@@ -9,7 +9,7 @@ Proyek modul resep & menu (halaman HTML statis + skrip bantu).
 ├── index.html                      # Halaman utama (PWA)
 ├── grid.html                       # Photo grid tool
 ├── plano.html                      # Halaman_PLANO (rak)
-├── plu-ja-di.html                  # Daftar produk PLU
+├── note.html                       # Catatan / Note
 ├── produk-ja-di.html               # Detail produk
 ├── time-kamera.html                # Utility kamera/waktu
 ├── modul/                          # Halaman modul

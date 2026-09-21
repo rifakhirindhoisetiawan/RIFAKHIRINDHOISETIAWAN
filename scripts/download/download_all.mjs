@@ -68,7 +68,7 @@ const menuItems = [
   "KOLAK LATTE",
   "WATERMELON COOLER",
   "PISANG IJO LATTE",
-  "PLU JA-DI",
+  "NOTE",
   "PLANO",
   "TIME KAMERA",
   "COFFEE LATTE",
