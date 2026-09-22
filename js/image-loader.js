@@ -152,14 +152,27 @@ export async function loadIndexPhoto(menuFolder, imgEl) {
   }
 }
 
-// Loader untuk ja-di-photos (local files) - pakai background-image
+// Loader untuk ja-di-photos (local files) - pakai background-image + fallback ke index-photos biar tidak emot
 export async function loadJaDiPhoto(slug, tileEl) {
   if (tileEl.dataset.hasimg === '1') return; // sudah ada gambar upload
   
   const folder = `../images/ja-di-photos/${slug}/`;
   const urls = generateUrls(folder);
   
-  const workingUrl = await findFirstWorkingUrl(urls);
+  let workingUrl = await findFirstWorkingUrl(urls);
+  
+  // Fallback ke index-photos kalau ja-di kosong (biar tidak emot)
+  if (!workingUrl) {
+    const altFolder = `../images/index-photos/${slug}/`;
+    const altUrls = generateUrls(altFolder);
+    workingUrl = await findFirstWorkingUrl(altUrls);
+  }
+  // Fallback terakhir ke grid default
+  if (!workingUrl) {
+    const defFolder = `../images/index-photos/grid/`;
+    const defUrls = generateUrls(defFolder);
+    workingUrl = await findFirstWorkingUrl(defUrls);
+  }
   
   if (workingUrl) {
     tileEl.style.backgroundImage = `url(${workingUrl})`;
