@@ -414,7 +414,7 @@
 
       .dl-inline-wrap {
         display: none;
-        padding: 12px 18px 20px;
+        padding: 8px 12px 12px;
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
@@ -423,101 +423,111 @@
       }
       .dl-inline-wrap.show {
         display: block;
-        animation: slideUp 0.25s ease;
+        animation: slideUp 0.2s ease;
       }
       @keyframes slideUp {
-        from { opacity: 0; transform: translateY(12px); }
+        from { opacity: 0; transform: translateY(8px); }
         to { opacity: 1; transform: translateY(0); }
       }
       .dl-inline-card {
         background: #fff;
-        border: 2px solid #c7d2fe;
-        border-radius: 16px;
-        padding: 16px;
+        border: 1.5px solid #c7d2fe;
+        border-radius: 10px;
+        padding: 8px;
         width: 100%;
-        box-shadow: 0 4px 18px rgba(99, 102, 241, 0.12);
+        max-width: 280px;
+        margin: 0 auto;
+        box-shadow: 0 2px 10px rgba(99, 102, 241, 0.1);
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 14px;
+        gap: 6px;
         box-sizing: border-box;
       }
       .dl-preview {
         width: 100%;
-        max-height: 55vh;
-        border-radius: 10px;
+        max-height: 22vh;
+        max-width: 260px;
+        border-radius: 6px;
         overflow: hidden;
         background: #f3f4f6;
       }
       .dl-preview img {
         width: 100%;
         height: auto;
+        max-height: 22vh;
         display: block;
         object-fit: contain;
       }
       .dl-info {
         text-align: center;
+        line-height: 1.2;
       }
       .dl-info .dl-title {
-        font-size: 15px;
+        font-size: 11px;
         font-weight: 700;
         color: #1f2937;
       }
       .dl-info .dl-size {
-        font-size: 12px;
+        font-size: 10px;
         color: #9ca3af;
-        margin-top: 3px;
+        margin-top: 2px;
       }
       .dl-actions {
         display: flex;
-        gap: 10px;
+        gap: 6px;
         width: 100%;
+        max-width: 260px;
       }
       .dl-btn-save {
         flex: 1;
-        padding: 12px 0;
+        padding: 7px 0;
         border: none;
-        border-radius: 12px;
+        border-radius: 8px;
         background: #6366f1;
         color: #fff;
-        font-size: 14px;
+        font-size: 11px;
         font-weight: 700;
         cursor: pointer;
         transition: background 0.15s;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
+        gap: 4px;
       }
       .dl-btn-save:active {
         background: #4f46e5;
       }
+      .dl-btn-save svg, .dl-btn-wa svg {
+        width: 12px;
+        height: 12px;
+      }
       .dl-btn-wa {
         flex: 1;
-        padding: 12px 0;
+        padding: 7px 0;
         border: none;
-        border-radius: 12px;
+        border-radius: 8px;
         background: #22c55e;
         color: #fff;
-        font-size: 14px;
+        font-size: 11px;
         font-weight: 700;
         cursor: pointer;
         transition: background 0.15s;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
+        gap: 4px;
       }
       .dl-btn-wa:active {
         background: #16a34a;
       }
       .dl-btn-close {
-        padding: 12px 14px;
+        padding: 7px 9px;
         border: none;
-        border-radius: 12px;
+        border-radius: 8px;
         background: #f3f4f6;
         color: #6b7280;
-        font-size: 14px;
+        font-size: 11px;
         font-weight: 600;
         cursor: pointer;
         transition: background 0.15s;
