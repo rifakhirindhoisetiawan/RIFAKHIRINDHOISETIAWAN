@@ -612,11 +612,10 @@
             openSheet(m);
           });
         });
-         // Foto load langsung via <img> onload, tidak pakai lazy loader
-         // (lazy loader bisa overwrite <img> dengan background-image)
-         // document.querySelectorAll('.icon-photo[data-slug]').forEach((tile) => {
-         //   photoLazyLoader.observe(tile);
-         // });
+        // Load foto lazy (seperti index) biar tidak glitch
+        document.querySelectorAll('.icon-photo[data-slug]').forEach((tile) => {
+          photoLazyLoader.observe(tile);
+        });
       }
       function openSheet(m) {
         if (!m) return;
@@ -674,11 +673,11 @@
       sheetBg.addEventListener('click', (e) => {
         if (e.target === sheetBg) closeSheet();
       });
-       // Lazy loader dimatikan untuk grid KOPI - foto load langsung via <img onload>
-       // const photoLazyLoader = createLazyLoader(async (tile) => {
-       //   const slug = tile.dataset.slug;
-       //   await loadJaDiPhoto(slug, tile);
-       // });
+      // Lazy load dengan IntersectionObserver
+      const photoLazyLoader = createLazyLoader(async (tile) => {
+        const slug = tile.dataset.slug;
+        await loadJaDiPhoto(slug, tile);
+      });
       searchInput.addEventListener('input', renderMenu);
 
       // First paint: render data lokal DULU, lalu refresh dari Supabase saat sampai.
