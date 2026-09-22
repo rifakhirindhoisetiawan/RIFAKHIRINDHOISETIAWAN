@@ -412,39 +412,35 @@
         display: none;
       }
 
-      .dl-overlay {
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        background: rgba(0, 0, 0, 0.45);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.25s ease, visibility 0.25s ease;
-      }
-      .dl-overlay.show {
-        opacity: 1;
-        visibility: visible;
-      }
-      .dl-card {
-        background: #fff;
-        border-radius: 16px;
-        padding: 20px;
+      .dl-inline-wrap {
+        display: none;
+        padding: 12px 18px 20px;
+        max-width: 800px;
         width: 100%;
-        max-width: 340px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-        transform: translateY(20px) scale(0.95);
-        transition: transform 0.25s ease;
+        margin: 0 auto;
+        flex: 0 0 auto;
+        box-sizing: border-box;
+      }
+      .dl-inline-wrap.show {
+        display: block;
+        animation: slideUp 0.25s ease;
+      }
+      @keyframes slideUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .dl-inline-card {
+        background: #fff;
+        border: 2px solid #c7d2fe;
+        border-radius: 16px;
+        padding: 16px;
+        width: 100%;
+        box-shadow: 0 4px 18px rgba(99, 102, 241, 0.12);
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 16px;
-      }
-      .dl-overlay.show .dl-card {
-        transform: translateY(0) scale(1);
+        gap: 14px;
+        box-sizing: border-box;
       }
       .dl-preview {
         width: 100%;
@@ -484,27 +480,66 @@
         border-radius: 12px;
         background: #6366f1;
         color: #fff;
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 700;
         cursor: pointer;
         transition: background 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
       }
       .dl-btn-save:active {
         background: #4f46e5;
       }
-      .dl-btn-cancel {
-        padding: 12px 18px;
+      .dl-btn-wa {
+        flex: 1;
+        padding: 12px 0;
+        border: none;
+        border-radius: 12px;
+        background: #22c55e;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+      .dl-btn-wa:active {
+        background: #16a34a;
+      }
+      .dl-btn-close {
+        padding: 12px 14px;
         border: none;
         border-radius: 12px;
         background: #f3f4f6;
         color: #6b7280;
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 600;
         cursor: pointer;
         transition: background 0.15s;
+        flex-shrink: 0;
       }
-      .dl-btn-cancel:active {
+      .dl-btn-close:active {
         background: #e5e7eb;
+      }
+      .app.has-inline {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y !important;
+      }
+      .app.has-inline .canvas-wrap {
+        flex: 0 0 auto;
+        overflow: visible;
+        min-height: auto;
+      }
+      @media (min-width: 768px) {
+        .dl-inline-wrap {
+          padding: 0 20px 20px;
+        }
       }
     </style>
   </head>
@@ -643,25 +678,32 @@
       <div class="canvas-wrap">
         <div class="grid-frame" id="gridFrame"></div>
       </div>
+      <div class="dl-inline-wrap" id="dlInlineWrap">
+        <div class="dl-inline-card">
+          <div class="dl-preview"><img id="dlPreviewImg" src="" alt="Preview" /></div>
+          <div class="dl-info">
+            <div class="dl-title">photo-grid.png</div>
+            <div class="dl-size" id="dlSize"></div>
+          </div>
+          <div class="dl-actions">
+            <button class="dl-btn-save" id="dlSaveBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Simpan / Unduh
+            </button>
+            <button class="dl-btn-wa" id="dlShareWaBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.94A9.91 9.91 0 0 0 12.04 2C6.58 2 2.14 6.45 2.14 11.9c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.9 0-2.64-1.03-5.13-2.9-7zM12.05 20.03h-.01a8.18 8.18 0 0 1-4.17-1.14l-.3-.18-3.12.82.82-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.22-8.24 8.22zm4.52-6.16c-.25-.12-1.47-.73-1.69-.81-.22-.08-.39-.12-.55.12-.16.25-.63.81-.77.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.55-1.33-.75-1.82-.2-.47-.4-.41-.55-.42h-.47c-.16 0-.43.06-.65.31-.22.25-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.17 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.57.18 1.09.16 1.5.1.46-.07 1.47-.6 1.68-1.18.2-.58.2-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
+              Bagikan WA
+            </button>
+            <button class="dl-btn-close" id="dlCloseBtn" title="Tutup">✕</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <input type="file" id="fileInput" accept="image/*" />
     <input type="file" id="multiFileInput" accept="image/*" multiple />
     <canvas id="hiddenCanvas" style="display: none"></canvas>
     <div id="dragGhost"></div>
-    <div class="dl-overlay" id="dlOverlay">
-      <div class="dl-card">
-        <div class="dl-preview"><img id="dlPreviewImg" src="" alt="Preview" /></div>
-        <div class="dl-info">
-          <div class="dl-title">photo-grid.png</div>
-          <div class="dl-size" id="dlSize"></div>
-        </div>
-        <div class="dl-actions">
-          <button class="dl-btn-cancel" id="dlCancelBtn">Batal</button>
-          <button class="dl-btn-save" id="dlSaveBtn">Download</button>
-        </div>
-      </div>
-    </div>
 
     <script>
       const MIN_COUNT = 1;
@@ -1221,51 +1263,86 @@
         multiFileInput.value = "";
       });
 
-      const dlOverlay = document.getElementById("dlOverlay");
+      const dlInlineWrap = document.getElementById("dlInlineWrap");
       const dlPreviewImg = document.getElementById("dlPreviewImg");
       const dlSize = document.getElementById("dlSize");
       const dlSaveBtn = document.getElementById("dlSaveBtn");
-      const dlCancelBtn = document.getElementById("dlCancelBtn");
+      const dlShareWaBtn = document.getElementById("dlShareWaBtn");
+      const dlCloseBtn = document.getElementById("dlCloseBtn");
+      const appEl = document.querySelector(".app");
       let dlDataUrl = "";
+      let dlBlob = null;
+
+      function hideInlineCard() {
+        dlInlineWrap.classList.remove("show");
+        appEl.classList.remove("has-inline");
+      }
+      function showInlineCard() {
+        dlInlineWrap.classList.add("show");
+        appEl.classList.add("has-inline");
+        setTimeout(() => {
+          dlInlineWrap.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      }
 
       dlSaveBtn.addEventListener("click", async () => {
-        if (!dlDataUrl) return;
+        if (!dlDataUrl && !dlBlob) return;
         try {
-          const res = await fetch(dlDataUrl);
-          const blob = await res.blob();
-          const file = new File([blob], "photo-grid.png", { type: "image/png" });
-
-          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({ files: [file], title: "photo-grid.png" });
-          } else {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.download = "photo-grid.png";
-            a.href = url;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(url), 5000);
+          let blob = dlBlob;
+          if (!blob) {
+            const res = await fetch(dlDataUrl);
+            blob = await res.blob();
           }
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.download = "photo-grid.png";
+          a.href = url;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 5000);
+        } catch (err) {
+          const a = document.createElement("a");
+          a.download = "photo-grid.png";
+          a.href = dlDataUrl;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
+      });
+
+      dlShareWaBtn.addEventListener("click", async () => {
+        if (!dlDataUrl && !dlBlob) return;
+        try {
+          let blob = dlBlob;
+          if (!blob) {
+            const res = await fetch(dlDataUrl);
+            blob = await res.blob();
+          }
+          const file = new File([blob], "photo-grid.png", { type: "image/png" });
+          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: "photo-grid.png", text: "Lihat grid fotoku" });
+            return;
+          }
+          // Fallback: unduh dulu, kasih instruksi manual ke WA
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.download = "photo-grid.png";
+          a.href = url;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 5000);
+          alert("Fitur bagi langsung tidak didukung di browser ini. File sudah diunduh, silakan buka WhatsApp dan kirim manual dari galeri.");
         } catch (err) {
           if (err.name !== "AbortError") {
-            const a = document.createElement("a");
-            a.download = "photo-grid.png";
-            a.href = dlDataUrl;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            alert("Gagal berbagi ke WA: " + err.message);
           }
         }
-        dlOverlay.classList.remove("show");
       });
 
-      dlCancelBtn.addEventListener("click", () => {
-        dlOverlay.classList.remove("show");
-      });
-
-      dlOverlay.addEventListener("click", (e) => {
-        if (e.target === dlOverlay) dlOverlay.classList.remove("show");
+      dlCloseBtn.addEventListener("click", () => {
+        hideInlineCard();
       });
 
       downloadBtn.addEventListener("click", async () => {
@@ -1475,11 +1552,12 @@
 
         dlDataUrl = canvas.toDataURL("image/png");
         dlPreviewImg.src = dlDataUrl;
+        dlBlob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
         const sizeKB = Math.round((dlDataUrl.length * 3) / 4 / 1024);
         dlSize.textContent = sizeKB > 1024
           ? (sizeKB / 1024).toFixed(1) + " MB"
           : sizeKB + " KB";
-        dlOverlay.classList.add("show");
+        showInlineCard();
       });
 
       function drawCover(ctx, img, x, y, w, h, idx) {
