@@ -150,8 +150,8 @@
 
       .icon-tile {
         width: 100%;
-        max-width: 160px;
-        aspect-ratio: 4 / 3;
+        max-width: 110px;
+        aspect-ratio: 9 / 16;
         border-radius: 16px;
         display: flex;
         align-items: center;
@@ -315,7 +315,7 @@
       }
       .sheet-photo {
         width: 100%;
-        aspect-ratio: 4 / 3;
+        aspect-ratio: 9 / 16;
         border-radius: 16px;
         background: #f5f5f5;
         display: flex;
@@ -346,11 +346,6 @@
       }
       .sheet-side .sheet-meta {
         margin-bottom: 0;
-      }
-      .sheet-side .sheet-btn {
-        margin-top: 0;
-        padding: 10px;
-        font-size: 13px;
       }
       .sheet-side .sheet-close {
         margin-top: 0;
@@ -467,18 +462,6 @@
         font-weight: 600;
         padding: 20px 0;
       }
-      .sheet-btn {
-        display: block;
-        text-align: center;
-        margin-top: 16px;
-        background: #6366f1;
-        color: #fff;
-        font-weight: 700;
-        font-size: 14px;
-        padding: 12px;
-        border-radius: 10px;
-        text-decoration: none;
-      }
       .sheet-close {
         display: block;
         width: 100%;
@@ -533,7 +516,7 @@
 
     <script type="module">
       import { supabase } from './supabase.js';
-      import { toWebPThumb, toWebPLarge } from '../index/image-loader.js';
+      import { toWebPThumb, toWebPLarge } from '../../image-loader.js';
 
       let fallbackMenus = [];
       try {
@@ -568,7 +551,7 @@
         if (link.endsWith('.html') && !link.includes('/')) return '../' + link;
         return link;
       }
-      const adminMenu = { name: "ADMIN", foto: "../index/image-index/daily-task/1.jpg", cls: "g-a", link: "../admin.html", cat: "ADMIN" };
+      const adminMenu = { name: "ADMIN", foto: "../../image-index/daily-task/1.jpg", cls: "g-a", link: "../../admin.html", cat: "ADMIN" };
       function renderMenu() {
         const q = (searchInput.value || '').trim().toLowerCase();
         const baseFiltered = menus.map(normalizeMenu).filter(m => {
@@ -643,7 +626,6 @@
         if (m.cat) html += '<span class="sheet-badge">' + m.cat + '</span>';
         html += '</div>';
         if (pluRows.length) html += '<div class="plu-table">' + pluRows.map(function(r){ return '<div class="plu-row"><div class="plu-th">' + r[0] + '</div><div class="plu-td">' + r[1] + '</div></div>'; }).join('') + '</div>';
-        if (m.link) html += '<a class="sheet-btn" href="' + m.link + '">Buka Halaman Resep</a>';
         html += '<button class="sheet-close" id="sheetClose" type="button">Tutup</button>';
         html += '</div></div>';
         function bahanGroup(title, list) {

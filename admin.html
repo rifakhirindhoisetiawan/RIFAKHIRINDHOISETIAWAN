@@ -152,36 +152,49 @@
     .crop-icon-btn{width:40px;height:40px;padding:0;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;outline:none;transition:all .15s ease;display:flex;align-items:center;justify-content:center;flex-shrink:0}
     .crop-icon-btn:active{opacity:.85;transform:scale(.93)}
     @media(min-width:641px){.crop-stage{max-height:85vh}}
-    /* Bottom sheet pratinjau (gaya JA-DI) */
+/* Bottom sheet pratinjau (new design) */
     .sheet-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:80;align-items:flex-end;justify-content:center}
     .sheet-bg.open{display:flex}
-    .sheet{background:#fff;width:100%;max-width:800px;max-height:88vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:10px 18px 32px;animation:sheetUp .22s ease;scrollbar-width:none;-ms-overflow-style:none}
+    .sheet{background:#fff;width:100%;max-width:800px;max-height:88vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:0;animation:sheetUp .22s ease;scrollbar-width:none;-ms-overflow-style:none}
     .sheet::-webkit-scrollbar{width:0;height:0;display:none}
     @keyframes sheetUp{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}
     .sheet-handle{width:40px;height:4px;border-radius:4px;background:#e5e5e5;margin:2px auto 14px}
-    .sheet-top{display:flex;gap:12px;align-items:flex-start}
-    .sheet-photo{width:42%;flex-shrink:0;aspect-ratio:9/16;max-height:52vh;border-radius:16px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff}
-    .sheet-photo img{width:100%;height:100%;object-fit:cover;display:block}
-    .sheet-side{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
-    .sheet-name{font-size:16px;font-weight:800;color:#1f2937;line-height:1.25;margin:0}
-    .sheet-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:4px}
-    .sheet-badge{font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;background:#eef2ff;color:#4f46e5;letter-spacing:.4px}
-    .plu-table{border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;background:#fff}
-    .plu-row{display:flex;align-items:stretch}
-    .plu-row + .plu-row{border-top:1px solid #eee}
-    .plu-th{display:flex;align-items:center;justify-content:center;text-align:center;padding:6px 8px;font-size:9px;font-weight:800;color:#4f46e5;background:#eef2ff;min-width:62px}
-    .plu-td{flex:1;display:flex;align-items:center;padding:6px 10px;font-size:12px;font-weight:700;color:#1f2937}
-    .sheet-sec{font-size:11px;font-weight:800;color:#4f46e5;letter-spacing:.6px;text-transform:uppercase;margin:14px 0 8px}
-    .sheet-bahans{display:grid;gap:8px}
-    .bahan-row{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #c7d2fe;border-radius:10px;padding:9px 12px;font-size:13px;font-weight:600;color:#1f2937}
-    .sheet-note{width:100%;border:1px solid #c7d2fe;border-radius:10px;padding:10px 12px;font-size:13px;color:#374151;line-height:1.5;background:#fff}
+    
+    /* New sheet top */
+    .sheet-top-new{display:flex;gap:12px;padding:12px 16px;background:#fff;border-bottom:1px solid #e5e7eb}
+    .sheet-photo-wrap-new{width:120px;flex-shrink:0;aspect-ratio:9/16;border-radius:16px;overflow:hidden;background:#f5f5f5}
+    .sheet-photo-img-new{width:100%;height:100%;object-fit:cover;display:block}
+    .sheet-photo-placeholder-new{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;background:#f5f5f5;color:#999}
+    .sheet-info-wrap-new{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px;padding-top:4px}
+    .sheet-name-new{font-size:20px;font-weight:800;color:#1a1a1a;line-height:1.2;letter-spacing:-0.5px}
+    .sheet-plu-row-new{display:flex;gap:8px;flex-wrap:wrap}
+    .plu-chip-new{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 12px;background:#f5f5f5;border-radius:10px;min-width:70px}
+    .plu-label-new{font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.5px}
+    .plu-value-new{font-size:13px;font-weight:700;color:#1a1a1a}
+    .sheet-close-btn-new{width:100%;padding:12px;margin-top:4px;background:#f3f4f6;color:#1a1a1a;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer;font-family:inherit}
+    .sheet-close-btn-new:active{background:#e5e7eb}
+    
+    /* Bahan sections */
+    .sheet-bahan-wrap-new{padding:12px 16px 24px}
+    .sheet-section-new{margin-bottom:16px}
+    .sheet-section-title-new{font-size:11px;font-weight:800;color:#3b82f6;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:8px}
+    .sheet-bahan-list-new{display:flex;flex-direction:column;gap:8px}
+    .bahan-input-new{width:100%;padding:12px 14px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;color:#1a1a1a;font-size:13px;font-weight:500;font-family:inherit;outline:none;box-sizing:border-box}
+    .bahan-input-new:focus{border-color:#3b82f6;background:#fefefe}
+    .sheet-section-new:last-child{margin-bottom:0}
+    .sheet-section-title-new{font-size:11px;font-weight:800;color:#3b82f6;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:8px}
+    .sheet-note-new{padding:12px 14px;border:1px solid #c7d2fe;border-radius:10px;background:#fefefe;color:#374151;font-size:13px;line-height:1.5}
+    .sheet-empty-new{text-align:center;color:#9aa0ab;font-size:13px;font-weight:600;padding:24px 0}
+    .sheet-close-btn-main-new{display:block;width:100%;margin-top:16px;padding:14px;background:#6366f1;color:#fff;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer;font-family:inherit}
+    .sheet-close-btn-main-new:active{background:#4f46e5}
+    
     .sheet-empty{text-align:center;padding:24px;color:#9ca3af;font-size:13px}
     .sheet-close{display:block;width:100%;margin-top:8px;padding:12px;background:#f5f5f5;color:#1a1a1a;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer;font-family:inherit;text-decoration:none}
     @media(max-width:640px){
       .top-wrap{display:flex;flex-direction:column;gap:8px;align-items:stretch;padding:8px}
       .top-wrap .foto-box{flex:1 1 0 !important;width:100% !important;min-width:0 !important;max-width:none;aspect-ratio:9/16;border-radius:12px}
       .top-row{padding:2px !important;gap:6px !important}
-      .top-row > div:first-child{font-size:15px !important;min-height:40px;padding:10px 8px}
+      .top-row > div:first_child{font-size:15px !important;min-height:40px;padding:10px 8px}
       .top-row input{font-size:15px !important;font-weight:800 !important;text-align:left !important;padding:10px 4px}
       .tab-bar{display:flex;flex-wrap:nowrap;gap:6px;padding:8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
       .tab-btn{flex:0 0 auto;min-width:72px;min-height:48px;padding:12px 16px;font-size:14px;aspect-ratio:auto}
@@ -1179,29 +1192,59 @@ const outW = 540, outH = 960;
     const bahans = [...b12, ...b16, ...bHot, ...p12, ...p16];
     const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
     const photo = isImg ? '<img src="' + m.foto + '" alt="" loading="lazy"/>' : '<span style="font-size:48px">' + (m.foto || '☕') + '</span>';
-    const pluRows = [['PLU 12OZ', m.plu_12oz || '-'], ['PLU 16OZ', m.plu_16oz || '-'], ['PLU HOT', m.plu_hot || '-']];
-    let html = '<div class="sheet-top"><div class="sheet-photo ' + (m.cls || 'g-a') + '">' + photo + '</div><div class="sheet-side">';
-    html += '<div class="sheet-name">' + esc(m.name) + '</div>';
-    html += '<div class="sheet-meta">';
-    if (m.cat) html += '<span class="sheet-badge">' + esc(m.cat) + '</span>';
+    const pluRows = [['12oz', m.plu_12oz || '-'], ['16oz', m.plu_16oz || '-'], ['hot', m.plu_hot || '-']];
+    
+    // Build bahan sections - only show non-empty
+    const sections = [];
+    if (p12.length) sections.push({ title: 'P12', items: p12 });
+    if (p16.length) sections.push({ title: 'P16', items: p16 });
+    if (b12.length) sections.push({ title: '12OZ', items: b12 });
+    if (b16.length) sections.push({ title: '16OZ', items: b16 });
+    if (bHot.length) sections.push({ title: 'HOT', items: bHot });
+    
+    // Build header - name from m.name (e.g., "VANILLA LATTE PREMIX" -> "VANILLA LATTE")
+    const nameParts = (m.name || '').split(' ');
+    const displayName = nameParts.slice(0, -1).join(' ') || m.name; // Remove last word (PREMIX/MANUAL)
+    
+    let html = '<div class="sheet-top-new">';
+    // Left: Photo
+    html += '<div class="sheet-photo-wrap-new">';
+    html += isImg ? '<img src="' + m.foto + '" alt="" loading="lazy" class="sheet-photo-img-new"/>' : '<div class="sheet-photo-placeholder-new">' + (m.foto || '☕') + '</div>';
     html += '</div>';
-    html += '<div class="plu-table">' + pluRows.map(r => '<div class="plu-row"><div class="plu-th">' + r[0] + '</div><div class="plu-td">' + esc(r[1]) + '</div></div>').join('') + '</div>';
-    html += '<button class="sheet-close" id="sh_close" type="button">Tutup</button>';
-    html += '</div></div>';
-    function bahanGroup(title, list) {
-      return '<div class="sheet-sec">' + title + '</div><div class="sheet-bahans">' +
-        list.map(b => '<div class="bahan-row"><span>' + esc(b) + '</span></div>').join('') + '</div>';
-    }
-    if (bHot.length) html += bahanGroup('HOT', bHot);
-    if (p12.length) html += bahanGroup('P12', p12);
-    if (p16.length) html += bahanGroup('P16', p16);
-    if (b12.length) html += bahanGroup('12OZ', b12);
-    if (b16.length) html += bahanGroup('16OZ', b16);
-    if (m.catatan) html += '<div class="sheet-sec">Catatan</div><div class="sheet-note">' + esc(m.catatan) + '</div>';
-    if (!bahans.length && !m.catatan) html += '<div class="sheet-empty">Belum ada data bahan.</div>';
+    // Right: Info + PLU + Close
+    html += '<div class="sheet-info-wrap-new">';
+    html += '<div class="sheet-name-new">' + esc(displayName.toUpperCase()) + '</div>';
+    html += '<div class="sheet-plu-row-new">';
+    pluRows.forEach(r => {
+      html += '<div class="plu-chip-new"><span class="plu-label-new">' + r[0] + '</span><span class="plu-value-new">' + esc(r[1]) + '</span></div>';
+    });
+    html += '</div>';
+    html += '<button class="sheet-close-btn-new" id="sh_close_top" type="button">Tutup</button>';
+    html += '</div>';
+    html += '</div>'; // sheet-top-new
+    
+    // Bahan sections
+    html += '<div class="sheet-bahan-wrap-new">';
+    sections.forEach(sec => {
+      html += '<div class="sheet-section-new">';
+      html += '<div class="sheet-section-title-new">' + sec.title + '</div>';
+      html += '<div class="sheet-bahan-list-new">';
+      sec.items.forEach(b => {
+        html += '<input type="text" class="bahan-input-new" value="' + esc(b) + '" readonly />';
+      });
+      html += '</div>';
+      html += '</div>';
+    });
+    
+    if (m.catatan) html += '<div class="sheet-section-new"><div class="sheet-section-title-new">Catatan</div><div class="sheet-note-new">' + esc(m.catatan) + '</div></div>';
+    if (!bahans.length && !m.catatan) html += '<div class="sheet-empty-new">Belum ada data bahan.</div>';
+    
+    html += '<button class="sheet-close-btn-main-new" id="sh_close_bottom" type="button">Tutup</button>';
+    
     sheetBody.innerHTML = html;
     sheetBg.classList.add('open');
-    document.getElementById('sh_close').addEventListener('click', closeSheet);
+    document.getElementById('sh_close_top').addEventListener('click', closeSheet);
+    document.getElementById('sh_close_bottom').addEventListener('click', closeSheet);
   }
   function closeSheet(){
     sheetBg.classList.remove('open');
