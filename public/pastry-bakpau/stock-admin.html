@@ -1,0 +1,685 @@
+﻿<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+      name="viewport"
+    />
+    <title>Admin - Stok Opname</title>
+    <style>
+      :root {
+        --text: #1f2937;
+        --muted: #9ca3af;
+        --line: #e5e7eb;
+        --line-2: #d9dde3;
+        --surface: #f3f4f6;
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --soft: #eef2ff;
+        --soft-2: #c7d2fe;
+        --danger: #ef4444;
+        --row-h: 40px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        background: #ffffff;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        color: var(--text);
+        min-height: 100vh;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 14px 18px 40px;
+        padding-top: max(14px, env(safe-area-inset-top));
+      }
+
+      .section-label {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--muted);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        margin: 4px 0 14px;
+      }
+
+      .sec + .sec {
+        margin-top: 26px;
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+      }
+
+      .push {
+        margin-left: auto;
+      }
+
+      .count {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      input {
+        width: 100%;
+        min-width: 0;
+        height: var(--row-h);
+        padding: 0 14px;
+        font: inherit;
+        font-size: 14px;
+        color: var(--text);
+        background: var(--surface);
+        border: 1px solid var(--line-2);
+        border-radius: 10px;
+        text-transform: uppercase;
+      }
+
+      input[type="number"] {
+        text-transform: none;
+      }
+
+      input::placeholder {
+        color: #c3c8d1;
+      }
+
+      input:focus {
+        outline: none;
+        background: #fff;
+        border-color: #888;
+      }
+
+      .grow {
+        flex: 1;
+      }
+
+      .w-70 {
+        flex: 0 0 76px;
+      }
+
+      .w-120 {
+        flex: 0 0 120px;
+      }
+
+      .btn {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font: inherit;
+        font-size: 16px;
+        font-weight: 800;
+        line-height: 1;
+        color: #fff;
+        background: var(--primary);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all 0.15s ease;
+      }
+
+      .btn:active {
+        opacity: 0.85;
+        transform: scale(0.93);
+      }
+
+      .btn:disabled {
+        background: var(--line-2);
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .ico {
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font: inherit;
+        font-size: 11px;
+        line-height: 1;
+        color: var(--primary-dark);
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all 0.15s ease;
+      }
+
+      .ico:active {
+        background: var(--soft);
+        transform: scale(0.92);
+      }
+
+      .ico-danger {
+        color: var(--danger);
+        border-color: #fecaca;
+      }
+
+      .ico-danger:active {
+        background: #fef2f2;
+      }
+
+      .mini {
+        height: 24px;
+        padding: 0 10px;
+        font: inherit;
+        font-size: 11px;
+        font-weight: 800;
+        border-radius: 7px;
+        background: #fff;
+        border: 1px solid var(--line);
+        color: var(--primary-dark);
+        cursor: pointer;
+      }
+
+      .mini:active {
+        background: var(--soft);
+      }
+
+      .menu-row {
+        cursor: pointer;
+      }
+
+      .menu-row.on td {
+        background: var(--soft);
+        color: var(--primary-dark);
+        font-weight: 800;
+        box-shadow: inset 3px 0 0 var(--primary);
+      }
+
+      .table-wrap {
+        overflow: auto;
+        max-height: 56vh;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        -webkit-overflow-scrolling: touch;
+        background: #fff;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+
+      .daftar {
+        min-width: 180px;
+      }
+
+      .barang {
+        min-width: 340px;
+      }
+
+      thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: var(--surface);
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        text-align: left;
+        height: 32px;
+        padding: 0 10px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+
+      tbody td {
+        height: 32px;
+        padding: 0 10px;
+        border-bottom: 1px solid #f3f4f6;
+        vertical-align: middle;
+      }
+
+      tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      tbody tr:hover td {
+        background: #fafafa;
+      }
+
+      .c-kode {
+        width: 88px;
+      }
+
+      .c-satuan {
+        width: 64px;
+      }
+
+      .c-hpp {
+        width: 100px;
+        text-align: right;
+      }
+
+      .c-aksi {
+        width: 76px;
+      }
+
+      .kode {
+        color: var(--primary);
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 11px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .empty {
+        padding: 26px 12px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .acts {
+        display: flex;
+        gap: 6px;
+        justify-content: flex-end;
+      }
+
+      .head-info {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px 14px;
+        margin-bottom: 16px;
+      }
+
+      .head-info span {
+        display: block;
+        font-size: 10px;
+        font-weight: 800;
+        color: var(--muted);
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="sec">
+      <div class="section-label">Menu SO</div>
+      <form class="row" id="menuForm">
+        <input class="grow" type="text" id="mName" placeholder="SO ROTI" required />
+        <button class="btn" type="submit" title="Tambah menu" aria-label="Tambah menu">+</button>
+      </form>
+      <div class="table-wrap">
+        <table class="daftar">
+          <thead>
+            <tr>
+              <th>Menu</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="menuBody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="menuEmpty" hidden>Belum ada menu SO.</div>
+    </section>
+
+    <section class="sec" id="barangSec" hidden>
+      <div class="section-label" id="barangLabel">Item</div>
+      <div class="head-info">
+        <div>
+          <span>Lokasi</span>
+          <input type="text" id="infoLokasi" placeholder="Lokasi" />
+        </div>
+        <div>
+          <span>Tim Checker</span>
+          <input type="text" id="infoTim" placeholder="Tim Checker" />
+        </div>
+      </div>
+
+      <form class="row" id="barangForm">
+        <input class="grow" type="text" id="bName" placeholder="Nama Barang" required />
+        <input class="w-70" type="text" id="bSatuan" placeholder="Satuan" value="PCS" />
+        <input class="w-120" type="number" id="bHpp" min="0" value="0" placeholder="HPP" />
+        <button class="btn" type="submit" title="Tambah barang" aria-label="Tambah barang">+</button>
+      </form>
+
+      <div class="row">
+        <span class="count" id="barangCount"></span>
+        <button class="mini push" type="button" id="batalBtn">Batal Edit</button>
+      </div>
+
+      <div class="table-wrap" id="barangWrap">
+        <table class="barang">
+          <thead>
+            <tr>
+              <th class="c-kode">Kode Barang</th>
+              <th>Nama Barang</th>
+              <th class="c-satuan">Satuan</th>
+              <th class="c-hpp">HPP</th>
+              <th class="c-aksi"></th>
+            </tr>
+          </thead>
+          <tbody id="barangBody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="barangEmpty" hidden>Belum ada barang di menu ini.</div>
+    </section>
+
+    <script type="module">
+      import { supabase } from '../../js/supabase.js';
+
+      const MENU_KEY = 'so_active_menu';
+
+      const mName = document.getElementById('mName');
+      const menuBody = document.getElementById('menuBody');
+      const menuEmpty = document.getElementById('menuEmpty');
+      const barangSec = document.getElementById('barangSec');
+      const barangLabel = document.getElementById('barangLabel');
+      const infoLokasi = document.getElementById('infoLokasi');
+      const infoTim = document.getElementById('infoTim');
+      const bName = document.getElementById('bName');
+      const bSatuan = document.getElementById('bSatuan');
+      const bHpp = document.getElementById('bHpp');
+      const barangBody = document.getElementById('barangBody');
+      const barangEmpty = document.getElementById('barangEmpty');
+      const barangCount = document.getElementById('barangCount');
+      const barangWrap = document.getElementById('barangWrap');
+      const batalBtn = document.getElementById('batalBtn');
+
+      const dariUrl = Number(new URLSearchParams(location.search).get('m')) || null;
+      let menuAktif = dariUrl || Number(localStorage.getItem(MENU_KEY)) || null;
+      let menuTerpilih = null;
+      let editMenuId = null;
+      let editId = null;
+
+      const up = (value) => String(value ?? '').toUpperCase();
+      const num = (value) => {
+        const n = Number(value);
+        return Number.isFinite(n) ? n : 0;
+      };
+      const rupiah = (value) => 'Rp ' + Math.round(num(value)).toLocaleString('id-ID');
+
+      const cell = (text, cls) => {
+        const td = document.createElement('td');
+        td.textContent = text;
+        if (cls) td.className = cls;
+        return td;
+      };
+
+      const renderMenu = (menus) => {
+        menuBody.innerHTML = '';
+        menus.forEach((menu) => {
+          const tr = document.createElement('tr');
+          tr.className = 'menu-row' + (menu.id === menuAktif ? ' on' : '');
+          tr.appendChild(cell(up(menu.name)));
+
+          const edit = document.createElement('button');
+          edit.type = 'button';
+          edit.className = 'ico';
+          edit.textContent = '✎';
+          edit.title = 'Edit';
+          edit.setAttribute('aria-label', 'Edit ' + menu.name);
+          edit.addEventListener('click', (e) => {
+            e.stopPropagation();
+            editMenuId = menu.id;
+            mName.value = up(menu.name);
+            mName.focus();
+          });
+
+          const del = document.createElement('button');
+          del.type = 'button';
+          del.className = 'ico ico-danger';
+          del.textContent = '✕';
+          del.title = 'Hapus';
+          del.setAttribute('aria-label', 'Hapus ' + menu.name);
+          del.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            if (!confirm('Hapus menu ' + menu.name + ' beserta barangnya?')) return;
+            const { error } = await supabase.from('so_menus').delete().eq('id', menu.id);
+            if (error) {
+              console.error('Hapus menu gagal:', error.message);
+              return;
+            }
+            if (menuAktif === menu.id) menuAktif = null;
+            loadMenus();
+          });
+
+          const tdAct = document.createElement('td');
+          const wrap = document.createElement('div');
+          wrap.className = 'acts';
+          wrap.append(edit, del);
+          tdAct.appendChild(wrap);
+          tr.appendChild(tdAct);
+
+          tr.addEventListener('click', () => pilihMenu(menu.id));
+          menuBody.appendChild(tr);
+        });
+        menuEmpty.hidden = menus.length > 0;
+      };
+
+      const buatKode = (namaMenu, kodeTerpakai) => {
+        const prefix = (up(namaMenu).match(/[A-Z]/g) || ['PRD']).slice(0, 3).join('') || 'PRD';
+        let no = 1;
+        let kode = prefix + '-' + String(no).padStart(3, '0');
+        while (kodeTerpakai.has(kode)) {
+          no++;
+          kode = prefix + '-' + String(no).padStart(3, '0');
+        }
+        return kode;
+      };
+
+      const renderBarang = (barang) => {
+        barangBody.innerHTML = '';
+        barang.forEach((row) => {
+          const tr = document.createElement('tr');
+          tr.append(cell(row.kode || '-', 'kode'), cell(up(row.name)), cell(row.satuan || 'PCS', 'c-satuan'), cell(rupiah(row.hpp), 'c-hpp'));
+
+          const edit = document.createElement('button');
+          edit.type = 'button';
+          edit.className = 'ico';
+          edit.textContent = '✎';
+          edit.title = 'Edit';
+          edit.setAttribute('aria-label', 'Edit ' + (row.kode || row.name));
+          edit.addEventListener('click', () => {
+            editId = row.id;
+            bName.value = up(row.name);
+            bSatuan.value = row.satuan || 'PCS';
+            bHpp.value = String(num(row.hpp));
+            bName.focus();
+          });
+
+          const del = document.createElement('button');
+          del.type = 'button';
+          del.className = 'ico ico-danger';
+          del.textContent = '✕';
+          del.title = 'Hapus';
+          del.setAttribute('aria-label', 'Hapus ' + (row.kode || row.name));
+          del.addEventListener('click', async () => {
+            if (!confirm('Hapus barang ' + (row.kode || row.name) + '?')) return;
+            const { error } = await supabase.from('stock_products').delete().eq('id', row.id);
+            if (error) {
+              console.error('Hapus barang gagal:', error.message);
+              return;
+            }
+            loadBarang();
+          });
+
+          const tdAct = document.createElement('td');
+          const wrap = document.createElement('div');
+          wrap.className = 'acts';
+          wrap.append(edit, del);
+          tdAct.appendChild(wrap);
+          tr.appendChild(tdAct);
+          barangBody.appendChild(tr);
+        });
+        barangEmpty.hidden = barang.length > 0;
+        barangWrap.hidden = barang.length === 0;
+        barangCount.textContent = barang.length + ' barang';
+      };
+
+      const pilihMenu = async (id) => {
+        menuAktif = id;
+        localStorage.setItem(MENU_KEY, String(id));
+        await loadMenus();
+      };
+
+      const loadMenus = async () => {
+        const { data, error } = await supabase
+          .from('so_menus')
+          .select('id, name, lokasi, tim_checker')
+          .order('name');
+        if (error) {
+          console.error('Gagal memuat menu:', error.message);
+          return;
+        }
+        const menus = data || [];
+        if (menuAktif && !menus.some((m) => m.id === menuAktif)) menuAktif = null;
+        renderMenu(menus);
+
+        menuTerpilih = menus.find((m) => m.id === menuAktif) || null;
+        barangSec.hidden = !menuTerpilih;
+        if (!menuTerpilih) {
+          localStorage.removeItem(MENU_KEY);
+          return;
+        }
+        barangLabel.textContent = 'Item ' + up(menuTerpilih.name);
+        infoLokasi.value = up(menuTerpilih.lokasi || '');
+        infoTim.value = up(menuTerpilih.tim_checker || '');
+        await loadBarang();
+      };
+
+      const loadBarang = async () => {
+        if (!menuAktif) return;
+        const { data, error } = await supabase
+          .from('stock_products')
+          .select('id, kode, name, satuan, hpp')
+          .eq('menu_id', menuAktif)
+          .order('kode');
+        if (error) {
+          console.error('Gagal memuat barang:', error.message);
+          return;
+        }
+        renderBarang(data || []);
+      };
+
+      document.getElementById('menuForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = mName.value.trim().toUpperCase();
+        if (!name) return;
+        mName.value = name;
+
+        if (editMenuId) {
+          const { error } = await supabase.from('so_menus').update({ name }).eq('id', editMenuId);
+          if (error) {
+            console.error('Gagal update menu:', error.message);
+            return;
+          }
+          editMenuId = null;
+          mName.value = '';
+          loadMenus();
+          return;
+        }
+
+        const { data, error } = await supabase
+          .from('so_menus')
+          .upsert({ name }, { onConflict: 'name' })
+          .select('id')
+          .single();
+        if (error) {
+          console.error('Gagal menambah menu:', error.message);
+          return;
+        }
+        mName.value = '';
+        menuAktif = data.id;
+        loadMenus();
+      });
+
+      const simpanHeader = async () => {
+        if (!menuTerpilih) return;
+        await supabase
+          .from('so_menus')
+          .update({ lokasi: infoLokasi.value.trim().toUpperCase(), tim_checker: infoTim.value.trim().toUpperCase() })
+          .eq('id', menuTerpilih.id);
+      };
+
+      infoLokasi.addEventListener('change', simpanHeader);
+      infoTim.addEventListener('change', simpanHeader);
+
+      document.getElementById('barangForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!menuAktif) return;
+        const name = bName.value.trim().toUpperCase();
+        const satuan = bSatuan.value.trim().toUpperCase() || 'PCS';
+        const hpp = num(bHpp.value);
+        if (!name) return;
+
+        if (editId) {
+          const { error } = await supabase.from('stock_products').update({ name, satuan, hpp }).eq('id', editId);
+          if (error) {
+            console.error('Gagal update barang:', error.message);
+            return;
+          }
+          editId = null;
+        } else {
+          const { data: dipakai, error: errBaca } = await supabase
+            .from('stock_products')
+            .select('kode')
+            .eq('menu_id', menuAktif);
+          if (errBaca) {
+            console.error('Gagal membuat kode barang:', errBaca.message);
+            return;
+          }
+          const kode = buatKode(menuTerpilih.name, new Set((dipakai || []).map((r) => r.kode)));
+          const { error } = await supabase.from('stock_products').insert({
+            menu_id: menuAktif,
+            kode,
+            name,
+            satuan,
+            hpp,
+          });
+          if (error) {
+            console.error('Gagal menambah barang:', error.message);
+            return;
+          }
+        }
+        bName.value = '';
+        bHpp.value = '0';
+        loadBarang();
+      });
+
+      batalBtn.addEventListener('click', () => {
+        editMenuId = null;
+        editId = null;
+        mName.value = '';
+        bName.value = '';
+        bSatuan.value = 'PCS';
+        bHpp.value = '0';
+      });
+
+      loadMenus();
+    </script>
+  </body>
+</html>

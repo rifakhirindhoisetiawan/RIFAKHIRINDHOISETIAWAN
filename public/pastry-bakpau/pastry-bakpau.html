@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>PASTRY BAKPAU</title>
+    <meta name="theme-color" content="#ffffff" />
+    <style>
+      :root {
+        --background: #f8fafc;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --primary: #2563eb;
+        --badge-bg: #dcfce7;
+        --badge-text: #166534;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        background: var(--background);
+      }
+
+      body {
+        color: var(--text);
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        line-height: 1.5;
+      }
+
+      .page {
+        width: 100%;
+        max-width: 800px;
+        min-height: 100dvh;
+        margin: 0 auto;
+        padding: max(16px, env(safe-area-inset-top)) 18px 28px;
+        background: var(--surface);
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 18px;
+      }
+
+      .back {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        flex: 0 0 40px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        color: var(--primary);
+        background: var(--surface);
+        text-decoration: none;
+        font-size: 22px;
+        line-height: 1;
+      }
+
+      .back:active {
+        background: #eff6ff;
+      }
+
+      .heading {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .eyebrow {
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+
+      h1 {
+        color: var(--text);
+        font-size: clamp(18px, 5vw, 24px);
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+
+      .count {
+        flex: 0 0 auto;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .toolbar {
+        padding-bottom: 14px;
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 44px;
+        padding: 0 14px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: #f8fafc;
+        color: #94a3b8;
+      }
+
+      .search-box:focus-within {
+        border-color: #93c5fd;
+        background: var(--surface);
+      }
+
+      .search-box svg {
+        width: 18px;
+        height: 18px;
+        flex: 0 0 18px;
+      }
+
+      .search-box input {
+        width: 100%;
+        min-width: 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--text);
+        font: inherit;
+        font-size: 16px;
+      }
+
+      .search-box input::placeholder {
+        color: #94a3b8;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      table {
+        width: 100%;
+        min-width: 500px;
+        border-collapse: collapse;
+        background: var(--surface);
+        font-size: 13px;
+      }
+
+      thead {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: #f1f5f9;
+      }
+
+      th,
+      td {
+        padding: 11px 12px;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        vertical-align: middle;
+      }
+
+      th {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      tbody tr:hover {
+        background: #f8fafc;
+      }
+
+      .plu {
+        color: var(--primary);
+        font-family: "SF Mono", Consolas, monospace;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        padding: 2px 9px;
+        border-radius: 999px;
+        background: var(--badge-bg);
+        color: var(--badge-text);
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .empty {
+        padding: 28px 16px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (min-width: 768px) {
+        .page {
+          padding-right: 24px;
+          padding-left: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <a class="back" href="../../index.html" aria-label="Kembali ke index">←</a>
+        <div class="heading">
+          <div class="eyebrow">DAFTAR PRODUK</div>
+          <h1>PASTRY BAKPAU</h1>
+        </div>
+        <div class="count" id="count" aria-live="polite"></div>
+      </header>
+
+      <section class="toolbar">
+        <label class="search-box" for="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input id="search" type="search" placeholder="Cari PLU atau nama..." autocomplete="off" />
+        </label>
+      </section>
+
+      <section class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>PLU</th>
+              <th>Deskripsi</th>
+              <th>Kategori</th>
+            </tr>
+          </thead>
+          <tbody id="items"></tbody>
+        </table>
+        <p class="empty" id="empty" hidden>Produk tidak ditemukan.</p>
+      </section>
+    </main>
+
+    <script>
+      const items = [
+        ["446417", "JD MINI STEAM CHEESE FILLING35G"],
+        ["446418", "JD MINI STEAM CAKE MATCHA35G"],
+        ["446419", "JD MINI STEAM CAKE CHOCO35G"],
+        ["446420", "JD MINI BLUDER CHOCO35G"],
+        ["446421", "JD MINI BLUDER CHEESE35G"],
+        ["446422", "JD MINI CREAM MESSES50G"],
+        ["446688", "JD BAPAO KACANG HIJAU BYI"],
+        ["446689", "JD BAPAO COKLAT BYI"],
+        ["446690", "JD BAPAO STRAWBERRY BYI"],
+        ["446691", "JD BAPAO AYAM BYI"],
+        ["446692", "JD CHIFFON DONUT KEJU BYI"],
+        ["446693", "JD CHIFFON DONUT PANDAN BYI"],
+        ["446694", "JD CHIFFON DONUT COKLAT BYI"],
+        ["446695", "JD BOMBOLONI CHOCO PEANUT BYI"],
+        ["446696", "JD BOMBOLONI STRAWBERRY BYI"],
+        ["446697", "JD BOMBOLONI DOUBLE CHOCOLATE B"],
+        ["446698", "JD LONG JOHN KEJU BYI"],
+        ["446699", "JD LONG JOHN MESES BYI"],
+        ["446700", "JD ROTI DAGING AYAM BYI"],
+        ["446701", "JD PIZZA BYI"],
+        ["446702", "JD ABON GULUNG AYAM BYI"],
+        ["446704", "JD ROTI PISANG COKLAT KEJU BYI"],
+        ["446705", "JD ROTI PISANG COKLAT BYI"],
+        ["446706", "JD DIMSUM AYAM WORTEL BYI"],
+        ["446707", "JD DIMSUM AYAM UDANG BYI"],
+        ["446708", "JD DIMSUM AYAM JAMUR BYI"],
+        ["446709", "JD DIMSUM AYAM TELUR BYI"],
+        ["446710", "JD DIMSUM AYAM CUMI BYI"],
+        ["446711", "JD RISOLES BYI"],
+        ["446712", "JD SOSIS SOLO BYI"],
+        ["446713", "JD PLAIN CROISSANT BYI"],
+        ["446714", "JD ALMOND CROISSANT BYI"],
+        ["446715", "JD CHEESE CROISSANT BYI"],
+        ["446716", "JD CINNAMON ROLL CROISSANT BYI"],
+        ["446717", "JD DANISH RAISIN CROISSANT BYI"],
+        ["446718", "JD PAIN AU CHOCO CROISSANT BYI"],
+        ["446719", "JD MARTABAK CROISSANT BYI"],
+        ["446720", "JD PAIN SUISSE CROISSANT BYI"],
+        ["446721", "JD CROFFLE BYI"],
+        ["446722", "JD BEEF SAUSAGE CROISSANT BYI"],
+        ["446723", "JD SMOKE BEEF CROISSANT BYI"],
+        ["446724", "JD TUNA PUFF BYI"],
+        ["446725", "JD SAUSAGE PUFF BYI"],
+        ["446726", "JD CHICKEN CURRY PUFF BYI"],
+        ["894858", "PLU K 5DAYS MINI CROISSANT (PC)"],
+      ];
+
+      const search = document.getElementById("search");
+      const tbody = document.getElementById("items");
+      const count = document.getElementById("count");
+      const empty = document.getElementById("empty");
+
+      function renderItems() {
+        const query = search.value.trim().toLowerCase();
+        tbody.replaceChildren();
+        let visible = 0;
+
+        items.forEach(([plu, name]) => {
+          if (query && !`${plu} ${name}`.toLowerCase().includes(query)) return;
+
+          const row = document.createElement("tr");
+          const pluCell = document.createElement("td");
+          const nameCell = document.createElement("td");
+          const categoryCell = document.createElement("td");
+          const badge = document.createElement("span");
+
+          pluCell.className = "plu";
+          pluCell.textContent = plu;
+          nameCell.textContent = name;
+          badge.className = "badge";
+          badge.textContent = "RTE";
+          categoryCell.appendChild(badge);
+          row.append(pluCell, nameCell, categoryCell);
+          tbody.appendChild(row);
+          visible += 1;
+        });
+
+        count.textContent = `${visible} item`;
+        empty.hidden = visible !== 0;
+      }
+
+      search.addEventListener("input", renderItems);
+      renderItems();
+    </script>
+  </body>
+</html>

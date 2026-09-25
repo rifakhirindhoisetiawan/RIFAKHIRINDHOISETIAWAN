@@ -127,7 +127,89 @@ alter table recipes enable row level security;
 create policy "Allow public read" on recipes for select using (true);
 create policy "Allow all for service" on recipes for all using (true) with check (true);
 
--- 4. Storage bucket untuk foto menu (admin.html)
+-- 4. Stock opname (public/pastry-bakpau/stock.html)
+create table if not exists stock_opname (
+  id bigint generated always as identity primary key,
+  menu_id bigint,
+  product_plu text not null,
+  quantity integer not null default 0,
+  stok_sistem integer not null default 0,
+  stok_fisik integer not null default 0,
+  hpp numeric not null default 0,
+  selisih integer not null default 0,
+  total_nominal numeric not null default 0,
+  keterangan text,
+  admin text,
+  opname_date timestamp with time zone default now(),
+  created_at timestamp with time zone default now()
+);
+alter table stock_opname add column if not exists admin text;
+alter table stock_opname add column if not exists menu_id bigint;
+alter table stock_opname add column if not exists stok_sistem integer not null default 0;
+alter table stock_opname add column if not exists stok_fisik integer not null default 0;
+alter table stock_opname add column if not exists hpp numeric not null default 0;
+alter table stock_opname add column if not exists selisih integer not null default 0;
+alter table stock_opname add column if not exists total_nominal numeric not null default 0;
+alter table stock_opname add column if not exists keterangan text;
+alter table stock_opname enable row level security;
+drop policy if exists "Allow public read" on stock_opname;
+drop policy if exists "Allow service insert" on stock_opname;
+drop policy if exists "Allow service update" on stock_opname;
+drop policy if exists "Allow service delete" on stock_opname;
+create policy "Allow public read" on stock_opname for select using (true);
+create policy "Allow service insert" on stock_opname for insert with check (true);
+create policy "Allow service update" on stock_opname for update using (true) with check (true);
+create policy "Allow service delete" on stock_opname for delete using (true);
+
+-- 5. Menu SO (SO ROTI / SO BAKPAU / SO SIRUP) - dikelola dari stock-admin.html
+create table if not exists so_menus (
+  id bigint generated always as identity primary key,
+  name text not null unique,
+  lokasi text,
+  tim_checker text,
+  created_at timestamp with time zone default now()
+);
+alter table so_menus add column if not exists lokasi text;
+alter table so_menus add column if not exists tim_checker text;
+alter table so_menus enable row level security;
+drop policy if exists "Allow public read" on so_menus;
+drop policy if exists "Allow service insert" on so_menus;
+drop policy if exists "Allow service update" on so_menus;
+drop policy if exists "Allow service delete" on so_menus;
+create policy "Allow public read" on so_menus for select using (true);
+create policy "Allow service insert" on so_menus for insert with check (true);
+create policy "Allow service update" on so_menus for update using (true) with check (true);
+create policy "Allow service delete" on so_menus for delete using (true);
+
+-- 6. Produk per menu SO
+create table if not exists stock_products (
+  id bigint generated always as identity primary key,
+  menu_id bigint not null references so_menus(id) on delete cascade,
+  plu text,
+  kode text,
+  name text not null,
+  satuan text not null default 'PCS',
+  stok_sistem integer not null default 0,
+  hpp numeric not null default 0,
+  created_at timestamp with time zone default now(),
+  unique (menu_id, plu)
+);
+alter table stock_products add column if not exists kode text;
+alter table stock_products add column if not exists satuan text not null default 'PCS';
+alter table stock_products add column if not exists stok_sistem integer not null default 0;
+alter table stock_products add column if not exists hpp numeric not null default 0;
+alter table stock_products alter column plu drop not null;
+alter table stock_products enable row level security;
+drop policy if exists "Allow public read" on stock_products;
+drop policy if exists "Allow service insert" on stock_products;
+drop policy if exists "Allow service update" on stock_products;
+drop policy if exists "Allow service delete" on stock_products;
+create policy "Allow public read" on stock_products for select using (true);
+create policy "Allow service insert" on stock_products for insert with check (true);
+create policy "Allow service update" on stock_products for update using (true) with check (true);
+create policy "Allow service delete" on stock_products for delete using (true);
+
+-- 7. Storage bucket untuk foto menu (admin.html)
 insert into storage.buckets (id, name, public)
 values ('admin-icons', 'admin-icons', true)
 on conflict (id) do update set public = true;

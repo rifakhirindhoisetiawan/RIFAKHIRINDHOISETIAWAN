@@ -1,0 +1,718 @@
+﻿<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+      name="viewport"
+    />
+    <title>Stok Opname</title>
+    <style>
+      :root {
+        --text: #1f2937;
+        --muted: #9ca3af;
+        --line: #e5e7eb;
+        --line-2: #d9dde3;
+        --surface: #f3f4f6;
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --minus: #dc2626;
+        --plus: #16a34a;
+        --row-h: 40px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        background: #ffffff;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        color: var(--text);
+        min-height: 100vh;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 14px 18px 40px;
+        padding-top: max(14px, env(safe-area-inset-top));
+      }
+
+      .section-label {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--muted);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        margin: 4px 0 14px;
+      }
+
+      .section-label.flush {
+        margin: 4px 0 0;
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+      }
+
+      .push {
+        margin-left: auto;
+      }
+
+      .count {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .btn {
+        height: 32px;
+        padding: 0 16px;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 800;
+        color: #ffffff;
+        background: var(--primary);
+        border: 1px solid var(--primary);
+        border-radius: 8px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .btn:active {
+        background: var(--primary-dark);
+        border-color: var(--primary-dark);
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .btn-ghost {
+        color: var(--primary-dark);
+        background: #fff;
+        border-color: var(--line);
+      }
+
+      .btn-ghost:active {
+        background: #eef2ff;
+      }
+
+      .mini {
+        height: 24px;
+        padding: 0 10px;
+        font-size: 11px;
+        font-weight: 800;
+        border-radius: 7px;
+      }
+
+      .table-wrap {
+        overflow: auto;
+        max-height: 56vh;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        -webkit-overflow-scrolling: touch;
+        background: #fff;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+
+      .laporan {
+        min-width: 860px;
+      }
+
+      .riwayat {
+        min-width: 460px;
+      }
+
+      thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: var(--surface);
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        text-align: left;
+        height: 32px;
+        padding: 0 10px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+
+      tbody td {
+        height: 32px;
+        padding: 0 10px;
+        border-bottom: 1px solid #f3f4f6;
+        vertical-align: middle;
+      }
+
+      tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      tbody tr:hover td {
+        background: #fafafa;
+      }
+
+      tfoot td {
+        position: sticky;
+        bottom: 0;
+        background: var(--surface);
+        font-weight: 800;
+        font-size: 12px;
+        height: 32px;
+        padding: 0 10px;
+        border-top: 1px solid var(--line);
+        white-space: nowrap;
+      }
+
+      .c-no {
+        width: 28px;
+        text-align: center;
+        color: var(--muted);
+      }
+
+      .c-foto {
+        width: 70px;
+      }
+
+      .c-kode {
+        width: 80px;
+      }
+
+      .c-satuan {
+        width: 58px;
+      }
+
+      .c-num {
+        width: 76px;
+        text-align: right;
+      }
+
+      .c-total {
+        width: 100px;
+        text-align: right;
+      }
+
+      .foto {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 54px;
+        aspect-ratio: 4 / 3;
+        border: 1px dashed #d1d5db;
+        border-radius: 8px;
+        background: #f9fafb;
+        color: var(--muted);
+        font-size: 7px;
+        font-weight: 800;
+        text-align: center;
+        padding: 0 3px;
+        line-height: 1.15;
+      }
+
+      .kode {
+        color: var(--primary);
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .selisih {
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+      }
+
+      .selisih.minus,
+      .nominal.minus {
+        color: var(--minus);
+      }
+
+      .selisih.plus,
+      .nominal.plus {
+        color: var(--plus);
+      }
+
+      .keterangan {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+
+      .keterangan.minus {
+        color: var(--minus);
+      }
+
+      .keterangan.plus {
+        color: var(--plus);
+      }
+
+      .cell-input {
+        height: 24px;
+        padding: 0 10px;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        font-weight: 700;
+        border-radius: 7px;
+        background: var(--surface);
+        border: 1px solid var(--line-2);
+        color: var(--text);
+        font-size: 12px;
+        width: 100%;
+      }
+
+      .cell-input:focus {
+        outline: none;
+        background: #fff;
+        border-color: var(--primary);
+      }
+
+      .head-info {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px 14px;
+        margin-bottom: 16px;
+      }
+
+      .head-info > div {
+        min-width: 0;
+      }
+
+      .head-info span {
+        display: block;
+        font-size: 10px;
+        font-weight: 800;
+        color: var(--muted);
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+
+      .head-info b {
+        display: block;
+        font-size: 15px;
+        font-weight: 800;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .empty {
+        padding: 26px 12px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="sec">
+      <div class="section-label" id="judulSo">Stok Opname</div>
+      <div class="head-info">
+        <div>
+          <span>Tanggal SO</span>
+          <b id="infoTanggal">-</b>
+        </div>
+        <div>
+          <span>Lokasi</span>
+          <b id="infoLokasi">-</b>
+        </div>
+        <div>
+          <span>Tim Checker</span>
+          <b id="infoTim">-</b>
+        </div>
+        <div>
+          <span>Admin</span>
+          <b id="infoAdmin">-</b>
+        </div>
+      </div>
+
+      <div class="table-wrap" id="barangWrap">
+        <table class="laporan">
+          <thead>
+            <tr>
+              <th class="c-no">No</th>
+              <th class="c-foto">Foto</th>
+              <th class="c-kode">Kode Barang</th>
+              <th>Nama Barang</th>
+              <th class="c-satuan">Satuan</th>
+              <th class="c-num">Onhand</th>
+              <th class="c-num">Stok Fisik</th>
+              <th class="c-num">Selisih</th>
+              <th class="c-num">HPP</th>
+              <th class="c-total">Total Nominal</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody id="barangBody"></tbody>
+          <tfoot id="barangFoot"></tfoot>
+        </table>
+      </div>
+      <div class="empty" id="barangEmpty" hidden>Belum ada barang. Tambah lewat menu ADMIN.</div>
+
+      <div class="row">
+        <span class="count" id="counter">0 barang</span>
+        <button class="btn btn-ghost mini" type="button" id="resetBtn">Reset</button>
+        <button class="btn push" type="button" id="simpanBtn">Simpan Stok</button>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="row">
+        <div class="section-label flush">Riwayat (50 terakhir)</div>
+        <button class="btn btn-ghost mini push" type="button" id="refreshBtn">Muat</button>
+      </div>
+      <div class="table-wrap" id="riwayatWrap" hidden>
+        <table class="riwayat">
+          <thead>
+            <tr>
+              <th>Waktu</th>
+              <th>Kode</th>
+              <th class="c-num">Onhand</th>
+              <th class="c-num">Fisik</th>
+              <th class="c-num">Selisih</th>
+              <th class="c-total">Nominal</th>
+            </tr>
+          </thead>
+          <tbody id="riwayatBody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="riwayatEmpty">Belum ada riwayat.</div>
+    </section>
+
+    <script type="module">
+      import { supabase } from '../../js/supabase.js';
+
+      const ADMIN_KEY = 'stock_opname_admin';
+      const DEFAULT_ADMIN = 'Admin Stock Opname';
+
+      const judulSo = document.getElementById('judulSo');
+      const infoTanggal = document.getElementById('infoTanggal');
+      const infoLokasi = document.getElementById('infoLokasi');
+      const infoTim = document.getElementById('infoTim');
+      const infoAdmin = document.getElementById('infoAdmin');
+      const barangBody = document.getElementById('barangBody');
+      const barangFoot = document.getElementById('barangFoot');
+      const barangEmpty = document.getElementById('barangEmpty');
+      const counter = document.getElementById('counter');
+      const simpanBtn = document.getElementById('simpanBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const riwayatWrap = document.getElementById('riwayatWrap');
+      const riwayatBody = document.getElementById('riwayatBody');
+      const riwayatEmpty = document.getElementById('riwayatEmpty');
+      const refreshBtn = document.getElementById('refreshBtn');
+
+      const menuId = Number(new URLSearchParams(location.search).get('m')) || 0;
+
+      const up = (value) => String(value ?? '').toUpperCase();
+      const num = (value) => {
+        const n = Number(value);
+        return Number.isFinite(n) ? n : 0;
+      };
+      const rupiah = (value) => 'Rp ' + Math.round(num(value)).toLocaleString('id-ID');
+      const getAdmin = () => (localStorage.getItem(ADMIN_KEY) || '').trim() || DEFAULT_ADMIN;
+
+      const cell = (text, cls) => {
+        const td = document.createElement('td');
+        td.textContent = text;
+        if (cls) td.className = cls;
+        return td;
+      };
+
+      const keteranganOf = (selisih) => {
+        if (selisih === 0) return { text: 'Sesuai', cls: '' };
+        if (selisih < 0) return { text: 'Hilang / Rusak / Expired', cls: 'minus' };
+        return { text: 'Beda Input / Selisih Terima', cls: 'plus' };
+      };
+
+      const hitungBaris = (tr) => {
+        const onhand = num(tr.querySelector('.in-onhand').value);
+        const fisik = num(tr.querySelector('.in-fisik').value);
+        const hpp = num(tr.querySelector('.hpp').dataset.value);
+        const selisih = fisik - onhand;
+        const nominal = selisih * hpp;
+        const ket = keteranganOf(selisih);
+
+        const tdSelisih = tr.querySelector('.selisih');
+        tdSelisih.textContent = selisih > 0 ? '+' + selisih : String(selisih);
+        tdSelisih.className = 'selisih ' + (selisih === 0 ? '' : selisih < 0 ? 'minus' : 'plus');
+
+        const tdNominal = tr.querySelector('.nominal');
+        tdNominal.textContent = rupiah(nominal);
+        tdNominal.dataset.value = String(nominal);
+        tdNominal.className = 'nominal c-total ' + (nominal === 0 ? '' : nominal < 0 ? 'minus' : 'plus');
+
+        const tdKet = tr.querySelector('.keterangan');
+        tdKet.textContent = ket.text;
+        tdKet.className = 'keterangan ' + ket.cls;
+      };
+
+      const hitungTotal = () => {
+        let selisih = 0;
+        let nominal = 0;
+        barangBody.querySelectorAll('tr').forEach((tr) => {
+          selisih += num(tr.querySelector('.in-fisik').value) - num(tr.querySelector('.in-onhand').value);
+          nominal += num(tr.querySelector('.nominal').dataset.value);
+        });
+        barangFoot.innerHTML = '';
+        const tr = document.createElement('tr');
+        const tdTotal = cell('TOTAL');
+        tdTotal.colSpan = 7;
+        const tdSelisih = cell(
+          String(selisih),
+          'selisih ' + (selisih === 0 ? '' : selisih < 0 ? 'minus' : 'plus')
+        );
+        const tdNominal = cell(
+          rupiah(nominal),
+          'nominal c-total ' + (nominal === 0 ? '' : nominal < 0 ? 'minus' : 'plus')
+        );
+        tdNominal.colSpan = 2;
+        const tdSisa = cell('');
+        tr.append(tdTotal, tdSelisih, tdNominal, tdSisa);
+        barangFoot.appendChild(tr);
+        counter.textContent = barangBody.querySelectorAll('tr').length + ' barang';
+      };
+
+      const renderBarang = (barang, terakhir) => {
+        barangBody.innerHTML = '';
+        barang.forEach((row, i) => {
+          const nilai = terakhir.get(row.kode) || null;
+          const onhand = nilai ? num(nilai.stok_sistem) : num(row.stok_sistem);
+          const fisik = nilai ? num(nilai.stok_fisik) : 0;
+
+          const tr = document.createElement('tr');
+          tr.append(cell(String(i + 1), 'c-no'));
+
+          const tdFoto = document.createElement('td');
+          tdFoto.className = 'c-foto';
+          const foto = document.createElement('div');
+          foto.className = 'foto';
+          foto.textContent = '[Sisipkan Foto]';
+          tdFoto.appendChild(foto);
+          tr.appendChild(tdFoto);
+
+          tr.append(cell(row.kode || '-', 'kode'), cell(up(row.name)), cell(row.satuan || 'PCS', 'c-satuan'));
+
+          ['onhand', 'fisik'].forEach((jenis) => {
+            const td = document.createElement('td');
+            td.className = 'c-num';
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.min = '0';
+            input.className = 'cell-input in-' + jenis;
+            input.value = String(jenis === 'onhand' ? onhand : fisik);
+            input.addEventListener('input', () => {
+              hitungBaris(tr);
+              hitungTotal();
+            });
+            td.appendChild(input);
+            tr.appendChild(td);
+          });
+
+          tr.appendChild(cell('0', 'selisih'));
+
+          const hpp = num(row.hpp);
+          const tdHpp = cell(rupiah(hpp), 'c-num');
+          tdHpp.classList.add('hpp');
+          tdHpp.dataset.value = String(hpp);
+          tr.appendChild(tdHpp);
+
+          tr.appendChild(cell('Rp 0', 'nominal c-total'));
+          tr.appendChild(cell('Sesuai', 'keterangan'));
+
+          hitungBaris(tr);
+          barangBody.appendChild(tr);
+        });
+        barangEmpty.hidden = barang.length > 0;
+        document.getElementById('barangWrap').hidden = barang.length === 0;
+        hitungTotal();
+      };
+
+      const load = async () => {
+        if (!menuId) {
+          judulSo.textContent = 'Pilih menu SO dulu';
+          return;
+        }
+        const { data: menu, error: errMenu } = await supabase
+          .from('so_menus')
+          .select('id, name, lokasi, tim_checker')
+          .eq('id', menuId)
+          .single();
+        if (errMenu || !menu) {
+          judulSo.textContent = 'Menu tidak ditemukan';
+          console.error('Gagal memuat menu:', errMenu && errMenu.message);
+          return;
+        }
+        judulSo.textContent = up(menu.name);
+        infoTanggal.textContent = new Date()
+          .toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
+          .toUpperCase();
+        infoLokasi.textContent = up(menu.lokasi || '-');
+        infoTim.textContent = up(menu.tim_checker || '-');
+        infoAdmin.textContent = up(getAdmin());
+
+        const { data: barang, error: errBarang } = await supabase
+          .from('stock_products')
+          .select('id, kode, name, satuan, stok_sistem, hpp')
+          .eq('menu_id', menuId)
+          .order('kode');
+        if (errBarang) {
+          console.error('Gagal memuat barang:', errBarang.message);
+          return;
+        }
+
+        const { data: riwayat } = await supabase
+          .from('stock_opname')
+          .select('product_plu, stok_sistem, stok_fisik')
+          .eq('menu_id', menuId)
+          .order('id', { ascending: false })
+          .limit(200);
+        const terakhir = new Map();
+        (riwayat || []).forEach((r) => {
+          if (r.product_plu && !terakhir.has(r.product_plu)) terakhir.set(r.product_plu, r);
+        });
+
+        renderBarang(barang || [], terakhir);
+      };
+
+      simpanBtn.addEventListener('click', async () => {
+        if (!menuId) return;
+        const admin = getAdmin();
+        const now = new Date().toISOString();
+        const rows = [];
+        barangBody.querySelectorAll('tr').forEach((tr) => {
+          const onhand = num(tr.querySelector('.in-onhand').value);
+          const fisik = num(tr.querySelector('.in-fisik').value);
+          if (onhand === 0 && fisik === 0) return;
+          const hpp = num(tr.querySelector('.hpp').dataset.value);
+          const selisih = fisik - onhand;
+          rows.push({
+            menu_id: menuId,
+            product_plu: tr.querySelector('.kode').textContent,
+            quantity: fisik,
+            stok_sistem: onhand,
+            stok_fisik: fisik,
+            hpp,
+            selisih,
+            total_nominal: selisih * hpp,
+            keterangan: keteranganOf(selisih).text,
+            admin,
+            opname_date: now,
+          });
+        });
+        if (rows.length === 0) return;
+        simpanBtn.disabled = true;
+        const { error } = await supabase.from('stock_opname').insert(rows);
+        simpanBtn.disabled = false;
+        if (error) {
+          console.error('Gagal menyimpan stok:', error.message);
+          return;
+        }
+        loadBarangNilai();
+        loadRiwayat();
+      });
+
+      resetBtn.addEventListener('click', () => {
+        barangBody.querySelectorAll('tr').forEach((tr) => {
+          tr.querySelector('.in-fisik').value = '0';
+          hitungBaris(tr);
+        });
+        hitungTotal();
+      });
+
+      const loadBarangNilai = async () => {
+        const { data: riwayat } = await supabase
+          .from('stock_opname')
+          .select('product_plu, stok_sistem, stok_fisik')
+          .eq('menu_id', menuId)
+          .order('id', { ascending: false })
+          .limit(200);
+        const terakhir = new Map();
+        (riwayat || []).forEach((r) => {
+          if (r.product_plu && !terakhir.has(r.product_plu)) terakhir.set(r.product_plu, r);
+        });
+        barangBody.querySelectorAll('tr').forEach((tr) => {
+          const kode = tr.querySelector('.kode').textContent;
+          const nilai = terakhir.get(kode);
+          if (!nilai) return;
+          tr.querySelector('.in-onhand').value = String(num(nilai.stok_sistem));
+          tr.querySelector('.in-fisik').value = String(num(nilai.stok_fisik));
+          hitungBaris(tr);
+        });
+        hitungTotal();
+      };
+
+      const formatWaktu = (value) => {
+        if (!value) return '-';
+        const d = new Date(value);
+        if (Number.isNaN(d.getTime())) return '-';
+        return d.toLocaleString('id-ID', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+      };
+
+      const loadRiwayat = async () => {
+        if (!menuId) return;
+        const { data, error } = await supabase
+          .from('stock_opname')
+          .select('product_plu, stok_sistem, stok_fisik, selisih, total_nominal, opname_date, created_at')
+          .eq('menu_id', menuId)
+          .order('id', { ascending: false })
+          .limit(50);
+        if (error) {
+          console.error('Gagal memuat riwayat:', error.message);
+          return;
+        }
+        const rows = data || [];
+        riwayatBody.innerHTML = '';
+        rows.forEach((row) => {
+          const tr = document.createElement('tr');
+          tr.append(
+            cell(formatWaktu(row.opname_date || row.created_at)),
+            cell(row.product_plu || '-', 'kode'),
+            cell(String(num(row.stok_sistem)), 'c-num'),
+            cell(String(num(row.stok_fisik)), 'c-num'),
+            cell(String(num(row.selisih)), 'c-num'),
+            cell(rupiah(row.total_nominal), 'c-total')
+          );
+          riwayatBody.appendChild(tr);
+        });
+        riwayatEmpty.hidden = rows.length > 0;
+        riwayatWrap.hidden = rows.length === 0;
+      };
+
+      refreshBtn.addEventListener('click', loadRiwayat);
+      load();
+    </script>
+  </body>
+</html>

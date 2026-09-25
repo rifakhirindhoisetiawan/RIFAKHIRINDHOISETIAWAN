@@ -311,11 +311,10 @@
       const menuItems = [
         { label: "GRID", href: "public/grid/grid.html", folder: "grid", ext: "jpg", thumb: "public/grid/image-index.jpg" },
         { label: "KOPI", href: "public/kopi/kopi.html", folder: "ja-di", ext: "png", thumb: "public/kopi/image-index.png" },
+        { label: "STOK OPNAME", href: "public/pastry-bakpau/stock.html", folder: "pastry-bakpau", ext: "jpg", thumb: "image-index/time-kamera/1.png" },
         { label: "DAILY TASK", href: "public/daily-task/daily-task.html", folder: "admin", ext: "jpg", thumb: "public/daily-task/image-index.jpg" },
         { label: "NOTE", href: "public/note/note.html", folder: "note", ext: "jpg", thumb: "public/note/image-index.jpg" },
         { label: "PLANO", href: "public/plano.html", folder: "plano", ext: "jpg" },
-        { label: "TIME KAMERA", href: "public/time-kamera.html", folder: "time-kamera", ext: "png" },
-        { label: "MEMOS", href: "memos.html", folder: "memos", ext: "png" },
         { label: "EXP", href: "#", folder: "exp", ext: "png" },
         { label: "PULANG", href: "#", folder: "pulang", ext: "png" },
         { label: "PAGI", href: "#", folder: "pagi", ext: "png" },
@@ -324,7 +323,7 @@
         { label: "SELANJUTNYA", href: "public/modul/selanjutnya.html", folder: "selanjutnya", ext: "jpg" },
       ];
 
-      const disabledLabels = new Set(["PLANO", "TIME KAMERA", "SELANJUTNYA"]);
+      const disabledLabels = new Set(["PLANO", "SELANJUTNYA"]);
       const menuList = document.getElementById("menuList");
       menuItems.forEach((item, idx) => {
         const isDisabled = item.href === "#" || disabledLabels.has(item.label);
