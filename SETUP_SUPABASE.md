@@ -14,7 +14,6 @@ Buka: https://supabase.com/dashboard/project/xsacwgxxoptdrgbbzzib/sql/new
 Di terminal VS Code jalankan:
 ```
 node scripts/test-supabase.mjs
-node scripts/wait-and-sync.mjs
 ```
 
 Jika masih PGRST205 = tabel belum ke-create, ulangi langkah 4.

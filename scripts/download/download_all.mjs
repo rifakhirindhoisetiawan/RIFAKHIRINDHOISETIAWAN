@@ -2,7 +2,7 @@ import https from 'https';
 import fs from 'fs';
 import path from 'path';
 
-const PHOTOS_DIR = path.join(process.cwd(), 'images', 'ja-di-photos');
+const PHOTOS_DIR = path.join(process.cwd(), 'kopi', 'image-kopi');
 fs.mkdirSync(PHOTOS_DIR, { recursive: true });
 
 const menuItems = [

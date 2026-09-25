@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>JA-DI</title>
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="theme-color" content="#ffffff" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        overflow: hidden;
+      }
+
+      body {
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 0;
+      }
+
+      .phone {
+        width: 100%;
+        max-width: 100%;
+        background: #ffffff;
+        border-radius: 0;
+        box-shadow: none;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        padding-bottom: env(safe-area-inset-bottom, 20px);
+      }
+
+      @media (min-width: 800px) {
+        .phone {
+          max-width: 800px;
+          margin: 0 auto;
+        }
+      }
+
+      .search-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 0 14px;
+      }
+      .search-box {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px 14px;
+        color: #222;
+        font-size: 14px;
+        background: #f9f9f9;
+      }
+      .search-box:focus-within {
+        border-color: #888;
+        background: #fff;
+      }
+      .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        font-size: 14px;
+        color: #222;
+        font-family: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        border-radius: 0;
+      }
+      .search-box input::placeholder {
+        color: #c3c8d1;
+      }
+      .search-box svg {
+        flex-shrink: 0;
+        color: #c3c8d1;
+        width: 18px;
+        height: 18px;
+      }
+
+      .menu-wrap {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 4px 18px 60px 18px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .menu-wrap::-webkit-scrollbar {
+        display: none;
+      }
+
+      .section-label {
+        font-size: 11px;
+        font-weight: 800;
+        color: #9aa0ab;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        margin: 4px 0 14px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 10px;
+      }
+
+      @media (min-width: 768px) {
+        .grid {
+          gap: 22px 14px;
+        }
+      }
+
+      .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        cursor: default;
+        background: none;
+        border: none;
+      }
+
+      .icon-tile {
+        width: 100%;
+        max-width: 110px;
+        aspect-ratio: 9 / 16;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        margin-bottom: 8px;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+      }
+      .icon-tile:not(.has-photo) {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.2s infinite;
+      }
+      @keyframes shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+      .icon-tile.has-photo {
+        animation: none;
+      }
+      .icon-photo {
+        padding: 0;
+        overflow: hidden;
+      }
+      .icon-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: inherit;
+        display: block;
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+      .icon-photo img.loaded {
+        opacity: 1;
+      }
+      .icon-photo.has-photo {
+        background-size: cover;
+        background-position: center;
+        animation: none;
+      }
+      .icon-photo.has-photo img {
+        display: none;
+      }
+
+      @media (max-width: 360px) {
+        .icon-tile {
+          max-width: 95px;
+          border-radius: 14px;
+        }
+      }
+
+      .item.active-modul {
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .item.active-modul span {
+        color: #1f2937;
+        font-weight: 800;
+      }
+
+      .item span {
+        font-size: 9px;
+        font-weight: 700;
+        color: #b6bac2;
+        line-height: 1.2;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .item span .plu-tag {
+        font-weight: 600;
+        color: #3b82f6;
+        font-size: 10px;
+        display: block;
+      }
+
+      @media (min-width: 768px) {
+        .item span {
+          font-size: 12px;
+        }
+      }
+
+      .g-a {
+        background: linear-gradient(135deg, #a5b4fc, #818cf8);
+      }
+      .g-b {
+        background: linear-gradient(135deg, #c4b5fd, #a78bfa);
+      }
+      .g-c {
+        background: linear-gradient(135deg, #93c5fd, #60a5fa);
+      }
+      .g-d {
+        background: linear-gradient(135deg, #67e8f9, #22d3ee);
+      }
+      .g-e {
+        background: linear-gradient(135deg, #6ee7b7, #34d399);
+      }
+      .g-f {
+        background: linear-gradient(135deg, #fcd34d, #fbbf24);
+      }
+      .g-g {
+        background: linear-gradient(135deg, #fca5a5, #f87171);
+      }
+      .g-h {
+        background: linear-gradient(135deg, #f0abfc, #e879f9);
+      }
+
+      .empty-msg {
+        grid-column: 1 / -1;
+        text-align: center;
+        color: #9aa0ab;
+        font-size: 13px;
+        padding: 40px 0;
+        font-weight: 600;
+      }
+
+      .sheet-bg {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 50;
+        align-items: flex-end;
+        justify-content: center;
+      }
+      .sheet-bg.open {
+        display: flex;
+      }
+      .sheet {
+        background: #fff;
+        width: 100%;
+        max-width: 800px;
+        max-height: 88vh;
+        overflow-y: auto;
+        border-radius: 20px 20px 0 0;
+        padding: 10px 18px 32px;
+        animation: sheetUp 0.22s ease;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .sheet::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        display: none;
+      }
+      @keyframes sheetUp {
+        from { transform: translateY(40px); opacity: 0.5; }
+        to { transform: none; opacity: 1; }
+      }
+      .sheet-handle {
+        width: 40px;
+        height: 4px;
+        border-radius: 4px;
+        background: #e5e5e5;
+        margin: 2px auto 14px;
+      }
+      .sheet-photo {
+        width: 100%;
+        aspect-ratio: 9 / 16;
+        border-radius: 16px;
+        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        color: #fff;
+      }
+      .sheet-top {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .sheet-top .sheet-photo {
+        width: 42%;
+        flex-shrink: 0;
+        max-height: 52vh;
+      }
+      .sheet-side {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .sheet-side .sheet-name {
+        margin: 0;
+      }
+      .sheet-side .sheet-meta {
+        margin-bottom: 0;
+      }
+      .sheet-side .sheet-btn {
+        margin-top: 0;
+        padding: 10px;
+        font-size: 13px;
+      }
+      .sheet-side .sheet-close {
+        margin-top: 0;
+        padding: 10px;
+        font-size: 13px;
+      }
+      .plu-table {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .plu-row {
+        display: flex;
+        align-items: stretch;
+      }
+      .plu-row + .plu-row {
+        border-top: 1px solid #eee;
+      }
+      .plu-th {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 6px 8px;
+        font-size: 9px;
+        font-weight: 800;
+        color: #4f46e5;
+        background: #eef2ff;
+        min-width: 62px;
+      }
+      .plu-td {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        padding: 6px 10px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #1f2937;
+      }
+      .sheet-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .sheet-name {
+        font-size: 16px;
+        font-weight: 800;
+        color: #1f2937;
+        margin: 8px 0 6px;
+        line-height: 1.25;
+      }
+      .sheet-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+      .sheet-badge {
+        font-size: 10px;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 6px;
+        background: #eef2ff;
+        color: #4f46e5;
+        letter-spacing: 0.4px;
+      }
+      .sheet-sec {
+        font-size: 11px;
+        font-weight: 800;
+        color: #4f46e5;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        margin: 14px 0 8px;
+      }
+      .sheet-bahans {
+        display: grid;
+        gap: 8px;
+      }
+      .bahan-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        background: #fff;
+        border: 1px solid #c7d2fe;
+        border-radius: 10px;
+        padding: 9px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #1f2937;
+      }
+      .dual-methods{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+      .method-col h4{font-size:11px;margin:0 0 6px;padding:6px 10px;border-radius:6px 6px 0 0;text-transform:uppercase;letter-spacing:0.4px;color:#fff}
+      .method-col.normal h4{background:#1565c0}
+      .method-col.accel h4{background:#2e7d32}
+      .method-col .sheet-bahans{margin-top:0}
+      .method-col .sheet-sec{margin-top:0}
+      @media(max-width:640px){.dual-methods{grid-template-columns:1fr}}
+      .sheet-note {
+        background: #fff;
+        border: 1px solid #c7d2fe;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 13px;
+        color: #374151;
+        line-height: 1.5;
+      }
+      .sheet-empty {
+        text-align: center;
+        color: #9aa0ab;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 20px 0;
+      }
+      .sheet-btn {
+        display: block;
+        text-align: center;
+        margin-top: 16px;
+        background: #6366f1;
+        color: #fff;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 12px;
+        border-radius: 10px;
+        text-decoration: none;
+      }
+      .sheet-close {
+        display: block;
+        width: 100%;
+        margin-top: 8px;
+        background: #f5f5f5;
+        color: #1a1a1a;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="phone">
+      <div class="menu-wrap">
+        <div class="search-row">
+          <div class="search-box">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Cari menu..."
+              oninput="renderMenu()"
+            />
+          </div>
+        </div>
+
+        <div id="status" style="display:none"></div><div class="grid" id="menuGrid"></div>
+      </div>
+    </div>
+
+    <div class="sheet-bg" id="sheetBg">
+      <div class="sheet" role="dialog" aria-modal="true">
+        <div class="sheet-handle"></div>
+        <div id="sheetBody"></div>
+      </div>
+    </div>
+
+
+    <script type="module">
+      import { supabase } from './supabase.js';
+      import { toWebPThumb, toWebPLarge } from '../index/image-loader.js';
+
+      let fallbackMenus = [];
+      try {
+        const res = await fetch('data-kopi.json');
+        if (res.ok) fallbackMenus = await res.json();
+      } catch(e) { console.warn('Fallback load error:', e.message); }
+      let menus = [...fallbackMenus];
+      let shownMenus = [];
+      let isSupabase = false;
+      const menuGrid = document.getElementById('menuGrid');
+      const searchInput = document.getElementById('searchInput');
+      const statusEl = document.getElementById('status');
+      const sheetBg = document.getElementById('sheetBg');
+      const sheetBody = document.getElementById('sheetBody');
+      function slugify(str) {
+        return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      }
+      function normalizeMenu(m) {
+        let link = m.link || '';
+        let cat = m.cat || '';
+        if (!link && cat.endsWith('.html')) { link = cat; cat = ''; }
+        if (cat && cat.includes('.html') && !link) { link = cat; cat = ''; }
+        return { ...m, link: resolveLink(link), cat };
+      }
+      // ja-di.html ada di folder modul/, sedangkan file item ada di root (pages/, *.html)
+      // jadi link relatif-root harus di-resolve dengan ../
+      function resolveLink(link) {
+        if (!link) return link;
+        if (/^(https?:|data:|blob:)/i.test(link)) return link;
+        if (link.startsWith('../') || link.startsWith('/')) return link;
+        if (link.startsWith('pages/') || link.startsWith('image-index/') || link.startsWith('image-kopi/') || link.startsWith('images/') || link.startsWith('modul/')) return '../' + link;
+        if (link.endsWith('.html') && !link.includes('/')) return '../' + link;
+        return link;
+      }
+      const adminMenu = { name: "ADMIN", foto: "../index/image-index/daily-task/1.jpg", cls: "g-a", link: "../admin.html", cat: "ADMIN" };
+      function renderMenu() {
+        const q = (searchInput.value || '').trim().toLowerCase();
+        const baseFiltered = menus.map(normalizeMenu).filter(m => {
+          if (!q) return true;
+          return m.name.toLowerCase().includes(q) ||
+                 (m.cat && m.cat.toLowerCase().includes(q)) ||
+                 (m.plu && m.plu.toLowerCase().includes(q)) ||
+                 (m.catatan && m.catatan.toLowerCase().includes(q));
+        });
+        const adminMatch = !q || "admin".includes(q);
+        const filtered = adminMatch ? [adminMenu, ...baseFiltered] : baseFiltered;
+        if (filtered.length === 0) {
+          shownMenus = [];
+          menuGrid.innerHTML = '<div class="empty-msg">Tidak ditemukan</div>';
+          return;
+        }
+        shownMenus = filtered;
+        menuGrid.innerHTML = filtered.map((m, i) => {
+          const slug = slugify(m.name);
+          const hasLink = m.link && m.link.length > 0;
+          const tag = hasLink ? 'a' : 'div';
+          const href = hasLink ? ' href="' + m.link + '"' : '';
+          const isImgIcon = m.name === "ADMIN" ? true : !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
+          let iconHtml;
+          if (isImgIcon) {
+            const thumbUrl = toWebPThumb(m.foto, 80, 80, 70);
+            iconHtml = '<img src="' + thumbUrl + '" alt="" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;border-radius:inherit" onload="this.classList.add(\'loaded\')" onerror="this.style.display=\'none\'"/>';
+          } else {
+            iconHtml = '';
+          }
+          return '<' + tag + ' class="item js-detail' + (hasLink ? ' active-modul' : '') + '"' + href + ' data-idx="' + i + '">' +
+                   '<div class="icon-tile ' + (m.cls||'g-a') + ' icon-photo" data-slug="' + slug + '"' + (isImgIcon ? ' data-hasimg="1"' : '') + '>' + iconHtml + '</div>' +
+                   '<span>' + m.name + '</span>' +
+                 '</' + tag + '>';
+        }).join('');
+        menuGrid.querySelectorAll('.js-detail').forEach(el => {
+          el.addEventListener('click', (e) => {
+            const m = shownMenus[parseInt(el.dataset.idx)];
+            if (m.name === "ADMIN") return;
+            e.preventDefault();
+            openSheet(m);
+          });
+        });
+         // Foto load langsung via <img> onload, tidak pakai lazy loader
+         // (lazy loader bisa overwrite <img> dengan background-image)
+         // document.querySelectorAll('.icon-photo[data-slug]').forEach((tile) => {
+         //   photoLazyLoader.observe(tile);
+         // });
+      }
+      function openSheet(m) {
+        if (!m) return;
+        const b12 = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_12oz_' + i]).filter(Boolean);
+        const b16 = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_16oz_' + i]).filter(Boolean);
+        const bHot = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_hot_' + i]).filter(Boolean);
+        const bHot16 = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_hot_16oz_' + i]).filter(Boolean);
+        const p12 = [1,2,3,4,5,6,7,8,9,10].map(i => m['percepatan_12oz_' + i]).filter(Boolean);
+        const p16 = [1,2,3,4,5,6,7,8,9,10].map(i => m['percepatan_16oz_' + i]).filter(Boolean);
+        const bahans = [...b12, ...b16, ...bHot, ...bHot16, ...p12, ...p16];
+        const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
+        let photo;
+        if (isImg) {
+          const largeUrl = toWebPLarge(m.foto, 360, 640, 80);
+          photo = '<img src="' + largeUrl + '" alt="" loading="lazy" decoding="async"/>';
+        } else {
+          photo = '<span style="font-size:48px">' + (m.foto||'☕') + '</span>';
+        }
+        const pluRows = [['PLU 12OZ', m.plu_12oz || '-'], ['PLU 16OZ', m.plu_16oz || '-'], ['PLU HOT', m.plu_hot || '-']];
+        if (!m.plu_12oz && !m.plu_16oz && !m.plu_hot && m.plu) pluRows.push(['PLU', m.plu]);
+        let html = '<div class="sheet-top"><div class="sheet-photo ' + (m.cls||'g-a') + '">' + photo + '</div><div class="sheet-side">';
+        html += '<div class="sheet-name">' + m.name + '</div>';
+        html += '<div class="sheet-meta">';
+        if (m.cat) html += '<span class="sheet-badge">' + m.cat + '</span>';
+        html += '</div>';
+        if (pluRows.length) html += '<div class="plu-table">' + pluRows.map(function(r){ return '<div class="plu-row"><div class="plu-th">' + r[0] + '</div><div class="plu-td">' + r[1] + '</div></div>'; }).join('') + '</div>';
+        if (m.link) html += '<a class="sheet-btn" href="' + m.link + '">Buka Halaman Resep</a>';
+        html += '<button class="sheet-close" id="sheetClose" type="button">Tutup</button>';
+        html += '</div></div>';
+        function bahanGroup(title, list) {
+          return '<div class="sheet-sec">' + title + '</div><div class="sheet-bahans">' +
+            list.map((b) => '<div class="bahan-row"><span>' + b + '</span></div>').join('') +
+            '</div>';
+        }
+        function bahanTextGroup(title, text) {
+          if (!text) return '';
+          const parts = text.split('+').map(s=>s.trim()).filter(Boolean);
+          return bahanGroup(title, parts);
+        }
+        if (bHot.length) html += bahanGroup('HOT', bHot);
+        if (bHot16.length) html += bahanGroup('HOT 16OZ', bHot16);
+        if (p12.length) html += bahanGroup('P12', p12);
+        if (p16.length) html += bahanGroup('P16', p16);
+        if (b12.length) html += bahanGroup('12OZ', b12);
+        if (b16.length) html += bahanGroup('16OZ', b16);
+        if (m.catatan) html += '<div class="sheet-sec">Catatan</div><div class="sheet-note">' + m.catatan + '</div>';
+        if (!bahans.length && !m.catatan) html += '<div class="sheet-empty">Belum ada data bahan.</div>';
+        sheetBody.innerHTML = html;
+        sheetBg.classList.add('open');
+        document.getElementById('sheetClose').addEventListener('click', closeSheet);
+      }
+      function closeSheet() {
+        sheetBg.classList.remove('open');
+      }
+      sheetBg.addEventListener('click', (e) => {
+        if (e.target === sheetBg) closeSheet();
+      });
+       // Lazy loader dimatikan untuk grid KOPI - foto load langsung via <img onload>
+      searchInput.addEventListener('input', renderMenu);
+
+      // First paint: render data lokal DULU, lalu refresh dari Supabase saat sampai.
+      // Sebelumnya halaman menunggu fetch Supabase selesai -> grid kosong berdetik-detikan di HP.
+      renderMenu();
+
+      let lastSig = null;
+      async function loadFromSupabase() {
+        statusEl.textContent = 'Memuat dari Supabase...';
+        try {
+          const { data, error } = await supabase.from('ja_di_menus').select('*').order('id', { ascending: true });
+          if (error) throw error;
+          if (data && data.length > 0) {
+            const fbCat = {};
+            fallbackMenus.forEach(function(f){ if (f.name && f.cat) fbCat[f.name.toUpperCase().replace(/\s+/g, ' ').trim()] = f.cat; });
+            const next = data.map(m => { const k = (m.name || '').toUpperCase().replace(/\s+/g, ' ').trim(); return { ...m, cat: m.cat || fbCat[k] || '', plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || m.plu || '' }; });
+            const sig = next.map(m => (m.name || '') + '|' + (m.cat || '') + '|' + (m.plu || '')).join('§');
+            if (sig !== lastSig) {
+              menus = next;
+              isSupabase = true;
+              lastSig = sig;
+              renderMenu();
+            }
+            statusEl.textContent = '✅ ' + data.length + ' menu dari Supabase';
+            statusEl.style.color = '#10b981';
+          } else {
+            statusEl.textContent = '⚠️ Supabase kosong, pakai data lokal';
+            statusEl.style.color = '#f59e0b';
+          }
+        } catch (e) {
+          console.warn('Supabase error, fallback:', e.message);
+          statusEl.textContent = '⚠️ Offline (' + e.message.slice(0,40) + ')';
+          statusEl.style.color = '#ef4444';
+          if (!isSupabase) renderMenu();
+        }
+        setTimeout(() => { statusEl.textContent = isSupabase ? '✅ Live dari Supabase' : '📦 Data lokal'; statusEl.style.color = isSupabase ? '#10b981' : '#9aa0ab'; }, 3000);
+      }
+      // Realtime di-debounce: kalau banyak event beruntun, cukup fetch sekali,
+      // dan render-ulang hanya kalau data beneran berubah (tidak flicker).
+      let rtTimer = null;
+      try {
+        supabase.channel('ja_di_menus_changes')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'ja_di_menus' }, () => {
+            clearTimeout(rtTimer);
+            rtTimer = setTimeout(() => loadFromSupabase(), 400);
+          })
+          .subscribe();
+      } catch(e) { console.log('Realtime not enabled', e.message); }
+      loadFromSupabase();
+    </script>
+  </body>
+</html>

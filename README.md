@@ -41,9 +41,9 @@ Semua skrip menggunakan `process.cwd()`, jalankan dari **root proyek**.
 # Sinkronkan resep .txt -> pages/*.html
 node scripts/sync/sync-recipes.mjs
 
-# Sinkronkan data JA-DI
-node scripts/sync/sync-data.mjs
-node scripts/sync/sync-menus.mjs
+# Sinkronkan data JA-DI (ARSIP — file pindah ke archive/legacy-scripts/, jangan dijalankan)
+# node archive/legacy-scripts/sync-data.mjs
+# node archive/legacy-scripts/sync-menus.mjs
 
 # Download foto (Wikimedia Commons)
 node scripts/download/download_all.mjs
