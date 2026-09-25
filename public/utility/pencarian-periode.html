@@ -149,8 +149,8 @@
 
       .icon-tile {
         width: 100%;
-        max-width: 110px;
-        aspect-ratio: 9 / 16;
+        max-width: 160px;
+        aspect-ratio: 4 / 3;
         border-radius: 16px;
         display: flex;
         align-items: center;
@@ -161,7 +161,12 @@
         opacity: 0.55;
       }
 
+      @media (max-width: 480px) {
+        .icon-tile { max-width: 140px; }
+      }
       @media (max-width: 360px) {
+        .icon-tile { max-width: 120px; aspect-ratio: 1 / 1; }
+      }
         .icon-tile {
           max-width: 95px;
           border-radius: 14px;
