@@ -1,15 +1,380 @@
 <!doctype html>
+
 <html lang="id">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+      name="viewport"
+    />
     <title>My Love</title>
-    <!-- Halaman utama pindah ke index/ (tiap menu di folder sendiri) -->
-    <meta http-equiv="refresh" content="0;url=index/index.html" />
-    <link rel="canonical" href="index/index.html" />
+    <meta content="#ffffff" name="theme-color" />
+    <meta content="yes" name="mobile-web-app-capable" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta
+      content="black-translucent"
+      name="apple-mobile-web-app-status-bar-style"
+    />
+    <meta content=" " name="apple-mobile-web-app-title" />
+    <link
+      href="image-index/favicon.png"
+      rel="icon"
+      sizes="192x192"
+      type="image/png"
+    />
+    <link
+      href="image-index/icon-512x512.png"
+      rel="icon"
+      sizes="512x512"
+      type="image/png"
+    />
+    <link
+      href="image-index/apple-touch-icon-152x152.png"
+      rel="apple-touch-icon"
+    />
+    <link
+      href="image-index/apple-touch-icon-180x180.png"
+      rel="apple-touch-icon"
+      sizes="180x180"
+    />
+    <link
+      href="image-index/apple-touch-icon-192x192.png"
+      rel="apple-touch-icon"
+      sizes="192x192"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+    <script>
+      const ICON192 = "image-index/icon-192x192.png";
+      const ICON512 = "image-index/icon-512x512.png";
+      const manifest = {
+        name: "My Love",
+        short_name: "MyLove",
+        description: "My Love",
+        start_url: "./index.html",
+        scope: "./",
+        display: "standalone",
+        orientation: "portrait",
+        background_color: "#ffffff",
+        theme_color: "#ffffff",
+        icons: [
+          { src: ICON192, sizes: "192x192", type: "image/png", purpose: "any" },
+          {
+            src: ICON192,
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "maskable",
+          },
+          { src: ICON512, sizes: "512x512", type: "image/png", purpose: "any" },
+          {
+            src: ICON512,
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
+          },
+        ],
+      };
+      const blob = new Blob([JSON.stringify(manifest)], {
+        type: "application/json",
+      });
+      const link = document.createElement("link");
+      link.rel = "manifest";
+      link.href = URL.createObjectURL(blob);
+      document.head.appendChild(link);
+    </script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+        height: 100dvh;
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+        width: 100%;
+        background: #ffffff !important;
+        margin: 0;
+        padding: 0;
+      }
+
+      ::-webkit-scrollbar {
+        width: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #999;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #ffffff !important;
+        min-height: 100vh;
+        min-height: 100dvh;
+        padding: 0;
+        margin: 0;
+        overflow-x: hidden;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 800px;
+        min-height: 100vh;
+        min-height: 100dvh;
+        background: #ffffff;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 12px 18px 40px;
+        padding-top: max(12px, env(safe-area-inset-top));
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        margin: 0 auto;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 10px;
+        width: 100%;
+        align-content: start;
+      }
+
+      .search-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        margin-bottom: 14px;
+      }
+
+      .search-box {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px 14px;
+        color: #222;
+        font-size: 14px;
+        background: #f9f9f9;
+      }
+
+      .search-box:focus-within {
+        border-color: #888;
+        background: #fff;
+      }
+
+      .search-box svg {
+        flex-shrink: 0;
+        color: #c3c8d1;
+        width: 18px;
+        height: 18px;
+      }
+
+      .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        font-size: 14px;
+        color: #222;
+        font-family: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        border-radius: 0;
+      }
+
+      .search-box input::placeholder {
+        color: #c3c8d1;
+      }
+
+      .menu-list {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 10px;
+        width: 100%;
+        align-content: start;
+      }
+
+      .menu-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #1a1a1a;
+        cursor: pointer;
+      }
+
+      .menu-item .icon-box {
+        width: 100%;
+        max-width: 160px;
+        aspect-ratio: 4 / 3;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.2s infinite;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .menu-item .icon-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+
+      .menu-item .icon-box img.loaded {
+        opacity: 1;
+      }
+
+      @keyframes shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+
+      .menu-item .label {
+        font-size: 9px;
+        font-weight: 700;
+        text-align: center;
+        line-height: 1.2;
+        color: #1f2937;
+        max-width: 100%;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .hidden-item {
+        display: none !important;
+      }
+      .menu-item.disabled {
+        opacity: 0.35;
+        pointer-events: none;
+        filter: grayscale(1);
+      }
+      .menu-item.disabled .icon-box {
+        background: #e5e7eb;
+      }
+      .menu-item.disabled .label {
+        color: #9aa0ab;
+      }
+
+      @media (max-width: 480px) {
+        .menu-item .icon-box {
+          max-width: 140px;
+          aspect-ratio: 4 / 3;
+        }
+      }
+      @media (max-width: 360px) {
+        .menu-item .icon-box {
+          max-width: 120px;
+          aspect-ratio: 1 / 1;
+          border-radius: 14px;
+        }
+        .menu-item .label {
+          font-size: 10px;
+        }
+      }
+    </style>
   </head>
-  <body style="font-family:sans-serif;text-align:center;padding-top:40px">
-    <p>Membuka <a href="index/index.html">halaman utama</a>…</p>
-    <script>location.replace("index/index.html");</script>
+  <body>
+    <div class="container">
+      <div class="search-wrapper">
+        <div style="flex:1;display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f9f9f9;border:1px solid #ddd;border-radius:10px;min-width:0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#c3c8d1;width:18px;height:18px;flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <div id="dateTime" style="flex:1;min-width:0;font-family:'Inter',sans-serif;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:space-between">Memuat...</div>
+        </div>
+      </div>
+      <div class="menu-list" id="menuList"></div>
+    </div>
+    <script type="module">
+      import { loadIndexPhoto, createLazyLoader } from './image-loader.js';
+
+      const menuItems = [
+        { label: "GRID", href: "public/grid/grid.html", folder: "grid", ext: "jpg", thumb: "public/grid/image-index.jpg" },
+        { label: "KOPI", href: "public/kopi/kopi.html", folder: "ja-di", ext: "png", thumb: "public/kopi/image-index.png" },
+        { label: "DAILY TASK", href: "public/daily-task/daily-task.html", folder: "admin", ext: "jpg", thumb: "public/daily-task/image-index.jpg" },
+        { label: "NOTE", href: "public/note/note.html", folder: "note", ext: "jpg", thumb: "public/note/image-index.jpg" },
+        { label: "PLANO", href: "public/plano.html", folder: "plano", ext: "jpg" },
+        { label: "TIME KAMERA", href: "public/time-kamera.html", folder: "time-kamera", ext: "png" },
+        { label: "MEMOS", href: "memos.html", folder: "memos", ext: "png" },
+        { label: "EXP", href: "#", folder: "exp", ext: "png" },
+        { label: "PULANG", href: "#", folder: "pulang", ext: "png" },
+        { label: "PAGI", href: "#", folder: "pagi", ext: "png" },
+        { label: "SIANG", href: "#", folder: "siang", ext: "png" },
+        { label: "MALAM", href: "#", folder: "malam", ext: "png" },
+        { label: "SELANJUTNYA", href: "public/modul/selanjutnya.html", folder: "selanjutnya", ext: "jpg" },
+      ];
+
+      const disabledLabels = new Set(["PLANO", "TIME KAMERA", "SELANJUTNYA"]);
+      const menuList = document.getElementById("menuList");
+      menuItems.forEach((item, idx) => {
+        const isDisabled = item.href === "#" || disabledLabels.has(item.label);
+        const a = document.createElement(isDisabled ? "div" : "a");
+        a.className = "menu-item" + (isDisabled ? " disabled" : "");
+        if (!isDisabled) a.href = item.href;
+        if (isDisabled) a.setAttribute("aria-disabled", "true");
+        a.innerHTML = `
+          <div class="icon-box">
+            <img
+              alt="${item.label}"
+              ${item.thumb ? '' : `data-menu="${item.folder}"`}
+              src="${item.thumb || `image-index/${item.folder}/1.${item.ext}`}"
+              loading="lazy"
+              decoding="async"
+              onload="this.classList.add('loaded')"
+            />
+          </div>
+          <span class="label">${item.label}</span>
+        `;
+        menuList.appendChild(a);
+      });
+
+      const dateTimeEl = document.getElementById("dateTime");
+      function updateDateTime(){
+        const now = new Date();
+        const tgl = now.toLocaleDateString('id-ID', { weekday:'short', day:'2-digit', month:'short', year:'numeric' });
+        const jam = now.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false });
+        if(dateTimeEl) dateTimeEl.innerHTML = '<span style="font-size:clamp(11px,2.8vw,13px);font-weight:700;color:#1f2937;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0">'+tgl+'</span><span style="font-family:\'JetBrains Mono\',monospace;font-size:clamp(12px,3.2vw,14px);font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0">'+jam+'</span>';
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+
+      // Lazy load dengan IntersectionObserver
+      const lazyLoader = createLazyLoader(async (img) => {
+        const menu = img.dataset.menu;
+        await loadIndexPhoto(menu, img);
+        img.classList.add('loaded');
+      });
+
+      document.querySelectorAll('img[data-menu]').forEach((img) => {
+        lazyLoader.observe(img);
+      });
+    </script>
   </body>
 </html>
