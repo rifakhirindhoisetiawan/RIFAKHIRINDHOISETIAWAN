@@ -6,6 +6,7 @@
   <title>Admin — JA-DI Supabase</title>
 <style>
     *{margin:0;padding:0;box-sizing:border-box}
+    :root{--admin-photo-size:clamp(110px,32vw,125px)}
     html,body{max-width:100%;overflow-x:hidden}
     html,body{width:100%;height:100%;background:#ffffff}
     body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;background:#ffffff;color:#1a1a1a;min-height:100vh;overflow-x:hidden}
@@ -111,8 +112,15 @@
    .form-compact .th{font-size:9px;font-weight:700;padding:2px 8px;min-width:auto;border:1px solid #c7d2fe;border-radius:6px;background:#eef2ff;color:#4f46e5;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;justify-content:center}
    .form-compact .td{flex:1;display:flex;align-items:center;padding:2px;border:1px solid #c7d2fe;border-radius:6px;min-width:0}
    .form-compact .td input{width:100%;font-size:10px;padding:4px 6px;border:none;border-radius:4px;color:#111827;background:transparent;outline:none;font-family:inherit}
-   .form-compact .td input:focus{background:#fff}
-   input:focus{outline:none !important;box-shadow:none !important}
+    .form-compact .td input:focus{background:#fff}
+     .form-side-table{border:0!important}
+     .admin-plu-table{border:0;border-radius:10px;overflow:hidden;background:#fff}
+    .admin-plu-table .top-row{align-items:stretch!important;gap:0!important;padding:0!important;border-bottom:1px solid #eee!important}
+    .admin-plu-table .top-row:last-child{border-bottom:0!important}
+    .admin-plu-table .top-row > div:first-child{flex:0 0 62px!important;width:62px!important;min-height:32px!important;padding:6px 8px!important;border-radius:0!important;background:#eef2ff!important;color:#4f46e5!important;box-shadow:none!important;font-size:9px!important;font-weight:800!important;text-align:center!important}
+    .admin-plu-table .top-row > div:last-child{flex:1!important;min-height:32px!important;padding:6px 10px!important;border-bottom:0!important;background:#fff!important}
+    .admin-plu-table .top-row input{width:100%!important;padding:0!important;border:0!important;font-size:12px!important;font-weight:700!important;text-transform:uppercase!important;color:#1f2937!important;background:transparent!important}
+    input:focus{outline:none !important;box-shadow:none !important}
 
    .tab-bar{display:flex;gap:4px;margin-top:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
    .tab-bar::-webkit-scrollbar{display:none}
@@ -162,15 +170,16 @@
     
     /* New sheet top */
     .sheet-top-new{display:flex;gap:12px;padding:12px 16px;background:#fff;border-bottom:1px solid #e5e7eb}
-    .sheet-photo-wrap-new{width:120px;flex-shrink:0;aspect-ratio:9/16;border-radius:16px;overflow:hidden;background:#f5f5f5}
+    .sheet-photo-wrap-new{width:var(--admin-photo-size);flex-shrink:0;aspect-ratio:9/16;border-radius:16px;overflow:hidden;background:#f5f5f5}
     .sheet-photo-img-new{width:100%;height:100%;object-fit:cover;display:block}
     .sheet-photo-placeholder-new{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;background:#f5f5f5;color:#999}
     .sheet-info-wrap-new{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px;padding-top:4px}
     .sheet-name-new{font-size:20px;font-weight:800;color:#1a1a1a;line-height:1.2;letter-spacing:-0.5px}
-    .sheet-plu-row-new{display:flex;gap:8px;flex-wrap:wrap}
-    .plu-chip-new{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 12px;background:#f5f5f5;border-radius:10px;min-width:70px}
-    .plu-label-new{font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.5px}
-    .plu-value-new{font-size:13px;font-weight:700;color:#1a1a1a}
+     .sheet-plu-table{border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;background:#fff}
+     .sheet-plu-row{display:flex;align-items:stretch}
+     .sheet-plu-row + .sheet-plu-row{border-top:1px solid #eee}
+     .sheet-plu-th{display:flex;align-items:center;justify-content:center;text-align:center;padding:6px 8px;font-size:9px;font-weight:800;color:#4f46e5;background:#eef2ff;min-width:62px}
+     .sheet-plu-td{flex:1;display:flex;align-items:center;padding:6px 10px;font-size:12px;font-weight:700;color:#1f2937;min-width:0;overflow-wrap:anywhere}
     .sheet-close-btn-new{width:100%;padding:12px;margin-top:4px;background:#f3f4f6;color:#1a1a1a;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer;font-family:inherit}
     .sheet-close-btn-new:active{background:#e5e7eb}
     
@@ -191,16 +200,25 @@
     .sheet-empty{text-align:center;padding:24px;color:#9ca3af;font-size:13px}
     .sheet-close{display:block;width:100%;margin-top:8px;padding:12px;background:#f5f5f5;color:#1a1a1a;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer;font-family:inherit;text-decoration:none}
     @media(max-width:640px){
-      .top-wrap{display:flex;flex-direction:column;gap:8px;align-items:stretch;padding:8px}
-      .top-wrap .foto-box{flex:1 1 0 !important;width:100% !important;min-width:0 !important;max-width:none;aspect-ratio:9/16;border-radius:12px}
-      .top-row{padding:2px !important;gap:6px !important}
-      .top-row > div:first_child{font-size:15px !important;min-height:40px;padding:10px 8px}
-      .top-row input{font-size:15px !important;font-weight:800 !important;text-align:left !important;padding:10px 4px}
-      .tab-bar{display:flex;flex-wrap:nowrap;gap:6px;padding:8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-      .tab-btn{flex:0 0 auto;min-width:72px;min-height:48px;padding:12px 16px;font-size:14px;aspect-ratio:auto}
-      .tab-empty{flex:0 0 auto;width:48px;height:48px;min-height:48px;aspect-ratio:1/1}
-      .foto-act{flex:0 0 auto;width:48px;height:48px;min-height:48px;aspect-ratio:1/1}
-      .table-title{min-height:46px;padding:10px 0;font-size:15px}
+      .top-wrap{display:grid !important;grid-template-columns:var(--admin-photo-size) minmax(0,1fr) !important;gap:8px !important;align-items:start !important;padding:0 0 6px !important}
+      .top-wrap .foto-box{flex:none !important;width:100% !important;height:auto !important;min-height:0 !important;min-width:0 !important;max-width:var(--admin-photo-size) !important;align-self:start !important;aspect-ratio:9/16;border-radius:16px}
+      .form-side-table{gap:3px !important;padding:3px !important;border-radius:12px !important}
+      .top-row{padding:1px !important;gap:4px !important}
+      .top-row > div:first-child{flex:0 0 42px !important;width:42px !important;min-height:40px !important;padding:8px 2px !important;font-size:13px !important}
+      .top-row > div:last-child{min-height:38px !important;padding:0 3px !important}
+      .top-row input{font-size:13px !important;font-weight:800 !important;text-align:left !important;padding:8px 2px !important}
+       .tab-bar{display:flex;flex-wrap:nowrap;gap:2px;padding:1px !important;overflow-x:auto;-webkit-overflow-scrolling:touch}
+       .tab-btn{flex:0 0 46px;width:46px;min-width:46px;max-width:46px;min-height:32px;height:32px;padding:4px 5px;font-size:10px;aspect-ratio:auto}
+       .tab-empty{flex:0 0 auto;width:32px;height:32px;min-height:32px;aspect-ratio:1/1}
+       .foto-act{flex:0 0 auto;width:32px;height:32px;min-height:32px;padding:0;aspect-ratio:1/1}
+       .foto-act svg{width:14px;height:14px}
+       .foto-act{width:46px!important;height:32px!important;min-height:32px!important;flex-basis:46px!important;max-width:100%!important;border-radius:6px!important;padding:0!important;box-shadow:none!important}
+       .foto-act svg{width:14px!important;height:14px!important}
+       #tabBar{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-auto-rows:32px;gap:2px!important;padding:1px!important;overflow:visible!important}
+       #tabBar .tab-btn{width:100%!important;min-width:0!important;max-width:none!important;height:32px!important}
+       #tabBar .foto-act{width:46px!important;justify-self:center}
+       #tabBar .tab-empty{display:none!important}
+       .table-title{min-height:46px;padding:10px 0;font-size:15px}
       .bahan-add-head{width:46px;height:46px;min-height:46px}
       .form-table .th{font-size:8px;padding:0 4px;min-width:40px}
       .form-table .td{padding:2px 4px}
@@ -209,6 +227,18 @@
       .form-table .tr.plu-head .th{font-size:8px;padding:6px 2px;min-width:0}
       .form-table .tr.plu-input .td{padding:2px 2px}
       .form-table .tr.plu-input .td input{font-size:12px;padding:8px 2px}
+      .sheet-top-new{flex-direction:row;align-items:flex-start;gap:10px;padding:10px 12px}
+      .sheet-photo-wrap-new{width:var(--admin-photo-size);aspect-ratio:9/16}
+      .sheet-info-wrap-new{width:auto;min-width:0;align-items:stretch;text-align:left;gap:8px;padding-top:0}
+       .sheet-plu-th{min-width:56px;padding:5px 6px;font-size:8px}
+       .sheet-plu-td{padding:5px 7px;font-size:11px}
+       .sheet-name-new{font-size:18px}
+      .sheet-close-btn-new{margin-top:0;padding:10px;font-size:13px}
+      .sheet-bahan-wrap-new{padding:8px 12px 16px}
+      .bahan-input-new{padding:10px 12px;font-size:12px}
+      .sheet-section-title-new{font-size:10px}
+      .sheet-close-btn-new{padding:10px;font-size:13px}
+      .sheet-close-btn-main-new{padding:12px;font-size:13px}
     }
   </style>
 </head>
@@ -238,24 +268,26 @@
             <div id="icon_preview"></div>
             <span id="fotoName" style="display:none"></span>
           </div>
-          <div style="flex:1 1 0;min-width:0;width:100%;border:1px solid #c7d2fe;border-radius:8px;overflow:visible;display:flex;flex-direction:column;gap:4px;padding:4px;background:#fff;isolation:isolate">
-            <div class="top-row" style="flex:0 0 auto;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
-              <div style="width:100%;min-height:46px;display:flex;align-items:center;justify-content:flex-start;text-align:left;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0 12px 8px">MENU</div>
-              <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_name" required style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" oninput="this.value=this.value.toUpperCase()" /></div>
-            </div>
-            <div class="top-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:6px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
-              <div style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0">12</div>
+          <div class="form-side-table" style="flex:1 1 0;min-width:0;width:100%;border:1px solid #c7d2fe;border-radius:8px;overflow:visible;display:flex;flex-direction:column;gap:4px;padding:4px;background:#fff;isolation:isolate">
+             <div class="admin-plu-table">
+             <div class="top-row admin-menu-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:stretch;gap:0;background:transparent;border-radius:0;padding:0;min-height:0;border-bottom:none">
+               <div style="flex:0 0 62px;width:62px;min-height:32px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:9px;font-weight:800;border:none;border-radius:0;background:#eef2ff;color:#4f46e5;box-shadow:none;padding:6px 8px">MENU</div>
+               <div style="flex:1;min-height:32px;border:none;border-radius:0;display:flex;align-items:center;padding:6px 10px;min-width:0;border-bottom:0;background:#fff;position:relative;z-index:1"><input id="f_name" required style="width:100%;font-size:12px;font-weight:700;padding:0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" oninput="this.value=this.value.toUpperCase()" /></div>
+             </div>
+             <div class="top-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:6px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
+               <div style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0">PLU 12OZ</div>
               <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_plu12" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" oninput="this.value=this.value.toUpperCase()" /></div>
             </div>
             <div id="plu16Row" class="top-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:6px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
-              <div id="plu16Lab" style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0">16</div>
+              <div id="plu16Lab" style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0">PLU 16OZ</div>
               <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_plu16" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-align:left" /></div>
             </div>
             <div id="pluHotRow" class="top-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:6px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
-              <div id="pluHotLab" style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0">HOT</div>
+              <div id="pluHotLab" style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0">PLU HOT</div>
               <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_pluHot" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-align:left" /></div>
             </div>
-            <div id="tabBar" style="flex:0 0 auto;display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:transparent;padding:2px">
+             </div>
+             <div id="tabBar" style="flex:0 0 auto;display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:transparent;padding:2px">
               <button type="button" class="tab-btn active" data-tab="secHot">HOT</button>
               <button type="button" class="tab-btn" data-tab="secP12">P12</button>
               <button type="button" class="tab-btn" data-tab="secP16">P16</button>
@@ -396,17 +428,11 @@
   const f_pluHot = document.getElementById('f_pluHot');
   const plu16Row = document.getElementById('plu16Row');
   const pluHotRow = document.getElementById('pluHotRow');
-  const plu16Lab = document.getElementById('plu16Lab');
-  const pluHotLab = document.getElementById('pluHotLab');
   function syncPluRows() {
     const e16 = !f_plu16.value.trim();
     const eH = !f_pluHot.value.trim();
     plu16Row.style.opacity = e16 ? '0.5' : '1';
     pluHotRow.style.opacity = eH ? '0.5' : '1';
-    plu16Row.style.background = 'transparent';
-    pluHotRow.style.background = 'transparent';
-    if (plu16Lab) { plu16Lab.style.background = e16 ? '#a5b4fc' : '#6366f1'; plu16Lab.style.color = '#fff'; }
-    if (pluHotLab) { pluHotLab.style.background = eH ? '#a5b4fc' : '#6366f1'; pluHotLab.style.color = '#fff'; }
   }
   f_plu16.addEventListener('input', syncPluRows);
   f_pluHot.addEventListener('input', syncPluRows);
@@ -1192,7 +1218,7 @@ const outW = 540, outH = 960;
     const bahans = [...b12, ...b16, ...bHot, ...p12, ...p16];
     const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
     const photo = isImg ? '<img src="' + m.foto + '" alt="" loading="lazy"/>' : '<span style="font-size:48px">' + (m.foto || '☕') + '</span>';
-    const pluRows = [['12oz', m.plu_12oz || '-'], ['16oz', m.plu_16oz || '-'], ['hot', m.plu_hot || '-']];
+    const pluRows = [['PLU 12OZ', m.plu_12oz || '-'], ['PLU 16OZ', m.plu_16oz || '-'], ['PLU HOT', m.plu_hot || '-']];
     
     // Build bahan sections - only show non-empty
     const sections = [];
@@ -1214,11 +1240,11 @@ const outW = 540, outH = 960;
     // Right: Info + PLU + Close
     html += '<div class="sheet-info-wrap-new">';
     html += '<div class="sheet-name-new">' + esc(displayName.toUpperCase()) + '</div>';
-    html += '<div class="sheet-plu-row-new">';
-    pluRows.forEach(r => {
-      html += '<div class="plu-chip-new"><span class="plu-label-new">' + r[0] + '</span><span class="plu-value-new">' + esc(r[1]) + '</span></div>';
-    });
-    html += '</div>';
+     html += '<div class="sheet-plu-table">';
+     pluRows.forEach(r => {
+       html += '<div class="sheet-plu-row"><div class="sheet-plu-th">' + esc(r[0]) + '</div><div class="sheet-plu-td">' + esc(r[1]) + '</div></div>';
+     });
+     html += '</div>';
     html += '<button class="sheet-close-btn-new" id="sh_close_top" type="button">Tutup</button>';
     html += '</div>';
     html += '</div>'; // sheet-top-new
