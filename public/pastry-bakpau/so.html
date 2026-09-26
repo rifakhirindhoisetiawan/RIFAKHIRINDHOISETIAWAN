@@ -157,6 +157,14 @@
         white-space: nowrap;
       }
 
+      tfoot tr.f-plus td {
+        background: #f0fdf4;
+      }
+
+      tfoot tr.f-minus td {
+        background: #fef2f2;
+      }
+
       .c-no {
         width: 34px;
         text-align: center;
@@ -493,7 +501,7 @@
               <th class="c-kode">Kode Barang</th>
               <th>Nama Barang</th>
               <th class="c-satuan">Satuan</th>
-              <th class="c-num">Stok Sistem</th>
+              <th class="c-num">Onhand</th>
               <th class="c-num">Stok Fisik</th>
               <th class="c-num">Selisih (Qty)</th>
               <th class="c-num">HPP / Satuan</th>
@@ -546,7 +554,7 @@
       const riwayatBody = document.getElementById('riwayatBody');
       const riwayatEmpty = document.getElementById('riwayatEmpty');
 
-      const menuId = Number(new URLSearchParams(location.search).get('m')) || 0;
+      let menuId = Number(new URLSearchParams(location.search).get('m')) || 0;
 
       const up = (value) => String(value ?? '').toUpperCase();
       const num = (value) => {
@@ -648,7 +656,8 @@
         );
       };
 
-      const cellKode = (kode) => {        const td = document.createElement('td');
+      const cellKode = (kode) => {
+        const td = document.createElement('td');
         td.className = 'c-kode';
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -690,28 +699,62 @@
       };
 
       const hitungTotal = () => {
-        let selisih = 0;
-        let nominal = 0;
+        const total = { sistem: 0, fisik: 0, selisih: 0, nominal: 0, beda: 0, jumlah: 0 };
+        const plus = { sistem: 0, fisik: 0, selisih: 0, nominal: 0, jumlah: 0 };
+        const minus = { sistem: 0, fisik: 0, selisih: 0, nominal: 0, jumlah: 0 };
+
         barangBody.querySelectorAll('tr').forEach((tr) => {
-          selisih += num(tr.querySelector('.in-fisik').value) - num(tr.querySelector('.in-sistem').value);
-          nominal += num(tr.querySelector('.nominal').dataset.value);
+          const s = num(tr.querySelector('.in-sistem').value);
+          const f = num(tr.querySelector('.in-fisik').value);
+          const n = num(tr.querySelector('.nominal').dataset.value);
+          const d = f - s;
+          total.sistem += s;
+          total.fisik += f;
+          total.selisih += d;
+          total.nominal += n;
+          total.jumlah += 1;
+          if (d !== 0) total.beda += 1;
+          const tujuan = d > 0 ? plus : d < 0 ? minus : null;
+          if (tujuan) {
+            tujuan.sistem += s;
+            tujuan.fisik += f;
+            tujuan.selisih += d;
+            tujuan.nominal += n;
+            tujuan.jumlah += 1;
+          }
         });
+
+        const warna = (v) => (v === 0 ? '' : v < 0 ? 'minus' : 'plus');
+        const angka = (v) => (v > 0 ? '+' + v : String(v));
+
+        const baris = (label, a, cls, ket) => {
+          const tr = document.createElement('tr');
+          if (cls) tr.className = cls;
+          const tdLabel = cell(label);
+          tdLabel.colSpan = 6;
+          tr.append(
+            tdLabel,
+            cell(String(a.sistem), 'c-num'),
+            cell(String(a.fisik), 'c-num'),
+            cell(angka(a.selisih), 'c-num selisih ' + warna(a.selisih)),
+            cell('-', 'c-num'),
+            cell(rupiah(a.nominal), 'nominal c-total ' + warna(a.nominal)),
+            cell(ket, 'keterangan ' + (cls === 'f-plus' ? 'plus' : cls === 'f-minus' ? 'minus' : '')),
+            cell('')
+          );
+          return tr;
+        };
+
         barangFoot.innerHTML = '';
-        const tr = document.createElement('tr');
-        const tdTotal = cell('TOTAL');
-        tdTotal.colSpan = 9;
-        const tdSelisih = cell(
-          String(selisih),
-          'selisih ' + (selisih === 0 ? '' : selisih < 0 ? 'minus' : 'plus')
+        barangFoot.appendChild(
+          baris('TOTAL ' + total.jumlah + ' BARANG', total, '', total.beda ? total.beda + ' BARANG BEDA' : 'SEMUA SESUAI')
         );
-        const tdNominal = cell(
-          rupiah(nominal),
-          'nominal c-total ' + (nominal === 0 ? '' : nominal < 0 ? 'minus' : 'plus')
-        );
-        tdNominal.colSpan = 2;
-        const tdSisa = cell('');
-        tr.append(tdTotal, tdSelisih, tdNominal, tdSisa);
-        barangFoot.appendChild(tr);
+        if (plus.jumlah) {
+          barangFoot.appendChild(baris('TOTAL PLUS', plus, 'f-plus', plus.jumlah + ' BARANG PLUS'));
+        }
+        if (minus.jumlah) {
+          barangFoot.appendChild(baris('TOTAL MINUS', minus, 'f-minus', minus.jumlah + ' BARANG MINUS'));
+        }
       };
 
       const renderBarang = (barang) => {
@@ -723,6 +766,7 @@
         );
         barangBody.innerHTML = '';
         tampil.forEach((row, i) => {
+          const sistem = num(row.stok_sistem);
           const tr = document.createElement('tr');
           tr.dataset.id = row.id;
           tr.append(cell(String(i + 1), 'c-no'), cell(tanggalSo, 'c-tgl'));
@@ -764,7 +808,7 @@
             input.value = String(
               jenis === 'sistem' ? sistem : num(row.stok_fisik)
             );
-            input.setAttribute('aria-label', (jenis === 'sistem' ? 'Stok Sistem' : 'Stok Fisik') + ' ' + (row.kode || row.name || i + 1));
+            input.setAttribute('aria-label', (jenis === 'sistem' ? 'Onhand' : 'Stok Fisik') + ' ' + (row.kode || row.name || i + 1));
             input.addEventListener('input', () => {
               hitungBaris(tr);
               hitungTotal();
@@ -816,20 +860,31 @@
 
       cariBarang.addEventListener('input', () => load());
 
-      const load = async () => {
-        if (!menuId) {
-          judulSo.textContent = 'Pilih menu SO dulu';
+
+      const pilihMenuOtomatis = async () => {
+        const { data, error } = await supabase.from('so_menus').select('id').order('name').limit(1);
+        if (error || !data || !data.length) {
+          judulSo.textContent = 'Belum ada menu SO. Buat dulu di ADMIN.';
           return;
         }
+        menuId = data[0].id;
+        history.replaceState(null, '', '?m=' + menuId);
+      };
+
+      const load = async () => {
+        if (!menuId) await pilihMenuOtomatis();
+        if (!menuId) return;
         const { data: menu, error: errMenu } = await supabase
           .from('so_menus')
           .select('id, name')
           .eq('id', menuId)
           .single();
         if (errMenu || !menu) {
-          judulSo.textContent = 'Menu tidak ditemukan';
-          console.error('Gagal memuat menu:', errMenu && errMenu.message);
-          return;
+          console.warn('Menu tidak ditemukan, pindah ke menu pertama');
+          menuId = 0;
+          await pilihMenuOtomatis();
+          if (!menuId) return;
+          return load();
         }
         judulSo.textContent = up(menu.name);
         tanggalSo = formatTanggal(new Date());
@@ -847,6 +902,9 @@
             .order('kode');
           if (ulang.error) {
             console.error('Gagal memuat barang:', ulang.error.message);
+            barangBody.innerHTML = '';
+            barangEmpty.hidden = false;
+            barangEmpty.textContent = 'Gagal memuat barang: ' + ulang.error.message;
             return;
           }
           renderBarang(ulang.data || []);

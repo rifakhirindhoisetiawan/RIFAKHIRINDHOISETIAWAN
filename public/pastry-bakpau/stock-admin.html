@@ -415,6 +415,33 @@
         background: #eff6ff;
       }
 
+      tfoot td {
+        position: sticky;
+        bottom: 0;
+        z-index: 1;
+        background: #f9f9f9;
+        border-top: 1px solid #e5e7eb;
+        font-weight: 800;
+        font-size: 13px;
+        height: 44px;
+        padding: 0 10px;
+        white-space: nowrap;
+      }
+
+      tfoot tr.f-plus td {
+        background: #f0fdf4;
+      }
+
+      tfoot tr.f-minus td {
+        background: #fef2f2;
+      }
+
+      tfoot tr.f-plus td:first-child,
+      tfoot tr.f-minus td:first-child {
+        position: sticky;
+        left: 0;
+      }
+
       .kode {
         color: var(--primary);
         font-family: "JetBrains Mono", ui-monospace, monospace;
@@ -702,6 +729,7 @@
             </tr>
           </tbody>
           <tbody id="barangBody"></tbody>
+          <tfoot id="barangFoot"></tfoot>
         </table>
       </div>
       <div class="empty" id="barangEmpty" hidden>Belum ada barang di menu ini.</div>
@@ -729,6 +757,7 @@
       const barangBody = document.getElementById('barangBody');
       const barangEmpty = document.getElementById('barangEmpty');
       const barangWrap = document.getElementById('barangWrap');
+      const barangFoot = document.getElementById('barangFoot');
       const bAdd = document.getElementById('bAdd');
       const cariBarang = document.getElementById('cariBarang');
       const fotoInput = document.getElementById('fotoInput');
@@ -1160,11 +1189,68 @@
           tr.append(tdFoto, tdAct);
           barangBody.appendChild(tr);
         });
+        renderTotal(tampil);
         barangEmpty.hidden = tampil.length > 0;
         barangEmpty.textContent = q
           ? 'Tidak ada barang yang cocok dengan "' + cariBarang.value.trim() + '".'
           : 'Belum ada barang di menu ini.';
         barangWrap.hidden = barang.length === 0;
+      };
+
+      const renderTotal = (tampil) => {
+        const total = { onhand: 0, fisik: 0, selisih: 0, jumlah: 0, beda: 0 };
+        const plus = { onhand: 0, fisik: 0, selisih: 0, jumlah: 0 };
+        const minus = { onhand: 0, fisik: 0, selisih: 0, jumlah: 0 };
+
+        tampil.forEach((row) => {
+          const o = num(row.stok_sistem);
+          const f = num(row.stok_fisik);
+          const d = f - o;
+          total.onhand += o;
+          total.fisik += f;
+          total.selisih += d;
+          total.jumlah += 1;
+          if (d !== 0) total.beda += 1;
+          const tujuan = d > 0 ? plus : d < 0 ? minus : null;
+          if (tujuan) {
+            tujuan.onhand += o;
+            tujuan.fisik += f;
+            tujuan.selisih += d;
+            tujuan.jumlah += 1;
+          }
+        });
+
+        const warna = (v) => (v === 0 ? '' : v < 0 ? 'minus' : 'plus');
+        const angka = (v) => (v > 0 ? '+' + v : String(v));
+
+        const baris = (label, a, cls, ket) => {
+          const tr = document.createElement('tr');
+          if (cls) tr.className = cls;
+          const tdLabel = cell(label);
+          tdLabel.colSpan = 4;
+          tr.append(
+            tdLabel,
+            cell(String(a.onhand), 'c-num'),
+            cell(String(a.fisik), 'c-num'),
+            cell('-', 'c-hpp'),
+            cell(angka(a.selisih), 'c-num selisih ' + warna(a.selisih)),
+            cell(ket, 'c-ket ket ' + (cls === 'f-plus' ? 'plus' : cls === 'f-minus' ? 'minus' : '')),
+            cell(''),
+            cell('')
+          );
+          return tr;
+        };
+
+        barangFoot.innerHTML = '';
+        barangFoot.appendChild(
+          baris('TOTAL ' + total.jumlah + ' BARANG', total, '', total.beda ? total.beda + ' BARANG BEDA' : 'SEMUA SESUAI')
+        );
+        if (plus.jumlah) {
+          barangFoot.appendChild(baris('TOTAL PLUS', plus, 'f-plus', plus.jumlah + ' BARANG PLUS'));
+        }
+        if (minus.jumlah) {
+          barangFoot.appendChild(baris('TOTAL MINUS', minus, 'f-minus', minus.jumlah + ' BARANG MINUS'));
+        }
       };
 
       cariBarang.addEventListener('input', () => {
@@ -1332,6 +1418,9 @@
             .order('kode');
           if (ulang.error) {
             console.error('Gagal memuat barang:', ulang.error.message);
+            barangBody.innerHTML = '';
+            barangEmpty.hidden = false;
+            barangEmpty.textContent = 'Gagal memuat barang: ' + ulang.error.message;
             return;
           }
           renderBarang(ulang.data || []);
