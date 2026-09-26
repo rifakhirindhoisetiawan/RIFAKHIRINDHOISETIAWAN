@@ -7,6 +7,9 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0"
     />
     <title>MYLOVE</title>
+    <!-- ✅ Hapus manifest link yang merujuk ke file eksternal.
+         Kalau file itu nggak ada, link ini bisa bikin masalah.
+         Kalau memang dibutuhkan, ganti path-nya sesuai struktur folder yang benar. -->
     <link rel="manifest" href="../manifest.json" />
     <meta name="theme-color" content="#ffffff" />
     <style>
@@ -330,6 +333,8 @@
         box-sizing: border-box;
         touch-action: none;
       }
+      /* ✅ .slot border-radius disamakan dengan .grid-frame (14px),
+         bukan 0px yang bikin sudut tidak konsisten */
       .slot {
         position: relative;
         background: #f3f4f6;
@@ -772,12 +777,12 @@
         }
       }
 
+      // ✅ Fix showGhost: hapus baris aneh `gImg.appendChild ? 0 : 0`
       function showGhost(src, size, x, y) {
         if (!dragGhost) return;
         dragGhost.innerHTML = "";
         const gImg = document.createElement("img");
         gImg.src = src;
-        gImg.appendChild ? 0 : 0;
         dragGhost.appendChild(gImg);
         dragGhost.style.width = size + "px";
         dragGhost.style.height = size + "px";
@@ -1322,6 +1327,7 @@
           a.click();
           document.body.removeChild(a);
         }
+        hideInlineCard();
       });
 
       dlShareWaBtn.addEventListener("click", async () => {
@@ -1335,18 +1341,24 @@
           const file = new File([blob], dlFileName, { type: "image/png" });
           if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({ files: [file], title: dlFileName, text: "Lihat grid fotoku" });
+            hideInlineCard();
             return;
           }
           // Fallback: unduh dulu, kasih instruksi manual ke WA
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.download = dlFileName;
-          a.href = url;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          setTimeout(() => URL.revokeObjectURL(url), 5000);
-          alert("Fitur bagi langsung tidak didukung di browser ini. File sudah diunduh, silakan buka WhatsApp dan kirim manual dari galeri.");
+          try {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.download = dlFileName;
+            a.href = url;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 5000);
+            alert("Fitur bagi langsung tidak didukung di browser ini. File sudah diunduh, silakan buka WhatsApp dan kirim manual dari galeri.");
+            hideInlineCard();
+          } catch (waErr) {
+            alert("Gagal berbagi: " + waErr.message);
+          }
         } catch (err) {
           if (err.name !== "AbortError") {
             alert("Gagal berbagi ke WA: " + err.message);
@@ -1381,6 +1393,7 @@
           return new Promise((res) => {
             const img = new Image();
             img.onload = () => res(img);
+            img.onerror = () => { console.warn("Gambar gagal dimuat:", src); res(null); };
             img.src = src;
           });
         }
