@@ -192,6 +192,7 @@ create table if not exists stock_products (
   name text not null,
   satuan text not null default 'PCS',
   stok_sistem integer not null default 0,
+  stok_fisik integer not null default 0,
   hpp numeric not null default 0,
   created_at timestamp with time zone default now(),
   unique (menu_id, plu)
@@ -199,6 +200,7 @@ create table if not exists stock_products (
 alter table stock_products add column if not exists kode text;
 alter table stock_products add column if not exists satuan text not null default 'PCS';
 alter table stock_products add column if not exists foto_url text;
+alter table stock_products add column if not exists stok_fisik integer not null default 0;
 alter table stock_products add column if not exists stok_sistem integer not null default 0;
 alter table stock_products add column if not exists hpp numeric not null default 0;
 alter table stock_products alter column plu drop not null;

@@ -411,6 +411,10 @@
         background: #ecfdf5;
       }
 
+      tbody tr.sinkron td {
+        background: #eff6ff;
+      }
+
       .kode {
         color: var(--primary);
         font-family: "JetBrains Mono", ui-monospace, monospace;
@@ -915,7 +919,37 @@
         return td;
       };
 
-      const fisikTemp = new Map();
+      const sinkronTimer = new Map();
+
+      const tulisFisik = async (row, nilai, tr) => {
+        const { error } = await supabase
+          .from('stock_products')
+          .update({ stok_fisik: Math.round(num(nilai)) })
+          .eq('id', row.id);
+        if (error) {
+          console.error('Gagal sinkron stok fisik:', error.message);
+          return false;
+        }
+        row.stok_fisik = Math.round(num(nilai));
+        if (tr) {
+          tr.classList.add('sinkron');
+          setTimeout(() => tr.classList.remove('sinkron'), 900);
+        }
+        return true;
+      };
+
+      const sinkronFisik = (row, nilai, tr, langsung) => {
+        if (!row.id) return;
+        clearTimeout(sinkronTimer.get(row.id));
+        if (langsung) {
+          tulisFisik(row, nilai, tr);
+          return;
+        }
+        sinkronTimer.set(
+          row.id,
+          setTimeout(() => tulisFisik(row, nilai, tr), 500)
+        );
+      };
 
       const keteranganOf = (selisih) => {
         if (selisih === 0) return { text: 'Sesuai', cls: '' };
@@ -927,7 +961,7 @@
         const td = tr.querySelector('.selisih');
         if (!td) return;
         const inFisik = tr.querySelector('.in-fisik');
-        const fisik = inFisik ? num(inFisik.value) : num(fisikTemp.get(Number(tr.dataset.id)));
+        const fisik = inFisik ? num(inFisik.value) : 0;
         const sistem = num(tr.dataset.onhand);
         const selisih = fisik - sistem;
         td.textContent = selisih > 0 ? '+' + selisih : String(selisih);
@@ -950,13 +984,15 @@
         input.step = '1';
         input.inputMode = 'numeric';
         input.className = 'cell-input in-fisik';
-        input.value = String(num(fisikTemp.get(row.id)));
+        input.value = String(num(row.stok_fisik));
         input.title = 'Stok fisik ' + (row.kode || row.name);
         input.setAttribute('aria-label', input.title);
         input.addEventListener('input', () => {
-          fisikTemp.set(row.id, Math.round(num(input.value)));
           hitungSelisih(tr);
+          sinkronFisik(row, input.value, tr, false);
         });
+        input.addEventListener('change', () => sinkronFisik(row, input.value, tr, true));
+        input.addEventListener('blur', () => sinkronFisik(row, input.value, tr, true));
         td.appendChild(input);
         return td;
       };
@@ -1285,7 +1321,7 @@
         if (!menuAktif) return;
         const { data, error } = await supabase
           .from('stock_products')
-          .select('id, menu_id, kode, name, satuan, stok_sistem, hpp, foto_url')
+          .select('id, menu_id, kode, name, satuan, stok_sistem, stok_fisik, hpp, foto_url')
           .eq('menu_id', menuAktif)
           .order('kode');
         if (error) {

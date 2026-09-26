@@ -447,6 +447,10 @@
         background: #ecfdf5;
       }
 
+      tbody tr.sinkron td {
+        background: #eff6ff;
+      }
+
       .empty {
         padding: 26px 12px;
         color: var(--muted);
@@ -614,8 +618,37 @@
         if (e.key === 'Escape' && !lightbox.hidden) tutupQr();
       });
 
-      const cellKode = (kode) => {
-        const td = document.createElement('td');
+            const sinkronTimer = new Map();
+
+      const tulisFisik = async (id, nilai, tr) => {
+        if (!id) return;
+        const { error } = await supabase
+          .from('stock_products')
+          .update({ stok_fisik: Math.round(num(nilai)) })
+          .eq('id', Number(id));
+        if (error) {
+          console.error('Gagal sinkron stok fisik:', error.message);
+          return;
+        }
+        if (tr) {
+          tr.classList.add('sinkron');
+          setTimeout(() => tr.classList.remove('sinkron'), 900);
+        }
+      };
+
+      const sinkronFisik = (id, nilai, tr, langsung) => {
+        clearTimeout(sinkronTimer.get(id));
+        if (langsung) {
+          tulisFisik(id, nilai, tr);
+          return;
+        }
+        sinkronTimer.set(
+          id,
+          setTimeout(() => tulisFisik(id, nilai, tr), 500)
+        );
+      };
+
+      const cellKode = (kode) => {        const td = document.createElement('td');
         td.className = 'c-kode';
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -728,11 +761,20 @@
             input.min = '0';
             input.inputMode = 'numeric';
             input.className = 'cell-input in-' + jenis;
-            input.value = String(jenis === 'sistem' ? sistem : 0);
+            input.value = String(
+              jenis === 'sistem' ? sistem : num(row.stok_fisik)
+            );
             input.setAttribute('aria-label', (jenis === 'sistem' ? 'Stok Sistem' : 'Stok Fisik') + ' ' + (row.kode || row.name || i + 1));
             input.addEventListener('input', () => {
               hitungBaris(tr);
               hitungTotal();
+              if (jenis === 'fisik') sinkronFisik(row.id, input.value, tr, false);
+            });
+            input.addEventListener('change', () => {
+              if (jenis === 'fisik') sinkronFisik(row.id, input.value, tr, true);
+            });
+            input.addEventListener('blur', () => {
+              if (jenis === 'fisik') sinkronFisik(row.id, input.value, tr, true);
             });
             td.appendChild(input);
             tr.appendChild(td);
@@ -794,7 +836,7 @@
 
         const { data: barang, error: errBarang } = await supabase
           .from('stock_products')
-          .select('id, kode, name, satuan, stok_sistem, hpp, foto_url')
+          .select('id, kode, name, satuan, stok_sistem, stok_fisik, hpp, foto_url')
           .eq('menu_id', menuId)
           .order('kode');
         if (errBarang) {
@@ -832,36 +874,40 @@
       });
 
       const simpanBaris = async (tr, btn) => {
-        if (!menuId || btn.disabled) return;
+        if (!menuId) return;
         const inSistem = tr.querySelector('.in-sistem');
         const inFisik = tr.querySelector('.in-fisik');
+        if (!inSistem || !inFisik) return;
         const sistem = num(inSistem.value);
         const fisik = num(inFisik.value);
+        const cap = sistem + '|' + fisik;
         if (sistem === 0 && fisik === 0) return;
+        if (tr.dataset.terkirim === cap) return;
+        if (btn) btn.disabled = true;
         const hpp = num(tr.querySelector('.hpp').dataset.value);
-        btn.disabled = true;
         const { error } = await supabase
           .from('stock_opname')
           .insert([barisOpname(tr, sistem, fisik, hpp)]);
         if (error) {
-          btn.disabled = false;
+          if (btn) btn.disabled = false;
           console.error('Gagal menyimpan stok:', error.message);
           return;
         }
         if (tr.dataset.id) {
           const { error: errSistem } = await supabase
             .from('stock_products')
-            .update({ stok_sistem: fisik })
+            .update({ stok_sistem: fisik, stok_fisik: 0 })
             .eq('id', Number(tr.dataset.id));
           if (errSistem) {
             console.error('Gagal memperbarui stok sistem:', errSistem.message);
           }
         }
+        tr.dataset.terkirim = cap;
         inSistem.value = String(fisik);
         inFisik.value = '0';
         hitungBaris(tr);
         hitungTotal();
-        btn.disabled = false;
+        if (btn) btn.disabled = false;
         tr.classList.add('simpan');
         setTimeout(() => tr.classList.remove('simpan'), 1200);
         loadRiwayat();
