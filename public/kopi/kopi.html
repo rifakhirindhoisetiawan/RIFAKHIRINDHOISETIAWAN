@@ -273,6 +273,44 @@
         font-weight: 600;
       }
 
+      #status {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 12px 0 0;
+        padding: 6px 9px;
+        border-radius: 8px;
+        background: #f6f7f9;
+        border: 1px solid #eceef1;
+        color: #8b909a;
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1.3;
+        word-break: break-word;
+      }
+
+      #status[data-tone="ok"] {
+        background: #f2fbf7;
+        border-color: #d6f0e5;
+        color: #6b9c8a;
+      }
+
+      #status[data-tone="warn"] {
+        background: #fffdf5;
+        border-color: #f5e9cd;
+        color: #a89160;
+      }
+
+      #status[data-tone="err"] {
+        background: #fff7f7;
+        border-color: #f7dcdc;
+        color: #b07070;
+      }
+
+      #status[hidden] {
+        display: none;
+      }
+
       .sheet-bg {
         display: none;
         position: fixed;
@@ -502,7 +540,9 @@
           </div>
         </div>
 
-        <div id="status" style="display:none"></div><div class="grid" id="menuGrid"></div>
+        <div class="grid" id="menuGrid"></div>
+
+        <div id="status" role="status" aria-live="polite" hidden></div>
       </div>
     </div>
 
@@ -518,19 +558,23 @@
       import { supabase } from './supabase.js';
       import { toWebPThumb, toWebPLarge } from '../../image-loader.js';
 
-      let fallbackMenus = [];
-      try {
-        const res = await fetch('data-kopi.json');
-        if (res.ok) fallbackMenus = await res.json();
-      } catch(e) { console.warn('Fallback load error:', e.message); }
-      let menus = [...fallbackMenus];
+      let menus = [];
       let shownMenus = [];
       let isSupabase = false;
+      let lastSucces = false;
       const menuGrid = document.getElementById('menuGrid');
       const searchInput = document.getElementById('searchInput');
       const statusEl = document.getElementById('status');
       const sheetBg = document.getElementById('sheetBg');
       const sheetBody = document.getElementById('sheetBody');
+
+      // Status tidak menampilkan "memuat..." - hanya muncul kalau ada yang perlu
+      // diperhatikan: jumlah menu, atau error. Teks kosong = disembunyikan.
+      const setStatus = (text, tone) => {
+        statusEl.textContent = text || '';
+        statusEl.dataset.tone = tone || '';
+        statusEl.hidden = !text;
+      };
       function slugify(str) {
         return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
       }
@@ -571,9 +615,14 @@
         shownMenus = filtered;
         menuGrid.innerHTML = filtered.map((m, i) => {
           const slug = slugify(m.name);
-          const hasLink = m.link && m.link.length > 0;
+          const isAdmin = m.name === 'ADMIN';
+          // Setiap menu punya halaman sendiri: public/pages/item-<slug>.html
+          // (dibuat oleh scripts/build/generate-kopi-pages.mjs).
+          // Link dari DB tidak dipakai karena beberapa nilainya salah/tumpang tindih.
+          const hrefMenu = isAdmin ? (m.link || '') : '../pages/item-' + slug + '.html';
+          const hasLink = !!hrefMenu;
           const tag = hasLink ? 'a' : 'div';
-          const href = hasLink ? ' href="' + m.link + '"' : '';
+          const href = hasLink ? ' href="' + hrefMenu + '"' : '';
           const isImgIcon = m.name === "ADMIN" ? true : !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
           let iconHtml;
           if (isImgIcon) {
@@ -591,6 +640,9 @@
           el.addEventListener('click', (e) => {
             const m = shownMenus[parseInt(el.dataset.idx)];
             if (m.name === "ADMIN") return;
+            // Semua menu sudah punya halaman -> biarkan browser navigasi.
+            // Sheet hanya dipakai kalau Tile tidak punya href (mis. link kosong).
+            if (el.getAttribute('href')) return;
             e.preventDefault();
             openSheet(m);
           });
@@ -659,53 +711,80 @@
        // Lazy loader dimatikan untuk grid KOPI - foto load langsung via <img onload>
       searchInput.addEventListener('input', renderMenu);
 
-      // First paint: render data lokal DULU, lalu refresh dari Supabase saat sampai.
-      // Sebelumnya halaman menunggu fetch Supabase selesai -> grid kosong berdetik-detikan di HP.
-      renderMenu();
+      // ===== Signature: mencakup semua field yang dipakai render (grid + sheet) =====
+      // Dulu hanya name|cat|plu, jadi perubahan foto/cls/link/catatan/bahan
+      // tidak pernah memicu render ulang -> data terlihat "tidak sinkron".
+      const SIG_FIELDS = ['name','foto','cls','cat','plu','plu_12oz','plu_16oz','plu_hot','catatan'];
+      for (let i = 1; i <= 10; i++) {
+        SIG_FIELDS.push('bahan_12oz_' + i, 'bahan_16oz_' + i, 'bahan_hot_' + i,
+                        'bahan_hot_16oz_' + i, 'percepatan_12oz_' + i, 'percepatan_16oz_' + i);
+      }
+      const signature = (list) =>
+        list.map((m) => SIG_FIELDS.map((f) => (m[f] == null ? '' : m[f])).join('\u0001')).join('\u0002');
 
+      // Semua state dideklarasikan DULU, baru dipanggil: kalau tidak, `let` di bawah
+      // masih di TDZ dan loadFromSupabase() melempar ReferenceError -> halaman mati.
       let lastSig = null;
+      let sedangLoad = false;
+      let rtTimer = null;
+
+      // ===== Supabase = satu-satunya sumber data (ADMIN tetap hardcoded) =====
+      // Halaman tidak lagi membaca data-kopi.json sama sekali.
+      renderMenu();
+      loadFromSupabase();
+
       async function loadFromSupabase() {
-        statusEl.textContent = 'Memuat dari Supabase...';
+        if (sedangLoad) return;
+        sedangLoad = true;
         try {
           const { data, error } = await supabase.from('ja_di_menus').select('*').order('id', { ascending: true });
           if (error) throw error;
+          lastSucces = true;
           if (data && data.length > 0) {
-            const fbCat = {};
-            fallbackMenus.forEach(function(f){ if (f.name && f.cat) fbCat[f.name.toUpperCase().replace(/\s+/g, ' ').trim()] = f.cat; });
-            const next = data.map(m => { const k = (m.name || '').toUpperCase().replace(/\s+/g, ' ').trim(); return { ...m, cat: m.cat || fbCat[k] || '', plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || m.plu || '' }; });
-            const sig = next.map(m => (m.name || '') + '|' + (m.cat || '') + '|' + (m.plu || '')).join('§');
+            const next = data.map(m => ({ ...m, cat: m.cat || '', plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || m.plu || '' }));
+            const sig = signature(next);
+            isSupabase = true;
             if (sig !== lastSig) {
               menus = next;
-              isSupabase = true;
               lastSig = sig;
               renderMenu();
             }
-            statusEl.textContent = '✅ ' + data.length + ' menu dari Supabase';
-            statusEl.style.color = '#10b981';
+            setStatus('\u2705 ' + data.length + ' menu - live dari Supabase', 'ok');
           } else {
-            statusEl.textContent = '⚠️ Supabase kosong, pakai data lokal';
-            statusEl.style.color = '#f59e0b';
+            setStatus('\u26A0\uFE0F Supabase kosong - belum ada menu', 'warn');
           }
         } catch (e) {
-          console.warn('Supabase error, fallback:', e.message);
-          statusEl.textContent = '⚠️ Offline (' + e.message.slice(0,40) + ')';
-          statusEl.style.color = '#ef4444';
-          if (!isSupabase) renderMenu();
+          console.warn('Supabase error:', e.message);
+          // Data yang tampil TETAP dipakai (hasil sinkron terakhir), tidak dikosongkan.
+          const sumber = isSupabase ? 'data tersinkron terakhir (' + menus.length + ' menu)' : 'hanya ADMIN';
+          setStatus('\u26A0\uFE0F Supabase gagal (' + e.message.slice(0, 40) + ') - tetap pakai ' + sumber, 'err');
+          if (!menus.length) renderMenu();
+        } finally {
+          sedangLoad = false;
         }
-        setTimeout(() => { statusEl.textContent = isSupabase ? '✅ Live dari Supabase' : '📦 Data lokal'; statusEl.style.color = isSupabase ? '#10b981' : '#9aa0ab'; }, 3000);
       }
-      // Realtime di-debounce: kalau banyak event beruntun, cukup fetch sekali,
-      // dan render-ulang hanya kalau data beneran berubah (tidak flicker).
-      let rtTimer = null;
+
+      // Realtime: debounce longgar (800ms) + guard sedangLoad, jadi tidak ada
+      // rentetan fetch/render berulang yang bikin flicker.
+      const jadwalSync = () => {
+        clearTimeout(rtTimer);
+        rtTimer = setTimeout(() => loadFromSupabase(), 800);
+      };
       try {
         supabase.channel('ja_di_menus_changes')
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'ja_di_menus' }, () => {
-            clearTimeout(rtTimer);
-            rtTimer = setTimeout(() => loadFromSupabase(), 400);
-          })
-          .subscribe();
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'ja_di_menus' }, jadwalSync)
+          .subscribe((status) => {
+            if (status === 'SUBSCRIBED') console.log('Realtime aktif');
+            else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+              console.warn('Realtime bermasalah:', status);
+            }
+          });
       } catch(e) { console.log('Realtime not enabled', e.message); }
-      loadFromSupabase();
+
+      // Tab kembali aktif -> cek ulang, 基 supaya event yang terlewat tertangkap.
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') loadFromSupabase();
+      });
     </script>
   </body>
 </html>

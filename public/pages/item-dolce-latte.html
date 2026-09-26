@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0" />
+    <title>DOLCE LATTE</title>
+    <meta name="theme-color" content="#ffffff" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { min-height: 100%; background: #fff; }
+      /* Scrollbar disembunyikan, scrolling tetap normal (HP) */
+      html { scrollbar-width: none; -ms-overflow-style: none; }
+      html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
+      body {
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        color: #1f2937;
+        -webkit-text-size-adjust: 100%;
+        overflow-y: auto;
+      }
+      .wrap {
+        background: #fff;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 14px 18px 32px;
+        padding-top: calc(14px + env(safe-area-inset-top));
+        padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+      }
+      h1 { font-size: 16px; font-weight: 800; line-height: 1.25; margin: 8px 0 6px; }
+      .top-grid { display: flex; gap: 12px; align-items: flex-start; }
+      .foto {
+        width: 42%; flex-shrink: 0; max-height: 52vh;
+        aspect-ratio: 9 / 16;
+        border-radius: 16px;
+        background: #f5f5f5;
+        display: flex; align-items: center; justify-content: center;
+        overflow: hidden;
+      }
+      .foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .foto .pending { font-size: 48px; line-height: 1; }
+      .foto .pending.teks { font-size: 11px; font-weight: 700; color: #b0b5bf; padding: 10px; text-align: center; }
+      /* warna kategori sama persis dengan sheet */
+      .g-a { background: linear-gradient(135deg, #a5b4fc, #818cf8); }
+      .g-b { background: linear-gradient(135deg, #c4b5fd, #a78bfa); }
+      .g-c { background: linear-gradient(135deg, #93c5fd, #60a5fa); }
+      .g-d { background: linear-gradient(135deg, #67e8f9, #22d3ee); }
+      .g-e { background: linear-gradient(135deg, #6ee7b7, #34d399); }
+      .g-f { background: linear-gradient(135deg, #fcd34d, #fbbf24); }
+      .g-g { background: linear-gradient(135deg, #fca5a5, #f87171); }
+      .g-h { background: linear-gradient(135deg, #f0abfc, #e879f9); }
+      .side { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+      .badge {
+        align-self: flex-start;
+        font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px;
+        background: #eef2ff; color: #4f46e5; letter-spacing: 0.4px; text-transform: uppercase;
+      }
+      .plu-table { border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; background: #fff; }
+      .plu-row { display: flex; align-items: stretch; }
+      .plu-row + .plu-row { border-top: 1px solid #eee; }
+      .plu-th {
+        display: flex; align-items: center; justify-content: center; text-align: center;
+        padding: 6px 8px; font-size: 9px; font-weight: 800;
+        color: #6b7280; background: #f3f4f6; width: 38%; flex-shrink: 0;
+      }
+      .plu-td {
+        flex: 1; display: flex; align-items: center; padding: 6px 10px;
+        font-size: 12px; font-weight: 700; color: #1f2937;
+      }
+      .plu-td.kosong { color: #c3c8d1; font-weight: 600; }
+      h2 {
+        font-size: 11px; font-weight: 800; color: #4f46e5; letter-spacing: 0.6px;
+        text-transform: uppercase; margin: 14px 0 8px;
+      }
+      .resep { border: 1px solid #c7d2fe; border-radius: 10px; overflow: hidden; background: #fff; }
+      .resep-row { display: flex; align-items: stretch; }
+      .resep-row + .resep-row { border-top: 1px solid #eef0f3; }
+      .resep-no {
+        display: flex; align-items: center; justify-content: center; text-align: center;
+        padding: 8px; font-size: 9px; font-weight: 800;
+        color: #6b7280; background: #f3f4f6; width: 34px; flex-shrink: 0;
+      }
+      .resep-nama {
+        flex: 1; display: flex; align-items: center; padding: 8px 12px;
+        font-size: 13px; font-weight: 600; color: #1f2937;
+      }
+      .catatan {
+        background: #fff; border: 1px solid #c7d2fe; border-radius: 10px;
+        padding: 10px 12px; font-size: 13px; color: #374151; line-height: 1.5;
+      }
+      .empty { text-align: center; color: #9aa0ab; font-size: 13px; font-weight: 600; padding: 20px 0; }
+      #status { margin: 10px 0 0; padding: 6px 9px; border-radius: 8px; background: #f6f7f9; border: 1px solid #eceef1; color: #8b909a; font-size: 10px; font-weight: 700; }
+      #status[hidden] { display: none; }
+      #status[data-tone="err"] { background: #fff7f7; border-color: #f7dcdc; color: #b07070; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="top-grid">
+        <div class="foto g-a" id="fotoBox"><div class="pending teks">Memuat foto...</div></div>
+        <div class="side">
+          <h1 id="nama">DOLCE LATTE</h1>
+          <div id="badgeWrap"></div>
+          <div class="plu-table" id="pluTable"></div>
+        </div>
+      </div>
+
+      <div id="bahanWrap"></div>
+      <div id="status" role="status" aria-live="polite" hidden></div>
+    </div>
+
+    <script type="module">
+      import { supabase } from '../../js/supabase.js';
+      import { toWebPLarge } from '../../image-loader.js';
+
+      const MENU_ID = 445;
+      const NAMA = "DOLCE LATTE";
+
+      const fotoBox = document.getElementById('fotoBox');
+      const namaEl = document.getElementById('nama');
+      const badgeWrap = document.getElementById('badgeWrap');
+      const pluTable = document.getElementById('pluTable');
+      const bahanWrap = document.getElementById('bahanWrap');
+      const statusEl = document.getElementById('status');
+
+      const setStatus = (text, tone) => {
+        statusEl.textContent = text || '';
+        statusEl.dataset.tone = tone || '';
+        statusEl.hidden = !text;
+      };
+
+      const grup = (m, prefix) =>
+        Array.from({ length: 10 }, (_, i) => m[prefix + (i + 1)]).filter(Boolean);
+
+      // Sama seperti sheet: kalau foto bukan URL, teksnya ditampilkan besar
+      // (kode/emoji menu). Kalau kosong, tetap pakai gradient kategori.
+      function renderFoto(m) {
+        fotoBox.className = 'foto ' + (m.cls || 'g-a');
+        const isUrl = m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto);
+        if (!isUrl) {
+          fotoBox.innerHTML = m.foto
+            ? '<div class="pending">' + m.foto + '</div>'
+            : '<div class="pending teks">Foto belum ada</div>';
+          return;
+        }
+        const img = document.createElement('img');
+        img.alt = m.name || NAMA;
+        img.decoding = 'async';
+        img.src = toWebPLarge(m.foto, 360, 640, 80);
+        img.addEventListener('load', () => { fotoBox.innerHTML = ''; fotoBox.appendChild(img); });
+        img.addEventListener('error', () => { fotoBox.innerHTML = '<div class="pending teks">Foto gagal dimuat</div>'; });
+      }
+
+      function render(m) {
+        document.title = m.name || NAMA;
+        namaEl.textContent = m.name || NAMA;
+        renderFoto(m);
+
+        badgeWrap.innerHTML = m.cat ? '<span class="badge">' + m.cat + '</span>' : '';
+
+          // Tabel PLU selalu tampil, walau nilainya belum diisi (selalu "-").
+        // Hanya 3 baris, sama seperti sheet asli: 12OZ, 16OZ, HOT.
+        const pluRows = [
+          ['PLU 12OZ', m.plu_12oz],
+          ['PLU 16OZ', m.plu_16oz],
+          ['PLU HOT', m.plu_hot],
+        ];
+        pluTable.innerHTML = pluRows
+          .map((r) => '<div class="plu-row"><div class="plu-th">' + r[0] + '</div>' +
+                      '<div class="plu-td' + (r[1] ? '' : ' kosong') + '">' + (r[1] || '-') + '</div></div>')
+          .join('');
+
+        const bagian = [];
+        const push = (judul, list) => { if (list.length) bagian.push([judul, list]); };
+        push('HOT', grup(m, 'bahan_hot_'));
+        push('HOT 16OZ', grup(m, 'bahan_hot_16oz_'));
+        push('P12', grup(m, 'percepatan_12oz_'));
+        push('P16', grup(m, 'percepatan_16oz_'));
+        push('12OZ', grup(m, 'bahan_12oz_'));
+        push('16OZ', grup(m, 'bahan_16oz_'));
+
+        // Resep / bahan jadi TABEL (sama gaya dengan tabel PLU):
+        // tiap grup punya header No | Bahan, nomornya berlanjut per grup.
+        let html = '';
+        bagian.forEach(([judul, list]) => {
+          html += '<h2>' + judul + '</h2><div class="resep">' +
+            list.map((b, i) =>
+              '<div class="resep-row"><div class="resep-no">' + (i + 1) + '</div>' +
+              '<div class="resep-nama">' + b + '</div></div>').join('') +
+            '</div>';
+        });
+        if (m.catatan) html += '<h2>Catatan</h2><div class="catatan">' + m.catatan + '</div>';
+        if (!bagian.length && !m.catatan) html = '<div class="empty">Belum ada data bahan.</div>';
+        bahanWrap.innerHTML = html;
+      }
+
+      try {
+        const { data, error } = await supabase.from('ja_di_menus').select('*').eq('id', MENU_ID).single();
+        if (error) throw error;
+        render(data);
+      } catch (e) {
+        console.warn(e);
+        setStatus('Gagal memuat data (' + e.message.slice(0, 50) + ')', 'err');
+      }
+    </script>
+  </body>
+</html>
