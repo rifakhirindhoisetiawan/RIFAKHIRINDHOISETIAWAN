@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
@@ -123,71 +123,30 @@
         min-width: 0;
       }
 
-      .btn {
-        width: 28px;
-        height: 28px;
+      .btn,
+      .ico {
+        width: 32px;
+        height: 32px;
         padding: 0;
         display: flex;
         align-items: center;
         justify-content: center;
         font: inherit;
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 800;
         line-height: 1;
-        color: #fff;
-        background: var(--primary);
+        color: #ffffff;
+        background: #6366f1;
         border: none;
         border-radius: 8px;
         cursor: pointer;
         flex-shrink: 0;
+        outline: none;
         transition: all 0.15s ease;
       }
 
-      .btn:active {
-        opacity: 0.85;
-        transform: scale(0.93);
-      }
-
-      .btn:disabled {
-        background: var(--line-2);
-        cursor: not-allowed;
-        transform: none;
-      }
-
-      .ico {
-        width: 28px;
-        height: 28px;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font: inherit;
-        font-size: 12px;
-        font-weight: 800;
-        line-height: 1;
-        color: #4f46e5;
-        background: #eef2ff;
-        border: none;
-        border-radius: 7px;
-        cursor: pointer;
-        flex-shrink: 0;
-        outline: none;
-        transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
-      }
-
-      .ico:hover {
-        color: #4338ca;
-        background: #e0e7ff;
-      }
-
-      .ico:active {
-        transform: scale(0.9);
-      }
-
-      .ico:disabled {
-        color: #c7d2fe;
-        background: #f6f7fb;
-        cursor: not-allowed;
+      .btn {
+        font-size: 17px;
       }
 
       .menu-list {
@@ -224,11 +183,6 @@
         font-weight: 800;
         background: var(--surface);
         border-color: var(--line-2);
-      }
-
-      .menu-item .ico:active {
-        opacity: 0.85;
-        transform: scale(0.93);
       }
 
       .table-wrap {
@@ -353,7 +307,7 @@
       }
 
       tbody td {
-        height: 38px;
+        height: 44px;
         padding: 0 10px;
         border-bottom: 1px solid #f1f2f4;
         vertical-align: middle;
@@ -391,8 +345,37 @@
         background: #fafafa;
       }
 
+      .kode-seri {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .qr-btn {
+        width: 26px;
+        height: 26px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font: inherit;
+        font-size: 12px;
+        color: #ffffff;
+        background: #6366f1;
+        border: none;
+        border-radius: 7px;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all 0.15s ease;
+      }
+
+      .qr-btn:active {
+        opacity: 0.85;
+        transform: scale(0.93);
+      }
+
       .c-kode {
-        width: 92px;
+        width: 128px;
       }
 
       .c-no {
@@ -412,7 +395,20 @@
       }
 
       .c-aksi {
-        width: 84px;
+        width: 96px;
+        position: sticky;
+        right: 0;
+        background: #ffffff;
+        box-shadow: -7px 0 9px -7px rgba(17, 24, 39, 0.22);
+      }
+
+      thead th.c-aksi {
+        z-index: 2;
+        background: #f9f9f9;
+      }
+
+      tbody tr.ok td.c-aksi {
+        background: #ecfdf5;
       }
 
       .kode {
@@ -466,6 +462,15 @@
 
       .ket.plus {
         color: #16a34a;
+      }
+
+      .cari {
+        width: 100%;
+        text-transform: none;
+      }
+
+      .cari::-webkit-search-cancel-button {
+        -webkit-appearance: none;
       }
 
       .c-num {
@@ -599,34 +604,9 @@
         white-space: nowrap;
       }
 
-      .toast {
-        position: fixed;
-        left: 50%;
-        bottom: max(18px, env(safe-area-inset-bottom));
-        transform: translateX(-50%);
-        z-index: 30;
-        max-width: calc(100% - 36px);
-        padding: 10px 16px;
-        border-radius: 10px;
-        background: #111827;
-        color: #ffffff;
-        font-size: 13px;
-        font-weight: 700;
-        text-align: center;
-        box-shadow: 0 8px 24px rgba(17, 24, 39, 0.28);
-      }
-
-      .toast.err {
-        background: var(--danger);
-      }
-
-      .toast[hidden] {
-        display: none;
-      }
     </style>
   </head>
   <body>
-    <div class="toast" id="toast" role="status" hidden></div>
     <div class="lightbox" id="lightbox" hidden>
       <div class="lightbox-box">
         <canvas class="qr" id="lightboxQr" width="220" height="220" hidden></canvas>
@@ -663,6 +643,16 @@
     </section>
 
     <section class="sec" id="barangSec" hidden>
+      <div class="row">
+        <input
+          class="cari"
+          type="search"
+          id="cariBarang"
+          placeholder="Cari PLU / Nama barang"
+          autocomplete="off"
+          aria-label="Cari barang"
+        />
+      </div>
       <div class="table-wrap" id="barangWrap">
         <table class="barang">
           <thead>
@@ -710,6 +700,7 @@
           <tbody id="barangBody"></tbody>
         </table>
       </div>
+      <div class="empty" id="barangEmpty" hidden>Belum ada barang di menu ini.</div>
       <input accept="image/*" id="fotoInput" type="file" hidden />
     </section>
 
@@ -731,9 +722,11 @@
       const bSelisih = document.getElementById('bSelisih');
       const bKet = document.getElementById('bKet');
       const mMode = document.getElementById('mMode');
-      const toast = document.getElementById('toast');
       const barangBody = document.getElementById('barangBody');
+      const barangEmpty = document.getElementById('barangEmpty');
+      const barangWrap = document.getElementById('barangWrap');
       const bAdd = document.getElementById('bAdd');
+      const cariBarang = document.getElementById('cariBarang');
       const fotoInput = document.getElementById('fotoInput');
       const lightbox = document.getElementById('lightbox');
       const lightboxImg = document.getElementById('lightboxImg');
@@ -755,6 +748,12 @@
         const n = Number(value);
         return Number.isFinite(n) ? n : 0;
       };
+      const formatRupiah = new Intl.NumberFormat('id-ID', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      });
+      const rupiah = (value) => 'Rp ' + formatRupiah.format(num(value));
+
       const cell = (text, cls) => {
         const td = document.createElement('td');
         td.textContent = text;
@@ -772,16 +771,6 @@
         return td;
       };
 
-      let toastTimer = null;
-      const say = (message, isError) => {
-        toast.textContent = message;
-        toast.className = 'toast' + (isError ? ' err' : '');
-        toast.hidden = false;
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => {
-          toast.hidden = true;
-        }, 2800);
-      };
 
       const setMode = () => {
         mMode.textContent = editMenuId ? 'mode edit' : '';
@@ -819,7 +808,7 @@
           const edit = document.createElement('button');
           edit.type = 'button';
           edit.className = 'ico';
-          edit.textContent = '✎';
+        edit.textContent = '✎';
           edit.title = 'Edit';
           edit.setAttribute('aria-label', 'Edit ' + menu.name);
           edit.addEventListener('click', (e) => {
@@ -833,7 +822,7 @@
           const del = document.createElement('button');
           del.type = 'button';
           del.className = 'ico';
-          del.textContent = '✕';
+        del.textContent = '✕';
           del.title = 'Hapus';
           del.setAttribute('aria-label', 'Hapus ' + menu.name);
           del.addEventListener('click', async (e) => {
@@ -842,7 +831,6 @@
             const { error } = await supabase.from('so_menus').delete().eq('id', menu.id);
             if (error) {
               console.error('Hapus menu gagal:', error.message);
-              say('Gagal hapus menu: ' + error.message, true);
               return;
             }
             if (menuAktif === menu.id) {
@@ -877,9 +865,12 @@
           .update({ [kolom]: nilai })
           .eq('id', row.id);
 
-      const tandaiOke = (td) => {
+      const tandaiOke = (td, tr) => {
         td.classList.add('ok');
-        setTimeout(() => td.classList.remove('ok'), 600);
+        setTimeout(() => td.classList.remove('ok'), 1200);
+        if (!tr) return;
+        tr.classList.add('ok');
+        setTimeout(() => tr.classList.remove('ok'), 1200);
       };
 
       const inputAngka = (row, kolom, judul, sesudah) => {
@@ -903,13 +894,12 @@
           const { error } = await simpanSel(row, kolom, judul, nilai);
           if (error) {
             console.error('Gagal update ' + judul + ':', error.message);
-            say('Gagal update ' + judul.toLowerCase() + ': ' + error.message, true);
             input.value = String(num(row[kolom]));
             return;
           }
           row[kolom] = nilai;
           input.value = String(nilai);
-          tandaiOke(td);
+          tandaiOke(td, tr);
           if (sesudah) sesudah(nilai);
         };
 
@@ -992,13 +982,12 @@
           const { error } = await simpanSel(row, kolom, judul, nilai);
           if (error) {
             console.error('Gagal update ' + judul + ':', error.message);
-            say('Gagal update ' + judul.toLowerCase() + ': ' + error.message, true);
             input.value = up(row[kolom] || '');
             return;
           }
           row[kolom] = nilai;
           input.value = nilai;
-          tandaiOke(td);
+          tandaiOke(td, td.closest('tr'));
         };
 
         input.addEventListener('change', simpan);
@@ -1027,10 +1016,35 @@
         return td;
       };
 
+      const kodeEdit = (row) => {
+        const td = document.createElement('td');
+        td.className = 'c-kode kode-seri';
+        td.appendChild(inputTeks(row, 'kode', 'PLU', 'dalem', true).firstChild);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'qr-btn';
+        btn.textContent = '▦';
+        btn.title = 'Lihat QR ' + (row.kode || '');
+        btn.setAttribute('aria-label', btn.title);
+        btn.addEventListener('click', () => lihatQr(row.kode));
+        td.appendChild(btn);
+        return td;
+      };
+
+      const cocokCari = (row, q) => {
+        if (!q) return true;
+        return (
+          String(row.kode || '').toLowerCase().includes(q) ||
+          String(row.name || '').toLowerCase().includes(q)
+        );
+      };
+
       const renderBarang = (barang) => {
         fotoData = barang;
+        const q = cariBarang.value.trim().toLowerCase();
+        const tampil = barang.filter((row) => cocokCari(row, q));
         barangBody.innerHTML = '';
-        barang.forEach((row, i) => {
+        tampil.forEach((row, i) => {
           const tr = document.createElement('tr');
           const modeEdit = editBarangId === row.id;
           tr.dataset.id = row.id;
@@ -1040,7 +1054,7 @@
 
           if (modeEdit) {
             tr.append(
-              inputTeks(row, 'kode', 'PLU', 'c-kode', true),
+              kodeEdit(row),
               inputTeks(row, 'name', 'Nama barang', 'c-nama'),
               inputTeks(row, 'satuan', 'Satuan', 'c-satuan'),
               inputAngka(row, 'stok_sistem', 'Onhand', (nilai) => {
@@ -1057,7 +1071,7 @@
               cell(row.satuan || 'PCS', 'c-satuan'),
               cell(String(num(row.stok_sistem)), 'c-num'),
               inputFisik(row, tr),
-              cell(String(num(row.hpp)), 'c-hpp')
+              cell(rupiah(row.hpp), 'c-hpp')
             );
           }
 
@@ -1084,7 +1098,7 @@
           const del = document.createElement('button');
           del.type = 'button';
           del.className = 'ico';
-          del.textContent = '✕';
+        del.textContent = '✕';
           del.title = 'Hapus barang';
           del.setAttribute('aria-label', 'Hapus ' + (row.kode || row.name));
           del.addEventListener('click', async () => {
@@ -1092,7 +1106,6 @@
             const { error } = await supabase.from('stock_products').delete().eq('id', row.id);
             if (error) {
               console.error('Hapus barang gagal:', error.message);
-              say('Gagal hapus barang: ' + error.message, true);
               return;
             }
             if (editBarangId === row.id) editBarangId = null;
@@ -1111,7 +1124,16 @@
           tr.append(tdFoto, tdAct);
           barangBody.appendChild(tr);
         });
+        barangEmpty.hidden = tampil.length > 0;
+        barangEmpty.textContent = q
+          ? 'Tidak ada barang yang cocok dengan "' + cariBarang.value.trim() + '".'
+          : 'Belum ada barang di menu ini.';
+        barangWrap.hidden = barang.length === 0;
       };
+
+      cariBarang.addEventListener('input', () => {
+        if (fotoData.length) renderBarang(fotoData);
+      });
 
       const pilihFoto = (id) => {
         fotoTarget = id;
@@ -1144,13 +1166,11 @@
           lightbox.hidden = false;
         } catch (err) {
           console.error('Gagal membuat QR:', err);
-          say('Gagal membuat QR: ' + err.message, true);
         }
       };
 
       const lihatFoto = (row) => {
         if (!row.foto_url) {
-          say('Belum ada foto ' + (row.kode || row.name), true);
           return;
         }
         lightboxQr.hidden = true;
@@ -1184,11 +1204,11 @@
         btn.type = 'button';
         btn.className = 'ico';
         if (modeEdit) {
-          btn.textContent = '⬆';
+          btn.textContent = '↑';
           btn.title = row.foto_url ? 'Ganti foto ' + label : 'Upload foto ' + label;
           btn.addEventListener('click', () => pilihFoto(row.id));
         } else {
-          btn.textContent = '👁';
+          btn.textContent = '⊙';
           btn.title = row.foto_url ? 'Lihat foto ' + label : 'Belum ada foto ' + label;
           btn.addEventListener('click', () => lihatFoto(row));
         }
@@ -1214,7 +1234,6 @@
         });
         if (errUpload) {
           console.error('Upload foto gagal:', errUpload.message);
-          say('Gagal upload foto: ' + errUpload.message, true);
           return;
         }
 
@@ -1225,7 +1244,6 @@
           .eq('id', id);
         if (errSimpan) {
           console.error('Simpan foto gagal:', errSimpan.message);
-          say('Foto terupload tapi gagal disimpan: ' + errSimpan.message, true);
           return;
         }
         loadBarang();
@@ -1246,7 +1264,6 @@
           .order('name');
         if (error) {
           console.error('Gagal memuat menu:', error.message);
-          say('Gagal memuat menu: ' + error.message, true);
           return;
         }
         const menus = data || [];
@@ -1279,7 +1296,6 @@
             .order('kode');
           if (ulang.error) {
             console.error('Gagal memuat barang:', ulang.error.message);
-            say('Gagal memuat barang: ' + ulang.error.message, true);
             return;
           }
           renderBarang(ulang.data || []);
@@ -1297,7 +1313,6 @@
           const { error } = await supabase.from('so_menus').update({ name }).eq('id', editMenuId);
           if (error) {
             console.error('Gagal update menu:', error.message);
-            say('Gagal update menu: ' + error.message, true);
             return;
           }
           stopEdit(true);
@@ -1312,7 +1327,6 @@
           .single();
         if (error) {
           console.error('Gagal menambah menu:', error.message);
-          say('Gagal menambah menu: ' + error.message, true);
           return;
         }
         stopEdit(true);
@@ -1345,7 +1359,6 @@
           .eq('menu_id', menuAktif);
         if (errBaca) {
           console.error('Gagal membuat PLU:', errBaca.message);
-          say('Gagal membuat PLU: ' + errBaca.message, true);
           return;
         }
         const kode = buatKode(menuTerpilih.name, new Set((dipakai || []).map((r) => r.kode)));
@@ -1359,7 +1372,6 @@
         });
         if (error) {
           console.error('Gagal menambah barang:', error.message);
-          say('Gagal menambah barang: ' + error.message, true);
           return;
         }
         stopEdit(false);

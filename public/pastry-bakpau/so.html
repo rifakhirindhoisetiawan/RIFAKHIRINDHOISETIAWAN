@@ -131,7 +131,7 @@
       }
 
       tbody td {
-        height: 38px;
+        height: 44px;
         padding: 0 10px;
         border-bottom: 1px solid #f1f2f4;
         vertical-align: middle;
@@ -151,7 +151,7 @@
         background: #f9f9f9;
         font-weight: 800;
         font-size: 13px;
-        height: 38px;
+        height: 44px;
         padding: 0 10px;
         border-top: 1px solid #e5e7eb;
         white-space: nowrap;
@@ -173,6 +173,28 @@
 
       .c-foto {
         width: 70px;
+      }
+
+      .cari {
+        width: 100%;
+        height: 36px;
+        padding: 0 12px;
+        font: inherit;
+        font-size: 13px;
+        color: var(--text);
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+      }
+
+      .cari:focus {
+        outline: none;
+        background: #fff;
+        border-color: #888;
+      }
+
+      .cari::-webkit-search-cancel-button {
+        -webkit-appearance: none;
       }
 
       .c-kode {
@@ -229,6 +251,63 @@
         font-size: clamp(12px, 3.2vw, 14px);
         font-weight: 800;
         white-space: nowrap;
+      }
+
+      .kode-btn {
+        width: 100%;
+        padding: 5px 6px;
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.2px;
+        color: #4f46e5;
+        text-align: left;
+        background: transparent;
+        border: 1px dashed transparent;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      .kode-btn:active {
+        background: var(--soft);
+        border-color: #e0e7ff;
+      }
+
+      .lightbox {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 40;
+        max-width: calc(100vw - 32px);
+        padding: 12px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+      }
+
+      .lightbox[hidden] {
+        display: none;
+      }
+
+      .lightbox-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .lightbox .qr {
+        width: min(56vw, 196px);
+        height: min(56vw, 196px);
+      }
+
+      .lightbox-text {
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
       }
 
       .selisih {
@@ -314,41 +393,54 @@
       }
 
       .c-aksi {
-        width: 52px;
+        width: 56px;
+        position: sticky;
+        right: 0;
+        background: #ffffff;
+        box-shadow: -7px 0 9px -7px rgba(17, 24, 39, 0.22);
+      }
+
+      thead th.c-aksi {
+        z-index: 2;
+        background: #f9f9f9;
+      }
+
+      tfoot td.c-aksi,
+      tbody tr.simpan td.c-aksi {
+        background: #ecfdf5;
       }
 
       .simpan-btn {
-        width: 28px;
-        height: 28px;
+        width: 32px;
+        height: 32px;
         padding: 0;
         display: flex;
         align-items: center;
         justify-content: center;
         font: inherit;
-        font-size: 12px;
+        font-size: 15px;
         font-weight: 800;
         line-height: 1;
-        color: #4f46e5;
-        background: #eef2ff;
+        color: #ffffff;
+        background: #6366f1;
         border: none;
-        border-radius: 7px;
+        border-radius: 8px;
         cursor: pointer;
-        transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
-      }
-
-      .simpan-btn:hover {
-        color: #4338ca;
-        background: #e0e7ff;
+        flex-shrink: 0;
+        outline: none;
+        transition: all 0.15s ease;
       }
 
       .simpan-btn:active {
-        transform: scale(0.9);
+        opacity: 0.85;
+        transform: scale(0.93);
       }
 
       .simpan-btn:disabled {
-        color: #c7d2fe;
-        background: #f6f7fb;
+        background: #d9dde3;
+        box-shadow: none;
         cursor: not-allowed;
+        transform: none;
       }
 
       tbody tr.simpan td {
@@ -363,37 +455,28 @@
         text-align: center;
       }
 
-      .toast {
-        position: fixed;
-        left: 50%;
-        bottom: max(18px, env(safe-area-inset-bottom));
-        transform: translateX(-50%);
-        z-index: 30;
-        max-width: calc(100% - 36px);
-        padding: 10px 16px;
-        border-radius: 10px;
-        background: #111827;
-        color: #ffffff;
-        font-size: 13px;
-        font-weight: 700;
-        text-align: center;
-        box-shadow: 0 8px 24px rgba(17, 24, 39, 0.28);
-      }
-
-      .toast.err {
-        background: var(--minus);
-      }
-
-      .toast[hidden] {
-        display: none;
-      }
     </style>
   </head>
   <body>
-    <div class="toast" id="toast" role="status" hidden></div>
+    <div class="lightbox" id="lightbox" hidden>
+      <div class="lightbox-box">
+        <canvas class="qr" id="lightboxQr" width="220" height="220"></canvas>
+        <div class="lightbox-text" id="lightboxText"></div>
+      </div>
+    </div>
     <section class="sec">
       <div class="row">
         <div class="section-label flush" id="judulSo">Stok Opname</div>
+      </div>
+      <div class="row">
+        <input
+          class="cari"
+          type="search"
+          id="cariBarang"
+          placeholder="Cari PLU / Nama barang"
+          autocomplete="off"
+          aria-label="Cari barang"
+        />
       </div>
 
       <div class="table-wrap" id="barangWrap">
@@ -452,12 +535,12 @@
 
       const judulSo = document.getElementById('judulSo');
       const barangBody = document.getElementById('barangBody');
+      const cariBarang = document.getElementById('cariBarang');
       const barangFoot = document.getElementById('barangFoot');
       const barangEmpty = document.getElementById('barangEmpty');
       const riwayatWrap = document.getElementById('riwayatWrap');
       const riwayatBody = document.getElementById('riwayatBody');
       const riwayatEmpty = document.getElementById('riwayatEmpty');
-      const toast = document.getElementById('toast');
 
       const menuId = Number(new URLSearchParams(location.search).get('m')) || 0;
 
@@ -466,7 +549,11 @@
         const n = Number(value);
         return Number.isFinite(n) ? n : 0;
       };
-      const rupiah = (value) => 'Rp ' + Math.round(num(value)).toLocaleString('id-ID');
+      const formatRupiah = new Intl.NumberFormat('id-ID', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      });
+      const rupiah = (value) => 'Rp ' + formatRupiah.format(num(value));
       const getAdmin = () => (localStorage.getItem(ADMIN_KEY) || '').trim() || DEFAULT_ADMIN;
       const formatTanggal = (value) => {
         const d = new Date(value);
@@ -476,21 +563,68 @@
 
       let tanggalSo = formatTanggal(new Date());
 
-      let toastTimer = null;
-      const say = (message, isError) => {
-        toast.textContent = message;
-        toast.className = 'toast' + (isError ? ' err' : '');
-        toast.hidden = false;
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => {
-          toast.hidden = true;
-        }, 2800);
-      };
 
       const cell = (text, cls) => {
         const td = document.createElement('td');
         td.textContent = text;
         if (cls) td.className = cls;
+        return td;
+      };
+
+      const lightbox = document.getElementById('lightbox');
+      const lightboxQr = document.getElementById('lightboxQr');
+      const lightboxText = document.getElementById('lightboxText');
+
+      let qrLib = null;
+      const muatQr = async () => {
+        if (!qrLib) {
+          qrLib = await import('https://cdn.jsdelivr.net/npm/qrcode@1.5.4/+esm');
+        }
+        return qrLib;
+      };
+
+      const tutupQr = () => {
+        lightbox.hidden = true;
+        lightboxText.textContent = '';
+      };
+
+      const lihatQr = async (plu) => {
+        const teks = String(plu || '').trim();
+        if (!teks) return;
+        try {
+          const QR = await muatQr();
+          await QR.toCanvas(lightboxQr, teks, {
+            width: 220,
+            margin: 1,
+            color: { dark: '#111827', light: '#ffffff' },
+          });
+          lightboxText.textContent = teks;
+          lightbox.hidden = false;
+        } catch (err) {
+          console.error('Gagal membuat QR:', err);
+        }
+      };
+
+      document.addEventListener('click', (e) => {
+        if (lightbox.hidden) return;
+        if (lightbox.contains(e.target)) return;
+        tutupQr();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !lightbox.hidden) tutupQr();
+      });
+
+      const cellKode = (kode) => {
+        const td = document.createElement('td');
+        td.className = 'c-kode';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'kode-btn';
+        btn.textContent = kode || '-';
+        btn.title = 'Lihat QR ' + (kode || '');
+        btn.setAttribute('aria-label', 'Lihat QR ' + (kode || ''));
+        btn.addEventListener('click', () => lihatQr(kode));
+        td.appendChild(btn);
         return td;
       };
 
@@ -548,10 +682,14 @@
       };
 
       const renderBarang = (barang) => {
+        const q = cariBarang.value.trim().toLowerCase();
+        const tampil = barang.filter((row) =>
+          !q ||
+          String(row.kode || '').toLowerCase().includes(q) ||
+          String(row.name || '').toLowerCase().includes(q)
+        );
         barangBody.innerHTML = '';
-        barang.forEach((row, i) => {
-          const sistem = num(row.stok_sistem);
-
+        tampil.forEach((row, i) => {
           const tr = document.createElement('tr');
           tr.dataset.id = row.id;
           tr.append(cell(String(i + 1), 'c-no'), cell(tanggalSo, 'c-tgl'));
@@ -580,7 +718,7 @@
           potong.textContent = up(row.name);
           potong.title = up(row.name);
           tdNama.appendChild(potong);
-          tr.append(cell(row.kode || '-', 'kode'), tdNama, cell(row.satuan || 'PCS', 'c-satuan'));
+          tr.append(cellKode(row.kode), tdNama, cell(row.satuan || 'PCS', 'c-satuan'));
 
           ['sistem', 'fisik'].forEach((jenis) => {
             const td = document.createElement('td');
@@ -616,7 +754,7 @@
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'simpan-btn';
-          btn.textContent = 'âœ“';
+        btn.textContent = '✓';
           btn.title = 'Simpan ' + (row.kode || row.name);
           btn.setAttribute('aria-label', btn.title);
           btn.addEventListener('click', () => simpanBaris(tr, btn));
@@ -626,10 +764,15 @@
           hitungBaris(tr);
           barangBody.appendChild(tr);
         });
-        barangEmpty.hidden = barang.length > 0;
+        barangEmpty.hidden = tampil.length > 0;
+        barangEmpty.textContent = q
+          ? 'Tidak ada barang yang cocok dengan "' + cariBarang.value.trim() + '".'
+          : 'Belum ada barang. Tambah lewat menu ADMIN.';
         document.getElementById('barangWrap').hidden = barang.length === 0;
         hitungTotal();
       };
+
+      cariBarang.addEventListener('input', () => load());
 
       const load = async () => {
         if (!menuId) {
@@ -662,7 +805,6 @@
             .order('kode');
           if (ulang.error) {
             console.error('Gagal memuat barang:', ulang.error.message);
-            say('Gagal memuat barang: ' + ulang.error.message, true);
             return;
           }
           renderBarang(ulang.data || []);
@@ -677,7 +819,7 @@
       const barisOpname = (tr, sistem, fisik, hpp) => ({
         menu_id: menuId,
         product_id: Number(tr.dataset.id) || null,
-        product_plu: tr.querySelector('.kode').textContent,
+        product_plu: tr.querySelector('.kode-btn').textContent,
         quantity: fisik,
         stok_sistem: sistem,
         stok_fisik: fisik,
@@ -691,12 +833,11 @@
 
       const simpanBaris = async (tr, btn) => {
         if (!menuId || btn.disabled) return;
-        const sistem = num(tr.querySelector('.in-sistem').value);
-        const fisik = num(tr.querySelector('.in-fisik').value);
-        if (sistem === 0 && fisik === 0) {
-          say('Isi Stok Sistem atau Stok Fisik dulu', true);
-          return;
-        }
+        const inSistem = tr.querySelector('.in-sistem');
+        const inFisik = tr.querySelector('.in-fisik');
+        const sistem = num(inSistem.value);
+        const fisik = num(inFisik.value);
+        if (sistem === 0 && fisik === 0) return;
         const hpp = num(tr.querySelector('.hpp').dataset.value);
         btn.disabled = true;
         const { error } = await supabase
@@ -705,7 +846,6 @@
         if (error) {
           btn.disabled = false;
           console.error('Gagal menyimpan stok:', error.message);
-          say('Gagal menyimpan stok: ' + error.message, true);
           return;
         }
         if (tr.dataset.id) {
@@ -715,11 +855,15 @@
             .eq('id', Number(tr.dataset.id));
           if (errSistem) {
             console.error('Gagal memperbarui stok sistem:', errSistem.message);
-            say('Tersimpan, tapi stok sistem gagal diperbarui: ' + errSistem.message, true);
           }
         }
+        inSistem.value = String(fisik);
+        inFisik.value = '0';
+        hitungBaris(tr);
+        hitungTotal();
+        btn.disabled = false;
         tr.classList.add('simpan');
-        setTimeout(() => tr.classList.remove('simpan'), 900);
+        setTimeout(() => tr.classList.remove('simpan'), 1200);
         loadRiwayat();
       };
 
