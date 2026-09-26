@@ -582,7 +582,31 @@
       }
 
       .c-foto {
-        width: 56px;
+        width: 84px;
+      }
+
+      .foto-box {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+      }
+
+      .c-foto .thumb {
+        width: 38px;
+        height: 38px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        object-fit: cover;
+        display: block;
+        cursor: pointer;
+        background: #f9fafb;
+      }
+
+      .c-foto .kosong {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--muted);
       }
 
       .lightbox {
@@ -673,6 +697,29 @@
       <div class="empty" id="menuEmpty" hidden>Belum ada menu SO.</div>
     </section>
 
+    <section class="sec" id="menuFotoSec">
+      <div class="row">
+        <div class="section-label flush">Foto Menu SO</div>
+      </div>
+      <div class="table-wrap" id="menuFotoWrap" hidden>
+        <table class="barang">
+          <thead>
+            <tr>
+              <th class="c-no">No</th>
+              <th>Nama Menu</th>
+              <th class="c-satuan">Lokasi</th>
+              <th class="c-satuan">Tim Checker</th>
+              <th class="c-foto">Foto</th>
+              <th class="c-aksi"></th>
+            </tr>
+          </thead>
+          <tbody id="menuFotoBody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="menuFotoEmpty" hidden>Belum ada menu SO.</div>
+      <div class="empty" id="menuFotoHint" hidden></div>
+    </section>
+
     <section class="sec" id="barangSec" hidden>
       <div class="row">
         <input
@@ -755,6 +802,10 @@
       const bKet = document.getElementById('bKet');
       const mMode = document.getElementById('mMode');
       const barangBody = document.getElementById('barangBody');
+      const menuFotoBody = document.getElementById('menuFotoBody');
+      const menuFotoWrap = document.getElementById('menuFotoWrap');
+      const menuFotoEmpty = document.getElementById('menuFotoEmpty');
+      const menuFotoHint = document.getElementById('menuFotoHint');
       const barangEmpty = document.getElementById('barangEmpty');
       const barangWrap = document.getElementById('barangWrap');
       const barangFoot = document.getElementById('barangFoot');
@@ -769,6 +820,8 @@
       const BUCKET = 'stock-foto';
       let fotoTarget = null;
       let fotoData = [];
+      let fotoMenuTarget = null;
+      let menuFotoData = [];
 
       const dariUrl = Number(new URLSearchParams(location.search).get('m')) || null;
       let menuAktif = dariUrl || Number(localStorage.getItem(MENU_KEY)) || null;
@@ -1177,9 +1230,7 @@
             loadBarang();
           });
 
-          const tdFoto = document.createElement('td');
-          tdFoto.className = 'c-foto';
-          tdFoto.appendChild(buatFoto(row, modeEdit));
+          const tdFoto = isiFoto(row);
           const tdAct = document.createElement('td');
           tdAct.className = 'c-aksi';
           const wrap = document.createElement('div');
@@ -1263,6 +1314,12 @@
         fotoInput.click();
       };
 
+      const pilihFotoMenu = (id) => {
+        fotoMenuTarget = id;
+        fotoInput.value = '';
+        fotoInput.click();
+      };
+
       let qrLib = null;
       const muatQr = async () => {
         if (!qrLib) {
@@ -1318,44 +1375,108 @@
         if (e.key === 'Escape' && !lightbox.hidden) tutupFoto();
       });
 
-      const buatFoto = (row, modeEdit) => {
-        const label = row.kode || row.name || '';
+      const isiFoto = (row) => {
         const td = document.createElement('td');
         td.className = 'c-foto';
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'ico';
-        if (modeEdit) {
-          btn.textContent = '↑';
-          btn.title = row.foto_url ? 'Ganti foto ' + label : 'Upload foto ' + label;
-          btn.addEventListener('click', () => pilihFoto(row.id));
+        const box = document.createElement('div');
+        box.className = 'foto-box';
+
+        if (row.foto_url) {
+          const img = document.createElement('img');
+          img.className = 'thumb';
+          img.src = row.foto_url;
+          img.alt = row.name || row.kode || 'foto';
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          img.title = 'Lihat foto ' + (row.kode || row.name || '');
+          img.addEventListener('click', () => lihatFoto(row));
+          box.appendChild(img);
         } else {
-          btn.textContent = '⊙';
-          btn.title = row.foto_url ? 'Lihat foto ' + label : 'Belum ada foto ' + label;
-          btn.addEventListener('click', () => lihatFoto(row));
+          const kosong = document.createElement('span');
+          kosong.className = 'kosong';
+          kosong.textContent = '-';
+          box.appendChild(kosong);
         }
-        btn.setAttribute('aria-label', btn.title);
-        td.appendChild(btn);
+
+        const up = document.createElement('button');
+        up.type = 'button';
+        up.className = 'ico';
+        up.textContent = '↑';
+        up.title = row.foto_url ? 'Ganti foto ' + (row.kode || row.name || '') : 'Upload foto ' + (row.kode || row.name || '');
+        up.setAttribute('aria-label', up.title);
+        up.addEventListener('click', (e) => {
+          e.stopPropagation();
+          pilihFoto(row.id);
+        });
+        box.appendChild(up);
+
+        td.appendChild(box);
         return td;
       };
 
       fotoInput.addEventListener('change', async () => {
         const file = fotoInput.files && fotoInput.files[0];
         const id = fotoTarget;
+        const idMenu = fotoMenuTarget;
         fotoTarget = null;
-        if (!file || !id) return;
+        fotoMenuTarget = null;
+        if (!file) return;
+
+        if (idMenu) {
+          const menu = menuFotoData.find((m) => m.id === idMenu);
+          if (!menu) return;
+          const kecil = await kompresFoto(file);
+          const path = 'menu/' + menu.id + '.jpg';
+          const { error: errUp } = await supabase.storage.from(BUCKET).upload(path, kecil, {
+            upsert: true,
+            contentType: 'image/jpeg',
+          });
+          if (errUp) {
+            console.error('Upload foto menu gagal:', errUp.message);
+            menuFotoHint.hidden = false;
+            menuFotoHint.textContent = 'Upload foto menu gagal: ' + errUp.message;
+            return;
+          }
+          const { data: publik } = supabase.storage.from(BUCKET).getPublicUrl(path);
+          const url = publik.publicUrl;
+          menu.foto_url = url;
+
+          if (menu.id === AKUN_TILE) {
+            menuFotoHint.hidden = true;
+          } else {
+            const { error: errSimpan } = await supabase
+              .from('so_menus')
+              .update({ foto_url: url })
+              .eq('id', idMenu);
+            if (errSimpan) {
+              console.error('Simpan foto menu gagal:', errSimpan.message);
+              menuFotoHint.hidden = false;
+              menuFotoHint.textContent =
+                'Foto tersimpan di storage, tapi belum tercatat di DB: ' + errSimpan.message +
+                ' — jalankan: alter table so_menus add column if not exists foto_url text;';
+            } else {
+              menuFotoHint.hidden = true;
+            }
+          }
+          renderFotoMenu(menuFotoData);
+          return;
+        }
+
+        if (!id) return;
         const row = fotoData.find((r) => r.id === id);
         if (!row) return;
 
-        const ext = ((file.name.split('.').pop() || 'jpg').toLowerCase()).replace(/[^a-z0-9]/g, '') || 'jpg';
-        const path = (row.menu_id || menuAktif || 'lain') + '/' + (row.kode || row.id) + '-' + Date.now() + '.' + ext;
+        const kecil = await kompresFoto(file);
+        const path = (row.menu_id || menuAktif || 'lain') + '/' + (row.kode || row.id) + '-' + Date.now() + '.jpg';
 
-        const { error: errUpload } = await supabase.storage.from(BUCKET).upload(path, file, {
+        const { error: errUpload } = await supabase.storage.from(BUCKET).upload(path, kecil, {
           upsert: true,
-          contentType: file.type || 'image/jpeg',
+          contentType: 'image/jpeg',
         });
         if (errUpload) {
           console.error('Upload foto gagal:', errUpload.message);
+          barangEmpty.hidden = false;
+          barangEmpty.textContent = 'Upload foto gagal: ' + errUpload.message;
           return;
         }
 
@@ -1366,9 +1487,11 @@
           .eq('id', id);
         if (errSimpan) {
           console.error('Simpan foto gagal:', errSimpan.message);
+          barangEmpty.hidden = false;
+          barangEmpty.textContent = 'Foto terupload, tapi gagal disimpan: ' + errSimpan.message;
           return;
         }
-        loadBarang();
+        await loadBarang();
       });
 
       const pilihMenu = async (id) => {
@@ -1377,6 +1500,157 @@
         menuAktif = id;
         localStorage.setItem(MENU_KEY, String(id));
         await loadMenus();
+      };
+
+      const kompresFoto = async (file, maxSisi = 1200, kualitas = 0.82) => {
+        if (!file || !/^image\//.test(file.type || '')) return file;
+        let gambar = null;
+        try {
+          gambar = await createImageBitmap(file);
+        } catch {
+          return file;
+        }
+        if (!gambar) return file;
+        const sisi = Math.max(gambar.width, gambar.height);
+        const skala = Math.min(1, maxSisi / sisi);
+        if (skala === 1 && file.size < 400 * 1024) {
+          if (gambar.close) gambar.close();
+          return file;
+        }
+        const w = Math.max(1, Math.round(gambar.width * skala));
+        const h = Math.max(1, Math.round(gambar.height * skala));
+        const kanvas = document.createElement('canvas');
+        kanvas.width = w;
+        kanvas.height = h;
+        const ctx = kanvas.getContext('2d');
+        ctx.drawImage(gambar, 0, 0, w, h);
+        if (gambar.close) gambar.close();
+        const blob = await new Promise((res) => kanvas.toBlob(res, 'image/jpeg', kualitas));
+        if (!blob) return file;
+        const nama = (file.name || 'foto').replace(/\.[^.]+$/, '') + '.jpg';
+        return new File([blob], nama, { type: 'image/jpeg', lastModified: Date.now() });
+      };
+
+      const AKUN_TILE = 'admin';
+
+      const fotoMenuUrl = (id) =>
+        supabase.storage.from(BUCKET).getPublicUrl('menu/' + id + '.jpg').data.publicUrl;
+
+      const adaFotoMenu = async (url) => {
+        try {
+          const r = await fetch(url, { method: 'HEAD' });
+          return r.ok;
+        } catch {
+          return false;
+        }
+      };
+
+      const loadFotoMenu = async () => {
+        let hasil = await supabase
+          .from('so_menus')
+          .select('id, name, lokasi, tim_checker, foto_url')
+          .order('name');
+
+        if (hasil.error) {
+          hasil = await supabase
+            .from('so_menus')
+            .select('id, name, lokasi, tim_checker')
+            .order('name');
+          if (hasil.error) {
+            console.error('Gagal memuat daftar menu:', hasil.error.message);
+            menuFotoBody.innerHTML = '';
+            menuFotoWrap.hidden = true;
+            menuFotoEmpty.hidden = true;
+            menuFotoHint.hidden = false;
+            menuFotoHint.textContent = 'Gagal memuat menu: ' + hasil.error.message;
+            return;
+          }
+          menuFotoHint.hidden = false;
+          menuFotoHint.textContent =
+            'Kolom foto_url belum ada di so_menus, jadi foto disimpan di storage tanpa dicatat di DB. ' +
+            'Jalankan di Supabase SQL Editor: alter table so_menus add column if not exists foto_url text;';
+        } else {
+          menuFotoHint.hidden = true;
+        }
+
+        const menus = hasil.data || [];
+        await Promise.all(
+          menus.map(async (m) => {
+            if (m.foto_url) return;
+            const url = fotoMenuUrl(m.id);
+            if (await adaFotoMenu(url)) m.foto_url = url;
+          })
+        );
+        const urlAdmin = fotoMenuUrl(AKUN_TILE);
+        const fotoAdmin = (await adaFotoMenu(urlAdmin)) ? urlAdmin : null;
+        menuFotoData = [
+          { id: AKUN_TILE, name: 'ADMIN STOCK OPNAME', lokasi: '-', tim_checker: '-', foto_url: fotoAdmin },
+        ].concat(menus);
+        renderFotoMenu(menuFotoData);
+      };
+
+      const renderFotoMenu = (menus) => {
+        menuFotoBody.innerHTML = '';
+        menus.forEach((menu, i) => {
+          const tr = document.createElement('tr');
+          tr.dataset.id = menu.id;
+
+          tr.append(cell(String(i + 1), 'c-no'));
+          tr.append(cellPotong(up(menu.name), 'c-nama'));
+          tr.append(cell(up(menu.lokasi || '-'), 'c-satuan'));
+          tr.append(cell(up(menu.tim_checker || '-'), 'c-satuan'));
+
+          const tdFoto = document.createElement('td');
+          tdFoto.className = 'c-foto';
+          if (menu.foto_url) {
+            const img = document.createElement('img');
+            img.className = 'thumb';
+            img.src = menu.foto_url;
+            img.alt = menu.name || 'foto menu';
+            img.loading = 'lazy';
+            img.decoding = 'async';
+            img.title = 'Lihat foto ' + up(menu.name);
+            img.addEventListener('click', () => lihatFoto(menu));
+            tdFoto.appendChild(img);
+          } else {
+            const kosong = document.createElement('span');
+            kosong.className = 'kosong';
+            kosong.textContent = '-';
+            tdFoto.appendChild(kosong);
+          }
+          tr.appendChild(tdFoto);
+
+          const tdAct = document.createElement('td');
+          tdAct.className = 'c-aksi';
+          const wrap = document.createElement('div');
+          wrap.className = 'acts';
+
+          const up2 = document.createElement('button');
+          up2.type = 'button';
+          up2.className = 'ico';
+          up2.textContent = '↑';
+          up2.title = menu.foto_url ? 'Ganti foto ' + up(menu.name) : 'Upload foto ' + up(menu.name);
+          up2.setAttribute('aria-label', up2.title);
+          up2.addEventListener('click', () => pilihFotoMenu(menu.id));
+          wrap.appendChild(up2);
+
+          if (menu.foto_url) {
+            const lihat = document.createElement('button');
+            lihat.type = 'button';
+            lihat.className = 'ico';
+            lihat.textContent = '⊙';
+            lihat.title = 'Lihat foto ' + up(menu.name);
+            lihat.setAttribute('aria-label', lihat.title);
+            lihat.addEventListener('click', () => lihatFoto(menu));
+            wrap.appendChild(lihat);
+          }
+
+          tdAct.appendChild(wrap);
+          tr.appendChild(tdAct);
+          menuFotoBody.appendChild(tr);
+        });
+        menuFotoWrap.hidden = menus.length === 0;
+        menuFotoEmpty.hidden = menus.length > 0;
       };
 
       const loadMenus = async () => {
@@ -1391,6 +1665,7 @@
         const menus = data || [];
         if (menuAktif && !menus.some((m) => m.id === menuAktif)) menuAktif = null;
         renderMenu(menus);
+        loadFotoMenu();
 
         menuTerpilih = menus.find((m) => m.id === menuAktif) || null;
         barangSec.hidden = !menuTerpilih;

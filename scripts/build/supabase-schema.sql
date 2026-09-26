@@ -173,6 +173,7 @@ create table if not exists so_menus (
 );
 alter table so_menus add column if not exists lokasi text;
 alter table so_menus add column if not exists tim_checker text;
+alter table so_menus add column if not exists foto_url text;
 alter table so_menus enable row level security;
 drop policy if exists "Allow public read" on so_menus;
 drop policy if exists "Allow service insert" on so_menus;
