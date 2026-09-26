@@ -200,8 +200,8 @@
             <line x1="8" y1="2" x2="8" y2="6" />
             <line x1="3" y1="10" x2="21" y2="10" />
           </svg>
-          <span class="date-text" id="dateText">Memuat...</span>
-          <span class="clock-text" id="clockText">--:--:--</span>
+          <span class="date-text" id="dateText"></span>
+          <span class="clock-text" id="clockText"></span>
         </div>
       </div>
       <div class="menu-list" id="menuList"></div>
@@ -212,6 +212,26 @@
       const THUMB = '../../image-index/time-kamera/1.png';
       const BUCKET = 'stock-foto';
       const menuList = document.getElementById('menuList');
+
+      const dateText = document.getElementById('dateText');
+      const clockText = document.getElementById('clockText');
+      const tick = () => {
+        const now = new Date();
+        dateText.textContent = now.toLocaleDateString('id-ID', {
+          weekday: 'short',
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        });
+        clockText.textContent = now.toLocaleTimeString('id-ID', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        });
+      };
+      tick();
+      setInterval(tick, 1000);
 
       const addTile = (label, href, thumb = THUMB) => {
         const a = document.createElement('a');
@@ -266,26 +286,6 @@
         }
         addTile(menu.name, 'so.html?m=' + menu.id, thumb);
       }
-
-      const dateText = document.getElementById('dateText');
-      const clockText = document.getElementById('clockText');
-      const tick = () => {
-        const now = new Date();
-        dateText.textContent = now.toLocaleDateString('id-ID', {
-          weekday: 'short',
-          day: '2-digit',
-          month: 'short',
-          year: 'numeric',
-        });
-        clockText.textContent = now.toLocaleTimeString('id-ID', {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: false,
-        });
-      };
-      tick();
-      setInterval(tick, 1000);
     </script>
   </body>
 </html>
