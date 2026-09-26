@@ -131,6 +131,7 @@ create policy "Allow all for service" on recipes for all using (true) with check
 create table if not exists stock_opname (
   id bigint generated always as identity primary key,
   menu_id bigint,
+  product_id bigint,
   product_plu text not null,
   quantity integer not null default 0,
   stok_sistem integer not null default 0,
@@ -145,6 +146,7 @@ create table if not exists stock_opname (
 );
 alter table stock_opname add column if not exists admin text;
 alter table stock_opname add column if not exists menu_id bigint;
+alter table stock_opname add column if not exists product_id bigint;
 alter table stock_opname add column if not exists stok_sistem integer not null default 0;
 alter table stock_opname add column if not exists stok_fisik integer not null default 0;
 alter table stock_opname add column if not exists hpp numeric not null default 0;
@@ -196,9 +198,11 @@ create table if not exists stock_products (
 );
 alter table stock_products add column if not exists kode text;
 alter table stock_products add column if not exists satuan text not null default 'PCS';
+alter table stock_products add column if not exists foto_url text;
 alter table stock_products add column if not exists stok_sistem integer not null default 0;
 alter table stock_products add column if not exists hpp numeric not null default 0;
 alter table stock_products alter column plu drop not null;
+create unique index if not exists stock_products_menu_kode_uniq on stock_products (menu_id, kode) where kode is not null;
 alter table stock_products enable row level security;
 drop policy if exists "Allow public read" on stock_products;
 drop policy if exists "Allow service insert" on stock_products;
@@ -222,3 +226,17 @@ create policy "Public read admin-icons" on storage.objects for select using (buc
 create policy "Allow upload admin-icons" on storage.objects for insert with check (bucket_id = 'admin-icons');
 create policy "Allow update admin-icons" on storage.objects for update using (bucket_id = 'admin-icons') with check (bucket_id = 'admin-icons');
 create policy "Allow delete admin-icons" on storage.objects for delete using (bucket_id = 'admin-icons');
+
+-- 8. Storage bucket untuk foto barang stok opname (stock-admin.html)
+insert into storage.buckets (id, name, public)
+values ('stock-foto', 'stock-foto', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists "Public read stock-foto" on storage.objects;
+drop policy if exists "Allow upload stock-foto" on storage.objects;
+drop policy if exists "Allow update stock-foto" on storage.objects;
+drop policy if exists "Allow delete stock-foto" on storage.objects;
+create policy "Public read stock-foto" on storage.objects for select using (bucket_id = 'stock-foto');
+create policy "Allow upload stock-foto" on storage.objects for insert with check (bucket_id = 'stock-foto');
+create policy "Allow update stock-foto" on storage.objects for update using (bucket_id = 'stock-foto') with check (bucket_id = 'stock-foto');
+create policy "Allow delete stock-foto" on storage.objects for delete using (bucket_id = 'stock-foto');

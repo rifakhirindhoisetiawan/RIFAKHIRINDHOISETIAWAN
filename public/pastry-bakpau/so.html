@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
@@ -7,6 +7,10 @@
       name="viewport"
     />
     <title>Stok Opname</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --text: #1f2937;
@@ -31,6 +35,15 @@
       body {
         min-height: 100%;
         background: #ffffff;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      html::-webkit-scrollbar,
+      body::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
       }
 
       body {
@@ -69,76 +82,31 @@
         flex-wrap: wrap;
       }
 
-      .push {
-        margin-left: auto;
-      }
-
-      .count {
-        color: var(--muted);
-        font-size: 11px;
-        font-weight: 800;
-        white-space: nowrap;
-      }
-
-      .btn {
-        height: 32px;
-        padding: 0 16px;
-        font: inherit;
-        font-size: 12px;
-        font-weight: 800;
-        color: #ffffff;
-        background: var(--primary);
-        border: 1px solid var(--primary);
-        border-radius: 8px;
-        cursor: pointer;
-        white-space: nowrap;
-      }
-
-      .btn:active {
-        background: var(--primary-dark);
-        border-color: var(--primary-dark);
-      }
-
-      .btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-
-      .btn-ghost {
-        color: var(--primary-dark);
-        background: #fff;
-        border-color: var(--line);
-      }
-
-      .btn-ghost:active {
-        background: #eef2ff;
-      }
-
-      .mini {
-        height: 24px;
-        padding: 0 10px;
-        font-size: 11px;
-        font-weight: 800;
-        border-radius: 7px;
-      }
-
       .table-wrap {
-        overflow: auto;
-        max-height: 56vh;
+        overflow-x: auto;
+        overflow-y: hidden;
         border: 1px solid var(--line);
         border-radius: 14px;
         -webkit-overflow-scrolling: touch;
         background: #fff;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .table-wrap::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
       }
 
       table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 12px;
+        font-size: 13px;
       }
 
       .laporan {
-        min-width: 860px;
+        min-width: 880px;
       }
 
       .riwayat {
@@ -149,23 +117,23 @@
         position: sticky;
         top: 0;
         z-index: 1;
-        background: var(--surface);
+        background: #f9f9f9;
         color: var(--muted);
-        font-size: 10px;
+        font-size: clamp(10px, 2.6vw, 12px);
         font-weight: 800;
         letter-spacing: 0.5px;
         text-transform: uppercase;
         text-align: left;
-        height: 32px;
+        height: 34px;
         padding: 0 10px;
-        border-bottom: 1px solid var(--line);
+        border-bottom: 1px solid #e5e7eb;
         white-space: nowrap;
       }
 
       tbody td {
-        height: 32px;
+        height: 38px;
         padding: 0 10px;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid #f1f2f4;
         vertical-align: middle;
       }
 
@@ -180,18 +148,26 @@
       tfoot td {
         position: sticky;
         bottom: 0;
-        background: var(--surface);
+        background: #f9f9f9;
         font-weight: 800;
-        font-size: 12px;
-        height: 32px;
+        font-size: 13px;
+        height: 38px;
         padding: 0 10px;
-        border-top: 1px solid var(--line);
+        border-top: 1px solid #e5e7eb;
         white-space: nowrap;
       }
 
       .c-no {
-        width: 28px;
+        width: 34px;
         text-align: center;
+        color: var(--muted);
+      }
+
+      .c-tgl {
+        width: 64px;
+        text-align: center;
+        font-size: 11px;
+        font-variant-numeric: tabular-nums;
         color: var(--muted);
       }
 
@@ -200,7 +176,7 @@
       }
 
       .c-kode {
-        width: 80px;
+        width: 92px;
       }
 
       .c-satuan {
@@ -210,6 +186,11 @@
       .c-num {
         width: 76px;
         text-align: right;
+      }
+
+      .hpp {
+        width: 100px;
+        white-space: nowrap;
       }
 
       .c-total {
@@ -223,6 +204,7 @@
         justify-content: center;
         width: 54px;
         aspect-ratio: 4 / 3;
+        overflow: hidden;
         border: 1px dashed #d1d5db;
         border-radius: 8px;
         background: #f9fafb;
@@ -234,10 +216,17 @@
         line-height: 1.15;
       }
 
+      .foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
       .kode {
         color: var(--primary);
         font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 12px;
+        font-size: clamp(12px, 3.2vw, 14px);
         font-weight: 800;
         white-space: nowrap;
       }
@@ -258,10 +247,25 @@
         color: var(--plus);
       }
 
+      .c-nama {
+        min-width: 180px;
+      }
+
+      .potong {
+        max-width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       .keterangan {
+        max-width: 170px;
         font-size: 12px;
         font-weight: 700;
         color: var(--muted);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .keterangan.minus {
@@ -273,53 +277,82 @@
       }
 
       .cell-input {
-        height: 24px;
-        padding: 0 10px;
+        height: 30px;
+        min-width: 0;
+        padding: 0 8px;
         text-align: right;
         font-variant-numeric: tabular-nums;
-        font-weight: 700;
+        font-weight: 600;
+        line-height: 1;
         border-radius: 7px;
-        background: var(--surface);
-        border: 1px solid var(--line-2);
+        background: transparent;
+        border: 1px solid transparent;
         color: var(--text);
-        font-size: 12px;
+        font: inherit;
+        font-size: 13px;
         width: 100%;
+        -moz-appearance: textfield;
+        appearance: textfield;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+
+      .cell-input:hover {
+        background: #f9f9f9;
+        border-color: #e5e7eb;
       }
 
       .cell-input:focus {
         outline: none;
-        background: #fff;
+        background: #ffffff;
         border-color: var(--primary);
       }
 
-      .head-info {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px 14px;
-        margin-bottom: 16px;
+      .cell-input::-webkit-outer-spin-button,
+      .cell-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
       }
 
-      .head-info > div {
-        min-width: 0;
+      .c-aksi {
+        width: 52px;
       }
 
-      .head-info span {
-        display: block;
-        font-size: 10px;
+      .simpan-btn {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font: inherit;
+        font-size: 12px;
         font-weight: 800;
-        color: var(--muted);
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        margin-bottom: 4px;
+        line-height: 1;
+        color: #4f46e5;
+        background: #eef2ff;
+        border: none;
+        border-radius: 7px;
+        cursor: pointer;
+        transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
       }
 
-      .head-info b {
-        display: block;
-        font-size: 15px;
-        font-weight: 800;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+      .simpan-btn:hover {
+        color: #4338ca;
+        background: #e0e7ff;
+      }
+
+      .simpan-btn:active {
+        transform: scale(0.9);
+      }
+
+      .simpan-btn:disabled {
+        color: #c7d2fe;
+        background: #f6f7fb;
+        cursor: not-allowed;
+      }
+
+      tbody tr.simpan td {
+        background: #ecfdf5;
       }
 
       .empty {
@@ -329,28 +362,38 @@
         font-weight: 700;
         text-align: center;
       }
+
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: max(18px, env(safe-area-inset-bottom));
+        transform: translateX(-50%);
+        z-index: 30;
+        max-width: calc(100% - 36px);
+        padding: 10px 16px;
+        border-radius: 10px;
+        background: #111827;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 700;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(17, 24, 39, 0.28);
+      }
+
+      .toast.err {
+        background: var(--minus);
+      }
+
+      .toast[hidden] {
+        display: none;
+      }
     </style>
   </head>
   <body>
+    <div class="toast" id="toast" role="status" hidden></div>
     <section class="sec">
-      <div class="section-label" id="judulSo">Stok Opname</div>
-      <div class="head-info">
-        <div>
-          <span>Tanggal SO</span>
-          <b id="infoTanggal">-</b>
-        </div>
-        <div>
-          <span>Lokasi</span>
-          <b id="infoLokasi">-</b>
-        </div>
-        <div>
-          <span>Tim Checker</span>
-          <b id="infoTim">-</b>
-        </div>
-        <div>
-          <span>Admin</span>
-          <b id="infoAdmin">-</b>
-        </div>
+      <div class="row">
+        <div class="section-label flush" id="judulSo">Stok Opname</div>
       </div>
 
       <div class="table-wrap" id="barangWrap">
@@ -358,16 +401,18 @@
           <thead>
             <tr>
               <th class="c-no">No</th>
-              <th class="c-foto">Foto</th>
+              <th class="c-tgl">Tanggal SO</th>
+              <th class="c-foto">Foto Produk</th>
               <th class="c-kode">Kode Barang</th>
               <th>Nama Barang</th>
               <th class="c-satuan">Satuan</th>
-              <th class="c-num">Onhand</th>
+              <th class="c-num">Stok Sistem</th>
               <th class="c-num">Stok Fisik</th>
-              <th class="c-num">Selisih</th>
-              <th class="c-num">HPP</th>
-              <th class="c-total">Total Nominal</th>
+              <th class="c-num">Selisih (Qty)</th>
+              <th class="c-num">HPP / Satuan</th>
+              <th class="c-total">Total Nominal Selisih</th>
               <th>Keterangan</th>
+              <th class="c-aksi"></th>
             </tr>
           </thead>
           <tbody id="barangBody"></tbody>
@@ -375,18 +420,11 @@
         </table>
       </div>
       <div class="empty" id="barangEmpty" hidden>Belum ada barang. Tambah lewat menu ADMIN.</div>
-
-      <div class="row">
-        <span class="count" id="counter">0 barang</span>
-        <button class="btn btn-ghost mini" type="button" id="resetBtn">Reset</button>
-        <button class="btn push" type="button" id="simpanBtn">Simpan Stok</button>
-      </div>
     </section>
 
     <section class="sec">
       <div class="row">
         <div class="section-label flush">Riwayat (50 terakhir)</div>
-        <button class="btn btn-ghost mini push" type="button" id="refreshBtn">Muat</button>
       </div>
       <div class="table-wrap" id="riwayatWrap" hidden>
         <table class="riwayat">
@@ -394,7 +432,7 @@
             <tr>
               <th>Waktu</th>
               <th>Kode</th>
-              <th class="c-num">Onhand</th>
+              <th class="c-num">Stok Sistem</th>
               <th class="c-num">Fisik</th>
               <th class="c-num">Selisih</th>
               <th class="c-total">Nominal</th>
@@ -413,20 +451,13 @@
       const DEFAULT_ADMIN = 'Admin Stock Opname';
 
       const judulSo = document.getElementById('judulSo');
-      const infoTanggal = document.getElementById('infoTanggal');
-      const infoLokasi = document.getElementById('infoLokasi');
-      const infoTim = document.getElementById('infoTim');
-      const infoAdmin = document.getElementById('infoAdmin');
       const barangBody = document.getElementById('barangBody');
       const barangFoot = document.getElementById('barangFoot');
       const barangEmpty = document.getElementById('barangEmpty');
-      const counter = document.getElementById('counter');
-      const simpanBtn = document.getElementById('simpanBtn');
-      const resetBtn = document.getElementById('resetBtn');
       const riwayatWrap = document.getElementById('riwayatWrap');
       const riwayatBody = document.getElementById('riwayatBody');
       const riwayatEmpty = document.getElementById('riwayatEmpty');
-      const refreshBtn = document.getElementById('refreshBtn');
+      const toast = document.getElementById('toast');
 
       const menuId = Number(new URLSearchParams(location.search).get('m')) || 0;
 
@@ -437,6 +468,24 @@
       };
       const rupiah = (value) => 'Rp ' + Math.round(num(value)).toLocaleString('id-ID');
       const getAdmin = () => (localStorage.getItem(ADMIN_KEY) || '').trim() || DEFAULT_ADMIN;
+      const formatTanggal = (value) => {
+        const d = new Date(value);
+        const pad = (n) => String(n).padStart(2, '0');
+        return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + String(d.getFullYear()).slice(-2);
+      };
+
+      let tanggalSo = formatTanggal(new Date());
+
+      let toastTimer = null;
+      const say = (message, isError) => {
+        toast.textContent = message;
+        toast.className = 'toast' + (isError ? ' err' : '');
+        toast.hidden = false;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.hidden = true;
+        }, 2800);
+      };
 
       const cell = (text, cls) => {
         const td = document.createElement('td');
@@ -452,10 +501,10 @@
       };
 
       const hitungBaris = (tr) => {
-        const onhand = num(tr.querySelector('.in-onhand').value);
+        const sistem = num(tr.querySelector('.in-sistem').value);
         const fisik = num(tr.querySelector('.in-fisik').value);
         const hpp = num(tr.querySelector('.hpp').dataset.value);
-        const selisih = fisik - onhand;
+        const selisih = fisik - sistem;
         const nominal = selisih * hpp;
         const ket = keteranganOf(selisih);
 
@@ -477,13 +526,13 @@
         let selisih = 0;
         let nominal = 0;
         barangBody.querySelectorAll('tr').forEach((tr) => {
-          selisih += num(tr.querySelector('.in-fisik').value) - num(tr.querySelector('.in-onhand').value);
+          selisih += num(tr.querySelector('.in-fisik').value) - num(tr.querySelector('.in-sistem').value);
           nominal += num(tr.querySelector('.nominal').dataset.value);
         });
         barangFoot.innerHTML = '';
         const tr = document.createElement('tr');
         const tdTotal = cell('TOTAL');
-        tdTotal.colSpan = 7;
+        tdTotal.colSpan = 9;
         const tdSelisih = cell(
           String(selisih),
           'selisih ' + (selisih === 0 ? '' : selisih < 0 ? 'minus' : 'plus')
@@ -496,37 +545,53 @@
         const tdSisa = cell('');
         tr.append(tdTotal, tdSelisih, tdNominal, tdSisa);
         barangFoot.appendChild(tr);
-        counter.textContent = barangBody.querySelectorAll('tr').length + ' barang';
       };
 
-      const renderBarang = (barang, terakhir) => {
+      const renderBarang = (barang) => {
         barangBody.innerHTML = '';
         barang.forEach((row, i) => {
-          const nilai = terakhir.get(row.kode) || null;
-          const onhand = nilai ? num(nilai.stok_sistem) : num(row.stok_sistem);
-          const fisik = nilai ? num(nilai.stok_fisik) : 0;
+          const sistem = num(row.stok_sistem);
 
           const tr = document.createElement('tr');
-          tr.append(cell(String(i + 1), 'c-no'));
+          tr.dataset.id = row.id;
+          tr.append(cell(String(i + 1), 'c-no'), cell(tanggalSo, 'c-tgl'));
 
           const tdFoto = document.createElement('td');
           tdFoto.className = 'c-foto';
           const foto = document.createElement('div');
           foto.className = 'foto';
-          foto.textContent = '[Sisipkan Foto]';
+          if (row.foto_url) {
+            const img = document.createElement('img');
+            img.src = row.foto_url;
+            img.alt = row.name || row.kode || 'foto';
+            img.loading = 'lazy';
+            img.decoding = 'async';
+            foto.appendChild(img);
+          } else {
+            foto.textContent = '[Sisipkan Foto]';
+          }
           tdFoto.appendChild(foto);
           tr.appendChild(tdFoto);
 
-          tr.append(cell(row.kode || '-', 'kode'), cell(up(row.name)), cell(row.satuan || 'PCS', 'c-satuan'));
+          const tdNama = document.createElement('td');
+          tdNama.className = 'c-nama';
+          const potong = document.createElement('div');
+          potong.className = 'potong';
+          potong.textContent = up(row.name);
+          potong.title = up(row.name);
+          tdNama.appendChild(potong);
+          tr.append(cell(row.kode || '-', 'kode'), tdNama, cell(row.satuan || 'PCS', 'c-satuan'));
 
-          ['onhand', 'fisik'].forEach((jenis) => {
+          ['sistem', 'fisik'].forEach((jenis) => {
             const td = document.createElement('td');
             td.className = 'c-num';
             const input = document.createElement('input');
             input.type = 'number';
             input.min = '0';
+            input.inputMode = 'numeric';
             input.className = 'cell-input in-' + jenis;
-            input.value = String(jenis === 'onhand' ? onhand : fisik);
+            input.value = String(jenis === 'sistem' ? sistem : 0);
+            input.setAttribute('aria-label', (jenis === 'sistem' ? 'Stok Sistem' : 'Stok Fisik') + ' ' + (row.kode || row.name || i + 1));
             input.addEventListener('input', () => {
               hitungBaris(tr);
               hitungTotal();
@@ -546,6 +611,18 @@
           tr.appendChild(cell('Rp 0', 'nominal c-total'));
           tr.appendChild(cell('Sesuai', 'keterangan'));
 
+          const tdAksi = document.createElement('td');
+          tdAksi.className = 'c-aksi';
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'simpan-btn';
+          btn.textContent = 'âœ“';
+          btn.title = 'Simpan ' + (row.kode || row.name);
+          btn.setAttribute('aria-label', btn.title);
+          btn.addEventListener('click', () => simpanBaris(tr, btn));
+          tdAksi.appendChild(btn);
+          tr.appendChild(tdAksi);
+
           hitungBaris(tr);
           barangBody.appendChild(tr);
         });
@@ -561,7 +638,7 @@
         }
         const { data: menu, error: errMenu } = await supabase
           .from('so_menus')
-          .select('id, name, lokasi, tim_checker')
+          .select('id, name')
           .eq('id', menuId)
           .single();
         if (errMenu || !menu) {
@@ -570,102 +647,80 @@
           return;
         }
         judulSo.textContent = up(menu.name);
-        infoTanggal.textContent = new Date()
-          .toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
-          .toUpperCase();
-        infoLokasi.textContent = up(menu.lokasi || '-');
-        infoTim.textContent = up(menu.tim_checker || '-');
-        infoAdmin.textContent = up(getAdmin());
+        tanggalSo = formatTanggal(new Date());
 
         const { data: barang, error: errBarang } = await supabase
           .from('stock_products')
-          .select('id, kode, name, satuan, stok_sistem, hpp')
+          .select('id, kode, name, satuan, stok_sistem, hpp, foto_url')
           .eq('menu_id', menuId)
           .order('kode');
         if (errBarang) {
-          console.error('Gagal memuat barang:', errBarang.message);
+          const ulang = await supabase
+            .from('stock_products')
+            .select('id, kode, name, satuan, stok_sistem, hpp')
+            .eq('menu_id', menuId)
+            .order('kode');
+          if (ulang.error) {
+            console.error('Gagal memuat barang:', ulang.error.message);
+            say('Gagal memuat barang: ' + ulang.error.message, true);
+            return;
+          }
+          renderBarang(ulang.data || []);
+          loadRiwayat();
           return;
         }
 
-        const { data: riwayat } = await supabase
-          .from('stock_opname')
-          .select('product_plu, stok_sistem, stok_fisik')
-          .eq('menu_id', menuId)
-          .order('id', { ascending: false })
-          .limit(200);
-        const terakhir = new Map();
-        (riwayat || []).forEach((r) => {
-          if (r.product_plu && !terakhir.has(r.product_plu)) terakhir.set(r.product_plu, r);
-        });
-
-        renderBarang(barang || [], terakhir);
+        renderBarang(barang || []);
+        loadRiwayat();
       };
 
-      simpanBtn.addEventListener('click', async () => {
-        if (!menuId) return;
-        const admin = getAdmin();
-        const now = new Date().toISOString();
-        const rows = [];
-        barangBody.querySelectorAll('tr').forEach((tr) => {
-          const onhand = num(tr.querySelector('.in-onhand').value);
-          const fisik = num(tr.querySelector('.in-fisik').value);
-          if (onhand === 0 && fisik === 0) return;
-          const hpp = num(tr.querySelector('.hpp').dataset.value);
-          const selisih = fisik - onhand;
-          rows.push({
-            menu_id: menuId,
-            product_plu: tr.querySelector('.kode').textContent,
-            quantity: fisik,
-            stok_sistem: onhand,
-            stok_fisik: fisik,
-            hpp,
-            selisih,
-            total_nominal: selisih * hpp,
-            keterangan: keteranganOf(selisih).text,
-            admin,
-            opname_date: now,
-          });
-        });
-        if (rows.length === 0) return;
-        simpanBtn.disabled = true;
-        const { error } = await supabase.from('stock_opname').insert(rows);
-        simpanBtn.disabled = false;
-        if (error) {
-          console.error('Gagal menyimpan stok:', error.message);
+      const barisOpname = (tr, sistem, fisik, hpp) => ({
+        menu_id: menuId,
+        product_id: Number(tr.dataset.id) || null,
+        product_plu: tr.querySelector('.kode').textContent,
+        quantity: fisik,
+        stok_sistem: sistem,
+        stok_fisik: fisik,
+        hpp,
+        selisih: fisik - sistem,
+        total_nominal: (fisik - sistem) * hpp,
+        keterangan: keteranganOf(fisik - sistem).text,
+        admin: getAdmin(),
+        opname_date: new Date().toISOString(),
+      });
+
+      const simpanBaris = async (tr, btn) => {
+        if (!menuId || btn.disabled) return;
+        const sistem = num(tr.querySelector('.in-sistem').value);
+        const fisik = num(tr.querySelector('.in-fisik').value);
+        if (sistem === 0 && fisik === 0) {
+          say('Isi Stok Sistem atau Stok Fisik dulu', true);
           return;
         }
-        loadBarangNilai();
-        loadRiwayat();
-      });
-
-      resetBtn.addEventListener('click', () => {
-        barangBody.querySelectorAll('tr').forEach((tr) => {
-          tr.querySelector('.in-fisik').value = '0';
-          hitungBaris(tr);
-        });
-        hitungTotal();
-      });
-
-      const loadBarangNilai = async () => {
-        const { data: riwayat } = await supabase
+        const hpp = num(tr.querySelector('.hpp').dataset.value);
+        btn.disabled = true;
+        const { error } = await supabase
           .from('stock_opname')
-          .select('product_plu, stok_sistem, stok_fisik')
-          .eq('menu_id', menuId)
-          .order('id', { ascending: false })
-          .limit(200);
-        const terakhir = new Map();
-        (riwayat || []).forEach((r) => {
-          if (r.product_plu && !terakhir.has(r.product_plu)) terakhir.set(r.product_plu, r);
-        });
-        barangBody.querySelectorAll('tr').forEach((tr) => {
-          const kode = tr.querySelector('.kode').textContent;
-          const nilai = terakhir.get(kode);
-          if (!nilai) return;
-          tr.querySelector('.in-onhand').value = String(num(nilai.stok_sistem));
-          tr.querySelector('.in-fisik').value = String(num(nilai.stok_fisik));
-          hitungBaris(tr);
-        });
-        hitungTotal();
+          .insert([barisOpname(tr, sistem, fisik, hpp)]);
+        if (error) {
+          btn.disabled = false;
+          console.error('Gagal menyimpan stok:', error.message);
+          say('Gagal menyimpan stok: ' + error.message, true);
+          return;
+        }
+        if (tr.dataset.id) {
+          const { error: errSistem } = await supabase
+            .from('stock_products')
+            .update({ stok_sistem: fisik })
+            .eq('id', Number(tr.dataset.id));
+          if (errSistem) {
+            console.error('Gagal memperbarui stok sistem:', errSistem.message);
+            say('Tersimpan, tapi stok sistem gagal diperbarui: ' + errSistem.message, true);
+          }
+        }
+        tr.classList.add('simpan');
+        setTimeout(() => tr.classList.remove('simpan'), 900);
+        loadRiwayat();
       };
 
       const formatWaktu = (value) => {
@@ -710,8 +765,6 @@
         riwayatEmpty.hidden = rows.length > 0;
         riwayatWrap.hidden = rows.length === 0;
       };
-
-      refreshBtn.addEventListener('click', loadRiwayat);
       load();
     </script>
   </body>

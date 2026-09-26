@@ -7,6 +7,10 @@
       name="viewport"
     />
     <title>Admin - Stok Opname</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --text: #1f2937;
@@ -19,7 +23,7 @@
         --soft: #eef2ff;
         --soft-2: #c7d2fe;
         --danger: #ef4444;
-        --row-h: 40px;
+        --row-h: 36px;
       }
 
       * {
@@ -32,6 +36,15 @@
       body {
         min-height: 100%;
         background: #ffffff;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      html::-webkit-scrollbar,
+      body::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
       }
 
       body {
@@ -43,7 +56,7 @@
           sans-serif;
         color: var(--text);
         min-height: 100vh;
-        max-width: 800px;
+        max-width: 960px;
         margin: 0 auto;
         padding: 14px 18px 40px;
         padding-top: max(14px, env(safe-area-inset-top));
@@ -70,10 +83,6 @@
         flex-wrap: wrap;
       }
 
-      .push {
-        margin-left: auto;
-      }
-
       .count {
         color: var(--muted);
         font-size: 11px;
@@ -85,12 +94,12 @@
         width: 100%;
         min-width: 0;
         height: var(--row-h);
-        padding: 0 14px;
+        padding: 0 12px;
         font: inherit;
-        font-size: 14px;
+        font-size: 13px;
         color: var(--text);
-        background: var(--surface);
-        border: 1px solid var(--line-2);
+        background: #f9f9f9;
+        border: 1px solid #ddd;
         border-radius: 10px;
         text-transform: uppercase;
       }
@@ -111,25 +120,18 @@
 
       .grow {
         flex: 1;
-      }
-
-      .w-70 {
-        flex: 0 0 76px;
-      }
-
-      .w-120 {
-        flex: 0 0 120px;
+        min-width: 0;
       }
 
       .btn {
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
         padding: 0;
         display: flex;
         align-items: center;
         justify-content: center;
         font: inherit;
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 800;
         line-height: 1;
         color: #fff;
@@ -153,79 +155,165 @@
       }
 
       .ico {
-        width: 24px;
-        height: 24px;
+        width: 28px;
+        height: 28px;
         padding: 0;
         display: flex;
         align-items: center;
         justify-content: center;
         font: inherit;
-        font-size: 11px;
+        font-size: 12px;
+        font-weight: 800;
         line-height: 1;
-        color: var(--primary-dark);
-        background: #fff;
-        border: 1px solid var(--line);
-        border-radius: 6px;
+        color: #4f46e5;
+        background: #eef2ff;
+        border: none;
+        border-radius: 7px;
         cursor: pointer;
         flex-shrink: 0;
-        transition: all 0.15s ease;
+        outline: none;
+        transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+      }
+
+      .ico:hover {
+        color: #4338ca;
+        background: #e0e7ff;
       }
 
       .ico:active {
-        background: var(--soft);
-        transform: scale(0.92);
+        transform: scale(0.9);
       }
 
-      .ico-danger {
-        color: var(--danger);
-        border-color: #fecaca;
+      .ico:disabled {
+        color: #c7d2fe;
+        background: #f6f7fb;
+        cursor: not-allowed;
       }
 
-      .ico-danger:active {
-        background: #fef2f2;
+      .menu-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 8px;
       }
 
-      .mini {
-        height: 24px;
-        padding: 0 10px;
-        font: inherit;
-        font-size: 11px;
-        font-weight: 800;
-        border-radius: 7px;
+      .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .menu-item .nama {
+        flex: 1;
+        min-width: 0;
+        padding: 8px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text);
         background: #fff;
-        border: 1px solid var(--line);
-        color: var(--primary-dark);
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
         cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
-      .mini:active {
-        background: var(--soft);
-      }
-
-      .menu-row {
-        cursor: pointer;
-      }
-
-      .menu-row.on td {
-        background: var(--soft);
+      .menu-item.on .nama {
         color: var(--primary-dark);
         font-weight: 800;
-        box-shadow: inset 3px 0 0 var(--primary);
+        background: var(--surface);
+        border-color: var(--line-2);
+      }
+
+      .menu-item .ico:active {
+        opacity: 0.85;
+        transform: scale(0.93);
       }
 
       .table-wrap {
-        overflow: auto;
-        max-height: 56vh;
-        border: 1px solid var(--line);
-        border-radius: 14px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        border: 1px solid #ddd;
+        border-radius: 10px;
         -webkit-overflow-scrolling: touch;
         background: #fff;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .table-wrap::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+      }
+
+      .daftar-wrap {
+        overflow: hidden;
+        border-color: #e5e7eb;
+      }
+
+      .menu-tulis {
+        flex-wrap: nowrap;
+        margin-bottom: 0;
+      }
+
+      .menu-tulis .table-wrap {
+        flex: 1;
+        min-width: 0;
+      }
+
+      table.daftar {
+        font-size: 12px;
+      }
+
+      table.daftar td {
+        height: auto;
+        padding: 8px 12px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      table.daftar tr + tr td {
+        border-top: 1px solid #eeeeee;
+        border-bottom: 0;
+      }
+
+      table.daftar .tulis-in {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      table.daftar input {
+        flex: 1;
+        min-width: 0;
+        height: 24px;
+        padding: 0;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text);
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        text-transform: uppercase;
+      }
+
+      table.daftar input::placeholder {
+        color: #c3c8d1;
+      }
+
+      table.daftar input:focus {
+        outline: none;
+        background: transparent;
+        border-color: transparent;
       }
 
       table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 12px;
+        font-size: 13px;
       }
 
       .daftar {
@@ -233,31 +321,66 @@
       }
 
       .barang {
-        min-width: 340px;
+        min-width: 620px;
+      }
+
+      .c-nama {
+        max-width: 340px;
+      }
+
+      .potong {
+        max-width: 340px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       thead th {
         position: sticky;
         top: 0;
         z-index: 1;
-        background: var(--surface);
+        background: #f9f9f9;
         color: var(--muted);
-        font-size: 10px;
+        font-size: clamp(10px, 2.6vw, 12px);
         font-weight: 800;
         letter-spacing: 0.5px;
         text-transform: uppercase;
         text-align: left;
-        height: 32px;
-        padding: 0 10px;
-        border-bottom: 1px solid var(--line);
+        height: 34px;
+        padding: 0 12px;
+        border-bottom: 1px solid #e5e7eb;
         white-space: nowrap;
       }
 
       tbody td {
-        height: 32px;
+        height: 38px;
         padding: 0 10px;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid #f1f2f4;
         vertical-align: middle;
+        transition: background 0.5s ease;
+      }
+
+      tbody td.ok {
+        background: #ecfdf5;
+      }
+
+      .tambah td {
+        background: #fafbfc;
+      }
+
+      .tambah:hover td {
+        background: #fafbfc;
+      }
+
+      .tambah .auto {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--muted);
+        letter-spacing: 0.3px;
+      }
+
+      .tambah .btn {
+        margin: 0 auto;
       }
 
       tbody tr:last-child td {
@@ -269,26 +392,33 @@
       }
 
       .c-kode {
-        width: 88px;
+        width: 92px;
+      }
+
+      .c-no {
+        width: 34px;
+        text-align: center;
+        color: var(--muted);
       }
 
       .c-satuan {
-        width: 64px;
+        width: 58px;
       }
 
       .c-hpp {
-        width: 100px;
+        width: 112px;
         text-align: right;
+        white-space: nowrap;
       }
 
       .c-aksi {
-        width: 76px;
+        width: 84px;
       }
 
       .kode {
         color: var(--primary);
         font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 11px;
+        font-size: clamp(12px, 3.2vw, 14px);
         font-weight: 800;
         white-space: nowrap;
       }
@@ -307,85 +437,280 @@
         justify-content: flex-end;
       }
 
-      .head-info {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px 14px;
-        margin-bottom: 16px;
+      .selisih {
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
       }
 
-      .head-info span {
-        display: block;
+      .selisih.minus {
+        color: #dc2626;
+      }
+
+      .selisih.plus {
+        color: #16a34a;
+      }
+
+      .c-ket {
+        max-width: 170px;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .ket.minus {
+        color: #dc2626;
+      }
+
+      .ket.plus {
+        color: #16a34a;
+      }
+
+      .c-num {
+        width: 84px;
+        text-align: right;
+      }
+
+      .cell-input {
+        width: 100%;
+        min-width: 0;
+        height: 30px;
+        padding: 0 8px;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        color: var(--text);
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 7px;
+        cursor: text;
+        -moz-appearance: textfield;
+        appearance: textfield;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+
+      .cell-input:hover {
+        background: #f9f9f9;
+        border-color: #e5e7eb;
+      }
+
+      .cell-input:focus {
+        outline: none;
+        background: #ffffff;
+        border-color: var(--primary);
+      }
+
+      .cell-input.teks {
+        text-align: left;
+        font-size: 13px;
+      }
+
+      .cell-input::-webkit-outer-spin-button,
+      .cell-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      .cell-input.mono {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 12px;
+        font-weight: 700;
+        color: #4f46e5;
+        letter-spacing: -0.2px;
+      }
+
+      .kode-btn {
+        width: 100%;
+        padding: 5px 6px;
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.2px;
+        color: #4f46e5;
+        text-align: left;
+        background: transparent;
+        border: 1px dashed transparent;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      .kode-btn:active {
+        background: var(--soft);
+        border-color: var(--soft-2);
+      }
+
+      .c-foto {
+        width: 56px;
+      }
+
+      .lightbox {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 40;
+        max-width: calc(100vw - 32px);
+        padding: 12px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+      }
+
+      .lightbox[hidden] {
+        display: none;
+      }
+
+      .lightbox-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .lightbox img {
+        max-width: min(76vw, 300px);
+        max-height: 46vh;
+        border-radius: 8px;
+        object-fit: contain;
+      }
+
+      .lightbox .qr {
+        width: min(56vw, 196px);
+        height: min(56vw, 196px);
+      }
+
+      .lightbox-text {
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+      }
+
+      .mode {
+        color: var(--primary-dark);
         font-size: 10px;
         font-weight: 800;
-        color: var(--muted);
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        margin-bottom: 5px;
+        white-space: nowrap;
+      }
+
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: max(18px, env(safe-area-inset-bottom));
+        transform: translateX(-50%);
+        z-index: 30;
+        max-width: calc(100% - 36px);
+        padding: 10px 16px;
+        border-radius: 10px;
+        background: #111827;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 700;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(17, 24, 39, 0.28);
+      }
+
+      .toast.err {
+        background: var(--danger);
+      }
+
+      .toast[hidden] {
+        display: none;
       }
     </style>
   </head>
   <body>
-    <section class="sec">
-      <div class="section-label">Menu SO</div>
-      <form class="row" id="menuForm">
-        <input class="grow" type="text" id="mName" placeholder="SO ROTI" required />
-        <button class="btn" type="submit" title="Tambah menu" aria-label="Tambah menu">+</button>
-      </form>
-      <div class="table-wrap">
-        <table class="daftar">
-          <thead>
-            <tr>
-              <th>Menu</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="menuBody"></tbody>
-        </table>
+    <div class="toast" id="toast" role="status" hidden></div>
+    <div class="lightbox" id="lightbox" hidden>
+      <div class="lightbox-box">
+        <canvas class="qr" id="lightboxQr" width="220" height="220" hidden></canvas>
+        <img id="lightboxImg" alt="preview foto" hidden />
+        <div class="lightbox-text" id="lightboxText"></div>
       </div>
+    </div>
+    <section class="sec">
+      <div class="row menu-tulis">
+        <div class="table-wrap daftar-wrap grow">
+          <table class="daftar">
+            <tbody>
+              <tr>
+                <td class="tulis">
+                  <div class="tulis-in">
+                    <input
+                      type="text"
+                      id="mName"
+                      placeholder="SO ROTI"
+                      autocomplete="off"
+                      aria-label="Nama menu SO"
+                    />
+                    <span class="mode" id="mMode"></span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="btn" type="button" id="mAdd" title="Tambah menu" aria-label="Tambah menu">+</button>
+      </div>
+      <div class="menu-list" id="menuList"></div>
       <div class="empty" id="menuEmpty" hidden>Belum ada menu SO.</div>
     </section>
 
     <section class="sec" id="barangSec" hidden>
-      <div class="section-label" id="barangLabel">Item</div>
-      <div class="head-info">
-        <div>
-          <span>Lokasi</span>
-          <input type="text" id="infoLokasi" placeholder="Lokasi" />
-        </div>
-        <div>
-          <span>Tim Checker</span>
-          <input type="text" id="infoTim" placeholder="Tim Checker" />
-        </div>
-      </div>
-
-      <form class="row" id="barangForm">
-        <input class="grow" type="text" id="bName" placeholder="Nama Barang" required />
-        <input class="w-70" type="text" id="bSatuan" placeholder="Satuan" value="PCS" />
-        <input class="w-120" type="number" id="bHpp" min="0" value="0" placeholder="HPP" />
-        <button class="btn" type="submit" title="Tambah barang" aria-label="Tambah barang">+</button>
-      </form>
-
-      <div class="row">
-        <span class="count" id="barangCount"></span>
-        <button class="mini push" type="button" id="batalBtn">Batal Edit</button>
-      </div>
-
       <div class="table-wrap" id="barangWrap">
         <table class="barang">
           <thead>
             <tr>
-              <th class="c-kode">Kode Barang</th>
+              <th class="c-no">No</th>
+              <th class="c-kode">PLU</th>
               <th>Nama Barang</th>
               <th class="c-satuan">Satuan</th>
+              <th class="c-num">Onhand</th>
+              <th class="c-num">Fisik</th>
               <th class="c-hpp">HPP</th>
+              <th class="c-num">Selisih</th>
+              <th>Keterangan</th>
+              <th class="c-foto">Foto</th>
               <th class="c-aksi"></th>
             </tr>
           </thead>
+          <tbody class="tambah">
+            <tr>
+              <td class="c-no"></td>
+              <td class="c-kode"><span class="auto">otomatis</span></td>
+              <td class="c-nama">
+                <input class="cell-input teks" type="text" id="bName" size="1" placeholder="Nama Barang" autocomplete="off" />
+              </td>
+              <td class="c-satuan">
+                <input class="cell-input teks" type="text" id="bSatuan" size="1" placeholder="Satuan" value="PCS" autocomplete="off" />
+              </td>
+              <td class="c-num">
+                <input class="cell-input" type="number" id="bOnhand" min="0" value="0" inputmode="numeric" />
+              </td>
+              <td class="c-num">
+                <input class="cell-input" type="number" id="bFisik" min="0" value="0" inputmode="numeric" />
+              </td>
+              <td class="c-hpp">
+                <input class="cell-input" type="number" id="bHpp" min="0" value="0" inputmode="decimal" />
+              </td>
+              <td class="c-num selisih" id="bSelisih">0</td>
+              <td class="c-ket" id="bKet">Sesuai</td>
+              <td class="c-foto"></td>
+              <td class="c-aksi">
+                <button class="btn" type="button" id="bAdd" title="Tambah barang" aria-label="Tambah barang">+</button>
+              </td>
+            </tr>
+          </tbody>
           <tbody id="barangBody"></tbody>
         </table>
       </div>
-      <div class="empty" id="barangEmpty" hidden>Belum ada barang di menu ini.</div>
+      <input accept="image/*" id="fotoInput" type="file" hidden />
     </section>
 
     <script type="module">
@@ -394,34 +719,42 @@
       const MENU_KEY = 'so_active_menu';
 
       const mName = document.getElementById('mName');
-      const menuBody = document.getElementById('menuBody');
+      const mAdd = document.getElementById('mAdd');
+      const menuList = document.getElementById('menuList');
       const menuEmpty = document.getElementById('menuEmpty');
       const barangSec = document.getElementById('barangSec');
-      const barangLabel = document.getElementById('barangLabel');
-      const infoLokasi = document.getElementById('infoLokasi');
-      const infoTim = document.getElementById('infoTim');
       const bName = document.getElementById('bName');
       const bSatuan = document.getElementById('bSatuan');
+      const bOnhand = document.getElementById('bOnhand');
+      const bFisik = document.getElementById('bFisik');
       const bHpp = document.getElementById('bHpp');
+      const bSelisih = document.getElementById('bSelisih');
+      const bKet = document.getElementById('bKet');
+      const mMode = document.getElementById('mMode');
+      const toast = document.getElementById('toast');
       const barangBody = document.getElementById('barangBody');
-      const barangEmpty = document.getElementById('barangEmpty');
-      const barangCount = document.getElementById('barangCount');
-      const barangWrap = document.getElementById('barangWrap');
-      const batalBtn = document.getElementById('batalBtn');
+      const bAdd = document.getElementById('bAdd');
+      const fotoInput = document.getElementById('fotoInput');
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxQr = document.getElementById('lightboxQr');
+      const lightboxText = document.getElementById('lightboxText');
+
+      const BUCKET = 'stock-foto';
+      let fotoTarget = null;
+      let fotoData = [];
 
       const dariUrl = Number(new URLSearchParams(location.search).get('m')) || null;
       let menuAktif = dariUrl || Number(localStorage.getItem(MENU_KEY)) || null;
       let menuTerpilih = null;
       let editMenuId = null;
-      let editId = null;
+      let editBarangId = null;
 
       const up = (value) => String(value ?? '').toUpperCase();
       const num = (value) => {
         const n = Number(value);
         return Number.isFinite(n) ? n : 0;
       };
-      const rupiah = (value) => 'Rp ' + Math.round(num(value)).toLocaleString('id-ID');
-
       const cell = (text, cls) => {
         const td = document.createElement('td');
         td.textContent = text;
@@ -429,12 +762,59 @@
         return td;
       };
 
+      const cellPotong = (text, cls) => {
+        const td = document.createElement('td');
+        if (cls) td.className = cls;
+        const div = document.createElement('div');
+        div.className = 'potong';
+        div.textContent = text;
+        td.appendChild(div);
+        return td;
+      };
+
+      let toastTimer = null;
+      const say = (message, isError) => {
+        toast.textContent = message;
+        toast.className = 'toast' + (isError ? ' err' : '');
+        toast.hidden = false;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.hidden = true;
+        }, 2800);
+      };
+
+      const setMode = () => {
+        mMode.textContent = editMenuId ? 'mode edit' : '';
+        mAdd.textContent = editMenuId ? '✓' : '+';
+        mAdd.title = editMenuId ? 'Simpan perubahan' : 'Tambah menu';
+        mAdd.setAttribute('aria-label', mAdd.title);
+      };
+
+      const stopEdit = (clearMenu) => {
+        editMenuId = null;
+        if (clearMenu) mName.value = '';
+        bName.value = '';
+        bSatuan.value = 'PCS';
+        bOnhand.value = '0';
+        bFisik.value = '0';
+        bHpp.value = '0';
+        bSelisih.textContent = '0';
+        bSelisih.className = 'c-num selisih';
+        bKet.textContent = 'Sesuai';
+        bKet.className = 'c-ket ket';
+        setMode();
+      };
+
       const renderMenu = (menus) => {
-        menuBody.innerHTML = '';
+        menuList.innerHTML = '';
         menus.forEach((menu) => {
-          const tr = document.createElement('tr');
-          tr.className = 'menu-row' + (menu.id === menuAktif ? ' on' : '');
-          tr.appendChild(cell(up(menu.name)));
+          const item = document.createElement('div');
+          item.className = 'menu-item' + (menu.id === menuAktif ? ' on' : '');
+
+          const nama = document.createElement('div');
+          nama.className = 'nama';
+          nama.textContent = up(menu.name);
+          item.appendChild(nama);
 
           const edit = document.createElement('button');
           edit.type = 'button';
@@ -447,35 +827,35 @@
             editMenuId = menu.id;
             mName.value = up(menu.name);
             mName.focus();
+            setMode();
           });
 
           const del = document.createElement('button');
           del.type = 'button';
-          del.className = 'ico ico-danger';
+          del.className = 'ico';
           del.textContent = '✕';
           del.title = 'Hapus';
           del.setAttribute('aria-label', 'Hapus ' + menu.name);
           del.addEventListener('click', async (e) => {
             e.stopPropagation();
-            if (!confirm('Hapus menu ' + menu.name + ' beserta barangnya?')) return;
+            if (!confirm('Hapus menu ' + menu.name + '?\nSemua barang di menu ini ikut terhapus.')) return;
             const { error } = await supabase.from('so_menus').delete().eq('id', menu.id);
             if (error) {
               console.error('Hapus menu gagal:', error.message);
+              say('Gagal hapus menu: ' + error.message, true);
               return;
             }
-            if (menuAktif === menu.id) menuAktif = null;
+            if (menuAktif === menu.id) {
+              menuAktif = null;
+              localStorage.removeItem(MENU_KEY);
+              stopEdit(true);
+            }
             loadMenus();
           });
 
-          const tdAct = document.createElement('td');
-          const wrap = document.createElement('div');
-          wrap.className = 'acts';
-          wrap.append(edit, del);
-          tdAct.appendChild(wrap);
-          tr.appendChild(tdAct);
-
-          tr.addEventListener('click', () => pilihMenu(menu.id));
-          menuBody.appendChild(tr);
+          item.append(edit, del);
+          item.addEventListener('click', () => pilihMenu(menu.id));
+          menuList.appendChild(item);
         });
         menuEmpty.hidden = menus.length > 0;
       };
@@ -491,56 +871,369 @@
         return kode;
       };
 
+      const simpanSel = (row, kolom, judul, nilai) =>
+        supabase
+          .from('stock_products')
+          .update({ [kolom]: nilai })
+          .eq('id', row.id);
+
+      const tandaiOke = (td) => {
+        td.classList.add('ok');
+        setTimeout(() => td.classList.remove('ok'), 600);
+      };
+
+      const inputAngka = (row, kolom, judul, sesudah) => {
+        const td = document.createElement('td');
+        td.className = kolom === 'hpp' ? 'c-hpp' : 'c-num';
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.size = 1;
+        input.min = '0';
+        input.step = kolom === 'hpp' ? 'any' : '1';
+        input.inputMode = kolom === 'hpp' ? 'decimal' : 'numeric';
+        input.className = 'cell-input';
+        input.value = String(num(row[kolom]));
+        input.title = judul + ' ' + (row.kode || row.name);
+        input.setAttribute('aria-label', input.title);
+
+        const simpan = async () => {
+          const mentah = num(input.value);
+          const nilai = kolom === 'hpp' ? mentah : Math.round(mentah);
+          if (nilai === num(row[kolom])) return;
+          const { error } = await simpanSel(row, kolom, judul, nilai);
+          if (error) {
+            console.error('Gagal update ' + judul + ':', error.message);
+            say('Gagal update ' + judul.toLowerCase() + ': ' + error.message, true);
+            input.value = String(num(row[kolom]));
+            return;
+          }
+          row[kolom] = nilai;
+          input.value = String(nilai);
+          tandaiOke(td);
+          if (sesudah) sesudah(nilai);
+        };
+
+        input.addEventListener('change', simpan);
+        input.addEventListener('blur', simpan);
+        input.addEventListener('keydown', (e) => {
+          if (e.key !== 'Enter') return;
+          e.preventDefault();
+          input.blur();
+        });
+
+        td.appendChild(input);
+        return td;
+      };
+
+      const fisikTemp = new Map();
+
+      const keteranganOf = (selisih) => {
+        if (selisih === 0) return { text: 'Sesuai', cls: '' };
+        if (selisih < 0) return { text: 'Hilang / Rusak / Expired', cls: 'minus' };
+        return { text: 'Beda Input / Selisih Terima', cls: 'plus' };
+      };
+
+      const hitungSelisih = (tr) => {
+        const td = tr.querySelector('.selisih');
+        if (!td) return;
+        const inFisik = tr.querySelector('.in-fisik');
+        const fisik = inFisik ? num(inFisik.value) : num(fisikTemp.get(Number(tr.dataset.id)));
+        const sistem = num(tr.dataset.onhand);
+        const selisih = fisik - sistem;
+        td.textContent = selisih > 0 ? '+' + selisih : String(selisih);
+        td.className = 'c-num selisih ' + (selisih === 0 ? '' : selisih < 0 ? 'minus' : 'plus');
+        const tdKet = tr.querySelector('.ket');
+        if (tdKet) {
+          const ket = keteranganOf(selisih);
+          tdKet.textContent = ket.text;
+          tdKet.className = 'c-ket ket ' + ket.cls;
+        }
+      };
+
+      const inputFisik = (row, tr) => {
+        const td = document.createElement('td');
+        td.className = 'c-num';
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.size = 1;
+        input.min = '0';
+        input.step = '1';
+        input.inputMode = 'numeric';
+        input.className = 'cell-input in-fisik';
+        input.value = String(num(fisikTemp.get(row.id)));
+        input.title = 'Stok fisik ' + (row.kode || row.name);
+        input.setAttribute('aria-label', input.title);
+        input.addEventListener('input', () => {
+          fisikTemp.set(row.id, Math.round(num(input.value)));
+          hitungSelisih(tr);
+        });
+        td.appendChild(input);
+        return td;
+      };
+
+      const inputTeks = (row, kolom, judul, cls, mono) => {
+        const td = document.createElement('td');
+        if (cls) td.className = cls;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.size = 1;
+        input.className = 'cell-input teks' + (mono ? ' mono' : '');
+        input.value = up(row[kolom] || '');
+        input.title = judul + ' ' + (row.kode || row.name);
+        input.setAttribute('aria-label', input.title);
+
+        const simpan = async () => {
+          const nilai = up(input.value.trim());
+          if (!nilai) {
+            input.value = up(row[kolom] || '');
+            return;
+          }
+          if (nilai === up(row[kolom] || '')) return;
+          const { error } = await simpanSel(row, kolom, judul, nilai);
+          if (error) {
+            console.error('Gagal update ' + judul + ':', error.message);
+            say('Gagal update ' + judul.toLowerCase() + ': ' + error.message, true);
+            input.value = up(row[kolom] || '');
+            return;
+          }
+          row[kolom] = nilai;
+          input.value = nilai;
+          tandaiOke(td);
+        };
+
+        input.addEventListener('change', simpan);
+        input.addEventListener('blur', simpan);
+        input.addEventListener('keydown', (e) => {
+          if (e.key !== 'Enter') return;
+          e.preventDefault();
+          input.blur();
+        });
+
+        td.appendChild(input);
+        return td;
+      };
+
+      const kodeTeks = (row) => {
+        const td = document.createElement('td');
+        td.className = 'c-kode';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'kode-btn';
+        btn.textContent = row.kode || '-';
+        btn.title = 'Lihat QR ' + (row.kode || '');
+        btn.setAttribute('aria-label', btn.title);
+        btn.addEventListener('click', () => lihatQr(row.kode));
+        td.appendChild(btn);
+        return td;
+      };
+
       const renderBarang = (barang) => {
+        fotoData = barang;
         barangBody.innerHTML = '';
-        barang.forEach((row) => {
+        barang.forEach((row, i) => {
           const tr = document.createElement('tr');
-          tr.append(cell(row.kode || '-', 'kode'), cell(up(row.name)), cell(row.satuan || 'PCS', 'c-satuan'), cell(rupiah(row.hpp), 'c-hpp'));
+          const modeEdit = editBarangId === row.id;
+          tr.dataset.id = row.id;
+          tr.dataset.onhand = String(num(row.stok_sistem));
+
+          tr.append(cell(String(i + 1), 'c-no'));
+
+          if (modeEdit) {
+            tr.append(
+              inputTeks(row, 'kode', 'PLU', 'c-kode', true),
+              inputTeks(row, 'name', 'Nama barang', 'c-nama'),
+              inputTeks(row, 'satuan', 'Satuan', 'c-satuan'),
+              inputAngka(row, 'stok_sistem', 'Onhand', (nilai) => {
+                tr.dataset.onhand = String(nilai);
+                hitungSelisih(tr);
+              }),
+              inputFisik(row, tr),
+              inputAngka(row, 'hpp', 'HPP')
+            );
+          } else {
+            tr.append(
+              kodeTeks(row),
+              cellPotong(up(row.name), 'c-nama'),
+              cell(row.satuan || 'PCS', 'c-satuan'),
+              cell(String(num(row.stok_sistem)), 'c-num'),
+              inputFisik(row, tr),
+              cell(String(num(row.hpp)), 'c-hpp')
+            );
+          }
+
+          const tdSelisih = document.createElement('td');
+          tdSelisih.className = 'c-num selisih';
+          const tdKet = document.createElement('td');
+          tdKet.className = 'c-ket ket';
+          tr.append(tdSelisih, tdKet);
+          hitungSelisih(tr);
 
           const edit = document.createElement('button');
           edit.type = 'button';
           edit.className = 'ico';
-          edit.textContent = '✎';
-          edit.title = 'Edit';
-          edit.setAttribute('aria-label', 'Edit ' + (row.kode || row.name));
+          edit.textContent = modeEdit ? '✓' : '✎';
+          edit.title = modeEdit ? 'Selesai edit' : 'Edit';
+          edit.setAttribute('aria-label', edit.title + ' ' + (row.kode || row.name));
           edit.addEventListener('click', () => {
-            editId = row.id;
-            bName.value = up(row.name);
-            bSatuan.value = row.satuan || 'PCS';
-            bHpp.value = String(num(row.hpp));
-            bName.focus();
+            const aktif = document.activeElement;
+            if (aktif && aktif.classList && aktif.classList.contains('cell-input')) aktif.blur();
+            editBarangId = modeEdit ? null : row.id;
+            renderBarang(fotoData);
           });
 
           const del = document.createElement('button');
           del.type = 'button';
-          del.className = 'ico ico-danger';
+          del.className = 'ico';
           del.textContent = '✕';
-          del.title = 'Hapus';
+          del.title = 'Hapus barang';
           del.setAttribute('aria-label', 'Hapus ' + (row.kode || row.name));
           del.addEventListener('click', async () => {
             if (!confirm('Hapus barang ' + (row.kode || row.name) + '?')) return;
             const { error } = await supabase.from('stock_products').delete().eq('id', row.id);
             if (error) {
               console.error('Hapus barang gagal:', error.message);
+              say('Gagal hapus barang: ' + error.message, true);
               return;
             }
+            if (editBarangId === row.id) editBarangId = null;
             loadBarang();
           });
 
+          const tdFoto = document.createElement('td');
+          tdFoto.className = 'c-foto';
+          tdFoto.appendChild(buatFoto(row, modeEdit));
           const tdAct = document.createElement('td');
+          tdAct.className = 'c-aksi';
           const wrap = document.createElement('div');
           wrap.className = 'acts';
           wrap.append(edit, del);
           tdAct.appendChild(wrap);
-          tr.appendChild(tdAct);
+          tr.append(tdFoto, tdAct);
           barangBody.appendChild(tr);
         });
-        barangEmpty.hidden = barang.length > 0;
-        barangWrap.hidden = barang.length === 0;
-        barangCount.textContent = barang.length + ' barang';
       };
 
+      const pilihFoto = (id) => {
+        fotoTarget = id;
+        fotoInput.value = '';
+        fotoInput.click();
+      };
+
+      let qrLib = null;
+      const muatQr = async () => {
+        if (!qrLib) {
+          qrLib = await import('https://cdn.jsdelivr.net/npm/qrcode@1.5.4/+esm');
+        }
+        return qrLib;
+      };
+
+      const lihatQr = async (plu) => {
+        const teks = String(plu || '').trim();
+        if (!teks) return;
+        try {
+          const QR = await muatQr();
+          lightboxImg.hidden = true;
+          lightboxImg.removeAttribute('src');
+          lightboxQr.hidden = false;
+          await QR.toCanvas(lightboxQr, teks, {
+            width: 220,
+            margin: 1,
+            color: { dark: '#111827', light: '#ffffff' },
+          });
+          lightboxText.textContent = teks;
+          lightbox.hidden = false;
+        } catch (err) {
+          console.error('Gagal membuat QR:', err);
+          say('Gagal membuat QR: ' + err.message, true);
+        }
+      };
+
+      const lihatFoto = (row) => {
+        if (!row.foto_url) {
+          say('Belum ada foto ' + (row.kode || row.name), true);
+          return;
+        }
+        lightboxQr.hidden = true;
+        lightboxImg.hidden = false;
+        lightboxImg.src = row.foto_url;
+        lightboxImg.alt = row.name || row.kode || 'foto';
+        lightboxText.textContent = row.kode || row.name || '';
+        lightbox.hidden = false;
+      };
+
+      const tutupFoto = () => {
+        lightbox.hidden = true;
+        lightboxImg.removeAttribute('src');
+        lightboxText.textContent = '';
+      };
+
+      document.addEventListener('click', (e) => {
+        if (lightbox.hidden) return;
+        if (lightbox.contains(e.target)) return;
+        tutupFoto();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !lightbox.hidden) tutupFoto();
+      });
+
+      const buatFoto = (row, modeEdit) => {
+        const label = row.kode || row.name || '';
+        const td = document.createElement('td');
+        td.className = 'c-foto';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ico';
+        if (modeEdit) {
+          btn.textContent = '⬆';
+          btn.title = row.foto_url ? 'Ganti foto ' + label : 'Upload foto ' + label;
+          btn.addEventListener('click', () => pilihFoto(row.id));
+        } else {
+          btn.textContent = '👁';
+          btn.title = row.foto_url ? 'Lihat foto ' + label : 'Belum ada foto ' + label;
+          btn.addEventListener('click', () => lihatFoto(row));
+        }
+        btn.setAttribute('aria-label', btn.title);
+        td.appendChild(btn);
+        return td;
+      };
+
+      fotoInput.addEventListener('change', async () => {
+        const file = fotoInput.files && fotoInput.files[0];
+        const id = fotoTarget;
+        fotoTarget = null;
+        if (!file || !id) return;
+        const row = fotoData.find((r) => r.id === id);
+        if (!row) return;
+
+        const ext = ((file.name.split('.').pop() || 'jpg').toLowerCase()).replace(/[^a-z0-9]/g, '') || 'jpg';
+        const path = (row.menu_id || menuAktif || 'lain') + '/' + (row.kode || row.id) + '-' + Date.now() + '.' + ext;
+
+        const { error: errUpload } = await supabase.storage.from(BUCKET).upload(path, file, {
+          upsert: true,
+          contentType: file.type || 'image/jpeg',
+        });
+        if (errUpload) {
+          console.error('Upload foto gagal:', errUpload.message);
+          say('Gagal upload foto: ' + errUpload.message, true);
+          return;
+        }
+
+        const { data: publik } = supabase.storage.from(BUCKET).getPublicUrl(path);
+        const { error: errSimpan } = await supabase
+          .from('stock_products')
+          .update({ foto_url: publik.publicUrl })
+          .eq('id', id);
+        if (errSimpan) {
+          console.error('Simpan foto gagal:', errSimpan.message);
+          say('Foto terupload tapi gagal disimpan: ' + errSimpan.message, true);
+          return;
+        }
+        loadBarang();
+      });
+
       const pilihMenu = async (id) => {
+        stopEdit(true);
+        editBarangId = null;
         menuAktif = id;
         localStorage.setItem(MENU_KEY, String(id));
         await loadMenus();
@@ -549,10 +1242,11 @@
       const loadMenus = async () => {
         const { data, error } = await supabase
           .from('so_menus')
-          .select('id, name, lokasi, tim_checker')
+          .select('id, name')
           .order('name');
         if (error) {
           console.error('Gagal memuat menu:', error.message);
+          say('Gagal memuat menu: ' + error.message, true);
           return;
         }
         const menus = data || [];
@@ -563,11 +1257,10 @@
         barangSec.hidden = !menuTerpilih;
         if (!menuTerpilih) {
           localStorage.removeItem(MENU_KEY);
+          stopEdit(true);
           return;
         }
-        barangLabel.textContent = 'Item ' + up(menuTerpilih.name);
-        infoLokasi.value = up(menuTerpilih.lokasi || '');
-        infoTim.value = up(menuTerpilih.tim_checker || '');
+        barangSec.dataset.menu = menuTerpilih.name;
         await loadBarang();
       };
 
@@ -575,18 +1268,27 @@
         if (!menuAktif) return;
         const { data, error } = await supabase
           .from('stock_products')
-          .select('id, kode, name, satuan, hpp')
+          .select('id, menu_id, kode, name, satuan, stok_sistem, hpp, foto_url')
           .eq('menu_id', menuAktif)
           .order('kode');
         if (error) {
-          console.error('Gagal memuat barang:', error.message);
+          const ulang = await supabase
+            .from('stock_products')
+            .select('id, menu_id, kode, name, satuan, stok_sistem, hpp')
+            .eq('menu_id', menuAktif)
+            .order('kode');
+          if (ulang.error) {
+            console.error('Gagal memuat barang:', ulang.error.message);
+            say('Gagal memuat barang: ' + ulang.error.message, true);
+            return;
+          }
+          renderBarang(ulang.data || []);
           return;
         }
         renderBarang(data || []);
       };
 
-      document.getElementById('menuForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+      const simpanMenu = async () => {
         const name = mName.value.trim().toUpperCase();
         if (!name) return;
         mName.value = name;
@@ -595,10 +1297,10 @@
           const { error } = await supabase.from('so_menus').update({ name }).eq('id', editMenuId);
           if (error) {
             console.error('Gagal update menu:', error.message);
+            say('Gagal update menu: ' + error.message, true);
             return;
           }
-          editMenuId = null;
-          mName.value = '';
+          stopEdit(true);
           loadMenus();
           return;
         }
@@ -610,75 +1312,81 @@
           .single();
         if (error) {
           console.error('Gagal menambah menu:', error.message);
+          say('Gagal menambah menu: ' + error.message, true);
           return;
         }
-        mName.value = '';
+        stopEdit(true);
         menuAktif = data.id;
+        localStorage.setItem(MENU_KEY, String(menuAktif));
         loadMenus();
-      });
-
-      const simpanHeader = async () => {
-        if (!menuTerpilih) return;
-        await supabase
-          .from('so_menus')
-          .update({ lokasi: infoLokasi.value.trim().toUpperCase(), tim_checker: infoTim.value.trim().toUpperCase() })
-          .eq('id', menuTerpilih.id);
       };
 
-      infoLokasi.addEventListener('change', simpanHeader);
-      infoTim.addEventListener('change', simpanHeader);
-
-      document.getElementById('barangForm').addEventListener('submit', async (e) => {
+      mName.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter') return;
         e.preventDefault();
+        simpanMenu();
+      });
+      mAdd.addEventListener('click', simpanMenu);
+
+      const simpanBarang = async () => {
         if (!menuAktif) return;
         const name = bName.value.trim().toUpperCase();
-        const satuan = bSatuan.value.trim().toUpperCase() || 'PCS';
-        const hpp = num(bHpp.value);
-        if (!name) return;
-
-        if (editId) {
-          const { error } = await supabase.from('stock_products').update({ name, satuan, hpp }).eq('id', editId);
-          if (error) {
-            console.error('Gagal update barang:', error.message);
-            return;
-          }
-          editId = null;
-        } else {
-          const { data: dipakai, error: errBaca } = await supabase
-            .from('stock_products')
-            .select('kode')
-            .eq('menu_id', menuAktif);
-          if (errBaca) {
-            console.error('Gagal membuat kode barang:', errBaca.message);
-            return;
-          }
-          const kode = buatKode(menuTerpilih.name, new Set((dipakai || []).map((r) => r.kode)));
-          const { error } = await supabase.from('stock_products').insert({
-            menu_id: menuAktif,
-            kode,
-            name,
-            satuan,
-            hpp,
-          });
-          if (error) {
-            console.error('Gagal menambah barang:', error.message);
-            return;
-          }
+        if (!name) {
+          bName.focus();
+          return;
         }
-        bName.value = '';
-        bHpp.value = '0';
+        const satuan = bSatuan.value.trim().toUpperCase() || 'PCS';
+        const stokSistem = num(bOnhand.value);
+        const hpp = num(bHpp.value);
+
+        const { data: dipakai, error: errBaca } = await supabase
+          .from('stock_products')
+          .select('kode')
+          .eq('menu_id', menuAktif);
+        if (errBaca) {
+          console.error('Gagal membuat PLU:', errBaca.message);
+          say('Gagal membuat PLU: ' + errBaca.message, true);
+          return;
+        }
+        const kode = buatKode(menuTerpilih.name, new Set((dipakai || []).map((r) => r.kode)));
+        const { error } = await supabase.from('stock_products').insert({
+          menu_id: menuAktif,
+          kode,
+          name,
+          satuan,
+          stok_sistem: stokSistem,
+          hpp,
+        });
+        if (error) {
+          console.error('Gagal menambah barang:', error.message);
+          say('Gagal menambah barang: ' + error.message, true);
+          return;
+        }
+        stopEdit(false);
         loadBarang();
-      });
+        bName.focus();
+      };
 
-      batalBtn.addEventListener('click', () => {
-        editMenuId = null;
-        editId = null;
-        mName.value = '';
-        bName.value = '';
-        bSatuan.value = 'PCS';
-        bHpp.value = '0';
+      bAdd.addEventListener('click', simpanBarang);
+      [bName, bSatuan, bOnhand, bFisik, bHpp].forEach((input) => {
+        input.addEventListener('keydown', (e) => {
+          if (e.key !== 'Enter') return;
+          e.preventDefault();
+          simpanBarang();
+        });
       });
+      const hitungBarisTambah = () => {
+        const selisih = Math.round(num(bFisik.value)) - Math.round(num(bOnhand.value));
+        bSelisih.textContent = selisih > 0 ? '+' + selisih : String(selisih);
+        bSelisih.className = 'c-num selisih ' + (selisih === 0 ? '' : selisih < 0 ? 'minus' : 'plus');
+        const ket = keteranganOf(selisih);
+        bKet.textContent = ket.text;
+        bKet.className = 'c-ket ket ' + ket.cls;
+      };
+      bOnhand.addEventListener('input', hitungBarisTambah);
+      bFisik.addEventListener('input', hitungBarisTambah);
 
+      setMode();
       loadMenus();
     </script>
   </body>
