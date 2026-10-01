@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>LAPORAN</title>
+  <link rel="manifest" href="../../manifest.json" />
+  <meta content="#fffbf2" name="theme-color" />
+  <link rel="stylesheet" href="../mori-style.css" />
+  <style>
+    .report-text {
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .stat {
+      border: 1px solid var(--mori-accent);
+      background: var(--mori-surface);
+      padding: 10px 12px;
+      min-width: 0;
+    }
+    .stat-num {
+      font-family: var(--mori-mono);
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--mori-text-2);
+      margin-top: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="head">
+      <a class="back" href="../../index.html" title="Kembali" aria-label="Kembali">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </a>
+      <div>
+        <div class="head-title">Laporan</div>
+        <div class="head-sub">Paste teks laporan</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Paste Laporan</h2>
+      <textarea id="inputText" class="field" placeholder="Tempel teks laporan di sini..." spellcheck="false"></textarea>
+      <div class="btn-row">
+        <button id="btnSave" class="btn primary" type="button">Simpan</button>
+        <button id="btnCopy" class="btn" type="button">Salin Teks</button>
+        <button id="btnClear" class="btn danger" type="button">Kosongkan</button>
+      </div>
+      <p class="hint">Tersimpan di perangkat (localStorage). Tekan Ctrl+V untuk paste.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num" id="statChars">0</div>
+        <div class="stat-label">Karakter</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statWords">0</div>
+        <div class="stat-label">Kata</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statLines">0</div>
+        <div class="stat-label">Baris</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Riwayat â€” <span id="count">0</span></h2>
+      <input id="search" class="field" type="search" placeholder="Cari laporan..." style="margin-bottom:12px" autocomplete="off" />
+      <div id="list" class="list"><div class="empty">Belum ada laporan</div></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module">
+    const KEY = "mylove_reports_v1";
+    const DRAFT = "mylove_report_draft";
+    const inputEl = document.getElementById("inputText");
+    const searchEl = document.getElementById("search");
+    const listEl = document.getElementById("list");
+    const countEl = document.getElementById("count");
+    const toastEl = document.getElementById("toast");
+    let reports = load();
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      } catch (e) {
+        console.warn("gagal baca laporan", e);
+        return [];
+      }
+    }
+
+    function persist() {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(reports));
+      } catch (e) {
+        toast("Penyimpanan penuh");
+      }
+    }
+
+    let toastTimer = null;
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add("on");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.remove("on"), 2200);
+    }
+
+    function esc(s) {
+      return String(s == null ? "" : s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function fmtDate(iso) {
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return "-";
+      return (
+        d.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" }) +
+        " Â· " +
+        d.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })
+      );
+    }
+
+    function firstLine(text) {
+      const line = String(text || "").split("\n").find((l) => l.trim());
+      return line ? line.trim().slice(0, 80) : "(kosong)";
+    }
+
+    function updateStats() {
+      const v = inputEl.value;
+      document.getElementById("statChars").textContent = v.length.toLocaleString("id-ID");
+      document.getElementById("statWords").textContent =
+        v.trim() ? v.trim().split(/\s+/).length.toLocaleString("id-ID") : 0;
+      document.getElementById("statLines").textContent = v.trim()
+        ? v.trim().split(/\r?\n/).length.toLocaleString("id-ID")
+        : 0;
+    }
+
+    function itemHtml(r) {
+      const open = r.id === openId;
+      return (
+        '<div class="item" style="display:block">' +
+        '<div style="display:flex;align-items:center;gap:12px">' +
+        '<div class="item-main">' +
+        '<div class="item-title">' + esc(firstLine(r.text)) + "</div>" +
+        '<div class="item-meta"><span>' + fmtDate(r.at) + "</span><span>" +
+        r.text.length.toLocaleString("id-ID") + " char</span></div>" +
+        "</div>" +
+        '<button type="button" class="btn sm" data-view="' + r.id + '">' + (open ? "Tutup" : "Lihat") + "</button>" +
+        '<button type="button" class="btn sm danger" data-del="' + r.id + '">Hapus</button>' +
+        "</div>" +
+        (open ? '<div class="card plain report-text" style="margin:12px 0 0">' + esc(r.text) + "</div>" : "") +
+        "</div>"
+      );
+    }
+
+    let openId = null;
+
+    function render() {
+      const q = searchEl.value.trim().toLowerCase();
+      const filtered = reports.filter((r) => !q || r.text.toLowerCase().includes(q));
+      countEl.textContent = filtered.length;
+      if (!filtered.length) {
+        listEl.innerHTML = '<div class="empty">' + (reports.length ? "Tidak cocok" : "Belum ada laporan") + "</div>";
+        return;
+      }
+      listEl.innerHTML = filtered.map(itemHtml).join("");
+      listEl.querySelectorAll("[data-view]").forEach((b) => {
+        b.addEventListener("click", () => {
+          const id = parseInt(b.dataset.view);
+          openId = openId === id ? null : id;
+          render();
+        });
+      });
+      listEl.querySelectorAll("[data-del]").forEach((b) => {
+        b.addEventListener("click", () => {
+          reports = reports.filter((r) => r.id !== parseInt(b.dataset.del));
+          persist();
+          render();
+          toast("Dihapus");
+        });
+      });
+    }
+
+    document.getElementById("btnSave").addEventListener("click", () => {
+      const text = inputEl.value.trim();
+      if (!text) {
+        toast("Tulis sesuatu dulu");
+        return;
+      }
+      reports.unshift({ id: Date.now(), text, at: new Date().toISOString() });
+      persist();
+      try {
+        localStorage.setItem(DRAFT, text);
+      } catch (e) {}
+      render();
+      toast("Tersimpan");
+    });
+
+    document.getElementById("btnCopy").addEventListener("click", async () => {
+      const text = inputEl.value.trim();
+      if (!text) {
+        toast("Kosong");
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(text);
+        toast("Tersalin");
+      } catch (e) {
+        inputEl.select();
+        toast("Gagal â€” select manual");
+      }
+    });
+
+    document.getElementById("btnClear").addEventListener("click", () => {
+      inputEl.value = "";
+      try {
+        localStorage.removeItem(DRAFT);
+      } catch (e) {}
+      updateStats();
+      toast("Dikosongkan");
+    });
+
+    inputEl.addEventListener("input", () => {
+      updateStats();
+      try {
+        localStorage.setItem(DRAFT, inputEl.value);
+      } catch (e) {}
+    });
+
+    searchEl.addEventListener("input", render);
+
+    // pulihkan draft terakhir
+    try {
+      const draft = localStorage.getItem(DRAFT);
+      if (draft) inputEl.value = draft;
+    } catch (e) {}
+
+    updateStats();
+    render();
+  </script>
+</body>
+</html>

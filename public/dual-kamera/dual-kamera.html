@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>DUAL KAMERA</title>
+  <link rel="manifest" href="../../manifest.json" />
+  <meta content="#fffbf2" name="theme-color" />
+  <link rel="stylesheet" href="../mori-style.css" />
+  <style>
+    .dual-stage {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      background: var(--mori-accent);
+      border: 1px solid var(--mori-accent);
+    }
+    .dual-pane {
+      position: relative;
+      background: #0d0d0f;
+      min-width: 0;
+    }
+    .dual-pane video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .dual-pane .cam-badge {
+      top: 6px;
+      left: 6px;
+      font-size: 9px;
+      padding: 3px 7px;
+    }
+    /* frame 1:1 di tengah tiap pane */
+    .dual-frame {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 78%;
+      aspect-ratio: 1 / 1;
+      transform: translate(-50%, -50%);
+      border: 1px dashed rgba(255, 255, 255, 0.75);
+      pointer-events: none;
+    }
+    .dual-frame::before,
+    .dual-frame::after {
+      content: "";
+      position: absolute;
+      background: rgba(255, 255, 255, 0.75);
+    }
+    .dual-frame::before {
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+    }
+    .dual-frame::after {
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+    }
+    .frame-cap {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--mori-text-2);
+      margin-top: 10px;
+      text-align: center;
+    }
+    .pair-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .pair {
+      border: 1px solid var(--mori-accent);
+      background: var(--mori-surface);
+      padding: 8px;
+      min-width: 0;
+    }
+    .pair img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border: 1px solid var(--mori-accent);
+      display: block;
+      background: #0d0d0f;
+    }
+    .pair-time {
+      font-family: var(--mori-mono);
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+    .pair-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .pair-actions .btn {
+      flex: 1;
+      padding: 7px 5px;
+      font-size: 9px;
+    }
+    .single-note {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--mori-text-2);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="head">
+      <a class="back" href="../../index.html" title="Kembali" aria-label="Kembali">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </a>
+      <div>
+        <div class="head-title">Dual Kamera</div>
+        <div class="head-sub">Depan + belakang, 1 frame</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Live Dual View</h2>
+      <div class="dual-stage" style="aspect-ratio:4/5">
+        <div class="dual-pane">
+          <video id="vidFront" playsinline muted autoplay></video>
+          <div class="cam-badge">DEPAN</div>
+          <div class="dual-frame"></div>
+        </div>
+        <div class="dual-pane">
+          <video id="vidBack" playsinline muted autoplay></video>
+          <div class="cam-badge">BELAKANG</div>
+          <div class="dual-frame"></div>
+        </div>
+      </div>
+      <div class="frame-cap">Kotak putus-putus = area frame 1:1</div>
+      <div class="btn-row">
+        <button id="btnStart" class="btn primary" type="button">Nyalakan Dual</button>
+        <button id="btnStop" class="btn danger" type="button">Matikan</button>
+      </div>
+      <p class="hint" id="camNote">Butuh izin kamera + perangkat dengan 2 kamera.</p>
+    </div>
+
+    <div class="card">
+      <h2>Keterangan</h2>
+      <div class="stack">
+        <div>
+          <label class="head-sub" for="inLokasi" style="display:block;margin-bottom:6px">Lokasi</label>
+          <input id="inLokasi" class="field" style="font-size:12px;padding:9px 10px" placeholder="cth: Depan Kasir" autocomplete="off" />
+        </div>
+        <div>
+          <label class="head-sub" for="inBaris" style="display:block;margin-bottom:6px">Baris / Line</label>
+          <input id="inBaris" class="field" style="font-size:12px;padding:9px 10px" placeholder="cth: Baris 1" autocomplete="off" />
+        </div>
+        <div>
+          <label class="head-sub" for="inCatatan" style="display:block;margin-bottom:6px">Catatan</label>
+          <input id="inCatatan" class="field" style="font-size:12px;padding:9px 10px" placeholder="opsional" autocomplete="off" />
+        </div>
+      </div>
+      <div class="btn-row">
+        <button id="btnSnap" class="btn primary" type="button" disabled>Jepret 2 Arah</button>
+      </div>
+      <p class="hint">Hasil: dua foto 1:1 (depan &amp; belakang) dalam satu frame waktu.</p>
+    </div>
+
+    <div class="card">
+      <h2>Frame Tersimpan â€” <span id="count">0</span></h2>
+      <div id="pairs" class="pair-grid"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module">
+    const KEY = "mylove_dualkamera_v1";
+    const vidFront = document.getElementById("vidFront");
+    const vidBack = document.getElementById("vidBack");
+    const btnStart = document.getElementById("btnStart");
+    const btnStop = document.getElementById("btnStop");
+    const btnSnap = document.getElementById("btnSnap");
+    const inLokasi = document.getElementById("inLokasi");
+    const inBaris = document.getElementById("inBaris");
+    const inCatatan = document.getElementById("inCatatan");
+    const camNote = document.getElementById("camNote");
+    const pairsEl = document.getElementById("pairs");
+    const countEl = document.getElementById("count");
+    const toastEl = document.getElementById("toast");
+
+    let pairs = load();
+    let sFront = null;
+    let sBack = null;
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      } catch (e) {
+        console.warn("gagal baca dual kamera", e);
+        return [];
+      }
+    }
+
+    function persist() {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(pairs));
+      } catch (e) {
+        if (pairs.length > 1) {
+          pairs = pairs.slice(0, Math.max(1, Math.floor(pairs.length / 2)));
+          try {
+            localStorage.setItem(KEY, JSON.stringify(pairs));
+          } catch (e2) {}
+          toast("Penyimpanan penuh â€” frame lama dihapus");
+        } else {
+          toast("Penyimpanan penuh");
+        }
+      }
+    }
+
+    let toastTimer = null;
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add("on");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.remove("on"), 2200);
+    }
+
+    function esc(s) {
+      return String(s == null ? "" : s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function pad(n) {
+      return String(n).padStart(2, "0");
+    }
+
+    function fmtClock(iso) {
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return "-";
+      return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+    }
+
+    function fmtDate(iso) {
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return "-";
+      return d.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "2-digit" });
+    }
+
+    // Crop 1:1 dari tengah video -> ukuran final mis. 480x480 JPEG
+    function grabSquare(source, size) {
+      const w = source.videoWidth || source.width;
+      const h = source.videoHeight || source.height;
+      if (!w || !h) return null;
+      const side = Math.min(w, h);
+      const sx = Math.round((w - side) / 2);
+      const sy = Math.round((h - side) / 2);
+      const c = document.createElement("canvas");
+      c.width = size;
+      c.height = size;
+      const ctx = c.getContext("2d");
+      ctx.drawImage(source, sx, sy, side, side, 0, 0, size, size);
+      return c.toDataURL("image/jpeg", 0.7);
+    }
+
+    function pairHtml(p) {
+      const meta = [];
+      if (p.lokasi) meta.push(esc(p.lokasi));
+      if (p.baris) meta.push(esc(p.baris));
+      const metaHtml = meta.length ? meta.join(" Â· ") : "Tanpa keterangan";
+      return (
+        '<div class="pair">' +
+        '<img src="' + p.front + '" alt="" />' +
+        '<img src="' + p.back + '" alt="" style="margin-top:6px" />' +
+        '<div class="pair-time">' + fmtDate(p.at) + " Â· " + fmtClock(p.at) + "</div>" +
+        '<div class="single-note">' + metaHtml + "</div>" +
+        (p.catatan ? '<div class="single-note">' + esc(p.catatan) + "</div>" : "") +
+        '<div class="pair-actions">' +
+        '<button type="button" class="btn sm" data-dl="' + p.id + '">Simpan</button>' +
+        '<button type="button" class="btn sm danger" data-del="' + p.id + '">Hapus</button>' +
+        "</div>" +
+        "</div>"
+      );
+    }
+
+    function render() {
+      countEl.textContent = pairs.length;
+      if (!pairs.length) {
+        pairsEl.innerHTML = '<div class="empty" style="grid-column:1/-1">Belum ada frame</div>';
+        return;
+      }
+      pairsEl.innerHTML = pairs.map(pairHtml).join("");
+      pairsEl.querySelectorAll("[data-dl]").forEach((b) => {
+        b.addEventListener("click", () => {
+          const p = pairs.find((x) => x.id === parseInt(b.dataset.dl));
+          if (!p) return;
+          const stamp = new Date(p.at).toISOString().replace(/[:.]/g, "-");
+          dl(p.front, "dual_" + stamp + "_depan.jpg");
+          setTimeout(() => dl(p.back, "dual_" + stamp + "_belakang.jpg"), 250);
+        });
+      });
+      pairsEl.querySelectorAll("[data-del]").forEach((b) => {
+        b.addEventListener("click", () => {
+          pairs = pairs.filter((p) => p.id !== parseInt(b.dataset.del));
+          persist();
+          render();
+          toast("Dihapus");
+        });
+      });
+    }
+
+    function dl(dataUrl, name) {
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = name;
+      a.click();
+    }
+
+    // Daftar device camera -> cari 1 user-facing + 1 environment-facing
+    async function pickDevices() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+        return { front: "user", back: "environment" };
+      }
+      let devices = [];
+      try {
+        devices = await navigator.mediaDevices.enumerateDevices();
+      } catch (e) {
+        return { front: "user", back: "environment" };
+      }
+      const cams = devices.filter((d) => d.kind === "videoinput");
+      if (cams.length < 2) {
+        return { front: "user", back: "environment" };
+      }
+      const score = (d) => {
+        const l = (d.label || "").toLowerCase();
+        let s = 0;
+        if (/back|rear|belakang|environment/.test(l)) s += 10;
+        if (/front|user|selfie|depan/.test(l)) s -= 10;
+        return s;
+      };
+      const sorted = cams.slice().sort((a, b) => score(a) - score(b));
+      return { front: sorted[0].deviceId, back: sorted[sorted.length - 1].deviceId };
+    }
+
+    async function start() {
+      if (sFront || sBack) return;
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        toast("Kamera tidak didukung");
+        return;
+      }
+      btnStart.disabled = true;
+      camNote.textContent = "Meminta izin kamera...";
+
+      try {
+        const first = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: "user" } },
+          audio: false,
+        });
+        vidFront.srcObject = first;
+        await vidFront.play().catch(() => {});
+        sFront = first;
+
+        const devs = await pickDevices();
+        try {
+          sBack = await navigator.mediaDevices.getUserMedia({
+            video: devs.back && devs.back !== "user" ? { deviceId: { exact: devs.back } } : { facingMode: { ideal: "environment" } },
+            audio: false,
+          });
+          vidBack.srcObject = sBack;
+          await vidBack.play().catch(() => {});
+          camNote.textContent = "Dua kamera aktif â€” depan & belakang.";
+        } catch (e2) {
+          vidBack.srcObject = null;
+          camNote.textContent =
+            "Hanya 1 kamera terdeteksi. Pane belakang kosong â€” perangkat ini mungkin tidak punya kamera ganda.";
+          toast("Belakangan tidak tersedia");
+        }
+
+        btnSnap.disabled = false;
+        toast("Dual aktif");
+      } catch (e) {
+        btnStart.disabled = false;
+        camNote.textContent = "Butuh izin kamera + HTTPS/localhost.";
+        const msg = (e && e.name) === "NotAllowedError" ? "Izin ditolak" : "Gagal: " + (e && e.name);
+        toast(msg);
+        console.warn("getUserMedia dual", e);
+      }
+    }
+
+    function stop() {
+      [sFront, sBack].forEach((s) => s && s.getTracks().forEach((t) => t.stop()));
+      sFront = null;
+      sBack = null;
+      vidFront.srcObject = null;
+      vidBack.srcObject = null;
+      btnStart.disabled = false;
+      btnSnap.disabled = true;
+    }
+
+    btnStart.addEventListener("click", start);
+    btnStop.addEventListener("click", () => {
+      stop();
+      camNote.textContent = "Butuh izin kamera + perangkat dengan 2 kamera.";
+      toast("Dimatikan");
+    });
+
+    btnSnap.addEventListener("click", () => {
+      if (!sFront && !sBack) return;
+      const front = sFront ? grabSquare(vidFront, 480) : null;
+      const back = sBack ? grabSquare(vidBack, 480) : null;
+      if (!front && !back) {
+        toast("Gagal ambil frame");
+        return;
+      }
+      pairs.unshift({
+        id: Date.now(),
+        front: front || back,
+        back: back || front,
+        single: !front || !back,
+        lokasi: inLokasi.value.trim(),
+        baris: inBaris.value.trim(),
+        catatan: inCatatan.value.trim(),
+        at: new Date().toISOString(),
+      });
+      persist();
+      render();
+      toast("Frame " + fmtClock(new Date().toISOString()));
+    });
+
+    window.addEventListener("beforeunload", stop);
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>LINK</title>
+  <link rel="manifest" href="../../manifest.json" />
+  <meta content="#fffbf2" name="theme-color" />
+  <link rel="stylesheet" href="../mori-style.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="head">
+      <a class="back" href="../../index.html" title="Kembali" aria-label="Kembali">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </a>
+      <div>
+        <div class="head-title">Link</div>
+        <div class="head-sub">Paste link, klik untuk buka</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Link Baru</h2>
+      <label class="head-sub" for="inputUrl" style="display:block;margin-bottom:6px">URL</label>
+      <input id="inputUrl" class="field mono" type="url" inputmode="url" placeholder="https://..." autocomplete="off" spellcheck="false" />
+      <div class="btn-row">
+        <button id="btnSave" class="btn primary" type="button">Simpan</button>
+        <button id="btnOpen" class="btn" type="button">Buka Sekarang</button>
+      </div>
+      <p class="hint">Kalau tidak ada <code>http://</code>, otomatis ditambahkan. Tekan Enter untuk langsung membuka.</p>
+    </div>
+
+    <div class="card">
+      <h2>Tersimpan â€” <span id="count">0</span></h2>
+      <input id="search" class="field" type="search" placeholder="Cari link..." style="margin-bottom:12px" autocomplete="off" />
+      <div id="list" class="list"><div class="empty">Belum ada link</div></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module">
+    const KEY = "mylove_links_v1";
+    const inputUrl = document.getElementById("inputUrl");
+    const searchEl = document.getElementById("search");
+    const listEl = document.getElementById("list");
+    const countEl = document.getElementById("count");
+    const toastEl = document.getElementById("toast");
+    let links = load();
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      } catch (e) {
+        console.warn("gagal baca links", e);
+        return [];
+      }
+    }
+
+    function persist() {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(links));
+      } catch (e) {
+        toast("Penyimpanan penuh");
+      }
+    }
+
+    let toastTimer = null;
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add("on");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.remove("on"), 2200);
+    }
+
+    // Terima "www.x.com" tanpa skema -> tambahkan https://
+    function normalize(raw) {
+      let u = String(raw || "").trim();
+      if (!u) return "";
+      if (!/^https?:\/\//i.test(u)) u = "https://" + u;
+      try {
+        return new URL(u).href;
+      } catch (e) {
+        return "";
+      }
+    }
+
+    function hostOf(url) {
+      try {
+        return new URL(url).hostname.replace(/^www\./, "");
+      } catch (e) {
+        return url;
+      }
+    }
+
+    function itemHtml(l) {
+      return (
+        '<div class="item">' +
+        '<div class="item-main">' +
+        '<div class="item-title">' + hostOf(l.url) + "</div>" +
+        '<div class="item-meta"><span class="mono">' + l.url + "</span></div>" +
+        "</div>" +
+        '<button type="button" class="btn sm" data-open="' + l.id + '">Buka</button>' +
+        '<button type="button" class="btn sm danger" data-del="' + l.id + '">Hapus</button>' +
+        "</div>"
+      );
+    }
+
+    function render() {
+      const q = searchEl.value.trim().toLowerCase();
+      const filtered = links.filter(
+        (l) => !q || l.url.toLowerCase().includes(q) || hostOf(l.url).includes(q),
+      );
+      countEl.textContent = filtered.length;
+      if (!filtered.length) {
+        listEl.innerHTML = '<div class="empty">' + (links.length ? "Tidak cocok" : "Belum ada link") + "</div>";
+        return;
+      }
+      listEl.innerHTML = filtered.map(itemHtml).join("");
+      listEl.querySelectorAll("[data-open]").forEach((b) => {
+        b.addEventListener("click", () => openById(parseInt(b.dataset.open)));
+      });
+      listEl.querySelectorAll("[data-del]").forEach((b) => {
+        b.addEventListener("click", () => {
+          links = links.filter((l) => l.id !== parseInt(b.dataset.del));
+          persist();
+          render();
+          toast("Dihapus");
+        });
+      });
+    }
+
+    function openById(id) {
+      const l = links.find((x) => x.id === id);
+      if (l) window.open(l.url, "_blank", "noopener");
+    }
+
+    function save() {
+      const url = normalize(inputUrl.value);
+      if (!url) {
+        toast("URL tidak valid");
+        return;
+      }
+      if (links.some((l) => l.url === url)) {
+        toast("Sudah ada");
+        inputUrl.value = "";
+        return;
+      }
+      links.unshift({ id: Date.now(), url, at: new Date().toISOString() });
+      persist();
+      inputUrl.value = "";
+      render();
+      toast("Tersimpan");
+    }
+
+    document.getElementById("btnSave").addEventListener("click", save);
+    document.getElementById("btnOpen").addEventListener("click", () => {
+      const url = normalize(inputUrl.value);
+      if (!url) {
+        toast("URL tidak valid");
+        return;
+      }
+      if (!links.some((l) => l.url === url)) {
+        links.unshift({ id: Date.now(), url, at: new Date().toISOString() });
+        persist();
+        render();
+      }
+      window.open(url, "_blank", "noopener");
+    });
+    inputUrl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const url = normalize(inputUrl.value);
+        if (url) {
+          window.open(url, "_blank", "noopener");
+        } else {
+          save();
+        }
+      }
+    });
+    searchEl.addEventListener("input", render);
+
+    render();
+  </script>
+</body>
+</html>
