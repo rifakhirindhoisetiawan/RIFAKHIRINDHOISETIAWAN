@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>MUSNAH — Barang Musnah</title>
+    <link rel="manifest" href="../../manifest.json" />
+    <meta name="theme-color" content="#ffffff" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        overflow: hidden;
+      }
+
+      body {
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 0;
+        color: #1f2937;
+      }
+
+      .phone {
+        width: 100%;
+        max-width: 100%;
+        background: #ffffff;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      @media (min-width: 800px) {
+        .phone {
+          max-width: 800px;
+          margin: 0 auto;
+        }
+      }
+
+      /* ===== SEARCH ROW ===== */
+      .search-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 18px 10px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .search-box {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px 14px;
+        color: #222;
+        font-size: 14px;
+        background: #f9f9f9;
+      }
+      .search-box:focus-within {
+        border-color: #888;
+        background: #fff;
+      }
+      .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        font-size: 14px;
+        color: #222;
+        font-family: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        border-radius: 0;
+      }
+      .search-box input::placeholder {
+        color: #c3c8d1;
+      }
+      .search-box svg {
+        flex-shrink: 0;
+        color: #c3c8d1;
+        width: 18px;
+        height: 18px;
+      }
+      .admin-btn {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        background: #fff;
+        color: #4f46e5;
+        width: 38px;
+        height: 38px;
+        text-decoration: none;
+      }
+      .admin-btn:active {
+        background: #eef2ff;
+      }
+
+      /* ===== FILTER CHIPS ===== */
+      .filter-row {
+        display: flex;
+        gap: 6px;
+        padding: 0 18px 12px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+        overflow-x: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .filter-row::-webkit-scrollbar {
+        display: none;
+      }
+      .chip {
+        flex: 0 0 auto;
+        border: 1px solid #e3e6ec;
+        background: #fff;
+        color: #6b7280;
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 7px 12px;
+        border-radius: 999px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .chip.on {
+        background: #4f46e5;
+        border-color: #4f46e5;
+        color: #fff;
+      }
+
+      /* ===== SUMMARY ===== */
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        padding: 0 18px 12px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .sum-box {
+        background: #fafbfc;
+        border: 1px solid #e3e6ec;
+        border-radius: 12px;
+        padding: 10px 12px;
+        text-align: left;
+        min-width: 0;
+      }
+      .sum-box.danger {
+        background: #fef2f2;
+        border-color: #fecaca;
+      }
+      .sum-box.danger .sum-num {
+        color: #dc2626;
+      }
+      .sum-num {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 1.2;
+      }
+      .sum-label {
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #9aa0ab;
+        margin-top: 2px;
+      }
+
+      /* ===== REKAP ALASAN ===== */
+      .recap {
+        padding: 0 18px 14px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .recap-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+      .recap-name {
+        font-size: 10px;
+        font-weight: 800;
+        color: #6b7280;
+        width: 82px;
+        flex-shrink: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .recap-bar {
+        flex: 1;
+        height: 8px;
+        background: #f3f4f6;
+        border-radius: 999px;
+        overflow: hidden;
+        min-width: 0;
+      }
+      .recap-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #fca5a5, #ef4444);
+      }
+      .recap-val {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 10px;
+        font-weight: 800;
+        color: #1f2937;
+        width: 62px;
+        text-align: right;
+        flex-shrink: 0;
+      }
+
+      /* ===== LIST ===== */
+      .menu-wrap {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0 18px 28px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .menu-wrap::-webkit-scrollbar {
+        display: none;
+      }
+
+      .section-label {
+        font-size: 11px;
+        font-weight: 800;
+        color: #9aa0ab;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        margin: 4px 0 10px;
+      }
+
+      .list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #fafbfc;
+        border: 1px solid #e3e6ec;
+        border-radius: 14px;
+        padding: 11px 12px;
+      }
+      .row-main {
+        flex: 1;
+        min-width: 0;
+      }
+      .row-name {
+        font-size: 13px;
+        font-weight: 800;
+        color: #1f2937;
+        line-height: 1.3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .row-meta {
+        font-size: 10px;
+        font-weight: 600;
+        color: #9aa0ab;
+        margin-top: 3px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 8px;
+      }
+      .row-loss {
+        flex-shrink: 0;
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 12px;
+        font-weight: 800;
+        color: #dc2626;
+        text-align: right;
+      }
+      .row-loss-cap {
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        color: #9aa0ab;
+      }
+
+      .badge {
+        flex-shrink: 0;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        padding: 4px 8px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      .badge.expired {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+      .badge.rusak {
+        background: #ffedd5;
+        color: #c2410c;
+      }
+      .badge.hilang {
+        background: #ede9fe;
+        color: #6d28d9;
+      }
+      .badge.lainnya {
+        background: #f3f4f6;
+        color: #6b7280;
+      }
+
+      .empty {
+        text-align: center;
+        color: #9aa0ab;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 40px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone">
+      <div class="search-row">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="Cari produk / alasan..."
+            oninput="renderList()"
+          />
+        </div>
+        <a
+          class="admin-btn"
+          href="musnah-admin.html"
+          title="Kelola catatan"
+          aria-label="Kelola catatan"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+            />
+          </svg>
+        </a>
+      </div>
+
+      <div class="filter-row" id="filterRow"></div>
+
+      <div class="summary">
+        <div class="sum-box danger">
+          <div class="sum-num" id="sumLoss">Rp0</div>
+          <div class="sum-label">Total Rugi — Terpilih</div>
+        </div>
+        <div class="sum-box">
+          <div class="sum-num" id="sumQty">0</div>
+          <div class="sum-label">Total Qty — Terpilih</div>
+        </div>
+      </div>
+
+      <div class="recap" id="recap"></div>
+
+      <div class="menu-wrap">
+        <div class="section-label">Catatan Musnah — <span id="count">0</span></div>
+        <div class="list" id="list"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { supabase } from '../kopi/supabase.js';
+
+      const TABLE = 'waste_items';
+
+      const REASONS = [
+        { key: 'expired', label: 'Expired' },
+        { key: 'rusak', label: 'Rusak' },
+        { key: 'hilang', label: 'Hilang' },
+        { key: 'lainnya', label: 'Lainnya' },
+      ];
+
+      const RANGES = [
+        { key: 'all', label: 'Semua' },
+        { key: 'today', label: 'Hari Ini' },
+        { key: '7d', label: '7 Hari' },
+        { key: '30d', label: '30 Hari' },
+      ];
+
+      let items = [];
+      let reason = 'all';
+      let range = 'all';
+
+      const listEl = document.getElementById('list');
+      const countEl = document.getElementById('count');
+      const searchInput = document.getElementById('searchInput');
+      const filterRow = document.getElementById('filterRow');
+
+      function esc(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function rupiah(v) {
+        const n = Number(v) || 0;
+        return (
+          'Rp' +
+          n.toLocaleString('id-ID', { maximumFractionDigits: 0 })
+        );
+      }
+
+      function reasonKey(r) {
+        const k = String(r || '').trim().toLowerCase();
+        return REASONS.some((x) => x.key === k) ? k : 'lainnya';
+      }
+
+      function reasonLabel(k) {
+        return (REASONS.find((x) => x.key === k) || REASONS[3]).label;
+      }
+
+      function rowDate(r) {
+        if (!r.waste_date) return null;
+        const d = new Date(r.waste_date + 'T00:00:00');
+        return isNaN(d.getTime()) ? null : d;
+      }
+
+      function ageDays(r) {
+        const d = rowDate(r);
+        if (!d) return null;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return Math.round((today - d) / 86400000);
+      }
+
+      function inRange(r) {
+        if (range === 'all') return true;
+        const age = ageDays(r);
+        if (age === null) return false;
+        if (range === 'today') return age === 0;
+        if (range === '7d') return age >= 0 && age <= 6;
+        if (range === '30d') return age >= 0 && age <= 29;
+        return true;
+      }
+
+      function buildChips() {
+        const reasonChips = REASONS.map(
+          (r) =>
+            '<button type="button" class="chip' +
+            (r.key === reason ? ' on' : '') +
+            '" data-reason="' +
+            r.key +
+            '">' +
+            r.label +
+            '</button>',
+        )
+          .join('') +
+          '<button type="button" class="chip' +
+          (reason === 'all' ? ' on' : '') +
+          '" data-reason="all">Semua Alasan</button>';
+
+        const rangeChips = RANGES.map(
+          (r) =>
+            '<button type="button" class="chip' +
+            (r.key === range ? ' on' : '') +
+            '" data-range="' +
+            r.key +
+          '">' +
+            r.label +
+            '</button>',
+        ).join('');
+
+        filterRow.innerHTML =
+          '<div style="display:flex;gap:6px;flex:0 0 auto">' +
+          reasonChips +
+          '</div>' +
+          '<span style="width:1px;flex:0 0 auto;background:#e3e6ec;margin:2px 4px"></span>' +
+          '<div style="display:flex;gap:6px;flex:0 0 auto">' +
+          rangeChips +
+          '</div>';
+
+        filterRow.querySelectorAll('[data-reason]').forEach((c) => {
+          c.addEventListener('click', () => {
+            reason = c.dataset.reason;
+            buildChips();
+            renderList();
+          });
+        });
+        filterRow.querySelectorAll('[data-range]').forEach((c) => {
+          c.addEventListener('click', () => {
+            range = c.dataset.range;
+            buildChips();
+            renderList();
+          });
+        });
+      }
+
+      function rowHtml(r) {
+        const rk = reasonKey(r.alasan);
+        const loss = (Number(r.qty) || 0) * (Number(r.harga_satuan) || 0);
+        const meta = [];
+        if (r.qty != null) meta.push('Qty ' + r.qty);
+        if (r.harga_satuan) meta.push('@' + rupiah(r.harga_satuan));
+        if (r.waste_date) meta.push(r.waste_date);
+        if (r.admin) meta.push(r.admin);
+        return (
+          '<div class="row">' +
+          '<div class="row-main">' +
+          '<div class="row-name">' +
+          esc(r.name) +
+          "</div>" +
+          '<div class="row-meta"><span class="badge ' +
+          rk +
+          '">' +
+          esc(reasonLabel(rk)) +
+          "</span>" +
+          meta.map((m) => "<span>" + esc(m) + "</span>").join("") +
+          "</div>" +
+          (r.catatan ? '<div class="row-meta"><span>' + esc(r.catatan) + "</span></div>" : "") +
+          "</div>" +
+          (loss > 0
+            ? '<div class="row-loss">' + rupiah(loss) + '<div class="row-loss-cap">Rugi</div></div>'
+            : '<div class="row-loss-cap">Tanpa harga</div>') +
+          "</div>"
+        );
+      }
+
+      function renderList() {
+        const q = searchInput.value.trim().toLowerCase();
+        const matched = items.filter((r) => {
+          if (reason !== 'all' && reasonKey(r.alasan) !== reason) return false;
+          if (!inRange(r)) return false;
+          if (q) {
+            const hay = [r.name, r.alasan, r.catatan, r.admin]
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase();
+            if (!hay.includes(q)) return false;
+          }
+          return true;
+        });
+
+        // terbaru dulu; tanpa tanggal tetap tampil di paling bawah
+        matched.sort((a, b) => {
+          const da = a.waste_date || '';
+          const db = b.waste_date || '';
+          if (da !== db) return db.localeCompare(da);
+          return (b.id || 0) - (a.id || 0);
+        });
+
+        const loss = matched.reduce(
+          (t, r) => t + (Number(r.qty) || 0) * (Number(r.harga_satuan) || 0),
+          0,
+        );
+        const qty = matched.reduce((t, r) => t + (Number(r.qty) || 0), 0);
+        document.getElementById('sumLoss').textContent = rupiah(loss);
+        document.getElementById('sumQty').textContent = qty.toLocaleString('id-ID');
+
+        renderRecap(matched);
+
+        countEl.textContent = matched.length;
+        if (!matched.length) {
+          listEl.innerHTML = '<div class="empty">Tidak ada data</div>';
+          return;
+        }
+        listEl.innerHTML = matched.map(rowHtml).join('');
+      }
+
+      function renderRecap(matched) {
+        const recapEl = document.getElementById('recap');
+        const byReason = REASONS.map((r) => ({
+          key: r.key,
+          label: r.label,
+          loss: matched
+            .filter((x) => reasonKey(x.alasan) === r.key)
+            .reduce((t, x) => t + (Number(x.qty) || 0) * (Number(x.harga_satuan) || 0), 0),
+        })).filter((r) => r.loss > 0);
+
+        if (!byReason.length) {
+          recapEl.innerHTML = '';
+          return;
+        }
+        const max = Math.max.apply(
+          null,
+          byReason.map((r) => r.loss),
+        );
+        recapEl.innerHTML = byReason
+          .map(
+            (r) =>
+              '<div class="recap-row">' +
+              '<div class="recap-name">' +
+              esc(r.label) +
+              "</div>" +
+              '<div class="recap-bar"><div class="recap-fill" style="width:' +
+              Math.round((r.loss / max) * 100) +
+              '%"></div></div>' +
+              '<div class="recap-val">' +
+              rupiah(r.loss) +
+              "</div>" +
+              "</div>",
+          )
+          .join('');
+      }
+
+      async function load() {
+        try {
+          const { data, error } = await supabase
+            .from(TABLE)
+            .select('*')
+            .order('waste_date', { ascending: false, nullsFirst: false });
+          if (error) throw error;
+          items = data || [];
+        } catch (e) {
+          console.warn('Supabase ' + TABLE + ' fallback', e && e.message);
+          items = [];
+        }
+        renderList();
+      }
+
+      buildChips();
+      renderList();
+      load();
+
+      let rtTimer = null;
+      try {
+        supabase
+          .channel('waste_items_changes')
+          .on('postgres_changes', { event: '*', schema: 'public', table: TABLE }, () => {
+            clearTimeout(rtTimer);
+            rtTimer = setTimeout(() => load(), 400);
+          })
+          .subscribe();
+      } catch (e) {}
+
+      window.renderList = renderList;
+    </script>
+  </body>
+</html>

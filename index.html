@@ -229,7 +229,7 @@
         background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
         background-size: 200% 100%;
         animation: shimmer 1.2s infinite;
-        border-radius: 16px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -287,7 +287,7 @@
       @media (max-width: 360px) {
         .icon-box {
           max-width: 95px;
-          border-radius: 14px;
+          border-radius: 8px;
         }
         .label {
           font-size: 10px;
@@ -314,8 +314,10 @@
         { label: "STOK OPNAME", href: "public/pastry-bakpau/stock.html", folder: "pastry-bakpau", ext: "jpg", thumb: "image-index/time-kamera/1.png" },
         { label: "DAILY TASK", href: "public/daily-task/daily-task.html", folder: "admin", ext: "jpg", thumb: "public/daily-task/image-index.jpg" },
         { label: "NOTE", href: "public/note/note.html", folder: "note", ext: "jpg", thumb: "public/note/image-index.jpg" },
-        { label: "PLANO", href: "public/plano.html", folder: "plano", ext: "jpg" },
-        { label: "EXP", href: "#", folder: "exp", ext: "png" },
+        { label: "PLANO", href: "public/plano.html", folder: "pulang", ext: "png", thumb: "image-index/pulang/1.png" },
+        { label: "EXP", href: "public/exp/exp.html", folder: "exp", ext: "png", thumb: "image-index/exp/1.png" },
+        { label: "MUSNAH", href: "public/musnah/musnah.html", folder: "pagi", ext: "png", thumb: "image-index/pagi/1.png" },
+        { label: "OFO", href: "public/ofo/ofo.html", folder: "siang", ext: "png", thumb: "image-index/siang/1.png" },
         { label: "PULANG", href: "#", folder: "pulang", ext: "png" },
         { label: "PAGI", href: "#", folder: "pagi", ext: "png" },
         { label: "SIANG", href: "#", folder: "siang", ext: "png" },
@@ -323,7 +325,7 @@
         { label: "SELANJUTNYA", href: "public/modul/selanjutnya.html", folder: "selanjutnya", ext: "jpg" },
       ];
 
-      const disabledLabels = new Set(["PLANO", "SELANJUTNYA"]);
+      const disabledLabels = new Set(["SELANJUTNYA"]);
       const menuList = document.getElementById("menuList");
       menuItems.forEach((item, idx) => {
         const isDisabled = item.href === "#" || disabledLabels.has(item.label);

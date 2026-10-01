@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>OFO</title>
+    <link rel="manifest" href="../../manifest.json" />
+    <meta name="theme-color" content="#ffffff" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        overflow: hidden;
+      }
+
+      body {
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 0;
+        color: #1f2937;
+      }
+
+      .phone {
+        width: 100%;
+        max-width: 100%;
+        background: #ffffff;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      @media (min-width: 800px) {
+        .phone {
+          max-width: 800px;
+          margin: 0 auto;
+        }
+      }
+
+      .wrap {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 18px 48px;
+        max-width: 560px;
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .badge {
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        padding: 5px 11px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: #4f46e5;
+      }
+
+      .logo {
+        width: 76px;
+        height: 76px;
+        border-radius: 20px;
+        margin: 18px 0 14px;
+        background: linear-gradient(135deg, #a5b4fc, #818cf8);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+      }
+
+      h1 {
+        font-size: 20px;
+        font-weight: 800;
+        margin: 0 0 6px;
+      }
+
+      p {
+        color: #6b7280;
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 0 0 20px;
+      }
+
+      .steps {
+        width: 100%;
+        text-align: left;
+        background: #fafbfc;
+        border: 1px solid #e3e6ec;
+        border-radius: 14px;
+        padding: 14px 16px;
+        margin-bottom: 16px;
+      }
+      .steps h2 {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: #9aa0ab;
+        margin: 0 0 10px;
+      }
+      .steps ol {
+        margin: 0;
+        padding-left: 20px;
+        color: #4b5563;
+        font-size: 12px;
+        line-height: 1.9;
+      }
+      .steps code {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 11px;
+        background: #eef2ff;
+        color: #4f46e5;
+        padding: 2px 6px;
+        border-radius: 6px;
+      }
+
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        background: #fff;
+        color: #4f46e5;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 12px 18px;
+        text-decoration: none;
+      }
+      .back-btn:active {
+        background: #eef2ff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone">
+      <div class="wrap">
+        <span class="badge">Modul</span>
+        <div class="logo">🗂️</div>
+        <h1>OFO</h1>
+        <p>Halaman ini masih kerangka. Isi modulnya nanti.</p>
+
+        <div class="steps">
+          <h2>Yang perlu disiapkan</h2>
+          <ol>
+            <li>Tentukan isi modul OFO (data apa yang dicatat).</li>
+            <li>Tambah tabel di <code>scripts/build/supabase-schema.sql</code>.</li>
+            <li>Buat halaman admin CRUD di <code>ofo-admin.html</code>.</li>
+            <li>Isi UI di <code>ofo.html</code>.</li>
+            <li>Opsional: ganti thumbnail di <code>index.html</code>.</li>
+          </ol>
+        </div>
+
+        <a class="back-btn" href="../../index.html">&larr; Dashboard utama</a>
+      </div>
+    </div>
+  </body>
+</html>

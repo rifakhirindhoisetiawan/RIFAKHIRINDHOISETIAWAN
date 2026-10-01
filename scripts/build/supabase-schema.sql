@@ -243,3 +243,49 @@ create policy "Public read stock-foto" on storage.objects for select using (buck
 create policy "Allow upload stock-foto" on storage.objects for insert with check (bucket_id = 'stock-foto');
 create policy "Allow update stock-foto" on storage.objects for update using (bucket_id = 'stock-foto') with check (bucket_id = 'stock-foto');
 create policy "Allow delete stock-foto" on storage.objects for delete using (bucket_id = 'stock-foto');
+
+-- 9. EXP / Expired Date Tracker (public/exp/exp.html + exp-admin.html)
+create table if not exists exp_items (
+  id bigint generated always as identity primary key,
+  name text not null,
+  plu text,
+  batch text,
+  exp_date date,
+  qty integer,
+  lokasi text,
+  catatan text,
+  created_at timestamp with time zone default now()
+);
+alter table exp_items enable row level security;
+drop policy if exists "Allow public read" on exp_items;
+drop policy if exists "Allow service insert" on exp_items;
+drop policy if exists "Allow service update" on exp_items;
+drop policy if exists "Allow service delete" on exp_items;
+create policy "Allow public read" on exp_items for select using (true);
+create policy "Allow service insert" on exp_items for insert with check (true);
+create policy "Allow service update" on exp_items for update using (true) with check (true);
+create policy "Allow service delete" on exp_items for delete using (true);
+create index if not exists exp_items_exp_date_idx on exp_items (exp_date);
+
+-- 10. MUSNAH / Barang Musnah (public/musnah/musnah.html + musnah-admin.html)
+create table if not exists waste_items (
+  id bigint generated always as identity primary key,
+  name text not null,
+  alasan text not null default 'lainnya', -- expired / rusak / hilang / lainnya
+  qty integer,
+  harga_satuan integer, -- rupiah per 1 pcs, null = belum diketahui
+  waste_date date,
+  admin text,
+  catatan text,
+  created_at timestamp with time zone default now()
+);
+alter table waste_items enable row level security;
+drop policy if exists "Allow public read" on waste_items;
+drop policy if exists "Allow service insert" on waste_items;
+drop policy if exists "Allow service update" on waste_items;
+drop policy if exists "Allow service delete" on waste_items;
+create policy "Allow public read" on waste_items for select using (true);
+create policy "Allow service insert" on waste_items for insert with check (true);
+create policy "Allow service update" on waste_items for update using (true) with check (true);
+create policy "Allow service delete" on waste_items for delete using (true);
+create index if not exists waste_items_waste_date_idx on waste_items (waste_date);
