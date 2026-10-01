@@ -365,12 +365,9 @@
         { label: "DUAL KAMERA", href: "public/dual-kamera/dual-kamera.html", folder: "dual-kamera", ext: "png" },
         { label: "PULANG", href: "#", folder: "pulang", ext: "png" },
         { label: "PAGI", href: "#", folder: "pagi", ext: "png" },
-        { label: "SIANG", href: "#", folder: "siang", ext: "png" },
-        { label: "MALAM", href: "#", folder: "malam", ext: "png" },
-        { label: "SELANJUTNYA", href: "public/modul/selanjutnya.html", folder: "selanjutnya", ext: "jpg" },
       ];
 
-      const disabledLabels = new Set(["SELANJUTNYA"]);
+      const disabledLabels = new Set(["PULANG", "PAGI"]);
       const menuList = document.getElementById("menuList");
       menuItems.forEach((item, idx) => {
         const isDisabled = item.href === "#" || disabledLabels.has(item.label);
