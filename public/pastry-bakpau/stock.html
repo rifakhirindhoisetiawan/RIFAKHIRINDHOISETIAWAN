@@ -182,6 +182,89 @@
           font-size: 10px;
         }
       }
+
+      /* ============================================================
+         TEMA MORI
+         Palet dari public/mori/css/variables.css:
+         bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64
+         Gaya: sharp (radius 0), border hitam solid, shadow offset 4px.
+         ============================================================ */
+      :root {
+        --mori-bg: #fffbf2;
+        --mori-surface: #f7f3e9;
+        --mori-text: #1a1917;
+        --mori-text-2: #6e6a64;
+        --mori-line: rgba(26, 25, 23, 0.14);
+        --mori-accent: #1a1917;
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+
+      html,
+      body {
+        background: var(--mori-bg);
+      }
+
+      body {
+        color: var(--mori-text);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        background: var(--mori-bg);
+      }
+
+      /* ===== BARIS TANGGAL + JAM ===== */
+      .date-box {
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        box-shadow: 4px 4px 0 rgba(26, 25, 23, 0.12);
+      }
+
+      .date-box svg {
+        color: var(--mori-text-2);
+      }
+
+      .date-text {
+        color: var(--mori-text);
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
+      .clock-text {
+        font-family: var(--mori-mono);
+        color: var(--mori-accent);
+        letter-spacing: 0.5px;
+      }
+
+      /* ===== TILE MENU ===== */
+      .menu-item .icon-box {
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        box-shadow: 4px 4px 0 rgba(26, 25, 23, 0.12);
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+      }
+
+      .menu-item .icon-box::after {
+        background: linear-gradient(90deg, #f2eee2 25%, #e8e2d2 50%, #f2eee2 75%);
+      }
+
+      .menu-item:hover .icon-box {
+        box-shadow: 4px 4px 0 var(--mori-accent);
+      }
+
+      .menu-item:active .icon-box {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 var(--mori-accent);
+      }
+
+      .menu-item .label {
+        font-family: var(--mori-mono);
+        color: var(--mori-text);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+      }
     </style>
   </head>
   <body>
