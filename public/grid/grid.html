@@ -6,12 +6,9 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0"
     />
-    <title>MYLOVE</title>
-    <!-- ✅ Hapus manifest link yang merujuk ke file eksternal.
-         Kalau file itu nggak ada, link ini bisa bikin masalah.
-         Kalau memang dibutuhkan, ganti path-nya sesuai struktur folder yang benar. -->
-    <link rel="manifest" href="../manifest.json" />
-    <meta name="theme-color" content="#ffffff" />
+    <title>GRID — Photo Grid</title>
+    <link rel="manifest" href="../../manifest.json" />
+    <meta name="theme-color" content="#fffbf2" />
     <style>
       * {
         box-sizing: border-box;
@@ -554,6 +551,327 @@
           padding: 0 20px 20px;
         }
       }
+
+      /* ============================================================
+         TEMA MORI — override di atas, logika JS tidak disentuh.
+         Palet dari public/mori/css/variables.css:
+         bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64
+         Gaya: sharp (radius 0), border hitam solid, shadow offset 4px.
+         CATATAN: canvas export tetap putih (lihat ctx.fillStyle di JS)
+         supaya hasil download tidak ikut krem.
+         ============================================================ */
+      :root {
+        --mori-bg: #fffbf2;
+        --mori-surface: #f7f3e9;
+        --mori-text: #1a1917;
+        --mori-text-2: #6e6a64;
+        --mori-line: rgba(26, 25, 23, 0.14);
+        --mori-accent: #1a1917;
+        --mori-danger: #b91c1c;
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+
+      html,
+      body {
+        background: var(--mori-bg);
+        overscroll-behavior: none;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        color: var(--mori-text);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .app {
+        background: var(--mori-bg);
+      }
+
+      /* ===== HEADER: judul + tombol back ===== */
+      .stepper-row {
+        border-bottom: 1px solid var(--mori-line);
+        padding-bottom: 12px;
+        align-items: center;
+      }
+
+      .back-btn {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        background: var(--mori-surface);
+        color: var(--mori-accent);
+        text-decoration: none;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+      }
+      .back-btn:hover {
+        box-shadow: 4px 4px 0 var(--mori-accent);
+      }
+      .back-btn:active {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 var(--mori-accent);
+      }
+
+      .stepper {
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      /* buttons stay in one row on HP — never wrap */
+      .left-controls {
+        gap: 8px;
+        flex-wrap: nowrap;
+        min-width: 0;
+        flex: 1 1 auto;
+      }
+
+      /* ===== TOMBOL: hitam solid, square, shadow offset ===== */
+      .step-btn,
+      .trash-btn,
+      .add-photo-btn,
+      .aspect-btn,
+      .layout-cycle,
+      .dl-btn,
+      .dl-btn-save,
+      .dl-btn-wa {
+        border-radius: 0;
+        border: 1px solid var(--mori-accent);
+        background: var(--mori-accent);
+        color: var(--mori-bg);
+        transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+      }
+
+      .step-btn:hover:not(:disabled),
+      .trash-btn:hover:not(:disabled),
+      .add-photo-btn:hover:not(:disabled),
+      .aspect-btn:hover:not(:disabled),
+      .layout-cycle:hover:not(:disabled),
+      .dl-btn:hover:not(:disabled),
+      .dl-btn-save:hover:not(:disabled),
+      .dl-btn-wa:hover:not(:disabled) {
+        box-shadow: 4px 4px 0 var(--mori-text-2);
+      }
+
+      .step-btn:active:not(:disabled),
+      .trash-btn:active:not(:disabled),
+      .add-photo-btn:active:not(:disabled),
+      .aspect-btn:active:not(:disabled),
+      .layout-cycle:active:not(:disabled),
+      .dl-btn:active:not(:disabled),
+      .dl-btn-save:active:not(:disabled),
+      .dl-btn-wa:active:not(:disabled) {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 var(--mori-text-2);
+        opacity: 1;
+        background: #33312f;
+      }
+
+      /* tombol aktif (aspect terpilih) = kebalik */
+      .aspect-btn.active {
+        background: var(--mori-bg);
+        color: var(--mori-accent);
+      }
+
+      .step-btn:disabled,
+      .dl-btn:disabled {
+        background: #e5e0d2;
+        border-color: var(--mori-line);
+        color: var(--mori-text-2);
+        cursor: not-allowed;
+      }
+
+      /* tombol bahaya tetap merah */
+      .trash-btn {
+        background: var(--mori-danger);
+        border-color: var(--mori-danger);
+        color: #fff;
+      }
+      .trash-btn:hover:not(:disabled) {
+        box-shadow: 4px 4px 0 rgba(26, 25, 23, 0.5);
+      }
+
+      /* ===== COUNTER ===== */
+      .stepper .value {
+        font-family: var(--mori-mono);
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--mori-text);
+        min-width: 30px;
+      }
+
+      /* ===== HP: rapatkan baris tombol atas =====
+         6 tombol kiri (back/aspect/layout/download/tambah/hapus)
+         + 3 elemen kanan (kurang/nilai/tambah) = 9 kolom.
+         Satu baris, tidak wrap, ukuran & gap dikecilkan bertahap. */
+      @media (max-width: 420px) {
+        .stepper-row {
+          padding-left: 12px;
+          padding-right: 12px;
+          padding-bottom: 10px;
+        }
+        .stepper {
+          gap: 8px;
+        }
+        .left-controls {
+          gap: 6px;
+        }
+        .stepper .btns {
+          gap: 6px;
+        }
+        .back-btn,
+        .step-btn,
+        .trash-btn,
+        .add-photo-btn,
+        .aspect-btn,
+        .layout-cycle,
+        .dl-btn {
+          width: 30px;
+          height: 30px;
+        }
+        .back-btn svg,
+        .step-btn svg,
+        .trash-btn svg,
+        .add-photo-btn svg,
+        .aspect-btn svg,
+        .layout-cycle svg,
+        .dl-btn svg {
+          width: 15px;
+          height: 15px;
+        }
+        .stepper .value {
+          font-size: 14px;
+          min-width: 20px;
+        }
+      }
+
+      /* HP kecil (320px): masih muat 9 kolom dalam satu baris */
+      @media (max-width: 360px) {
+        .stepper-row {
+          padding-left: 8px;
+          padding-right: 8px;
+        }
+        .stepper,
+        .left-controls,
+        .stepper .btns {
+          gap: 4px;
+        }
+        .back-btn,
+        .step-btn,
+        .trash-btn,
+        .add-photo-btn,
+        .aspect-btn,
+        .layout-cycle,
+        .dl-btn {
+          width: 28px;
+          height: 28px;
+        }
+        .back-btn svg,
+        .step-btn svg,
+        .trash-btn svg,
+        .add-photo-btn svg,
+        .aspect-btn svg,
+        .layout-cycle svg,
+        .dl-btn svg {
+          width: 14px;
+          height: 14px;
+        }
+        .stepper .value {
+          font-size: 13px;
+          min-width: 18px;
+        }
+      }
+
+      /* ===== CANVAS / GRID FRAME ===== */
+      .canvas-wrap {
+        padding: 14px 18px 16px;
+      }
+
+      .grid-frame {
+        background: var(--mori-bg);
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        padding: 6px;
+        gap: 3px;
+        box-shadow: 6px 6px 0 rgba(26, 25, 23, 0.12);
+      }
+
+      .slot {
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-line);
+        border-radius: 0;
+      }
+
+      .slot.drag-over {
+        border: 2px dashed var(--mori-accent);
+        background: #fff8e6;
+      }
+
+      .slot .placeholder {
+        color: var(--mori-text-2);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      .slot .placeholder svg {
+        color: var(--mori-text-2);
+      }
+
+      #dragGhost {
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        box-shadow: 6px 6px 0 rgba(26, 25, 23, 0.3);
+      }
+
+      /* ===== DOWNLOAD CARD ===== */
+      .dl-inline-wrap {
+        padding: 0 18px 18px;
+      }
+
+      .dl-inline-card {
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        box-shadow: 6px 6px 0 rgba(26, 25, 23, 0.12);
+      }
+
+      .dl-preview {
+        border: 1px solid var(--mori-line);
+        border-radius: 0;
+        background: var(--mori-bg);
+      }
+
+      .dl-info .dl-title {
+        font-family: var(--mori-mono);
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--mori-text);
+      }
+
+      .dl-info .dl-size {
+        font-size: 9px;
+        font-weight: 500;
+        color: var(--mori-text-2);
+      }
+
+      @media (min-width: 768px) {
+        .canvas-wrap {
+          padding: 14px 20px 18px;
+        }
+        .dl-inline-wrap {
+          padding: 0 20px 24px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -561,6 +879,14 @@
       <div class="stepper-row">
         <div class="stepper">
           <div class="left-controls">
+            <a
+              class="back-btn"
+              href="../../index.html"
+              title="Kembali ke dashboard"
+              aria-label="Kembali ke dashboard"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            </a>
             <button class="aspect-btn active" id="aspectBtn" title="Ukuran">
               <svg
                 id="aspectIcon"
