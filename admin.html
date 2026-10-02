@@ -540,6 +540,54 @@
     .sheet-close-btn-main-new:active{background:#33312f}
     .sheet-close{background:var(--mori-surface);border:1px solid var(--mori-accent);
       border-radius:0;color:var(--mori-text)}
+
+/* ===== MODAL PASSWORD HAPUS =====
+       Dipakai menggantikan alert/confirm/prompt bawaan browser: di WebView/PWA
+       window.prompt sering dinonaktifkan sehingga popup tidak muncul. */
+    .pw-bg{
+      display:none;position:fixed;left:0;right:0;top:0;bottom:0;z-index:200;
+      background:rgba(26,25,23,.45);
+      align-items:center;justify-content:center;
+      padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));
+      overscroll-behavior:contain;
+    }
+    .pw-bg.open{display:flex}
+    /* scroll halaman dibekukan saat modal dibuka (kunci scroll + keyboard HP) */
+    html.pw-open{overflow:hidden;overscroll-behavior:none}
+    /* kartu selalu di tengah layar, ikut tinggi viewport yang terlihat
+       (keyboard HP = layout viewport memendek, modal sering terdorong ke bawah) */
+    .pw-card{
+      width:100%;max-width:360px;margin:auto;max-height:100%;overflow-y:auto;
+      background:var(--mori-bg);
+      border:1px solid var(--mori-accent);border-radius:0;padding:18px;
+      box-shadow:6px 6px 0 rgba(26,25,23,.2);
+      overscroll-behavior:contain;
+    }
+    .pw-title{
+      font-family:var(--mori-mono);font-size:13px;font-weight:700;letter-spacing:1.2px;
+      text-transform:uppercase;color:var(--mori-text);margin-bottom:8px;
+    }
+    .pw-msg{font-size:12px;color:var(--mori-text-2);line-height:1.5;margin-bottom:12px}
+    .pw-input{
+      width:100%;padding:11px 12px;font-family:var(--mori-mono);font-size:15px;
+      letter-spacing:2px;color:var(--mori-text);background:var(--mori-surface);
+      border:1px solid var(--mori-accent);border-radius:0;outline:none;
+    }
+    .pw-input:focus{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
+    .pw-error{
+      margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;
+      letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger);
+    }
+    .pw-error[hidden]{display:none}
+    .pw-actions{display:flex;gap:8px;margin-top:16px}
+    .pw-btn{
+      flex:1;padding:12px;border:1px solid var(--mori-accent);border-radius:0;
+      background:var(--mori-surface);color:var(--mori-text);
+      font-family:var(--mori-mono);font-size:11px;font-weight:700;
+      letter-spacing:1px;text-transform:uppercase;cursor:pointer;
+    }
+    .pw-btn:active{transform:translate(2px,2px)}
+    .pw-btn-danger{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff}
   </style>
 </head>
 <body>
@@ -708,6 +756,25 @@
   <div class="sheet" role="dialog" aria-modal="true">
     <div class="sheet-handle"></div>
     <div id="sheetBody"></div>
+  </div>
+</div>
+<div class="pw-bg" id="pwBg">
+  <div class="pw-card" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+    <div class="pw-title" id="pwTitle">Hapus Menu</div>
+    <div class="pw-msg" id="pwMsg"></div>
+    <input
+      class="pw-input"
+      id="pwInput"
+      type="password"
+      inputmode="numeric"
+      autocomplete="off"
+      placeholder="Masukkan password"
+    />
+    <div class="pw-error" id="pwError" hidden>Password salah.</div>
+    <div class="pw-actions">
+      <button class="pw-btn" id="pwCancel" type="button">Batal</button>
+      <button class="pw-btn pw-btn-danger" id="pwOk" type="button">Hapus</button>
+    </div>
   </div>
 </div>
 <script type="module">
@@ -1443,9 +1510,101 @@ const outW = 540, outH = 960;
     window.scrollTo({top:0, behavior:'smooth'});
   };
 
+  // Hapus menu dikunci password. Nilai ini ada di source (frontend statis),
+  // jadi hanya menahan salah klik — bukan proteksi sungguhan. Proteksi asli
+  // harus di Supabase (RLS / auth), bukan di file ini.
+  // Pakai modal sendiri (bukan prompt/confirm bawaan) karena di WebView/PWA
+  // window.prompt sering dinonaktifkan sehingga popup tidak pernah muncul.
+  const DEL_PASSWORD = '0225106927';
+
+  const pwBg = document.getElementById('pwBg');
+  const pwMsg = document.getElementById('pwMsg');
+  const pwInput = document.getElementById('pwInput');
+  const pwError = document.getElementById('pwError');
+  const pwOk = document.getElementById('pwOk');
+  const pwCancel = document.getElementById('pwCancel');
+  let pwResolve = null;
+  let pwScrollY = 0;
+
+  // Kunci scroll halaman saat modal terbuka: HP sering auto-scroll ke bawah
+  // saat keyboard muncul, jadi halaman dibekukan (position:fixed) dulu.
+  function lockScroll() {
+    pwScrollY = window.scrollY || window.pageYOffset || 0;
+    document.documentElement.classList.add('pw-open');
+    document.body.style.position = 'fixed';
+    document.body.style.top = -pwScrollY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  function unlockScroll() {
+    document.documentElement.classList.remove('pw-open');
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    window.scrollTo(0, pwScrollY);
+  }
+
+  // Sync overlay ke visualViewport: kalau keyboard HP naik, area terlihat
+  // jadi lebih pendek dan centering flex akan terdorong ke bawah.
+  function syncPwViewport() {
+    const vv = window.visualViewport;
+    if (!vv || !pwBg.classList.contains('open')) return;
+    pwBg.style.height = vv.height + 'px';
+    pwBg.style.top = vv.offsetTop + 'px';
+    pwBg.style.bottom = 'auto';
+  }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', syncPwViewport);
+    window.visualViewport.addEventListener('scroll', syncPwViewport);
+  }
+
+  function askDelPassword(msg) {
+    // Jangan sampai dua modal menumpuk: selesaikan yang lama dengan "batal".
+    if (pwResolve) closePw(false);
+    pwMsg.textContent = msg || '';
+    pwInput.value = '';
+    pwError.hidden = true;
+    lockScroll();
+    pwBg.classList.add('open');
+    syncPwViewport();
+    // preventScroll: keyboard HP tidak membuat halaman melompat ke bawah
+    try { pwInput.focus({ preventScroll: true }); } catch (e) { try { pwInput.focus(); } catch (e2) {} }
+    requestAnimationFrame(syncPwViewport);
+    return new Promise((res) => { pwResolve = res; });
+  }
+  function closePw(ok) {
+    pwBg.classList.remove('open');
+    pwBg.style.height = '';
+    pwBg.style.top = '';
+    pwBg.style.bottom = '';
+    unlockScroll();
+    const fn = pwResolve;
+    pwResolve = null;
+    if (fn) fn(ok);
+  }
+  pwOk.addEventListener('click', () => {
+    if (pwInput.value.trim() !== DEL_PASSWORD) {
+      pwError.hidden = false;
+      pwInput.value = '';
+      try { pwInput.focus({ preventScroll: true }); } catch (e) {}
+      return;
+    }
+    closePw(true);
+  });
+  pwCancel.addEventListener('click', () => closePw(false));
+  pwBg.addEventListener('click', (e) => { if (e.target === pwBg) closePw(false); });
+  pwInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') pwOk.click();
+    if (e.key === 'Escape') closePw(false);
+  });
+
   async function delRow(id) {
     if (saving) { alert('Tunggu proses simpan selesai'); return; }
-    if (!confirm('Hapus menu #' + id + ' (' + currentTable + ')?')) return;
+    const ok = await askDelPassword('Menu #' + id + ' akan dihapus permanen. Password wajib diisi.');
+    if (!ok) return;
     const { error } = await supabase.from(currentTable).delete().eq('id', id);
     if (error) alert('Gagal hapus: ' + error.message);
     else { setStatus('🗑️ Dihapus #' + id); await load(); }
