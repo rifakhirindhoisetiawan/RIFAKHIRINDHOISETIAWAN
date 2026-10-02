@@ -9,6 +9,13 @@
     <title>DAILY TASK</title>
     <link rel="manifest" href="../../manifest.json" />
     <meta name="theme-color" content="#fffbf2" />
+    <!-- Font sama dengan Admin Stok Opname (Inter + JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       * {
         box-sizing: border-box;
@@ -26,6 +33,7 @@
 
       body {
         font-family:
+          "Inter",
           "Segoe UI",
           system-ui,
           -apple-system,
@@ -315,18 +323,36 @@
          Kotak hitam solid + ikon kunci (diisi lewat JS), foto tidak
          dipakai supaya tidak bergantung file gambar. */
       .icon-tile-foto.tile-admin {
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
         background: var(--mori-accent);
         box-shadow: 4px 4px 0 rgba(26, 25, 23, 0.28);
       }
+      /* Foto ADMIN menutupi ikon upload (foto menutupi kotak hitam) */
+      .icon-tile-foto.tile-admin img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 1;
+        filter: saturate(0.55) contrast(1.02);
+        z-index: 1;
+      }
+      /* Ikon upload hanya terlihat saat foto belum ada sama sekali. */
       .icon-tile-foto.tile-admin svg {
         width: 42%;
         height: 42%;
         max-width: 56px;
         max-height: 56px;
         color: var(--mori-bg);
+      }
+      /* Bingkai ADMIN tetap krem saat memakai foto cadangan, supaya tidak
+         terlihat seperti kotak hitam kosong. */
+      .icon-tile-foto.tile-admin:has(img) {
+        background: var(--mori-surface);
       }
       .item.active-modul:hover .icon-tile-foto.tile-admin {
         box-shadow: 4px 4px 0 var(--mori-text-2);
@@ -336,10 +362,11 @@
         box-shadow: 2px 2px 0 var(--mori-text-2);
       }
 
-      /* ===== TILE MENU (konsep sama dengan menu Stok Opname) =====
-         Foto diambil dari image-daily-task/<slug>/1.jpg; kalau tidak ada,
-         kotak krem + garis putus-putus (bukan gradien warna). */
+      /* ===== TILE MENU: tema MORI =====
+         Bingkai foto 9:16 berlatar krem, garis hitam tipis, radius 0,
+         shadow offset 4px seperti kartu MORI lainnya. */
       .icon-tile-foto {
+        position: relative;
         width: 100%;
         max-width: 160px;
         aspect-ratio: 9 / 16;
@@ -361,30 +388,64 @@
           max-width: 104px;
         }
       }
+      /* Foto di dalamnya sedikit diredam: foto asli sering berwarna cerah
+         sehingga keluar dari palet MORI. */
       .icon-tile-foto img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
         opacity: 0;
+        filter: saturate(0.55) contrast(1.02);
         transition: opacity 0.25s ease;
       }
       .icon-tile-foto img.loaded {
         opacity: 1;
       }
+      /* Foto belum ada: motif garis putus-putus diagonal di atas dasar
+         krem, dengan ikon upload di tengah. Tenang, tidak berkedip
+         seperti shimmer, dan tetap terasa "kosong" MORI. */
       .icon-tile-foto.tanpa-foto {
-        background: var(--mori-surface);
-        background-image: linear-gradient(90deg, #f2eee2 25%, #e8e2d2 50%, #f2eee2 75%);
-        background-size: 200% 100%;
-        animation: dt-shimmer 1.4s infinite;
+        background-color: var(--mori-surface);
+        background-image: repeating-linear-gradient(
+          45deg,
+          #f2eee2 0 6px,
+          #ece6d6 6px 12px
+        );
+        background-size: auto;
+        animation: none;
+        border-style: dashed;
+        border-color: var(--mori-text-2);
       }
-      @keyframes dt-shimmer {
-        0% {
-          background-position: 200% 0;
-        }
-        100% {
-          background-position: -200% 0;
-        }
+      /* Ikon upload di tengah kotak kosong (dipasang lewat JS) */
+      .icon-tile-foto .tanpa-ikon {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--mori-text-2);
+      }
+      .icon-tile-foto .tanpa-ikon svg {
+        width: 26%;
+        height: auto;
+        max-width: 34px;
+        max-height: 34px;
+        min-width: 18px;
+        min-height: 18px;
+      }
+      /* Label "BELUM ADA FOTO" mono kecil di bawah ikon */
+      .icon-tile-foto .tanpa-label {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 14%;
+        text-align: center;
+        font-family: var(--mori-mono);
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        color: var(--mori-text-2);
       }
 
       .item.active-modul:hover .icon-tile-foto {
@@ -449,8 +510,11 @@
       // image-daily-task/<slug>/1.jpg, dan tile ADMIN ada di depan.
       // Menu HARI / MINGGU / BULAN yang dulu hardcoded sudah dihapus.
       const ADMIN_SLUG = 'admin';
+      // Label ADMIN boleh diganti dari halaman admin (disimpan di localStorage).
+      let adminLabel = 'ADMIN';
+      try { adminLabel = localStorage.getItem('daily-task-admin-label') || 'ADMIN'; } catch (e) {}
       const adminMenu = {
-        name: 'ADMIN',
+        name: adminLabel,
         cls: 'g-h',
         href: 'daily-task-admin.html',
         slug: ADMIN_SLUG
@@ -466,14 +530,22 @@
           .replace(/[^a-z0-9]+/g, '-')
           .replace(/^-+|-+$/g, '');
 
-      // Foto menu: coba beberapa ekstensi, kalau tidak ada tampilkan kotak
-      // shimmer krem (tanpa file thumbnail cadangan).
-      const FOTO_EXT = ['.jpg', '.jpeg', '.png', '.webp', '.svg'];
+// Foto menu: pakai URL dari Supabase Storage (foto_url) kalau sudah diupload
+  // dari menu ADMIN. Kalau belum ada, probe folder image-daily-task/<slug>/1.*.
+  const FOTO_EXT = ['.jpg', '.jpeg', '.png', '.webp', '.svg'];
 
-      // Foto tidak dimuat untuk tile ADMIN (bukan record daily_tasks).
-      const tileFoto = (slug) => {
-        const folder = 'image-daily-task/' + slug + '/';
-        return `<div class="icon-tile-foto"><img
+  // Foto tidak dimuat untuk tile ADMIN (bukan record daily_tasks).
+  const tileFoto = (slug, fotoUrl) => {
+    if (fotoUrl) {
+      return `<div class="icon-tile-foto"><img
+            src="${fotoUrl}"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          /></div>`;
+    }
+    const folder = 'image-daily-task/' + slug + '/';
+    return `<div class="icon-tile-foto"><img
             src="${folder}1.jpg"
             alt=""
             loading="lazy"
@@ -481,12 +553,29 @@
             onerror="probeFoto(this)"
             data-folder="${folder}"
           /></div>`;
-      };
+  };
 
-      // Tile ADMIN: kotak hitam solid + ikon kunci (bukan foto), supaya jelas
-      // bedanya dari tile menu dan tidak bergantung file gambar.
+      /* Tile ADMIN. Urutan gambarnya:
+         1. Foto yang diupload dari menu ADMIN (Supabase Storage).
+         2. Kalau belum ada, pakai gambar modul Daily Task di folder ini
+            (image-index.jpg) supaya tile tidak kosong.
+         3. Kalau file itu juga hilang, turun ke kotak hitam + ikon upload. */
+      const FOTO_ADMIN =
+        supabase.storage.from('stock-foto').getPublicUrl('daily-task/admin.jpg').data.publicUrl;
+      const FOTO_ADMIN_CADANGAN = 'image-index.jpg';
+      window.gantiFotoAdmin = (img) => {
+        if (img.dataset.ganti) {
+          img.remove();
+          return;
+        }
+        img.dataset.ganti = '1';
+        img.src = FOTO_ADMIN_CADANGAN;
+      };
       const tileAdmin = () =>
-        `<div class="icon-tile-foto tile-admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="1"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>`;
+        `<div class="icon-tile-foto tile-admin">
+          <img src="${FOTO_ADMIN}" alt="" loading="lazy" decoding="async" onerror="gantiFotoAdmin(this)" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>`;
 
       // Probe 1.jpg -> 1.jpeg -> 1.png -> 1.webp -> 1.svg -> fallback.
       window.probeFoto = (img) => {
@@ -494,8 +583,17 @@
         let i = 1;
         const next = () => {
           if (i >= FOTO_EXT.length) {
-            img.removeAttribute('src');
-            img.closest('.icon-tile-foto').classList.add('tanpa-foto');
+            // Foto tidak ada -> kotak motif garis putus-putus + ikon upload.
+            img.remove();
+            const tile = img.closest('.icon-tile-foto');
+            if (tile && !tile.querySelector('.tanpa-ikon')) {
+              tile.classList.add('tanpa-foto');
+              tile.insertAdjacentHTML(
+                'beforeend',
+                '<div class="tanpa-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>' +
+                  '<div class="tanpa-label">BELUM ADA FOTO</div>'
+              );
+            }
             return;
           }
           const ext = FOTO_EXT[i++];
@@ -538,7 +636,7 @@
             const href = p.href || (slug ? `../utility/${slug}.html` : '#');
             const isAdmin = slug === ADMIN_SLUG || p.isAdmin;
             return `<a class="item active-modul" href="${href}">
-              ${isAdmin ? tileAdmin() : tileFoto(slug)}
+              ${isAdmin ? tileAdmin() : tileFoto(slug, p.foto_url)}
               <span>${name}</span>
             </a>`;
           })
@@ -554,7 +652,8 @@
             cls: r.cls || '',
             // link: pakai kolom href/description, fallback ke utility/<slug>.html
             href: r.href || r.description || '',
-            slug: r.slug || r.period || slugify(r.title || r.name)
+            slug: r.slug || r.period || slugify(r.title || r.name),
+            foto_url: r.foto_url || ''
           }));
           if (periods.length) console.info('daily_tasks: ' + periods.length + ' menu dari Supabase');
           else console.warn('daily_tasks kosong - belum ada menu');

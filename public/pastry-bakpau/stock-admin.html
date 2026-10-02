@@ -574,6 +574,13 @@
         width: 84px;
       }
 
+      /* Kolom Foto dan Aksi ikut isinya saja, tidak melar.
+         .c-aksi tetap 148px (lihat aturan MORI di bawah) karena isinya
+         tombol 32px. */
+      .c-foto {
+        white-space: nowrap;
+      }
+
       .foto-box {
         display: flex;
         align-items: center;
@@ -930,9 +937,9 @@
         box-shadow: none;
       }
 
-      /* kolom aksi melebar karena ada 4 tombol */
+      /* kolom aksi melebar karena ada 3 tombol (upload/edit/hapus) */
       .c-aksi {
-        width: 148px;
+        width: 116px;
       }
 
       /* Baris tabel Foto Menu SO = pemilih menu (pengganti daftar menu atas) */
@@ -947,9 +954,47 @@
         font-weight: 700;
       }
 
-      /* Tabel menu SO menempel di bawah baris input (tanpa jeda section) */
+      /* ===== JARAK ANTAR TABEL DI ATAS =====
+         Baris input (+tombol) lalu tabel Foto Menu SO, lalu section
+         barang. Jeda dibuat seragam supaya tidak ada rongga di bawah. */
+      .menu-tulis {
+        margin-bottom: 10px;
+      }
       .menu-foto-wrap {
-        margin-top: 12px;
+        margin-top: 0;
+        margin-bottom: 12px;
+      }
+      #barangSec .row {
+        margin-bottom: 10px;
+      }
+      #barangWrap {
+        margin-bottom: 12px;
+      }
+      /* Dua blok pesan di bawah tabel Foto Menu SO tidak menambah jarak ganda */
+      #menuFotoEmpty,
+      #menuFotoHint {
+        margin-top: 0;
+      }
+
+      /* Tabel Foto Menu SO: kolomnya lebih sedikit dari tabel barang, jadi
+         min-width dan lebar nama dikecilkan supaya tidak ada ruang kosong
+         menganga di kanan pada layar HP. */
+      .menu-foto-wrap .barang {
+        min-width: 0;
+        width: 100%;
+      }
+      /* Kolom Nama mengisi sisa lebar tabel. Max-width 0 supaya melar penuh;
+         teks panjang tetap dipotong ellipsis oleh .potong. */
+      .menu-foto-wrap .c-nama {
+        width: 100%;
+        max-width: none;
+      }
+      .menu-foto-wrap .potong {
+        max-width: 100%;
+      }
+      /* Baris tabel Foto Menu SO sedikit lebih rapat */
+      .menu-foto-wrap tbody td {
+        padding: 0 8px;
       }
 
       /* ===== MODAL PASSWORD HAPUS (sama seperti admin KOPI) =====
@@ -1103,8 +1148,6 @@
             <tr>
               <th class="c-no">No</th>
               <th>Nama Menu</th>
-              <th class="c-satuan">Lokasi</th>
-              <th class="c-satuan">Tim Checker</th>
               <th class="c-foto">Foto</th>
               <th class="c-aksi"></th>
             </tr>
@@ -1606,7 +1649,8 @@
         const input = document.createElement('input');
         input.type = 'number';
         input.size = 1;
-        input.min = '0';
+        // min TIDAK dikunci 0: selisih minus dipakai untuk mencatat
+        // barang hilang / rusak, jadi nilai negatif harus bisa tampil &diedit.
         input.step = '1';
         input.inputMode = 'numeric';
         input.className = 'cell-input in-fisik';
@@ -1865,6 +1909,24 @@
         if (fotoData.length) renderBarang(fotoData);
       });
 
+      // Realtime stock_products: tabel barang ikut berubah sendiri begitu
+      // stok diubah dari halaman lain (mis. lewat Supabase), jadi tidak
+      // perlu refresh manual.
+      let rtBarangTimer = null;
+      try {
+        supabase
+          .channel('stock_products_changes')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'stock_products' }, () => {
+            clearTimeout(rtBarangTimer);
+            rtBarangTimer = setTimeout(() => {
+              if (menuAktif) loadBarang();
+            }, 600);
+          })
+          .subscribe();
+      } catch (e) {
+        console.warn('Realtime stock_products tidak aktif:', e.message);
+      }
+
       // Foto BARANG tidak bisa diupload dari halaman ini (tombaknya dihapus),
       // hanya foto MENU (tabel Foto Menu SO) yang bisa diupload/ganti.
       const pilihFotoMenu = (id) => {
@@ -2068,13 +2130,13 @@
       const loadFotoMenu = async () => {
         let hasil = await supabase
           .from('so_menus')
-          .select('id, name, lokasi, tim_checker, foto_url')
+          .select('id, name, foto_url')
           .order('name');
 
         if (hasil.error) {
           hasil = await supabase
             .from('so_menus')
-            .select('id, name, lokasi, tim_checker')
+            .select('id, name')
             .order('name');
           if (hasil.error) {
             console.error('Gagal memuat daftar menu:', hasil.error.message);
@@ -2104,7 +2166,7 @@
         const urlAdmin = fotoMenuUrl(AKUN_TILE);
         const fotoAdmin = (await adaFotoMenu(urlAdmin)) ? urlAdmin : null;
         menuFotoData = [
-          { id: AKUN_TILE, name: 'ADMIN STOCK OPNAME', lokasi: '-', tim_checker: '-', foto_url: fotoAdmin },
+          { id: AKUN_TILE, name: 'ADMIN STOCK OPNAME', foto_url: fotoAdmin },
         ].concat(menus);
         renderFotoMenu(menuFotoData);
       };
@@ -2128,8 +2190,6 @@
 
           tr.append(cell(String(i + 1), 'c-no'));
           tr.append(cellPotong(up(menu.name), 'c-nama'));
-          tr.append(cell(up(menu.lokasi || '-'), 'c-satuan'));
-          tr.append(cell(up(menu.tim_checker || '-'), 'c-satuan'));
 
           const tdFoto = document.createElement('td');
           tdFoto.className = 'c-foto';

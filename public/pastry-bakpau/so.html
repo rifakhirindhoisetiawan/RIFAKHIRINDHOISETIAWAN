@@ -904,7 +904,8 @@
             td.className = 'c-num';
             const input = document.createElement('input');
             input.type = 'number';
-            input.min = '0';
+            // min 0 hanya untuk Onhand; Stok Fisik boleh negatif (barang hilang).
+            if (jenis === 'sistem') input.min = '0';
             input.inputMode = 'numeric';
             input.className = 'cell-input in-' + jenis;
             input.value = String(
@@ -1053,6 +1054,21 @@
         riwayatEmpty.hidden = riwayatTerbuka || rows.length > 0;
       };
       load();
+
+      // Realtime stock_products: kalau stok diubah dari ADMIN, tabel SO
+      // ikut berubah sendiri tanpa perlu refresh manual.
+      let rtTimer = null;
+      try {
+        supabase
+          .channel('stock_products_changes')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'stock_products' }, () => {
+            clearTimeout(rtTimer);
+            rtTimer = setTimeout(() => load(), 600);
+          })
+          .subscribe();
+      } catch (e) {
+        console.warn('Realtime stock_products tidak aktif:', e.message);
+      }
     </script>
   </body>
 </html>

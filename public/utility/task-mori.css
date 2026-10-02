@@ -1,0 +1,244 @@
+/* public/utility/task-mori.css
+   Tema MORI untuk halaman kegiatan Daily Task (utility/hari|minggu|bulan).
+   Satu file dipakai ketiga halaman supaya tampilannya selalu sama. */
+
+:root {
+  --mori-bg: #fffbf2;
+  --mori-surface: #f7f3e9;
+  --mori-text: #1a1917;
+  --mori-text-2: #6e6a64;
+  --mori-line: rgba(26, 25, 23, 0.14);
+  --mori-accent: #1a1917;
+  --mori-danger: #b91c1c;
+  --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background: var(--mori-bg);
+}
+
+body {
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: var(--mori-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 12px 18px 28px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100vh;
+}
+
+/* ===== KEPALA: judul menu + jumlah kegiatan ===== */
+.kepala {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 0 12px;
+}
+.kepala h1 {
+  font-family: var(--mori-mono);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--mori-text);
+}
+.kepala .jumlah {
+  font-family: var(--mori-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--mori-text-2);
+}
+
+/* ===== SEARCH ===== */
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.search-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  border: 1px solid var(--mori-accent);
+  border-radius: 0;
+  background: var(--mori-surface);
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--mori-text);
+  transition: box-shadow 0.2s ease;
+}
+.search-box:focus-within {
+  background: #fffdf7;
+  box-shadow: 4px 4px 0 var(--mori-accent);
+}
+.search-box svg {
+  flex-shrink: 0;
+  color: var(--mori-text-2);
+  width: 18px;
+  height: 18px;
+}
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  min-width: 0;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--mori-text);
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0;
+}
+.search-box input::placeholder {
+  color: var(--mori-text-2);
+}
+
+/* ===== TABEL KEGIATAN ===== */
+.table-wrap {
+  border: 1px solid var(--mori-accent);
+  border-radius: 0;
+  background: var(--mori-bg);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tabel {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: fixed;
+}
+.tabel thead th {
+  background: var(--mori-surface);
+  color: var(--mori-text);
+  font-family: var(--mori-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: left;
+  height: 34px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--mori-accent);
+  white-space: nowrap;
+}
+.tabel tbody td {
+  height: 46px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--mori-line);
+  vertical-align: middle;
+}
+.tabel tbody tr:last-child td {
+  border-bottom: 0;
+}
+.tabel tbody tr.selesai td {
+  background: #f2eee2;
+}
+/* Sudah dikerjakan: cuma berubah warna, teks tetap terbaca jelas */
+.tabel tbody tr.selesai .c-teks .isi {
+  color: var(--mori-text-2);
+  opacity: 0.65;
+}
+
+.c-no {
+  width: 34px;
+  text-align: center;
+  font-family: var(--mori-mono);
+  font-size: 11px;
+  color: var(--mori-text-2);
+}
+.c-teks {
+  min-width: 0;
+  overflow: hidden;
+}
+.tabel .c-teks .isi {
+  font-family: var(--mori-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.c-aksi {
+  width: 60px;
+}
+
+/* Kotak centang untuk tandai selesai */
+.centang {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--mori-accent);
+  border-radius: 0;
+  background: var(--mori-accent);
+  color: var(--mori-bg);
+  cursor: pointer;
+  font-family: var(--mori-mono);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 3px 3px 0 rgba(26, 25, 23, 0.18);
+  transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+.centang:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+.tabel tbody tr.selesai .centang {
+  background: var(--mori-surface);
+  color: var(--mori-text);
+}
+
+/* Baris tambah kegiatan tidak ada di halaman menu: kegiatan hanya
+   ditambah dari menu ADMIN. */
+
+.empty {
+  font-family: var(--mori-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--mori-text-2);
+}
+
+.hint {
+  margin-top: 10px;
+  font-family: var(--mori-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--mori-danger);
+  border-left: 3px solid var(--mori-danger);
+  padding: 6px 8px;
+  background: #fdf1f1;
+}
+.hint[hidden] {
+  display: none;
+}
