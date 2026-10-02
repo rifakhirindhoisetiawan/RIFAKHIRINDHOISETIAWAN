@@ -795,7 +795,7 @@
 
     <script type="module">
       import { supabase } from './supabase.js';
-      import { toWebPThumb, toWebPLarge } from '../../image-loader.js';
+      import { toWebPThumb } from '../../image-loader.js';
 
       let menus = [];
       let shownMenus = [];
@@ -901,17 +901,14 @@
         const p12 = [1,2,3,4,5,6,7,8,9,10].map(i => m['percepatan_12oz_' + i]).filter(Boolean);
         const p16 = [1,2,3,4,5,6,7,8,9,10].map(i => m['percepatan_16oz_' + i]).filter(Boolean);
         const bahans = [...b12, ...b16, ...bHot, ...bHot16, ...p12, ...p16];
-        const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
-        let photo;
-        if (isImg) {
-          const largeUrl = toWebPLarge(m.foto, 360, 640, 80);
-          photo = '<img src="' + largeUrl + '" alt="" loading="lazy" decoding="async"/>';
-        } else {
-          photo = '<span style="font-size:48px">' + (m.foto||'☕') + '</span>';
-        }
-        const pluRows = [['PLU 12OZ', m.plu_12oz || '-'], ['PLU 16OZ', m.plu_16oz || '-'], ['PLU HOT', m.plu_hot || '-']];
-        if (!m.plu_12oz && !m.plu_16oz && !m.plu_hot && m.plu) pluRows.push(['PLU', m.plu]);
-        let html = '<div class="sheet-top"><div class="sheet-photo ' + (m.cls||'g-a') + '">' + photo + '</div><div class="sheet-side">';
+        // Foto sengaja TIDAK dimuat di sheet: memuat gambar besar (toWebPLarge)
+        // bikin lambat di HP. Foto hanya dipakai di grid (toWebPThumb 80px).
+        // PLU: hanya baris yang sudah diisi. Kalau tidak ada satupun, tabelnya
+        // tidak dirender sama sekali (bukan tampil baris "-").
+        const pluRows = [['PLU 12OZ', m.plu_12oz], ['PLU 16OZ', m.plu_16oz], ['PLU HOT', m.plu_hot]]
+          .filter(function(r) { return String(r[1] || '').trim() !== ''; });
+        if (!pluRows.length && m.plu && String(m.plu).trim()) pluRows.push(['PLU', m.plu]);
+        let html = '<div class="sheet-top"><div class="sheet-side">';
         html += '<div class="sheet-name">' + m.name + '</div>';
         html += '<div class="sheet-meta">';
         if (m.cat) html += '<span class="sheet-badge">' + m.cat + '</span>';

@@ -4,21 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0" />
     <title>PINK BERRY SODA</title>
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#fffbf2" />
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body { min-height: 100%; background: #fff; }
+      /* ============================================================
+         TEMA MORI
+         Palet dari public/mori/css/variables.css:
+         bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64
+         Gaya: sharp (radius 0), border hitam solid, label mono uppercase.
+         ============================================================ */
+      :root {
+        --mori-bg: #fffbf2;
+        --mori-surface: #f7f3e9;
+        --mori-text: #1a1917;
+        --mori-text-2: #6e6a64;
+        --mori-line: rgba(26, 25, 23, 0.14);
+        --mori-accent: #1a1917;
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+      html, body { min-height: 100%; background: var(--mori-bg); }
       /* Scrollbar disembunyikan, scrolling tetap normal (HP) */
       html { scrollbar-width: none; -ms-overflow-style: none; }
       html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
       body {
-        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-        color: #1f2937;
+        font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+        color: var(--mori-text);
+        -webkit-font-smoothing: antialiased;
         -webkit-text-size-adjust: 100%;
         overflow-y: auto;
       }
       .wrap {
-        background: #fff;
+        background: var(--mori-bg);
         width: 100%;
         max-width: 800px;
         margin: 0 auto;
@@ -26,77 +42,88 @@
         padding-top: calc(14px + env(safe-area-inset-top));
         padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
       }
-      h1 { font-size: 16px; font-weight: 800; line-height: 1.25; margin: 8px 0 6px; }
-      .top-grid { display: flex; gap: 12px; align-items: flex-start; }
-      .foto {
-        width: 42%; flex-shrink: 0; max-height: 52vh;
-        aspect-ratio: 9 / 16;
-        border-radius: 16px;
-        background: #f5f5f5;
-        display: flex; align-items: center; justify-content: center;
-        overflow: hidden;
+      h1 {
+        font-size: 17px; font-weight: 800; line-height: 1.25; margin: 8px 0 8px;
+        letter-spacing: 0.6px; text-transform: uppercase;
       }
-      .foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
-      .foto .pending { font-size: 48px; line-height: 1; }
-      .foto .pending.teks { font-size: 11px; font-weight: 700; color: #b0b5bf; padding: 10px; text-align: center; }
-      /* warna kategori sama persis dengan sheet */
-      .g-a { background: linear-gradient(135deg, #a5b4fc, #818cf8); }
-      .g-b { background: linear-gradient(135deg, #c4b5fd, #a78bfa); }
-      .g-c { background: linear-gradient(135deg, #93c5fd, #60a5fa); }
-      .g-d { background: linear-gradient(135deg, #67e8f9, #22d3ee); }
-      .g-e { background: linear-gradient(135deg, #6ee7b7, #34d399); }
-      .g-f { background: linear-gradient(135deg, #fcd34d, #fbbf24); }
-      .g-g { background: linear-gradient(135deg, #fca5a5, #f87171); }
-      .g-h { background: linear-gradient(135deg, #f0abfc, #e879f9); }
-      .side { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+      /* Foto dihapus: halaman detail hanya berisi tabel PLU + resep. */
+      .top-grid { display: block; }
+      .side { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
       .badge {
         align-self: flex-start;
-        font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px;
-        background: #eef2ff; color: #4f46e5; letter-spacing: 0.4px; text-transform: uppercase;
+        font-family: var(--mori-mono);
+        font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: 0;
+        background: var(--mori-surface); border: 1px solid var(--mori-accent);
+        color: var(--mori-text); letter-spacing: 0.8px; text-transform: uppercase;
       }
-      .plu-table { border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; background: #fff; }
+      /* ===== TABEL PLU ===== */
+      .plu-table {
+        border: 1px solid var(--mori-accent); border-radius: 0;
+        overflow: hidden; background: var(--mori-bg);
+      }
       .plu-row { display: flex; align-items: stretch; }
-      .plu-row + .plu-row { border-top: 1px solid #eee; }
+      .plu-row + .plu-row { border-top: 1px solid var(--mori-line); }
       .plu-th {
         display: flex; align-items: center; justify-content: center; text-align: center;
-        padding: 6px 8px; font-size: 9px; font-weight: 800;
-        color: #6b7280; background: #f3f4f6; width: 38%; flex-shrink: 0;
+        padding: 8px; font-family: var(--mori-mono); font-size: 10px; font-weight: 700;
+        color: var(--mori-text); background: var(--mori-surface);
+        border-right: 1px solid var(--mori-line);
+        letter-spacing: 0.6px; width: 38%; flex-shrink: 0;
       }
       .plu-td {
-        flex: 1; display: flex; align-items: center; padding: 6px 10px;
-        font-size: 12px; font-weight: 700; color: #1f2937;
+        flex: 1; display: flex; align-items: center; padding: 8px 10px;
+        font-family: var(--mori-mono); font-size: 13px; font-weight: 700;
+        color: var(--mori-text);
       }
-      .plu-td.kosong { color: #c3c8d1; font-weight: 600; }
+      .plu-td.kosong { color: var(--mori-text-2); font-weight: 600; }
       h2 {
-        font-size: 11px; font-weight: 800; color: #4f46e5; letter-spacing: 0.6px;
-        text-transform: uppercase; margin: 14px 0 8px;
+        font-family: var(--mori-mono);
+        font-size: 11px; font-weight: 700; color: var(--mori-text); letter-spacing: 1.2px;
+        text-transform: uppercase; margin: 18px 0 8px;
       }
-      .resep { border: 1px solid #c7d2fe; border-radius: 10px; overflow: hidden; background: #fff; }
+      /* ===== TABEL RESEP / BAHAN ===== */
+      .resep {
+        border: 1px solid var(--mori-accent); border-radius: 0;
+        overflow: hidden; background: var(--mori-bg);
+        box-shadow: 4px 4px 0 rgba(26, 25, 23, 0.1);
+      }
       .resep-row { display: flex; align-items: stretch; }
-      .resep-row + .resep-row { border-top: 1px solid #eef0f3; }
+      .resep-row + .resep-row { border-top: 1px solid var(--mori-line); }
       .resep-no {
         display: flex; align-items: center; justify-content: center; text-align: center;
-        padding: 8px; font-size: 9px; font-weight: 800;
-        color: #6b7280; background: #f3f4f6; width: 34px; flex-shrink: 0;
+        padding: 9px 4px; font-family: var(--mori-mono); font-size: 10px; font-weight: 700;
+        color: var(--mori-text); background: var(--mori-surface);
+        border-right: 1px solid var(--mori-line);
+        width: 38px; flex-shrink: 0;
       }
       .resep-nama {
-        flex: 1; display: flex; align-items: center; padding: 8px 12px;
-        font-size: 13px; font-weight: 600; color: #1f2937;
+        flex: 1; display: flex; align-items: center; padding: 9px 12px;
+        font-size: 13px; font-weight: 600; color: var(--mori-text);
       }
       .catatan {
-        background: #fff; border: 1px solid #c7d2fe; border-radius: 10px;
-        padding: 10px 12px; font-size: 13px; color: #374151; line-height: 1.5;
+        background: var(--mori-surface); border: 1px solid var(--mori-accent); border-radius: 0;
+        padding: 10px 12px; font-size: 13px; color: var(--mori-text); line-height: 1.5;
       }
-      .empty { text-align: center; color: #9aa0ab; font-size: 13px; font-weight: 600; padding: 20px 0; }
-      #status { margin: 10px 0 0; padding: 6px 9px; border-radius: 8px; background: #f6f7f9; border: 1px solid #eceef1; color: #8b909a; font-size: 10px; font-weight: 700; }
+      .empty {
+        text-align: center; color: var(--mori-text-2);
+        font-family: var(--mori-mono); font-size: 11px; font-weight: 600;
+        letter-spacing: 0.6px; text-transform: uppercase; padding: 24px 0;
+      }
+      #status {
+        margin: 10px 0 0; padding: 6px 9px; border-radius: 0;
+        background: var(--mori-surface); border: 1px solid var(--mori-line);
+        color: var(--mori-text-2); font-family: var(--mori-mono);
+        font-size: 10px; font-weight: 700; letter-spacing: 0.4px;
+      }
       #status[hidden] { display: none; }
-      #status[data-tone="err"] { background: #fff7f7; border-color: #f7dcdc; color: #b07070; }
+      #status[data-tone="err"] {
+        background: #fdf1f1; border-color: var(--mori-accent); color: #b91c1c;
+      }
     </style>
   </head>
   <body>
     <div class="wrap">
       <div class="top-grid">
-        <div class="foto g-a" id="fotoBox"><div class="pending teks">Memuat foto...</div></div>
         <div class="side">
           <h1 id="nama">PINK BERRY SODA</h1>
           <div id="badgeWrap"></div>
@@ -110,12 +137,10 @@
 
     <script type="module">
       import { supabase } from '../../js/supabase.js';
-      import { toWebPLarge } from '../../image-loader.js';
 
       const MENU_ID = 481;
       const NAMA = "PINK BERRY SODA";
 
-      const fotoBox = document.getElementById('fotoBox');
       const namaEl = document.getElementById('nama');
       const badgeWrap = document.getElementById('badgeWrap');
       const pluTable = document.getElementById('pluTable');
@@ -131,43 +156,24 @@
       const grup = (m, prefix) =>
         Array.from({ length: 10 }, (_, i) => m[prefix + (i + 1)]).filter(Boolean);
 
-      // Sama seperti sheet: kalau foto bukan URL, teksnya ditampilkan besar
-      // (kode/emoji menu). Kalau kosong, tetap pakai gradient kategori.
-      function renderFoto(m) {
-        fotoBox.className = 'foto ' + (m.cls || 'g-a');
-        const isUrl = m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto);
-        if (!isUrl) {
-          fotoBox.innerHTML = m.foto
-            ? '<div class="pending">' + m.foto + '</div>'
-            : '<div class="pending teks">Foto belum ada</div>';
-          return;
-        }
-        const img = document.createElement('img');
-        img.alt = m.name || NAMA;
-        img.decoding = 'async';
-        img.src = toWebPLarge(m.foto, 360, 640, 80);
-        img.addEventListener('load', () => { fotoBox.innerHTML = ''; fotoBox.appendChild(img); });
-        img.addEventListener('error', () => { fotoBox.innerHTML = '<div class="pending teks">Foto gagal dimuat</div>'; });
-      }
-
       function render(m) {
         document.title = m.name || NAMA;
         namaEl.textContent = m.name || NAMA;
-        renderFoto(m);
 
         badgeWrap.innerHTML = m.cat ? '<span class="badge">' + m.cat + '</span>' : '';
 
-          // Tabel PLU selalu tampil, walau nilainya belum diisi (selalu "-").
-        // Hanya 3 baris, sama seperti sheet asli: 12OZ, 16OZ, HOT.
+          // Tabel PLU hanya menampilkan yang sudah diisi (12OZ, 16OZ, HOT).
+        // Kalau tidak ada satupun yang terisi, tabelnya disembunyikan.
         const pluRows = [
           ['PLU 12OZ', m.plu_12oz],
           ['PLU 16OZ', m.plu_16oz],
           ['PLU HOT', m.plu_hot],
-        ];
+        ].filter((r) => String(r[1] || '').trim() !== '');
         pluTable.innerHTML = pluRows
           .map((r) => '<div class="plu-row"><div class="plu-th">' + r[0] + '</div>' +
-                      '<div class="plu-td' + (r[1] ? '' : ' kosong') + '">' + (r[1] || '-') + '</div></div>')
+                      '<div class="plu-td">' + r[1] + '</div></div>')
           .join('');
+        pluTable.hidden = pluRows.length === 0;
 
         const bagian = [];
         const push = (judul, list) => { if (list.length) bagian.push([judul, list]); };

@@ -1326,9 +1326,10 @@ const outW = 540, outH = 960;
     } else {
       thumb = '<span>' + (m.foto || '☕') + '</span>';
     }
-    let pluHtml = '<span>' + (m.plu_12oz || '-') + '</span>';
-    if (m.plu_16oz) pluHtml += '<span>' + m.plu_16oz + '</span>';
-    if (m.plu_hot) pluHtml += '<span>' + m.plu_hot + '</span>';
+    // Kolom PLU di list: hanya PLU yang sudah diisi (tidak ada "-" kosong).
+    const pluHtml = [['PLU 12OZ', m.plu_12oz], ['PLU 16OZ', m.plu_16oz], ['PLU HOT', m.plu_hot]]
+      .filter(r => String(r[1] || '').trim() !== '')
+      .map(r => '<span>' + esc(r[1]) + '</span>').join('');
     return `
       <div class="item" data-view="${m.id}" style="cursor:pointer">
         <div class="thumb">${thumb}</div>
@@ -1693,7 +1694,10 @@ const outW = 540, outH = 960;
     const bahans = [...b12, ...b16, ...bHot, ...p12, ...p16];
     const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
     const photo = isImg ? '<img src="' + m.foto + '" alt="" loading="lazy"/>' : '<span style="font-size:48px">' + (m.foto || '☕') + '</span>';
-    const pluRows = [['PLU 12OZ', m.plu_12oz || '-'], ['PLU 16OZ', m.plu_16oz || '-'], ['PLU HOT', m.plu_hot || '-']];
+    // PLU: hanya baris yang SUDAH diisi yang ditampilkan.
+    // Kalau semuanya kosong, tabelnya tidak dirender sama sekali.
+    const pluRows = [['PLU 12OZ', m.plu_12oz], ['PLU 16OZ', m.plu_16oz], ['PLU HOT', m.plu_hot]]
+      .filter(r => String(r[1] || '').trim() !== '');
     
     // Build bahan sections - only show non-empty
     const sections = [];
@@ -1715,11 +1719,13 @@ const outW = 540, outH = 960;
     // Right: Info + PLU + Close
     html += '<div class="sheet-info-wrap-new">';
     html += '<div class="sheet-name-new">' + esc(displayName.toUpperCase()) + '</div>';
-     html += '<div class="sheet-plu-table">';
-     pluRows.forEach(r => {
-       html += '<div class="sheet-plu-row"><div class="sheet-plu-th">' + esc(r[0]) + '</div><div class="sheet-plu-td">' + esc(r[1]) + '</div></div>';
-     });
-     html += '</div>';
+     if (pluRows.length) {
+      html += '<div class="sheet-plu-table">';
+      pluRows.forEach(r => {
+        html += '<div class="sheet-plu-row"><div class="sheet-plu-th">' + esc(r[0]) + '</div><div class="sheet-plu-td">' + esc(r[1]) + '</div></div>';
+      });
+      html += '</div>';
+    }
     html += '<button class="sheet-close-btn-new" id="sh_close_top" type="button">Tutup</button>';
     html += '</div>';
     html += '</div>'; // sheet-top-new
