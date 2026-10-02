@@ -249,6 +249,297 @@
       .sheet-close-btn-new{padding:10px;font-size:13px}
       .sheet-close-btn-main-new{padding:12px;font-size:13px}
     }
+  /* ============================================================
+       TEMA MORI — override di atas, logika JS tidak disentuh.
+       Palet dari public/mori/css/variables.css:
+       bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64
+       Gaya: sharp (radius 0), border hitam solid, shadow offset 4px.
+       CATATAN: banyak elemen pakai style inline (indigo #6366f1/#eef2ff/#c7d2fe),
+       jadi override di bawah wajib !important.
+       ============================================================ */
+    :root{
+      --mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;
+      --mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;
+      --mori-mono:"JetBrains Mono",ui-monospace,monospace;
+    }
+    html,body{background:var(--mori-bg) !important}
+    body{
+      font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;
+      background:var(--mori-bg) !important;color:var(--mori-text);
+      -webkit-font-smoothing:antialiased;
+    }
+    .wrap{background:var(--mori-bg) !important;padding-top:max(12px,env(safe-area-inset-top))}
+
+    /* ===== SEARCH ===== */
+    .section-label{
+      font-family:var(--mori-mono);font-size:10px;font-weight:700;
+      color:var(--mori-text);letter-spacing:1.4px;
+    }
+    .search-box{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-surface) !important;color:var(--mori-text);
+      transition:box-shadow .2s ease;
+    }
+    .search-box:focus-within{box-shadow:4px 4px 0 var(--mori-accent);background:#fffdf7 !important}
+    .search-box svg,.search-box input::placeholder{color:var(--mori-text-2) !important}
+    .search-box input{color:var(--mori-text) !important}
+
+    /* ===== TOMBOL ===== */
+    .btn,.btn-primary,.btn-ghost,.btn-danger,
+    .btn-save-icon,.bahan-add,.bahan-add-head,.crop-icon-btn,.foto-act{
+      border-radius:0 !important;font-family:inherit;
+      transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
+    }
+    .btn-primary,.btn-save-icon,.bahan-add,.bahan-add-head,.crop-icon-btn,#btnFotoSave{
+      background:var(--mori-accent) !important;color:var(--mori-bg) !important;
+      border:1px solid var(--mori-accent) !important;
+      box-shadow:3px 3px 0 rgba(26,25,23,.18) !important;
+    }
+    .btn-ghost,#btnFotoAdd{
+      background:var(--mori-surface) !important;color:var(--mori-accent) !important;
+      border:1px solid var(--mori-accent) !important;
+    }
+    .btn-danger,#btnFotoCancel{
+      background:#fdf1f1 !important;color:var(--mori-danger) !important;
+      border:1px solid var(--mori-danger) !important;
+    }
+    /* tombol Edit di list: inline style indigo -> Mori */
+    .item-actions .btn-ghost{
+      background:var(--mori-accent) !important;border-color:var(--mori-accent) !important;
+    }
+    /* ===== Edit & Hapus: kotak identik + sejajar =====
+       Keduanya dipaksa 32x32 dengan border 1px yang sama, jadi tidak ada
+       yang melorot gara-gara border inline. Arahnya baris (row), bukan
+       ditumpuk, supaya tombol Edit sejajar sama Hapus. */
+    .item-actions{
+      flex-direction:row !important;align-items:center !important;
+      justify-content:center !important;gap:6px !important;
+    }
+    .item-actions .btn{
+      flex:0 0 32px !important;width:32px !important;height:32px !important;
+      min-height:32px !important;max-height:32px !important;aspect-ratio:auto !important;
+      padding:0 !important;margin:0 !important;border-radius:0 !important;
+      border:1px solid var(--mori-accent) !important;
+      display:flex !important;align-items:center !important;justify-content:center !important;
+    }
+    .item-actions .btn svg{
+      width:14px !important;height:14px !important;flex:0 0 auto !important;
+      display:block !important;
+    }
+    .item-actions .btn-danger{border-color:var(--mori-danger) !important}
+    .btn:active,.crop-icon-btn:active,.tab-btn:active{opacity:1;transform:translate(2px,2px)}
+    .bahan-add-head,.bahan-add-head:active{transform:none;opacity:1}
+    .bahan-add-head:active{transform:scale(.94)}
+
+    /* ===== TOMBOL "+" di samping judul dan tombol Simpan di samping CATATAN =====
+       Keduanya menempel pada kotak judulnya, jadi dibuat sama persis:
+       kotak hitam penuh, border hitam, TANPA shadow offset (kotak judul juga tanpa). */
+    .bahan-add,.bahan-add-head,.btn-save-icon.btn-save-head{
+      border-radius:0 !important;
+      box-shadow:none !important;
+      border:1px solid var(--mori-accent) !important;
+    }
+    /* CATATAN + tombol Simpan harus ukuran & border identik di semua breakpoint */
+    .catatan-title{
+      border:1px solid var(--mori-accent) !important;
+      min-height:46px !important;height:46px !important;
+    }
+    .btn-save-icon.btn-save-head{
+      min-height:46px !important;height:46px !important;flex:0 0 46px !important;
+    }
+    @media(max-width:640px){
+      .catatan-title{
+        min-height:32px !important;height:32px !important;
+      }
+      .btn-save-icon.btn-save-head{
+        width:32px !important;height:32px !important;min-height:32px !important;
+        flex:0 0 32px !important;
+      }
+    }
+    .bahan-add-head svg,.btn-save-icon.btn-save-head svg{width:14px;height:14px}
+    .btn-save-icon.btn-save-head,.btn-save-icon.btn-save-head:active{transform:none;opacity:1}
+    .btn-save-icon.btn-save-head:active{transform:scale(.94)}
+    .btn-save-icon:disabled{background:#e5e0d2 !important;border-color:var(--mori-line) !important;
+      color:var(--mori-text-2) !important;box-shadow:none !important;opacity:1}
+
+    /* ===== TAB BAR ===== */
+    .tab-btn{
+      background:var(--mori-surface) !important;color:var(--mori-text) !important;
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      font-family:var(--mori-mono);letter-spacing:.4px;
+    }
+    .tab-btn.active{background:var(--mori-accent) !important;color:var(--mori-bg) !important;
+      border-color:var(--mori-accent) !important}
+
+    /* ===== KOTAK FOTO & TABEL PLU: tinggi sama persis =====
+   --admin-photo-size = lebar kolom foto (rasio tetap 9/16).
+   Tinggi kotak foto diturunkan dari lebar itu, lalu tinggi yang SAMA
+   dipasang ke tabel PLU; row di dalamnya flex:1 supaya ruang sisa
+   dibagi rata. Jadi kedua kotak selalu rata atas-bawah, dan rasio
+   crop foto tetap 9/16 (tidak ikut gepeng). */
+    :root{
+      --admin-photo-size:clamp(132px,44vw,152px);
+      --admin-photo-h:calc(var(--admin-photo-size) * 16 / 9);
+    }
+    .top-wrap{
+      grid-template-columns:var(--admin-photo-size) minmax(0,1fr) !important;
+      align-items:start !important;
+      gap:8px !important;
+      max-width:560px !important;margin:0 auto !important;
+    }
+    .top-wrap .foto-box{
+      width:100% !important;max-width:none !important;
+      height:var(--admin-photo-h) !important;min-height:0 !important;
+      align-self:start !important;aspect-ratio:auto !important;
+    }
+    .form-side-table{
+      height:var(--admin-photo-h) !important;
+      display:flex !important;flex-direction:column !important;gap:4px !important;
+    }
+    .admin-plu-table{
+      flex:1 1 auto !important;min-height:0 !important;
+      display:flex !important;flex-direction:column !important;
+    }
+    .admin-plu-table .top-row{flex:1 1 0 !important;min-height:32px !important}
+    .admin-plu-table .top-row>div:first-child,
+    .admin-plu-table .top-row>div:last-child{min-height:0 !important}
+    #tabBar{flex:0 0 auto !important}
+
+    /* ===== FORM: label + input ===== */
+    .form label{color:var(--mori-text) !important;font-family:var(--mori-mono);
+      font-size:9px;letter-spacing:1px;text-transform:uppercase}
+    .form input,.form select{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-bg) !important;color:var(--mori-text) !important;
+      font-family:inherit;
+    }
+    .form input:focus,.form select:focus{
+      border-color:var(--mori-accent) !important;background:#fffdf7 !important;
+      box-shadow:4px 4px 0 var(--mori-accent) !important;
+    }
+    .form input::placeholder{color:var(--mori-text-2) !important}
+    .select-box select{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-surface) !important;color:var(--mori-text) !important;
+    }
+    .select-box select:focus{background:#fffdf7 !important;box-shadow:4px 4px 0 var(--mori-accent) !important}
+    .select-box svg{color:var(--mori-text-2) !important}
+
+    /* ===== KOTAK FOTO ===== */
+    .foto-box{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-surface) !important;
+    }
+    .top-wrap .foto-box{border-radius:0 !important;box-shadow:4px 4px 0 rgba(26,25,23,.12) !important}
+    .foto-box:active{background:#efe9da !important}
+    .foto-empty{color:var(--mori-text-2) !important}
+    .foto-empty span{color:var(--mori-text) !important;font-family:var(--mori-mono);
+      font-size:11px;letter-spacing:1px;text-transform:uppercase}
+    .foto-empty small{color:var(--mori-text-2) !important}
+    .foto-empty svg{color:var(--mori-text-2) !important}
+
+    /* ===== TABEL FORM (inline style) ===== */
+    .form-side-table{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-bg) !important;
+    }
+    /* label kolom PLU 12/16/HOT */
+    .form-side-table .top-row>div:first-child,
+    #plu16Lab,#pluHotLab{
+      background:var(--mori-accent) !important;color:var(--mori-bg) !important;
+      border-radius:0 !important;box-shadow:none !important;
+      font-family:var(--mori-mono);letter-spacing:.4px;
+    }
+    /* label MENU dibalik biar beda dari label PLU */
+    .admin-menu-row>div:first-child{
+      background:var(--mori-surface) !important;color:var(--mori-text) !important;
+      border-right:1px solid var(--mori-line) !important;
+    }
+    /* kolom input: garis bawah + latar */
+    .form-side-table .top-row>div:last-child,
+    .tab-panel .form-table .td,
+    .catatan-field{
+      background:var(--mori-bg) !important;border-bottom-color:var(--mori-line) !important;
+      border-color:var(--mori-line) !important;
+    }
+    .form-side-table .top-row>div:last-child input,
+    .tab-panel .form-table .td input,
+    .catatan-field input{color:var(--mori-text) !important}
+    .form-table,.form-compact,.admin-plu-table,.plu-photo-grid .form-table{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-bg) !important;
+    }
+    .form-table .tr,.form-compact .tr{border-bottom-color:var(--mori-line) !important;
+      border-color:var(--mori-line) !important}
+    .form-table .th,.form-compact .th{
+      background:var(--mori-surface) !important;color:var(--mori-text) !important;
+      border-color:var(--mori-accent) !important;font-family:var(--mori-mono);
+    }
+    /* judul tabel (HOT/P12/.../CATATAN) = blok hitam, bukan indigo */
+    .tab-panel .form-table .table-title,
+    .tab-panel .form-table .th,
+    .catatan-title{
+      background:var(--mori-accent) !important;color:var(--mori-bg) !important;
+      border-radius:0 !important;box-shadow:none !important;
+      font-family:var(--mori-mono);letter-spacing:1px;
+    }
+    .tab-panel .form-table .th{display:none}
+
+    /* ===== DAFTAR MENU ===== */
+    .thumb{
+      border:1px solid var(--mori-accent);border-radius:0 !important;background:var(--mori-surface);
+      box-shadow:4px 4px 0 rgba(26,25,23,.12);
+      background-image:linear-gradient(90deg,#f2eee2 25%,#e8e2d2 50%,#f2eee2 75%);
+    }
+    .item{cursor:pointer}
+    .item:active .thumb{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--mori-accent)}
+    .item-name{
+      font-family:var(--mori-mono);color:var(--mori-text-2) !important;
+      text-transform:uppercase;letter-spacing:.6px;
+    }
+    .col-plu{color:var(--mori-text) !important;font-family:var(--mori-mono) !important}
+    .vbadge{background:var(--mori-accent) !important;border-radius:0 !important;
+      font-family:var(--mori-mono)}
+    .empty,.hint{color:var(--mori-text-2) !important;font-family:var(--mori-mono)}
+    /* placeholder emoji di tile: warna teks, bukan putih (Mori) */
+    .thumb span,.sheet-photo span{color:var(--mori-text)}
+
+    /* ===== CROP / SHEET ===== */
+    .crop-overlay{background:rgba(26,25,23,.45)}
+    .crop-card{
+      background:var(--mori-bg);border:1px solid var(--mori-accent);border-radius:0;
+      box-shadow:6px 6px 0 rgba(26,25,23,.18);
+    }
+    .crop-stage{background:var(--mori-surface);border-color:var(--mori-accent);border-radius:0}
+    .crop-stage::after{border-color:var(--mori-accent);border-radius:0}
+    .sheet-bg{background:rgba(26,25,23,.45)}
+    .sheet{background:var(--mori-bg);border:1px solid var(--mori-accent);
+      border-bottom:none;border-radius:0;box-shadow:0 -6px 24px rgba(26,25,23,.16)}
+    .sheet-handle{background:var(--mori-text-2)}
+    .sheet-top-new{background:var(--mori-bg);border-bottom:1px solid var(--mori-line)}
+    .sheet-photo-wrap-new,.sheet-photo-placeholder-new{background:var(--mori-surface);
+      border:1px solid var(--mori-accent);border-radius:0}
+    .sheet-name-new{color:var(--mori-text);text-transform:uppercase;letter-spacing:.6px}
+    .sheet-plu-table{border:1px solid var(--mori-accent);border-radius:0;background:var(--mori-bg)}
+    .sheet-plu-row+.sheet-plu-row{border-top-color:var(--mori-line)}
+    .sheet-plu-th{background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono)}
+    .sheet-plu-td{color:var(--mori-text);font-family:var(--mori-mono)}
+    .sheet-section-title-new{color:var(--mori-text);font-family:var(--mori-mono);letter-spacing:1.2px}
+    .sheet-note-new{background:var(--mori-surface);border-color:var(--mori-accent);
+      border-radius:0;color:var(--mori-text)}
+    .bahan-input-new{background:var(--mori-bg);border:1px solid var(--mori-accent);
+      border-radius:0;color:var(--mori-text)}
+    .bahan-input-new:focus{background:#fffdf7;border-color:var(--mori-accent);
+      box-shadow:4px 4px 0 var(--mori-accent)}
+    .sheet-empty-new,.sheet-empty{color:var(--mori-text-2);font-family:var(--mori-mono)}
+    .sheet-close-btn-new{background:var(--mori-surface);border:1px solid var(--mori-accent);
+      border-radius:0;color:var(--mori-text)}
+    .sheet-close-btn-main-new{background:var(--mori-accent);color:var(--mori-bg);
+      border:1px solid var(--mori-accent);border-radius:0;text-transform:uppercase;
+      letter-spacing:1px;font-size:12px}
+    .sheet-close-btn-main-new:active{background:#33312f}
+    .sheet-close{background:var(--mori-surface);border:1px solid var(--mori-accent);
+      border-radius:0;color:var(--mori-text)}
   </style>
 </head>
 <body>

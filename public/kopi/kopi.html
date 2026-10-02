@@ -6,9 +6,9 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>JA-DI</title>
-    <link rel="manifest" href="../manifest.json" />
-    <meta name="theme-color" content="#ffffff" />
+    <title>KOPI</title>
+    <link rel="manifest" href="../../manifest.json" />
+    <meta name="theme-color" content="#fffbf2" />
     <style>
       * {
         box-sizing: border-box;
@@ -515,6 +515,245 @@
         font-family: inherit;
       }
 
+      /* ============================================================
+         TEMA MORI — override di atas, logika JS tidak disentuh.
+         Palet dari public/mori/css/variables.css:
+         bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64
+         Gaya: sharp (radius 0), border hitam solid, shadow offset 4px.
+         ============================================================ */
+      :root {
+        --mori-bg: #fffbf2;
+        --mori-surface: #f7f3e9;
+        --mori-text: #1a1917;
+        --mori-text-2: #6e6a64;
+        --mori-line: rgba(26, 25, 23, 0.14);
+        --mori-accent: #1a1917;
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+
+      html,
+      body {
+        background: var(--mori-bg);
+      }
+
+      body {
+        font-family:
+          "Inter",
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        color: var(--mori-text);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .phone {
+        background: var(--mori-bg);
+      }
+
+      /* ===== SEARCH ===== */
+      .search-box {
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        background: var(--mori-surface);
+        color: var(--mori-text);
+        transition: box-shadow 0.2s ease;
+      }
+      .search-box:focus-within {
+        background: #fffdf7;
+        box-shadow: 4px 4px 0 var(--mori-accent);
+      }
+      .search-box input {
+        color: var(--mori-text);
+      }
+      .search-box input::placeholder,
+      .search-box svg {
+        color: var(--mori-text-2);
+      }
+
+      /* ===== GRID TILE ===== */
+      .section-label {
+        font-family: var(--mori-mono);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.4px;
+        color: var(--mori-text);
+      }
+
+      .icon-tile {
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        box-shadow: 4px 4px 0 rgba(26, 25, 23, 0.12);
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+      }
+      .icon-tile:not(.has-photo) {
+        background: linear-gradient(90deg, #f2eee2 25%, #e8e2d2 50%, #f2eee2 75%);
+      }
+      .item.active-modul:hover .icon-tile {
+        box-shadow: 4px 4px 0 var(--mori-accent);
+      }
+      .item.active-modul:active .icon-tile {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 var(--mori-accent);
+      }
+
+      .item span {
+        font-family: var(--mori-mono);
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: var(--mori-text-2);
+      }
+      .item.active-modul span {
+        color: var(--mori-text);
+      }
+      .item span .plu-tag {
+        font-family: inherit;
+        font-weight: 700;
+        color: var(--mori-accent);
+        letter-spacing: 0.4px;
+      }
+
+      .empty-msg,
+      .sheet-empty {
+        color: var(--mori-text-2);
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+      }
+
+      /* ===== STATUS BAR ===== */
+      #status {
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-line);
+        border-radius: 0;
+        color: var(--mori-text-2);
+        font-family: var(--mori-mono);
+        letter-spacing: 0.4px;
+      }
+      #status[data-tone="ok"] {
+        background: #f2f7f0;
+        border-color: rgba(26, 25, 23, 0.18);
+        color: #3f6212;
+      }
+      #status[data-tone="warn"] {
+        background: #fdf8ea;
+        border-color: rgba(26, 25, 23, 0.18);
+        color: #92700a;
+      }
+      #status[data-tone="err"] {
+        background: #fdf1f1;
+        border-color: rgba(26, 25, 23, 0.18);
+        color: var(--mori-danger, #b91c1c);
+      }
+
+      /* ===== SHEET / MODAL ===== */
+      .sheet-bg {
+        background: rgba(26, 25, 23, 0.45);
+      }
+      .sheet {
+        background: var(--mori-bg);
+        border: 1px solid var(--mori-accent);
+        border-bottom: none;
+        border-radius: 0;
+        box-shadow: 0 -6px 24px rgba(26, 25, 23, 0.16);
+      }
+      .sheet-handle {
+        background: var(--mori-text-2);
+      }
+      .sheet-photo {
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        background: var(--mori-surface);
+      }
+      .sheet-name {
+        color: var(--mori-text);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+      }
+      .sheet-badge {
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        color: var(--mori-text);
+        font-family: var(--mori-mono);
+        letter-spacing: 0.8px;
+      }
+      .sheet-sec {
+        font-family: var(--mori-mono);
+        color: var(--mori-text);
+        letter-spacing: 1.2px;
+      }
+      .sheet-note {
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        color: var(--mori-text);
+      }
+      .sheet-close {
+        background: var(--mori-accent);
+        color: var(--mori-bg);
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 12px;
+        transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+      }
+      .sheet-close:hover {
+        box-shadow: 4px 4px 0 var(--mori-text-2);
+      }
+      .sheet-close:active {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 var(--mori-text-2);
+        background: #33312f;
+      }
+
+      /* ===== TABEL PLU ===== */
+      .plu-table {
+        background: var(--mori-bg);
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+      }
+      .plu-row + .plu-row {
+        border-top: 1px solid var(--mori-line);
+      }
+      .plu-th {
+        background: var(--mori-surface);
+        border-right: 1px solid var(--mori-line);
+        color: var(--mori-text);
+        font-family: var(--mori-mono);
+        letter-spacing: 0.6px;
+      }
+      .plu-td {
+        color: var(--mori-text);
+        font-family: var(--mori-mono);
+        font-size: 13px;
+      }
+
+      /* ===== BAHAN / METODE ===== */
+      .bahan-row {
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        color: var(--mori-text);
+        box-shadow: 3px 3px 0 rgba(26, 25, 23, 0.08);
+      }
+      .method-col h4 {
+        border-radius: 0;
+        border: 1px solid var(--mori-accent);
+        font-family: var(--mori-mono);
+        letter-spacing: 0.8px;
+      }
+      .method-col.normal h4 {
+        background: #1a1917;
+      }
+      .method-col.accel h4 {
+        background: #4d7c0f;
+        border-color: #1a1917;
+      }
     </style>
   </head>
   <body>
