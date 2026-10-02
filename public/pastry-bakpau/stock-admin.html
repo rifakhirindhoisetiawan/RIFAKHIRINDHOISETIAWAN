@@ -428,19 +428,8 @@
         white-space: nowrap;
       }
 
-      tfoot tr.f-plus td {
-        background: #f0fdf4;
-      }
-
-      tfoot tr.f-minus td {
-        background: #fef2f2;
-      }
-
-      tfoot tr.f-plus td:first-child,
-      tfoot tr.f-minus td:first-child {
-        position: sticky;
-        left: 0;
-      }
+      /* tr.f-plus / tr.f-minus dihapus: tfoot sekarang satu baris total,
+         rincian plus/minus wiget berada di kolom Keterangan. */
 
       .kode {
         color: var(--primary);
@@ -659,6 +648,419 @@
         white-space: nowrap;
       }
 
+      /* ============================================================
+         TEMA MORI — override di atas, logika JS tidak disentuh.
+         Palet dari public/mori/css/variables.css:
+         bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64
+         Gaya: sharp (radius 0), border hitam solid, shadow offset.
+         Variabel asli (--text, --line, --primary, ...) di-override di sini
+         supaya aturan yang sudah ada ikut berubah warna tanpa disentuh.
+         ============================================================ */
+      :root {
+        --text: #1a1917;
+        --muted: #6e6a64;
+        --line: rgba(26, 25, 23, 0.14);
+        --line-2: rgba(26, 25, 23, 0.14);
+        --surface: #f7f3e9;
+        --primary: #1a1917;
+        --primary-dark: #1a1917;
+        --soft: #f7f3e9;
+        --soft-2: rgba(26, 25, 23, 0.14);
+        --danger: #b91c1c;
+        --mori-bg: #fffbf2;
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+
+      html,
+      body {
+        background: var(--mori-bg);
+      }
+
+      body {
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .section-label {
+        font-family: var(--mori-mono);
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: 1.4px;
+      }
+
+      .count,
+      .c-ket,
+      .empty {
+        font-family: var(--mori-mono);
+        color: var(--muted);
+      }
+
+      /* ===== INPUT ===== */
+      input {
+        background: var(--surface);
+        border: 1px solid var(--text);
+        border-radius: 0;
+        transition: box-shadow 0.2s ease;
+      }
+      input::placeholder {
+        color: var(--muted);
+      }
+      input:focus {
+        background: #fffdf7;
+        border-color: var(--text);
+        box-shadow: 4px 4px 0 var(--text);
+      }
+
+      /* ===== TOMBOL ===== */
+      .btn,
+      .ico,
+      .qr-btn {
+        border-radius: 0;
+        border: 1px solid var(--primary);
+        background: var(--primary);
+        color: var(--mori-bg);
+        box-shadow: 3px 3px 0 rgba(26, 25, 23, 0.18);
+        transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+      }
+      .btn:active,
+      .ico:active,
+      .qr-btn:active {
+        opacity: 1;
+        transform: translate(2px, 2px);
+        box-shadow: none;
+      }
+
+      /* Daftar menu di atas sudah dihapus (pilih/edit/hapus lewat tabel
+         Foto Menu SO). Aturan .menu-item/.menu-list di bawah ini sisa
+         gaya lama dan tidak lagi dipakai. */
+      .mode {
+        font-family: var(--mori-mono);
+        color: var(--muted);
+      }
+
+      /* ===== TABEL ===== */
+      .table-wrap {
+        border: 1px solid var(--text);
+        border-radius: 0;
+        background: var(--mori-bg);
+      }
+      .daftar-wrap {
+        border-color: var(--text);
+      }
+      thead th {
+        background: var(--surface);
+        color: var(--text);
+        font-family: var(--mori-mono);
+        font-weight: 700;
+        border-bottom: 1px solid var(--text);
+      }
+      thead th.c-aksi {
+        background: var(--surface);
+      }
+      tbody td {
+        border-bottom: 1px solid var(--line);
+      }
+      tbody td.ok {
+        background: #f2f7f0;
+      }
+      tbody tr.sinkron td {
+        background: #f0f3f8;
+      }
+      .tambah td {
+        background: var(--surface);
+      }
+      .tambah:hover td {
+        background: #f2eee2;
+      }
+      tbody tr:hover td {
+        background: #faf6ea;
+      }
+      .tambah .auto {
+        font-family: var(--mori-mono);
+        color: var(--muted);
+      }
+      table.daftar tr + tr td {
+        border-top: 1px solid var(--line);
+      }
+      table.daftar input::placeholder {
+        color: var(--muted);
+      }
+      .c-no {
+        color: var(--muted);
+      }
+      .c-aksi {
+        background: var(--mori-bg);
+        box-shadow: -7px 0 9px -7px rgba(26, 25, 23, 0.3);
+      }
+      tbody tr.ok td.c-aksi {
+        background: #f2f7f0;
+      }
+      tfoot td {
+        background: var(--surface);
+        border-top: 1px solid var(--text);
+        font-family: var(--mori-mono);
+        font-weight: 700;
+      }
+
+      /* ===== RINGKASAN SELISIH (mobile-friendly, di bawah tabel) ===== */
+      .ringkas {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .ringkas[hidden] {
+        display: none;
+      }
+      .ringkas-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        padding: 8px 4px;
+        background: var(--surface);
+        border: 1px solid var(--text);
+        border-radius: 0;
+        min-width: 0;
+      }
+      .ringkas-label {
+        font-family: var(--mori-mono);
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .ringkas-nilai {
+        font-family: var(--mori-mono);
+        font-size: clamp(13px, 3.6vw, 16px);
+        font-weight: 700;
+        color: var(--text);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .ringkas-nilai.plus {
+        color: #3f6212;
+      }
+      .ringkas-nilai.minus {
+        color: var(--danger);
+      }
+      @media (max-width: 340px) {
+        .ringkas {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      /* ===== SELISIH / KETERANGAN ===== */
+      .kode,
+      .cell-input.mono,
+      .kode-btn {
+        color: var(--text);
+        font-family: var(--mori-mono);
+      }
+      .selisih.minus,
+      .ket.minus {
+        color: #b91c1c;
+      }
+      .selisih.plus,
+      .ket.plus {
+        color: #3f6212;
+      }
+
+      /* ===== INPUT DI DALAM SEL ===== */
+      .cell-input {
+        border-radius: 0;
+        transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      }
+      .cell-input:hover {
+        background: var(--surface);
+        border-color: var(--line);
+      }
+      .cell-input:focus {
+        background: #fffdf7;
+        border-color: var(--text);
+        box-shadow: 3px 3px 0 rgba(26, 25, 23, 0.15);
+      }
+      .kode-btn {
+        border-radius: 0;
+        border: 1px dashed var(--line);
+      }
+      .kode-btn:active {
+        background: var(--surface);
+        border-color: var(--text);
+      }
+
+      /* ===== FOTO + LIGHTBOX ===== */
+      .c-foto .thumb {
+        border: 1px solid var(--text);
+        border-radius: 0;
+        background: var(--surface);
+      }
+      .c-foto .kosong {
+        font-family: var(--mori-mono);
+        color: var(--muted);
+      }
+      .lightbox {
+        background: var(--mori-bg);
+        border: 1px solid var(--text);
+        border-radius: 0;
+        box-shadow: 6px 6px 0 rgba(26, 25, 23, 0.2);
+      }
+      .lightbox img {
+        border-radius: 0;
+      }
+      .lightbox-text {
+        font-family: var(--mori-mono);
+        letter-spacing: 0.8px;
+      }
+
+      /* tombol hapus tetap merah, tombol edit/pilih tetap hitam */
+      .ico-danger {
+        background: var(--danger);
+        border-color: var(--danger);
+        color: #fff;
+        box-shadow: 3px 3px 0 rgba(26, 25, 23, 0.18);
+      }
+      .ico-danger:active {
+        box-shadow: none;
+      }
+
+      /* kolom aksi melebar karena ada 4 tombol */
+      .c-aksi {
+        width: 148px;
+      }
+
+      /* Baris tabel Foto Menu SO = pemilih menu (pengganti daftar menu atas) */
+      #menuFotoBody tr.pilih {
+        cursor: pointer;
+      }
+      #menuFotoBody tr.pilih:active td {
+        background: #efe9da;
+      }
+      #menuFotoBody tr.on td {
+        background: #f2eee2;
+        font-weight: 700;
+      }
+
+      /* Tabel menu SO menempel di bawah baris input (tanpa jeda section) */
+      .menu-foto-wrap {
+        margin-top: 12px;
+      }
+
+      /* ===== MODAL PASSWORD HAPUS (sama seperti admin KOPI) =====
+         Pakai modal sendiri, bukan confirm/prompt bawaan: di WebView/PWA
+         window.prompt sering dinonaktifkan sehingga popup tak muncul. */
+      .pw-bg {
+        display: none;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 200;
+        background: rgba(26, 25, 23, 0.45);
+        align-items: center;
+        justify-content: center;
+        padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+        overscroll-behavior: contain;
+      }
+      .pw-bg.open {
+        display: flex;
+      }
+      html.pw-open {
+        overflow: hidden;
+        overscroll-behavior: none;
+      }
+      .pw-card {
+        width: 100%;
+        max-width: 360px;
+        margin: auto;
+        max-height: 100%;
+        overflow-y: auto;
+        background: var(--mori-bg);
+        border: 1px solid var(--text);
+        border-radius: 0;
+        padding: 18px;
+        box-shadow: 6px 6px 0 rgba(26, 25, 23, 0.2);
+        overscroll-behavior: contain;
+      }
+      .pw-title {
+        font-family: var(--mori-mono);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: var(--text);
+        margin-bottom: 8px;
+      }
+      .pw-msg {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.5;
+        margin-bottom: 12px;
+      }
+      .pw-input {
+        width: 100%;
+        height: auto;
+        padding: 11px 12px;
+        font-family: var(--mori-mono);
+        font-size: 15px;
+        letter-spacing: 2px;
+        text-transform: none;
+        color: var(--text);
+        background: var(--surface);
+        border: 1px solid var(--text);
+        border-radius: 0;
+        outline: none;
+      }
+      .pw-input:focus {
+        background: #fffdf7;
+        box-shadow: 4px 4px 0 var(--text);
+      }
+      .pw-error {
+        margin-top: 8px;
+        font-family: var(--mori-mono);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: var(--danger);
+      }
+      .pw-error[hidden] {
+        display: none;
+      }
+      .pw-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .pw-btn {
+        flex: 1;
+        padding: 12px;
+        border: 1px solid var(--text);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--text);
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .pw-btn:active {
+        transform: translate(2px, 2px);
+      }
+      .pw-btn-danger {
+        background: var(--danger);
+        border-color: var(--danger);
+        color: #fff;
+      }
     </style>
   </head>
   <body>
@@ -693,15 +1095,9 @@
         </div>
         <button class="btn" type="button" id="mAdd" title="Tambah menu" aria-label="Tambah menu">+</button>
       </div>
-      <div class="menu-list" id="menuList"></div>
-      <div class="empty" id="menuEmpty" hidden>Belum ada menu SO.</div>
-    </section>
-
-    <section class="sec" id="menuFotoSec">
-      <div class="row">
-        <div class="section-label flush">Foto Menu SO</div>
-      </div>
-      <div class="table-wrap" id="menuFotoWrap" hidden>
+      <!-- Judul "Foto Menu SO" dihapus: tabelnya langsung menempel di bawah
+           baris input, tanpa section/jeda baru. -->
+      <div class="table-wrap menu-foto-wrap" id="menuFotoWrap" hidden>
         <table class="barang">
           <thead>
             <tr>
@@ -780,8 +1176,52 @@
         </table>
       </div>
       <div class="empty" id="barangEmpty" hidden>Belum ada barang di menu ini.</div>
+      <!-- Ringkasan selisih semua barang: diluar tabel (tidak ikut geser
+           horizontal) supaya easy dibaca di layar HP. -->
+      <div class="ringkas" id="ringkasBarang" hidden>
+        <div class="ringkas-item">
+          <span class="ringkas-label">Selisih</span>
+          <span class="ringkas-nilai" id="rkSelisih">0</span>
+        </div>
+        <div class="ringkas-item">
+          <span class="ringkas-label">Rupiah</span>
+          <span class="ringkas-nilai" id="rkNominal">Rp 0</span>
+        </div>
+        <div class="ringkas-item">
+          <span class="ringkas-label">Beda</span>
+          <span class="ringkas-nilai" id="rkBeda">0</span>
+        </div>
+        <div class="ringkas-item">
+          <span class="ringkas-label">Plus</span>
+          <span class="ringkas-nilai plus" id="rkPlus">0</span>
+        </div>
+        <div class="ringkas-item">
+          <span class="ringkas-label">Minus</span>
+          <span class="ringkas-nilai minus" id="rkMinus">0</span>
+        </div>
+      </div>
       <input accept="image/*" id="fotoInput" type="file" hidden />
     </section>
+
+    <div class="pw-bg" id="pwBg">
+      <div class="pw-card" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+        <div class="pw-title" id="pwTitle">Hapus Menu</div>
+        <div class="pw-msg" id="pwMsg"></div>
+        <input
+          class="pw-input"
+          id="pwInput"
+          type="password"
+          inputmode="numeric"
+          autocomplete="off"
+          placeholder="Masukkan password"
+        />
+        <div class="pw-error" id="pwError" hidden>Password salah.</div>
+        <div class="pw-actions">
+          <button class="pw-btn" id="pwCancel" type="button">Batal</button>
+          <button class="pw-btn pw-btn-danger" id="pwOk" type="button">Hapus</button>
+        </div>
+      </div>
+    </div>
 
     <script type="module">
       import { supabase, SUPABASE_URL, SUPABASE_KEY } from '../../js/supabase.js';
@@ -790,8 +1230,6 @@
 
       const mName = document.getElementById('mName');
       const mAdd = document.getElementById('mAdd');
-      const menuList = document.getElementById('menuList');
-      const menuEmpty = document.getElementById('menuEmpty');
       const barangSec = document.getElementById('barangSec');
       const bName = document.getElementById('bName');
       const bSatuan = document.getElementById('bSatuan');
@@ -809,6 +1247,12 @@
       const barangEmpty = document.getElementById('barangEmpty');
       const barangWrap = document.getElementById('barangWrap');
       const barangFoot = document.getElementById('barangFoot');
+      const ringkasBarang = document.getElementById('ringkasBarang');
+      const rkSelisih = document.getElementById('rkSelisih');
+      const rkNominal = document.getElementById('rkNominal');
+      const rkBeda = document.getElementById('rkBeda');
+      const rkPlus = document.getElementById('rkPlus');
+      const rkMinus = document.getElementById('rkMinus');
       const bAdd = document.getElementById('bAdd');
       const cariBarang = document.getElementById('cariBarang');
       const fotoInput = document.getElementById('fotoInput');
@@ -818,7 +1262,6 @@
       const lightboxText = document.getElementById('lightboxText');
 
       const BUCKET = 'stock-foto';
-      let fotoTarget = null;
       let fotoData = [];
       let fotoMenuTarget = null;
       let menuFotoData = [];
@@ -880,58 +1323,129 @@
         setMode();
       };
 
-      const renderMenu = (menus) => {
-        menuList.innerHTML = '';
-        menus.forEach((menu) => {
-          const item = document.createElement('div');
-          item.className = 'menu-item' + (menu.id === menuAktif ? ' on' : '');
+      // Aksi menu SO dipakai dua tempat: daftar menu di atas dan tabel
+      // "Foto Menu SO". Dipisah jadi fungsi supaya perilakunya sama.
+      const editMenu = (menu) => {
+        editMenuId = menu.id;
+        mName.value = up(menu.name);
+        mName.focus();
+        setMode();
+      };
 
-          const nama = document.createElement('div');
-          nama.className = 'nama';
-          nama.textContent = up(menu.name);
-          item.appendChild(nama);
+      // Hapus menu dikunci password, sama seperti admin KOPI. Password ada di
+      // source (frontend statis) jadi hanya menahan salah klik; proteksi
+      // sungguhan harus lewat Supabase RLS/auth.
+      const DEL_PASSWORD = '0225106927';
 
-          const edit = document.createElement('button');
-          edit.type = 'button';
-          edit.className = 'ico';
-        edit.textContent = '✎';
-          edit.title = 'Edit';
-          edit.setAttribute('aria-label', 'Edit ' + menu.name);
-          edit.addEventListener('click', (e) => {
-            e.stopPropagation();
-            editMenuId = menu.id;
-            mName.value = up(menu.name);
-            mName.focus();
-            setMode();
-          });
+      const pwBg = document.getElementById('pwBg');
+      const pwMsg = document.getElementById('pwMsg');
+      const pwInput = document.getElementById('pwInput');
+      const pwError = document.getElementById('pwError');
+      const pwOk = document.getElementById('pwOk');
+      const pwCancel = document.getElementById('pwCancel');
+      let pwResolve = null;
+      let pwScrollY = 0;
 
-          const del = document.createElement('button');
-          del.type = 'button';
-          del.className = 'ico';
-        del.textContent = '✕';
-          del.title = 'Hapus';
-          del.setAttribute('aria-label', 'Hapus ' + menu.name);
-          del.addEventListener('click', async (e) => {
-            e.stopPropagation();
-            if (!confirm('Hapus menu ' + menu.name + '?\nSemua barang di menu ini ikut terhapus.')) return;
-            const { error } = await supabase.from('so_menus').delete().eq('id', menu.id);
-            if (error) {
-              console.error('Hapus menu gagal:', error.message);
-              return;
-            }
-            if (menuAktif === menu.id) {
-              menuAktif = null;
-              localStorage.removeItem(MENU_KEY);
-              stopEdit(true);
-            }
-            loadMenus();
-          });
+      // Bekukan scroll halaman: keyboard HP suka membuat halaman melompat.
+      function lockScrollPw() {
+        pwScrollY = window.scrollY || window.pageYOffset || 0;
+        document.documentElement.classList.add('pw-open');
+        document.body.style.position = 'fixed';
+        document.body.style.top = -pwScrollY + 'px';
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+      }
+      function unlockScrollPw() {
+        document.documentElement.classList.remove('pw-open');
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        window.scrollTo(0, pwScrollY);
+      }
 
-          item.append(edit, del);
-          item.addEventListener('click', () => pilihMenu(menu.id));
-          menuList.appendChild(item);
+      // Ikuti tinggi viewport yang terlihat supaya kartu tetap di tengah
+      // walau keyboard HP sudah naik.
+      function syncPwViewport() {
+        const vv = window.visualViewport;
+        if (!vv || !pwBg.classList.contains('open')) return;
+        pwBg.style.height = vv.height + 'px';
+        pwBg.style.top = vv.offsetTop + 'px';
+        pwBg.style.bottom = 'auto';
+      }
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', syncPwViewport);
+        window.visualViewport.addEventListener('scroll', syncPwViewport);
+      }
+
+      function askDelPassword(msg) {
+        if (pwResolve) closePw(false);
+        pwMsg.textContent = msg || '';
+        pwInput.value = '';
+        pwError.hidden = true;
+        lockScrollPw();
+        pwBg.classList.add('open');
+        syncPwViewport();
+        try {
+          pwInput.focus({ preventScroll: true });
+        } catch (e) {
+          pwInput.focus();
+        }
+        requestAnimationFrame(syncPwViewport);
+        return new Promise((res) => {
+          pwResolve = res;
         });
-        menuEmpty.hidden = menus.length > 0;
+      }
+      function closePw(ok) {
+        pwBg.classList.remove('open');
+        pwBg.style.height = '';
+        pwBg.style.top = '';
+        pwBg.style.bottom = '';
+        unlockScrollPw();
+        const fn = pwResolve;
+        pwResolve = null;
+        if (fn) fn(ok);
+      }
+      pwOk.addEventListener('click', () => {
+        if (pwInput.value.trim() !== DEL_PASSWORD) {
+          pwError.hidden = false;
+          pwInput.value = '';
+          try {
+            pwInput.focus({ preventScroll: true });
+          } catch (e) {}
+          return;
+        }
+        closePw(true);
+      });
+      pwCancel.addEventListener('click', () => closePw(false));
+      pwBg.addEventListener('click', (e) => {
+        if (e.target === pwBg) closePw(false);
+      });
+      pwInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') pwOk.click();
+        if (e.key === 'Escape') closePw(false);
+      });
+
+      const hapusMenu = async (menu) => {
+        const ok = await askDelPassword(
+          'Hapus menu ' + up(menu.name) + '?\nSemua barang di menu ini ikut terhapus.'
+        );
+        if (!ok) return;
+        const { error } = await supabase.from('so_menus').delete().eq('id', menu.id);
+        if (error) {
+          console.error('Hapus menu gagal:', error.message);
+          menuFotoHint.hidden = false;
+          menuFotoHint.textContent = 'Hapus menu gagal: ' + error.message;
+          return;
+        }
+        if (menuAktif === menu.id) {
+          menuAktif = null;
+          localStorage.removeItem(MENU_KEY);
+          stopEdit(true);
+        }
+        loadMenus();
       };
 
       const buatKode = (namaMenu, kodeTerpakai) => {
@@ -1065,8 +1579,8 @@
 
       const keteranganOf = (selisih) => {
         if (selisih === 0) return { text: 'Sesuai', cls: '' };
-        if (selisih < 0) return { text: 'Hilang / Rusak / Expired', cls: 'minus' };
-        return { text: 'Beda Input / Selisih Terima', cls: 'plus' };
+        if (selisih < 0) return { text: 'Hilang', cls: 'minus' };
+        return { text: 'Beda Input', cls: 'plus' };
       };
 
       const hitungSelisih = (tr) => {
@@ -1197,6 +1711,8 @@
           const modeEdit = editBarangId === row.id;
           tr.dataset.id = row.id;
           tr.dataset.onhand = String(num(row.stok_sistem));
+          // HPP disimpan di dataset supaya total nominal selisih bisa dihitung
+          tr.dataset.hpp = String(num(row.hpp));
 
           tr.append(cell(String(i + 1), 'c-no'));
 
@@ -1279,17 +1795,21 @@
       };
 
       const renderTotal = (tampil) => {
-        const total = { onhand: 0, fisik: 0, selisih: 0, jumlah: 0, beda: 0 };
-        const plus = { onhand: 0, fisik: 0, selisih: 0, jumlah: 0 };
-        const minus = { onhand: 0, fisik: 0, selisih: 0, jumlah: 0 };
+        const total = { onhand: 0, fisik: 0, selisih: 0, jumlah: 0, beda: 0, nominal: 0 };
+        const plus = { onhand: 0, fisik: 0, selisih: 0, jumlah: 0, nominal: 0 };
+        const minus = { onhand: 0, fisik: 0, selisih: 0, jumlah: 0, nominal: 0 };
 
         tampil.forEach((row) => {
           const o = num(row.stok_sistem);
           const f = num(row.stok_fisik);
           const d = f - o;
+          // Nominal = selisih x HPP (HPP diambil dari baris, supaya ikut
+          // nilai yang sedang diedit, bukan data lama).
+          const nilai = d * num(barangBody.querySelector('tr[data-id="' + row.id + '"]')?.dataset.hpp);
           total.onhand += o;
           total.fisik += f;
           total.selisih += d;
+          total.nominal += nilai;
           total.jumlah += 1;
           if (d !== 0) total.beda += 1;
           const tujuan = d > 0 ? plus : d < 0 ? minus : null;
@@ -1297,6 +1817,7 @@
             tujuan.onhand += o;
             tujuan.fisik += f;
             tujuan.selisih += d;
+            tujuan.nominal += nilai;
             tujuan.jumlah += 1;
           }
         });
@@ -1304,9 +1825,11 @@
         const warna = (v) => (v === 0 ? '' : v < 0 ? 'minus' : 'plus');
         const angka = (v) => (v > 0 ? '+' + v : String(v));
 
-        const baris = (label, a, cls, ket) => {
+        // Tfoot SATU baris: total barang, lalu nominal rupiah selisih
+        // menggantikan kolom Keterangan (rincian plus/minus pindah ke
+        // kotak ringkasan di bawah tabel, biar tidak terpotong di HP).
+        const baris = (label, a) => {
           const tr = document.createElement('tr');
-          if (cls) tr.className = cls;
           const tdLabel = cell(label);
           tdLabel.colSpan = 4;
           tr.append(
@@ -1315,7 +1838,7 @@
             cell(String(a.fisik), 'c-num'),
             cell('-', 'c-hpp'),
             cell(angka(a.selisih), 'c-num selisih ' + warna(a.selisih)),
-            cell(ket, 'c-ket ket ' + (cls === 'f-plus' ? 'plus' : cls === 'f-minus' ? 'minus' : '')),
+            cell(rupiah(a.nominal), 'c-total ' + warna(a.nominal)),
             cell(''),
             cell('')
           );
@@ -1323,27 +1846,27 @@
         };
 
         barangFoot.innerHTML = '';
-        barangFoot.appendChild(
-          baris('TOTAL ' + total.jumlah + ' BARANG', total, '', total.beda ? total.beda + ' BARANG BEDA' : 'SEMUA SESUAI')
-        );
-        if (plus.jumlah) {
-          barangFoot.appendChild(baris('TOTAL PLUS', plus, 'f-plus', plus.jumlah + ' BARANG PLUS'));
-        }
-        if (minus.jumlah) {
-          barangFoot.appendChild(baris('TOTAL MINUS', minus, 'f-minus', minus.jumlah + ' BARANG MINUS'));
-        }
+        barangFoot.appendChild(baris('TOTAL ' + total.jumlah + ' BARANG', total));
+
+        // Ringkasan untuk HP: kotak kecil di bawah tabel (tidak ikut geser
+        // horizontal), jadi jumlah + rupiah selisih semua barang langsung
+        // kelihatan tanpa harus menggeser tabel.
+        rkSelisih.textContent = angka(total.selisih);
+        rkSelisih.className = 'ringkas-nilai ' + warna(total.selisih);
+        rkNominal.textContent = rupiah(total.nominal);
+        rkNominal.className = 'ringkas-nilai ' + warna(total.nominal);
+        rkBeda.textContent = String(total.beda) + '/' + String(total.jumlah);
+        rkPlus.textContent = String(plus.jumlah) + ' (' + angka(plus.selisih) + ')';
+        rkMinus.textContent = String(minus.jumlah) + ' (' + angka(minus.selisih) + ')';
+        ringkasBarang.hidden = total.jumlah === 0;
       };
 
       cariBarang.addEventListener('input', () => {
         if (fotoData.length) renderBarang(fotoData);
       });
 
-      const pilihFoto = (id) => {
-        fotoTarget = id;
-        fotoInput.value = '';
-        fotoInput.click();
-      };
-
+      // Foto BARANG tidak bisa diupload dari halaman ini (tombaknya dihapus),
+      // hanya foto MENU (tabel Foto Menu SO) yang bisa diupload/ganti.
       const pilihFotoMenu = (id) => {
         fotoMenuTarget = id;
         fotoInput.value = '';
@@ -1378,13 +1901,22 @@
         }
       };
 
+      // Foto menu di-upload ke path yang sama ('menu/<id>.jpg', upsert), jadi
+      // URL publiknya tidak pernah berubah. Tanpa param cache-bust, browser
+      // (dan CDN Supabase) terus menyajikan foto LAMA setelah foto diganti.
+      let fotoVersi = Date.now();
+      const fotoBaru = (url) => {
+        if (!url) return url;
+        return url + (url.includes('?') ? '&' : '?') + 'v=' + fotoVersi;
+      };
+
       const lihatFoto = (row) => {
         if (!row.foto_url) {
           return;
         }
         lightboxQr.hidden = true;
         lightboxImg.hidden = false;
-        lightboxImg.src = row.foto_url;
+        lightboxImg.src = fotoBaru(row.foto_url);
         lightboxImg.alt = row.name || row.kode || 'foto';
         lightboxText.textContent = row.kode || row.name || '';
         lightbox.hidden = false;
@@ -1414,7 +1946,7 @@
         if (row.foto_url) {
           const img = document.createElement('img');
           img.className = 'thumb';
-          img.src = row.foto_url;
+          img.src = fotoBaru(row.foto_url);
           img.alt = row.name || row.kode || 'foto';
           img.loading = 'lazy';
           img.decoding = 'async';
@@ -1428,109 +1960,59 @@
           box.appendChild(kosong);
         }
 
-        const up = document.createElement('button');
-        up.type = 'button';
-        up.className = 'ico';
-        up.textContent = '↑';
-        up.title = row.foto_url ? 'Ganti foto ' + (row.kode || row.name || '') : 'Upload foto ' + (row.kode || row.name || '');
-        up.setAttribute('aria-label', up.title);
-        up.addEventListener('click', (e) => {
-          e.stopPropagation();
-          pilihFoto(row.id);
-        });
-        box.appendChild(up);
-
+        // Tombol upload (↑) dihapus dari sel foto barang; thumbnail + klik untuk
+        // lihat tetap ada.
         td.appendChild(box);
         return td;
       };
 
+      // Upload foto MENU saja. Jalur foto barang dihapus (tombaknya tidak ada).
       fotoInput.addEventListener('change', async () => {
         const file = fotoInput.files && fotoInput.files[0];
-        const id = fotoTarget;
         const idMenu = fotoMenuTarget;
-        fotoTarget = null;
         fotoMenuTarget = null;
-        if (!file) return;
+        if (!file || !idMenu) return;
 
-        if (idMenu) {
-          const menu = menuFotoData.find((m) => m.id === idMenu);
-          if (!menu) return;
-          const kecil = await kompresFoto(file);
-          const path = 'menu/' + menu.id + '.jpg';
-          const { error: errUp } = await supabase.storage.from(BUCKET).upload(path, kecil, {
-            upsert: true,
-            contentType: 'image/jpeg',
-          });
-          if (errUp) {
-            console.error('Upload foto menu gagal:', errUp.message);
-            menuFotoHint.hidden = false;
-            menuFotoHint.textContent = 'Upload foto menu gagal: ' + errUp.message;
-            return;
-          }
-          const { data: publik } = supabase.storage.from(BUCKET).getPublicUrl(path);
-          const url = publik.publicUrl;
-          menu.foto_url = url;
-
-          if (menu.id === AKUN_TILE) {
-            menuFotoHint.hidden = true;
-          } else {
-            const { error: errSimpan } = await supabase
-              .from('so_menus')
-              .update({ foto_url: url })
-              .eq('id', idMenu);
-            if (errSimpan) {
-              console.error('Simpan foto menu gagal:', errSimpan.message);
-              menuFotoHint.hidden = false;
-              menuFotoHint.textContent =
-                'Foto tersimpan di storage, tapi belum tercatat di DB: ' + errSimpan.message +
-                ' — jalankan: alter table so_menus add column if not exists foto_url text;';
-            } else {
-              menuFotoHint.hidden = true;
-            }
-          }
-          renderFotoMenu(menuFotoData);
-          return;
-        }
-
-        if (!id) return;
-        const row = fotoData.find((r) => r.id === id);
-        if (!row) return;
-
+        const menu = menuFotoData.find((m) => m.id === idMenu);
+        if (!menu) return;
         const kecil = await kompresFoto(file);
-        const path = (row.menu_id || menuAktif || 'lain') + '/' + (row.kode || row.id) + '-' + Date.now() + '.jpg';
-
-        const { error: errUpload } = await supabase.storage.from(BUCKET).upload(path, kecil, {
+        const path = 'menu/' + menu.id + '.jpg';
+        const { error: errUp } = await supabase.storage.from(BUCKET).upload(path, kecil, {
           upsert: true,
           contentType: 'image/jpeg',
         });
-        if (errUpload) {
-          console.error('Upload foto gagal:', errUpload.message);
-          barangEmpty.hidden = false;
-          barangEmpty.textContent = 'Upload foto gagal: ' + errUpload.message;
+        if (errUp) {
+          console.error('Upload foto menu gagal:', errUp.message);
+          menuFotoHint.hidden = false;
+          menuFotoHint.textContent = 'Upload foto menu gagal: ' + errUp.message;
           return;
         }
-
         const { data: publik } = supabase.storage.from(BUCKET).getPublicUrl(path);
-        const { error: errSimpan } = await supabase
-          .from('stock_products')
-          .update({ foto_url: publik.publicUrl })
-          .eq('id', id);
-        if (errSimpan) {
-          console.error('Simpan foto gagal:', errSimpan.message);
-          barangEmpty.hidden = false;
-          barangEmpty.textContent = 'Foto terupload, tapi gagal disimpan: ' + errSimpan.message;
-          return;
-        }
-        await loadBarang();
-      });
+        const url = publik.publicUrl;
+        menu.foto_url = url;
+        // URL-nya sama tiap upload (path tetap), naikkan versi cache
+        // supaya foto baru langsung tampil, bukan foto lama dari cache.
+        fotoVersi = Date.now();
 
-      const pilihMenu = async (id) => {
-        stopEdit(true);
-        editBarangId = null;
-        menuAktif = id;
-        localStorage.setItem(MENU_KEY, String(id));
-        await loadMenus();
-      };
+        if (menu.id === AKUN_TILE) {
+          menuFotoHint.hidden = true;
+        } else {
+          const { error: errSimpan } = await supabase
+            .from('so_menus')
+            .update({ foto_url: url })
+            .eq('id', idMenu);
+          if (errSimpan) {
+            console.error('Simpan foto menu gagal:', errSimpan.message);
+            menuFotoHint.hidden = false;
+            menuFotoHint.textContent =
+              'Foto tersimpan di storage, tapi belum tercatat di DB: ' + errSimpan.message +
+              ' — jalankan: alter table so_menus add column if not exists foto_url text;';
+          } else {
+            menuFotoHint.hidden = true;
+          }
+        }
+        renderFotoMenu(menuFotoData);
+      });
 
       const kompresFoto = async (file, maxSisi = 1200, kualitas = 0.82) => {
         if (!file || !/^image\//.test(file.type || '')) return file;
@@ -1562,6 +2044,14 @@
       };
 
       const AKUN_TILE = 'admin';
+
+      const pilihMenu = async (id) => {
+        stopEdit(true);
+        editBarangId = null;
+        menuAktif = id;
+        localStorage.setItem(MENU_KEY, String(id));
+        await loadMenus();
+      };
 
       const fotoMenuUrl = (id) =>
         supabase.storage.from(BUCKET).getPublicUrl('menu/' + id + '.jpg').data.publicUrl;
@@ -1624,6 +2114,17 @@
         menus.forEach((menu, i) => {
           const tr = document.createElement('tr');
           tr.dataset.id = menu.id;
+          // Daftar menu di atas sudah dihapus: baris tabel ini yang jadi
+          // pemilih menu (klik baris = aktifkan menu, tabel barang muncul).
+          if (menu.id === menuAktif) tr.className = 'on';
+          if (menu.id !== AKUN_TILE) {
+            tr.classList.add('pilih');
+            tr.title = 'Klik untuk memakai menu ' + up(menu.name);
+            tr.addEventListener('click', (e) => {
+              if (e.target.closest('button, img')) return;
+              pilihMenu(menu.id);
+            });
+          }
 
           tr.append(cell(String(i + 1), 'c-no'));
           tr.append(cellPotong(up(menu.name), 'c-nama'));
@@ -1635,7 +2136,7 @@
           if (menu.foto_url) {
             const img = document.createElement('img');
             img.className = 'thumb';
-            img.src = menu.foto_url;
+            img.src = fotoBaru(menu.foto_url);
             img.alt = menu.name || 'foto menu';
             img.loading = 'lazy';
             img.decoding = 'async';
@@ -1655,6 +2156,8 @@
           const wrap = document.createElement('div');
           wrap.className = 'acts';
 
+          // Tombol upload (↑) foto menu dikembalikan: foto menu boleh diupload/ganti
+          // dari tabel Foto Menu SO. (Foto produk tidak punya tombol upload.)
           const up2 = document.createElement('button');
           up2.type = 'button';
           up2.className = 'ico';
@@ -1664,15 +2167,27 @@
           up2.addEventListener('click', () => pilihFotoMenu(menu.id));
           wrap.appendChild(up2);
 
-          if (menu.foto_url) {
-            const lihat = document.createElement('button');
-            lihat.type = 'button';
-            lihat.className = 'ico';
-            lihat.textContent = '⊙';
-            lihat.title = 'Lihat foto ' + up(menu.name);
-            lihat.setAttribute('aria-label', lihat.title);
-            lihat.addEventListener('click', () => lihatFoto(menu));
-            wrap.appendChild(lihat);
+          // Tombol "lihat/preview" (⊙) tetap dihapus: preview lewat thumbnail.
+
+          // Baris ADMIN bukan record so_menus, jadi tidak bisa diedit/dihapus.
+          if (menu.id !== AKUN_TILE) {
+            const edit = document.createElement('button');
+            edit.type = 'button';
+            edit.className = 'ico';
+            edit.textContent = '✎';
+            edit.title = 'Edit ' + up(menu.name);
+            edit.setAttribute('aria-label', edit.title);
+            edit.addEventListener('click', () => editMenu(menu));
+            wrap.appendChild(edit);
+
+            const del = document.createElement('button');
+            del.type = 'button';
+            del.className = 'ico ico-danger';
+            del.textContent = '✕';
+            del.title = 'Hapus ' + up(menu.name);
+            del.setAttribute('aria-label', del.title);
+            del.addEventListener('click', () => hapusMenu(menu));
+            wrap.appendChild(del);
           }
 
           tdAct.appendChild(wrap);
@@ -1694,7 +2209,6 @@
         }
         const menus = data || [];
         if (menuAktif && !menus.some((m) => m.id === menuAktif)) menuAktif = null;
-        renderMenu(menus);
         loadFotoMenu();
 
         menuTerpilih = menus.find((m) => m.id === menuAktif) || null;

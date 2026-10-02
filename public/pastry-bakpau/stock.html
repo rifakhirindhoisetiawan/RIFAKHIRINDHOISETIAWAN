@@ -316,6 +316,14 @@
       tick();
       setInterval(tick, 1000);
 
+      // Foto menu di-upload dengan nama file yang sama, jadi URL publiknya tidak
+      // berubah. Tanpa param cache-bust, tile masih menampilkan foto lama.
+      let fotoVersi = Date.now();
+      const fotoBaru = (url) => {
+        if (!url) return url;
+        return url + (url.includes('?') ? '&' : '?') + 'v=' + fotoVersi;
+      };
+
       const addTile = (label, href, thumb = THUMB) => {
         const a = document.createElement('a');
         a.className = 'menu-item';
@@ -324,7 +332,7 @@
           <div class="icon-box">
             <img
               alt="${label}"
-              src="${thumb}"
+              src="${fotoBaru(thumb)}"
               loading="lazy"
               decoding="async"
               onload="this.classList.add('loaded');this.parentElement.classList.add('siap')"

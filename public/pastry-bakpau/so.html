@@ -106,7 +106,7 @@
       }
 
       .laporan {
-        min-width: 880px;
+        min-width: 810px;
       }
 
       .riwayat {
@@ -157,13 +157,7 @@
         white-space: nowrap;
       }
 
-      tfoot tr.f-plus td {
-        background: #f0fdf4;
-      }
-
-      tfoot tr.f-minus td {
-        background: #fef2f2;
-      }
+      /* tr.f-plus / tr.f-minus dihapus: tfoot sekarang satu baris total. */
 
       .c-no {
         width: 34px;
@@ -177,10 +171,6 @@
         font-size: 11px;
         font-variant-numeric: tabular-nums;
         color: var(--muted);
-      }
-
-      .c-foto {
-        width: 70px;
       }
 
       .cari {
@@ -226,31 +216,6 @@
       .c-total {
         width: 100px;
         text-align: right;
-      }
-
-      .foto {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 54px;
-        aspect-ratio: 4 / 3;
-        overflow: hidden;
-        border: 1px dashed #d1d5db;
-        border-radius: 8px;
-        background: #f9fafb;
-        color: var(--muted);
-        font-size: 7px;
-        font-weight: 800;
-        text-align: center;
-        padding: 0 3px;
-        line-height: 1.15;
-      }
-
-      .foto img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
       }
 
       .kode {
@@ -400,64 +365,32 @@
         margin: 0;
       }
 
-      .c-aksi {
-        width: 56px;
-        position: sticky;
-        right: 0;
-        background: #ffffff;
-        box-shadow: -7px 0 9px -7px rgba(17, 24, 39, 0.22);
-      }
-
-      thead th.c-aksi {
-        z-index: 2;
-        background: #f9f9f9;
-      }
-
-      tfoot td.c-aksi,
-      tbody tr.simpan td.c-aksi {
-        background: #ecfdf5;
-      }
-
-      .simpan-btn {
-        width: 32px;
-        height: 32px;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font: inherit;
-        font-size: 15px;
-        font-weight: 800;
-        line-height: 1;
-        color: #ffffff;
-        background: #6366f1;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        flex-shrink: 0;
-        outline: none;
-        transition: all 0.15s ease;
-      }
-
-      .simpan-btn:active {
-        opacity: 0.85;
-        transform: scale(0.93);
-      }
-
-      .simpan-btn:disabled {
-        background: #d9dde3;
-        box-shadow: none;
+      /* Kolom baca-only (mis. Onhand): data master, hanya berubah di ADMIN.
+         Tampil sebagai nilai, bukan input yang bisa diklik. */
+      .cell-input.baca {
+        background: #f1eee4;
+        border: 1px dashed #d8d2c2;
+        border-radius: 0;
+        color: #6e6a64;
         cursor: not-allowed;
-        transform: none;
+        font-weight: 700;
+      }
+      .cell-input.baca:hover {
+        background: #f1eee4;
+        border-color: #d8d2c2;
+      }
+      .cell-input.baca:focus {
+        outline: none;
+        background: #f1eee4;
+        border-color: #d8d2c2;
       }
 
-      tbody tr.simpan td {
-        background: #ecfdf5;
-      }
+      /* .c-aksi dihapus: kolom aksinya sudah tidak ada (tidak ada tombol
+         simpan), dan kolom kosong yang sticky justru menutupi judul
+         kolom di sebelahnya saat tabel digeser. */
 
-      tbody tr.sinkron td {
-        background: #eff6ff;
-      }
+      /* .simpan-btn / tr.simpan / tr.sinkron dihapus: tombol simpan dan
+         sinkronisasi sudah tidak ada (halaman ini read-only). */
 
       .empty {
         padding: 26px 12px;
@@ -467,6 +400,195 @@
         text-align: center;
       }
 
+      /* ============================================================
+         TEMA MORI — override di atas, logika JS tidak disentuh.
+         Palet dari public/mori/css/variables.css:
+         bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64
+         Gaya: sharp (radius 0), border hitam solid, shadow offset.
+         Variabel asli (--text, --line, --primary, ...) di-override di sini
+         supaya aturan yang sudah ada ikut berubah warna tanpa disentuh.
+         ============================================================ */
+      :root {
+        --text: #1a1917;
+        --muted: #6e6a64;
+        --line: rgba(26, 25, 23, 0.14);
+        --line-2: rgba(26, 25, 23, 0.14);
+        --surface: #f7f3e9;
+        --primary: #1a1917;
+        --primary-dark: #1a1917;
+        --soft: #f7f3e9;
+        --minus: #b91c1c;
+        --plus: #3f6212;
+        --mori-bg: #fffbf2;
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+
+      html,
+      body {
+        background: var(--mori-bg);
+      }
+
+      body {
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .section-label {
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: 1.4px;
+      }
+
+      /* ===== SEARCH ===== */
+      .cari {
+        background: var(--surface);
+        border: 1px solid var(--text);
+        border-radius: 0;
+        transition: box-shadow 0.2s ease;
+      }
+      .cari:focus {
+        background: #fffdf7;
+        border-color: var(--text);
+        box-shadow: 4px 4px 0 var(--text);
+      }
+
+      /* ===== TABEL ===== */
+      .table-wrap {
+        border: 1px solid var(--text);
+        border-radius: 0;
+        background: var(--mori-bg);
+      }
+      thead th {
+        background: var(--surface);
+        color: var(--text);
+        font-family: var(--mori-mono);
+        font-weight: 700;
+        border-bottom: 1px solid var(--text);
+      }
+      tbody td {
+        border-bottom: 1px solid var(--line);
+      }
+      tbody tr:hover td {
+        background: #faf6ea;
+      }
+      tfoot td {
+        background: var(--surface);
+        border-top: 1px solid var(--text);
+        font-family: var(--mori-mono);
+        font-weight: 700;
+      }
+      /* tr.f-plus / tr.f-minus dihapus: tfoot sekarang satu baris total. */
+      tbody tr.sinkron td {
+        background: #f0f3f8;
+      }
+
+      .c-no,
+      .c-tgl {
+        color: var(--muted);
+        font-family: var(--mori-mono);
+      }
+
+      /* ===== RIWAYAT: ringkas, disembunyikan sampai ditekan ===== */
+      .riwayat-head {
+        margin-bottom: 0;
+      }
+      .riwayat-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        padding: 10px 12px;
+        background: var(--surface);
+        border: 1px solid var(--text);
+        border-radius: 0;
+        color: var(--text);
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+      }
+      .riwayat-toggle:active {
+        transform: translate(2px, 2px);
+        box-shadow: none;
+      }
+      .riwayat-toggle:hover {
+        box-shadow: 4px 4px 0 var(--text);
+      }
+      .riwayat-caret {
+        font-size: 14px;
+        line-height: 1;
+      }
+      .riwayat-count {
+        color: var(--muted);
+        letter-spacing: 0.5px;
+      }
+      .riwayat {
+        min-width: 320px;
+      }
+      /* Riwayat harus muat: waktu ringkas + nominal satu baris,
+         tidak boleh turun ke baris kedua. */
+      .riwayat td {
+        white-space: nowrap;
+      }
+      .riwayat .c-total {
+        width: auto;
+        min-width: 92px;
+      }
+      .riwayat .kode {
+        max-width: 130px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .empty {
+        padding: 18px 12px;
+      }
+
+      /* ===== KODE (QR) ===== */
+      .kode,
+      .kode-btn {
+        color: var(--text);
+        font-family: var(--mori-mono);
+      }
+      .kode-btn {
+        border-radius: 0;
+        border: 1px dashed var(--line);
+      }
+      .kode-btn:active {
+        background: var(--surface);
+        border-color: var(--text);
+      }
+
+      /* ===== LIGHTBOX QR ===== */
+      .lightbox {
+        background: var(--mori-bg);
+        border: 1px solid var(--text);
+        border-radius: 0;
+        box-shadow: 6px 6px 0 rgba(26, 25, 23, 0.2);
+      }
+      .lightbox-text {
+        font-family: var(--mori-mono);
+        letter-spacing: 0.8px;
+      }
+
+      /* ===== KOLOM BACA-ONLY (Onhand / Stok Fisik) ===== */
+      .cell-input.baca {
+        background: var(--surface);
+        border: 1px dashed var(--text);
+        border-radius: 0;
+        color: var(--muted);
+      }
+
+      .empty {
+        font-family: var(--mori-mono);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+      }
     </style>
   </head>
   <body>
@@ -477,10 +599,9 @@
       </div>
     </div>
     <section class="sec">
-      <div class="row">
-        <div class="section-label flush" id="judulSo">Stok Opname</div>
-      </div>
-      <div class="row">
+      <!-- Tulisan nama menu dihapus: kotak pencarian langsung di paling atas.
+           Nama menu代替 judul, pindah ke placeholder input. -->
+      <div class="row menu-cari-row">
         <input
           class="cari"
           type="search"
@@ -497,7 +618,6 @@
             <tr>
               <th class="c-no">No</th>
               <th class="c-tgl">Tanggal SO</th>
-              <th class="c-foto">Foto Produk</th>
               <th class="c-kode">Kode Barang</th>
               <th>Nama Barang</th>
               <th class="c-satuan">Satuan</th>
@@ -507,7 +627,6 @@
               <th class="c-num">HPP / Satuan</th>
               <th class="c-total">Total Nominal Selisih</th>
               <th>Keterangan</th>
-              <th class="c-aksi"></th>
             </tr>
           </thead>
           <tbody id="barangBody"></tbody>
@@ -518,8 +637,20 @@
     </section>
 
     <section class="sec">
-      <div class="row">
-        <div class="section-label flush">Riwayat (50 terakhir)</div>
+      <!-- Riwayat dibuat simple: 4 kolom (Waktu, Kode, Selisih, Nominal),
+           disembunyikan sampai menekan tombol, maksimal 20 baris. -->
+      <div class="row riwayat-head">
+        <button
+          class="riwayat-toggle"
+          id="riwayatToggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="riwayatWrap"
+        >
+          <span class="riwayat-caret" id="riwayatCaret">+</span>
+          <span>Riwayat</span>
+          <span class="riwayat-count" id="riwayatCount"></span>
+        </button>
       </div>
       <div class="table-wrap" id="riwayatWrap" hidden>
         <table class="riwayat">
@@ -527,8 +658,6 @@
             <tr>
               <th>Waktu</th>
               <th>Kode</th>
-              <th class="c-num">Stok Sistem</th>
-              <th class="c-num">Fisik</th>
               <th class="c-num">Selisih</th>
               <th class="c-total">Nominal</th>
             </tr>
@@ -536,23 +665,31 @@
           <tbody id="riwayatBody"></tbody>
         </table>
       </div>
-      <div class="empty" id="riwayatEmpty">Belum ada riwayat.</div>
+      <div class="empty" id="riwayatEmpty" hidden>Belum ada riwayat.</div>
     </section>
 
     <script type="module">
-      import { supabase, SUPABASE_URL, SUPABASE_KEY } from '../../js/supabase.js';
+      import { supabase } from '../../js/supabase.js';
 
-      const ADMIN_KEY = 'stock_opname_admin';
-      const DEFAULT_ADMIN = 'Admin Stock Opname';
-
-      const judulSo = document.getElementById('judulSo');
-      const barangBody = document.getElementById('barangBody');
       const cariBarang = document.getElementById('cariBarang');
+      const barangBody = document.getElementById('barangBody');
       const barangFoot = document.getElementById('barangFoot');
       const barangEmpty = document.getElementById('barangEmpty');
       const riwayatWrap = document.getElementById('riwayatWrap');
       const riwayatBody = document.getElementById('riwayatBody');
       const riwayatEmpty = document.getElementById('riwayatEmpty');
+      const riwayatToggle = document.getElementById('riwayatToggle');
+      const riwayatCaret = document.getElementById('riwayatCaret');
+      const riwayatCount = document.getElementById('riwayatCount');
+      let riwayatTerbuka = false;
+
+      riwayatToggle.addEventListener('click', () => {
+        riwayatTerbuka = !riwayatTerbuka;
+        riwayatToggle.setAttribute('aria-expanded', String(riwayatTerbuka));
+        riwayatCaret.textContent = riwayatTerbuka ? '−' : '+';
+        riwayatWrap.hidden = !riwayatTerbuka || riwayatBody.children.length === 0;
+        riwayatEmpty.hidden = riwayatTerbuka || riwayatBody.children.length > 0;
+      });
 
       let menuId = Number(new URLSearchParams(location.search).get('m')) || 0;
 
@@ -566,7 +703,6 @@
         maximumFractionDigits: 2,
       });
       const rupiah = (value) => 'Rp ' + formatRupiah.format(num(value));
-      const getAdmin = () => (localStorage.getItem(ADMIN_KEY) || '').trim() || DEFAULT_ADMIN;
       const formatTanggal = (value) => {
         const d = new Date(value);
         const pad = (n) => String(n).padStart(2, '0');
@@ -626,66 +762,12 @@
         if (e.key === 'Escape' && !lightbox.hidden) tutupQr();
       });
 
-      const sinkronTimer = new Map();
-      const sinkronTertunda = new Map();
-
-      const tulisFisik = async (id, nilai, tr) => {
-        if (!id) return;
-        const { error } = await supabase
-          .from('stock_products')
-          .update({ stok_fisik: Math.round(num(nilai)) })
-          .eq('id', Number(id));
-        sinkronTertunda.delete(id);
-        if (error) {
-          console.error('Gagal sinkron stok fisik:', error.message);
-          return;
-        }
-        if (tr) {
-          tr.classList.add('sinkron');
-          setTimeout(() => tr.classList.remove('sinkron'), 900);
-        }
-      };
-
-      const flushFisik = () => {
-        if (!sinkronTertunda.size) return;
-        sinkronTertunda.forEach((nilai, id) => {
-          fetch(SUPABASE_URL + '/rest/v1/stock_products?id=eq.' + id, {
-            method: 'PATCH',
-            keepalive: true,
-            headers: {
-              apikey: SUPABASE_KEY,
-              Authorization: 'Bearer ' + SUPABASE_KEY,
-              'Content-Type': 'application/json',
-              Prefer: 'return=minimal',
-            },
-            body: JSON.stringify({ stok_fisik: Math.round(num(nilai)) }),
-          }).catch(() => {});
-        });
-        sinkronTertunda.clear();
-      };
-
-      window.addEventListener('pagehide', flushFisik);
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden') flushFisik();
-      });
-
-      const sinkronFisik = (id, nilai, tr, langsung) => {
-        if (!id) return;
-        clearTimeout(sinkronTimer.get(id));
-        sinkronTimer.delete(id);
-        sinkronTertunda.set(id, nilai);
-        if (langsung) {
-          tulisFisik(id, nilai, tr);
-          return;
-        }
-        sinkronTimer.set(
-          id,
-          setTimeout(() => {
-            sinkronTimer.delete(id);
-            tulisFisik(id, nilai, tr);
-          }, 350)
-        );
-      };
+      // ---------------------------------------------
+// Semua penulisan dari halaman SO dihapus.
+// Onhand & Stok Fisik read-only, jadi tidak ada sinkronisasi otomatis
+// maupun tombol simpan: data hanya berubah dari halaman ADMIN.
+// Fungsi tulisFisik/flushFisik/sinkronFisik/simpanBaris tidak lagi dipakai.
+// ---------------------------------------------
 
       const cellKode = (kode) => {
         const td = document.createElement('td');
@@ -703,8 +785,8 @@
 
       const keteranganOf = (selisih) => {
         if (selisih === 0) return { text: 'Sesuai', cls: '' };
-        if (selisih < 0) return { text: 'Hilang / Rusak / Expired', cls: 'minus' };
-        return { text: 'Beda Input / Selisih Terima', cls: 'plus' };
+        if (selisih < 0) return { text: 'Hilang', cls: 'minus' };
+        return { text: 'Beda Input', cls: 'plus' };
       };
 
       const hitungBaris = (tr) => {
@@ -758,11 +840,12 @@
         const warna = (v) => (v === 0 ? '' : v < 0 ? 'minus' : 'plus');
         const angka = (v) => (v > 0 ? '+' + v : String(v));
 
-        const baris = (label, a, cls, ket) => {
+        // Tfoot jadi SATU baris: total barang + rincian plus/minus digabung
+        // di kolom Keterangan (tidak lagi 2-3 baris terpisah).
+        const baris = (label, a, ket, ketCls) => {
           const tr = document.createElement('tr');
-          if (cls) tr.className = cls;
           const tdLabel = cell(label);
-          tdLabel.colSpan = 6;
+          tdLabel.colSpan = 5;
           tr.append(
             tdLabel,
             cell(String(a.sistem), 'c-num'),
@@ -770,22 +853,24 @@
             cell(angka(a.selisih), 'c-num selisih ' + warna(a.selisih)),
             cell('-', 'c-num'),
             cell(rupiah(a.nominal), 'nominal c-total ' + warna(a.nominal)),
-            cell(ket, 'keterangan ' + (cls === 'f-plus' ? 'plus' : cls === 'f-minus' ? 'minus' : '')),
-            cell('')
+            cell(ket, 'keterangan ' + (ketCls || ''))
           );
           return tr;
         };
 
+        const rincian = [];
+        if (plus.jumlah) rincian.push(plus.jumlah + ' PLUS');
+        if (minus.jumlah) rincian.push(minus.jumlah + ' MINUS (' + rupiah(Math.abs(minus.nominal)) + ')');
+
         barangFoot.innerHTML = '';
         barangFoot.appendChild(
-          baris('TOTAL ' + total.jumlah + ' BARANG', total, '', total.beda ? total.beda + ' BARANG BEDA' : 'SEMUA SESUAI')
+          baris(
+            'TOTAL ' + total.jumlah + ' BARANG',
+            total,
+            rincian.length ? rincian.join(' · ') : total.beda ? total.beda + ' BARANG BEDA' : 'SEMUA SESUAI',
+            minus.jumlah && !plus.jumlah ? 'minus' : plus.jumlah && !minus.jumlah ? 'plus' : ''
+          )
         );
-        if (plus.jumlah) {
-          barangFoot.appendChild(baris('TOTAL PLUS', plus, 'f-plus', plus.jumlah + ' BARANG PLUS'));
-        }
-        if (minus.jumlah) {
-          barangFoot.appendChild(baris('TOTAL MINUS', minus, 'f-minus', minus.jumlah + ' BARANG MINUS'));
-        }
       };
 
       const renderBarang = (barang) => {
@@ -802,22 +887,8 @@
           tr.dataset.id = row.id;
           tr.append(cell(String(i + 1), 'c-no'), cell(tanggalSo, 'c-tgl'));
 
-          const tdFoto = document.createElement('td');
-          tdFoto.className = 'c-foto';
-          const foto = document.createElement('div');
-          foto.className = 'foto';
-          if (row.foto_url) {
-            const img = document.createElement('img');
-            img.src = row.foto_url;
-            img.alt = row.name || row.kode || 'foto';
-            img.loading = 'lazy';
-            img.decoding = 'async';
-            foto.appendChild(img);
-          } else {
-            foto.textContent = '[Sisipkan Foto]';
-          }
-          tdFoto.appendChild(foto);
-          tr.appendChild(tdFoto);
+          // Kolom foto produk dihapus (data foto tetap diambil dari DB,
+          // tidak dipakai untuk render di halaman ini).
 
           const tdNama = document.createElement('td');
           tdNama.className = 'c-nama';
@@ -840,16 +911,16 @@
               jenis === 'sistem' ? sistem : num(row.stok_fisik)
             );
             input.setAttribute('aria-label', (jenis === 'sistem' ? 'Onhand' : 'Stok Fisik') + ' ' + (row.kode || row.name || i + 1));
+            // Onhand & Stok Fisik = data, hanya boleh diubah dari ADMIN.
+            // Di halaman SO keduanya read-only supaya tidak ada input yang
+            // bisa menulis ke database; hitungan selisih tetap jalan.
+            input.readOnly = true;
+            input.tabIndex = -1;
+            input.classList.add('baca');
+            input.title = (jenis === 'sistem' ? 'Onhand' : 'Stok Fisik') + ' hanya bisa diubah di menu ADMIN';
             input.addEventListener('input', () => {
               hitungBaris(tr);
               hitungTotal();
-              if (jenis === 'fisik') sinkronFisik(row.id, input.value, tr, false);
-            });
-            input.addEventListener('change', () => {
-              if (jenis === 'fisik') sinkronFisik(row.id, input.value, tr, true);
-            });
-            input.addEventListener('blur', () => {
-              if (jenis === 'fisik') sinkronFisik(row.id, input.value, tr, true);
             });
             td.appendChild(input);
             tr.appendChild(td);
@@ -865,18 +936,6 @@
 
           tr.appendChild(cell('Rp 0', 'nominal c-total'));
           tr.appendChild(cell('Sesuai', 'keterangan'));
-
-          const tdAksi = document.createElement('td');
-          tdAksi.className = 'c-aksi';
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'simpan-btn';
-        btn.textContent = '✓';
-          btn.title = 'Simpan ' + (row.kode || row.name);
-          btn.setAttribute('aria-label', btn.title);
-          btn.addEventListener('click', () => simpanBaris(tr, btn));
-          tdAksi.appendChild(btn);
-          tr.appendChild(tdAksi);
 
           hitungBaris(tr);
           barangBody.appendChild(tr);
@@ -895,7 +954,9 @@
       const pilihMenuOtomatis = async () => {
         const { data, error } = await supabase.from('so_menus').select('id').order('name').limit(1);
         if (error || !data || !data.length) {
-          judulSo.textContent = 'Belum ada menu SO. Buat dulu di ADMIN.';
+          barangWrap.hidden = true;
+          barangEmpty.hidden = false;
+          barangEmpty.textContent = 'Belum ada menu SO. Buat dulu di menu ADMIN.';
           return;
         }
         menuId = data[0].id;
@@ -917,12 +978,14 @@
           if (!menuId) return;
           return load();
         }
-        judulSo.textContent = up(menu.name);
+        // Nama menu tidak lagi jadi judul di atas (kotak search sudah di paling
+        // atas). Sekarang cuma jadi petunjuk di placeholder kotak search.
+        cariBarang.placeholder = 'Cari di ' + up(menu.name) + ' — PLU / Nama barang';
         tanggalSo = formatTanggal(new Date());
 
         const { data: barang, error: errBarang } = await supabase
           .from('stock_products')
-          .select('id, kode, name, satuan, stok_sistem, stok_fisik, hpp, foto_url')
+          .select('id, kode, name, satuan, stok_sistem, stok_fisik, hpp')
           .eq('menu_id', menuId)
           .order('kode');
         if (errBarang) {
@@ -947,82 +1010,27 @@
         loadRiwayat();
       };
 
-      const barisOpname = (tr, sistem, fisik, hpp) => ({
-        menu_id: menuId,
-        product_id: Number(tr.dataset.id) || null,
-        product_plu: tr.querySelector('.kode-btn').textContent,
-        quantity: fisik,
-        stok_sistem: sistem,
-        stok_fisik: fisik,
-        hpp,
-        selisih: fisik - sistem,
-        total_nominal: (fisik - sistem) * hpp,
-        keterangan: keteranganOf(fisik - sistem).text,
-        admin: getAdmin(),
-        opname_date: new Date().toISOString(),
-      });
+      // Fungsi simpanBaris + barisOpname dihapus: tidak ada lagi input yang
+      // bisa diedit di halaman SO, jadi tidak ada yang perlu di-commit ke
+      // stock_opname maupun stock_products dari sini.
 
-      const simpanBaris = async (tr, btn) => {
-        if (!menuId) return;
-        const inSistem = tr.querySelector('.in-sistem');
-        const inFisik = tr.querySelector('.in-fisik');
-        if (!inSistem || !inFisik) return;
-        const sistem = num(inSistem.value);
-        const fisik = num(inFisik.value);
-        const cap = sistem + '|' + fisik;
-        if (sistem === 0 && fisik === 0) return;
-        if (tr.dataset.terkirim === cap) return;
-        if (btn) btn.disabled = true;
-        const hpp = num(tr.querySelector('.hpp').dataset.value);
-        const { error } = await supabase
-          .from('stock_opname')
-          .insert([barisOpname(tr, sistem, fisik, hpp)]);
-        if (error) {
-          if (btn) btn.disabled = false;
-          console.error('Gagal menyimpan stok:', error.message);
-          return;
-        }
-        if (tr.dataset.id) {
-          const { error: errSistem } = await supabase
-            .from('stock_products')
-            .update({ stok_sistem: fisik, stok_fisik: 0 })
-            .eq('id', Number(tr.dataset.id));
-          if (errSistem) {
-            console.error('Gagal memperbarui stok sistem:', errSistem.message);
-          }
-        }
-        tr.dataset.terkirim = cap;
-        inSistem.value = String(fisik);
-        inFisik.value = '0';
-        hitungBaris(tr);
-        hitungTotal();
-        if (btn) btn.disabled = false;
-        tr.classList.add('simpan');
-        setTimeout(() => tr.classList.remove('simpan'), 1200);
-        loadRiwayat();
-      };
-
+      // Waktu ringkas satu baris: "24/10 14:30" (tanpa tahun, tanpa detik).
       const formatWaktu = (value) => {
         if (!value) return '-';
         const d = new Date(value);
         if (Number.isNaN(d.getTime())) return '-';
-        return d.toLocaleString('id-ID', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-        });
+        const pad = (n) => String(n).padStart(2, '0');
+        return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
       };
 
       const loadRiwayat = async () => {
         if (!menuId) return;
         const { data, error } = await supabase
           .from('stock_opname')
-          .select('product_plu, stok_sistem, stok_fisik, selisih, total_nominal, opname_date, created_at')
+          .select('product_plu, selisih, total_nominal, opname_date, created_at')
           .eq('menu_id', menuId)
           .order('id', { ascending: false })
-          .limit(50);
+          .limit(20);
         if (error) {
           console.error('Gagal memuat riwayat:', error.message);
           return;
@@ -1031,18 +1039,18 @@
         riwayatBody.innerHTML = '';
         rows.forEach((row) => {
           const tr = document.createElement('tr');
+          const selisih = num(row.selisih);
           tr.append(
             cell(formatWaktu(row.opname_date || row.created_at)),
             cell(row.product_plu || '-', 'kode'),
-            cell(String(num(row.stok_sistem)), 'c-num'),
-            cell(String(num(row.stok_fisik)), 'c-num'),
-            cell(String(num(row.selisih)), 'c-num'),
-            cell(rupiah(row.total_nominal), 'c-total')
+            cell(selisih > 0 ? '+' + selisih : String(selisih), 'c-num selisih ' + (selisih === 0 ? '' : selisih < 0 ? 'minus' : 'plus')),
+            cell(rupiah(row.total_nominal), 'c-total ' + (num(row.total_nominal) === 0 ? '' : num(row.total_nominal) < 0 ? 'minus' : 'plus'))
           );
           riwayatBody.appendChild(tr);
         });
-        riwayatEmpty.hidden = rows.length > 0;
-        riwayatWrap.hidden = rows.length === 0;
+        riwayatCount.textContent = rows.length ? '(' + rows.length + ')' : '';
+        riwayatWrap.hidden = !riwayatTerbuka || rows.length === 0;
+        riwayatEmpty.hidden = riwayatTerbuka || rows.length > 0;
       };
       load();
     </script>

@@ -38,7 +38,6 @@
     .thumb img{width:100%;height:100%;object-fit:cover;display:block}
     .thumb span{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:clamp(20px,5vw,32px);line-height:1}
     .item-name{font-size:9px;font-weight:700;color:#1f2937;line-height:1.25;max-width:100%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-align:center;width:100%;min-height:2.25em}
-    .item-period{font-size:8px;font-weight:700;color:#9aa0ab;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;margin-top:1px}
     .item-actions{display:flex;gap:6px;flex-shrink:0;justify-content:center;margin-top:5px}
     .btn{padding:10px 16px;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;font-family:inherit}
     .btn-ghost{background:#eef2ff;color:#4f46e5;border:1px solid #c7d2fe}
@@ -52,15 +51,194 @@
     .form-table .td input{width:100%;margin:0 !important;padding:8px 10px;border:1px solid transparent;border-radius:6px;font-size:12px;font-weight:600;color:#111827;background:transparent;outline:none;font-family:inherit;line-height:1.2}
     .form-table .td input:focus{border-color:#6366f1;background:#fff;box-shadow:0 0 0 1px #6366f1}
     .empty{text-align:center;color:#9aa0ab;font-size:13px;font-weight:600;padding:40px 0}
-    .g-a{background:linear-gradient(135deg,#a5b4fc,#818cf8)}
-    .g-b{background:linear-gradient(135deg,#c4b5fd,#a78bfa)}
-    .g-c{background:linear-gradient(135deg,#93c5fd,#60a5fa)}
-    .g-d{background:linear-gradient(135deg,#67e8f9,#22d3ee)}
-    .g-e{background:linear-gradient(135deg,#6ee7b7,#34d399)}
-    .g-f{background:linear-gradient(135deg,#fcd34d,#fbbf24)}
-    .g-g{background:linear-gradient(135deg,#fca5a5,#f87171)}
-    .g-h{background:linear-gradient(135deg,#f0abfc,#e879f9)}
     .hint{font-size:11px;color:#9aa0ab}
+
+    /* ============================================================
+       TEMA MORI — override di atas, logika JS tidak disentuh.
+       Palet dari public/mori/css/variables.css:
+       bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64
+       Gaya: sharp (radius 0), border hitam solid, shadow offset 4px.
+       CATATAN: beberapa elemen punya style inline indigo
+       (#6366f1/#eef2ff/#c7d2fe) -> override di bawah pakai !important.
+       ============================================================ */
+    :root{
+      --mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;
+      --mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;
+      --mori-mono:"JetBrains Mono",ui-monospace,monospace;
+    }
+    html,body{background:var(--mori-bg) !important}
+    body{
+      font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;
+      background:var(--mori-bg) !important;color:var(--mori-text);
+      -webkit-font-smoothing:antialiased;
+      padding-top:max(12px,env(safe-area-inset-top));
+    }
+    .wrap{background:var(--mori-bg) !important}
+
+    .section-label{
+      font-family:var(--mori-mono);font-size:10px;font-weight:700;
+      color:var(--mori-text);letter-spacing:1.4px;
+    }
+
+    /* ===== SEARCH ===== */
+    .search-box{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-surface) !important;color:var(--mori-text);
+      transition:box-shadow .2s ease;
+    }
+    .search-box:focus-within{background:#fffdf7 !important;box-shadow:4px 4px 0 var(--mori-accent)}
+    .search-box svg,.search-box input::placeholder{color:var(--mori-text-2) !important}
+    .search-box input{color:var(--mori-text) !important}
+
+    /* ===== TOMBOL BACK ===== */
+    .back-btn{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-accent) !important;color:var(--mori-bg) !important;
+      box-shadow:3px 3px 0 rgba(26,25,23,.18) !important;
+      transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
+    }
+    .back-btn:active{background:#33312f !important;transform:translate(2px,2px);box-shadow:none !important}
+
+    /* ===== TOMBOL SIMPAN / BATAL ===== */
+    .btn-save-icon{
+      border-radius:0 !important;border:1px solid var(--mori-accent) !important;
+      font-family:var(--mori-mono);font-weight:700;
+      letter-spacing:1px;text-transform:uppercase;font-size:12px;
+      transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
+    }
+    .btn-save-icon:active{opacity:1;transform:translate(2px,2px)}
+    #btnSave{background:var(--mori-accent) !important;color:var(--mori-bg) !important}
+    #btnReset{
+      background:var(--mori-surface) !important;color:var(--mori-accent) !important;
+    }
+
+    /* ===== DAFTAR MENU ===== */
+    .list{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 10px}
+    .thumb{
+      aspect-ratio:9/16;border-radius:0 !important;
+      border:1px solid var(--mori-accent);background:var(--mori-surface) !important;
+      box-shadow:4px 4px 0 rgba(26,25,23,.12);
+      transition:box-shadow .2s ease,transform .2s ease;
+    }
+    /* Emoji dipakai kalau folder foto tidak ada: warna teks, bukan putih */
+    .thumb span{color:var(--mori-text)}
+    .thumb img{filter:saturate(.4) brightness(1.04)}
+    /* Foto tidak ada -> shimmer krem (bukan gradien g-a..g-h) */
+    .thumb.tanpa-foto{
+      background:var(--mori-surface) !important;
+      background-image:linear-gradient(90deg,#f2eee2 25%,#e8e2d2 50%,#f2eee2 75%) !important;
+      background-size:200% 100%;
+      animation:dt-shimmer 1.4s infinite;
+    }
+    @keyframes dt-shimmer{
+      0%{background-position:200% 0}
+      100%{background-position:-200% 0}
+    }
+
+    .item:active .thumb{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--mori-accent)}
+    .item-name{
+      font-family:var(--mori-mono);color:var(--mori-text) !important;
+      letter-spacing:.6px;text-transform:uppercase;
+    }
+
+    /* ===== TOMBOL EDIT / HAPUS DI LIST =====
+       Kotak identik 32x32 + border sama, jadi tidak meleset 1px. */
+    .item-actions{gap:6px;margin-top:8px;justify-content:center;align-items:center}
+    .btn,.btn-ghost,.btn-danger{
+      border-radius:0 !important;
+      transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
+    }
+    .btn-small{
+      flex:0 0 32px !important;width:32px !important;height:32px !important;
+      min-height:32px !important;max-height:32px !important;aspect-ratio:auto !important;
+      padding:0 !important;margin:0 !important;
+      border:1px solid var(--mori-accent) !important;
+      display:flex !important;align-items:center !important;justify-content:center !important;
+    }
+    .btn-small svg{width:14px !important;height:14px !important;flex:0 0 auto !important;display:block !important}
+    .btn-ghost{background:var(--mori-accent) !important;color:var(--mori-bg) !important}
+    .btn-danger{background:#fdf1f1 !important;color:var(--mori-danger) !important;
+      border-color:var(--mori-danger) !important}
+    .btn-small:active{transform:translate(2px,2px)}
+
+    /* ===== FORM ===== */
+    /* Input judul: lebar penuh di paling atas, gaya sama dengan search box */
+    #f_title{
+      width:100%;max-width:100%;min-width:0;margin:0;
+      height:44px;padding:0 14px;
+      font-family:var(--mori-mono);font-size:13px;font-weight:700;
+      letter-spacing:.4px;text-transform:uppercase;
+      color:var(--mori-text) !important;background:var(--mori-surface) !important;
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      outline:none;
+    }
+    #f_title::placeholder{color:var(--mori-text-2) !important;letter-spacing:.4px}
+    #f_title:focus{background:#fffdf7 !important;box-shadow:4px 4px 0 var(--mori-accent) !important}
+
+    .form label{
+      font-family:var(--mori-mono);font-size:9px;font-weight:700;
+      color:var(--mori-text) !important;letter-spacing:1px;text-transform:uppercase;
+    }
+    .form input,.form select{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-bg) !important;color:var(--mori-text) !important;
+      font-family:inherit;
+    }
+    .form input:focus,.form select:focus{
+      border-color:var(--mori-accent) !important;background:#fffdf7 !important;
+      box-shadow:4px 4px 0 var(--mori-accent) !important;
+    }
+    .form input::placeholder{color:var(--mori-text-2) !important}
+
+    /* ===== TABEL FORM ===== */
+    .form-table{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-bg) !important;
+    }
+    .form-table .tr{border-bottom-color:var(--mori-line) !important}
+    .form-table .th{
+      background:var(--mori-surface) !important;color:var(--mori-text) !important;
+      border-right-color:var(--mori-line) !important;font-family:var(--mori-mono);
+    }
+    .form-table .td input{
+      border-radius:0;font-family:inherit;color:var(--mori-text) !important;
+    }
+    .form-table .td input:focus{
+      border-color:var(--mori-accent) !important;background:#fffdf7 !important;
+      box-shadow:3px 3px 0 rgba(26,25,23,.15) !important;
+    }
+
+    /* ===== ISI MENU (tabel kegiatan, sama gaya Admin Stok Opname) ===== */
+    .items-table{margin-top:12px}
+    .items-table .th{min-width:44px}
+    .items-table .items-head .th{
+      background:var(--mori-accent) !important;color:var(--mori-bg) !important;
+      border-right-color:var(--mori-accent) !important;
+    }
+    .items-table .items-head{min-height:30px}
+    .items-table .item-no{
+      font-family:var(--mori-mono);color:var(--mori-text-2) !important;
+      background:var(--mori-surface) !important;
+    }
+    .items-table .td input{
+      font-family:inherit;text-transform:none;
+    }
+    .items-table .item-aksi{
+      flex:0 0 76px;gap:4px;justify-content:flex-end;padding:3px 6px;
+    }
+    .items-table .btn-small{
+      flex:0 0 32px !important;width:32px !important;height:32px !important;
+    }
+    #btnItemAdd{
+      font-size:11px;padding:10px;height:auto;
+    }
+
+    .empty{
+      font-family:var(--mori-mono);font-size:11px;font-weight:700;
+      color:var(--mori-text-2);letter-spacing:1px;text-transform:uppercase;
+    }
+    .hint{font-family:var(--mori-mono);color:var(--mori-text-2)}
+    .hint b{color:var(--mori-text)}
   </style>
 </head>
 <body>
@@ -71,7 +249,7 @@
       <div class="search-wrapper">
         <div class="search-box">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-          <input id="search" type="text" placeholder="Cari periode..." autocomplete="off" />
+          <input id="search" type="text" placeholder="Cari menu..." autocomplete="off" />
         </div>
         <a class="back-btn" href="daily-task.html" title="Kembali" aria-label="Kembali">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
@@ -81,38 +259,34 @@
     </div>
 
     <div class="card" style="order:1">
-      <div class="section-label" id="formLabel">Tambah Menu</div>
       <form id="form" class="form" onsubmit="return false">
         <input type="hidden" id="editId" />
-        <div class="form-table">
-          <div class="tr">
-            <div class="th">Judul</div>
-            <div class="td"><input id="f_title" placeholder="cth: HARI" required /></div>
-          </div>
-          <div class="tr">
-            <div class="th">Slug</div>
-            <div class="td"><input id="f_slug" placeholder="cth: hari (nama folder foto)" /></div>
-          </div>
-          <div class="tr">
-            <div class="th">Periode</div>
-            <div class="td"><input id="f_period" placeholder="hari / minggu / bulan" /></div>
-          </div>
-          <div class="tr">
-            <div class="th">Link</div>
-            <div class="td"><input id="f_link" placeholder="../utility/hari.html" /></div>
-          </div>
-          <div class="tr">
-            <div class="th">Emoji</div>
-            <div class="td"><input id="f_icon" placeholder="☀️" /></div>
+        <!-- Form sengaja dibuat pendek: halaman ini cuma untuk bikin menu
+             beserta kegiatan hariannya. Slug & link dibuat otomatis
+             dari judul (lihat btnSave). Label "Tambah Menu" dihapus,
+             input Judul jadi lebar penuh paling atas. -->
+        <input
+          id="f_title"
+          type="text"
+          placeholder="Judul menu, cth: HARI"
+          aria-label="Judul menu"
+          autocomplete="off"
+          required
+        />
+        <div class="form-table items-table" id="itemsTable" style="margin-top:10px">
+          <div class="tr items-head">
+            <div class="th">No</div>
+            <div class="th" style="flex:1">Kegiatan</div>
           </div>
         </div>
-        <label style="margin-top:12px">Isi Menu (1 baris = 1 kegiatan)</label>
-        <textarea id="f_items" class="items-area" rows="8" style="display:block;width:100%;max-width:100%;min-width:0;margin-top:3px;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:12px;color:#111827;background:#fff;outline:none;font-family:inherit;resize:vertical;line-height:1.5" placeholder="Kiwi&#10;WhatsApp Business&#10;YouTube&#10;..."></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="btnItemAdd" type="button" class="btn-save-icon" style="flex:1">+ Tambah Kegiatan</button>
+        </div>
         <div style="display:flex;gap:8px;margin-top:10px">
           <button id="btnReset" type="button" class="btn-save-icon" style="background:#eef2ff;color:#4f46e5;flex:1">Batal</button>
           <button id="btnSave" type="button" class="btn-save-icon" style="flex:2">Simpan</button>
         </div>
-        <p class="hint" style="margin-top:8px">Slug dipakai untuk foto folder: image-daily-task/<b>[slug]</b>/1.jpg (kalau ada). Kosongkan link biar pakai <i>../utility/[slug].html</i>.</p>
+        <p class="hint" style="margin-top:8px">Cukup isi <b>Judul</b> + daftar <b>kegiatan</b>. Slug, link, dan folder foto dibuat otomatis dari judul.</p>
       </form>
     </div>
   </div>
@@ -125,16 +299,80 @@
   const countEl = document.getElementById('count');
   const searchEl = document.getElementById('search');
   const form = document.getElementById('form');
-  const formLabel = document.getElementById('formLabel');
   const editId = document.getElementById('editId');
   const f_title = document.getElementById('f_title');
-  const f_slug = document.getElementById('f_slug');
-  const f_period = document.getElementById('f_period');
-  const f_link = document.getElementById('f_link');
-  const f_icon = document.getElementById('f_icon');
-  const f_items = document.getElementById('f_items');
+  const itemsTable = document.getElementById('itemsTable');
+  const btnItemAdd = document.getElementById('btnItemAdd');
   const btnSave = document.getElementById('btnSave');
   const btnReset = document.getElementById('btnReset');
+
+  // ===== Isi Menu =====
+  // Gaya sama dengan form tabel Admin Stok Opname: tiap kegiatan = satu
+  // baris No | Kegiatan, ada tombol tambah & hapus per baris. Disimpan ke
+  // daily_task_items dengan sort_order sesuai urutan baris.
+  const itemRow = (nilai = '', nomor) => {
+    const tr = document.createElement('div');
+    tr.className = 'tr';
+    tr.innerHTML =
+      '<div class="th item-no"></div>' +
+      '<div class="td"><input type="text" placeholder="cth: Kiwi" autocomplete="off" /></div>' +
+      '<div class="td item-aksi">' +
+      '<button type="button" class="btn btn-ghost btn-small item-up" title="Naik" aria-label="Naik">↑</button>' +
+      '<button type="button" class="btn btn-danger btn-small item-del" title="Hapus" aria-label="Hapus">✕</button>' +
+      '</div>';
+    tr.querySelector('input').value = nilai;
+    tr.dataset.nomor = String(nomor);
+    return tr;
+  };
+
+  const nomorUlang = () => {
+    itemsTable.querySelectorAll('.tr:not(.items-head)').forEach((tr, i) => {
+      tr.dataset.nomor = String(i + 1);
+      tr.querySelector('.item-no').textContent = String(i + 1);
+      // baris pertama tidak butuh tombol naik
+      const up = tr.querySelector('.item-up');
+      if (up) up.style.visibility = i === 0 ? 'hidden' : 'visible';
+    });
+  };
+
+  const setItems = (list) => {
+    itemsTable.querySelectorAll('.tr:not(.items-head)').forEach((tr) => tr.remove());
+    (list || []).forEach((t, i) => itemsTable.appendChild(itemRow(t, i + 1)));
+    if (!list || !list.length) itemsTable.appendChild(itemRow('', 1));
+    nomorUlang();
+  };
+
+  const getItems = () =>
+    Array.from(itemsTable.querySelectorAll('.tr:not(.items-head) input'))
+      .map((el) => el.value.trim())
+      .filter(Boolean);
+
+  btnItemAdd.addEventListener('click', () => {
+    const tr = itemRow('', itemsTable.querySelectorAll('.tr:not(.items-head)').length + 1);
+    itemsTable.appendChild(tr);
+    nomorUlang();
+    tr.querySelector('input').focus();
+  });
+
+  itemsTable.addEventListener('click', (e) => {
+    const tr = e.target.closest('.tr:not(.items-head)');
+    if (!tr) return;
+    if (e.target.closest('.item-del')) {
+      // Jangan tinggalkan tabel kosong: sisakan satu baris kosong.
+      tr.remove();
+      if (!itemsTable.querySelector('.tr:not(.items-head)')) itemsTable.appendChild(itemRow('', 1));
+      nomorUlang();
+      return;
+    }
+    if (e.target.closest('.item-up')) {
+      const prev = tr.previousElementSibling;
+      if (prev && prev.classList.contains('tr') && !prev.classList.contains('items-head')) {
+        tr.parentNode.insertBefore(tr, prev);
+        nomorUlang();
+      }
+    }
+  });
+  setItems([]);
 
   let all = [];
   const CURRENT_TABLE = 'daily_tasks';
@@ -144,19 +382,14 @@
 
   function itemHtml(m) {
     const title = m.title || m.name || 'Tanpa judul';
-    const period = m.period || '';
     const slug = m.slug || m.period || slugify(title);
-    const icon = m.icon || '📅';
-    const cls = m.cls || '';
     const photoFolder = '../image-daily-task/' + slug + '/1.jpg';
     return `
       <div class="item">
-        <div class="thumb ${cls}">
+        <div class="thumb">
           <img src="${photoFolder}" alt="" data-slug="${slug}" loading="lazy" onerror="sqProbe(this)" />
-          <span style="display:none">${icon}</span>
         </div>
         <div class="item-name">${title}</div>
-        <div class="item-period">${period || '—'}</div>
         <div class="item-actions">
           <button type="button" class="btn btn-ghost btn-small" data-edit="${m.id}" title="Edit" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
           <button type="button" class="btn btn-danger btn-small" data-del="${m.id}" title="Hapus" aria-label="Hapus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
@@ -170,7 +403,13 @@
     const exts = ['.jpg', '.jpeg', '.png', '.webp', '.svg'];
     let i = 0;
     function next() {
-      if (i >= exts.length) { img.style.display = 'none'; img.nextElementSibling.style.display = 'flex'; return; }
+      // Foto tidak ditemukan -> kotak shimmer krem (emoji disembunyikan,
+      // tidak ada lagi warna gradien di tema Mori).
+      if (i >= exts.length) {
+        img.style.display = 'none';
+        img.closest('.thumb').classList.add('tanpa-foto');
+        return;
+      }
       const url = folder + '1' + exts[i++];
       const t = new Image();
       t.onload = () => { img.src = url; };
@@ -214,9 +453,9 @@
   function resetForm() {
     editId.value = '';
     form.reset();
-    f_items.value = '';
-    formLabel.textContent = 'Tambah Menu';
+    setItems([]);
     btnSave.textContent = 'Simpan';
+    f_title.focus();
   }
 
   async function editRow(id) {
@@ -224,19 +463,14 @@
     if (!m) return;
     editId.value = m.id;
     f_title.value = m.title || '';
-    f_slug.value = m.slug || '';
-    f_period.value = m.period || '';
-    f_link.value = m.description || m.href || '';
-    f_icon.value = m.icon || '';
-    f_items.value = '';
-    formLabel.textContent = 'Edit Menu — ' + (m.title || '#') + m.id;
+    setItems([]);
     btnSave.textContent = 'Update';
     window.scrollTo({ top: 0, behavior: 'smooth' });
     try {
       const period = m.period || m.slug || slugify(m.title || '');
       const { data, error } = await supabase.from(ITEMS_TABLE).select('text').eq('period', period).order('sort_order');
       if (error) throw error;
-      if (data && data.length) f_items.value = data.map(d => d.text).join('\n');
+      setItems((data || []).map((d) => d.text));
     } catch (e) {
       console.error('Gagal memuat isi menu:', e);
     }
@@ -250,14 +484,15 @@
   }
 
   btnSave.addEventListener('click', async () => {
-    if (!f_title.value.trim()) { alert('Judul wajib'); return; }
-    const autoLink = '../utility/' + (f_slug.value.trim() || slugify(f_title.value.trim()) || f_period.value.trim()) + '.html';
+    const judul = f_title.value.trim();
+    if (!judul) { alert('Judul wajib'); return; }
+    // Slug & link otomatis dari judul — tidak ada input slug/link lagi.
+    const slug = slugify(judul);
     const payload = {
-      title: f_title.value.trim(),
-      slug: f_slug.value.trim() || null,
-      period: f_period.value.trim() || null,
-      description: f_link.value.trim() || autoLink,
-      icon: f_icon.value.trim() || null
+      title: judul,
+      slug: slug,
+      period: slug,
+      description: '../utility/' + slug + '.html'
     };
     let res;
     if (editId.value) {
@@ -266,7 +501,8 @@
       res = await supabase.from(CURRENT_TABLE).insert([payload]);
     }
     if (res.error && /PGRST204|Could not find/i.test(res.error.message || '')) {
-      const slim = { title: payload.title, period: payload.period, description: payload.description };
+      // Kolom slug/icon belum ada di DB: pakai kolom minimal saja.
+      const slim = { title: judul, period: slug, description: payload.description };
       res = editId.value
         ? await supabase.from(CURRENT_TABLE).update(slim).eq('id', parseInt(editId.value))
         : await supabase.from(CURRENT_TABLE).insert([slim]);
@@ -276,20 +512,17 @@
       return;
     }
 
-    const period = f_slug.value.trim() || f_period.value.trim() || slugify(f_title.value.trim());
-    const rawItems = f_items.value.split('\n');
-    const items = rawItems.map(s => s.replace(/\r$/, '').trim()).filter(Boolean);
-    if (period) {
-      try {
-        const delRes = await supabase.from(ITEMS_TABLE).delete().eq('period', period);
-        if (delRes.error) throw delRes.error;
-        if (items.length) {
-          const insRes = await supabase.from(ITEMS_TABLE).insert(items.map((t, i) => ({ period, text: t, sort_order: i + 1 })));
-          if (insRes.error) throw insRes.error;
-        }
-      } catch (e) {
-        alert('Menu tersimpan, tapi isi gagal disimpan: ' + (e.message || 'error'));
+    // Kegiatan disimpan dengan kunci period = slug (sama seperti editRow).
+    const items = getItems();
+    try {
+      const delRes = await supabase.from(ITEMS_TABLE).delete().eq('period', slug);
+      if (delRes.error) throw delRes.error;
+      if (items.length) {
+        const insRes = await supabase.from(ITEMS_TABLE).insert(items.map((t, i) => ({ period: slug, text: t, sort_order: i + 1 })));
+        if (insRes.error) throw insRes.error;
       }
+    } catch (e) {
+      alert('Menu tersimpan, tapi kegiatan gagal disimpan: ' + (e.message || 'error'));
     }
 
     resetForm();
