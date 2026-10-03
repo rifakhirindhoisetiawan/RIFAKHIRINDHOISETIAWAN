@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Catatan — NOTE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --mori-bg: #fffbf2;
+        --mori-surface: #f7f3e9;
+        --mori-text: #1a1917;
+        --mori-text-2: #6e6a64;
+        --mori-line: rgba(26, 25, 23, 0.14);
+        --mori-accent: #1a1917;
+        --mori-danger: #b91c1c;
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { width: 100%; height: 100%; background: var(--mori-bg); }
+      body {
+        font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+        color: var(--mori-text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .wrap {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 12px 18px 28px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 100vh;
+      }
+      /* form tambah catatan */
+      .form-tambah { display: flex; gap: 8px; margin-bottom: 12px; }
+      .form-tambah input {
+        flex: 1; padding: 11px 12px; font-size: 13px; font-family: inherit;
+        color: var(--mori-text); background: var(--mori-surface);
+        border: 1px solid var(--mori-accent); border-radius: 0; outline: none;
+        transition: box-shadow .2s ease, background .2s ease;
+      }
+      .form-tambah input:focus { background: #fffdf7; box-shadow: 4px 4px 0 var(--mori-accent); }
+      .form-tambah input::placeholder { color: var(--mori-text-2); }
+      .btn-add {
+        flex: 0 0 44px; width: 44px; height: 44px; padding: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-family: inherit; font-size: 22px; line-height: 1;
+        color: var(--mori-bg); background: var(--mori-accent);
+        border: 1px solid var(--mori-accent); border-radius: 0; cursor: pointer;
+        box-shadow: 3px 3px 0 rgba(26,25,23,.18);
+        transition: box-shadow .2s ease, transform .2s ease;
+      }
+      .btn-add:active { transform: translate(2px,2px); box-shadow: none; }
+
+      /* tabel - sama persis task-mori.css */
+      .table-wrap {
+        border: 1px solid var(--mori-accent); border-radius: 0;
+        background: var(--mori-bg); overflow-x: auto; -webkit-overflow-scrolling: touch;
+      }
+      .tabel { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+      .tabel thead th {
+        background: var(--mori-surface); color: var(--mori-text);
+        font-family: var(--mori-mono); font-size: 10px; font-weight: 700;
+        letter-spacing: 1px; text-transform: uppercase; text-align: left;
+        height: 34px; padding: 0 8px; border-bottom: 1px solid var(--mori-accent); white-space: nowrap;
+      }
+      .tabel tbody td { height: 46px; padding: 0 8px; border-bottom: 1px solid var(--mori-line); vertical-align: middle; }
+      .tabel tbody tr:last-child td { border-bottom: 0; }
+      .tabel tbody tr:hover td { background: #faf6ea; }
+      .c-no { width: 34px; text-align: center; font-family: var(--mori-mono); font-size: 11px; color: var(--mori-text-2); }
+      .c-teks { min-width: 0; overflow: hidden; }
+      .tabel .c-teks .isi {
+        font-family: var(--mori-mono); font-size: 12px; font-weight: 700;
+        letter-spacing: .4px; text-transform: uppercase;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .c-aksi { width: 72px; }
+      .acts { display: flex; gap: 6px; justify-content: flex-end; }
+      .ico {
+        width: 32px; height: 32px; flex: 0 0 32px;
+        display: flex; align-items: center; justify-content: center;
+        font-family: inherit; font-size: 14px; font-weight: 800; line-height: 1;
+        color: var(--mori-bg); background: var(--mori-accent);
+        border: 1px solid var(--mori-accent); border-radius: 0;
+        box-shadow: 3px 3px 0 rgba(26,25,23,.18); cursor: pointer;
+        transition: box-shadow .2s ease, transform .2s ease;
+      }
+      .ico:active { transform: translate(2px,2px); box-shadow: none; }
+      .ico-danger { background: var(--mori-danger); border-color: var(--mori-danger); color: #fff; }
+      .empty {
+        font-family: var(--mori-mono); font-size: 11px; font-weight: 700;
+        letter-spacing: 1px; text-transform: uppercase; color: var(--mori-text-2);
+      }
+      .hint {
+        margin-top: 10px; font-family: var(--mori-mono); font-size: 10px; font-weight: 700;
+        letter-spacing: .6px; text-transform: uppercase; color: var(--mori-danger);
+        border-left: 3px solid var(--mori-danger); padding: 6px 8px; background: #fdf1f1;
+      }
+      .hint[hidden] { display: none; }
+
+      /* modal password */
+      .pw-bg { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(26,25,23,.45); align-items: center; justify-content: center; padding: 16px; }
+      .pw-bg.open { display: flex; }
+      .pw-card { width: 100%; max-width: 360px; background: var(--mori-bg); border: 1px solid var(--mori-accent); padding: 18px; box-shadow: 6px 6px 0 rgba(26,25,23,.2); }
+      .pw-title { font-family: var(--mori-mono); font-size: 13px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px; }
+      .pw-msg { font-size: 12px; color: var(--mori-text-2); line-height: 1.5; margin-bottom: 12px; white-space: pre-line; }
+      .pw-input { width: 100%; padding: 11px 12px; font-family: var(--mori-mono); font-size: 15px; background: var(--mori-surface); border: 1px solid var(--mori-accent); border-radius: 0; outline: none; }
+      .pw-input:focus { background: #fffdf7; box-shadow: 4px 4px 0 var(--mori-accent); }
+      .pw-error { margin-top: 8px; font-family: var(--mori-mono); font-size: 10px; font-weight: 700; color: var(--mori-danger); }
+      .pw-error[hidden] { display: none; }
+      .pw-actions { display: flex; gap: 8px; margin-top: 16px; }
+      .pw-btn { flex: 1; padding: 12px; border: 1px solid var(--mori-accent); background: var(--mori-surface); color: var(--mori-text); font-family: var(--mori-mono); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+      .pw-btn:active { transform: translate(2px,2px); }
+      .pw-btn-danger { background: var(--mori-danger); border-color: var(--mori-danger); color: #fff; }
+
+      /* modal edit */
+      .edit-bg { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(26,25,23,.45); align-items: center; justify-content: center; padding: 16px; }
+      .edit-bg.open { display: flex; }
+      .edit-card { width: 100%; max-width: 480px; background: var(--mori-bg); border: 1px solid var(--mori-accent); padding: 18px; box-shadow: 6px 6px 0 rgba(26,25,23,.2); }
+      .edit-card textarea {
+        width: 100%; min-height: 120px; padding: 12px; font-family: inherit; font-size: 13px;
+        border: 1px solid var(--mori-accent); background: var(--mori-surface); outline: none; resize: vertical;
+      }
+      .edit-card textarea:focus { background: #fffdf7; box-shadow: 4px 4px 0 var(--mori-accent); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="form-tambah">
+        <input id="f_catatan" type="text" placeholder="Tulis catatan penting..." autocomplete="off" />
+        <button class="btn-add" type="button" id="btnAdd" title="Tambah catatan">+</button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="tabel">
+          <thead>
+            <tr>
+              <th class="c-no">No</th>
+              <th>Catatan Penting</th>
+              <th class="c-aksi"></th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="hint" id="hint" hidden></div>
+    </div>
+
+    <div class="pw-bg" id="pwBg">
+      <div class="pw-card">
+        <div class="pw-title">Konfirmasi Hapus</div>
+        <div class="pw-msg" id="pwMsg"></div>
+        <input class="pw-input" id="pwInput" type="password" inputmode="numeric" placeholder="Masukkan password" />
+        <div class="pw-error" id="pwError" hidden>Password salah.</div>
+        <div class="pw-actions">
+          <button class="pw-btn" id="pwCancel" type="button">Batal</button>
+          <button class="pw-btn pw-btn-danger" id="pwOk" type="button">Hapus</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="edit-bg" id="editBg">
+      <div class="edit-card">
+        <div class="pw-title">Edit Catatan</div>
+        <textarea id="editInput"></textarea>
+        <div class="pw-actions">
+          <button class="pw-btn" id="editCancel" type="button">Batal</button>
+          <button class="pw-btn pw-btn-danger" id="editOk" type="button" style="background:var(--mori-accent);border-color:var(--mori-accent);color:var(--mori-bg)">Simpan</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { supabase } from '../kopi/supabase.js';
+
+      const params = new URLSearchParams(location.search);
+      const menuId = parseInt(params.get('id'), 10);
+
+      const tbody = document.getElementById('tbody');
+      const hintEl = document.getElementById('hint');
+      const f_catatan = document.getElementById('f_catatan');
+      const btnAdd = document.getElementById('btnAdd');
+
+      function setHint(msg) {
+        if (!msg) { hintEl.hidden = true; hintEl.textContent = ''; return; }
+        hintEl.hidden = false; hintEl.textContent = msg;
+      }
+
+      if (!menuId) {
+        setHint('ID menu tidak valid — buka dari halaman NOTE.');
+      }
+
+      let entries = [];
+      let editingId = null;
+
+      async function loadJudul() {
+        const { data } = await supabase.from('note_menus').select('title').eq('id', menuId).single();
+        if (data) document.title = (data.title || 'Catatan') + ' — NOTE';
+      }
+
+      async function loadEntries() {
+        const { data, error } = await supabase.from('note_entries').select('*').eq('menu_id', menuId).order('created_at');
+        if (error) { setHint('Gagal muat: ' + error.message); return; }
+        entries = data || [];
+        setHint('');
+        render();
+      }
+
+      function render() {
+        if (entries.length === 0) {
+          tbody.innerHTML = '<tr><td class="c-no"></td><td class="c-teks"><div class="empty">Belum ada catatan penting</div></td><td class="c-aksi"></td></tr>';
+          return;
+        }
+        tbody.innerHTML = entries.map((e, i) =>
+          '<tr data-id="' + e.id + '">' +
+          '<td class="c-no">' + (i + 1) + '</td>' +
+          '<td class="c-teks"><div class="isi" title="' + String(e.content || '').replace(/"/g,'&quot;') + '">' + String(e.content || '').toUpperCase() + '</div></td>' +
+          '<td class="c-aksi"><div class="acts">' +
+          '<button type="button" class="ico" data-edit="' + e.id + '" title="Edit">✎</button>' +
+          '<button type="button" class="ico ico-danger" data-del="' + e.id + '" title="Hapus">✕</button>' +
+          '</div></td></tr>'
+        ).join('');
+      }
+
+      async function tambah() {
+        const content = (f_catatan.value || '').trim();
+        if (!content) { setHint('Catatan tidak boleh kosong'); f_catatan.focus(); return; }
+        const { error } = await supabase.from('note_entries').insert([{ menu_id: menuId, content }]);
+        if (error) { setHint('Gagal simpan: ' + error.message); return; }
+        f_catatan.value = '';
+        await loadEntries();
+      }
+
+      btnAdd.addEventListener('click', tambah);
+      f_catatan.addEventListener('keydown', e => { if (e.key === 'Enter') tambah(); });
+
+      /* edit modal */
+      const editBg = document.getElementById('editBg');
+      const editInput = document.getElementById('editInput');
+      document.getElementById('editCancel').addEventListener('click', () => editBg.classList.remove('open'));
+      editBg.addEventListener('click', e => { if (e.target === editBg) editBg.classList.remove('open'); });
+      document.getElementById('editOk').addEventListener('click', async () => {
+        const val = (editInput.value || '').trim();
+        if (!val) return;
+        const { error } = await supabase.from('note_entries').update({ content: val }).eq('id', editingId);
+        if (error) { setHint('Gagal edit: ' + error.message); return; }
+        editBg.classList.remove('open');
+        await loadEntries();
+      });
+
+      /* delete modal */
+      const DEL_PASSWORD = '0225106927';
+      const pwBg = document.getElementById('pwBg');
+      const pwMsg = document.getElementById('pwMsg');
+      const pwInput = document.getElementById('pwInput');
+      const pwError = document.getElementById('pwError');
+      let pwResolve = null;
+      function askPw(msg) {
+        pwMsg.textContent = msg; pwInput.value = ''; pwError.hidden = true;
+        pwBg.classList.add('open'); try { pwInput.focus(); } catch(e) {}
+        return new Promise(r => pwResolve = r);
+      }
+      function closePw(ok) { pwBg.classList.remove('open'); const fn = pwResolve; pwResolve = null; if (fn) fn(ok); }
+      document.getElementById('pwOk').addEventListener('click', () => {
+        if (pwInput.value.trim() !== DEL_PASSWORD) { pwError.hidden = false; pwInput.value = ''; return; }
+        closePw(true);
+      });
+      document.getElementById('pwCancel').addEventListener('click', () => closePw(false));
+      pwBg.addEventListener('click', e => { if (e.target === pwBg) closePw(false); });
+      pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('pwOk').click(); if (e.key === 'Escape') closePw(false); });
+
+      tbody.addEventListener('click', async e => {
+        const delBtn = e.target.closest('[data-del]');
+        if (delBtn) {
+          const id = parseInt(delBtn.dataset.del, 10);
+          const row = entries.find(x => x.id === id);
+          const ok = await askPw('Hapus catatan "' + (row ? row.content.slice(0,40) : id) + '"?');
+          if (!ok) return;
+          const { error } = await supabase.from('note_entries').delete().eq('id', id);
+          if (error) { setHint('Gagal hapus: ' + error.message); return; }
+          await loadEntries();
+          return;
+        }
+        const editBtn = e.target.closest('[data-edit]');
+        if (editBtn) {
+          const id = parseInt(editBtn.dataset.edit, 10);
+          const row = entries.find(x => x.id === id);
+          if (!row) return;
+          editingId = id;
+          editInput.value = row.content || '';
+          editBg.classList.add('open');
+          setTimeout(() => editInput.focus(), 50);
+        }
+      });
+
+      try {
+        supabase.channel('note_entries_' + menuId)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'note_entries', filter: 'menu_id=eq.' + menuId }, () => loadEntries())
+          .subscribe();
+      } catch(e) {}
+
+      if (menuId) { loadJudul(); loadEntries(); }
+    </script>
+  </body>
+</html>

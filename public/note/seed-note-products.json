@@ -1,0 +1,986 @@
+[
+    {
+        "sort_order":  1,
+        "plu":  "115816",
+        "deskripsi":  "JOLLY TIME FUN MANIA 100G",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  2,
+        "plu":  "115818",
+        "deskripsi":  "JOLLY TIME BLASTO BUTTER 100G",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  3,
+        "plu":  "115819",
+        "deskripsi":  "JOLLY TIME THE BIG CHEEZ 100G",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  4,
+        "plu":  "416088",
+        "deskripsi":  "SUKI ONIGIRI 110G",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  5,
+        "plu":  "441529",
+        "deskripsi":  "JD ICE CREAM CONE",
+        "kategori":  "ICE SCOOP"
+    },
+    {
+        "sort_order":  6,
+        "plu":  "441537",
+        "deskripsi":  "JD ICE CREAM CUP",
+        "kategori":  "ICE SCOOP"
+    },
+    {
+        "sort_order":  7,
+        "plu":  "441671",
+        "deskripsi":  "JD ICE CREAM CONE 2 SCOOP",
+        "kategori":  "ICE SCOOP"
+    },
+    {
+        "sort_order":  8,
+        "plu":  "443770",
+        "deskripsi":  "JD ICE BLACK COFFEE R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  9,
+        "plu":  "443771",
+        "deskripsi":  "JD ICE BLACK COFFEE L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  10,
+        "plu":  "443772",
+        "deskripsi":  "JD HOT BLACK HONEY",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  11,
+        "plu":  "443773",
+        "deskripsi":  "JD BLACK HONEY R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  12,
+        "plu":  "443774",
+        "deskripsi":  "JD BLACK HONEY L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  13,
+        "plu":  "443775",
+        "deskripsi":  "JD HOT COFFEE LATTE",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  14,
+        "plu":  "443776",
+        "deskripsi":  "JD ICE COFFEE LATTE R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  15,
+        "plu":  "443779",
+        "deskripsi":  "JD JADI KEREN R (KOPSU AREN)",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  16,
+        "plu":  "443780",
+        "deskripsi":  "JD JADI KEREN L (KOPSU AREN)",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  17,
+        "plu":  "443781",
+        "deskripsi":  "JD JADI RINDU R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  18,
+        "plu":  "443782",
+        "deskripsi":  "JD JADI RINDU L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  19,
+        "plu":  "443783",
+        "deskripsi":  "JD ICE MOCCA R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  20,
+        "plu":  "443784",
+        "deskripsi":  "JD ICE MOCCA L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  21,
+        "plu":  "443786",
+        "deskripsi":  "JD ICE SALTED CARAMEL R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  22,
+        "plu":  "443787",
+        "deskripsi":  "JD ICE SALTED CARAMEL L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  23,
+        "plu":  "443788",
+        "deskripsi":  "JD ICE BUTTERSCOTCH R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  24,
+        "plu":  "443789",
+        "deskripsi":  "JD ICE BUTTERSCOTCH L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  25,
+        "plu":  "443790",
+        "deskripsi":  "JD ICE VANILLA LATTE R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  26,
+        "plu":  "443791",
+        "deskripsi":  "JD ICE VANILLA LATTE L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  27,
+        "plu":  "443792",
+        "deskripsi":  "JD ICE MATCHA LATTE R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  28,
+        "plu":  "443793",
+        "deskripsi":  "JD ICE BLEND CHOCO CARAMEL L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  29,
+        "plu":  "443794",
+        "deskripsi":  "JD ICE MATCHA LATTE L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  30,
+        "plu":  "443795",
+        "deskripsi":  "JD HOT CHOCOLATE",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  31,
+        "plu":  "443796",
+        "deskripsi":  "JD ICE BLEND CHOCO R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  32,
+        "plu":  "443797",
+        "deskripsi":  "JD ICE BLEND CHOCO L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  33,
+        "plu":  "443798",
+        "deskripsi":  "JD ICE BLEND VANILLA CARAMEL R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  34,
+        "plu":  "443799",
+        "deskripsi":  "JD ICE BLEND VANILLA CARAMEL L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  35,
+        "plu":  "443800",
+        "deskripsi":  "JD ICE BLEND CHOCO CARAMEL R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  36,
+        "plu":  "443804",
+        "deskripsi":  "JD ICE KOREAN STRAWBERRY MILK R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  37,
+        "plu":  "443805",
+        "deskripsi":  "JD ICE KOREAN STRAWBERRY MILK L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  38,
+        "plu":  "443806",
+        "deskripsi":  "JD ICE LYCHEE TEA REG",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  39,
+        "plu":  "443807",
+        "deskripsi":  "JD ICE LYCHEE TEA L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  40,
+        "plu":  "443808",
+        "deskripsi":  "JD ICE HONEY LEMON TEA R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  41,
+        "plu":  "443809",
+        "deskripsi":  "JD ICE HONEY LEMON TEA L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  42,
+        "plu":  "443810",
+        "deskripsi":  "JD HOT BLACK COFFEE",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  43,
+        "plu":  "443835",
+        "deskripsi":  "JD ICE COFFEE LATTE L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  44,
+        "plu":  "443838",
+        "deskripsi":  "JD FRESH JUICE SEMANGKA",
+        "kategori":  "FRESH JUICE"
+    },
+    {
+        "sort_order":  45,
+        "plu":  "443839",
+        "deskripsi":  "JD FRESH JUICE MELON SKY",
+        "kategori":  "FRESH JUICE"
+    },
+    {
+        "sort_order":  46,
+        "plu":  "443842",
+        "deskripsi":  "JD FRESH JUICE SIRSAK",
+        "kategori":  "FRESH JUICE"
+    },
+    {
+        "sort_order":  47,
+        "plu":  "443843",
+        "deskripsi":  "JD FRESH JUICE JAMBU",
+        "kategori":  "FRESH JUICE"
+    },
+    {
+        "sort_order":  48,
+        "plu":  "443844",
+        "deskripsi":  "JD FRESH JUICE ALPUKAT",
+        "kategori":  "FRESH JUICE"
+    },
+    {
+        "sort_order":  49,
+        "plu":  "443845",
+        "deskripsi":  "JD FRESH JUICE BUAH NAGA",
+        "kategori":  "FRESH JUICE"
+    },
+    {
+        "sort_order":  50,
+        "plu":  "443847",
+        "deskripsi":  "JD FRESH JUICE JERUK",
+        "kategori":  "FRESH JUICE"
+    },
+    {
+        "sort_order":  51,
+        "plu":  "443848",
+        "deskripsi":  "JD HOT MATCHA LATTE",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  52,
+        "plu":  "443910",
+        "deskripsi":  "JD ICE CHOCOLATE R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  53,
+        "plu":  "443911",
+        "deskripsi":  "JD ICE CHOCOLATE L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  54,
+        "plu":  "444571",
+        "deskripsi":  "JD ESPRESSO",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  55,
+        "plu":  "444572",
+        "deskripsi":  "JD EXT SHOT ESPRESSO",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  56,
+        "plu":  "444987",
+        "deskripsi":  "JD FRESH JUICE PISANG STRAW2",
+        "kategori":  "FRESH JUICE"
+    },
+    {
+        "sort_order":  57,
+        "plu":  "445073",
+        "deskripsi":  "JD HOT CAPUCCINO",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  58,
+        "plu":  "445992",
+        "deskripsi":  "JD FRESH JUICE GREEN3",
+        "kategori":  "FRESH JUICE"
+    },
+    {
+        "sort_order":  59,
+        "plu":  "446279",
+        "deskripsi":  "JD FRESH JUICE CARROT MIX FR 4",
+        "kategori":  "FRESH JUICE"
+    },
+    {
+        "sort_order":  60,
+        "plu":  "446322",
+        "deskripsi":  "JD FRESH JUICE MANGGA",
+        "kategori":  "FRESH JUICE"
+    },
+    {
+        "sort_order":  61,
+        "plu":  "446417",
+        "deskripsi":  "JD MINI STEAM CHEESE FILLING35G",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  62,
+        "plu":  "446418",
+        "deskripsi":  "JD MINI STEAM CAKE MATCHA35G",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  63,
+        "plu":  "446419",
+        "deskripsi":  "JD MINI STEAM CAKE CHOCO35G",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  64,
+        "plu":  "446420",
+        "deskripsi":  "JD MINI BLUDER CHOCO35G",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  65,
+        "plu":  "446421",
+        "deskripsi":  "JD MINI BLUDER CHEESE35G",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  66,
+        "plu":  "446422",
+        "deskripsi":  "JD MINI CREAM MESSES50G",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  67,
+        "plu":  "446688",
+        "deskripsi":  "JD BAPAO KACANG HIJAU BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  68,
+        "plu":  "446689",
+        "deskripsi":  "JD BAPAO COKLAT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  69,
+        "plu":  "446690",
+        "deskripsi":  "JD BAPAO STRAWBERRY BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  70,
+        "plu":  "446691",
+        "deskripsi":  "JD BAPAO AYAM BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  71,
+        "plu":  "446692",
+        "deskripsi":  "JD CHIFFON DONUT KEJU BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  72,
+        "plu":  "446693",
+        "deskripsi":  "JD CHIFFON DONUT PANDAN BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  73,
+        "plu":  "446694",
+        "deskripsi":  "JD CHIFFON DONUT COKLAT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  74,
+        "plu":  "446695",
+        "deskripsi":  "JD BOMBOLONI CHOCO PEANUT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  75,
+        "plu":  "446696",
+        "deskripsi":  "JD BOMBOLONI STRAWBERRY BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  76,
+        "plu":  "446697",
+        "deskripsi":  "JD BOMBOLONI DOUBLE CHOCOLATE B",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  77,
+        "plu":  "446698",
+        "deskripsi":  "JD LONG JOHN KEJU BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  78,
+        "plu":  "446699",
+        "deskripsi":  "JD LONG JOHN MESES BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  79,
+        "plu":  "446700",
+        "deskripsi":  "JD ROTI DAGING AYAM BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  80,
+        "plu":  "446701",
+        "deskripsi":  "JD PIZZA BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  81,
+        "plu":  "446702",
+        "deskripsi":  "JD ABON GULUNG AYAM BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  82,
+        "plu":  "446704",
+        "deskripsi":  "JD ROTI PISANG COKLAT KEJU BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  83,
+        "plu":  "446705",
+        "deskripsi":  "JD ROTI PISANG COKLAT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  84,
+        "plu":  "446706",
+        "deskripsi":  "JD DIMSUM AYAM WORTEL BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  85,
+        "plu":  "446707",
+        "deskripsi":  "JD DIMSUM AYAM UDANG BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  86,
+        "plu":  "446708",
+        "deskripsi":  "JD DIMSUM AYAM JAMUR BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  87,
+        "plu":  "446709",
+        "deskripsi":  "JD DIMSUM AYAM TELUR BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  88,
+        "plu":  "446710",
+        "deskripsi":  "JD DIMSUM AYAM CUMI BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  89,
+        "plu":  "446711",
+        "deskripsi":  "JD RISOLES BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  90,
+        "plu":  "446712",
+        "deskripsi":  "JD SOSIS SOLO BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  91,
+        "plu":  "446713",
+        "deskripsi":  "JD PLAIN CROISSANT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  92,
+        "plu":  "446714",
+        "deskripsi":  "JD ALMOND CROISSANT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  93,
+        "plu":  "446715",
+        "deskripsi":  "JD CHEESE CROISSANT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  94,
+        "plu":  "446716",
+        "deskripsi":  "JD CINNAMON ROLL CROISSANT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  95,
+        "plu":  "446717",
+        "deskripsi":  "JD DANISH RAISIN CROISSANT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  96,
+        "plu":  "446718",
+        "deskripsi":  "JD PAIN AU CHOCO CROISSANT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  97,
+        "plu":  "446719",
+        "deskripsi":  "JD MARTABAK CROISSANT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  98,
+        "plu":  "446720",
+        "deskripsi":  "JD PAIN SUISSE CROISSANT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  99,
+        "plu":  "446721",
+        "deskripsi":  "JD CROFFLE BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  100,
+        "plu":  "446722",
+        "deskripsi":  "JD BEEF SAUSAGE CROISSANT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  101,
+        "plu":  "446723",
+        "deskripsi":  "JD SMOKE BEEF CROISSANT BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  102,
+        "plu":  "446724",
+        "deskripsi":  "JD TUNA PUFF BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  103,
+        "plu":  "446725",
+        "deskripsi":  "JD SAUSAGE PUFF BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  104,
+        "plu":  "446726",
+        "deskripsi":  "JD CHICKEN CURRY PUFF BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  105,
+        "plu":  "446995",
+        "deskripsi":  "JD ES BATU R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  106,
+        "plu":  "447411",
+        "deskripsi":  "SUKI ONIGIRI TUNA MAYO",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  107,
+        "plu":  "447412",
+        "deskripsi":  "SUKI ONIGIRI HOT CHICKEN",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  108,
+        "plu":  "447413",
+        "deskripsi":  "SUKI ONIGIRI HOT TUNA",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  109,
+        "plu":  "447414",
+        "deskripsi":  "SUKI ONIGIRI CHICKEN MAYO",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  110,
+        "plu":  "449485",
+        "deskripsi":  "JD JADI KEREN JUMBO 1L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  111,
+        "plu":  "449486",
+        "deskripsi":  "JD ICE MATCHALATTE 1L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  112,
+        "plu":  "449489",
+        "deskripsi":  "JD ICE MATCHA LATTE2 R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  113,
+        "plu":  "449492",
+        "deskripsi":  "JD ICE MATCHA LATTE2 L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  114,
+        "plu":  "449493",
+        "deskripsi":  "JD HOT MATCHA LATTE 2",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  115,
+        "plu":  "449494",
+        "deskripsi":  "JD ESBATU L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  116,
+        "plu":  "451305",
+        "deskripsi":  "JD HAWAIIAN AMERICANO L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  117,
+        "plu":  "451306",
+        "deskripsi":  "JD CREAMY COCONUT FRAPPE L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  118,
+        "plu":  "452161",
+        "deskripsi":  "JD COLA CARAMELA R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  119,
+        "plu":  "452162",
+        "deskripsi":  "JD POPPY BERRY R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  120,
+        "plu":  "452163",
+        "deskripsi":  "JD CLOUDY LYCHEE R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  121,
+        "plu":  "452794",
+        "deskripsi":  "JD ICE CHOCO BERRY R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  122,
+        "plu":  "452795",
+        "deskripsi":  "JD ICE CAPPUCCINO R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  123,
+        "plu":  "452796",
+        "deskripsi":  "JD ICE CAPPUCCINO L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  124,
+        "plu":  "452797",
+        "deskripsi":  "JD PANDAN CLOUD LATTE R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  125,
+        "plu":  "452798",
+        "deskripsi":  "JD PANDAN CLOUD LATTE L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  126,
+        "plu":  "452799",
+        "deskripsi":  "JD COCONUT CLOUD LATTE R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  127,
+        "plu":  "452800",
+        "deskripsi":  "JD COCONUT CLOUD LATTE L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  128,
+        "plu":  "453432",
+        "deskripsi":  "JD COLAGEN LATTE",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  129,
+        "plu":  "453433",
+        "deskripsi":  "JD DOLCE LATTE",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  130,
+        "plu":  "453434",
+        "deskripsi":  "JD JADI ASIK",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  131,
+        "plu":  "453435",
+        "deskripsi":  "JD JADI SUKA",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  132,
+        "plu":  "453436",
+        "deskripsi":  "JD JADI SERU",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  133,
+        "plu":  "454102",
+        "deskripsi":  "JD ES TEH JUMBO 1L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  134,
+        "plu":  "459029",
+        "deskripsi":  "JD BOLU BUN ABON BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  135,
+        "plu":  "459030",
+        "deskripsi":  "JD ABON ROLL BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  136,
+        "plu":  "459031",
+        "deskripsi":  "JD BOLOGNA MAYO BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  137,
+        "plu":  "459032",
+        "deskripsi":  "JD BOLU BUN CHOCOLATE CHIPS BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  138,
+        "plu":  "459033",
+        "deskripsi":  "JD BOLU BUN CREAM CHEESE BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  139,
+        "plu":  "459034",
+        "deskripsi":  "JD BOLU BUN DURIAN BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  140,
+        "plu":  "459035",
+        "deskripsi":  "JD BOLU BUN KOPI BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  141,
+        "plu":  "459036",
+        "deskripsi":  "JD BOLU BUN OREO CREAM BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  142,
+        "plu":  "459037",
+        "deskripsi":  "JD BOLU BUN PINPPLE CHEESE BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  143,
+        "plu":  "459038",
+        "deskripsi":  "JD BOLU BUN PINEEAPPLE CHCO BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  144,
+        "plu":  "459039",
+        "deskripsi":  "JD BOLU BUN UBE CRUMBLE BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  145,
+        "plu":  "459040",
+        "deskripsi":  "JD SALT BREAD BYI",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  146,
+        "plu":  "460953",
+        "deskripsi":  "JD PINK BERRY SODA R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  147,
+        "plu":  "460954",
+        "deskripsi":  "JD GREEN GRAPE FRUITYCANO R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  148,
+        "plu":  "460957",
+        "deskripsi":  "JD TROPICAL APPLE AMERICANO R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  149,
+        "plu":  "460958",
+        "deskripsi":  "JD MANGO COLADA R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  150,
+        "plu":  "461283",
+        "deskripsi":  "PLU K JADI X ROMA ARDEN CKL270G",
+        "kategori":  ""
+    },
+    {
+        "sort_order":  151,
+        "plu":  "465840",
+        "deskripsi":  "JD KOLAK LATTE R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  152,
+        "plu":  "465842",
+        "deskripsi":  "JD PISANG IJO LATTE R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  153,
+        "plu":  "465843",
+        "deskripsi":  "JD PISANG IJO LATTE L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  154,
+        "plu":  "465844",
+        "deskripsi":  "JD WATERMELLON COOLER R",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  155,
+        "plu":  "465845",
+        "deskripsi":  "JD WATERMELLON COOLER L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  156,
+        "plu":  "465855",
+        "deskripsi":  "JD KOLAK LATTE L",
+        "kategori":  "NON KOPI"
+    },
+    {
+        "sort_order":  157,
+        "plu":  "466060",
+        "deskripsi":  "JOLLY TIME MALLOW MAGIC 125G",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  158,
+        "plu":  "466229",
+        "deskripsi":  "JD JADI MACCHIATO R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  159,
+        "plu":  "466230",
+        "deskripsi":  "JD JADI MACCHIATO L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  160,
+        "plu":  "466231",
+        "deskripsi":  "JD SALTED BUTTERCORN R",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  161,
+        "plu":  "466232",
+        "deskripsi":  "JD SALTED BUTTERCORN L",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  162,
+        "plu":  "466233",
+        "deskripsi":  "JD AFFOGATO",
+        "kategori":  "KOPI"
+    },
+    {
+        "sort_order":  163,
+        "plu":  "894858",
+        "deskripsi":  "PLU K 5DAYS MINI CROISSANT (PC)",
+        "kategori":  "RTE"
+    },
+    {
+        "sort_order":  164,
+        "plu":  "895439",
+        "deskripsi":  "JA-DI SUNPRIDE BLIND BOX",
+        "kategori":  ""
+    }
+]

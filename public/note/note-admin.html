@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — NOTE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{max-width:100%;overflow-x:hidden}
+    html,body{width:100%;background:#fffbf2}
+    body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:#1a1917;min-height:100vh;overflow-x:hidden}
+    ::-webkit-scrollbar{width:0;height:0}
+    *{scrollbar-width:none;-ms-overflow-style:none}
+    :root{
+      --mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;
+      --mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;
+      --mori-mono:"JetBrains Mono",ui-monospace,monospace;
+    }
+    html,body{background:var(--mori-bg) !important}
+    body{padding-top:max(12px,env(safe-area-inset-top));-webkit-font-smoothing:antialiased}
+    .wrap{width:100%;max-width:800px;min-height:100vh;margin:0 auto;background:var(--mori-bg) !important;padding:12px 18px 40px;min-width:0}
+    .back-row{display:flex;justify-content:flex-end;margin-bottom:10px}
+    .btn-back{
+      font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+      text-decoration:none;color:var(--mori-text);padding:6px 10px;
+      border:1px solid var(--mori-accent);background:var(--mori-surface);box-shadow:2px 2px 0 rgba(26,25,23,.15);
+    }
+    .btn-back:active{transform:translate(1px,1px);box-shadow:none}
+
+    /* baris input + tombol +  — sama daily-task-admin */
+    .judul-row{display:flex;align-items:stretch;gap:8px}
+    .judul-row #f_title{flex:1 1 auto;min-width:0}
+    .btn-add{
+      flex:0 0 44px;width:44px;padding:0;display:flex;align-items:center;justify-content:center;
+      font-family:inherit;font-size:22px;font-weight:700;line-height:1;
+      color:var(--mori-bg);background:var(--mori-accent);border:1px solid var(--mori-accent);border-radius:0;cursor:pointer;
+      box-shadow:3px 3px 0 rgba(26,25,23,.18);transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
+    }
+    .btn-add:active{background:#33312f;transform:translate(2px,2px);box-shadow:none}
+    #f_title{
+      flex:1 1 auto;min-width:0;width:auto;max-width:100%;margin:0;height:44px;padding:0 14px;
+      font-family:var(--mori-mono);font-size:13px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
+      color:var(--mori-text) !important;background:var(--mori-surface) !important;
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;outline:none;
+    }
+    #f_title::placeholder{color:var(--mori-text-2) !important;letter-spacing:.4px;text-transform:none}
+    #f_title:focus{background:#fffdf7 !important;box-shadow:4px 4px 0 var(--mori-accent) !important}
+
+    /* tabel — sama menu-table daily-task-admin */
+    .table-wrap{border:1px solid var(--mori-accent);border-radius:0;background:var(--mori-bg);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+    .menu-table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+    .menu-table thead th{
+      position:sticky;top:0;z-index:1;background:var(--mori-surface);color:var(--mori-text);
+      font-family:var(--mori-mono);font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;text-align:left;
+      height:34px;padding:0 6px;border-bottom:1px solid var(--mori-accent);white-space:nowrap;
+    }
+    .menu-table tbody td{height:46px;padding:0 6px;border-bottom:1px solid var(--mori-line);vertical-align:middle}
+    .menu-table tbody tr:hover td{background:#faf6ea}
+    .menu-table tbody tr:last-child td{border-bottom:0}
+    .c-no{width:36px;text-align:center;font-family:var(--mori-mono);color:var(--mori-text-2);font-size:11px}
+    .c-nama{min-width:0;overflow:hidden}
+    .menu-table .c-nama .nama{font-family:var(--mori-mono);color:var(--mori-text);font-weight:700;font-size:11px;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .c-foto{width:52px}
+    .c-aksi{width:116px}
+    .c-foto .thumb{width:38px;height:38px;display:block;border:1px solid var(--mori-accent);border-radius:0;background:var(--mori-surface);overflow:hidden}
+    .c-foto .thumb img{width:100%;height:100%;object-fit:cover;filter:saturate(.4) brightness(1.04);display:block}
+    .c-foto .thumb.kosong{background:repeating-linear-gradient(45deg,#f2eee2 0 5px,#ece6d6 5px 10px);border-color:var(--mori-line)}
+    .c-foto .thumb.sibuk{background:var(--mori-surface) !important}
+    .c-foto .thumb.thumb-admin{display:flex;align-items:center;justify-content:center;background:var(--mori-accent)}
+    .c-foto .thumb.thumb-admin svg{width:18px;height:18px;color:var(--mori-bg)}
+    .menu-table tbody tr.is-admin td{background:#faf6ea}
+    .menu-table tbody tr.is-admin .c-nama .nama{color:var(--mori-accent)}
+    .acts{display:flex;gap:6px;justify-content:flex-end}
+    .ico{
+      width:32px !important;height:32px !important;flex:0 0 32px !important;min-height:32px !important;max-height:32px !important;
+      padding:0 !important;margin:0 !important;display:flex !important;align-items:center !important;justify-content:center !important;
+      font-family:inherit;font-size:14px;font-weight:800;line-height:1;color:var(--mori-bg);background:var(--mori-accent);
+      border:1px solid var(--mori-accent);border-radius:0;box-shadow:3px 3px 0 rgba(26,25,23,.18);cursor:pointer;flex-shrink:0;outline:none;
+      transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
+    }
+    .ico:active{opacity:1;transform:translate(2px,2px);box-shadow:none}
+    .ico-danger{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff;box-shadow:3px 3px 0 rgba(26,25,23,.18)}
+    .ico-danger:active{box-shadow:none}
+
+    .search-wrapper{display:flex;align-items:center;gap:10px;width:100%;margin:12px 0 0}
+    .search-box{flex:1;display:flex;align-items:center;gap:8px;min-width:0;border:1px solid var(--mori-accent) !important;border-radius:0 !important;background:var(--mori-surface) !important;color:var(--mori-text);padding:10px 14px;font-size:14px;transition:box-shadow .2s ease}
+    .search-box:focus-within{background:#fffdf7 !important;box-shadow:4px 4px 0 var(--mori-accent)}
+    .search-box svg{flex-shrink:0;color:var(--mori-text-2) !important;width:18px;height:18px}
+    .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:var(--mori-text) !important;font-family:inherit;min-width:0;-webkit-appearance:none;appearance:none;border-radius:0}
+    .search-box input::placeholder{color:var(--mori-text-2) !important}
+    .empty{font-family:var(--mori-mono);font-size:11px;font-weight:700;color:var(--mori-text-2);letter-spacing:1px;text-transform:uppercase}
+    .foto-hint{margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger);border-left:3px solid var(--mori-danger);padding:6px 8px;background:#fdf1f1}
+    .foto-hint[hidden]{display:none}
+    .foto-hint.sembunyi{opacity:0;transition:opacity .4s ease}
+
+    .pw-bg{display:none;position:fixed;left:0;right:0;top:0;bottom:0;z-index:200;background:rgba(26,25,23,.45);align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));overscroll-behavior:contain}
+    .pw-bg.open{display:flex}
+    html.pw-open{overflow:hidden;overscroll-behavior:none}
+    .pw-card{width:100%;max-width:360px;margin:auto;max-height:100%;overflow-y:auto;background:var(--mori-bg);border:1px solid var(--mori-accent);border-radius:0;padding:18px;box-shadow:6px 6px 0 rgba(26,25,23,.2);overscroll-behavior:contain}
+    .pw-title{font-family:var(--mori-mono);font-size:13px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--mori-text);margin-bottom:8px}
+    .pw-msg{font-size:12px;color:var(--mori-text-2);line-height:1.5;margin-bottom:12px;white-space:pre-line}
+    .pw-input{width:100%;height:auto;padding:11px 12px;font-family:var(--mori-mono);font-size:15px;letter-spacing:2px;color:var(--mori-text);background:var(--mori-surface);border:1px solid var(--mori-accent);border-radius:0;outline:none}
+    .pw-input:focus{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
+    .pw-error{margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger)}
+    .pw-error[hidden]{display:none}
+    .pw-actions{display:flex;gap:8px;margin-top:16px}
+    .pw-btn{flex:1;padding:12px;border:1px solid var(--mori-accent);border-radius:0;background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+    .pw-btn:active{transform:translate(2px,2px)}
+    .pw-btn-danger{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <form id="form" onsubmit="return false">
+    <input type="hidden" id="editId" />
+    <div class="judul-row">
+      <input id="f_title" type="text" placeholder="Nama menu, cth: Catatan Penting" autocomplete="off" />
+      <button class="btn-add" type="button" id="btnAdd" title="Tambah menu">+</button>
+    </div>
+  </form>
+
+  <div class="table-wrap" id="listWrap" style="margin-top:12px">
+    <table class="menu-table">
+      <thead>
+        <tr>
+          <th class="c-no">No</th>
+          <th>Nama Menu</th>
+          <th class="c-foto">Foto</th>
+          <th class="c-aksi"></th>
+        </tr>
+      </thead>
+      <tbody id="list">
+        <tr><td class="c-no"></td><td class="c-nama"><div class="empty">Memuat...</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="foto-hint" id="fotoHint" hidden></div>
+
+  <div class="search-wrapper">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+      <input id="search" type="text" placeholder="Cari menu..." autocomplete="off" />
+    </div>
+  </div>
+</div>
+
+<input type="file" id="fotoInput" accept="image/*" hidden />
+
+<div class="pw-bg" id="pwBg">
+  <div class="pw-card" role="dialog" aria-modal="true">
+    <div class="pw-title">Konfirmasi Hapus</div>
+    <div class="pw-msg" id="pwMsg"></div>
+    <input class="pw-input" id="pwInput" type="password" inputmode="numeric" autocomplete="off" placeholder="Masukkan password" />
+    <div class="pw-error" id="pwError" hidden>Password salah.</div>
+    <div class="pw-actions">
+      <button class="pw-btn" id="pwCancel" type="button">Batal</button>
+      <button class="pw-btn pw-btn-danger" id="pwOk" type="button">Hapus</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { supabase } from '../kopi/supabase.js';
+  const TABLE = 'note_menus';
+  const BUCKET = 'note-foto';
+  const DEL_PASSWORD = '0225106927';
+
+  const listEl = document.getElementById('list');
+  const searchEl = document.getElementById('search');
+  const editId = document.getElementById('editId');
+  const f_title = document.getElementById('f_title');
+  const btnAdd = document.getElementById('btnAdd');
+  const fotoInput = document.getElementById('fotoInput');
+  const fotoHint = document.getElementById('fotoHint');
+
+  let all = [];
+  const AKUN_TILE = 'admin';
+  const fotoAdminUrl = () => supabase.storage.from(BUCKET).getPublicUrl('note/' + AKUN_TILE + '.jpg').data.publicUrl;
+  const barisAdmin = { id: AKUN_TILE, title: 'ADMIN', slug: AKUN_TILE, isAdmin: true, foto_url: '' };
+  const adaFoto = async (url) => { try { const r = await fetch(url, { method: 'HEAD' }); return r.ok; } catch { return false; } };
+  let fotoVersi = Date.now();
+  const fotoBaru = (url) => url ? url + (url.includes('?') ? '&' : '?') + 'v=' + fotoVersi : '';
+  const slugify = (s) => String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  const kapitalKata = (s) => (s||'').toUpperCase();
+
+  let hintTimer = null;
+  function setFotoHint(pesan){
+    clearTimeout(hintTimer);
+    if(!pesan){ fotoHint.hidden=true; fotoHint.textContent=''; fotoHint.classList.remove('sembunyi'); return; }
+    fotoHint.hidden=false; fotoHint.classList.remove('sembunyi'); fotoHint.textContent=pesan;
+    hintTimer=setTimeout(()=>{ fotoHint.classList.add('sembunyi'); setTimeout(()=>{fotoHint.hidden=true},400)},6000);
+  }
+
+  const pwBg=document.getElementById('pwBg'), pwMsg=document.getElementById('pwMsg'), pwInput=document.getElementById('pwInput'), pwError=document.getElementById('pwError'), pwOk=document.getElementById('pwOk'), pwCancel=document.getElementById('pwCancel');
+  let pwResolve=null, pwScrollY=0;
+  function lockScrollPw(){ pwScrollY=window.scrollY||0; document.documentElement.classList.add('pw-open'); document.body.style.position='fixed'; document.body.style.top=-pwScrollY+'px'; document.body.style.left='0'; document.body.style.right='0'; document.body.style.width='100%'; }
+  function unlockScrollPw(){ document.documentElement.classList.remove('pw-open'); document.body.style.position=''; document.body.style.top=''; document.body.style.left=''; document.body.style.right=''; document.body.style.width=''; window.scrollTo(0,pwScrollY); }
+  function syncPwViewport(){ const vv=window.visualViewport; if(!vv||!pwBg.classList.contains('open')) return; pwBg.style.height=vv.height+'px'; pwBg.style.top=vv.offsetTop+'px'; pwBg.style.bottom='auto'; }
+  if(window.visualViewport){ window.visualViewport.addEventListener('resize',syncPwViewport); window.visualViewport.addEventListener('scroll',syncPwViewport); }
+  function askDelPassword(msg){
+    if(pwResolve) closePw(false);
+    pwMsg.textContent=msg||''; pwMsg.style.whiteSpace='pre-line'; pwInput.value=''; pwError.hidden=true;
+    lockScrollPw(); pwBg.classList.add('open'); syncPwViewport();
+    try{ pwInput.focus({preventScroll:true}); }catch(e){ pwInput.focus(); }
+    requestAnimationFrame(syncPwViewport);
+    return new Promise(res=>{ pwResolve=res; });
+  }
+  function closePw(ok){ pwBg.classList.remove('open'); pwBg.style.height=''; pwBg.style.top=''; pwBg.style.bottom=''; unlockScrollPw(); const fn=pwResolve; pwResolve=null; if(fn) fn(ok); }
+  pwOk.addEventListener('click',()=>{ if(pwInput.value.trim()!==DEL_PASSWORD){ pwError.hidden=false; pwInput.value=''; try{pwInput.focus({preventScroll:true})}catch(e){} return; } closePw(true); });
+  pwCancel.addEventListener('click',()=>closePw(false));
+  pwBg.addEventListener('click',e=>{ if(e.target===pwBg) closePw(false); });
+  pwInput.addEventListener('keydown',e=>{ if(e.key==='Enter') pwOk.click(); if(e.key==='Escape') closePw(false); });
+
+  async function kompresFoto(file,maxSisi=1200,kualitas=.82){
+    if(!file||!/^image\//.test(file.type||'')) return file;
+    let gambar=null; try{ gambar=await createImageBitmap(file); }catch{ return file; }
+    if(!gambar) return file;
+    const sisi=Math.max(gambar.width,gambar.height), skala=Math.min(1,maxSisi/sisi);
+    if(skala===1&&file.size<400*1024){ if(gambar.close) gambar.close(); return file; }
+    const w=Math.max(1,Math.round(gambar.width*skala)), h=Math.max(1,Math.round(gambar.height*skala));
+    const kanvas=document.createElement('canvas'); kanvas.width=w; kanvas.height=h;
+    kanvas.getContext('2d').drawImage(gambar,0,0,w,h); if(gambar.close) gambar.close();
+    const blob=await new Promise(res=>kanvas.toBlob(res,'image/jpeg',kualitas)); if(!blob) return file;
+    return new File([blob], (file.name||'foto').replace(/\.[^.]+$/,'')+'.jpg', {type:'image/jpeg',lastModified:Date.now()});
+  }
+
+  function barisKosong(pesan){ return '<tr><td class="c-no"></td><td class="c-nama"><div class="empty">'+pesan+'</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>'; }
+
+  function render(){
+    const q=searchEl.value.trim().toLowerCase();
+    const filtered=all.filter(m=>!q||(m.title||'').toLowerCase().includes(q));
+    const rows = (q ? [] : [barisAdmin]).concat(filtered);
+    if(!rows.length){ listEl.innerHTML=barisKosong(all.length?'Tidak ada yang cocok':'Belum ada menu. Tambah di atas.'); return; }
+    listEl.innerHTML=rows.map((m,i)=>{
+      const url=m.foto_url?fotoBaru(m.foto_url):'';
+      const isAdmin = !!m.isAdmin;
+      let thumb;
+      if (isAdmin) {
+        thumb = url
+          ? '<div class="thumb thumb-admin"><img src="'+url+'" alt="" loading="lazy" decoding="async" /></div>'
+          : '<div class="thumb thumb-admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v2" /><path d="M8 9h8" /><rect x="4" y="4" width="16" height="16" rx="1" /></svg></div>';
+      } else {
+        thumb=url?'<div class="thumb"><img src="'+url+'" alt="" loading="lazy" decoding="async" /></div>':'<div class="thumb kosong"></div>';
+      }
+      const aksi = isAdmin
+        ? '<button type="button" class="ico" data-foto="'+m.id+'" title="Ganti foto ADMIN">↑</button>'
+        : '<button type="button" class="ico" data-foto="'+m.id+'" title="Upload foto">↑</button><button type="button" class="ico" data-edit="'+m.id+'" title="Edit">✎</button><button type="button" class="ico ico-danger" data-del="'+m.id+'" title="Hapus">✕</button>';
+      return '<tr data-id="'+m.id+'"'+(isAdmin?' class="is-admin"':'')+'><td class="c-no">'+(i+1)+'</td><td class="c-nama"><div class="nama">'+(m.title||'')+'</div></td><td class="c-foto">'+thumb+'</td><td class="c-aksi"><div class="acts">'+aksi+'</div></td></tr>';
+    }).join('');
+    const idDari = v => (v === AKUN_TILE ? AKUN_TILE : parseInt(v, 10));
+    listEl.querySelectorAll('[data-foto]').forEach(b=>b.addEventListener('click',()=>pilihFoto(idDari(b.dataset.foto))));
+    listEl.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>isiForm(parseInt(b.dataset.edit,10))));
+    listEl.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>hapusMenu(parseInt(b.dataset.del,10))));
+  }
+
+  async function load(){
+    const {data,error}=await supabase.from(TABLE).select('*').order('sort_order');
+    if(error){ listEl.innerHTML=barisKosong('Gagal muat: '+error.message); setFotoHint('Gagal memuat: '+error.message); return; }
+    all=data||[];
+    const urlAdmin=fotoAdminUrl();
+    barisAdmin.foto_url=(await adaFoto(urlAdmin))?urlAdmin:'';
+    setFotoHint(''); render();
+  }
+
+  const setModeAdd=()=>{ btnAdd.textContent='+'; btnAdd.title='Tambah menu'; };
+  const setModeEdit=()=>{ btnAdd.textContent='✓'; btnAdd.title='Simpan perubahan'; };
+  function isiForm(id){
+    const m=all.find(x=>x.id===id); if(!m) return;
+    editId.value=String(m.id); f_title.value=kapitalKata(m.title||''); setModeEdit(); f_title.focus(); window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function resetForm(){ editId.value=''; f_title.value=''; setModeAdd(); f_title.focus(); }
+
+  btnAdd.addEventListener('click', async()=>{
+    const title=f_title.value.trim(); if(!title){ setFotoHint('Nama menu wajib diisi'); f_title.focus(); return; }
+    const slug=slugify(title);
+    let res;
+    if(editId.value) res=await supabase.from(TABLE).update({title,slug}).eq('id',parseInt(editId.value,10));
+    else res=await supabase.from(TABLE).insert([{title,slug,sort_order:all.length+1}]);
+    if(res.error){ setFotoHint('Gagal simpan: '+(res.error.message||'error')); return; }
+    resetForm(); await load();
+  });
+
+  f_title.addEventListener('input',e=>{
+    const pos=e.target.selectionStart, baru=kapitalKata(e.target.value);
+    if(baru!==e.target.value){ e.target.value=baru; try{e.target.setSelectionRange(Math.min(pos,baru.length),Math.min(pos,baru.length))}catch(err){} }
+  });
+  f_title.addEventListener('keydown',e=>{ if(e.key==='Enter') btnAdd.click(); });
+
+  let fotoTarget=null;
+  function pilihFoto(id){ fotoTarget=id; fotoInput.value=''; fotoInput.click(); }
+  fotoInput.addEventListener('change', async()=>{
+    const file=fotoInput.files&&fotoInput.files[0]; if(!file||fotoTarget===null) return;
+    const id=fotoTarget; fotoTarget=null;
+    const isAdmin = (id === AKUN_TILE);
+    const menu=isAdmin ? barisAdmin : all.find(m=>String(m.id)===String(id));
+    if(!menu) return;
+    setFotoHint('');
+    const thumb=listEl.querySelector('tr[data-id="'+id+'"] .c-foto .thumb');
+    if(thumb){ thumb.classList.add('sibuk'); thumb.innerHTML=''; }
+    try{
+      const kecil=await kompresFoto(file);
+      const path = isAdmin ? 'note/admin.jpg' : 'menu-'+id+'.jpg';
+      const {error:errUp}=await supabase.storage.from(BUCKET).upload(path,kecil,{upsert:true,contentType:'image/jpeg'});
+      if(errUp) throw new Error(errUp.message);
+      const {data:publik}=supabase.storage.from(BUCKET).getPublicUrl(path);
+      const url=publik.publicUrl;
+      if (!isAdmin) {
+        const {error:errSimpan}=await supabase.from(TABLE).update({foto_url:url}).eq('id',id);
+        if(errSimpan) setFotoHint('Foto tersimpan tapi DB belum terupdate: '+errSimpan.message);
+      }
+      menu.foto_url=url; fotoVersi=Date.now(); render(); setFotoHint('');
+    }catch(e){ setFotoHint('Upload foto gagal: '+(e&&e.message?e.message:e)); render(); }
+  });
+
+  async function hapusMenu(id){
+    const m=all.find(x=>x.id===id);
+    const ok=await askDelPassword('Hapus menu "'+(m?m.title:id)+'" beserta semua catatannya?');
+    if(!ok) return;
+    const {error}=await supabase.from(TABLE).delete().eq('id',id);
+    if(error){ setFotoHint('Gagal hapus: '+error.message); return; }
+    await load();
+  }
+
+  searchEl.addEventListener('input',render);
+  let rtTimer=null;
+  try{
+    supabase.channel('note_menus_admin').on('postgres_changes',{event:'*',schema:'public',table:TABLE},()=>{ clearTimeout(rtTimer); rtTimer=setTimeout(()=>load(),300); }).subscribe();
+  }catch(e){}
+
+  load();
+</script>
+</body>
+</html>

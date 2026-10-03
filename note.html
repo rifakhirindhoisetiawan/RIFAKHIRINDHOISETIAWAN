@@ -4,12 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NOTE</title>
-    <!-- Pindah ke note/: file asli di note/note.html (anti duplikat) -->
-    <meta http-equiv="refresh" content="0;url=note/note.html" />
-    <link rel="canonical" href="note/note.html" />
+    <!-- File asli ada di public/note/. Redirect ke sana, bukan ke note/
+         karena folder note/ tidak ada di root (cuma di dalam public/). -->
+    <meta http-equiv="refresh" content="0;url=public/note/note.html" />
+    <link rel="canonical" href="public/note/note.html" />
   </head>
   <body style="font-family:sans-serif;text-align:center;padding-top:40px">
-    <p>Membuka <a href="note/note.html">NOTE</a>…</p>
-    <script>location.replace("note/note.html");</script>
+    <p>Membuka <a href="public/note/note.html">NOTE</a>&hellip;</p>
+    <script>location.replace("public/note/note.html");</script>
   </body>
 </html>
