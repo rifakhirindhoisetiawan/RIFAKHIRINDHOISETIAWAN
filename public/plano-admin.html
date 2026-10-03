@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — PLANO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{max-width:100%;overflow-x:hidden}
+    html,body{width:100%;background:#fffbf2}
+    body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:#1a1917;min-height:100vh;overflow-x:hidden}
+    ::-webkit-scrollbar{width:0;height:0}
+    *{scrollbar-width:none;-ms-overflow-style:none}
+    :root{--mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;--mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;--mori-mono:"JetBrains Mono",ui-monospace,monospace}
+    html,body{background:#fffbf2!important}
+    body{padding-top:max(12px,env(safe-area-inset-top));-webkit-font-smoothing:antialiased}
+    .wrap{width:100%;max-width:800px;min-height:100vh;margin:0 auto;background:#fffbf2!important;padding:12px 18px 40px;min-width:0}
+    .judul-row{display:flex;gap:8px;flex-wrap:wrap}
+    .judul-row input{flex:1 1 120px;min-width:0}
+    .btn-add{flex:0 0 44px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fffbf2;background:#1a1917;border:1px solid #1a1917;cursor:pointer;box-shadow:3px 3px 0 rgba(26,25,23,.18);transition:box-shadow .2s ease,transform .2s ease}
+    .btn-add:active{transform:translate(2px,2px);box-shadow:none}
+    .inp{height:44px;padding:0 10px;font-family:var(--mori-mono);font-size:11px;font-weight:700;text-transform:uppercase;background:#f7f3e9;border:1px solid #1a1917;border-radius:0;outline:none}
+    .inp:focus{background:#fffdf7;box-shadow:4px 4px 0 #1a1917}
+    .table-wrap{border:1px solid #1a1917;border-radius:0;background:#fffbf2;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:12px}
+    .table-wrap::-webkit-scrollbar{display:none}
+    .menu-table{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+    .menu-table thead th{position:sticky;top:0;background:#f7f3e9;font-family:var(--mori-mono);font-size:8px;text-transform:uppercase;height:34px;padding:0 6px;border-bottom:1px solid #1a1917;white-space:nowrap}
+    .menu-table tbody td{height:46px;padding:0 6px;border-bottom:1px solid rgba(26,25,23,.14);vertical-align:middle}
+    .menu-table tbody tr:hover td{background:#faf6ea}
+    .c-no{width:36px;text-align:center;font-family:var(--mori-mono);color:#6e6a64}
+    .c-nama{overflow:hidden}
+    .menu-table .nama{font-family:var(--mori-mono);font-size:10px;font-weight:700;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .c-foto{width:52px}
+    .c-aksi{width:168px}
+    .c-foto .thumb{width:38px;height:38px;display:block;border:1px solid #1a1917;background:#f7f3e9;overflow:hidden}
+    .c-foto .thumb img{width:100%;height:100%;object-fit:cover}
+    .c-foto .thumb.kosong{background:repeating-linear-gradient(45deg,#f2eee2 0 5px,#ece6d6 5px 10px)}
+    .c-foto .thumb.thumb-admin{display:flex;align-items:center;justify-content:center;background:#1a1917;color:#fffbf2}
+    .c-foto .thumb.thumb-admin svg{width:18px;height:18px}
+    .acts{display:flex;gap:4px;justify-content:flex-end}
+    .ico{width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fffbf2;background:#1a1917;border:1px solid #1a1917;cursor:pointer;flex-shrink:0}
+    .ico:active{transform:translate(1px,1px)}
+    .ico-danger{background:#b91c1c;border-color:#b91c1c}
+    .ico-ghost{background:#f7f3e9;color:#1a1917}
+    .search-wrapper{margin-top:12px}
+    .search-box{display:flex;align-items:center;gap:8px;border:1px solid #1a1917;background:#f7f3e9;padding:10px 14px}
+    .search-box:focus-within{background:#fffdf7;box-shadow:4px 4px 0 #1a1917}
+    .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;font-family:inherit}
+    .empty{font-family:var(--mori-mono);font-size:11px;font-weight:700;color:#6e6a64;text-transform:uppercase;text-align:center;padding:12px}
+    .hint{margin-top:8px;font-family:var(--mori-mono);font-size:10px;color:#b91c1c;border-left:3px solid #b91c1c;background:#fdf1f1;padding:6px 8px}
+    .hint[hidden]{display:none}
+    .plano-preview{margin-top:14px;border:1px solid #1a1917;background:#fffbf2;padding:12px}
+    .plano-head{font-family:var(--mori-mono);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:flex;justify-content:space-between;margin-bottom:10px}
+    .plano-head span{color:#6e6a64;font-size:8px}
+    .plano-group{margin-bottom:12px}
+    .plano-label{font-family:var(--mori-mono);font-size:9px;font-weight:700;background:#f7f3e9;border:1px solid #1a1917;display:inline-block;padding:3px 8px;margin-bottom:8px}
+    .plano-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    @media(max-width:480px){.plano-grid{grid-template-columns:repeat(3,1fr)}}
+    .pt{aspect-ratio:9/16;border:1px solid #1a1917;background:#f7f3e9;box-shadow:3px 3px 0 rgba(26,25,23,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px;text-align:center;position:relative;overflow:hidden}
+    .pt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .pt-name{font-family:var(--mori-mono);font-size:8px;font-weight:700;position:relative;z-index:1;background:rgba(255,251,242,.88);padding:2px 4px;width:100%}
+    .pt-desc{font-family:var(--mori-mono);font-size:7px;color:#6e6a64;position:relative;z-index:1}
+    .pw-bg{display:none;position:fixed;inset:0;background:rgba(26,25,23,.45);align-items:center;justify-content:center;padding:16px;z-index:200}
+    .pw-bg.open{display:flex}
+    .pw-card{width:100%;max-width:360px;background:#fffbf2;border:1px solid #1a1917;padding:18px;box-shadow:6px 6px 0 rgba(26,25,23,.2)}
+    .pw-title{font-family:var(--mori-mono);font-size:13px;font-weight:700;margin-bottom:8px}
+    .pw-input{width:100%;padding:11px 12px;font-family:var(--mori-mono);background:#f7f3e9;border:1px solid #1a1917;outline:none}
+    .pw-actions{display:flex;gap:8px;margin-top:12px}
+    .pw-btn{flex:1;padding:12px;border:1px solid #1a1917;font-family:var(--mori-mono);font-size:11px;font-weight:700;text-transform:uppercase;cursor:pointer}
+    .pw-btn-danger{background:#b91c1c;color:#fff;border-color:#b91c1c}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <form id="form" onsubmit="return false">
+    <input type="hidden" id="editId" />
+    <div class="judul-row">
+      <input id="f_name" class="inp" type="text" placeholder="Nama rak (Rak A)" autocomplete="off" />
+      <button class="btn-add" type="button" id="btnAdd">+</button>
+    </div>
+  </form>
+  <div class="table-wrap">
+    <table class="menu-table">
+      <thead><tr><th class="c-no">No</th><th>Nama</th><th class="c-foto">Foto</th><th class="c-aksi"></th></tr></thead>
+      <tbody id="list"><tr><td colspan="4"><div class="empty">Memuat...</div></td></tr></tbody>
+    </table>
+  </div>
+  <div class="plano-preview" id="planoPreview"><div class="plano-head">PREVIEW PLANOGRAM <span>↑↓ UNTUK GESER POSISI</span></div><div id="planoGrid"></div></div>
+  <div class="hint" id="hint" hidden></div>
+  <div class="search-wrapper"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="search" type="text" placeholder="Cari rak..." autocomplete="off" /></div></div>
+</div>
+<input type="file" id="fotoInput" accept="image/*" hidden />
+<div class="pw-bg" id="pwBg"><div class="pw-card"><div class="pw-title">Hapus?</div><div id="pwMsg" style="font-size:12px;color:#6e6a64;margin-bottom:12px"></div><input class="pw-input" id="pwInput" type="password" placeholder="Password" /><div class="pw-actions"><button class="pw-btn" id="pwCancel" type="button">Batal</button><button class="pw-btn pw-btn-danger" id="pwOk" type="button">Hapus</button></div></div></div>
+<script type="module">
+import { supabase } from './kopi/supabase.js';
+const TABLE='plano_items', BUCKET='plano-foto', DEL_PASSWORD='0225106927';
+const listEl=document.getElementById('list'), searchEl=document.getElementById('search'), editId=document.getElementById('editId'), f_name=document.getElementById('f_name'), btnAdd=document.getElementById('btnAdd'), fotoInput=document.getElementById('fotoInput'), hint=document.getElementById('hint'), planoGrid=document.getElementById('planoGrid');
+let all=[], fotoVersi=Date.now();
+const fotoBaru=u=>u?u+(u.includes('?')?'&':'?')+'v='+fotoVersi:'';
+const AKUN='admin', fotoAdminUrl=()=>supabase.storage.from(BUCKET).getPublicUrl('plano/'+AKUN+'.jpg').data.publicUrl;
+const barisAdmin={id:AKUN,group_title:'ADMIN',name:'ADMIN',desc:'',isAdmin:true,foto_url:''};
+const adaFoto=async u=>{try{const r=await fetch(u,{method:'HEAD'});return r.ok}catch{return false}};
+function setHint(m){ hint.hidden=!m; hint.textContent=m||''; if(m) setTimeout(()=>hint.hidden=true,4000); }
+const pwBg=document.getElementById('pwBg'),pwMsg=document.getElementById('pwMsg'),pwInput=document.getElementById('pwInput');
+let pwResolve=null;
+function askPw(msg){ pwMsg.textContent=msg; pwInput.value=''; pwBg.classList.add('open'); pwInput.focus(); return new Promise(r=>pwResolve=r); }
+function closePw(ok){ pwBg.classList.remove('open'); const fn=pwResolve; pwResolve=null; if(fn) fn(ok); }
+document.getElementById('pwOk').onclick=()=>{ if(pwInput.value.trim()!==DEL_PASSWORD){ pwInput.value=''; pwInput.placeholder='Salah!'; return;} closePw(true); };
+document.getElementById('pwCancel').onclick=()=>closePw(false);
+pwBg.onclick=e=>{ if(e.target===pwBg) closePw(false); };
+async function kompresFoto(f){ if(!f||!/^image\//.test(f.type||'')) return f; let g=null; try{g=await createImageBitmap(f)}catch{return f} if(!g) return f; const s=Math.max(g.width,g.height),sc=Math.min(1,1200/s); if(sc===1&&f.size<400*1024){if(g.close)g.close();return f} const w=Math.max(1,Math.round(g.width*sc)),h=Math.max(1,Math.round(g.height*sc)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(g,0,0,w,h);if(g.close)g.close();const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.82)); if(!b) return f; return new File([b],(f.name||'foto').replace(/\.[^.]+$/,'')+'.jpg',{type:'image/jpeg'}) }
+function render(){
+  const q=searchEl.value.trim().toLowerCase();
+  const filtered=all.filter(m=>!q||(m.name||'').toLowerCase().includes(q));
+  const rows=(q?[]:[barisAdmin]).concat(filtered);
+  if(!rows.length){ listEl.innerHTML='<tr><td colspan="4"><div class="empty">Belum ada rak</div></td></tr>'; renderPlano([]); return; }
+  listEl.innerHTML=rows.map((m,i)=>{
+    const url=m.foto_url?fotoBaru(m.foto_url):'', isA=!!m.isAdmin;
+    const thumb=isA?(url?'<div class="thumb thumb-admin"><img src="'+url+'"/>':'<div class="thumb thumb-admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M12 15v2"/><path d="M8 9h8"/></svg></div>'):(url?'<div class="thumb"><img src="'+url+'"/>':'<div class="thumb kosong">');
+    const acts=isA?'<button class="ico" data-foto="'+m.id+'">↑</button>':'<button class="ico ico-ghost" data-up="'+m.id+'">↑</button><button class="ico ico-ghost" data-down="'+m.id+'">↓</button><button class="ico" data-foto="'+m.id+'">↑</button><button class="ico" data-edit="'+m.id+'">✎</button><button class="ico ico-danger" data-del="'+m.id+'">✕</button>';
+    return '<tr data-id="'+m.id+'"><td class="c-no">'+(i+1)+'</td><td class="c-nama"><div class="nama">'+(m.name||'')+'</div></td><td class="c-foto">'+thumb+'</div></td><td class="c-aksi"><div class="acts">'+acts+'</div></td></tr>';
+  }).join('');
+  listEl.querySelectorAll('[data-foto]').forEach(b=>b.onclick=()=>pilihFoto(b.dataset.foto==='admin'?'admin':parseInt(b.dataset.foto,10)));
+  listEl.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>isiForm(parseInt(b.dataset.edit,10)));
+  listEl.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>hapus(parseInt(b.dataset.del,10)));
+  listEl.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>geser(parseInt(b.dataset.up,10),-1));
+  listEl.querySelectorAll('[data-down]').forEach(b=>b.onclick=()=>geser(parseInt(b.dataset.down,10),1));
+  renderPlano(filtered);
+}
+function renderPlano(filtered){
+  if(!filtered.length){ planoGrid.innerHTML='<div class="empty">Belum ada rak</div>'; return; }
+  planoGrid.innerHTML='<div class="plano-grid">'+filtered.map(r=>{
+    const img=r.foto_url?'<img src="'+fotoBaru(r.foto_url)+'" alt=""/>':'';
+    return '<div class="pt">'+img+'<span class="pt-name">'+(r.name||'')+'</span></div>';
+  }).join('')+'</div>';
+}
+async function geser(id,dir){
+  const idx=all.findIndex(x=>x.id===id); if(idx<0) return;
+  const nIdx=idx+dir; if(nIdx<0||nIdx>=all.length) return;
+  const a=all[idx], b=all[nIdx];
+  const tmp=a.sort_order; a.sort_order=b.sort_order; b.sort_order=tmp;
+  all.splice(idx,1); all.splice(nIdx,0,a);
+  render();
+  await supabase.from(TABLE).update({sort_order:a.sort_order}).eq('id',a.id);
+  await supabase.from(TABLE).update({sort_order:b.sort_order}).eq('id',b.id);
+}
+async function load(){
+  const {data,error}=await supabase.from(TABLE).select('*').order('sort_order');
+  if(error){ listEl.innerHTML='<tr><td colspan="6"><div class="empty">'+error.message+'</div></td></tr>'; return; }
+  all=data||[]; barisAdmin.foto_url=(await adaFoto(fotoAdminUrl()))?fotoAdminUrl():''; render();
+}
+const setAdd=()=>{btnAdd.textContent='+'}; const setEdit=()=>{btnAdd.textContent='✓'};
+function isiForm(id){ const m=all.find(x=>x.id===id); if(!m) return; editId.value=String(m.id); f_name.value=m.name||''; setEdit(); f_name.focus(); }
+function resetForm(){ editId.value=''; f_name.value=''; setAdd(); }
+btnAdd.onclick=async()=>{
+  const name=(f_name.value||'').trim();
+  if(!name){ setHint('Nama rak wajib diisi'); return; }
+  let res;
+  if(editId.value) res=await supabase.from(TABLE).update({name}).eq('id',parseInt(editId.value,10));
+  else res=await supabase.from(TABLE).insert([{group_title:'GONDOLA A',name,desc:'',sort_order:all.length+1}]);
+  if(res.error){ setHint(res.error.message); return; }
+  resetForm(); await load();
+};
+let fotoTarget=null; function pilihFoto(id){ fotoTarget=id; fotoInput.value=''; fotoInput.click(); }
+fotoInput.onchange=async()=>{
+  const f=fotoInput.files&&fotoInput.files[0]; if(!f||fotoTarget===null) return; const id=fotoTarget; fotoTarget=null;
+  const isA=(id==='admin'), menu=isA?barisAdmin:all.find(m=>String(m.id)===String(id)); if(!menu) return;
+  try{
+    const kecil=await kompresFoto(f), path=isA?'plano/admin.jpg':'plano/'+id+'.jpg';
+    const {error:e1}=await supabase.storage.from(BUCKET).upload(path,kecil,{upsert:true,contentType:'image/jpeg'}); if(e1) throw e1;
+    const url=supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+    if(!isA){ const {error:e2}=await supabase.from(TABLE).update({foto_url:url}).eq('id',id); if(e2) setHint(e2.message); }
+    menu.foto_url=url; fotoVersi=Date.now(); render();
+  }catch(e){ setHint(e.message); }
+};
+async function hapus(id){ const m=all.find(x=>x.id===id); const ok=await askPw('Hapus "'+(m?m.name:id)+'"?'); if(!ok) return; const {error}=await supabase.from(TABLE).delete().eq('id',id); if(error){setHint(error.message);return} await load(); }
+searchEl.oninput=render;
+try{ supabase.channel('plano_admin').on('postgres_changes',{event:'*',schema:'public',table:TABLE},()=>load()).subscribe(); }catch{}
+load();
+</script>
+</body>
+</html>
