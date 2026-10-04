@@ -106,13 +106,7 @@
         const { data, error } = await supabase.from('plano_items').select('*').order('sort_order');
         if(error) throw error;
         if(data && data.length){
-          const map = {};
-          data.forEach(r=>{
-            const grp = r.group_title || 'LAINNYA';
-            if(!map[grp]) map[grp]=[];
-            map[grp].push({ name:r.name, desc:r.desc||'', foto_url:r.foto_url||'', link:r.link||'#' });
-          });
-          dbGroups = Object.entries(map).map(([title,items])=>({ title, items }));
+          dbGroups = [{ title:"", items: data.map(r=>({ name:r.name, desc:r.desc||'', foto_url:r.foto_url||'', link:r.link||'#' })) }];
         }
       }catch(e){}
       renderMenu();

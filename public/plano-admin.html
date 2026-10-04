@@ -18,51 +18,78 @@
     html,body{background:#fffbf2!important}
     body{padding-top:max(12px,env(safe-area-inset-top));-webkit-font-smoothing:antialiased}
     .wrap{width:100%;max-width:800px;min-height:100vh;margin:0 auto;background:#fffbf2!important;padding:12px 18px 40px;min-width:0}
-    .judul-row{display:flex;gap:8px;flex-wrap:wrap}
-    .judul-row input{flex:1 1 120px;min-width:0}
-    .btn-add{flex:0 0 44px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fffbf2;background:#1a1917;border:1px solid #1a1917;cursor:pointer;box-shadow:3px 3px 0 rgba(26,25,23,.18);transition:box-shadow .2s ease,transform .2s ease}
-    .btn-add:active{transform:translate(2px,2px);box-shadow:none}
-    .inp{height:44px;padding:0 10px;font-family:var(--mori-mono);font-size:11px;font-weight:700;text-transform:uppercase;background:#f7f3e9;border:1px solid #1a1917;border-radius:0;outline:none}
-    .inp:focus{background:#fffdf7;box-shadow:4px 4px 0 #1a1917}
-    .table-wrap{border:1px solid #1a1917;border-radius:0;background:#fffbf2;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:12px}
+    .sec+.sec{margin-top:22px}
+    .row{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+    .grow{flex:1;min-width:0}
+    .inp{height:36px;padding:0 12px;font-family:var(--mori-mono);font-size:12px;font-weight:700;text-transform:uppercase;background:#f7f3e9;border:1px solid #1a1917;border-radius:0;outline:none;transition:box-shadow .2s ease}
+    .inp:focus{background:#fffdf7;border-color:#1a1917;box-shadow:4px 4px 0 #1a1917}
+    .btn-add,.ico{width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mori-mono);font-size:14px;font-weight:800;line-height:1;color:#fffbf2;background:#1a1917;border:1px solid #1a1917;border-radius:3px;cursor:pointer;flex-shrink:0;outline:none;box-shadow:2px 2px 0 rgba(26,25,23,.16);transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+    .btn-add{font-size:16px}
+    .btn-add:hover,.ico:hover{background:#35322d}
+    .ico-danger{background:#b91c1c;border-color:#b91c1c;color:#fff}
+    .ico-danger:hover{background:#c81e1e}
+    .btn-add:active,.ico:active{transform:translate(2px,2px);box-shadow:none}
+    .btn-add:focus-visible,.ico:focus-visible{outline:2px solid #1a1917;outline-offset:2px}
+    .ico-ghost{background:#f7f3e9;color:#1a1917;border-color:rgba(26,25,23,.3)}
+    .table-wrap{border:1px solid #1a1917;border-radius:0;background:#fffbf2;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:0}
     .table-wrap::-webkit-scrollbar{display:none}
     .menu-table{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
-    .menu-table thead th{position:sticky;top:0;background:#f7f3e9;font-family:var(--mori-mono);font-size:8px;text-transform:uppercase;height:34px;padding:0 6px;border-bottom:1px solid #1a1917;white-space:nowrap}
+    .menu-table thead th{position:sticky;top:0;background:#f7f3e9;font-family:var(--mori-mono);font-size:8px;text-transform:uppercase;height:34px;padding:0 6px;border-bottom:1px solid #1a1917;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .menu-table tbody td{height:46px;padding:0 6px;border-bottom:1px solid rgba(26,25,23,.14);vertical-align:middle}
     .menu-table tbody tr:hover td{background:#faf6ea}
-    .c-no{width:36px;text-align:center;font-family:var(--mori-mono);color:#6e6a64}
+    .c-no{width:30px;text-align:center;font-family:var(--mori-mono);color:#6e6a64}
     .c-nama{overflow:hidden}
     .menu-table .nama{font-family:var(--mori-mono);font-size:10px;font-weight:700;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .c-shelving{width:78px}
+    .c-baris{width:40px}
+    .c-plu{width:64px}
+    .c-barcode{width:88px}
     .c-foto{width:52px}
-    .c-aksi{width:168px}
+    .c-aksi{width:88px}
     .c-foto .thumb{width:38px;height:38px;display:block;border:1px solid #1a1917;background:#f7f3e9;overflow:hidden}
     .c-foto .thumb img{width:100%;height:100%;object-fit:cover}
     .c-foto .thumb.kosong{background:repeating-linear-gradient(45deg,#f2eee2 0 5px,#ece6d6 5px 10px)}
     .c-foto .thumb.thumb-admin{display:flex;align-items:center;justify-content:center;background:#1a1917;color:#fffbf2}
     .c-foto .thumb.thumb-admin svg{width:18px;height:18px}
-    .acts{display:flex;gap:4px;justify-content:flex-end}
-    .ico{width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fffbf2;background:#1a1917;border:1px solid #1a1917;cursor:pointer;flex-shrink:0}
-    .ico:active{transform:translate(1px,1px)}
-    .ico-danger{background:#b91c1c;border-color:#b91c1c}
-    .ico-ghost{background:#f7f3e9;color:#1a1917}
+    .acts{display:flex;gap:6px;justify-content:flex-end;align-items:center}
     .search-wrapper{margin-top:12px}
-    .search-box{display:flex;align-items:center;gap:8px;border:1px solid #1a1917;background:#f7f3e9;padding:10px 14px}
+    .search-box{display:flex;align-items:center;gap:8px;border:1px solid #1a1917;background:#f7f3e9;padding:0 12px;height:36px}
     .search-box:focus-within{background:#fffdf7;box-shadow:4px 4px 0 #1a1917}
-    .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;font-family:inherit}
+    .search-box input{border:none;background:transparent;outline:none;width:100%;min-width:0;font-size:14px;font-family:inherit;color:#1a1917}
+    .search-box input::-webkit-search-cancel-button{-webkit-appearance:none}
     .empty{font-family:var(--mori-mono);font-size:11px;font-weight:700;color:#6e6a64;text-transform:uppercase;text-align:center;padding:12px}
     .hint{margin-top:8px;font-family:var(--mori-mono);font-size:10px;color:#b91c1c;border-left:3px solid #b91c1c;background:#fdf1f1;padding:6px 8px}
     .hint[hidden]{display:none}
-    .plano-preview{margin-top:14px;border:1px solid #1a1917;background:#fffbf2;padding:12px}
-    .plano-head{font-family:var(--mori-mono);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:flex;justify-content:space-between;margin-bottom:10px}
-    .plano-head span{color:#6e6a64;font-size:8px}
-    .plano-group{margin-bottom:12px}
-    .plano-label{font-family:var(--mori-mono);font-size:9px;font-weight:700;background:#f7f3e9;border:1px solid #1a1917;display:inline-block;padding:3px 8px;margin-bottom:8px}
-    .plano-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-    @media(max-width:480px){.plano-grid{grid-template-columns:repeat(3,1fr)}}
-    .pt{aspect-ratio:9/16;border:1px solid #1a1917;background:#f7f3e9;box-shadow:3px 3px 0 rgba(26,25,23,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px;text-align:center;position:relative;overflow:hidden}
-    .pt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-    .pt-name{font-family:var(--mori-mono);font-size:8px;font-weight:700;position:relative;z-index:1;background:rgba(255,251,242,.88);padding:2px 4px;width:100%}
-    .pt-desc{font-family:var(--mori-mono);font-size:7px;color:#6e6a64;position:relative;z-index:1}
+    .sec .menu-table.detail{min-width:560px}
+    .menu-table.detail .c-nama{width:180px}
+    .sec .menu-table .c-aksi{position:sticky;right:0;background:#fffbf2;border-left:1px solid rgba(26,25,23,.16);box-shadow:-6px 0 8px -8px rgba(26,25,23,.3)}
+    .sec .menu-table thead th.c-aksi{z-index:2;background:#f7f3e9;border-left:1px solid rgba(26,25,23,.16)}
+    .sec .menu-table tbody.tambah .c-aksi{background:#fffdf7}
+    .sec .menu-table tbody.grp .c-aksi{background:#f7f3e9}
+    .sec .menu-table tbody.grp:hover .c-aksi,.sec .menu-table tbody.grp:focus-visible .c-aksi{background:#efe9da}
+    .menu-table tfoot td{position:sticky;bottom:0;z-index:1;background:#f7f3e9;border-top:1px solid #1a1917;font-family:var(--mori-mono);font-size:9px;font-weight:800;height:34px;padding:0 8px;white-space:nowrap}
+    .sec .menu-table tfoot td.c-aksi{background:#f7f3e9;box-shadow:none;border-left:1px solid rgba(26,25,23,.16)}
+    .menu-table tfoot b{color:#1a1917}
+    .tambah td{background:#fffdf7;height:44px}
+    .grp td{background:#f7f3e9;border-bottom:1px solid #1a1917;border-top:1px solid #1a1917;height:30px;padding:0 8px}
+    .grp{cursor:pointer}
+    .grp:hover td,.grp:focus-visible td{background:#f7f3e9}
+    .grp:focus-visible{outline:2px solid #1a1917;outline-offset:-2px}
+    .grp .grp-nama{font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:.6px;color:#1a1917}
+    .grp .grp-jml{float:right;font-family:var(--mori-mono);font-size:8px;font-weight:700;color:#6e6a64}
+    .tambah:hover td{background:#fffdf7}
+    .tambah .auto{font-family:var(--mori-mono);font-size:11px;font-weight:700;color:#6e6a64}
+    .tambah .acts{justify-content:center}
+    .menu-table tbody tr[data-rak]{cursor:pointer}
+    .menu-table tbody tr[data-rak]:hover td{background:#f7f3e9}
+    .menu-table tbody tr.aktif td{background:#e9e2d0;box-shadow:inset 0 -2px 0 rgba(26,25,23,.32)}
+    .menu-table tbody tr.aktif td.c-nama .nama{color:#1a1917}
+    .pilih td{background:#efe9da !important;box-shadow:inset 0 -2px 0 rgba(26,25,23,.22)}
+    .cell-input{width:100%;min-width:0;height:30px;padding:0 6px;font-family:var(--mori-mono);font-size:9px;font-weight:700;line-height:1;color:#1a1917;background:#f7f3e9;border:1px solid rgba(26,25,23,.28);border-radius:0;cursor:text;-moz-appearance:textfield;appearance:textfield;transition:background .15s ease,border-color .15s ease,box-shadow .15s ease}
+    .cell-input:hover{background:#fffdf7;border-color:#1a1917}
+    .cell-input:focus{outline:none;background:#fff;border-color:#1a1917;box-shadow:3px 3px 0 rgba(26,25,23,.18)}
+    .cell-input::placeholder{color:#a9a49b}
+    .cell-input::-webkit-outer-spin-button,.cell-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
     .pw-bg{display:none;position:fixed;inset:0;background:rgba(26,25,23,.45);align-items:center;justify-content:center;padding:16px;z-index:200}
     .pw-bg.open{display:flex}
     .pw-card{width:100%;max-width:360px;background:#fffbf2;border:1px solid #1a1917;padding:18px;box-shadow:6px 6px 0 rgba(26,25,23,.2)}
@@ -75,35 +102,63 @@
 </head>
 <body>
 <div class="wrap">
-  <form id="form" onsubmit="return false">
-    <input type="hidden" id="editId" />
-    <div class="judul-row">
-      <input id="f_name" class="inp" type="text" placeholder="Nama rak (Rak A)" autocomplete="off" />
-      <button class="btn-add" type="button" id="btnAdd">+</button>
+  <section class="sec">
+    <div class="row">
+      <div class="search-box grow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="search" type="search" placeholder="Cari rak / produk" autocomplete="off" aria-label="Cari rak atau produk" /></div>
     </div>
-  </form>
-  <div class="table-wrap">
-    <table class="menu-table">
-      <thead><tr><th class="c-no">No</th><th>Nama</th><th class="c-foto">Foto</th><th class="c-aksi"></th></tr></thead>
-      <tbody id="list"><tr><td colspan="4"><div class="empty">Memuat...</div></td></tr></tbody>
-    </table>
-  </div>
-  <div class="plano-preview" id="planoPreview"><div class="plano-head">PREVIEW PLANOGRAM <span>↑↓ UNTUK GESER POSISI</span></div><div id="planoGrid"></div></div>
+    <div class="row">
+      <input class="inp grow" id="f_name" type="text" placeholder="Nama rak" autocomplete="off" aria-label="Nama rak" />
+      <button class="btn-add" type="button" id="f_add" title="Tambah rak" aria-label="Tambah rak">+</button>
+    </div>
+    <div class="table-wrap">
+      <table class="menu-table">
+        <thead><tr><th class="c-no">No</th><th>Rak</th><th class="c-foto">Foto</th><th class="c-aksi"></th></tr></thead>
+        <tbody id="list"><tr><td colspan="4"><div class="empty">Memuat...</div></td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="table-wrap">
+      <table class="menu-table detail">
+        <thead><tr><th class="c-no">No</th><th class="c-shelving">Shelving</th><th class="c-baris">Baris</th><th class="c-plu">PLU</th><th class="c-barcode">Barcode</th><th>Produk</th><th class="c-foto">Foto</th><th class="c-aksi"></th></tr></thead>
+        <tbody class="tambah">
+          <tr>
+            <td class="c-no"><span class="auto">+</span></td>
+            <td class="c-shelving"><input class="cell-input mono" type="text" id="a_shelving" placeholder="Shelving" autocomplete="off" aria-label="Shelving" /></td>
+            <td class="c-baris"><input class="cell-input mono" type="text" id="a_baris" placeholder="Baris" inputmode="numeric" autocomplete="off" aria-label="Baris" /></td>
+            <td class="c-plu"><input class="cell-input mono" type="text" id="a_plu" placeholder="PLU" inputmode="numeric" autocomplete="off" aria-label="PLU" /></td>
+            <td class="c-barcode"><input class="cell-input mono" type="text" id="a_barcode" placeholder="Barcode" autocomplete="off" aria-label="Barcode" /></td>
+            <td class="c-nama"><input class="cell-input mono" type="text" id="a_name" placeholder="Produk" autocomplete="off" aria-label="Produk" /></td>
+            <td class="c-foto"></td>
+            <td class="c-aksi"><div class="acts"><button class="ico" type="button" id="a_add" title="Tambah produk" aria-label="Tambah produk">+</button></div></td>
+          </tr>
+        </tbody>
+        <tbody id="planoList"><tr><td colspan="8"><div class="empty">Memuat...</div></td></tr></tbody>
+        <tfoot id="planoFoot"></tfoot>
+      </table>
+    </div>
+  </section>
   <div class="hint" id="hint" hidden></div>
-  <div class="search-wrapper"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="search" type="text" placeholder="Cari rak..." autocomplete="off" /></div></div>
 </div>
 <input type="file" id="fotoInput" accept="image/*" hidden />
 <div class="pw-bg" id="pwBg"><div class="pw-card"><div class="pw-title">Hapus?</div><div id="pwMsg" style="font-size:12px;color:#6e6a64;margin-bottom:12px"></div><input class="pw-input" id="pwInput" type="password" placeholder="Password" /><div class="pw-actions"><button class="pw-btn" id="pwCancel" type="button">Batal</button><button class="pw-btn pw-btn-danger" id="pwOk" type="button">Hapus</button></div></div></div>
 <script type="module">
 import { supabase } from './kopi/supabase.js';
 const TABLE='plano_items', BUCKET='plano-foto', DEL_PASSWORD='0225106927';
-const listEl=document.getElementById('list'), searchEl=document.getElementById('search'), editId=document.getElementById('editId'), f_name=document.getElementById('f_name'), btnAdd=document.getElementById('btnAdd'), fotoInput=document.getElementById('fotoInput'), hint=document.getElementById('hint'), planoGrid=document.getElementById('planoGrid');
-let all=[], fotoVersi=Date.now();
+const listEl=document.getElementById('list'), searchEl=document.getElementById('search'), fotoInput=document.getElementById('fotoInput'), hint=document.getElementById('hint'), planoList=document.getElementById('planoList'), planoFoot=document.getElementById('planoFoot');
+let all=[], lastFiltered=[], fotoVersi=Date.now();
 const fotoBaru=u=>u?u+(u.includes('?')?'&':'?')+'v='+fotoVersi:'';
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const AKUN='admin', fotoAdminUrl=()=>supabase.storage.from(BUCKET).getPublicUrl('plano/'+AKUN+'.jpg').data.publicUrl;
-const barisAdmin={id:AKUN,group_title:'ADMIN',name:'ADMIN',desc:'',isAdmin:true,foto_url:''};
+const barisAdmin={id:AKUN,rak:'',shelving:'',baris:'',plu:'',barcode:'',name:'ADMIN',desc:'',isAdmin:true,foto_url:''};
 const adaFoto=async u=>{try{const r=await fetch(u,{method:'HEAD'});return r.ok}catch{return false}};
 function setHint(m){ hint.hidden=!m; hint.textContent=m||''; if(m) setTimeout(()=>hint.hidden=true,4000); }
+function tampilErr(e){
+  const msg=(e&&e.message)||String(e||'');
+  if(/PGRST204|Could not find the '.+' column/i.test(msg)) return 'Kolom belum ada di DB. Jalankan scripts/build/add-plano-detail.sql di Supabase > SQL Editor.';
+  return msg;
+}
 const pwBg=document.getElementById('pwBg'),pwMsg=document.getElementById('pwMsg'),pwInput=document.getElementById('pwInput');
 let pwResolve=null;
 function askPw(msg){ pwMsg.textContent=msg; pwInput.value=''; pwBg.classList.add('open'); pwInput.focus(); return new Promise(r=>pwResolve=r); }
@@ -112,58 +167,124 @@ document.getElementById('pwOk').onclick=()=>{ if(pwInput.value.trim()!==DEL_PASS
 document.getElementById('pwCancel').onclick=()=>closePw(false);
 pwBg.onclick=e=>{ if(e.target===pwBg) closePw(false); };
 async function kompresFoto(f){ if(!f||!/^image\//.test(f.type||'')) return f; let g=null; try{g=await createImageBitmap(f)}catch{return f} if(!g) return f; const s=Math.max(g.width,g.height),sc=Math.min(1,1200/s); if(sc===1&&f.size<400*1024){if(g.close)g.close();return f} const w=Math.max(1,Math.round(g.width*sc)),h=Math.max(1,Math.round(g.height*sc)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(g,0,0,w,h);if(g.close)g.close();const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.82)); if(!b) return f; return new File([b],(f.name||'foto').replace(/\.[^.]+$/,'')+'.jpg',{type:'image/jpeg'}) }
+const COLS=[['c-shelving','shelving','Shelving'],['c-baris','baris','Baris'],['c-plu','plu','PLU'],['c-barcode','barcode','Barcode']];
+function cellInput(id,k,val,ph){
+  return '<input class="cell-input mono" type="text" data-id="'+id+'" data-kol="'+k+'" placeholder="'+ph+'" value="'+esc(val||'')+'" autocomplete="off" />';
+}
+function rowPlano(r,i){
+  const cells=COLS.map(c=>'<td class="'+c[0]+'">'+cellInput(r.id,c[1],r[c[1]],c[2])+'</td>').join('')
+    +'<td class="c-nama">'+cellInput(r.id,'name',r.name,'Produk')+'</td>'
+    +'<td class="c-foto">'+(r.foto_url?'<div class="thumb"><img src="'+esc(fotoBaru(r.foto_url))+'"/></div>':'<div class="thumb kosong"></div>')+'</td>';
+  return '<tr data-id="'+r.id+'"><td class="c-no">'+(i+1)+'</td>'+cells+'</tr>';
+}
+const adaRak=m=>!String(m.rak||'').trim();
 function render(){
   const q=searchEl.value.trim().toLowerCase();
-  const filtered=all.filter(m=>!q||(m.name||'').toLowerCase().includes(q));
-  const rows=(q?[]:[barisAdmin]).concat(filtered);
+  const cocok=m=>!q||[m.name,m.rak,m.shelving,m.plu,m.barcode].some(v=>String(v||'').toLowerCase().includes(q));
+  const raks=all.filter(m=>adaRak(m)&&cocok(m));
+  const produk=all.filter(m=>!adaRak(m)&&cocok(m));
+  const rows=(q?[]:[barisAdmin]).concat(raks);
   if(!rows.length){ listEl.innerHTML='<tr><td colspan="4"><div class="empty">Belum ada rak</div></td></tr>'; renderPlano([]); return; }
   listEl.innerHTML=rows.map((m,i)=>{
     const url=m.foto_url?fotoBaru(m.foto_url):'', isA=!!m.isAdmin;
-    const thumb=isA?(url?'<div class="thumb thumb-admin"><img src="'+url+'"/>':'<div class="thumb thumb-admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M12 15v2"/><path d="M8 9h8"/></svg></div>'):(url?'<div class="thumb"><img src="'+url+'"/>':'<div class="thumb kosong">');
-    const acts=isA?'<button class="ico" data-foto="'+m.id+'">↑</button>':'<button class="ico ico-ghost" data-up="'+m.id+'">↑</button><button class="ico ico-ghost" data-down="'+m.id+'">↓</button><button class="ico" data-foto="'+m.id+'">↑</button><button class="ico" data-edit="'+m.id+'">✎</button><button class="ico ico-danger" data-del="'+m.id+'">✕</button>';
-    return '<tr data-id="'+m.id+'"><td class="c-no">'+(i+1)+'</td><td class="c-nama"><div class="nama">'+(m.name||'')+'</div></td><td class="c-foto">'+thumb+'</div></td><td class="c-aksi"><div class="acts">'+acts+'</div></td></tr>';
+    const thumb=isA?(url?'<div class="thumb thumb-admin"><img src="'+url+'"/>':'<div class="thumb thumb-admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M12 15v2"/><path d="M8 9h8"/></svg></div>'):(url?'<div class="thumb"><img src="'+url+'"/>':'<div class="thumb kosong"></div>');
+    const acts=(isA?'':'<button class="ico ico-danger" data-del="'+m.id+'" title="Hapus" aria-label="Hapus">✕</button>')+'<button class="ico" data-foto="'+m.id+'" title="Upload foto" aria-label="Upload foto">↑</button>';
+    const selRak=isA?'':' data-rak="'+esc(m.name||'')+'" title="Klik baris ini untuk isi produk"';
+    return '<tr data-id="'+m.id+'"'+selRak+'><td class="c-no">'+(i+1)+'</td><td class="c-nama"><div class="nama">'+esc(m.name||'')+'</div></td><td class="c-foto">'+thumb+'</td><td class="c-aksi"><div class="acts">'+acts+'</div></td></tr>';
   }).join('');
   listEl.querySelectorAll('[data-foto]').forEach(b=>b.onclick=()=>pilihFoto(b.dataset.foto==='admin'?'admin':parseInt(b.dataset.foto,10)));
-  listEl.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>isiForm(parseInt(b.dataset.edit,10)));
   listEl.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>hapus(parseInt(b.dataset.del,10)));
-  listEl.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>geser(parseInt(b.dataset.up,10),-1));
-  listEl.querySelectorAll('[data-down]').forEach(b=>b.onclick=()=>geser(parseInt(b.dataset.down,10),1));
-  renderPlano(filtered);
+  lastFiltered=produk;
+  renderPlano(produk);
+  listEl.querySelectorAll('tr[data-rak]').forEach(tr=>tr.classList.toggle('aktif',tr.dataset.rak===rakAktif));
 }
-function renderPlano(filtered){
-  if(!filtered.length){ planoGrid.innerHTML='<div class="empty">Belum ada rak</div>'; return; }
-  planoGrid.innerHTML='<div class="plano-grid">'+filtered.map(r=>{
-    const img=r.foto_url?'<img src="'+fotoBaru(r.foto_url)+'" alt=""/>':'';
-    return '<div class="pt">'+img+'<span class="pt-name">'+(r.name||'')+'</span></div>';
-  }).join('')+'</div>';
+let rakAktif='';
+try{ rakAktif=localStorage.getItem('plano_rak')||''; }catch{}
+function setRakAktif(nama){
+  rakAktif=nama||'';
+  try{ if(rakAktif) localStorage.setItem('plano_rak',rakAktif); }catch{}
+  listEl.querySelectorAll('tr[data-rak]').forEach(tr=>tr.classList.toggle('aktif',tr.dataset.rak===rakAktif));
+  renderPlano(lastFiltered);
 }
-async function geser(id,dir){
-  const idx=all.findIndex(x=>x.id===id); if(idx<0) return;
-  const nIdx=idx+dir; if(nIdx<0||nIdx>=all.length) return;
-  const a=all[idx], b=all[nIdx];
-  const tmp=a.sort_order; a.sort_order=b.sort_order; b.sort_order=tmp;
-  all.splice(idx,1); all.splice(nIdx,0,a);
-  render();
-  await supabase.from(TABLE).update({sort_order:a.sort_order}).eq('id',a.id);
-  await supabase.from(TABLE).update({sort_order:b.sort_order}).eq('id',b.id);
+function fokusRak(nama){
+  const key=String(nama||'').trim().toUpperCase();
+  planoList.querySelectorAll('.pilih').forEach(t=>t.classList.remove('pilih'));
+  const grp=planoList.querySelector('tr[data-grup="'+CSS.escape(key)+'"]');
+  if(grp) grp.classList.add('pilih');
+}
+function renderPlano(produk){
+  if(!produk.length){ planoList.innerHTML='<tr><td colspan="8"><div class="empty">Belum ada produk</div></td></tr>'; planoFoot.innerHTML=''; return; }
+  const groups=[];
+  produk.forEach(r=>{
+    const key=String(r.rak||'').trim().toUpperCase();
+    let g=groups.find(x=>x.key===key);
+    if(!g){ g={key,nama:r.rak,rows:[]}; groups.push(g); }
+    g.rows.push(r);
+  });
+  let no=0;
+  planoList.innerHTML=groups.map(g=>
+    '<tr class="grp" data-grup="'+esc(g.key)+'" data-nama="'+esc(g.nama||'')+'" tabindex="0" role="button" title="Klik untuk isi produk rak ini"><td colspan="8"><span class="grp-nama">'+esc(g.nama||'BELUM DIISI')+'</span><span class="grp-jml">'+g.rows.length+' PRODUK</span></td></tr>'
+    +g.rows.map(r=>rowPlano(r,++no)).join('')
+  ).join('');
+  planoFoot.innerHTML='<tr><td colspan="6">'+(rakAktif?'TAMBAH KE RAK <b>'+esc(rakAktif)+'</b> &middot; ':'')+'TOTAL '+produk.length+' PRODUK &middot; '+groups.length+' RAK</td><td class="c-foto"></td><td class="c-aksi"></td></tr>';
+}
+async function simpanSel(el){
+  const id=el.dataset.id, kol=el.dataset.kol;
+  const row=all.find(x=>String(x.id)===String(id)); if(!row) return;
+  let v=el.value.trim();
+  if(kol==='baris'){
+    if(v&&isNaN(parseInt(v,10))){ setHint('Baris harus angka'); el.value=row.baris||''; return; }
+    v=v?parseInt(v,10):null;
+  }
+  if(kol==='rak'&&!v){ setHint('Rak wajib diisi'); el.value=row.rak||''; return; }
+  if(String(row[kol]==null?'':row[kol])===String(v==null?'':v)) return;
+  const {error}=await supabase.from(TABLE).update({[kol]:v}).eq('id',id);
+  if(error){ setHint(tampilErr(error)); el.value=row[kol]==null?'':row[kol]; return; }
+  row[kol]=v;
+  const nav=document.getElementById('list');
+  const twin=nav&&nav.querySelector('tr[data-id="'+id+'"] .nama');
+  if(twin&&kol==='name') twin.textContent=v;
+  renderPlano(lastFiltered);
+  const baru=planoList.querySelector('tr[data-id="'+id+'"]');
+  if(baru) baru.classList.add('pilih');
+}
+planoList.addEventListener('change',e=>{ if(e.target.classList.contains('cell-input')) simpanSel(e.target); });
+planoList.addEventListener('click',e=>{
+  const g=e.target.closest&&e.target.closest('tr.grp');
+  if(g&&!e.target.closest('.cell-input')){ setRakAktif(g.dataset.nama); fokusRak(g.dataset.nama); }
+});
+planoList.addEventListener('keydown',e=>{
+  if(e.key!=='Enter'&&e.key!==' ') return;
+  const g=e.target.closest&&e.target.closest('tr.grp');
+  if(g&&!e.target.closest('.cell-input')){ e.preventDefault(); setRakAktif(g.dataset.nama); fokusRak(g.dataset.nama); }
+});
+const FIELDS_P=['shelving','baris','plu','barcode','name'];
+async function tambah(){
+  const g=k=>{ const el=document.getElementById('a_'+k); return el?String(el.value||'').trim():''; };
+  const row={rak:rakAktif,shelving:g('shelving'),plu:g('plu'),barcode:g('barcode'),name:g('name'),desc:''};
+  const b=g('baris');
+  row.baris=b?parseInt(b,10):null;
+  if(!row.rak){
+    const pertama=all.find(adaRak);
+    if(!pertama){ setHint('Buat rak dulu di tabel atas'); return; }
+    row.rak=pertama.name; rakAktif=pertama.name;
+    try{ localStorage.setItem('plano_rak',rakAktif); }catch{}
+  }
+  if(!row.name){ setHint('Nama produk wajib diisi'); document.getElementById('a_name').focus(); return; }
+  if(b&&isNaN(row.baris)){ setHint('Baris harus angka'); document.getElementById('a_baris').focus(); return; }
+  row.sort_order=all.length+1;
+  const {error}=await supabase.from(TABLE).insert([row]);
+  if(error){ setHint(tampilErr(error)); return; }
+  FIELDS_P.forEach(k=>{ const el=document.getElementById('a_'+k); if(el) el.value=''; });
+  searchEl.value='';
+  await load();
+  const n=document.getElementById('a_name'); if(n) n.focus();
 }
 async function load(){
   const {data,error}=await supabase.from(TABLE).select('*').order('sort_order');
-  if(error){ listEl.innerHTML='<tr><td colspan="6"><div class="empty">'+error.message+'</div></td></tr>'; return; }
+  if(error){ listEl.innerHTML='<tr><td colspan="4"><div class="empty">'+esc(tampilErr(error))+'</div></td></tr>'; return; }
   all=data||[]; barisAdmin.foto_url=(await adaFoto(fotoAdminUrl()))?fotoAdminUrl():''; render();
 }
-const setAdd=()=>{btnAdd.textContent='+'}; const setEdit=()=>{btnAdd.textContent='✓'};
-function isiForm(id){ const m=all.find(x=>x.id===id); if(!m) return; editId.value=String(m.id); f_name.value=m.name||''; setEdit(); f_name.focus(); }
-function resetForm(){ editId.value=''; f_name.value=''; setAdd(); }
-btnAdd.onclick=async()=>{
-  const name=(f_name.value||'').trim();
-  if(!name){ setHint('Nama rak wajib diisi'); return; }
-  let res;
-  if(editId.value) res=await supabase.from(TABLE).update({name}).eq('id',parseInt(editId.value,10));
-  else res=await supabase.from(TABLE).insert([{group_title:'GONDOLA A',name,desc:'',sort_order:all.length+1}]);
-  if(res.error){ setHint(res.error.message); return; }
-  resetForm(); await load();
-};
 let fotoTarget=null; function pilihFoto(id){ fotoTarget=id; fotoInput.value=''; fotoInput.click(); }
 fotoInput.onchange=async()=>{
   const f=fotoInput.files&&fotoInput.files[0]; if(!f||fotoTarget===null) return; const id=fotoTarget; fotoTarget=null;
@@ -178,6 +299,27 @@ fotoInput.onchange=async()=>{
 };
 async function hapus(id){ const m=all.find(x=>x.id===id); const ok=await askPw('Hapus "'+(m?m.name:id)+'"?'); if(!ok) return; const {error}=await supabase.from(TABLE).delete().eq('id',id); if(error){setHint(error.message);return} await load(); }
 searchEl.oninput=render;
+listEl.addEventListener('click',e=>{
+  if(e.target.closest('[data-foto],[data-del]')) return;
+  const tr=e.target.closest('tr[data-rak]'); if(!tr) return;
+  setRakAktif(tr.dataset.rak); fokusRak(tr.dataset.rak);
+});
+const f_name=document.getElementById('f_name');
+async function tambahRak(){
+  const name=(f_name.value||'').trim();
+  if(!name){ setHint('Nama rak wajib diisi'); f_name.focus(); return; }
+  const {error}=await supabase.from(TABLE).insert([{name,desc:'',sort_order:all.length+1}]);
+  if(error){ setHint(error.message); return; }
+  f_name.value='';
+  searchEl.value='';
+  await load();
+  setRakAktif(name);
+  f_name.focus();
+}
+document.getElementById('f_add').onclick=tambahRak;
+f_name.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); tambahRak(); } });
+document.getElementById('a_add').onclick=tambah;
+document.querySelector('.tambah').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); tambah(); } });
 try{ supabase.channel('plano_admin').on('postgres_changes',{event:'*',schema:'public',table:TABLE},()=>load()).subscribe(); }catch{}
 load();
 </script>
