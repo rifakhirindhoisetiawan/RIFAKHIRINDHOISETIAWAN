@@ -55,7 +55,7 @@
     <div class="menu-wrap" id="menuWrap"></div>
   </div>
   <script type="module">
-    import { supabase } from './kopi/supabase.js';
+    import { supabase } from '../../src/js/supabase.js';
     const FALLBACK_GROUPS = (() => {
       const H=["180-200","160-180","145-160","130-145","115-130","100-115","85-100","70-85"];
       const L="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -65,7 +65,7 @@
       ];
     })();
 
-    const adminTile = { isAdmin: true, name: "ADMIN", link: "plano-admin.html" };
+    const adminTile = { isAdmin: true, name: "ADMIN", link: "admin.html" };
     const menuWrap = document.getElementById("menuWrap");
     const searchInput = document.getElementById("searchInput");
     let dbGroups = null;

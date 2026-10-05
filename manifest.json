@@ -1,9 +1,10 @@
 {
-  "name": "MYLOVE",
-  "short_name": "MYLOVE",
-  "start_url": "index/index.html",
+  "name": "My Love",
+  "short_name": "MyLove",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
-  "description": "MYLOVE Menu"
+  "background_color": "#fffbf2",
+  "theme_color": "#fffbf2",
+  "description": "My Love"
 }

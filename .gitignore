@@ -1,3 +1,11 @@
-node_modules
+node_modules/
 .env
+.env.local
 .DS_Store
+Thumbs.db
+*.log
+dist/
+build/
+.cache/
+zib/android/app/build/
+zib/android/.gradle/

@@ -17,36 +17,36 @@
     />
     <meta content="MyLove" name="apple-mobile-web-app-title" />
     <link
-      href="image-index/favicon.png"
+      href="assets/image-index/favicon.png"
       rel="icon"
       sizes="192x192"
       type="image/png"
     />
     <link
-      href="image-index/icon-512x512.png"
+      href="assets/image-index/icon-512x512.png"
       rel="icon"
       sizes="512x512"
       type="image/png"
     />
     <link
-      href="image-index/apple-touch-icon-152x152.png"
+      href="assets/image-index/apple-touch-icon-152x152.png"
       rel="apple-touch-icon"
     />
     <link
-      href="image-index/apple-touch-icon-180x180.png"
+      href="assets/image-index/apple-touch-icon-180x180.png"
       rel="apple-touch-icon"
       sizes="180x180"
     />
     <link
-      href="image-index/apple-touch-icon-192x192.png"
+      href="assets/image-index/apple-touch-icon-192x192.png"
       rel="apple-touch-icon"
       sizes="192x192"
     />
     <!-- Font sama dengan Mori (public/mori/index.html:23) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;600&family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
     <script>
-      const ICON192 = "image-index/icon-192x192.png";
-      const ICON512 = "image-index/icon-512x512.png";
+      const ICON192 = "assets/image-index/icon-192x192.png";
+      const ICON512 = "assets/image-index/icon-512x512.png";
       const manifest = {
         name: "My Love",
         short_name: "MyLove",
@@ -343,28 +343,25 @@
       <div class="menu-list" id="menuList"></div>
     </div>
     <script type="module">
-      import { loadIndexPhoto, createLazyLoader } from './image-loader.js';
+      import { loadIndexPhoto, createLazyLoader } from './src/js/image-loader.js';
 
       const menuItems = [
         { label: "GRID", href: "public/grid/grid.html", folder: "grid", ext: "jpg", thumb: "public/grid/image-index.jpg" },
         { label: "KOPI", href: "public/kopi/kopi.html", folder: "ja-di", ext: "png", thumb: "public/kopi/image-index.png" },
-        { label: "STOK OPNAME", href: "public/pastry-bakpau/stock.html", folder: "time-kamera", ext: "png", thumb: "image-index/time-kamera/1.png" },
+        { label: "STOK OPNAME", href: "public/pastry-bakpau/stock.html", folder: "time-kamera", ext: "png", thumb: "assets/image-index/time-kamera/1.png" },
         { label: "DAILY TASK", href: "public/daily-task/daily-task.html", folder: "admin", ext: "jpg", thumb: "public/daily-task/image-index.jpg" },
         { label: "NOTE", href: "public/note/note.html", folder: "note", ext: "jpg", thumb: "public/note/image-index.jpg" },
-        { label: "PLANO", href: "public/plano.html", folder: "plano", ext: "jpg", thumb: "image-index/plano/1.jpg" },
-        { label: "EXP", href: "public/exp/exp.html", folder: "exp", ext: "png", thumb: "image-index/exp/1.png" },
-        { label: "MUSNAH", href: "public/musnah/musnah.html", folder: "pagi", ext: "png", thumb: "image-index/pagi/1.png" },
-        { label: "OFO", href: "public/ofo/ofo.html", folder: "siang", ext: "png", thumb: "image-index/siang/1.png" },
-        // MORI, LINK, LAPORAN, TIME KAMERA, DUAL KAMERA: tanpa `thumb`, jadi loader
-        // auto-probe image-index/<folder>/1.{jpg,png,jpeg,svg,webp} (image-loader.js:45).
-        // Ganti fotonya: taruh 1.jpg / 1.png di foldernya. ext = placeholder <img src> saja.
-        { label: "MORI", href: "public/mori/index.html", folder: "mori", ext: "png" },
-        { label: "LINK", href: "public/link/link.html", folder: "link", ext: "png" },
-        { label: "LAPORAN", href: "public/laporan/laporan.html", folder: "laporan", ext: "png" },
-        { label: "TIME KAMERA", href: "public/time-kamera/time-kamera.html", folder: "time-kamera", ext: "png" },
-        { label: "DUAL KAMERA", href: "public/dual-kamera/dual-kamera.html", folder: "dual-kamera", ext: "png" },
-        { label: "PULANG", href: "#", folder: "pulang", ext: "png" },
-        { label: "PAGI", href: "#", folder: "pagi", ext: "png" },
+        { label: "PLANO", href: "public/plano/", folder: "plano", ext: "jpg", thumb: "assets/image-index/plano/1.jpg" },
+        { label: "EXP", href: "public/exp/exp.html", folder: "exp", ext: "png", thumb: "assets/image-index/exp/1.png" },
+        { label: "MUSNAH", href: "public/musnah/musnah.html", folder: "pagi", ext: "png", thumb: "assets/image-index/pagi/1.png" },
+        { label: "OFO", href: "public/ofo/ofo.html", folder: "siang", ext: "png", thumb: "assets/image-index/siang/1.png" },
+        { label: "MORI", href: "public/mori/index.html", folder: "mori", ext: "png", thumb: "assets/image-index/mori/1.png" },
+        { label: "LINK", href: "public/link/link.html", folder: "link", ext: "png", thumb: "assets/image-index/link/1.png" },
+        { label: "LAPORAN", href: "public/laporan/laporan.html", folder: "laporan", ext: "png", thumb: "assets/image-index/laporan/1.png" },
+        { label: "TIME KAMERA", href: "public/time-kamera/time-kamera.html", folder: "time-kamera", ext: "png", thumb: "assets/image-index/time-kamera/1.png" },
+        { label: "DUAL KAMERA", href: "public/dual-kamera/dual-kamera.html", folder: "dual-kamera", ext: "png", thumb: "assets/image-index/dual-kamera/1.png" },
+        { label: "PULANG", href: "#", folder: "pulang", ext: "png", thumb: "assets/image-index/pulang/1.png" },
+        { label: "PAGI", href: "#", folder: "pagi", ext: "png", thumb: "assets/image-index/pagi/1.png" },
       ];
 
       const disabledLabels = new Set(["PULANG", "PAGI"]);
@@ -380,7 +377,7 @@
             <img
               alt="${item.label}"
               ${item.thumb ? '' : `data-menu="${item.folder}"`}
-              src="${item.thumb || `image-index/${item.folder}/1.${item.ext}`}"
+              src="${item.thumb || `assets/image-index/${item.folder}/1.${item.ext}`}"
               loading="lazy"
               decoding="async"
               onload="this.classList.add('loaded')"
