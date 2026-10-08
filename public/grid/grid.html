@@ -414,143 +414,27 @@
         display: none;
       }
 
-      .dl-inline-wrap {
-        display: none;
-        padding: 6px 10px 10px;
-        max-width: 800px;
-        width: 100%;
-        margin: 0 auto;
-        flex: 0 0 auto;
-        box-sizing: border-box;
-        justify-content: center;
-      }
-      .dl-inline-wrap.show {
-        display: flex;
-        animation: slideUp 0.2s ease;
-      }
-      @keyframes slideUp {
-        from { opacity: 0; transform: translateY(6px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      .dl-inline-card {
-        background: #fff;
-        border: 2px solid #c7d2fe;
-        border-radius: 12px;
-        padding: 6px;
-        width: fit-content;
-        max-width: 92vw;
-        margin: 0 auto;
-        box-shadow: 0 4px 18px rgba(99, 102, 241, 0.12);
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 6px;
-        box-sizing: border-box;
-      }
-      .dl-preview {
-        width: 62px;
-        height: 62px;
-        flex: 0 0 62px;
-        border-radius: 8px;
-        overflow: hidden;
-        background: #f3f4f6;
-        flex-shrink: 0;
-        align-self: center;
-      }
-      .dl-preview img {
-        width: 100%;
-        height: 100%;
-        display: block;
-        object-fit: cover;
-      }
-      .dl-right {
-        flex: 0 0 auto;
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        justify-content: center;
-      }
-      .dl-info {
-        text-align: left;
-        line-height: 1.15;
-      }
-      .dl-info .dl-title {
-        font-size: 10px;
-        font-weight: 700;
-        color: #1f2937;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1.2;
-      }
-      .dl-info .dl-size {
-        font-size: 8px;
-        color: #9ca3af;
-        margin-top: 1px;
-        line-height: 1.2;
-      }
-      .dl-actions {
-        display: flex;
-        flex-direction: row;
-        gap: 6px;
-        width: 100%;
-        align-items: center;
-      }
-      .dl-btn-save,
-      .dl-btn-wa {
-        width: 32px;
-        height: 32px;
-        flex: 0 0 32px;
-        aspect-ratio: 1 / 1;
-        padding: 0;
-        border: none;
-        border-radius: 8px;
-        color: #fff;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
-      }
-      .dl-btn-save {
-        background: #6366f1;
-      }
-      .dl-btn-save:active {
-        background: #4f46e5;
-        transform: scale(0.93);
-        opacity: 0.9;
-      }
-      .dl-btn-wa {
-        background: #6366f1;
-      }
-      .dl-btn-save svg, .dl-btn-wa svg {
-        width: 16px;
-        height: 16px;
-        flex-shrink: 0;
-        display: block;
-      }
-      .dl-btn-wa:active {
-        background: #4f46e5;
-        transform: scale(0.93);
-        opacity: 0.9;
-      }
-      .app.has-inline {
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch;
-        touch-action: pan-y !important;
-      }
-      .app.has-inline .canvas-wrap {
-        flex: 0 0 auto;
-        overflow: visible;
-        min-height: auto;
-      }
-      @media (min-width: 768px) {
-        .dl-inline-wrap {
-          padding: 0 20px 20px;
-        }
-      }
+      .download-bubble-container{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:max(16px,calc((100vw - 500px)/2 + 16px));z-index:1050;display:flex;flex-direction:column;align-items:flex-start;pointer-events:none}
+      .download-bubble-container.visible{pointer-events:auto}
+      .download-bubble-btn{width:46px;height:46px;border-radius:50%;background:var(--mori-surface);border:1.5px solid var(--mori-accent);box-shadow:2px 2px 0 var(--mori-accent);position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mori-accent);transition:transform .15s ease,box-shadow .15s ease}
+      .download-bubble-btn:active{transform:scale(.94);box-shadow:1px 1px 0 var(--mori-accent)}
+      .db-badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:var(--mori-accent);color:var(--mori-bg);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--mori-surface)}
+      .db-badge.hidden{opacity:0;transform:scale(.5);pointer-events:none}
+      .download-bubble-dropup{position:absolute;bottom:56px;left:0;width:min(320px,calc(100vw - 32px));background:var(--mori-surface);border:1.5px solid var(--mori-accent);border-radius:12px;box-shadow:4px 4px 0 var(--mori-accent);display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(10px) scale(.96);pointer-events:none;transition:opacity .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1)}
+      .download-bubble-dropup.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+      .dbd-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--mori-line);background:rgba(26,25,23,.04)}
+      .dbd-title{font-family:var(--mori-mono);font-size:.82rem;font-weight:700;color:var(--mori-text)}
+      .dbd-count-badge{font-size:.68rem;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(26,25,23,.1);color:var(--mori-accent)}
+      .dbd-close-btn{background:transparent;border:none;font-weight:700;color:var(--mori-text-2);cursor:pointer;padding:2px 6px;border-radius:4px}
+      .dbd-body{padding:10px}
+      .dbd-item{background:rgba(26,25,23,.03);border:1px solid var(--mori-line);border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:10px}
+      .dl-preview{width:62px;height:62px;flex:0 0 62px;border-radius:0;overflow:hidden;background:var(--mori-bg);border:1px solid var(--mori-line);flex-shrink:0}
+      .dl-preview img{width:100%;height:100%;display:block;object-fit:cover}
+      .dl-right{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;justify-content:center}
+      .dl-info .dl-title{font-family:var(--mori-mono);font-size:10px;font-weight:700;color:var(--mori-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .dl-info .dl-size{font-size:9px;color:var(--mori-text-2)}
+      .dl-actions{display:flex;gap:6px}
+      .dl-btn-save,.dl-btn-wa{width:32px;height:32px;flex:0 0 32px;border-radius:0;border:1px solid var(--mori-accent);background:var(--mori-accent);color:var(--mori-bg);display:flex;align-items:center;justify-content:center;cursor:pointer}
 
       /* ============================================================
          TEMA MORI — override di atas, logika JS tidak disentuh.
@@ -808,43 +692,9 @@
         box-shadow: 6px 6px 0 rgba(26, 25, 23, 0.3);
       }
 
-      /* ===== DOWNLOAD CARD ===== */
-      .dl-inline-wrap {
-        padding: 0 18px 18px;
-      }
-
-      .dl-inline-card {
-        background: var(--mori-surface);
-        border: 1px solid var(--mori-accent);
-        border-radius: 0;
-        box-shadow: 6px 6px 0 rgba(26, 25, 23, 0.12);
-      }
-
-      .dl-preview {
-        border: 1px solid var(--mori-line);
-        border-radius: 0;
-        background: var(--mori-bg);
-      }
-
-      .dl-info .dl-title {
-        font-family: var(--mori-mono);
-        font-size: 10px;
-        font-weight: 700;
-        color: var(--mori-text);
-      }
-
-      .dl-info .dl-size {
-        font-size: 9px;
-        font-weight: 500;
-        color: var(--mori-text-2);
-      }
-
       @media (min-width: 768px) {
         .canvas-wrap {
           padding: 14px 20px 18px;
-        }
-        .dl-inline-wrap {
-          padding: 0 20px 24px;
         }
       }
 
@@ -1041,24 +891,33 @@
       <div class="canvas-wrap">
         <div class="grid-frame" id="gridFrame"></div>
       </div>
-      <div class="dl-inline-wrap" id="dlInlineWrap">
-        <div class="dl-inline-card">
-          <div class="dl-preview"><img id="dlPreviewImg" src="" alt="Preview" /></div>
-          <div class="dl-right">
-            <div class="dl-info">
-              <div class="dl-title" id="dlTitle">photo-grid.png</div>
-              <div class="dl-size" id="dlSize"></div>
-            </div>
-            <div class="dl-actions">
-              <button class="dl-btn-save" id="dlSaveBtn" title="Simpan / Unduh" aria-label="Simpan">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              </button>
-              <button class="dl-btn-wa" id="dlShareWaBtn" title="Bagikan WA" aria-label="Bagikan WA">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.94A9.91 9.91 0 0 0 12.04 2C6.58 2 2.14 6.45 2.14 11.9c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.9 0-2.64-1.03-5.13-2.9-7zM12.05 20.03h-.01a8.18 8.18 0 0 1-4.17-1.14l-.3-.18-3.12.82.82-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.22-8.24 8.22zm4.52-6.16c-.25-.12-1.47-.73-1.69-.81-.22-.08-.39-.12-.55.12-.16.25-.63.81-.77.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.55-1.33-.75-1.82-.2-.47-.4-.41-.55-.42h-.47c-.16 0-.43.06-.65.31-.22.25-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.17 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.57.18 1.09.16 1.5.1.46-.07 1.47-.6 1.68-1.18.2-.58.2-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
-              </button>
+      <div id="downloadBubbleContainer" class="download-bubble-container">
+        <div id="downloadBubbleDropup" class="download-bubble-dropup">
+          <div class="dbd-header">
+            <span class="dbd-title">Unduhan</span>
+            <span class="dbd-count-badge" id="dbdCountBadge">1 file</span>
+            <button class="dbd-close-btn" id="dbdCloseBtn" aria-label="Tutup">✕</button>
+          </div>
+          <div class="dbd-body">
+            <div class="dbd-item">
+              <div class="dl-preview"><img id="dlPreviewImg" src="" alt="Preview" /></div>
+              <div class="dl-right">
+                <div class="dl-info">
+                  <div class="dl-title" id="dlTitle">photo-grid.png</div>
+                  <div class="dl-size" id="dlSize"></div>
+                </div>
+                <div class="dl-actions">
+                  <button class="dl-btn-save" id="dlSaveBtn" title="Simpan" aria-label="Simpan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+                  <button class="dl-btn-wa" id="dlShareWaBtn" title="Bagikan WA" aria-label="Bagikan WA"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.94A9.91 9.91 0 0 0 12.04 2C6.58 2 2.14 6.45 2.14 11.9c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.9 0-2.64-1.03-5.13-2.9-7zM12.05 20.03h-.01a8.18 8.18 0 0 1-4.17-1.14l-.3-.18-3.12.82.82-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.22-8.24 8.22zm4.52-6.16c-.25-.12-1.47-.73-1.69-.81-.22-.08-.39-.12-.55.12-.16.25-.63.81-.77.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.55-1.33-.75-1.82-.2-.47-.4-.41-.55-.42h-.47c-.16 0-.43.06-.65.31-.22.25-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.17 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.57.18 1.09.16 1.5.1.46-.07 1.47-.6 1.68-1.18.2-.58.2-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg></button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <button id="downloadBubbleBtn" class="download-bubble-btn" aria-label="Unduhan" title="Unduhan">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+          <span class="db-badge" id="dbBadge">1</span>
+        </button>
       </div>
     </div>
 
@@ -1625,13 +1484,16 @@
         multiFileInput.value = "";
       });
 
-      const dlInlineWrap = document.getElementById("dlInlineWrap");
       const dlPreviewImg = document.getElementById("dlPreviewImg");
       const dlSize = document.getElementById("dlSize");
       const dlTitle = document.getElementById("dlTitle");
       const dlSaveBtn = document.getElementById("dlSaveBtn");
       const dlShareWaBtn = document.getElementById("dlShareWaBtn");
-      const appEl = document.querySelector(".app");
+      const bubbleContainer = document.getElementById("downloadBubbleContainer");
+      const bubbleBtn = document.getElementById("downloadBubbleBtn");
+      const dropup = document.getElementById("downloadBubbleDropup");
+      const dbBadge = document.getElementById("dbBadge");
+      const dbdCloseBtn = document.getElementById("dbdCloseBtn");
       let dlDataUrl = "";
       let dlBlob = null;
       let dlFileName = "1.png";
@@ -1640,18 +1502,13 @@
         localStorage.setItem("gridDlCounter", String(n));
         return n + ".png";
       }
-
-      function hideInlineCard() {
-        dlInlineWrap.classList.remove("show");
-        appEl.classList.remove("has-inline");
-      }
-      function showInlineCard() {
-        dlInlineWrap.classList.add("show");
-        appEl.classList.add("has-inline");
-        setTimeout(() => {
-          dlInlineWrap.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 100);
-      }
+      bubbleContainer.classList.remove("visible");
+      dbBadge.classList.add("hidden");
+      function hideBubble(){ dropup.classList.remove("open"); setTimeout(()=>{ bubbleContainer.classList.remove("visible"); dbBadge.classList.add("hidden"); },200); }
+      function showBubble(){ bubbleContainer.classList.add("visible"); dbBadge.textContent="1"; dbBadge.classList.remove("hidden"); dropup.classList.add("open"); }
+      bubbleBtn.addEventListener("click",(e)=>{ e.stopPropagation(); dropup.classList.toggle("open"); });
+      dbdCloseBtn.addEventListener("click",(e)=>{ e.stopPropagation(); dropup.classList.remove("open"); });
+      document.addEventListener("click",(e)=>{ if(dropup.classList.contains("open") && !bubbleContainer.contains(e.target)) dropup.classList.remove("open"); });
 
       /* ===== Toast custom (pola Mori showToast) =====
          Dipakai untuk menggantikan alert() native browser, yang di WebView
@@ -1704,7 +1561,7 @@
           document.body.removeChild(a);
           showToast("Tersimpan " + dlFileName);
         }
-        hideInlineCard();
+        hideBubble();
       });
 
       dlShareWaBtn.addEventListener("click", async () => {
@@ -1718,7 +1575,7 @@
           const file = new File([blob], dlFileName, { type: "image/png" });
           if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({ files: [file], title: dlFileName, text: "Lihat grid fotoku" });
-            hideInlineCard();
+            hideBubble();
             return;
           }
           // Fallback: unduh dulu, kasih instruksi manual ke WA
@@ -1732,7 +1589,7 @@
             document.body.removeChild(a);
             setTimeout(() => URL.revokeObjectURL(url), 5000);
             showToast("File diunduh. Buka WhatsApp, kirim manual dari galeri.");
-            hideInlineCard();
+            hideBubble();
           } catch (waErr) {
             showToast("Gagal berbagi: " + waErr.message, "err");
           }
@@ -1966,7 +1823,7 @@
         dlSize.textContent = sizeKB > 1024
           ? (sizeKB / 1024).toFixed(1) + " MB"
           : sizeKB + " KB";
-        showInlineCard();
+        showBubble();
 
         // Dilempar setelah kartu muncul supaya toast tidak menutupi pratinjau.
         if (gagalMuat > 0) {
