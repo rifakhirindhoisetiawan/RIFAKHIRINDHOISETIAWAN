@@ -1535,31 +1535,77 @@
         }, durSec * 1000);
       }
 
+      const isAndroid = /android/i.test(navigator.userAgent);
+
+      function mimeDariName(nama) {
+        const ext = (String(nama).split(".").pop() || "png").toLowerCase();
+        return {
+          ext,
+          mime: ext === "jpg" || ext === "jpeg" ? "image/jpeg" : "image/png",
+        };
+      }
+
+      // Menyimpan tanpa memicu notifikasi Download Manager browser.
+      // 1. Desktop Chrome/Edge: File System Access API, user pilih lokasi sendiri.
+      // 2. Android: API itu tidak ada, jadi lewat share sheet (Galeri/Files).
+      // 3. Sisanya: a[download] — notifikasi browser muncul, tidak ada pilihan lain.
+      async function simpanBlob(blob) {
+        if (window.showSaveFilePicker) {
+          const { ext, mime } = mimeDariName(dlFileName);
+          try {
+            const handle = await window.showSaveFilePicker({
+              suggestedName: dlFileName,
+              types: [{ description: "Gambar", accept: { [mime]: ["." + ext] } }],
+            });
+            const w = await handle.createWritable();
+            await w.write(blob);
+            await w.close();
+            return true;
+          } catch (err) {
+            // User menekan batal = tidak ada yang perlu disimpan, jadi
+            // jangan fallback ke a[download] yang memunculkan notifikasi.
+            if (err && err.name === "AbortError") return false;
+          }
+        }
+
+        if (isAndroid && navigator.share) {
+          const { mime } = mimeDariName(dlFileName);
+          const file = new File([blob], dlFileName, { type: mime });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+              await navigator.share({ files: [file], title: dlFileName });
+              return true;
+            } catch (err) {
+              if (err && err.name === "AbortError") return false;
+            }
+          }
+        }
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.download = dlFileName;
+        a.href = url;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+        return true;
+      }
+
+      async function ambilBlob() {
+        if (dlBlob) return dlBlob;
+        const res = await fetch(dlDataUrl);
+        return res.blob();
+      }
+
       dlSaveBtn.addEventListener("click", async () => {
         if (!dlDataUrl && !dlBlob) return;
         try {
-          let blob = dlBlob;
-          if (!blob) {
-            const res = await fetch(dlDataUrl);
-            blob = await res.blob();
-          }
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.download = dlFileName;
-          a.href = url;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          setTimeout(() => URL.revokeObjectURL(url), 5000);
-          showToast("Tersimpan " + dlFileName);
+          const blob = await ambilBlob();
+          const ok = await simpanBlob(blob);
+          if (ok) showToast("Tersimpan " + dlFileName);
         } catch (err) {
-          const a = document.createElement("a");
-          a.download = dlFileName;
-          a.href = dlDataUrl;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          showToast("Tersimpan " + dlFileName);
+          showToast("Gagal menyimpan: " + err.message, "err");
         }
         hideBubble();
       });
@@ -1567,11 +1613,7 @@
       dlShareWaBtn.addEventListener("click", async () => {
         if (!dlDataUrl && !dlBlob) return;
         try {
-          let blob = dlBlob;
-          if (!blob) {
-            const res = await fetch(dlDataUrl);
-            blob = await res.blob();
-          }
+          const blob = await ambilBlob();
           const file = new File([blob], dlFileName, { type: "image/png" });
           if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({ files: [file], title: dlFileName, text: "Lihat grid fotoku" });
@@ -1580,14 +1622,7 @@
           }
           // Fallback: unduh dulu, kasih instruksi manual ke WA
           try {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.download = dlFileName;
-            a.href = url;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(url), 5000);
+            await simpanBlob(blob);
             showToast("File diunduh. Buka WhatsApp, kirim manual dari galeri.");
             hideBubble();
           } catch (waErr) {
