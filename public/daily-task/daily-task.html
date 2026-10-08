@@ -633,7 +633,7 @@
             const name = p.name || p.title || 'Tanpa nama';
             const slug = p.slug || '';
             const cls = p.cls || '';
-            const href = p.href || (slug ? `../utility/${slug}.html` : '#');
+            const href = p.href || (slug ? `utility/${slug}.html` : '#');
             const isAdmin = slug === ADMIN_SLUG || p.isAdmin;
             return `<a class="item active-modul" href="${href}">
               ${isAdmin ? tileAdmin() : tileFoto(slug, p.foto_url)}

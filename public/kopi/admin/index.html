@@ -1,0 +1,1929 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — JA-DI Supabase</title>
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--admin-photo-size:clamp(110px,32vw,125px)}
+    html,body{max-width:100%;overflow-x:hidden}
+    html,body{width:100%;height:100%;background:#ffffff}
+    body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;background:#ffffff;color:#1a1a1a;min-height:100vh;overflow-x:hidden}
+    ::-webkit-scrollbar{width:0;height:0}
+    *{scrollbar-width:none;-ms-overflow-style:none}
+    .wrap{width:100%;max-width:800px;min-height:100vh;margin:0 auto;background:#ffffff;padding:12px 18px 40px;min-width:0}
+    .status{display:none}
+    .grid{display:grid;grid-template-columns:1fr;gap:20px;max-width:100%}
+     @media(min-width:800px){.wrap{padding:12px 18px 40px}}
+    .card{background:transparent;border:none;padding:0;max-width:100%;min-width:0}
+    .section-label{font-size:11px;font-weight:800;color:#9aa0ab;letter-spacing:0.6px;text-transform:uppercase;margin:4px 0 14px}
+    .search-wrapper{display:flex;align-items:center;gap:10px;width:100%;margin-bottom:14px}
+    .search-box{flex:1;display:flex;align-items:center;gap:8px;border:1px solid #ddd;border-radius:10px;padding:10px 14px;color:#222;font-size:14px;background:#f9f9f9;min-width:0}
+    .search-box:focus-within{border-color:#888;background:#fff}
+    .search-box svg{flex-shrink:0;color:#c3c8d1;width:18px;height:18px}
+    .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:#222;font-family:inherit;min-width:0;-webkit-appearance:none;appearance:none;border-radius:0}
+    .search-box input::placeholder{color:#c3c8d1}
+    .form{display:grid;gap:6px;max-width:100%}
+    .form.saving{pointer-events:none;opacity:.75}
+    .form label{font-size:10px;font-weight:700;color:#374151;display:block;min-width:0;max-width:100%;line-height:1.2}
+    .form input,.form select{display:block;width:100%;max-width:100%;min-width:0;margin-top:3px;padding:6px 8px;border:1px solid #d1d5db;border-radius:4px;font-size:12px;color:#111827;background:#fff;outline:none;font-family:inherit}
+    .form input:focus,.form select:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 1px #3b82f6}
+    .form input::placeholder{color:#9ca3af;font-size:11px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-width:100%}
+    .row>*{min-width:0}
+    .btn{padding:10px 16px;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;font-family:inherit}
+    .btn-primary{background:#6366f1;color:#fff}
+    .btn-ghost{background:#eef2ff;color:#4f46e5;border:1px solid #c7d2fe}
+    .btn-danger{background:#fef2f2;color:#ef4444;border:1px solid #fecaca}
+    .btn-small{padding:6px 12px;font-size:12px}
+    .btn-save-icon{width:100%;height:44px;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0;transition:all .15s ease;font-size:14px;font-weight:700;padding:0 16px}
+    .btn-save-icon:active{opacity:.85;transform:scale(.93)}
+    .btn-save-icon:disabled{opacity:.6;cursor:not-allowed;transform:none}
+    .btn-save-icon.btn-save-head{flex:0 0 46px;width:46px;height:46px;min-height:46px;padding:0}
+    .list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 8px;max-width:100%;background:transparent;border:none;border-radius:0;overflow:visible;align-items:start}
+    .list-head{display:none}
+    .item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;padding:0;background:transparent;border:none;cursor:default;width:100%}
+    .thumb{width:100%;aspect-ratio:9/16;border-radius:16px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-size:22px;color:#fff;margin-bottom:8px;align-self:center}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .thumb span{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:clamp(20px,5vw,32px);line-height:1}
+    .item-info{min-width:0;max-width:100%;width:100%}
+    .item-name{font-size:9px;font-weight:700;color:#1f2937;line-height:1.25;white-space:normal;overflow:visible;text-overflow:clip;max-width:100%;letter-spacing:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-align:center;width:100%;min-height:2.25em}
+    .item-meta{display:none}
+    .badge{display:none}
+    .group-head{display:none}
+    .vbadge{font-size:8px;font-weight:800;padding:1px 5px;border-radius:4px;background:#111827;color:#fff;margin-left:6px;vertical-align:middle;white-space:nowrap;letter-spacing:0.3px}
+    .item-actions{display:flex;gap:6px;flex-shrink:0;justify-content:flex-end}
+    .col-plu{font-size:10px;font-weight:700;color:#1f2937;letter-spacing:0.2px;display:flex;flex-direction:column;gap:2px;align-items:flex-start}
+    .col-plu span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px}
+    .empty{text-align:center;color:#9aa0ab;font-size:13px;font-weight:600;padding:40px 0}
+    .hint{font-size:11px;color:#9aa0ab}
+    .foto-title,.field-title{font-size:11px;font-weight:700;color:#1f2937}
+
+    /* Skeleton shimmer for thumb loading */
+    .thumb{width:100%;aspect-ratio:9/16;border-radius:16px;background:linear-gradient(90deg,#ffffff 25%,#f1f5f9 50%,#ffffff 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-size:22px;color:#fff;margin-bottom:8px;align-self:center}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 0.25s ease}
+    .thumb img.loaded{opacity:1}
+    .thumb span{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:clamp(20px,5vw,32px);line-height:1}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .form-table{width:100%;border:1px solid #c7d2fe;border-radius:8px;overflow:hidden;background:#fff;margin-bottom:6px;table-layout:fixed}
+   .form-table .tr{display:flex;align-items:stretch;border-bottom:1px solid #c7d2fe;contain:layout}
+  .form-table .tr:last-child{border-bottom:none}
+  .form-table .th{min-width:48px;display:flex;align-items:center;justify-content:center;padding:0 6px;font-size:9px;font-weight:700;color:#4f46e5;background:#eef2ff;border-right:1px solid #c7d2fe;white-space:normal;text-align:center;letter-spacing:0;text-transform:uppercase;line-height:1.15;flex-shrink:0}
+  .form-table .td{flex:1;display:flex;align-items:center;padding:2px 6px;min-width:0}
+  .form-table .td input{width:100%;margin:0 !important;padding:6px 8px;border:1px solid transparent;border-radius:4px;font-size:10px;font-weight:500;color:#111827;background:transparent;outline:none;font-family:inherit;line-height:1.2;text-transform:uppercase}
+  .form-table .td input:focus{border-color:#6366f1;background:#fff;box-shadow:0 0 0 1px #6366f1}
+   .form-table .td input::placeholder{color:#9ca3af;font-weight:400}
+   .form-table .tr.plu-head{gap:6px;padding:6px 6px 0 6px;border-bottom:none}
+   .form-table .tr.plu-head .th{flex:1;min-width:0;border:1px solid #c7d2fe;border-radius:6px;padding:6px 4px}
+   .form-table .tr.plu-input{gap:6px;padding:6px}
+   .form-table .tr.plu-input .td{flex:1;min-width:0;border:1px solid #c7d2fe;border-radius:6px;justify-content:center}
+   .form-table .tr.plu-input .td input{text-align:center;padding:6px 4px}
+
+    .select-box{position:relative;margin-top:6px;max-width:100%}
+    .select-box select{display:block;width:100%;max-width:100%;min-width:0;margin-top:0;padding:10px 40px 10px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-weight:600;color:#222;background:#f9f9f9;outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;cursor:pointer}
+    .select-box select:focus{border-color:#888;background:#fff}
+    .select-box svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#9aa0ab;pointer-events:none}
+    .foto-box{position:relative;border:1px solid #c7d2fe;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;max-width:100%;aspect-ratio:9/16}
+    .foto-box:active{background:#f1f1f1}
+    .foto-empty{display:flex;flex-direction:column;align-items:center;gap:6px;color:#b0b5bf;padding:20px;text-align:center}
+    .foto-empty svg{width:22px;height:22px;color:#cbd5e1}
+    .foto-empty span{font-size:13px;font-weight:700;color:#94a3b8}
+    .foto-empty small{font-size:11px;color:#c3c8d1}
+    #icon_preview{display:none;position:absolute;inset:0;width:100%;height:100%}
+    #icon_preview img{width:100%;height:100%;object-fit:cover;display:block}
+    #icon_preview{touch-action:none;cursor:grab}
+    #icon_preview:active{cursor:grabbing}
+    #icon_preview img{position:absolute;left:50%;top:50%;max-width:none;max-height:none;user-select:none;-webkit-user-drag:none;touch-action:none;pointer-events:none}
+    .foto-box.has-photo #icon_preview{display:block}
+    .foto-box.has-photo .foto-empty{display:none}
+    .foto-box.has-photo{touch-action:none}
+    #f_icon_img{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;opacity:0}
+    .g-a{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+    .g-b{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+    .g-c{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+    .g-d{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+    .g-e{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+    .g-f{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+    .g-g{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+    .g-h{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+    .form-table .tr.hidden{display:none}
+   .form-compact{font-size:10px;border:1px solid #c7d2fe;border-radius:8px;overflow:hidden;width:100%}
+   .form-compact .tr{display:flex;align-items:center;min-height:28px;gap:4px;padding:3px 4px;border-bottom:1px solid #c7d2fe}
+   .form-compact .tr:last-child{border-bottom:none}
+   .form-compact .th{font-size:9px;font-weight:700;padding:2px 8px;min-width:auto;border:1px solid #c7d2fe;border-radius:6px;background:#eef2ff;color:#4f46e5;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+   .form-compact .td{flex:1;display:flex;align-items:center;padding:2px;border:1px solid #c7d2fe;border-radius:6px;min-width:0}
+   .form-compact .td input{width:100%;font-size:10px;padding:4px 6px;border:none;border-radius:4px;color:#111827;background:transparent;outline:none;font-family:inherit}
+    .form-compact .td input:focus{background:#fff}
+     .form-side-table{border:0!important}
+     .admin-plu-table{border:0;border-radius:10px;overflow:hidden;background:#fff}
+    .admin-plu-table .top-row{align-items:stretch!important;gap:0!important;padding:0!important;border-bottom:1px solid #eee!important}
+    .admin-plu-table .top-row:last-child{border-bottom:0!important}
+    .admin-plu-table .top-row > div:first-child{flex:0 0 62px!important;width:62px!important;min-height:32px!important;padding:6px 8px!important;border-radius:0!important;background:#eef2ff!important;color:#4f46e5!important;box-shadow:none!important;font-size:9px!important;font-weight:800!important;text-align:center!important}
+    .admin-plu-table .top-row > div:last-child{flex:1!important;min-height:32px!important;padding:6px 10px!important;border-bottom:0!important;background:#fff!important}
+    .admin-plu-table .top-row input{width:100%!important;padding:0!important;border:0!important;font-size:12px!important;font-weight:700!important;text-transform:uppercase!important;color:#1f2937!important;background:transparent!important}
+    input:focus{outline:none !important;box-shadow:none !important}
+
+   .tab-bar{display:flex;gap:4px;margin-top:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+   .tab-bar::-webkit-scrollbar{display:none}
+    .tab-btn{flex:1 1 22%;display:flex;align-items:center;justify-content:center;padding:8px 12px;min-height:40px;border:none;border-radius:6px;font-size:13px;font-weight:800;cursor:pointer;background:#eef2ff;color:#4f46e5;transition:all .15s ease;white-space:nowrap;font-family:inherit;text-align:center}
+    .tab-btn.active{background:#6366f1;color:#fff;border-color:#6366f1}
+    .tab-btn:active{opacity:.85;transform:scale(.95)}
+.tab-empty{flex:1 1 22%;min-height:40px;border:none;border-radius:6px;background:transparent;pointer-events:none}
+.foto-act{flex:1 1 22%;display:flex;align-items:center;justify-content:center;padding:8px 12px;min-height:40px;border-radius:6px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;text-align:center;white-space:nowrap}
+    #btnFotoAdd{background:#eef2ff;color:#4f46e5;border:1px solid #c7d2fe}
+    #btnFotoSave{background:#6366f1;color:#fff;border:none}
+    #btnFotoCancel{background:#fef2f2;color:#ef4444;border:1px solid #fecaca}
+   .tab-panel{display:none}
+   .tab-panel.active{display:block}
+    .tab-panel .form-table{border:none;border-radius:0;overflow:visible;background:transparent;padding:0;display:flex;flex-direction:column;gap:2px}
+   .tab-panel .form-table .tr{display:flex;flex-direction:column;align-items:stretch;gap:2px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none}
+   .tab-panel .form-table .tr:last-child{border-bottom:none}
+    .tab-panel .form-table .th{width:100%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:6px 0;text-align:center}
+    .tab-panel .form-table .table-title{flex:1;min-width:0;min-height:46px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0;text-align:center}
+    .table-title-row{display:flex;gap:6px;align-items:center}
+    .bahan-add-head{flex:0 0 46px;width:46px;height:46px;min-height:46px;padding:0;margin:0;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;outline:none;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .bahan-add-head:active{opacity:.85;transform:scale(.93)}
+    .tab-panel .form-table .tr .th{display:none}
+    .tab-panel .form-table .td{flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1}
+    .tab-panel .form-table .td input{width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-align:left}
+   .tab-panel .form-table .tr.hidden{display:none}
+    .form-table .tr.tr-plus{background:transparent;justify-content:center;align-items:center;padding:6px}
+    .bahan-add{width:100%;height:32px;padding:0;margin:0;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;outline:none;transition:all .15s ease;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .bahan-add:active{opacity:.85;transform:scale(.93)}
+    .crop-overlay{position:fixed;inset:0;z-index:9999;background:rgba(17,24,39,0.5);display:none;align-items:center;justify-content:center;padding:12px}
+    .crop-overlay.show{display:flex}
+    .crop-card{background:#fff;border:1px solid #c7d2fe;border-radius:12px;padding:12px;width:auto;max-width:94vw;max-height:92vh;max-height:92dvh;overflow-y:auto;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 4px 18px rgba(99,102,241,0.18);font-family:inherit}
+    .crop-stage{position:relative;aspect-ratio:9/16;width:auto;max-width:78vw;max-height:82vh;border-radius:8px;overflow:hidden;background:#eef2ff;border:1px solid #c7d2fe;touch-action:none;cursor:grab;flex-shrink:0}
+    .crop-stage:active{cursor:grabbing}
+    .crop-stage img{position:absolute;left:50%;top:50%;max-width:none;max-height:none;user-select:none;-webkit-user-drag:none;touch-action:none;pointer-events:none}
+    .crop-stage::after{content:'';position:absolute;inset:0;border:1px solid #c7d2fe;border-radius:8px;pointer-events:none}
+    .crop-actions{display:flex;gap:12px;justify-content:center;align-items:center}
+    .crop-icon-btn{width:40px;height:40px;padding:0;border-radius:8px;border:none;background:#6366f1;color:#fff;cursor:pointer;outline:none;transition:all .15s ease;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .crop-icon-btn:active{opacity:.85;transform:scale(.93)}
+    @media(min-width:641px){.crop-stage{max-height:85vh}}
+/* Bottom sheet pratinjau (new design) */
+    .sheet-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:80;align-items:flex-end;justify-content:center}
+    .sheet-bg.open{display:flex}
+    .sheet{background:#fff;width:100%;max-width:800px;max-height:88vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:0;animation:sheetUp .22s ease;scrollbar-width:none;-ms-overflow-style:none}
+    .sheet::-webkit-scrollbar{width:0;height:0;display:none}
+    @keyframes sheetUp{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}
+    .sheet-handle{width:40px;height:4px;border-radius:4px;background:#e5e5e5;margin:2px auto 14px}
+    
+    /* New sheet top */
+    .sheet-top-new{display:flex;gap:12px;padding:12px 16px;background:#fff;border-bottom:1px solid #e5e7eb}
+    .sheet-photo-wrap-new{width:var(--admin-photo-size);flex-shrink:0;aspect-ratio:9/16;border-radius:16px;overflow:hidden;background:#f5f5f5}
+    .sheet-photo-img-new{width:100%;height:100%;object-fit:cover;display:block}
+    .sheet-photo-placeholder-new{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;background:#f5f5f5;color:#999}
+    .sheet-info-wrap-new{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px;padding-top:4px}
+    .sheet-name-new{font-size:20px;font-weight:800;color:#1a1a1a;line-height:1.2;letter-spacing:-0.5px}
+     .sheet-plu-table{border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;background:#fff}
+     .sheet-plu-row{display:flex;align-items:stretch}
+     .sheet-plu-row + .sheet-plu-row{border-top:1px solid #eee}
+     .sheet-plu-th{display:flex;align-items:center;justify-content:center;text-align:center;padding:6px 8px;font-size:9px;font-weight:800;color:#4f46e5;background:#eef2ff;min-width:62px}
+     .sheet-plu-td{flex:1;display:flex;align-items:center;padding:6px 10px;font-size:12px;font-weight:700;color:#1f2937;min-width:0;overflow-wrap:anywhere}
+    .sheet-close-btn-new{width:100%;padding:12px;margin-top:4px;background:#f3f4f6;color:#1a1a1a;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer;font-family:inherit}
+    .sheet-close-btn-new:active{background:#e5e7eb}
+    
+    /* Bahan sections */
+    .sheet-bahan-wrap-new{padding:12px 16px 24px}
+    .sheet-section-new{margin-bottom:16px}
+    .sheet-section-title-new{font-size:11px;font-weight:800;color:#3b82f6;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:8px}
+    .sheet-bahan-list-new{display:flex;flex-direction:column;gap:8px}
+    .bahan-input-new{width:100%;padding:12px 14px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;color:#1a1a1a;font-size:13px;font-weight:500;font-family:inherit;outline:none;box-sizing:border-box}
+    .bahan-input-new:focus{border-color:#3b82f6;background:#fefefe}
+    .sheet-section-new:last-child{margin-bottom:0}
+    .sheet-section-title-new{font-size:11px;font-weight:800;color:#3b82f6;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:8px}
+    .sheet-note-new{padding:12px 14px;border:1px solid #c7d2fe;border-radius:10px;background:#fefefe;color:#374151;font-size:13px;line-height:1.5}
+    .sheet-empty-new{text-align:center;color:#9aa0ab;font-size:13px;font-weight:600;padding:24px 0}
+    .sheet-close-btn-main-new{display:block;width:100%;margin-top:16px;padding:14px;background:#6366f1;color:#fff;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer;font-family:inherit}
+    .sheet-close-btn-main-new:active{background:#4f46e5}
+    
+    .sheet-empty{text-align:center;padding:24px;color:#9ca3af;font-size:13px}
+    .sheet-close{display:block;width:100%;margin-top:8px;padding:12px;background:#f5f5f5;color:#1a1a1a;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer;font-family:inherit;text-decoration:none}
+     @media(max-width:640px){
+       .item-actions{flex-direction:column;gap:2px !important}
+      .top-wrap{display:grid !important;grid-template-columns:var(--admin-photo-size) minmax(0,1fr) !important;gap:8px !important;align-items:start !important;padding:0 0 6px !important}
+      .top-wrap .foto-box{flex:none !important;width:100% !important;height:auto !important;min-height:0 !important;min-width:0 !important;max-width:var(--admin-photo-size) !important;align-self:start !important;aspect-ratio:9/16;border-radius:16px}
+      .form-side-table{gap:3px !important;padding:3px !important;border-radius:12px !important}
+      .top-row{padding:1px !important;gap:4px !important}
+      .top-row > div:first-child{flex:0 0 42px !important;width:42px !important;min-height:40px !important;padding:8px 2px !important;font-size:13px !important}
+      .top-row > div:last-child{min-height:38px !important;padding:0 3px !important}
+      .top-row input{font-size:13px !important;font-weight:800 !important;text-align:left !important;padding:8px 2px !important}
+       .tab-bar{display:flex;flex-wrap:nowrap;gap:2px;padding:1px !important;overflow-x:auto;-webkit-overflow-scrolling:touch}
+       .tab-btn{flex:0 0 46px;width:46px;min-width:46px;max-width:46px;min-height:32px;height:32px;padding:4px 5px;font-size:10px;aspect-ratio:auto}
+       .tab-empty{flex:0 0 auto;width:32px;height:32px;min-height:32px;aspect-ratio:1/1}
+       .foto-act{flex:0 0 auto;width:32px;height:32px;min-height:32px;padding:0;aspect-ratio:1/1}
+       .foto-act svg{width:14px;height:14px}
+       .foto-act{width:46px!important;height:32px!important;min-height:32px!important;flex-basis:46px!important;max-width:100%!important;border-radius:6px!important;padding:0!important;box-shadow:none!important}
+       .foto-act svg{width:14px!important;height:14px!important}
+       #tabBar{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-auto-rows:32px;gap:2px!important;padding:1px!important;overflow:visible!important}
+       #tabBar .tab-btn{width:46px!important;min-width:0!important;max-width:100%!important;height:32px!important;justify-self:center}
+       #tabBar .foto-act{width:46px!important;justify-self:center}
+       #tabBar .tab-empty{display:none!important}
+       .tab-panel .form-table .table-title{min-height:32px!important;height:32px!important;padding:4px 0!important;font-size:9px!important}
+       .tab-panel .form-table .td{min-height:30px!important;padding:0 4px!important}
+       .tab-panel .form-table .td input{font-size:12px!important;font-weight:700!important;padding:4px 0!important}
+       .catatan-title{min-height:32px!important;height:32px!important;padding:4px 0 4px 8px!important;font-size:9px!important}
+       .catatan-field{min-height:30px!important;padding:0 4px!important}
+       #f_catatan{font-size:12px!important;font-weight:700!important;padding:4px 0!important}
+       .bahan-add-head,.btn-save-icon.btn-save-head{width:32px!important;height:32px!important;min-height:32px!important;flex-basis:32px!important;max-width:100%!important;border-radius:6px!important;padding:0!important;box-shadow:none!important}
+       .bahan-add-head svg,.btn-save-icon.btn-save-head svg{width:14px!important;height:14px!important}
+      .form-table .th{font-size:8px;padding:0 4px;min-width:40px}
+      .form-table .td{padding:2px 4px}
+      .form-table .td input{font-size:12px;padding:8px 6px}
+      .plu-photo-grid .form-table .td input{font-size:14px;padding:10px 8px;letter-spacing:0.5px}
+      .form-table .tr.plu-head .th{font-size:8px;padding:6px 2px;min-width:0}
+      .form-table .tr.plu-input .td{padding:2px 2px}
+      .form-table .tr.plu-input .td input{font-size:12px;padding:8px 2px}
+      .sheet-top-new{flex-direction:row;align-items:flex-start;gap:10px;padding:10px 12px}
+      .sheet-photo-wrap-new{width:var(--admin-photo-size);aspect-ratio:9/16}
+      .sheet-info-wrap-new{width:auto;min-width:0;align-items:stretch;text-align:left;gap:8px;padding-top:0}
+       .sheet-plu-th{min-width:56px;padding:5px 6px;font-size:8px}
+       .sheet-plu-td{padding:5px 7px;font-size:11px}
+       .sheet-name-new{font-size:18px}
+      .sheet-close-btn-new{margin-top:0;padding:10px;font-size:13px}
+      .sheet-bahan-wrap-new{padding:8px 12px 16px}
+      .bahan-input-new{padding:10px 12px;font-size:12px}
+      .sheet-section-title-new{font-size:10px}
+      .sheet-close-btn-new{padding:10px;font-size:13px}
+      .sheet-close-btn-main-new{padding:12px;font-size:13px}
+    }
+  /* ============================================================
+       TEMA MORI — override di atas, logika JS tidak disentuh.
+       Palet dari public/mori/css/variables.css:
+       bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64
+       Gaya: sharp (radius 0), border hitam solid, shadow offset 4px.
+       CATATAN: banyak elemen pakai style inline (indigo #6366f1/#eef2ff/#c7d2fe),
+       jadi override di bawah wajib !important.
+       ============================================================ */
+    :root{
+      --mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;
+      --mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;
+      --mori-mono:"JetBrains Mono",ui-monospace,monospace;
+    }
+    html,body{background:var(--mori-bg) !important}
+    body{
+      font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;
+      background:var(--mori-bg) !important;color:var(--mori-text);
+      -webkit-font-smoothing:antialiased;
+    }
+    .wrap{background:var(--mori-bg) !important;padding-top:max(12px,env(safe-area-inset-top))}
+
+    /* ===== SEARCH ===== */
+    .section-label{
+      font-family:var(--mori-mono);font-size:10px;font-weight:700;
+      color:var(--mori-text);letter-spacing:1.4px;
+    }
+    .search-box{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-surface) !important;color:var(--mori-text);
+      transition:box-shadow .2s ease;
+    }
+    .search-box:focus-within{box-shadow:4px 4px 0 var(--mori-accent);background:#fffdf7 !important}
+    .search-box svg,.search-box input::placeholder{color:var(--mori-text-2) !important}
+    .search-box input{color:var(--mori-text) !important}
+
+    /* ===== TOMBOL ===== */
+    .btn,.btn-primary,.btn-ghost,.btn-danger,
+    .btn-save-icon,.bahan-add,.bahan-add-head,.crop-icon-btn,.foto-act{
+      border-radius:0 !important;font-family:inherit;
+      transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
+    }
+    .btn-primary,.btn-save-icon,.bahan-add,.bahan-add-head,.crop-icon-btn,#btnFotoSave{
+      background:var(--mori-accent) !important;color:var(--mori-bg) !important;
+      border:1px solid var(--mori-accent) !important;
+      box-shadow:3px 3px 0 rgba(26,25,23,.18) !important;
+    }
+    .btn-ghost,#btnFotoAdd{
+      background:var(--mori-surface) !important;color:var(--mori-accent) !important;
+      border:1px solid var(--mori-accent) !important;
+    }
+    .btn-danger,#btnFotoCancel{
+      background:#fdf1f1 !important;color:var(--mori-danger) !important;
+      border:1px solid var(--mori-danger) !important;
+    }
+    /* tombol Edit di list: inline style indigo -> Mori */
+    .item-actions .btn-ghost{
+      background:var(--mori-accent) !important;border-color:var(--mori-accent) !important;
+    }
+    /* ===== Edit & Hapus: kotak identik + sejajar =====
+       Keduanya dipaksa 32x32 dengan border 1px yang sama, jadi tidak ada
+       yang melorot gara-gara border inline. Arahnya baris (row), bukan
+       ditumpuk, supaya tombol Edit sejajar sama Hapus. */
+    .item-actions{
+      flex-direction:row !important;align-items:center !important;
+      justify-content:center !important;gap:6px !important;
+    }
+    .item-actions .btn{
+      flex:0 0 32px !important;width:32px !important;height:32px !important;
+      min-height:32px !important;max-height:32px !important;aspect-ratio:auto !important;
+      padding:0 !important;margin:0 !important;border-radius:0 !important;
+      border:1px solid var(--mori-accent) !important;
+      display:flex !important;align-items:center !important;justify-content:center !important;
+    }
+    .item-actions .btn svg{
+      width:14px !important;height:14px !important;flex:0 0 auto !important;
+      display:block !important;
+    }
+    .item-actions .btn-danger{border-color:var(--mori-danger) !important}
+    .btn:active,.crop-icon-btn:active,.tab-btn:active{opacity:1;transform:translate(2px,2px)}
+    .bahan-add-head,.bahan-add-head:active{transform:none;opacity:1}
+    .bahan-add-head:active{transform:scale(.94)}
+
+    /* ===== TOMBOL "+" di samping judul dan tombol Simpan di samping CATATAN =====
+       Keduanya menempel pada kotak judulnya, jadi dibuat sama persis:
+       kotak hitam penuh, border hitam, TANPA shadow offset (kotak judul juga tanpa). */
+    .bahan-add,.bahan-add-head,.btn-save-icon.btn-save-head{
+      border-radius:0 !important;
+      box-shadow:none !important;
+      border:1px solid var(--mori-accent) !important;
+    }
+    /* CATATAN + tombol Simpan harus ukuran & border identik di semua breakpoint */
+    .catatan-title{
+      border:1px solid var(--mori-accent) !important;
+      min-height:46px !important;height:46px !important;
+    }
+    .btn-save-icon.btn-save-head{
+      min-height:46px !important;height:46px !important;flex:0 0 46px !important;
+    }
+    @media(max-width:640px){
+      .catatan-title{
+        min-height:32px !important;height:32px !important;
+      }
+      .btn-save-icon.btn-save-head{
+        width:32px !important;height:32px !important;min-height:32px !important;
+        flex:0 0 32px !important;
+      }
+    }
+    .bahan-add-head svg,.btn-save-icon.btn-save-head svg{width:14px;height:14px}
+    .btn-save-icon.btn-save-head,.btn-save-icon.btn-save-head:active{transform:none;opacity:1}
+    .btn-save-icon.btn-save-head:active{transform:scale(.94)}
+    .btn-save-icon:disabled{background:#e5e0d2 !important;border-color:var(--mori-line) !important;
+      color:var(--mori-text-2) !important;box-shadow:none !important;opacity:1}
+
+    /* ===== TAB BAR ===== */
+    .tab-btn{
+      background:var(--mori-surface) !important;color:var(--mori-text) !important;
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      font-family:var(--mori-mono);letter-spacing:.4px;
+    }
+    .tab-btn.active{background:var(--mori-accent) !important;color:var(--mori-bg) !important;
+      border-color:var(--mori-accent) !important}
+
+    /* ===== KOTAK FOTO & TABEL PLU: tinggi sama persis =====
+   --admin-photo-size = lebar kolom foto (rasio tetap 9/16).
+   Tinggi kotak foto diturunkan dari lebar itu, lalu tinggi yang SAMA
+   dipasang ke tabel PLU; row di dalamnya flex:1 supaya ruang sisa
+   dibagi rata. Jadi kedua kotak selalu rata atas-bawah, dan rasio
+   crop foto tetap 9/16 (tidak ikut gepeng). */
+    :root{
+      --admin-photo-size:clamp(132px,44vw,152px);
+      --admin-photo-h:calc(var(--admin-photo-size) * 16 / 9);
+    }
+    .top-wrap{
+      grid-template-columns:var(--admin-photo-size) minmax(0,1fr) !important;
+      align-items:start !important;
+      gap:8px !important;
+      max-width:560px !important;margin:0 auto !important;
+    }
+    .top-wrap .foto-box{
+      width:100% !important;max-width:none !important;
+      height:var(--admin-photo-h) !important;min-height:0 !important;
+      align-self:start !important;aspect-ratio:auto !important;
+    }
+    .form-side-table{
+      height:var(--admin-photo-h) !important;
+      display:flex !important;flex-direction:column !important;gap:4px !important;
+    }
+    .admin-plu-table{
+      flex:1 1 auto !important;min-height:0 !important;
+      display:flex !important;flex-direction:column !important;
+    }
+    .admin-plu-table .top-row{flex:1 1 0 !important;min-height:32px !important}
+    .admin-plu-table .top-row>div:first-child,
+    .admin-plu-table .top-row>div:last-child{min-height:0 !important}
+    #tabBar{flex:0 0 auto !important}
+
+    /* ===== FORM: label + input ===== */
+    .form label{color:var(--mori-text) !important;font-family:var(--mori-mono);
+      font-size:9px;letter-spacing:1px;text-transform:uppercase}
+    .form input,.form select{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-bg) !important;color:var(--mori-text) !important;
+      font-family:inherit;
+    }
+    .form input:focus,.form select:focus{
+      border-color:var(--mori-accent) !important;background:#fffdf7 !important;
+      box-shadow:4px 4px 0 var(--mori-accent) !important;
+    }
+    .form input::placeholder{color:var(--mori-text-2) !important}
+    .select-box select{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-surface) !important;color:var(--mori-text) !important;
+    }
+    .select-box select:focus{background:#fffdf7 !important;box-shadow:4px 4px 0 var(--mori-accent) !important}
+    .select-box svg{color:var(--mori-text-2) !important}
+
+    /* ===== KOTAK FOTO ===== */
+    .foto-box{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-surface) !important;
+    }
+    .top-wrap .foto-box{border-radius:0 !important;box-shadow:4px 4px 0 rgba(26,25,23,.12) !important}
+    .foto-box:active{background:#efe9da !important}
+    .foto-empty{color:var(--mori-text-2) !important}
+    .foto-empty span{color:var(--mori-text) !important;font-family:var(--mori-mono);
+      font-size:11px;letter-spacing:1px;text-transform:uppercase}
+    .foto-empty small{color:var(--mori-text-2) !important}
+    .foto-empty svg{color:var(--mori-text-2) !important}
+
+    /* ===== TABEL FORM (inline style) ===== */
+    .form-side-table{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-bg) !important;
+    }
+    /* label kolom PLU 12/16/HOT */
+    .form-side-table .top-row>div:first-child,
+    #plu16Lab,#pluHotLab{
+      background:var(--mori-accent) !important;color:var(--mori-bg) !important;
+      border-radius:0 !important;box-shadow:none !important;
+      font-family:var(--mori-mono);letter-spacing:.4px;
+    }
+    /* label MENU dibalik biar beda dari label PLU */
+    .admin-menu-row>div:first-child{
+      background:var(--mori-surface) !important;color:var(--mori-text) !important;
+      border-right:1px solid var(--mori-line) !important;
+    }
+    /* kolom input: garis bawah + latar */
+    .form-side-table .top-row>div:last-child,
+    .tab-panel .form-table .td,
+    .catatan-field{
+      background:var(--mori-bg) !important;border-bottom-color:var(--mori-line) !important;
+      border-color:var(--mori-line) !important;
+    }
+    .form-side-table .top-row>div:last-child input,
+    .tab-panel .form-table .td input,
+    .catatan-field input{color:var(--mori-text) !important}
+    .form-table,.form-compact,.admin-plu-table,.plu-photo-grid .form-table{
+      border:1px solid var(--mori-accent) !important;border-radius:0 !important;
+      background:var(--mori-bg) !important;
+    }
+    .form-table .tr,.form-compact .tr{border-bottom-color:var(--mori-line) !important;
+      border-color:var(--mori-line) !important}
+    .form-table .th,.form-compact .th{
+      background:var(--mori-surface) !important;color:var(--mori-text) !important;
+      border-color:var(--mori-accent) !important;font-family:var(--mori-mono);
+    }
+    /* judul tabel (HOT/P12/.../CATATAN) = blok hitam, bukan indigo */
+    .tab-panel .form-table .table-title,
+    .tab-panel .form-table .th,
+    .catatan-title{
+      background:var(--mori-accent) !important;color:var(--mori-bg) !important;
+      border-radius:0 !important;box-shadow:none !important;
+      font-family:var(--mori-mono);letter-spacing:1px;
+    }
+    .tab-panel .form-table .th{display:none}
+
+    /* ===== DAFTAR MENU ===== */
+    .thumb{
+      border:1px solid var(--mori-accent);border-radius:0 !important;background:var(--mori-surface);
+      box-shadow:4px 4px 0 rgba(26,25,23,.12);
+      background-image:linear-gradient(90deg,#f2eee2 25%,#e8e2d2 50%,#f2eee2 75%);
+    }
+    .item{cursor:pointer}
+    .item:active .thumb{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--mori-accent)}
+    .item-name{
+      font-family:var(--mori-mono);color:var(--mori-text-2) !important;
+      text-transform:uppercase;letter-spacing:.6px;
+    }
+    .col-plu{color:var(--mori-text) !important;font-family:var(--mori-mono) !important}
+    .vbadge{background:var(--mori-accent) !important;border-radius:0 !important;
+      font-family:var(--mori-mono)}
+    .empty,.hint{color:var(--mori-text-2) !important;font-family:var(--mori-mono)}
+    /* placeholder emoji di tile: warna teks, bukan putih (Mori) */
+    .thumb span,.sheet-photo span{color:var(--mori-text)}
+
+    /* ===== CROP / SHEET ===== */
+    .crop-overlay{background:rgba(26,25,23,.45)}
+    .crop-card{
+      background:var(--mori-bg);border:1px solid var(--mori-accent);border-radius:0;
+      box-shadow:6px 6px 0 rgba(26,25,23,.18);
+    }
+    .crop-stage{background:var(--mori-surface);border-color:var(--mori-accent);border-radius:0}
+    .crop-stage::after{border-color:var(--mori-accent);border-radius:0}
+    .sheet-bg{background:rgba(26,25,23,.45)}
+    .sheet{background:var(--mori-bg);border:1px solid var(--mori-accent);
+      border-bottom:none;border-radius:0;box-shadow:0 -6px 24px rgba(26,25,23,.16)}
+    .sheet-handle{background:var(--mori-text-2)}
+    .sheet-top-new{background:var(--mori-bg);border-bottom:1px solid var(--mori-line)}
+    .sheet-photo-wrap-new,.sheet-photo-placeholder-new{background:var(--mori-surface);
+      border:1px solid var(--mori-accent);border-radius:0}
+    .sheet-name-new{color:var(--mori-text);text-transform:uppercase;letter-spacing:.6px}
+    .sheet-plu-table{border:1px solid var(--mori-accent);border-radius:0;background:var(--mori-bg)}
+    .sheet-plu-row+.sheet-plu-row{border-top-color:var(--mori-line)}
+    .sheet-plu-th{background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono)}
+    .sheet-plu-td{color:var(--mori-text);font-family:var(--mori-mono)}
+    .sheet-section-title-new{color:var(--mori-text);font-family:var(--mori-mono);letter-spacing:1.2px}
+    .sheet-note-new{background:var(--mori-surface);border-color:var(--mori-accent);
+      border-radius:0;color:var(--mori-text)}
+    .bahan-input-new{background:var(--mori-bg);border:1px solid var(--mori-accent);
+      border-radius:0;color:var(--mori-text)}
+    .bahan-input-new:focus{background:#fffdf7;border-color:var(--mori-accent);
+      box-shadow:4px 4px 0 var(--mori-accent)}
+    .sheet-empty-new,.sheet-empty{color:var(--mori-text-2);font-family:var(--mori-mono)}
+    .sheet-close-btn-new{background:var(--mori-surface);border:1px solid var(--mori-accent);
+      border-radius:0;color:var(--mori-text)}
+    .sheet-close-btn-main-new{background:var(--mori-accent);color:var(--mori-bg);
+      border:1px solid var(--mori-accent);border-radius:0;text-transform:uppercase;
+      letter-spacing:1px;font-size:12px}
+    .sheet-close-btn-main-new:active{background:#33312f}
+    .sheet-close{background:var(--mori-surface);border:1px solid var(--mori-accent);
+      border-radius:0;color:var(--mori-text)}
+
+/* ===== MODAL PASSWORD HAPUS =====
+       Dipakai menggantikan alert/confirm/prompt bawaan browser: di WebView/PWA
+       window.prompt sering dinonaktifkan sehingga popup tidak muncul. */
+    .pw-bg{
+      display:none;position:fixed;left:0;right:0;top:0;bottom:0;z-index:200;
+      background:rgba(26,25,23,.45);
+      align-items:center;justify-content:center;
+      padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));
+      overscroll-behavior:contain;
+    }
+    .pw-bg.open{display:flex}
+    /* scroll halaman dibekukan saat modal dibuka (kunci scroll + keyboard HP) */
+    html.pw-open{overflow:hidden;overscroll-behavior:none}
+    /* kartu selalu di tengah layar, ikut tinggi viewport yang terlihat
+       (keyboard HP = layout viewport memendek, modal sering terdorong ke bawah) */
+    .pw-card{
+      width:100%;max-width:360px;margin:auto;max-height:100%;overflow-y:auto;
+      background:var(--mori-bg);
+      border:1px solid var(--mori-accent);border-radius:0;padding:18px;
+      box-shadow:6px 6px 0 rgba(26,25,23,.2);
+      overscroll-behavior:contain;
+    }
+    .pw-title{
+      font-family:var(--mori-mono);font-size:13px;font-weight:700;letter-spacing:1.2px;
+      text-transform:uppercase;color:var(--mori-text);margin-bottom:8px;
+    }
+    .pw-msg{font-size:12px;color:var(--mori-text-2);line-height:1.5;margin-bottom:12px}
+    .pw-input{
+      width:100%;padding:11px 12px;font-family:var(--mori-mono);font-size:15px;
+      letter-spacing:2px;color:var(--mori-text);background:var(--mori-surface);
+      border:1px solid var(--mori-accent);border-radius:0;outline:none;
+    }
+    .pw-input:focus{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
+    .pw-error{
+      margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;
+      letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger);
+    }
+    .pw-error[hidden]{display:none}
+    .pw-actions{display:flex;gap:8px;margin-top:16px}
+    .pw-btn{
+      flex:1;padding:12px;border:1px solid var(--mori-accent);border-radius:0;
+      background:var(--mori-surface);color:var(--mori-text);
+      font-family:var(--mori-mono);font-size:11px;font-weight:700;
+      letter-spacing:1px;text-transform:uppercase;cursor:pointer;
+    }
+    .pw-btn:active{transform:translate(2px,2px)}
+    .pw-btn-danger{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div id="status" class="status" style="display:none">Menghubungkan ke Supabase...</div>
+  <div class="grid">
+    <div class="card" style="order:2">
+      <span id="count" style="display:none">0</span>
+      <div class="search-wrapper">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+          <input id="search" type="text" placeholder="Cari menu..." autocomplete="off" />
+        </div>
+      </div>
+      <div id="list" class="list"><div class="empty">Memuat...</div></div>
+    </div>
+    <div class="card" style="order:1">
+      <form id="form" class="form">
+        <input type="hidden" id="editId" />
+        <div class="top-wrap" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;justify-content:center;align-items:stretch;width:100%;padding:4px;box-sizing:border-box">
+          <div class="foto-box" id="fotoBox" style="flex:1 1 0;min-width:0;width:100%;height:100%;min-height:100%;align-self:stretch;aspect-ratio:9/16;border-radius:8px;overflow:hidden;position:relative;border:1px solid #c7d2fe">
+             <input id="f_icon_img" type="file" accept="image/*" />
+            <div class="foto-empty">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            </div>
+            <div id="icon_preview"></div>
+            <span id="fotoName" style="display:none"></span>
+          </div>
+          <div class="form-side-table" style="flex:1 1 0;min-width:0;width:100%;border:1px solid #c7d2fe;border-radius:8px;overflow:visible;display:flex;flex-direction:column;gap:4px;padding:4px;background:#fff;isolation:isolate">
+             <div class="admin-plu-table">
+             <div class="top-row admin-menu-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:stretch;gap:0;background:transparent;border-radius:0;padding:0;min-height:0;border-bottom:none">
+               <div style="flex:0 0 62px;width:62px;min-height:32px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:9px;font-weight:800;border:none;border-radius:0;background:#eef2ff;color:#4f46e5;box-shadow:none;padding:6px 8px">MENU</div>
+               <div style="flex:1;min-height:32px;border:none;border-radius:0;display:flex;align-items:center;padding:6px 10px;min-width:0;border-bottom:0;background:#fff;position:relative;z-index:1"><input id="f_name" required style="width:100%;font-size:12px;font-weight:700;padding:0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" onblur="this.value=this.value.toUpperCase()" /></div>
+             </div>
+             <div class="top-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:6px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
+               <div style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0">PLU 12OZ</div>
+              <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_plu12" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" onblur="this.value=this.value.toUpperCase()" /></div>
+            </div>
+            <div id="plu16Row" class="top-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:6px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
+              <div id="plu16Lab" style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0">PLU 16OZ</div>
+              <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_plu16" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-align:left" /></div>
+            </div>
+            <div id="pluHotRow" class="top-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:6px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
+              <div id="pluHotLab" style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0">PLU HOT</div>
+              <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_pluHot" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-align:left" /></div>
+            </div>
+             </div>
+             <div id="tabBar" style="flex:0 0 auto;display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:transparent;padding:2px">
+              <button type="button" class="tab-btn active" data-tab="secHot">HOT</button>
+              <button type="button" class="tab-btn" data-tab="secP12">P12</button>
+              <button type="button" class="tab-btn" data-tab="secP16">P16</button>
+              <button type="button" class="tab-btn" data-tab="sec12oz">12OZ</button>
+              <button type="button" class="tab-btn" data-tab="sec16oz">16OZ</button>
+              <button type="button" class="foto-act" id="btnFotoAdd" title="Tambah foto" aria-label="Tambah foto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+              <button type="button" class="foto-act" id="btnFotoSave" title="Pakai foto" aria-label="Pakai foto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button>
+              <button type="button" class="foto-act" id="btnFotoCancel" title="Batal" aria-label="Batal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+              <div class="tab-empty" aria-hidden="true"></div>
+              <div class="tab-empty" aria-hidden="true"></div>
+              <div class="tab-empty" aria-hidden="true"></div>
+              <div class="tab-empty" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" id="f_link" />
+        <div class="tab-panel active" id="secHot">
+          <div class="form-table">
+            <div class="table-title-row"><div class="table-title">HOT</div><button type="button" class="bahan-add bahan-add-head" title="Tambah baris" aria-label="Tambah baris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+            <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_1" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_2" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_3" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_4" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_5" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_6" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_7" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_8" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_9" /></div></div>
+            <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_10" /></div></div>
+          </div>
+        </div>
+        <div class="tab-panel" id="secP12">
+          <div class="form-table">
+            <div class="table-title-row"><div class="table-title">P12</div><button type="button" class="bahan-add bahan-add-head" title="Tambah baris" aria-label="Tambah baris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+            <div class="tr"><div class="th">P12</div><div class="td"><input id="f_percepatan12_1" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_2" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_3" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_4" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_5" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_6" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_7" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_8" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_9" /></div></div>
+            <div class="tr hidden"><div class="th">P12</div><div class="td"><input id="f_percepatan12_10" /></div></div>
+          </div>
+        </div>
+        <div class="tab-panel" id="secP16">
+          <div class="form-table">
+            <div class="table-title-row"><div class="table-title">P16</div><button type="button" class="bahan-add bahan-add-head" title="Tambah baris" aria-label="Tambah baris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+            <div class="tr"><div class="th">P16</div><div class="td"><input id="f_percepatan16_1" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_2" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_3" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_4" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_5" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_6" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_7" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_8" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_9" /></div></div>
+            <div class="tr hidden"><div class="th">P16</div><div class="td"><input id="f_percepatan16_10" /></div></div>
+          </div>
+        </div>
+        <div class="tab-panel" id="sec12oz">
+          <div class="form-table">
+            <div class="table-title-row"><div class="table-title">12OZ</div><button type="button" class="bahan-add bahan-add-head" title="Tambah baris" aria-label="Tambah baris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+            <div class="tr"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_1" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_2" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_3" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_4" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_5" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_6" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_7" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_8" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_9" /></div></div>
+            <div class="tr hidden"><div class="th">12OZ</div><div class="td"><input id="f_bahan12_10" /></div></div>
+          </div>
+        </div>
+        <div class="tab-panel" id="sec16oz">
+          <div class="form-table">
+            <div class="table-title-row"><div class="table-title">16OZ</div><button type="button" class="bahan-add bahan-add-head" title="Tambah baris" aria-label="Tambah baris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+            <div class="tr"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_1" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_2" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_3" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_4" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_5" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_6" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_7" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_8" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_9" /></div></div>
+            <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_10" /></div></div>
+          </div>
+        </div>
+        <div style="border:none;border-radius:0;overflow:visible;background:transparent;padding:2px 0;margin-top:6px;display:flex">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:transparent;border-radius:0;padding:2px 0">
+             <div class="table-title-row"><div class="catatan-title" style="flex:1;min-width:0;min-height:46px;display:flex;align-items:center;justify-content:flex-start;text-align:left;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0 12px 8px">CATATAN</div><button id="btnSave" type="submit" class="btn-save-icon btn-save-head" title="Simpan" aria-label="Simpan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button></div>
+             <div class="catatan-field" style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_catatan" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" onblur="this.value=this.value.toUpperCase()" /></div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="crop-overlay" id="cropOverlay">
+  <div class="crop-card">
+    <div class="crop-stage" id="cropStage">
+      <img id="cropImg" alt="" draggable="false" />
+    </div>
+    <div class="crop-actions">
+      <button type="button" class="crop-icon-btn" id="cropCancel" title="Batal" aria-label="Batal">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <button type="button" class="crop-icon-btn" id="cropApply" title="Pakai" aria-label="Pakai">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sheet-bg" id="sheetBg">
+  <div class="sheet" role="dialog" aria-modal="true">
+    <div class="sheet-handle"></div>
+    <div id="sheetBody"></div>
+  </div>
+</div>
+<div class="pw-bg" id="pwBg">
+  <div class="pw-card" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+    <div class="pw-title" id="pwTitle">Hapus Menu</div>
+    <div class="pw-msg" id="pwMsg"></div>
+    <input
+      class="pw-input"
+      id="pwInput"
+      type="password"
+      inputmode="numeric"
+      autocomplete="off"
+      placeholder="Masukkan password"
+    />
+    <div class="pw-error" id="pwError" hidden>Password salah.</div>
+    <div class="pw-actions">
+      <button class="pw-btn" id="pwCancel" type="button">Batal</button>
+      <button class="pw-btn pw-btn-danger" id="pwOk" type="button">Hapus</button>
+    </div>
+  </div>
+</div>
+<script type="module">
+  import { supabase } from '../../../src/js/supabase.js';
+
+  const statusEl = document.getElementById('status');
+  const listEl = document.getElementById('list');
+  const countEl = document.getElementById('count');
+  const searchEl = document.getElementById('search');
+  const form = document.getElementById('form');
+  const editId = document.getElementById('editId');
+  const f_name = document.getElementById('f_name');
+  let existingIcon = '';
+  let existingCls = 'g-a';
+  const f_link = document.getElementById('f_link');
+  const f_plu12 = document.getElementById('f_plu12');
+  const f_plu16 = document.getElementById('f_plu16');
+  const f_pluHot = document.getElementById('f_pluHot');
+  const plu16Row = document.getElementById('plu16Row');
+  const pluHotRow = document.getElementById('pluHotRow');
+  function syncPluRows() {
+    const e16 = !f_plu16.value.trim();
+    const eH = !f_pluHot.value.trim();
+    plu16Row.style.opacity = e16 ? '0.5' : '1';
+    pluHotRow.style.opacity = eH ? '0.5' : '1';
+  }
+  f_plu16.addEventListener('input', syncPluRows);
+  f_pluHot.addEventListener('input', syncPluRows);
+  syncPluRows();
+  const f_bahan12 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahan12_' + n));
+  const f_bahan16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahan16_' + n));
+  const f_bahanHot = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahanHot_' + n));
+  const f_percepatan12 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_percepatan12_' + n));
+  const f_percepatan16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_percepatan16_' + n));
+   const f_catatan = document.getElementById('f_catatan');
+   const btnSave = document.getElementById('btnSave');
+   const f_icon_img = document.getElementById('f_icon_img');
+   const iconPreview = document.getElementById('icon_preview');
+   const fotoBox = document.getElementById('fotoBox');
+   const fotoName = document.getElementById('fotoName');
+   const btnFotoAdd = document.getElementById('btnFotoAdd');
+   const btnFotoSave = document.getElementById('btnFotoSave');
+   const btnFotoCancel = document.getElementById('btnFotoCancel');
+   let currentTable = 'ja_di_menus';
+  let existingCat = 'PREMIX';
+  function syncFotoBox() {
+    fotoBox.classList.toggle('has-photo', iconPreview.innerHTML.trim() !== '');
+  }
+  let pendingCroppedFile = null;
+  let photoDirty = false;
+  let photoCapturePromise = null;
+  let autoCropPromise = null;
+  let photoProcessing = false;
+  let photoSaveBlocked = false;
+  let saving = false;
+  let photoRunId = 0;
+  let previewObjectUrl = '';
+  function setPhotoBusy(busy) {
+    photoProcessing = busy;
+    btnFotoAdd.disabled = busy || saving;
+    btnFotoSave.disabled = busy || saving;
+    btnFotoCancel.disabled = saving;
+  }
+  f_icon_img.addEventListener('click', (e) => e.stopPropagation());
+  function openPhotoPicker() {
+    if (photoProcessing || saving) return;
+    f_icon_img.value = '';
+    f_icon_img.click();
+  }
+  function clearPreviewUrl() {
+    if (previewObjectUrl) {
+      URL.revokeObjectURL(previewObjectUrl);
+      previewObjectUrl = '';
+    }
+  }
+  function canvasToBlob(canvas) {
+    return new Promise((resolve, reject) => {
+      try {
+        canvas.toBlob((blob) => {
+          if (blob) resolve(blob);
+          else reject(new Error('Gagal membuat foto'));
+        }, 'image/jpeg', 0.92);
+      } catch (err) { reject(err); }
+    });
+  }
+  function showExistingPreview(url) {
+    clearPreviewUrl();
+    iconPreview.innerHTML = '';
+    if (!url || !/^(https?:|data:|blob:)/i.test(url)) return false;
+    const previewUrl = url.includes('supabase.co/storage') && !url.includes('?')
+      ? url + '?width=360&height=640&quality=80'
+      : url;
+    const img = document.createElement('img');
+    img.alt = '';
+    img.decoding = 'async';
+    if (/^https?:/i.test(previewUrl)) img.crossOrigin = 'anonymous';
+    let triedRaw = false;
+    img.addEventListener('error', () => {
+      if (previewUrl !== url && !triedRaw) {
+        triedRaw = true;
+        img.src = url;
+        return;
+      }
+      if (img.hasAttribute('crossorigin')) {
+        img.removeAttribute('crossorigin');
+        img.src = url;
+      }
+    });
+    iconPreview.appendChild(img);
+    if (fotoName) fotoName.textContent = String(url).split('/').pop().split('?')[0].slice(0, 24);
+    img.src = previewUrl;
+    return true;
+  }
+
+
+
+  // Klik kotak foto langsung buka file picker (tombol + di bawah P12 fungsinya sama)
+  // Abaikan klik sesudah drag/cubit-zoom agar tidak buka picker tanpa sengaja
+   fotoBox.addEventListener('click', (e) => {
+     if (e.target === f_icon_img || photoProcessing || saving) return;
+     if (typeof fzMoved !== 'undefined' && fzMoved) { fzMoved = false; return; }
+     openPhotoPicker();
+   });
+
+  // Preview langsung di kotak foto (9/16) tanpa popup: auto center-crop
+  function autoCropPreview(file) {
+    if (!file || !(file.type || '').startsWith('image/')) {
+      alert('Pilih file gambar yang didukung');
+      return Promise.resolve(false);
+    }
+    if (file.size > 3 * 1024 * 1024) {
+      photoSaveBlocked = true;
+      f_icon_img.value = '';
+      alert('Foto kebesaran, max 3MB. Kompres dulu ya.');
+      return Promise.resolve(false);
+    }
+    const run = ++photoRunId;
+    pendingCroppedFile = null;
+    photoDirty = false;
+    photoSaveBlocked = false;
+    setPhotoBusy(true);
+    cropFileName = file.name || 'foto.jpg';
+    const sourceUrl = URL.createObjectURL(file);
+    const img = new Image();
+    img.src = sourceUrl;
+    const operation = waitForImage(img).then(() => {
+      if (run !== photoRunId) return false;
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+      if (!iw || !ih) throw new Error('Ukuran foto tidak valid');
+      const target = 9/16;
+      const imgRatio = iw/ih;
+      let sx = 0, sy = 0, sw = iw, sh = ih;
+      if (imgRatio > target) { sw = ih*target; sx = (iw-sw)/2; }
+      else { sh = iw/target; sy = (ih-sh)/2; }
+      const outW = 540, outH = 960;
+      const canvas = document.createElement('canvas');
+      canvas.width = outW; canvas.height = outH;
+      const ctx = canvas.getContext('2d');
+      if (!ctx || !canvas.toBlob) throw new Error('Browser tidak mendukung proses foto');
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, outW, outH);
+      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
+      return canvasToBlob(canvas).then((blob) => {
+        if (run !== photoRunId) return false;
+        const base = cropFileName.replace(/\.[^.]+$/, '');
+        const cropped = new File([blob], base + '-9x16.jpg', { type: 'image/jpeg' });
+        pendingCroppedFile = cropped;
+        clearPreviewUrl();
+        const previewUrl = URL.createObjectURL(cropped);
+        previewObjectUrl = previewUrl;
+        iconPreview.innerHTML = '<img src="' + previewUrl + '" alt=""/>';
+        if (fotoName) fotoName.textContent = cropped.name;
+        fzReset();
+        syncFotoBox();
+        return true;
+      });
+    }).catch((err) => {
+      if (run !== photoRunId) return false;
+      console.warn('autoCrop gagal', err);
+      pendingCroppedFile = null;
+      photoDirty = false;
+      photoSaveBlocked = true;
+      f_icon_img.value = '';
+      alert('Gagal memproses foto, coba file lain.');
+      return false;
+    }).finally(() => {
+      URL.revokeObjectURL(sourceUrl);
+      if (autoCropPromise === operation) {
+        autoCropPromise = null;
+        setPhotoBusy(false);
+      }
+    });
+    autoCropPromise = operation;
+    return operation;
+  }
+
+   // Tombol bawah foto: tambah / pakai / batal (tanpa popup)
+   btnFotoAdd.addEventListener('click', (e) => { e.stopPropagation(); openPhotoPicker(); });
+   btnFotoSave.addEventListener('click', async (e) => { e.stopPropagation(); await fzCapture(); });
+   btnFotoCancel.addEventListener('click', (e) => {
+     e.stopPropagation();
+     if (saving) return;
+     photoRunId++;
+     autoCropPromise = null;
+     photoCapturePromise = null;
+     pendingCroppedFile = null;
+     photoDirty = false;
+     photoSaveBlocked = false;
+     setPhotoBusy(false);
+     f_icon_img.value = '';
+     fzPtrs.clear();
+     fzReset();
+     showExistingPreview(existingIcon);
+     if (!existingIcon) {
+       iconPreview.innerHTML = '';
+       if (fotoName) fotoName.textContent = '';
+     }
+     syncFotoBox();
+   });
+
+  // Zoom/pan langsung di kotak foto (tanpa popup): scroll=cubit/drag, dobel-klik=reset
+  let fzScale = 1, fzTx = 0, fzTy = 0, fzMoved = false;
+  const fzPtrs = new Map();
+  let fzPinchD = 0, fzPinchS = 1, fzDrag = false, fzDownX = 0, fzDownY = 0;
+  function fzApply() { const im = iconPreview.querySelector('img'); if (!im) return; im.style.transform = 'translate(-50%,-50%) translate(' + fzTx + 'px,' + fzTy + 'px) scale(' + fzScale + ')'; }
+  function fzReset() { fzScale = 1; fzTx = 0; fzTy = 0; fzMoved = false; fzApply(); }
+  function fzClamp() {
+    const im = iconPreview.querySelector('img'); if (!im) return;
+    const bR = fotoBox.getBoundingClientRect(); const iR = im.getBoundingClientRect();
+    let dx = 0, dy = 0;
+    if (iR.left > bR.left) dx = bR.left - iR.left;
+    if (iR.right < bR.right) dx = bR.right - iR.right;
+    if (iR.top > bR.top) dy = bR.top - iR.top;
+    if (iR.bottom < bR.bottom) dy = bR.bottom - iR.bottom;
+    fzTx += dx; fzTy += dy; fzApply();
+  }
+  function fzFit() {
+    const im = iconPreview.querySelector('img'); if (!im) return;
+    const bR = fotoBox.getBoundingClientRect();
+    const iw = im.naturalWidth, ih = im.naturalHeight;
+    if (!iw || !ih || !bR.width || !bR.height) return;
+    if ((iw/ih) > (bR.width/bR.height)) { im.style.height = '100%'; im.style.width = 'auto'; }
+    else { im.style.width = '100%'; im.style.height = 'auto'; }
+    fzReset();
+    requestAnimationFrame(() => { fzApply(); fzClamp(); });
+  }
+  function fzBind() { const im = iconPreview.querySelector('img'); if (!im) return; if (im.complete && im.naturalWidth) { fzFit(); } else { im.onload = () => fzFit(); } }
+  new MutationObserver(() => fzBind()).observe(iconPreview, { childList: true });
+   fotoBox.addEventListener('wheel', (e) => {
+     if (!iconPreview.querySelector('img') || photoProcessing || saving) return;
+     e.preventDefault();
+     const nextScale = Math.min(3, Math.max(1, fzScale + (e.deltaY < 0 ? 0.1 : -0.1)));
+     if (nextScale !== fzScale) { fzScale = nextScale; photoDirty = true; photoSaveBlocked = false; fzMoved = true; }
+     fzApply(); fzClamp();
+   }, { passive: false });
+   fotoBox.addEventListener('pointerdown', (e) => {
+     if (!iconPreview.querySelector('img') || photoProcessing || saving) return;
+     try { fotoBox.setPointerCapture(e.pointerId); } catch(err) {}
+     fzPtrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+     fzMoved = false; fzDownX = e.clientX; fzDownY = e.clientY;
+    if (fzPtrs.size === 2) {
+      const p = Array.from(fzPtrs.values());
+      fzPinchD = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+      fzPinchS = fzScale;
+    } else { fzDrag = true; }
+  });
+  fotoBox.addEventListener('pointermove', (e) => {
+    if (!fzPtrs.has(e.pointerId)) return;
+    e.preventDefault();
+    const pr = fzPtrs.get(e.pointerId);
+    fzPtrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (Math.hypot(e.clientX - fzDownX, e.clientY - fzDownY) > 4) { fzMoved = true; photoDirty = true; }
+    if (fzPtrs.size === 2) {
+      const p = Array.from(fzPtrs.values());
+      const d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+      if (fzPinchD > 0) {
+        const nextScale = Math.min(3, Math.max(1, fzPinchS * d / fzPinchD));
+        if (nextScale !== fzScale) { fzScale = nextScale; photoDirty = true; photoSaveBlocked = false; fzMoved = true; fzApply(); }
+      }
+      return;
+    }
+    if (!fzDrag) return;
+    const dx = e.clientX - pr.x, dy = e.clientY - pr.y;
+    if (dx || dy) { photoDirty = true; photoSaveBlocked = false; fzMoved = true; }
+    fzTx += dx; fzTy += dy;
+    fzApply();
+  });
+  function fzEnd(e) {
+    fzPtrs.delete(e.pointerId);
+    if (fzPtrs.size < 2) fzPinchD = 0;
+    if (fzPtrs.size === 1) {
+      const p = Array.from(fzPtrs.values())[0];
+      fzDrag = true;
+      fzDownX = p.x;
+      fzDownY = p.y;
+    }
+    if (fzPtrs.size === 0) fzDrag = false;
+    fzClamp();
+  }
+  fotoBox.addEventListener('pointerup', fzEnd);
+  fotoBox.addEventListener('pointercancel', fzEnd);
+  fotoBox.addEventListener('lostpointercapture', fzEnd);
+
+
+  function waitForImage(im) {
+    if (im.complete) {
+      return im.naturalWidth ? Promise.resolve(im) : Promise.reject(new Error('Foto belum dapat dibaca'));
+    }
+    return new Promise((resolve, reject) => {
+      const onLoad = () => { cleanup(); resolve(im); };
+      const onError = () => { cleanup(); reject(new Error('Foto belum dapat dibaca')); };
+      const timeout = setTimeout(() => { cleanup(); reject(new Error('Memuat foto terlalu lama')); }, 15000);
+      const cleanup = () => {
+        clearTimeout(timeout);
+        im.removeEventListener('load', onLoad);
+        im.removeEventListener('error', onError);
+      };
+      im.addEventListener('load', onLoad, { once: true });
+      im.addEventListener('error', onError, { once: true });
+    });
+  }
+  function fzCapture() {
+    if (photoCapturePromise) return photoCapturePromise;
+    const im = iconPreview.querySelector('img');
+    if (!im) { alert('Pilih foto terlebih dahulu'); return Promise.resolve(false); }
+    const run = photoRunId;
+    setPhotoBusy(true);
+    const operation = waitForImage(im).then(() => {
+      if (run !== photoRunId) return false;
+      const bR = fotoBox.getBoundingClientRect();
+      const iR = im.getBoundingClientRect();
+      const iw = im.naturalWidth, ih = im.naturalHeight;
+      if (!iw || !ih || !iR.width || !iR.height || !bR.width || !bR.height) throw new Error('Ukuran foto belum siap');
+      const sx = (bR.left - iR.left) / iR.width * iw;
+      const sy = (bR.top - iR.top) / iR.height * ih;
+      const sw = bR.width / iR.width * iw;
+      const sh = bR.height / iR.height * ih;
+      if (![sx, sy, sw, sh].every(Number.isFinite) || sw <= 0 || sh <= 0) throw new Error('Area foto tidak valid');
+      const base = (cropFileName || 'foto.jpg').replace(/-9x16(\.[^.]+)$/, '$1').replace(/\.[^.]+$/, '');
+      const outW = 540, outH = 960;
+      const canvas = document.createElement('canvas');
+      canvas.width = outW; canvas.height = outH;
+      const ctx = canvas.getContext('2d');
+      if (!ctx || !canvas.toBlob) throw new Error('Browser tidak mendukung proses foto');
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, outW, outH);
+      ctx.drawImage(im, sx, sy, sw, sh, 0, 0, outW, outH);
+      return canvasToBlob(canvas).then((blob) => {
+        if (run !== photoRunId) return false;
+        const cropped = new File([blob], base + '-9x16.jpg', { type: 'image/jpeg' });
+        pendingCroppedFile = cropped;
+        clearPreviewUrl();
+        const previewUrl = URL.createObjectURL(cropped);
+        previewObjectUrl = previewUrl;
+        iconPreview.innerHTML = '<img src="' + previewUrl + '" alt=""/>';
+        if (fotoName) fotoName.textContent = cropped.name;
+        fzReset();
+        syncFotoBox();
+        photoSaveBlocked = false;
+        return true;
+      });
+    }).then((result) => {
+      if (result && run === photoRunId) photoDirty = false;
+      return result;
+    }).catch((err) => {
+      if (run === photoRunId) {
+        console.warn('capture gagal', err);
+        photoSaveBlocked = true;
+        alert('Gagal memakai foto di HP. Coba ulangi atau pilih foto lain.');
+      }
+      return false;
+    }).finally(() => {
+      if (photoCapturePromise === operation) {
+        photoCapturePromise = null;
+        if (run === photoRunId) setPhotoBusy(false);
+      }
+    });
+    photoCapturePromise = operation;
+    return operation;
+  }
+
+  // Open crop dari URL gambar yang sudah ada
+  function openCropFromUrl(url) {
+    cropFromExisting = true;
+    cropFileName = 'existing-' + Date.now() + '.jpg';
+    cropImg.onload = () => { fitCropImg(); };
+    cropImg.src = url;
+    cropOverlay.classList.add('show');
+  }
+
+  const cropOverlay = document.getElementById('cropOverlay');
+  const cropStage = document.getElementById('cropStage');
+  const cropImg = document.getElementById('cropImg');
+  const cropCancel = document.getElementById('cropCancel');
+  const cropApply = document.getElementById('cropApply');
+  let cropScale = 1, cropTx = 0, cropTy = 0, cropFileName = 'foto.jpg';
+  let cropDragging = false, cropLastX = 0, cropLastY = 0;
+  const cropPointers = new Map();
+  let cropPinchDist = 0, cropPinchScale = 1;
+
+  function applyCropTransform() {
+    cropImg.style.transform = 'translate(-50%,-50%) translate(' + cropTx + 'px,' + cropTy + 'px) scale(' + cropScale + ')';
+  }
+  function clampCrop() {
+    const sR = cropStage.getBoundingClientRect();
+    const iR = cropImg.getBoundingClientRect();
+    let dx = 0, dy = 0;
+    if (iR.left > sR.left) dx = sR.left - iR.left;
+    if (iR.right < sR.right) dx = sR.right - iR.right;
+    if (iR.top > sR.top) dy = sR.top - iR.top;
+    if (iR.bottom < sR.bottom) dy = sR.bottom - iR.bottom;
+    cropTx += dx; cropTy += dy;
+    applyCropTransform();
+  }
+  function fitCropImg() {
+    const sR = cropStage.getBoundingClientRect();
+    const iw = cropImg.naturalWidth, ih = cropImg.naturalHeight;
+    if (!iw || !ih) return;
+    const stageRatio = sR.width / sR.height;
+    const imgRatio = iw / ih;
+    if (imgRatio > stageRatio) { cropImg.style.height = '100%'; cropImg.style.width = 'auto'; }
+    else { cropImg.style.width = '100%'; cropImg.style.height = 'auto'; }
+    cropScale = 1; cropTx = 0; cropTy = 0;
+    requestAnimationFrame(() => { applyCropTransform(); clampCrop(); });
+  }
+  function openCrop(file) {
+    cropFromExisting = false;
+    if (!file || !file.type.startsWith('image/')) { alert('Pilih file gambar ya'); return; }
+    cropFileName = file.name || 'foto.jpg';
+    const url = URL.createObjectURL(file);
+    cropImg.onload = () => { fitCropImg(); };
+    cropImg.src = url;
+    cropOverlay.classList.add('show');
+  }
+  function closeCrop() {
+    cropOverlay.classList.remove('show');
+  }
+
+  f_icon_img.addEventListener('change', () => {
+    const file = f_icon_img.files[0];
+    if (!file) return;
+    if (photoProcessing || saving) { f_icon_img.value = ''; return; }
+    if (!file.type.startsWith('image/')) { alert('Pilih file gambar ya'); f_icon_img.value = ''; return; }
+    autoCropPreview(file);
+  });
+
+  cropStage.addEventListener('pointerdown', (e) => {
+    cropStage.setPointerCapture(e.pointerId);
+    cropPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (cropPointers.size === 2) {
+      const p = Array.from(cropPointers.values());
+      cropPinchDist = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+      cropPinchScale = cropScale;
+    } else {
+      cropDragging = true; cropLastX = e.clientX; cropLastY = e.clientY;
+    }
+  });
+  cropStage.addEventListener('pointermove', (e) => {
+    if (!cropPointers.has(e.pointerId)) return;
+    cropPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (cropPointers.size === 2) {
+      const p = Array.from(cropPointers.values());
+      const d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+      if (cropPinchDist > 0) {
+        cropScale = Math.min(3, Math.max(1, cropPinchScale * d / cropPinchDist));
+        applyCropTransform();
+      }
+      return;
+    }
+    if (!cropDragging) return;
+    cropTx += e.clientX - cropLastX;
+    cropTy += e.clientY - cropLastY;
+    cropLastX = e.clientX; cropLastY = e.clientY;
+    applyCropTransform();
+  });
+  function endCropPoint(e) {
+    cropPointers.delete(e.pointerId);
+    if (cropPointers.size < 2) cropPinchDist = 0;
+    if (cropPointers.size === 0) cropDragging = false;
+    clampCrop();
+  }
+  cropStage.addEventListener('pointerup', endCropPoint);
+  cropStage.addEventListener('pointercancel', endCropPoint);
+  cropStage.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    cropScale = Math.min(3, Math.max(1, cropScale + (e.deltaY < 0 ? 0.1 : -0.1)));
+    applyCropTransform(); clampCrop();
+  }, { passive: false });
+
+  let cropFromExisting = false;
+
+  cropCancel.addEventListener('click', () => {
+    if (!cropFromExisting) { f_icon_img.value = ''; pendingCroppedFile = null; }
+    closeCrop();
+  });
+  cropOverlay.addEventListener('click', (e) => {
+    if (e.target === cropOverlay) { if (!cropFromExisting) { f_icon_img.value = ''; pendingCroppedFile = null; } closeCrop(); }
+  });
+
+  cropApply.addEventListener('click', () => {
+    const sR = cropStage.getBoundingClientRect();
+    const iR = cropImg.getBoundingClientRect();
+    const iw = cropImg.naturalWidth, ih = cropImg.naturalHeight;
+    if (!iw || !ih) { alert('Foto belum kebaca, coba lagi'); return; }
+    const sx = (sR.left - iR.left) / iR.width * iw;
+    const sy = (sR.top - iR.top) / iR.height * ih;
+    const sw = sR.width / iR.width * iw;
+    const sh = sR.height / iR.height * ih;
+const outW = 540, outH = 960;
+   const thumbW = 120, thumbH = 214;
+    const canvas = document.createElement('canvas');
+    canvas.width = outW; canvas.height = outH;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, outW, outH);
+    ctx.drawImage(cropImg, sx, sy, sw, sh, 0, 0, outW, outH);
+    canvas.toBlob((blob) => {
+      if (!blob) { alert('Gagal motong foto'); return; }
+      const ext = (cropFileName.split('.').pop() || 'jpg').split('?')[0];
+      const cropped = new File([blob], cropFileName.replace(/\.[^.]+$/, '') + '-1x1.' + ext, { type: blob.type || 'image/jpeg' });
+      pendingCroppedFile = cropped;
+      try { const dt = new DataTransfer(); dt.items.add(cropped); f_icon_img.files = dt.files; } catch(e) { console.warn('DataTransfer fallback', e); }
+      const url = URL.createObjectURL(cropped);
+      iconPreview.innerHTML = '<img src="' + url + '" alt=""/>';
+      if (fotoName) fotoName.textContent = cropped.name;
+      syncFotoBox();
+      closeCrop();
+    }, 'image/jpeg', 0.92);
+  });
+
+  async function uploadIcon(file) {
+    const ext = file.name.split('.').pop();
+    const name = Date.now() + '-' + Math.random().toString(36).slice(2,8) + '.' + ext;
+    const { data, error } = await supabase.storage.from('admin-icons').upload(name, file, { cacheControl: '3600', upsert: false });
+    if (error) throw error;
+    const { data: pub } = supabase.storage.from('admin-icons').getPublicUrl(name);
+    return pub.publicUrl;
+  }
+  function fileToDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(r.result);
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
+
+  // auth disabled
+
+  let all = [];
+
+  function setStatus(msg, ok=true) {
+    statusEl.textContent = msg;
+    statusEl.className = 'status ' + (ok ? 'ok' : 'err');
+  }
+
+  let loading = false;
+  async function load() {
+    if (loading) return;
+    loading = true;
+    try {
+      const label = currentTable === 'ja_di_menus' ? 'JA-DI' : 'Dr Coffee';
+      setStatus('Memuat ' + currentTable + '...');
+      const { data, error } = await supabase.from(currentTable).select('*').order('id');
+      if (error) {
+        if (error.code === 'PGRST205' || error.message.includes('Could not find the table')) {
+          setStatus('Tabel ' + currentTable + ' belum ada.', false);
+          listEl.innerHTML = '<div class="empty">Tabel belum ada.</div>';
+          countEl.textContent = '0';
+          render();
+          return;
+        }
+        setStatus('Error: ' + error.message, false);
+        listEl.innerHTML = '<div class="empty">Error: ' + error.message + '</div>';
+        countEl.textContent = '0';
+        render();
+        return;
+      }
+      const seen = new Set();
+      all = [];
+      for (const m of (data || [])) {
+        const key = m.id + '|' + (m.name || '').toLowerCase().trim();
+        if (seen.has(key)) continue;
+        seen.add(key);
+        all.push({ ...m });
+      }
+      setStatus(label + ' — ' + all.length + ' menu');
+      render();
+    } catch (e) {
+      console.error('load crash', e);
+      setStatus('Gagal memuat: ' + e.message, false);
+      render();
+    } finally {
+      loading = false;
+    }
+  }
+
+  function baseName(n) {
+    return (n || '').toUpperCase().replace(/\(.*?\)/g, ' ').replace(/\b(HOT|ICE|MANUAL|PREMIX|12OZ|16OZ|UPSIZE|REGULAR)\b/g, ' ').replace(/[^A-Z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+  function variantOf(n) {
+    const v = [];
+    if (/\bPREMIX\b/i.test(n)) v.push('PREMIX');
+    else if (/\bMANUAL\b/i.test(n)) v.push('MANUAL');
+    if (/\bHOT\b/i.test(n)) v.push('HOT');
+    else if (/\bICE\b/i.test(n)) v.push('ICE');
+    return v.join(' • ');
+  }
+  function slugify(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+  function itemHtml(m) {
+    const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
+    let thumb;
+    if (isImg) {
+      const url = m.foto;
+      const thumbUrl = url.includes('supabase.co/storage') && !url.includes('?')
+        ? url + '?width=120&height=214&quality=70&format=webp'
+        : url;
+      thumb = '<img data-src="' + thumbUrl + '" alt="" loading="lazy" decoding="async"/>';
+    } else {
+      thumb = '<span>' + (m.foto || '☕') + '</span>';
+    }
+    // Kolom PLU di list: hanya PLU yang sudah diisi (tidak ada "-" kosong).
+    const pluHtml = [['PLU 12OZ', m.plu_12oz], ['PLU 16OZ', m.plu_16oz], ['PLU HOT', m.plu_hot]]
+      .filter(r => String(r[1] || '').trim() !== '')
+      .map(r => '<span>' + esc(r[1]) + '</span>').join('');
+    return `
+      <div class="item" data-view="${m.id}" style="cursor:pointer">
+        <div class="thumb">${thumb}</div>
+        <div class="item-name">${m.name}</div>
+        <div class="col-plu" style="font-size:8px;line-height:1.2;margin-top:2px">${pluHtml}</div>
+        <div class="item-actions" style="margin-top:6px;gap:6px">
+          <button class="btn btn-ghost btn-small" data-edit="${m.id}" title="Edit" aria-label="Edit" style="width:32px;aspect-ratio:1/1;padding:0;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#6366f1;border:none"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="btn btn-danger btn-small" data-del="${m.id}" title="Hapus" aria-label="Hapus" style="width:32px;aspect-ratio:1/1;padding:0;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#fef2f2;border:1px solid #fecaca"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+        </div>
+      </div>`;
+  }
+  function render() {
+    const q = searchEl.value.trim().toLowerCase();
+    const seen = new Set();
+    const filtered = [];
+    for (const m of all) {
+      const key = m.id + '|' + (m.name || '').toLowerCase().trim();
+      if (seen.has(key)) continue;
+      seen.add(key);
+        if (q && !m.name.toLowerCase().includes(q) && !(m.cat && m.cat.toLowerCase().includes(q)) && !(m.plu_12oz && m.plu_12oz.toLowerCase().includes(q)) && !(m.plu_16oz && m.plu_16oz.toLowerCase().includes(q)) && !(m.plu_hot && m.plu_hot.toLowerCase().includes(q))) continue;
+      filtered.push(m);
+    }
+    countEl.textContent = filtered.length;
+    const label = currentTable === 'ja_di_menus' ? 'JA-DI' : 'Dr Coffee';
+    if (!filtered.length) { listEl.innerHTML = '<div class="empty">Tidak ada data — ' + label + ' konek Supabase OK (0 menu)</div>'; return; }
+    filtered.sort((a,b)=> a.name.localeCompare(b.name));
+    listEl.innerHTML = filtered.map(itemHtml).join('');
+    
+    // Lazy load images with IntersectionObserver (like index.html)
+    const thumbObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          const src = img.dataset.src;
+          if (src) {
+            img.src = src;
+            img.onload = () => img.classList.add('loaded');
+          }
+          obs.unobserve(img);
+        }
+      });
+    }, { rootMargin: '100px', threshold: 0.01 });
+    
+    listEl.querySelectorAll('img[data-src]').forEach(img => {
+      // If already loaded (cached), mark as loaded immediately
+      if (img.complete && img.src) {
+        img.classList.add('loaded');
+      } else {
+        thumbObserver.observe(img);
+      }
+    });
+
+    listEl.querySelectorAll('[data-edit]').forEach(btn => {
+      btn.addEventListener('click', () => editRow(parseInt(btn.dataset.edit)));
+    });
+    listEl.querySelectorAll('[data-del]').forEach(btn => {
+      btn.addEventListener('click', () => delRow(parseInt(btn.dataset.del)));
+    });
+    listEl.querySelectorAll('.item[data-view]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        if (e.target.closest('[data-edit],[data-del]')) return;
+        const m = all.find(x => String(x.id) === el.dataset.view);
+        if (m) openSheet(m);
+      });
+    });
+  }
+
+  function editRow(id) {
+    if (saving) { alert('Tunggu proses simpan selesai'); return; }
+    const m = all.find(x=>x.id===id);
+    if (!m) return;
+    editId.value = m.id;
+    f_name.value = (m.name || '').toUpperCase();
+    existingIcon = m.foto||'';
+    cropFileName = existingIcon ? String(existingIcon).split('/').pop().split('?')[0] || 'foto.jpg' : 'foto.jpg';
+    existingCls = m.cls||'g-a';
+    existingCat = m.cat || 'PREMIX';
+    f_link.value = m.link||'';
+    f_plu12.value = (m.plu_12oz||'').toUpperCase();
+    f_plu16.value = m.plu_16oz||'';
+    if(f_pluHot) f_pluHot.value = m.plu_hot||'';
+    syncPluRows();
+    f_bahan12.forEach((inp, i) => { inp.value = m['bahan_12oz_' + (i+1)] || ''; });
+    f_bahan16.forEach((inp, i) => { inp.value = m['bahan_16oz_' + (i+1)] || ''; });
+    f_bahanHot.forEach((inp, i) => { inp.value = m['bahan_hot_' + (i+1)] || ''; });
+    f_percepatan12.forEach((inp, i) => { inp.value = m['percepatan_12oz_' + (i+1)] || ''; });
+    f_percepatan16.forEach((inp, i) => { inp.value = m['percepatan_16oz_' + (i+1)] || ''; });
+    f_catatan.value = (m.catatan || '').toUpperCase();
+    photoRunId++;
+    autoCropPromise = null;
+    photoCapturePromise = null;
+    pendingCroppedFile = null;
+    photoDirty = false;
+    photoSaveBlocked = false;
+    fzPtrs.clear();
+    fzReset();
+    clearPreviewUrl();
+    setPhotoBusy(false);
+    f_icon_img.value = '';
+    if (!showExistingPreview(m.foto)) {
+      iconPreview.innerHTML = '';
+      if(fotoName) fotoName.textContent = m.foto || 'Belum ada foto';
+    }
+    syncFotoBox();
+    const tabWithData = ['secHot','secP12','secP16','sec12oz','sec16oz'].find(tid => {
+      const p = document.getElementById(tid);
+      return p && p.querySelector('input') && Array.from(p.querySelectorAll('input')).some(i => i.value.trim());
+    });
+    switchTab(tabWithData || 'secHot');
+    btnSave.title = 'Update'; btnSave.setAttribute('aria-label', 'Update');
+    window.scrollTo({top:0, behavior:'smooth'});
+  };
+
+  // Hapus menu dikunci password. Nilai ini ada di source (frontend statis),
+  // jadi hanya menahan salah klik — bukan proteksi sungguhan. Proteksi asli
+  // harus di Supabase (RLS / auth), bukan di file ini.
+  // Pakai modal sendiri (bukan prompt/confirm bawaan) karena di WebView/PWA
+  // window.prompt sering dinonaktifkan sehingga popup tidak pernah muncul.
+  const DEL_PASSWORD = '0225106927';
+
+  const pwBg = document.getElementById('pwBg');
+  const pwMsg = document.getElementById('pwMsg');
+  const pwInput = document.getElementById('pwInput');
+  const pwError = document.getElementById('pwError');
+  const pwOk = document.getElementById('pwOk');
+  const pwCancel = document.getElementById('pwCancel');
+  let pwResolve = null;
+  let pwScrollY = 0;
+
+  // Kunci scroll halaman saat modal terbuka: HP sering auto-scroll ke bawah
+  // saat keyboard muncul, jadi halaman dibekukan (position:fixed) dulu.
+  function lockScroll() {
+    pwScrollY = window.scrollY || window.pageYOffset || 0;
+    document.documentElement.classList.add('pw-open');
+    document.body.style.position = 'fixed';
+    document.body.style.top = -pwScrollY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  function unlockScroll() {
+    document.documentElement.classList.remove('pw-open');
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    window.scrollTo(0, pwScrollY);
+  }
+
+  // Sync overlay ke visualViewport: kalau keyboard HP naik, area terlihat
+  // jadi lebih pendek dan centering flex akan terdorong ke bawah.
+  function syncPwViewport() {
+    const vv = window.visualViewport;
+    if (!vv || !pwBg.classList.contains('open')) return;
+    pwBg.style.height = vv.height + 'px';
+    pwBg.style.top = vv.offsetTop + 'px';
+    pwBg.style.bottom = 'auto';
+  }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', syncPwViewport);
+    window.visualViewport.addEventListener('scroll', syncPwViewport);
+  }
+
+  function askDelPassword(msg) {
+    // Jangan sampai dua modal menumpuk: selesaikan yang lama dengan "batal".
+    if (pwResolve) closePw(false);
+    pwMsg.textContent = msg || '';
+    pwInput.value = '';
+    pwError.hidden = true;
+    lockScroll();
+    pwBg.classList.add('open');
+    syncPwViewport();
+    // preventScroll: keyboard HP tidak membuat halaman melompat ke bawah
+    try { pwInput.focus({ preventScroll: true }); } catch (e) { try { pwInput.focus(); } catch (e2) {} }
+    requestAnimationFrame(syncPwViewport);
+    return new Promise((res) => { pwResolve = res; });
+  }
+  function closePw(ok) {
+    pwBg.classList.remove('open');
+    pwBg.style.height = '';
+    pwBg.style.top = '';
+    pwBg.style.bottom = '';
+    unlockScroll();
+    const fn = pwResolve;
+    pwResolve = null;
+    if (fn) fn(ok);
+  }
+  pwOk.addEventListener('click', () => {
+    if (pwInput.value.trim() !== DEL_PASSWORD) {
+      pwError.hidden = false;
+      pwInput.value = '';
+      try { pwInput.focus({ preventScroll: true }); } catch (e) {}
+      return;
+    }
+    closePw(true);
+  });
+  pwCancel.addEventListener('click', () => closePw(false));
+  pwBg.addEventListener('click', (e) => { if (e.target === pwBg) closePw(false); });
+  pwInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') pwOk.click();
+    if (e.key === 'Escape') closePw(false);
+  });
+
+  async function delRow(id) {
+    if (saving) { alert('Tunggu proses simpan selesai'); return; }
+    const ok = await askDelPassword('Menu #' + id + ' akan dihapus permanen. Password wajib diisi.');
+    if (!ok) return;
+    const { error } = await supabase.from(currentTable).delete().eq('id', id);
+    if (error) alert('Gagal hapus: ' + error.message);
+    else { setStatus('🗑️ Dihapus #' + id); await load(); }
+  };
+
+  function resetForm() {
+    editId.value = '';
+    existingIcon = '';
+    cropFileName = 'foto.jpg';
+    existingCls = 'g-a';
+    existingCat = 'PREMIX';
+    photoRunId++;
+    autoCropPromise = null;
+    photoCapturePromise = null;
+    pendingCroppedFile = null;
+    photoDirty = false;
+    photoSaveBlocked = false;
+    fzPtrs.clear();
+    fzReset();
+    clearPreviewUrl();
+    setPhotoBusy(false);
+    f_icon_img.value = '';
+    form.reset();
+    syncPluRows();
+    iconPreview.innerHTML = '';
+    if(fotoName) fotoName.textContent = 'Belum ada foto';
+    syncFotoBox();
+    btnSave.title = 'Simpan'; btnSave.setAttribute('aria-label', 'Simpan');
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (saving) return;
+    const name = f_name.value.trim().toUpperCase();
+    if (!name) { alert('Menu wajib'); return; }
+    if (photoSaveBlocked) { alert('Foto belum berhasil diproses. Pilih foto lagi atau tekan Batal.'); return; }
+    const targetId = editId.value;
+    const targetTable = currentTable;
+    const targetCls = existingCls;
+    const targetIcon = existingIcon;
+    const initialPhotoRun = photoRunId;
+    const snapshot = {
+      name,
+      link: f_link.value.trim(),
+      plu12: f_plu12.value.trim().toUpperCase() || null,
+      plu16: f_plu16.value.trim() || null,
+      pluHot: f_pluHot ? f_pluHot.value.trim() || null : null,
+      bahanHot: f_bahanHot.map(inp => inp.value.trim() || null),
+      percepatan12: f_percepatan12.map(inp => inp.value.trim() || null),
+      percepatan16: f_percepatan16.map(inp => inp.value.trim() || null),
+      bahan12: f_bahan12.map(inp => inp.value.trim() || null),
+      bahan16: f_bahan16.map(inp => inp.value.trim() || null),
+      catatan: f_catatan.value.trim().toUpperCase() || null
+    };
+    saving = true;
+    form.classList.add('saving');
+    setPhotoBusy(photoProcessing);
+    btnSave.disabled = true;
+    btnSave.title = 'Menyimpan...';
+    btnSave.setAttribute('aria-label', 'Menyimpan...');
+    try {
+      if (autoCropPromise) {
+        const processed = await autoCropPromise;
+        if (!processed) return;
+      }
+      if (photoCapturePromise) {
+        const captured = await photoCapturePromise;
+        if (!captured) return;
+      }
+      if (photoProcessing) { alert('Tunggu foto selesai diproses'); return; }
+      if (photoDirty) {
+        const captured = await fzCapture();
+        if (!captured) return;
+      }
+      if (photoSaveBlocked || photoRunId !== initialPhotoRun) {
+        alert('Foto berubah atau belum siap. Ulangi proses foto.');
+        return;
+      }
+      let iconValue = targetIcon || '☕';
+      const pendingFile = pendingCroppedFile || f_icon_img.files[0];
+      if (pendingFile) {
+        const file = pendingFile;
+        if (file.size > 3 * 1024 * 1024) { alert('Foto kebesaran, max 3MB. Kompres dulu ya.'); return; }
+        try {
+          iconValue = await uploadIcon(file);
+        } catch (err) {
+          const msg = err.message || '';
+          const isRLS = msg.includes('row-level security') || msg.includes('AccessDenied') || msg.includes('403') || msg.includes('violates');
+          if (!isRLS) { alert('Gagal upload gambar: ' + msg); return; }
+          if (!confirm('Upload ke Storage gagal (RLS belum di-set).\n\nDetail: ' + msg + '\n\nMau simpan foto sebagai base64 sementara biar tetap kesimpan?\n(Disarankan tetap RUN scripts/fix-storage-rls.sql nanti)')) return;
+          try { iconValue = await fileToDataURL(file); }
+          catch (convertError) { alert('Gagal convert foto: ' + convertError.message); return; }
+        }
+      }
+      const autoLink = 'pages/item-' + slugify(snapshot.name) + '.html';
+      const payload = {
+        name: snapshot.name,
+        foto: iconValue,
+        cls: targetCls,
+        link: snapshot.link || autoLink,
+        plu_12oz: snapshot.plu12,
+        plu_16oz: snapshot.plu16,
+        plu_hot: snapshot.pluHot,
+        catatan: snapshot.catatan
+      };
+      snapshot.bahanHot.forEach((value, index) => { payload['bahan_hot_' + (index + 1)] = value; });
+      snapshot.percepatan12.forEach((value, index) => { payload['percepatan_12oz_' + (index + 1)] = value; });
+      snapshot.percepatan16.forEach((value, index) => { payload['percepatan_16oz_' + (index + 1)] = value; });
+      snapshot.bahan12.forEach((value, index) => { payload['bahan_12oz_' + (index + 1)] = value; });
+      snapshot.bahan16.forEach((value, index) => { payload['bahan_16oz_' + (index + 1)] = value; });
+      if (targetTable === 'dr_coffee_menus') {
+        payload.has_percepatan = snapshot.name && (snapshot.name.includes('Jadi') || snapshot.name.includes('Coffee Latte') || snapshot.name.includes('Latte'));
+      }
+      const makeLegacyPayload = () => {
+        const reduced = { ...payload };
+        Object.keys(reduced).forEach((key) => {
+          if (/^(plu_|bahan_hot_|percepatan_)/.test(key)) delete reduced[key];
+        });
+        return reduced;
+      };
+      let result;
+      let error;
+      if (targetId) {
+        result = await supabase.from(targetTable).update(payload).eq('id', parseInt(targetId));
+        error = result.error;
+        if (error && /bahan_hot|plu|percepatan|PGRST204/i.test(error.message)) {
+          alert('Kolom form belum lengkap di Supabase.\n\nRUN dulu:\n- scripts/sync-form-columns.sql\n\nMencoba simpan tanpa kolom baru...');
+          result = await supabase.from(targetTable).update(makeLegacyPayload()).eq('id', parseInt(targetId));
+          error = result.error;
+        }
+      } else {
+        result = await supabase.from(targetTable).insert([payload]);
+        error = result.error;
+        if (error && /bahan_hot|plu|percepatan|PGRST204/i.test(error.message)) {
+          alert('Kolom form belum lengkap di Supabase.\n\nRUN dulu:\n- scripts/sync-form-columns.sql\n\nMencoba simpan tanpa kolom baru...');
+          result = await supabase.from(targetTable).insert([makeLegacyPayload()]);
+          error = result.error;
+        }
+      }
+      if (error) {
+        alert('Gagal simpan: ' + error.message + '\n\nJika RLS error, cek SQL Editor: policy insert harus allow public.');
+        setStatus('Gagal: ' + error.message, false);
+        return;
+      }
+      setStatus('✅ Tersimpan (' + targetTable + '): ' + payload.name);
+      resetForm();
+      try { await load(); } catch (loadError) { console.warn('reload gagal', loadError); }
+    } catch (err) {
+      console.error(err);
+      alert('Gagal menyimpan: ' + (err.message || 'kesalahan tidak diketahui'));
+    } finally {
+      saving = false;
+      form.classList.remove('saving');
+      setPhotoBusy(photoProcessing);
+      btnSave.disabled = false;
+      btnSave.title = editId.value ? 'Update' : 'Simpan';
+      btnSave.setAttribute('aria-label', btnSave.title);
+    }
+  });
+
+  searchEl.addEventListener('input', render);
+
+  // bahan cuma 1 baris tampil, plus nambah baris biar nyatu ke tabel 1
+  // tab switching
+  const tabBar = document.getElementById('tabBar');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+  const tabBtns = tabBar.querySelectorAll('.tab-btn');
+  let activeTab = 'secHot';
+
+  function switchTab(tabId) {
+    activeTab = tabId;
+    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+    tabPanels.forEach(p => p.classList.toggle('active', p.id === tabId));
+    const panel = document.getElementById(tabId);
+    if (panel) showFilledRows(panel);
+  }
+  tabBtns.forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
+
+  function showFilledRows(panel) {
+    panel.querySelectorAll('.form-table .tr.hidden').forEach(r => r.classList.remove('hidden'));
+    const inputs = panel.querySelectorAll('.form-table .tr:not(.tr-plus) input');
+    let maxFilled = 0;
+    inputs.forEach((inp, i) => { if (inp.value.trim()) maxFilled = i + 1; });
+    const target = Math.min(10, Math.max(1, maxFilled + 1));
+    let count = 0;
+    panel.querySelectorAll('.form-table .tr:not(.tr-plus)').forEach(r => {
+      count++;
+      if (count > target) r.classList.add('hidden');
+    });
+    const table = panel.querySelector('.form-table');
+    if (table) {
+      const plus = table.querySelector('.bahan-add');
+      const hidden = table.querySelector('.tr.hidden');
+      if (plus) plus.style.display = hidden ? '' : 'none';
+    }
+  }
+
+  function initBahanTables(){
+    document.querySelectorAll('.tab-panel').forEach(panel => {
+      showFilledRows(panel);
+      const table = panel.querySelector('.form-table');
+      if (!table) return;
+      const btn = table.querySelector('.bahan-add');
+      if (!btn) return;
+      const updatePlus = () => {
+        const hidden = table.querySelector('.tr.hidden');
+        btn.style.display = hidden ? '' : 'none';
+      };
+      btn.onclick = () => {
+        const hidden = table.querySelector('.tr.hidden');
+        if (hidden) { hidden.classList.remove('hidden'); updatePlus(); }
+      };
+      updatePlus();
+    });
+  }
+  const _origReset5 = resetForm;
+  resetForm = function(){ document.querySelectorAll('.bahan-add').forEach(b=>{ const tr=b.closest('.tr'); if(tr) tr.remove(); }); document.querySelectorAll('.tab-panel .tr.hidden').forEach(r=>r.classList.remove('hidden')); _origReset5(); setTimeout(()=>{ initBahanTables(); switchTab('secHot'); }, 0); };
+  const _origEdit5 = editRow;
+  editRow = function(id){ _origEdit5(id); setTimeout(()=>{ document.querySelectorAll('.bahan-add').forEach(b=>{ const tr=b.closest('.tr'); if(tr) tr.remove(); }); document.querySelectorAll('.tab-panel .tr.hidden').forEach(r=>r.classList.remove('hidden')); initBahanTables(); }, 50); };
+
+  // realtime JA-DI aja (udah sama kayak Dr Coffee, gak pakai tab atas)
+  let realtimeChannel = null;
+  function subscribeRealtime() {
+    if (realtimeChannel) {
+      supabase.removeChannel(realtimeChannel);
+    }
+    const channelName = 'admin_ja_di_' + Math.random().toString(36).slice(2);
+    realtimeChannel = supabase.channel(channelName).on('postgres_changes', { event: '*', schema: 'public', table: 'ja_di_menus' }, () => load()).subscribe();
+  }
+  window.addEventListener('beforeunload', () => {
+    if (realtimeChannel) supabase.removeChannel(realtimeChannel);
+  });
+  subscribeRealtime();
+
+  // ===== Bottom sheet pratinjau (gaya JA-DI) =====
+  const sheetBg = document.getElementById('sheetBg');
+  const sheetBody = document.getElementById('sheetBody');
+  function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function openSheet(m){
+    if (!m) return;
+    const b12 = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_12oz_' + i]).filter(Boolean);
+    const b16 = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_16oz_' + i]).filter(Boolean);
+    const bHot = [1,2,3,4,5,6,7,8,9,10].map(i => m['bahan_hot_' + i]).filter(Boolean);
+    const p12 = [1,2,3,4,5,6,7,8,9,10].map(i => m['percepatan_12oz_' + i]).filter(Boolean);
+    const p16 = [1,2,3,4,5,6,7,8,9,10].map(i => m['percepatan_16oz_' + i]).filter(Boolean);
+    const bahans = [...b12, ...b16, ...bHot, ...p12, ...p16];
+    const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
+    const photo = isImg ? '<img src="' + m.foto + '" alt="" loading="lazy"/>' : '<span style="font-size:48px">' + (m.foto || '☕') + '</span>';
+    // PLU: hanya baris yang SUDAH diisi yang ditampilkan.
+    // Kalau semuanya kosong, tabelnya tidak dirender sama sekali.
+    const pluRows = [['PLU 12OZ', m.plu_12oz], ['PLU 16OZ', m.plu_16oz], ['PLU HOT', m.plu_hot]]
+      .filter(r => String(r[1] || '').trim() !== '');
+    
+    // Build bahan sections - only show non-empty
+    const sections = [];
+    if (p12.length) sections.push({ title: 'P12', items: p12 });
+    if (p16.length) sections.push({ title: 'P16', items: p16 });
+    if (b12.length) sections.push({ title: '12OZ', items: b12 });
+    if (b16.length) sections.push({ title: '16OZ', items: b16 });
+    if (bHot.length) sections.push({ title: 'HOT', items: bHot });
+    
+    // Build header - name from m.name (e.g., "VANILLA LATTE PREMIX" -> "VANILLA LATTE")
+    const nameParts = (m.name || '').split(' ');
+    const displayName = nameParts.slice(0, -1).join(' ') || m.name; // Remove last word (PREMIX/MANUAL)
+    
+    let html = '<div class="sheet-top-new">';
+    // Left: Photo
+    html += '<div class="sheet-photo-wrap-new">';
+    html += isImg ? '<img src="' + m.foto + '" alt="" loading="lazy" class="sheet-photo-img-new"/>' : '<div class="sheet-photo-placeholder-new">' + (m.foto || '☕') + '</div>';
+    html += '</div>';
+    // Right: Info + PLU + Close
+    html += '<div class="sheet-info-wrap-new">';
+    html += '<div class="sheet-name-new">' + esc(displayName.toUpperCase()) + '</div>';
+     if (pluRows.length) {
+      html += '<div class="sheet-plu-table">';
+      pluRows.forEach(r => {
+        html += '<div class="sheet-plu-row"><div class="sheet-plu-th">' + esc(r[0]) + '</div><div class="sheet-plu-td">' + esc(r[1]) + '</div></div>';
+      });
+      html += '</div>';
+    }
+    html += '<button class="sheet-close-btn-new" id="sh_close_top" type="button">Tutup</button>';
+    html += '</div>';
+    html += '</div>'; // sheet-top-new
+    
+    // Bahan sections
+    html += '<div class="sheet-bahan-wrap-new">';
+    sections.forEach(sec => {
+      html += '<div class="sheet-section-new">';
+      html += '<div class="sheet-section-title-new">' + sec.title + '</div>';
+      html += '<div class="sheet-bahan-list-new">';
+      sec.items.forEach(b => {
+        html += '<input type="text" class="bahan-input-new" value="' + esc(b) + '" readonly />';
+      });
+      html += '</div>';
+      html += '</div>';
+    });
+    
+    if (m.catatan) html += '<div class="sheet-section-new"><div class="sheet-section-title-new">Catatan</div><div class="sheet-note-new">' + esc(m.catatan) + '</div></div>';
+    if (!bahans.length && !m.catatan) html += '<div class="sheet-empty-new">Belum ada data bahan.</div>';
+    
+    html += '<button class="sheet-close-btn-main-new" id="sh_close_bottom" type="button">Tutup</button>';
+    
+    sheetBody.innerHTML = html;
+    sheetBg.classList.add('open');
+    document.getElementById('sh_close_top').addEventListener('click', closeSheet);
+    document.getElementById('sh_close_bottom').addEventListener('click', closeSheet);
+  }
+  function closeSheet(){
+    sheetBg.classList.remove('open');
+  }
+  sheetBg.addEventListener('click', (e) => { if (e.target === sheetBg) closeSheet(); });
+
+  initBahanTables();
+  load();
+</script>
+</body>
+</html>
+
+
+
+
+

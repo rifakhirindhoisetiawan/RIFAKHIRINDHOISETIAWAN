@@ -13,7 +13,7 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const BUCKET = 'index-photos';
-const LOCAL_DIR = path.join(__dirname, '..', 'index', 'image-index');
+const LOCAL_DIR = path.join(__dirname, '..', '..', 'assets', 'images');
 
 // Thumbnail size for index grid (matches CSS aspect-ratio 9/16 = 120x160)
 const THUMB_WIDTH = 120;

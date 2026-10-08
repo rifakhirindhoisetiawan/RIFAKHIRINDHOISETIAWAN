@@ -1,6 +1,6 @@
 // Generate satu halaman detail untuk setiap menu KOPI.
 // Sumber data: tabel ja_di_menus di Supabase.
-// Output     : public/pages/item-<slug>.html   (sesuai nilai `link` di database)
+// Output     : public/kopi/pages/item-<slug>.html
 //
 // Jalankan ulang setiap kali menu berubah:
 //   node scripts/build/generate-kopi-pages.mjs
@@ -24,7 +24,7 @@ if (!r.ok) {
 const rows = await r.json();
 console.log("Menu dari Supabase: " + rows.length);
 
-const OUT_DIR = path.join(ROOT, "public", "pages");
+const OUT_DIR = path.join(ROOT, "public", "kopi", "pages");
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
 const dibuat = [];
@@ -36,7 +36,7 @@ for (const m of rows) {
 
   // File selalu dari slug NAMA, bukan dari kolom `link` (beberapa nilai link di
   // DB menunjuk halaman menu lain -> 63 menu hanya jadi 59 file).
-  const rel = "pages/item-" + slug + ".html";
+  const rel = "kopi/pages/item-" + slug + ".html";
   const file = path.join(ROOT, "public", rel);
   fs.mkdirSync(path.dirname(file), { recursive: true });
 
@@ -189,7 +189,7 @@ function halaman(m, slug) {
     </div>
 
     <script type="module">
-      import { supabase } from '../../js/supabase.js';
+      import { supabase } from '../../../src/js/supabase.js';
 
       const MENU_ID = ${Number(m.id)};
       const NAMA = ${JSON.stringify(m.name)};

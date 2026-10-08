@@ -757,11 +757,11 @@
         if (!link) return link;
         if (/^(https?:|data:|blob:)/i.test(link)) return link;
         if (link.startsWith('../') || link.startsWith('/')) return link;
-        if (link.startsWith('pages/') || link.startsWith('assets/image-index/') || link.startsWith('image-index/') || link.startsWith('image-kopi/') || link.startsWith('images/') || link.startsWith('modul/')) return '../' + link;
+        if (link.startsWith('pages/') || link.startsWith('assets/images/') || link.startsWith('image-index/') || link.startsWith('image-kopi/') || link.startsWith('images/') || link.startsWith('modul/')) return '../' + link;
         if (link.endsWith('.html') && !link.includes('/')) return '../' + link;
         return link;
       }
-      const adminMenu = { name: "ADMIN", foto: "../../assets/image-index/daily-task/1.jpg", cls: "g-a", link: "../admin/", cat: "ADMIN" };
+      const adminMenu = { name: "ADMIN", foto: "../../assets/images/daily-task/1.jpg", cls: "g-a", link: "admin/", cat: "ADMIN" };
       function renderMenu() {
         const q = (searchInput.value || '').trim().toLowerCase();
         const baseFiltered = menus.map(normalizeMenu).filter(m => {
@@ -785,7 +785,7 @@
           // Setiap menu punya halaman sendiri: public/pages/item-<slug>.html
           // (dibuat oleh scripts/build/generate-kopi-pages.mjs).
           // Link dari DB tidak dipakai karena beberapa nilainya salah/tumpang tindih.
-          const hrefMenu = isAdmin ? (m.link || '') : '../pages/item-' + slug + '.html';
+          const hrefMenu = isAdmin ? (m.link || '') : 'pages/item-' + slug + '.html';
           const hasLink = !!hrefMenu;
           const tag = hasLink ? 'a' : 'div';
           const href = hasLink ? ' href="' + hrefMenu + '"' : '';

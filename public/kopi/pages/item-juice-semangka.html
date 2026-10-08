@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0" />
+    <title>JUICE SEMANGKA</title>
+    <meta name="theme-color" content="#fffbf2" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      /* ============================================================
+         TEMA MORI
+         Palet dari public/mori/css/variables.css:
+         bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64
+         Gaya: sharp (radius 0), border hitam solid, label mono uppercase.
+         ============================================================ */
+      :root {
+        --mori-bg: #fffbf2;
+        --mori-surface: #f7f3e9;
+        --mori-text: #1a1917;
+        --mori-text-2: #6e6a64;
+        --mori-line: rgba(26, 25, 23, 0.14);
+        --mori-accent: #1a1917;
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+      html, body { min-height: 100%; background: var(--mori-bg); }
+      /* Scrollbar disembunyikan, scrolling tetap normal (HP) */
+      html { scrollbar-width: none; -ms-overflow-style: none; }
+      html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
+      body {
+        font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+        color: var(--mori-text);
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-size-adjust: 100%;
+        overflow-y: auto;
+      }
+      .wrap {
+        background: var(--mori-bg);
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 14px 18px 32px;
+        padding-top: calc(14px + env(safe-area-inset-top));
+        padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+      }
+      h1 {
+        font-size: 17px; font-weight: 800; line-height: 1.25; margin: 8px 0 8px;
+        letter-spacing: 0.6px; text-transform: uppercase;
+      }
+      /* Foto dihapus: halaman detail hanya berisi tabel PLU + resep. */
+      .top-grid { display: block; }
+      .side { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+      .badge {
+        align-self: flex-start;
+        font-family: var(--mori-mono);
+        font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: 0;
+        background: var(--mori-surface); border: 1px solid var(--mori-accent);
+        color: var(--mori-text); letter-spacing: 0.8px; text-transform: uppercase;
+      }
+      /* ===== TABEL PLU ===== */
+      .plu-table {
+        border: 1px solid var(--mori-accent); border-radius: 0;
+        overflow: hidden; background: var(--mori-bg);
+      }
+      .plu-row { display: flex; align-items: stretch; }
+      .plu-row + .plu-row { border-top: 1px solid var(--mori-line); }
+      .plu-th {
+        display: flex; align-items: center; justify-content: center; text-align: center;
+        padding: 8px; font-family: var(--mori-mono); font-size: 10px; font-weight: 700;
+        color: var(--mori-text); background: var(--mori-surface);
+        border-right: 1px solid var(--mori-line);
+        letter-spacing: 0.6px; width: 38%; flex-shrink: 0;
+      }
+      .plu-td {
+        flex: 1; display: flex; align-items: center; padding: 8px 10px;
+        font-family: var(--mori-mono); font-size: 13px; font-weight: 700;
+        color: var(--mori-text);
+      }
+      .plu-td.kosong { color: var(--mori-text-2); font-weight: 600; }
+      h2 {
+        font-family: var(--mori-mono);
+        font-size: 11px; font-weight: 700; color: var(--mori-text); letter-spacing: 1.2px;
+        text-transform: uppercase; margin: 18px 0 8px;
+      }
+      /* ===== TABEL RESEP / BAHAN ===== */
+      .resep {
+        border: 1px solid var(--mori-accent); border-radius: 0;
+        overflow: hidden; background: var(--mori-bg);
+        box-shadow: 4px 4px 0 rgba(26, 25, 23, 0.1);
+      }
+      .resep-row { display: flex; align-items: stretch; }
+      .resep-row + .resep-row { border-top: 1px solid var(--mori-line); }
+      .resep-no {
+        display: flex; align-items: center; justify-content: center; text-align: center;
+        padding: 9px 4px; font-family: var(--mori-mono); font-size: 10px; font-weight: 700;
+        color: var(--mori-text); background: var(--mori-surface);
+        border-right: 1px solid var(--mori-line);
+        width: 38px; flex-shrink: 0;
+      }
+      .resep-nama {
+        flex: 1; display: flex; align-items: center; padding: 9px 12px;
+        font-size: 13px; font-weight: 600; color: var(--mori-text);
+      }
+      .catatan {
+        background: var(--mori-surface); border: 1px solid var(--mori-accent); border-radius: 0;
+        padding: 10px 12px; font-size: 13px; color: var(--mori-text); line-height: 1.5;
+      }
+      .empty {
+        text-align: center; color: var(--mori-text-2);
+        font-family: var(--mori-mono); font-size: 11px; font-weight: 600;
+        letter-spacing: 0.6px; text-transform: uppercase; padding: 24px 0;
+      }
+      #status {
+        margin: 10px 0 0; padding: 6px 9px; border-radius: 0;
+        background: var(--mori-surface); border: 1px solid var(--mori-line);
+        color: var(--mori-text-2); font-family: var(--mori-mono);
+        font-size: 10px; font-weight: 700; letter-spacing: 0.4px;
+      }
+      #status[hidden] { display: none; }
+      #status[data-tone="err"] {
+        background: #fdf1f1; border-color: var(--mori-accent); color: #b91c1c;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="top-grid">
+        <div class="side">
+          <h1 id="nama">JUICE SEMANGKA</h1>
+          <div id="badgeWrap"></div>
+          <div class="plu-table" id="pluTable"></div>
+        </div>
+      </div>
+
+      <div id="bahanWrap"></div>
+      <div id="status" role="status" aria-live="polite" hidden></div>
+    </div>
+
+    <script type="module">
+      import { supabase } from '../../../src/js/supabase.js';
+
+      const MENU_ID = 458;
+      const NAMA = "JUICE SEMANGKA";
+
+      const namaEl = document.getElementById('nama');
+      const badgeWrap = document.getElementById('badgeWrap');
+      const pluTable = document.getElementById('pluTable');
+      const bahanWrap = document.getElementById('bahanWrap');
+      const statusEl = document.getElementById('status');
+
+      const setStatus = (text, tone) => {
+        statusEl.textContent = text || '';
+        statusEl.dataset.tone = tone || '';
+        statusEl.hidden = !text;
+      };
+
+      const grup = (m, prefix) =>
+        Array.from({ length: 10 }, (_, i) => m[prefix + (i + 1)]).filter(Boolean);
+
+      function render(m) {
+        document.title = m.name || NAMA;
+        namaEl.textContent = m.name || NAMA;
+
+        badgeWrap.innerHTML = m.cat ? '<span class="badge">' + m.cat + '</span>' : '';
+
+          // Tabel PLU hanya menampilkan yang sudah diisi (12OZ, 16OZ, HOT).
+        // Kalau tidak ada satupun yang terisi, tabelnya disembunyikan.
+        const pluRows = [
+          ['PLU 12OZ', m.plu_12oz],
+          ['PLU 16OZ', m.plu_16oz],
+          ['PLU HOT', m.plu_hot],
+        ].filter((r) => String(r[1] || '').trim() !== '');
+        pluTable.innerHTML = pluRows
+          .map((r) => '<div class="plu-row"><div class="plu-th">' + r[0] + '</div>' +
+                      '<div class="plu-td">' + r[1] + '</div></div>')
+          .join('');
+        pluTable.hidden = pluRows.length === 0;
+
+        const bagian = [];
+        const push = (judul, list) => { if (list.length) bagian.push([judul, list]); };
+        push('HOT', grup(m, 'bahan_hot_'));
+        push('HOT 16OZ', grup(m, 'bahan_hot_16oz_'));
+        push('P12', grup(m, 'percepatan_12oz_'));
+        push('P16', grup(m, 'percepatan_16oz_'));
+        push('12OZ', grup(m, 'bahan_12oz_'));
+        push('16OZ', grup(m, 'bahan_16oz_'));
+
+        // Resep / bahan jadi TABEL (sama gaya dengan tabel PLU):
+        // tiap grup punya header No | Bahan, nomornya berlanjut per grup.
+        let html = '';
+        bagian.forEach(([judul, list]) => {
+          html += '<h2>' + judul + '</h2><div class="resep">' +
+            list.map((b, i) =>
+              '<div class="resep-row"><div class="resep-no">' + (i + 1) + '</div>' +
+              '<div class="resep-nama">' + b + '</div></div>').join('') +
+            '</div>';
+        });
+        if (m.catatan) html += '<h2>Catatan</h2><div class="catatan">' + m.catatan + '</div>';
+        if (!bagian.length && !m.catatan) html = '<div class="empty">Belum ada data bahan.</div>';
+        bahanWrap.innerHTML = html;
+      }
+
+      try {
+        const { data, error } = await supabase.from('ja_di_menus').select('*').eq('id', MENU_ID).single();
+        if (error) throw error;
+        render(data);
+      } catch (e) {
+        console.warn(e);
+        setStatus('Gagal memuat data (' + e.message.slice(0, 50) + ')', 'err');
+      }
+    </script>
+  </body>
+</html>

@@ -132,7 +132,7 @@ function toWebPLarge(url, width = 360, height = 640, quality = 80) {
 
 // Main loader untuk image-index (local files)
 export async function loadIndexPhoto(menuFolder, imgEl) {
-  const folder = `assets/image-index/${menuFolder}/`;
+  const folder = `assets/images/${menuFolder}/`;
   const urls = generateUrls(folder);
   
   const workingUrl = await findFirstWorkingUrl(urls);
@@ -162,9 +162,9 @@ export async function loadJaDiPhoto(slug, tileEl) {
   
   let workingUrl = await findFirstWorkingUrl(urls);
   
-  // Fallback ke assets/image-index kalau kopi kosong (biar tidak emot)
+  // Fallback ke assets/images kalau kopi kosong (biar tidak emot)
   if (!workingUrl) {
-    const altFolder = `../../assets/image-index/${slug}/`;
+    const altFolder = `../../assets/images/${slug}/`;
     const altUrls = generateUrls(altFolder);
     workingUrl = await findFirstWorkingUrl(altUrls);
   }
