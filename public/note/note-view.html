@@ -156,8 +156,9 @@
       <div class="pw-card">
         <div class="pw-title">Konfirmasi Hapus</div>
         <div class="pw-msg" id="pwMsg"></div>
-        <input class="pw-input" id="pwInput" type="password" inputmode="numeric" placeholder="Masukkan password" />
-        <div class="pw-error" id="pwError" hidden>Password salah.</div>
+        <input class="pw-input" id="pwEmail" type="email" autocomplete="username" placeholder="Email admin" />
+        <input class="pw-input" id="pwInput" type="password" autocomplete="current-password" placeholder="Password" />
+        <div class="pw-error" id="pwError" hidden>Gagal masuk.</div>
         <div class="pw-actions">
           <button class="pw-btn" id="pwCancel" type="button">Batal</button>
           <button class="pw-btn pw-btn-danger" id="pwOk" type="button">Hapus</button>
@@ -254,26 +255,36 @@
         await loadEntries();
       });
 
-      /* delete modal */
-      const DEL_PASSWORD = '0225106927';
+      /* delete modal — dikunci Supabase Auth, bukan password di source */
       const pwBg = document.getElementById('pwBg');
       const pwMsg = document.getElementById('pwMsg');
+      const pwEmail = document.getElementById('pwEmail');
       const pwInput = document.getElementById('pwInput');
       const pwError = document.getElementById('pwError');
+      const pwOk = document.getElementById('pwOk');
       let pwResolve = null;
-      function askPw(msg) {
-        pwMsg.textContent = msg; pwInput.value = ''; pwError.hidden = true;
-        pwBg.classList.add('open'); try { pwInput.focus(); } catch(e) {}
+      // Nilai password yang tadinya ada di sini bisa dibaca siapa saja dari
+      // DevTools, jadi hanya menahan salah klik. Proteksi asli ada di RLS
+      // policy (scripts/build/add-admin-rls.sql).
+      async function sudahMasukAdmin() { try { const { data } = await supabase.auth.getSession(); return !!data.session; } catch { return false; } }
+      async function askPw(msg) {
+        if (await sudahMasukAdmin()) return true;
+        pwMsg.textContent = msg; pwEmail.value = ''; pwInput.value = ''; pwError.hidden = true;
+        pwBg.classList.add('open'); try { pwEmail.focus(); } catch(e) {}
         return new Promise(r => pwResolve = r);
       }
       function closePw(ok) { pwBg.classList.remove('open'); const fn = pwResolve; pwResolve = null; if (fn) fn(ok); }
-      document.getElementById('pwOk').addEventListener('click', () => {
-        if (pwInput.value.trim() !== DEL_PASSWORD) { pwError.hidden = false; pwInput.value = ''; return; }
+      pwOk.addEventListener('click', async () => {
+        const email = (pwEmail.value || '').trim(), pass = pwInput.value || '';
+        if (!email || !pass) { pwError.textContent = 'Email dan password wajib diisi.'; pwError.hidden = false; return; }
+        const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
+        if (error) { pwError.textContent = 'Gagal masuk: ' + error.message; pwError.hidden = false; pwInput.value = ''; return; }
         closePw(true);
       });
       document.getElementById('pwCancel').addEventListener('click', () => closePw(false));
       pwBg.addEventListener('click', e => { if (e.target === pwBg) closePw(false); });
-      pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('pwOk').click(); if (e.key === 'Escape') closePw(false); });
+      pwEmail.addEventListener('keydown', e => { if (e.key === 'Enter') pwInput.focus(); if (e.key === 'Escape') closePw(false); });
+      pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') pwOk.click(); if (e.key === 'Escape') closePw(false); });
 
       tbody.addEventListener('click', async e => {
         const delBtn = e.target.closest('[data-del]');

@@ -14,7 +14,7 @@
     body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var(--mori-text);min-height:100vh;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:0;-webkit-font-smoothing:antialiased}
     .phone{width:100%;max-width:100%;background:var(--mori-bg);border-radius:0;box-shadow:none;overflow:hidden;display:flex;flex-direction:column;min-height:100vh;position:relative}
     @media(min-width:800px){.phone{max-width:800px;margin:0 auto}}
-    .search-row{display:flex;align-items:center;gap:10px;padding:12px 18px 14px;max-width:800px;width:100%;margin:0 auto}
+    .search-row{display:flex;align-items:center;gap:10px;padding:12px 18px 14px;max-width:800px;width:100%;margin:0 auto;flex-shrink:0}
     .search-box{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--mori-accent);border-radius:0;padding:10px 14px;color:var(--mori-text);font-size:14px;background:var(--mori-surface);transition:box-shadow .2s ease}
     .search-box:focus-within{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
     .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:var(--mori-text);font-family:inherit;-webkit-appearance:none;appearance:none;border-radius:0}
@@ -27,19 +27,16 @@
     .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px}
     @media(min-width:768px){.grid{gap:22px 14px}}
     .item{display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer;background:none;border:none;text-decoration:none}
-    .icon-tile-foto{position:relative;width:100%;max-width:160px;aspect-ratio:9/16;border:1px solid var(--mori-accent);border-radius:0;overflow:hidden;margin-bottom:8px;background:var(--mori-surface);box-shadow:4px 4px 0 rgba(26,25,23,.12);transition:box-shadow .2s ease,transform .2s ease;display:flex;align-items:center;justify-content:center;font-size:28px}
-    .icon-tile-foto img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.55) contrast(1.02)}
-    .icon-tile-foto.tile-admin{position:relative;display:flex;align-items:center;justify-content:center;background:var(--mori-accent);box-shadow:4px 4px 0 rgba(26,25,23,.28)}
-    .icon-tile-foto.tile-admin svg{width:36%;height:36%;color:var(--mori-bg)}
+    .icon-tile-foto{position:relative;width:100%;max-width:160px;aspect-ratio:9/16;border:1px solid var(--mori-accent);border-radius:0;overflow:hidden;margin-bottom:8px;background:var(--mori-surface);box-shadow:4px 4px 0 rgba(26,25,23,.12);transition:box-shadow .2s ease,transform .2s ease;display:flex;align-items:center;justify-content:center;font-size:28px;line-height:1}
     .icon-tile-foto.tanpa-foto{background-color:var(--mori-surface);background-image:repeating-linear-gradient(45deg,#f2eee2 0 6px,#ece6d6 6px 12px);border-style:dashed;border-color:var(--mori-text-2)}
-    .icon-tile-foto .tanpa-ikon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--mori-text-2)}
-    .icon-tile-foto .tanpa-ikon svg{width:26%;height:auto;max-width:34px;min-width:18px}
+    .icon-tile-foto.tile-admin{background:var(--mori-accent);box-shadow:4px 4px 0 rgba(26,25,23,.28)}
+    .icon-tile-foto.tile-admin svg{width:36%;height:36%;color:var(--mori-bg)}
     @media(max-width:480px){.icon-tile-foto{max-width:120px}}
     @media(max-width:360px){.icon-tile-foto{max-width:104px}}
     .item:hover .icon-tile-foto{box-shadow:4px 4px 0 var(--mori-accent)}
     .item:active .icon-tile-foto{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--mori-accent)}
     .item span{font-family:var(--mori-mono);font-size:11px;font-weight:700;line-height:1.3;color:var(--mori-text);letter-spacing:.8px;text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-    .item span.desc{color:var(--mori-text-2);font-size:10px;letter-spacing:.4px}
+    .item span.desc{color:var(--mori-text-2);font-size:10px;letter-spacing:.4px;-webkit-line-clamp:1}
     @media(min-width:768px){.item span{font-size:12px}}
     .empty-msg{text-align:center;font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text-2);padding:40px 0}
   </style>
@@ -49,75 +46,111 @@
     <div class="search-row">
       <div class="search-box">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-        <input id="searchInput" type="text" placeholder="Cari rak..." autocomplete="off" />
+        <input id="searchInput" type="text" placeholder="Cari rak..." autocomplete="off" aria-label="Cari rak" />
       </div>
     </div>
     <div class="menu-wrap" id="menuWrap"></div>
   </div>
-  <script type="module">
-    import { supabase } from '../../src/js/supabase.js';
-    const FALLBACK_GROUPS = (() => {
-      const H=["180-200","160-180","145-160","130-145","115-130","100-115","85-100","70-85"];
-      const L="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-      return [
-        { title:"GONDOLA A", items: L.map((letter,i)=>({ name:"Rak "+letter, desc:"±"+H[i%H.length]+" cm", icon:"🗄️", link:"shelving/rak/rak-"+letter.toLowerCase()+".html" })) },
-        { title:"SHELVING", items: ["ak5","ak9","lf1","lf2","ya4"].map(code=>({ name:code.toUpperCase(), desc:"5 shelving", icon:"📦", link:"shelving/rak/rak-"+code+".html" })) }
-      ];
-    })();
 
-    const adminTile = { isAdmin: true, name: "ADMIN", link: "admin.html" };
-    const menuWrap = document.getElementById("menuWrap");
-    const searchInput = document.getElementById("searchInput");
-    let dbGroups = null;
+  <script>
+  /* Menu PLANO sengaja dibuat statis.
+     Versi sebelumnya menarik daftar rak dari Supabase lewat <script type="module">.
+     src/js/supabase.js mengimpor @supabase/supabase-js dari CDN, jadi begitu
+     CDN tidak terjangkau (offline, diblokir, lambat) seluruh modul gagal
+     dievaluasi dan halaman ini tampil kosong tanpa pesan apa pun.
+     Isi rak di bawah sudah sesuai file yang benar-benar ada di
+     shelving/rak/, jadi halaman ini tidak bergantung pada jaringan sama sekali.
+     Upload foto / edit produk tetap lewat admin.html (butuh DB). */
+  (function () {
+    var TINGGI = ["180-200", "160-180", "145-160", "130-145", "115-130", "100-115", "85-100", "70-85"];
+    var HURUF = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    var SHELVING = ["ak5", "ak9", "lf1", "lf2", "ya4"];
 
-    function tileHtml(item, isAdmin){
-      if(isAdmin){
-        return '<a class="item" href="'+item.link+'"><div class="icon-tile-foto tile-admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v2"/><path d="M8 9h8"/><rect x="4" y="4" width="16" height="16" rx="1"/></svg></div><span>'+item.name+'</span></a>';
+    var GROUPS = [
+      {
+        title: "GONDOLA A",
+        items: HURUF.map(function (h, i) {
+          return {
+            name: "Rak " + h,
+            desc: "±" + TINGGI[i % TINGGI.length] + " cm",
+            icon: "🗄️",
+            link: "shelving/rak/rak-" + h.toLowerCase() + ".html"
+          };
+        })
+      },
+      {
+        title: "SHELVING",
+        items: SHELVING.map(function (code) {
+          return {
+            name: code.toUpperCase(),
+            desc: "5 shelving",
+            icon: "📦",
+            link: "shelving/rak/rak-" + code + ".html"
+          };
+        })
       }
-      const foto = item.foto_url ? '<img src="'+item.foto_url+'" alt="" loading="lazy" decoding="async" />' : item.icon || "📦";
-      const desc = item.desc ? '<span class="desc">'+item.desc+'</span>' : '';
-      const fotoClass = item.foto_url ? '' : ' tanpa-foto';
-      return '<a class="item" href="'+(item.link||"#")+'"><div class="icon-tile-foto'+fotoClass+'">'+foto+'</div><span>'+item.name+'</span>'+desc+'</a>';
+    ];
+
+    var ADMIN = { name: "ADMIN", link: "admin.html" };
+
+    /* Namarak, deskripsi, dan judul grup bisa berisi karakter HTML. Semua
+       disisipkan lewat innerHTML, jadi wajib di-escape lebih dulu. */
+    function esc(s) {
+      return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
     }
 
-    function renderMenu(){
-      const q = searchInput.value.trim().toLowerCase();
-      const groups = dbGroups || FALLBACK_GROUPS;
-      let html = "";
-      const firstGroup = groups[0];
-      if(firstGroup){
-        const adminMatch = !q || "admin".includes(q);
-        const tiles = [];
-        if(adminMatch) tiles.push(tileHtml(adminTile,true));
-        const filtered = firstGroup.items.filter(it=>!q||it.name.toLowerCase().includes(q)||(it.desc||"").toLowerCase().includes(q)||firstGroup.title.toLowerCase().includes(q));
-        filtered.forEach(it=> tiles.push(tileHtml(it,false)));
-        if(tiles.length) html += '<div class="grid">'+tiles.join("")+'</div>';
-      }
-      groups.slice(1).forEach(g=>{
-        const items = g.items.filter(it=>!q||it.name.toLowerCase().includes(q)||(it.desc||"").toLowerCase().includes(q)||g.title.toLowerCase().includes(q));
-        if(!items.length) return;
-        html += '<div class="group-title">'+g.title+'</div><div class="grid">'+items.map(it=>tileHtml(it,false)).join("")+'</div>';
+    /* Link ditulis di file ini sendiri, tapi tetap dibatasi ke path relatif
+       supaya tidak bisa berubah jadi javascript: atau URL luar. */
+    function amanLink(link) {
+      var v = String(link || "").trim();
+      if (!v) return "#";
+      if (/^[a-z][a-z0-9+.-]*:/i.test(v) || v.indexOf("//") === 0 || v.indexOf("\\") === 0) return "#";
+      return v;
+    }
+
+    function tileHtml(item, isAdmin) {
+      var head = isAdmin
+        ? '<div class="icon-tile-foto tile-admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v2"/><path d="M8 9h8"/><rect x="4" y="4" width="16" height="16" rx="1"/></svg></div>'
+        : '<div class="icon-tile-foto tanpa-foto">' + item.icon + "</div>";
+      return '<a class="item" href="' + esc(amanLink(item.link)) + '">' + head + "<span>" + esc(item.name) + "</span></a>";
+    }
+
+    var menuWrap = document.getElementById("menuWrap");
+    var searchInput = document.getElementById("searchInput");
+
+    function cocok(it, q, judulGrup) {
+      if (!q) return true;
+      return String(it.name).toLowerCase().indexOf(q) > -1 ||
+             String(it.desc || "").toLowerCase().indexOf(q) > -1 ||
+             String(judulGrup || "").toLowerCase().indexOf(q) > -1;
+    }
+
+    function render() {
+      var q = searchInput.value.trim().toLowerCase();
+      var html = "";
+
+      var tiles = [];
+      if (!q || "admin".indexOf(q) > -1) tiles.push(tileHtml(ADMIN, true));
+      GROUPS[0].items.forEach(function (it) {
+        if (cocok(it, q, GROUPS[0].title)) tiles.push(tileHtml(it, false));
       });
+      if (tiles.length) html += '<div class="grid">' + tiles.join("") + "</div>";
+
+      for (var g = 1; g < GROUPS.length; g++) {
+        var items = GROUPS[g].items.filter(function (it) { return cocok(it, q, GROUPS[g].title); });
+        if (!items.length) continue;
+        html += '<div class="group-title">' + esc(GROUPS[g].title) + '</div><div class="grid">' +
+          items.map(function (it) { return tileHtml(it, false); }).join("") + "</div>";
+      }
+
       menuWrap.innerHTML = html || '<div class="empty-msg">Tidak ditemukan</div>';
     }
 
-    async function loadFromSupabase(){
-      try{
-        const { data, error } = await supabase.from('plano_items').select('*').order('sort_order');
-        if(error) throw error;
-        if(data && data.length){
-          dbGroups = [{ title:"", items: data.map(r=>({ name:r.name, desc:r.desc||'', foto_url:r.foto_url||'', link:r.link||'#' })) }];
-        }
-      }catch(e){}
-      renderMenu();
-    }
-
-    searchInput.addEventListener('input', renderMenu);
-    renderMenu();
-    loadFromSupabase();
-    try{
-      supabase.channel('plano_items_plano').on('postgres_changes',{event:'*',schema:'public',table:'plano_items'},()=>loadFromSupabase()).subscribe();
-    }catch(e){}
+    searchInput.addEventListener("input", render);
+    render();
+  })();
   </script>
 </body>
 </html>

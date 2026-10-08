@@ -153,8 +153,9 @@
   <div class="pw-card" role="dialog" aria-modal="true">
     <div class="pw-title">Konfirmasi Hapus</div>
     <div class="pw-msg" id="pwMsg"></div>
-    <input class="pw-input" id="pwInput" type="password" inputmode="numeric" autocomplete="off" placeholder="Masukkan password" />
-    <div class="pw-error" id="pwError" hidden>Password salah.</div>
+    <input class="pw-input" id="pwEmail" type="email" autocomplete="username" placeholder="Email admin" />
+    <input class="pw-input" id="pwInput" type="password" autocomplete="current-password" placeholder="Password" />
+    <div class="pw-error" id="pwError" hidden>Gagal masuk.</div>
     <div class="pw-actions">
       <button class="pw-btn" id="pwCancel" type="button">Batal</button>
       <button class="pw-btn pw-btn-danger" id="pwOk" type="button">Hapus</button>
@@ -166,7 +167,10 @@
   import { supabase } from '../kopi/supabase.js';
   const TABLE = 'note_menus';
   const BUCKET = 'note-foto';
-  const DEL_PASSWORD = '0225106927';
+  // Hapus dikunci Supabase Auth. Password tidak lagi ditulis di source:
+  // nilai yang tadinya ada di sini bisa dibaca siapa saja dari DevTools, jadi
+  // hanya menahan salah klik. Proteksi asli ada di RLS policy
+  // (scripts/build/add-admin-rls.sql).
 
   const listEl = document.getElementById('list');
   const searchEl = document.getElementById('search');
@@ -194,24 +198,34 @@
     hintTimer=setTimeout(()=>{ fotoHint.classList.add('sembunyi'); setTimeout(()=>{fotoHint.hidden=true},400)},6000);
   }
 
-  const pwBg=document.getElementById('pwBg'), pwMsg=document.getElementById('pwMsg'), pwInput=document.getElementById('pwInput'), pwError=document.getElementById('pwError'), pwOk=document.getElementById('pwOk'), pwCancel=document.getElementById('pwCancel');
+  const pwBg=document.getElementById('pwBg'), pwMsg=document.getElementById('pwMsg'), pwEmail=document.getElementById('pwEmail'), pwInput=document.getElementById('pwInput'), pwError=document.getElementById('pwError'), pwOk=document.getElementById('pwOk'), pwCancel=document.getElementById('pwCancel');
   let pwResolve=null, pwScrollY=0;
+  async function sudahMasukAdmin(){ try{ const {data}=await supabase.auth.getSession(); return !!data.session; }catch{ return false; } }
   function lockScrollPw(){ pwScrollY=window.scrollY||0; document.documentElement.classList.add('pw-open'); document.body.style.position='fixed'; document.body.style.top=-pwScrollY+'px'; document.body.style.left='0'; document.body.style.right='0'; document.body.style.width='100%'; }
   function unlockScrollPw(){ document.documentElement.classList.remove('pw-open'); document.body.style.position=''; document.body.style.top=''; document.body.style.left=''; document.body.style.right=''; document.body.style.width=''; window.scrollTo(0,pwScrollY); }
   function syncPwViewport(){ const vv=window.visualViewport; if(!vv||!pwBg.classList.contains('open')) return; pwBg.style.height=vv.height+'px'; pwBg.style.top=vv.offsetTop+'px'; pwBg.style.bottom='auto'; }
   if(window.visualViewport){ window.visualViewport.addEventListener('resize',syncPwViewport); window.visualViewport.addEventListener('scroll',syncPwViewport); }
-  function askDelPassword(msg){
+  async function askDelPassword(msg){
+    // Sudah punya sesi: lewati modal, langsung lanjut.
+    if(await sudahMasukAdmin()) return true;
     if(pwResolve) closePw(false);
-    pwMsg.textContent=msg||''; pwMsg.style.whiteSpace='pre-line'; pwInput.value=''; pwError.hidden=true;
+    pwMsg.textContent=msg||''; pwMsg.style.whiteSpace='pre-line'; pwEmail.value=''; pwInput.value=''; pwError.hidden=true;
     lockScrollPw(); pwBg.classList.add('open'); syncPwViewport();
-    try{ pwInput.focus({preventScroll:true}); }catch(e){ pwInput.focus(); }
+    try{ pwEmail.focus({preventScroll:true}); }catch(e){ pwEmail.focus(); }
     requestAnimationFrame(syncPwViewport);
     return new Promise(res=>{ pwResolve=res; });
   }
   function closePw(ok){ pwBg.classList.remove('open'); pwBg.style.height=''; pwBg.style.top=''; pwBg.style.bottom=''; unlockScrollPw(); const fn=pwResolve; pwResolve=null; if(fn) fn(ok); }
-  pwOk.addEventListener('click',()=>{ if(pwInput.value.trim()!==DEL_PASSWORD){ pwError.hidden=false; pwInput.value=''; try{pwInput.focus({preventScroll:true})}catch(e){} return; } closePw(true); });
+  pwOk.addEventListener('click',async()=>{
+    const email=(pwEmail.value||'').trim(), pass=pwInput.value||'';
+    if(!email||!pass){ pwError.textContent='Email dan password wajib diisi.'; pwError.hidden=false; return; }
+    const {error}=await supabase.auth.signInWithPassword({email,password:pass});
+    if(error){ pwError.textContent='Gagal masuk: '+error.message; pwError.hidden=false; pwInput.value=''; try{pwInput.focus({preventScroll:true})}catch(e){} return; }
+    closePw(true);
+  });
   pwCancel.addEventListener('click',()=>closePw(false));
   pwBg.addEventListener('click',e=>{ if(e.target===pwBg) closePw(false); });
+  pwEmail.addEventListener('keydown',e=>{ if(e.key==='Enter') pwOk.click(); if(e.key==='Escape') closePw(false); });
   pwInput.addEventListener('keydown',e=>{ if(e.key==='Enter') pwOk.click(); if(e.key==='Escape') closePw(false); });
 
   async function kompresFoto(file,maxSisi=1200,kualitas=.82){

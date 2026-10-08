@@ -463,8 +463,9 @@
   <div class="pw-card" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
     <div class="pw-title" id="pwTitle">Konfirmasi Hapus</div>
     <div class="pw-msg" id="pwMsg"></div>
-    <input class="pw-input" id="pwInput" type="password" inputmode="numeric" autocomplete="off" placeholder="Masukkan password" />
-    <div class="pw-error" id="pwError" hidden>Password salah.</div>
+    <input class="pw-input" id="pwEmail" type="email" autocomplete="username" placeholder="Email admin" />
+    <input class="pw-input" id="pwInput" type="password" autocomplete="current-password" placeholder="Password" />
+    <div class="pw-error" id="pwError" hidden>Gagal masuk.</div>
     <div class="pw-actions">
       <button class="pw-btn" id="pwCancel" type="button">Batal</button>
       <button class="pw-btn pw-btn-danger" id="pwOk" type="button">Hapus</button>
@@ -489,20 +490,26 @@
   //     URL foto disimpan di kolom foto_url tabel daily_tasks. =====
   const BUCKET = 'stock-foto';
 
-  // ===== MODAL PASSWORD HAPUS =====
-  // Password ada di source (frontend statis) jadi hanya menahan salah klik;
-  // proteksi sungguhan harus lewat Supabase RLS/auth. Nilainya sama dengan
-  // admin KOPI dan Admin Stok Opname.
-  const DEL_PASSWORD = '0225106927';
+  // ===== MODAL HAPUS =====
+  // Password tidak lagi ditulis di source. Nilai yang tadinya ada di sini
+  // bisa dibaca siapa saja dari DevTools, jadi hanya menahan salah klik;
+  // proteksi sungguhan ada di RLS policy (scripts/build/add-admin-rls.sql).
+  // Validasi sekarang lewat Supabase Auth.
 
   const pwBg = document.getElementById('pwBg');
   const pwMsg = document.getElementById('pwMsg');
+  const pwEmail = document.getElementById('pwEmail');
   const pwInput = document.getElementById('pwInput');
   const pwError = document.getElementById('pwError');
   const pwOk = document.getElementById('pwOk');
   const pwCancel = document.getElementById('pwCancel');
   let pwResolve = null;
   let pwScrollY = 0;
+
+  async function sudahMasukAdmin() {
+    try { const { data } = await supabase.auth.getSession(); return !!data.session; }
+    catch { return false; }
+  }
 
   // Bekukan scroll halaman: keyboard HP suka membuat halaman melompat.
   function lockScrollPw() {
@@ -537,19 +544,22 @@
     window.visualViewport.addEventListener('scroll', syncPwViewport);
   }
 
-  function askDelPassword(msg) {
+  async function askDelPassword(msg) {
+    // Sudah punya sesi: lewati modal, langsung lanjut.
+    if (await sudahMasukAdmin()) return true;
     if (pwResolve) closePw(false);
     pwMsg.textContent = msg || '';
     pwMsg.style.whiteSpace = 'pre-line';
+    pwEmail.value = '';
     pwInput.value = '';
     pwError.hidden = true;
     lockScrollPw();
     pwBg.classList.add('open');
     syncPwViewport();
     try {
-      pwInput.focus({ preventScroll: true });
+      pwEmail.focus({ preventScroll: true });
     } catch (e) {
-      pwInput.focus();
+      pwEmail.focus();
     }
     requestAnimationFrame(syncPwViewport);
     return new Promise((res) => { pwResolve = res; });
@@ -564,8 +574,17 @@
     pwResolve = null;
     if (fn) fn(ok);
   }
-  pwOk.addEventListener('click', () => {
-    if (pwInput.value.trim() !== DEL_PASSWORD) {
+  pwOk.addEventListener('click', async () => {
+    const email = (pwEmail.value || '').trim();
+    const pass = pwInput.value || '';
+    if (!email || !pass) {
+      pwError.textContent = 'Email dan password wajib diisi.';
+      pwError.hidden = false;
+      return;
+    }
+    const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
+    if (error) {
+      pwError.textContent = 'Gagal masuk: ' + error.message;
       pwError.hidden = false;
       pwInput.value = '';
       try { pwInput.focus({ preventScroll: true }); } catch (e) {}
@@ -576,6 +595,10 @@
   pwCancel.addEventListener('click', () => closePw(false));
   pwBg.addEventListener('click', (e) => {
     if (e.target === pwBg) closePw(false);
+  });
+  pwEmail.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') pwOk.click();
+    if (e.key === 'Escape') closePw(false);
   });
   pwInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') pwOk.click();

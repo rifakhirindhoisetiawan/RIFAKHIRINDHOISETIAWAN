@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Contoh — Planogram PLANO</title>
+<meta name="theme-color" content="#fffbf2" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;--mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-mono:"JetBrains Mono",ui-monospace,monospace}
+html,body{width:100%;min-height:100%;background:var(--mori-bg)}
+body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var(--mori-text);padding-bottom:40px;-webkit-font-smoothing:antialiased}
+.wrap{width:100%;max-width:800px;margin:0 auto;padding:18px}
+.atas{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.atas a{display:inline-flex;align-items:center;gap:6px;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--mori-accent);padding:7px 10px;background:var(--mori-accent);color:var(--mori-bg)}
+.catatan{font-family:var(--mori-mono);font-size:9px;font-weight:700;letter-spacing:.6px;color:var(--mori-danger,#b91c1c);border-left:3px solid #b91c1c;background:#fdf1f1;padding:8px 10px;margin-bottom:18px;line-height:1.5}
+/* ===== PLANOGRAM (sama persis dengan admin.html) ===== */
+.pg-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.pg-title{font-family:var(--mori-mono);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#1a1917}
+.pg-meta{font-family:var(--mori-mono);font-size:9px;font-weight:700;letter-spacing:.6px;color:#6e6a64;text-align:right}
+.pg-body{display:flex;flex-direction:column;gap:12px}
+.pg-shelf{border:1px solid #1a1917;background:#f7f3e9;box-shadow:4px 4px 0 rgba(26,25,23,.12);padding:10px 10px 0}
+.pg-shelf-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding-bottom:8px;margin-bottom:10px;border-bottom:1px solid rgba(26,25,23,.14)}
+.pg-shelf-head b{font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#1a1917}
+.pg-shelf-head span{font-family:var(--mori-mono);font-size:8px;font-weight:700;color:#6e6a64}
+.pg-row{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:10px;scrollbar-width:none}
+.pg-row::-webkit-scrollbar{display:none}
+.pg-blok{flex:0 0 92px;width:92px;border:1px solid rgba(26,25,23,.28);background:#fffbf2;display:flex;flex-direction:column;overflow:hidden;transition:transform .12s ease,box-shadow .12s ease}
+.pg-blok:hover{box-shadow:3px 3px 0 #1a1917}
+.pg-blok:active{transform:translate(2px,2px)}
+.pg-foto{width:100%;height:56px;background:repeating-linear-gradient(45deg,#f2eee2 0 5px,#ece6d6 5px 10px);border-bottom:1px solid rgba(26,25,23,.14);flex-shrink:0;overflow:hidden}
+.pg-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.pg-info{padding:5px 6px 7px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.pg-nama{font-family:var(--mori-mono);font-size:8px;font-weight:700;line-height:1.3;color:#1a1917;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;min-height:30px}
+.pg-plu{font-family:var(--mori-mono);font-size:7px;font-weight:700;color:#6e6a64;word-break:break-all}
+.pg-no{font-family:var(--mori-mono);font-size:7px;font-weight:800;color:#fffbf2;background:#1a1917;align-self:flex-start;padding:1px 4px}
+.pg-kosong{border:1px dashed #6e6a64;background:#fffdf7;padding:14px 10px;text-align:center;font-family:var(--mori-mono);font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#6e6a64}
+.urut{font-family:var(--mori-mono);font-size:9px;color:var(--mori-text-2);margin-top:8px;letter-spacing:.4px}
+@media(min-width:768px){.pg-blok{flex:0 0 108px;width:108px}.pg-foto{height:66px}.wrap{padding:20px}}
+@media(max-width:360px){.pg-blok{flex:0 0 84px;width:84px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="atas">
+    <a href="admin.html">&#8592; ADMIN</a>
+    <div class="pg-title">CONTOH PLANOGRAM</div>
+  </div>
+
+  <p class="catatan">
+    Ini halaman contoh statis, bukan data asli. Planogram yang muncul di admin.html
+    punya bentuk persis seperti ini — hanya digerakkan oleh kolom &quot;Baris&quot;
+    pada tabel produk.
+  </p>
+
+  <div class="pg-head">
+    <div class="pg-title">PLANOGRAM</div>
+    <div class="pg-meta">9 PRODUK &middot; 3 BARIS &middot; 4 BARIS TERISI</div>
+  </div>
+
+  <div class="pg-body">
+    <div class="pg-shelf">
+      <div class="pg-shelf-head"><b>BARIS 1</b><span>3 PRODUK</span></div>
+      <div class="pg-row">
+        <div class="pg-blok">
+          <div class="pg-foto"><img src="../../assets/images/dual-kamera/1.png" alt="" /></div>
+          <div class="pg-info"><span class="pg-no">1.1</span><span class="pg-nama">Teh Botol Sosro 350ml</span><span class="pg-plu">PLU 443770</span></div>
+        </div>
+        <div class="pg-blok">
+          <div class="pg-foto"><img src="../../assets/images/malam/1.png" alt="" /></div>
+          <div class="pg-info"><span class="pg-no">1.2</span><span class="pg-nama">Teh Pucuk Harum 350ml</span><span class="pg-plu">PLU 443771</span></div>
+        </div>
+        <div class="pg-blok">
+          <div class="pg-foto"></div>
+          <div class="pg-info"><span class="pg-no">1.3</span><span class="pg-nama">Ultramilk Coklat 250ml</span><span class="pg-plu">8998009010015</span></div>
+        </div>
+      </div>
+      <p class="urut">blok 1.3 sengaja tanpa foto &rarr; muncul strip diagonal</p>
+    </div>
+
+    <div class="pg-shelf">
+      <div class="pg-shelf-head"><b>BARIS 2</b><span>4 PRODUK</span></div>
+      <div class="pg-row">
+        <div class="pg-blok">
+          <div class="pg-foto"><img src="../../assets/images/siang/1.png" alt="" /></div>
+          <div class="pg-info"><span class="pg-no">2.1</span><span class="pg-nama">Pocari Sweat 500ml</span><span class="pg-plu">PLU 443773</span></div>
+        </div>
+        <div class="pg-blok">
+          <div class="pg-foto"><img src="../../assets/images/pagi/1.png" alt="" /></div>
+          <div class="pg-info"><span class="pg-no">2.2</span><span class="pg-nama">Mizone Lychee 500ml</span><span class="pg-plu">PLU 443774</span></div>
+        </div>
+        <div class="pg-blok">
+          <div class="pg-foto"></div>
+          <div class="pg-info"><span class="pg-no">2.3</span><span class="pg-nama">Air Mineral 600ml Kemasan 1L</span><span class="pg-plu">PLU 443775</span></div>
+        </div>
+        <div class="pg-blok">
+          <div class="pg-foto"></div>
+          <div class="pg-info"><span class="pg-no">2.4</span><span class="pg-nama">Indomie Goreng 80g</span><span class="pg-plu">PLU 443776</span></div>
+        </div>
+      </div>
+      <p class="urut">baris panjang bisa digeser ke samping</p>
+    </div>
+
+    <div class="pg-shelf">
+      <div class="pg-shelf-head"><b>BARIS 3</b><span>1 PRODUK</span></div>
+      <div class="pg-row">
+        <div class="pg-blok">
+          <div class="pg-foto"></div>
+          <div class="pg-info"><span class="pg-no">3.1</span><span class="pg-nama">Chitato 68g</span><span class="pg-plu">PLU 443779</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pg-shelf">
+      <div class="pg-shelf-head"><b>BELUM DI-BARIS</b><span>1 PRODUK</span></div>
+      <div class="pg-row">
+        <div class="pg-blok">
+          <div class="pg-foto"></div>
+          <div class="pg-info"><span class="pg-no">4.1</span><span class="pg-nama">Kopi Kapal Api Special 380g</span><span class="pg-plu">PLU 443780</span></div>
+        </div>
+      </div>
+      <p class="urut">produk yang kolom &quot;Baris&quot;-nya masih kosong dikumpulkan di sini</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
