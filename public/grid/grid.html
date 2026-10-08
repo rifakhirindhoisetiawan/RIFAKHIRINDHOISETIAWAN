@@ -592,33 +592,11 @@
         background: var(--mori-bg);
       }
 
-      /* ===== HEADER: judul + tombol back ===== */
+      /* ===== HEADER: baris tombol ===== */
       .stepper-row {
         border-bottom: 1px solid var(--mori-line);
         padding-bottom: 12px;
         align-items: center;
-      }
-
-      .back-btn {
-        width: 32px;
-        height: 32px;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid var(--mori-accent);
-        border-radius: 0;
-        background: var(--mori-surface);
-        color: var(--mori-accent);
-        text-decoration: none;
-        transition: box-shadow 0.2s ease, transform 0.2s ease;
-      }
-      .back-btn:hover {
-        box-shadow: 4px 4px 0 var(--mori-accent);
-      }
-      .back-btn:active {
-        transform: translate(2px, 2px);
-        box-shadow: 2px 2px 0 var(--mori-accent);
       }
 
       .stepper {
@@ -709,8 +687,8 @@
       }
 
       /* ===== HP: rapatkan baris tombol atas =====
-         6 tombol kiri (back/aspect/layout/download/tambah/hapus)
-         + 3 elemen kanan (kurang/nilai/tambah) = 9 kolom.
+         5 tombol kiri (aspect/layout/download/tambah/hapus)
+         + 3 elemen kanan (kurang/nilai/tambah) = 8 kolom.
          Satu baris, tidak wrap, ukuran & gap dikecilkan bertahap. */
       @media (max-width: 420px) {
         .stepper-row {
@@ -727,7 +705,6 @@
         .stepper .btns {
           gap: 6px;
         }
-        .back-btn,
         .step-btn,
         .trash-btn,
         .add-photo-btn,
@@ -737,7 +714,6 @@
           width: 30px;
           height: 30px;
         }
-        .back-btn svg,
         .step-btn svg,
         .trash-btn svg,
         .add-photo-btn svg,
@@ -753,7 +729,7 @@
         }
       }
 
-      /* HP kecil (320px): masih muat 9 kolom dalam satu baris */
+      /* HP kecil (320px): masih muat 8 kolom dalam satu baris */
       @media (max-width: 360px) {
         .stepper-row {
           padding-left: 8px;
@@ -764,7 +740,6 @@
         .stepper .btns {
           gap: 4px;
         }
-        .back-btn,
         .step-btn,
         .trash-btn,
         .add-photo-btn,
@@ -774,7 +749,7 @@
           width: 28px;
           height: 28px;
         }
-        .back-btn svg,
+        .step-btn svg,
         .step-btn svg,
         .trash-btn svg,
         .add-photo-btn svg,
@@ -872,6 +847,63 @@
           padding: 0 20px 24px;
         }
       }
+
+      /* ===== TOAST (pola Mori app-mori/public/css/components.css:15) =====
+         Ganti alert()/confirm() native browser. Bentuk, animasi, dan
+         durasi mengikuti .custom-toast Mori, hanya gaya Sharp + palet
+         krem agar nyambung dengan tema GRID di atas. */
+      .custom-toast {
+        position: fixed;
+        bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+        left: 50%;
+        transform: translateX(-50%) translateY(24px) scale(0.94);
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-accent);
+        color: var(--mori-text);
+        padding: 12px 20px;
+        border-radius: 0;
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        z-index: 9999;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: auto;
+        max-width: min(88vw, 420px);
+        text-align: center;
+        line-height: 1.35;
+        white-space: pre-wrap;
+        box-shadow: 4px 4px 0 var(--mori-accent);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+          transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.3s ease;
+      }
+
+      .custom-toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+        pointer-events: auto;
+      }
+
+      .custom-toast.err {
+        background: #fdf1f1;
+        border-color: var(--mori-danger, #b91c1c);
+        box-shadow: 4px 4px 0 rgba(185, 28, 28, 0.35);
+        color: #b91c1c;
+      }
+
+      @media (max-width: 360px) {
+        .custom-toast {
+          font-size: 10px;
+          padding: 10px 14px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -879,14 +911,6 @@
       <div class="stepper-row">
         <div class="stepper">
           <div class="left-controls">
-            <a
-              class="back-btn"
-              href="../../index.html"
-              title="Kembali ke dashboard"
-              aria-label="Kembali ke dashboard"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-            </a>
             <button class="aspect-btn active" id="aspectBtn" title="Ukuran">
               <svg
                 id="aspectIcon"
@@ -1629,6 +1653,31 @@
         }, 100);
       }
 
+      /* ===== Toast custom (pola Mori showToast) =====
+         Dipakai untuk menggantikan alert() native browser, yang di WebView
+         / PWA sering tampil kotak kosong atau tidak muncul sama sekali.
+         Toast lama dibuang dulu supaya tidak menumpuk, lalu durasi mengikuti
+         localStorage (default 3 detik) seperti Mori. */
+      function showToast(pesan, tipe) {
+        if (!pesan) return;
+        console.log("[TOAST]", pesan);
+        document.querySelectorAll(".custom-toast").forEach((t) => t.remove());
+
+        const el = document.createElement("div");
+        el.className = "custom-toast" + (tipe === "err" ? " err" : "");
+        el.textContent = pesan;
+        el.setAttribute("role", "status");
+        document.body.appendChild(el);
+
+        requestAnimationFrame(() => el.classList.add("show"));
+
+        const durSec = parseInt(localStorage.getItem("grid_toast_dur") || "3", 10) || 3;
+        setTimeout(() => {
+          el.classList.remove("show");
+          setTimeout(() => el.remove(), 300);
+        }, durSec * 1000);
+      }
+
       dlSaveBtn.addEventListener("click", async () => {
         if (!dlDataUrl && !dlBlob) return;
         try {
@@ -1645,6 +1694,7 @@
           a.click();
           document.body.removeChild(a);
           setTimeout(() => URL.revokeObjectURL(url), 5000);
+          showToast("Tersimpan " + dlFileName);
         } catch (err) {
           const a = document.createElement("a");
           a.download = dlFileName;
@@ -1652,6 +1702,7 @@
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
+          showToast("Tersimpan " + dlFileName);
         }
         hideInlineCard();
       });
@@ -1680,14 +1731,14 @@
             a.click();
             document.body.removeChild(a);
             setTimeout(() => URL.revokeObjectURL(url), 5000);
-            alert("Fitur bagi langsung tidak didukung di browser ini. File sudah diunduh, silakan buka WhatsApp dan kirim manual dari galeri.");
+            showToast("File diunduh. Buka WhatsApp, kirim manual dari galeri.");
             hideInlineCard();
           } catch (waErr) {
-            alert("Gagal berbagi: " + waErr.message);
+            showToast("Gagal berbagi: " + waErr.message, "err");
           }
         } catch (err) {
           if (err.name !== "AbortError") {
-            alert("Gagal berbagi ke WA: " + err.message);
+            showToast("Gagal berbagi ke WA: " + err.message, "err");
           }
         }
       });
@@ -1715,11 +1766,19 @@
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, canvasW, canvasH);
 
+        // Direset tiap export. Kalau naik, ada foto yang gagal dimuat dan
+        // dilewati (bukan crash), lalu dilaporkan lewat toast di bawah.
+        let gagalMuat = 0;
+
         async function loadImg(src) {
           return new Promise((res) => {
             const img = new Image();
             img.onload = () => res(img);
-            img.onerror = () => { console.warn("Gambar gagal dimuat:", src); res(null); };
+            img.onerror = () => {
+              console.warn("Gambar gagal dimuat:", src);
+              gagalMuat++;
+              res(null);
+            };
             img.src = src;
           });
         }
@@ -1908,9 +1967,21 @@
           ? (sizeKB / 1024).toFixed(1) + " MB"
           : sizeKB + " KB";
         showInlineCard();
+
+        // Dilempar setelah kartu muncul supaya toast tidak menutupi pratinjau.
+        if (gagalMuat > 0) {
+          showToast(
+            gagalMuat + " foto gagal dimuat, dilewati. Coba pilih ulang fotonya.",
+            "err"
+          );
+        }
       });
 
       function drawCover(ctx, img, x, y, w, h, idx) {
+        // loadImg() resolve(null) kalau foto gagal dimuat. Tanpa guard ini
+        // `img.width` di bawah melempar TypeError dan satu export ikut gagal
+        // semua, jadi slot yang fotonya rusak cukup dilewati (sel kosong).
+        if (!img) return;
         if (w <= 0 || h <= 0) return;
         ctx.save();
         ctx.beginPath();
