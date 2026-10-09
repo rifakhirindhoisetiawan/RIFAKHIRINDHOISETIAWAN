@@ -49,8 +49,8 @@
     .c-barcode{width:88px}
     .c-foto{width:52px}
     .c-aksi{width:88px}
-    .c-foto .thumb{width:38px;height:38px;display:block;border:1px solid #1a1917;background:#f7f3e9;overflow:hidden}
-    .c-foto .thumb img{width:100%;height:100%;object-fit:cover}
+    .c-foto .thumb{width:28px;aspect-ratio:9/16;height:auto;display:block;border:1px solid #1a1917;background:#f7f3e9;overflow:hidden;margin:0 auto;flex-shrink:0}
+    .c-foto .thumb img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
     .c-foto .thumb.kosong{background:repeating-linear-gradient(45deg,#f2eee2 0 5px,#ece6d6 5px 10px)}
     .c-foto .thumb.thumb-admin{display:flex;align-items:center;justify-content:center;background:#1a1917;color:#fffbf2}
     .c-foto .thumb.thumb-admin svg{width:18px;height:18px}
@@ -125,9 +125,12 @@
     .menu-table.detail .c-barcode{width:100px}
     .menu-table.detail .c-shelving{width:88px}
     .menu-table.detail .c-baris{width:48px}
-    .menu-table.detail .c-rh{width:52px}
+    .menu-table.detail .c-rh{width:52px;text-align:center}
+    .menu-table.detail .c-rh .cell-input{text-align:center;padding:0 4px}
     .menu-table.detail .c-tgl{width:108px}
-    .menu-table.detail .c-foto{width:64px}
+    .menu-table.detail .c-foto{width:56px}
+    .menu-table.detail td.c-foto{display:flex;align-items:center;justify-content:center;gap:4px}
+    .menu-table.detail td.c-foto .thumb{margin:0}
     .menu-table.detail .c-aksi{width:96px}
     .menu-table.detail th.g-start,.menu-table.detail td.g-start{border-left:1px solid rgba(26,25,23,.22)}
     /* ED dibaca, bukan diketik: latar bergaris supaya tidak dikira isian. */
@@ -175,7 +178,7 @@
       .sec .menu-table.detail tr[data-id] td.c-tgl{order:8;display:block;width:auto}
       .sec .menu-table.detail tr[data-id] td.c-tgl .tgl{font-size:8px;white-space:nowrap}
       .sec .menu-table.detail tr[data-id] td.c-foto{order:9;display:flex;align-items:center;gap:4px}
-      .sec .menu-table.detail tr[data-id] td.c-foto .thumb{width:26px;height:26px}
+      .sec .menu-table.detail tr[data-id] td.c-foto .thumb{width:26px;height:auto;aspect-ratio:9/16}
       .sec .menu-table.detail tr[data-id] td.c-foto .ico{width:32px;height:32px;font-size:15px}
       /* Aksi menempel di tepi kanan: baris bisa digeser, jadi tanpa sticky
          tombol hapus ikut ter-scroll keluar layar. */
@@ -279,8 +282,19 @@ const barisAdmin={id:AKUN,rak:'',shelving:'',baris:'',plu:'',barcode:'',name:'AD
 // origin, jadi lempar error CORS dan hasilnya selalu false — foto admin
 // tidak pernah muncul. Coba list lewat SDK (authorized), lalu jatuh ke
 // render img yang memberi tahu sendiri kalau 404.
+// Foto admin jarang berubah, jadi hasilnya dicache. Sebelumnya tiap load()
+// menembak storage.list() sekali lagi, menambah satu request jaringan di
+// setiap render tabel.
+const cacheFoto=new Map();
 const adaFoto=async path=>{
   const nama=(path||'').split('/').pop();
+  if(cacheFoto.has(nama)) return cacheFoto.get(nama);
+  cacheFoto.set(nama,false);
+  const hasil=await cekFoto(nama);
+  cacheFoto.set(nama,hasil);
+  return hasil;
+};
+const cekFoto=async nama=>{
   try{
     const {data,error}=await supabase.storage.from(BUCKET).list('plano',{search:nama,limit:100});
     if(!error&&Array.isArray(data)) return data.some(f=>f.name===nama);
@@ -526,12 +540,24 @@ async function tambah(){
   if(!row.name){ setHint('Nama produk wajib diisi'); document.getElementById('a_name').focus(); return; }
   if(b&&isNaN(row.baris)){ setHint('Baris harus angka'); document.getElementById('a_baris').focus(); return; }
   row.sort_order=all.length+1;
-  const {error}=await supabase.from(TABLE).insert([row]);
+  // .select() mengembalikan baris tersimpan beserta id-nya. Tanpa select kita
+  // harus load() ulang seluruh tabel cuma untuk mendapat id itu, dan itu yang
+  // bikin "SIMPAN" kelamaan. Baris hasil kembalian langsung masuk ke cache
+  // lokal lalu tabel digambar ulang.
+  const {data,error}=await supabase.from(TABLE).insert([row]).select();
   if(error){ setHint(tampilErr(error)); return; }
+  const baru=data&&data[0];
+  if(baru){
+    all.push(baru);
+    const masihEdit=editIds.size>0;
+    searchEl.value='';
+    render();
+    if(masihEdit) pulihkanEdit();
+  }else{
+    await load();
+  }
   FIELDS_P.forEach(k=>{ const el=document.getElementById('a_'+k); if(el) el.value=''; });
   segarkanTgl();
-  searchEl.value='';
-  await load();
   const n=document.getElementById('a_name'); if(n) n.focus();
 }
 async function load(){
@@ -555,7 +581,7 @@ fotoInput.onchange=async()=>{
     const {error:e1}=await supabase.storage.from(BUCKET).upload(path,kecil,{upsert:true,contentType:'image/jpeg'}); if(e1) throw e1;
     const url=supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
     if(!isA){ const {error:e2}=await supabase.from(TABLE).update({foto_url:url}).eq('id',id); if(e2) setHint(e2.message); }
-    menu.foto_url=url; fotoVersi=Date.now(); render();
+    menu.foto_url=url; fotoVersi=Date.now(); cacheFoto.delete('admin.jpg'); render();
   }catch(e){ setHint(e.message); }
 };
 async function hapus(id){ const m=all.find(x=>x.id===id); if(!await masukAdmin()) return; const ok=await showConfirm('Hapus "'+(m?m.name:id)+'"?'); if(!ok) return; const {error}=await supabase.from(TABLE).delete().eq('id',id); if(error){setHint(tampilErr(error));return} await load(); }
@@ -623,7 +649,12 @@ document.getElementById('f_add').onclick=tambahRak;
 f_name.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); tambahRak(); } });
 document.getElementById('a_add').onclick=tambah;
 segarkanTgl();
-try{ supabase.channel('plano_admin').on('postgres_changes',{event:'*',schema:'public',table:TABLE},()=>load()).subscribe(); }catch{}
+// Realtime memicu load() untuk setiap perubahan. Kalau perubahan datang
+// beruntun (mis. beberapa produk disimpan cepat), load() dipanggil berkali-
+// kali. Debounce supaya satu query saja per jeda tenang.
+let loadT=null;
+const loadSegera=()=>{ clearTimeout(loadT); loadT=setTimeout(()=>load(),300); };
+try{ supabase.channel('plano_admin').on('postgres_changes',{event:'*',schema:'public',table:TABLE},()=>loadSegera()).subscribe(); }catch{}
 load();
 </script>
 </body>

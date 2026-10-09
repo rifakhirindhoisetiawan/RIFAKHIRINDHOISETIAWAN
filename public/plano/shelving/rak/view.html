@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>RAK</title>
+<meta name="theme-color" content="#fffbf2" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+<style>*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fffbf2;--surface:#f7f3e9;--text:#1a1917;--text-2:#6e6a64;--line:rgba(26,25,23,.14);--accent:#1a1917;--danger:#b91c1c;--mono:"JetBrains Mono",ui-monospace,monospace}
+*{scrollbar-width:none;-ms-overflow-style:none}::-webkit-scrollbar{width:0;height:0;display:none}html,body{scrollbar-width:none;-ms-overflow-style:none}
+html,body{width:100%;min-height:100%;background:var(--bg)}
+body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var(--text);padding-bottom:32px;-webkit-font-smoothing:antialiased}
+.wrap{width:100%;max-width:800px;margin:0 auto;padding:0 18px}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--accent);background:var(--surface);padding:10px 14px;margin-bottom:16px}
+.search:focus-within{background:#fffdf7;box-shadow:4px 4px 0 var(--accent)}
+.search svg{flex-shrink:0;width:16px;height:16px;color:var(--text-2)}
+.search input{border:none;background:transparent;outline:none;width:100%;font-size:14px;font-family:inherit;color:var(--text);-webkit-appearance:none;appearance:none}
+.shelf{border:1px solid var(--accent);background:var(--surface);box-shadow:4px 4px 0 rgba(26,25,23,.12);padding:12px;margin-bottom:16px}
+.shelf-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.shelf-head b{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text)}
+.shelf-head span{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text-2);flex-shrink:0}
+.grid{display:flex;gap:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;scroll-snap-type:x proximity;scrollbar-width:none}
+.grid::-webkit-scrollbar{display:none}
+.grid .card{flex:0 0 92px;width:92px;scroll-snap-align:start}
+.card{border:1px solid var(--accent);background:var(--bg);box-shadow:4px 4px 0 rgba(26,25,23,.12);padding:10px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+.card .icon{width:100%;aspect-ratio:9/16;height:auto;display:flex;align-items:center;justify-content:center;font-size:26px;line-height:1;background:var(--surface);border:1px solid var(--line);flex-shrink:0;overflow:hidden;margin:0 auto}
+.card .icon img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+.card .name{font-family:var(--mono);font-size:10px;font-weight:700;line-height:1.35;color:var(--text);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.card .sku{font-family:var(--mono);font-size:9px;color:var(--text-2);word-break:break-all}
+.card .facing{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--text-2)}
+.empty{text-align:center;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-2);padding:40px 0}
+@media(max-width:480px){.grid{gap:8px}.grid .card{flex:0 0 76px;width:76px}.card{padding:6px 4px}.card .icon{max-width:56px}.card .name{font-size:8px}.card .sku,.card .facing{font-size:7px}}
+@media(max-width:360px){.grid{gap:6px}.grid .card{flex:0 0 68px;width:68px}.card .icon{max-width:44px}.card .name{font-size:7px}}
+@media(min-width:768px){.grid .card{flex:0 0 108px;width:108px}}
+@media(min-width:768px){.wrap{padding:0 20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="search" style="margin-top:max(12px,env(safe-area-inset-top))">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="q" type="text" placeholder="Cari produk / barcode..." autocomplete="off" />
+  </div>
+  <div id="shelf"><div class="empty">Memuat...</div></div>
+  <div class="empty" id="empty" style="display:none">Tidak ditemukan</div>
+</div>
+<script type="module">
+const TABLE='plano_items';
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fotoBaru=u=>u?u+(u.includes('?')?'&':'?')+'v='+Date.now():'';
+const qEl=document.getElementById('q'), shelf=document.getElementById('shelf'), empty=document.getElementById('empty');
+const info=document.getElementById('info'), judul=document.getElementById('judul');
+const setJudul=t=>{ if(judul) judul.textContent=t; if(t) document.title=t; };
+let produk=[], supabase=null;
+function hitungED(rh){
+  const v=parseInt(rh,10);
+  if(!Number.isFinite(v)) return '';
+  const d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+v);
+  return 'ED '+String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+}
+function render(){
+  try{
+    const v=qEl.value.trim().toLowerCase();
+    const list=!v?produk:produk.filter(p=>[p.name,p.plu,p.barcode,p.shelving,String(p.baris),hitungED(p.rh)].some(x=>String(x||'').toLowerCase().includes(v)));
+    if(!list.length){
+      shelf.innerHTML='';
+      empty.style.display='block';
+      empty.textContent=produk.length?'Tidak ditemukan':'Belum ada produk di rak ini';
+      if(info) info.textContent=produk.length?list.length+' / '+produk.length+' PRODUK':'0 PRODUK';
+      return;
+    }
+    empty.style.display='none';
+    if(info) info.textContent=list.length+' PRODUK';
+    const groups=new Map();
+    list.forEach(r=>{
+      const s=String(r.shelving||'').trim(), b=String(r.baris||'').trim()||'—';
+      const k=(s||'')+'\x1f'+b;
+      if(!groups.has(k)) groups.set(k,[]);
+      groups.get(k).push(r);
+    });
+    const keys=[...groups.keys()].sort((a,b)=>{
+      const [sa,ba]=a.split('\x1f'), [sb,bb]=b.split('\x1f');
+      if(sa&&sb&&sa!==sb) return sa.localeCompare(sb,undefined,{numeric:true});
+      if(sa&&!sb) return -1; if(!sa&&sb) return 1;
+      const na=parseInt(ba,10), nb=parseInt(bb,10);
+      if(Number.isFinite(na)&&Number.isFinite(nb)) return na-nb;
+      if(ba==='—') return 1; if(bb==='—') return -1;
+      return String(ba).localeCompare(String(bb));
+    });
+    shelf.innerHTML=keys.map(k=>{
+      const [s,b]=k.split('\x1f');
+      const label=s? 'SHELVING '+esc(s)+' · BARIS '+esc(b||'—') : 'BARIS '+esc(b||'—');
+      return `<div class="shelf"><div class="shelf-head"><b>${label}</b><span>${groups.get(k).length} PRODUK</span></div><div class="grid">${groups.get(k).map(p=>`<div class="card"><div class="icon">${p.foto_url?`<img src="${esc(fotoBaru(p.foto_url))}" alt="" onerror="this.remove()" />`:'🗄️'}</div><div class="name">${esc(p.name||'—')}</div><div class="sku">${esc([p.plu?'PLU '+p.plu:'',p.barcode||''].filter(Boolean).join(' · ')||'—')}</div><div class="facing">${esc([p.shelving?'SHELVING '+p.shelving:'',p.baris?'BARIS '+p.baris:'',p.rh!=null&&String(p.rh).trim()!==''?hitungED(p.rh):''].filter(Boolean).join(' · ')||'—')}</div></div>`).join('')}</div></div>`;
+    }).join('');
+  }catch(e){ shelf.innerHTML='<div class="empty">Error render: '+esc(e.message)+'</div>'; console.error(e); }
+}
+async function load(){
+  const params=new URLSearchParams(location.search);
+  let rakName=(params.get('rak')||params.get('name')||'').trim();
+  if(!rakName){ const m=location.pathname.match(/rak-([^\/\.]+)\.html/i); if(m) rakName=decodeURIComponent(m[1]); }
+  if(!rakName) rakName='';
+  setJudul(rakName?rakName.toUpperCase():'RAK');
+  if(!rakName){ shelf.innerHTML='<div class="empty">Rak tidak ditemukan (?rak=...)</div>'; return; }
+  if(!supabase){ shelf.innerHTML='<div class="empty">Gagal load Supabase — cek koneksi/CDN</div>'; return; }
+  shelf.innerHTML='<div class="empty">Memuat...</div>';
+  try{
+    const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('Timeout Supabase (8s)')),8000));
+    const query=supabase.from(TABLE).select('*').order('sort_order');
+    const {data,error}=await Promise.race([query,timeout]);
+    if(error) throw error;
+    const key=rakName.trim().toUpperCase();
+    produk=(data||[]).filter(r=>String(r.rak||'').trim().toUpperCase()===key);
+    render();
+  }catch(e){ shelf.innerHTML='<div class="empty">'+esc(e.message)+'</div>'; console.error('[plano view]',e); }
+}
+(async()=>{
+  try{ ({supabase}=await import('../../../../src/js/supabase.js')); }catch(e){
+    shelf.innerHTML='<div class="empty">Gagal load Supabase: '+esc(e&&e.message||e)+'</div>';
+    console.error('[plano view]',e); return;
+  }
+  qEl.addEventListener('input',render);
+  try{ supabase.channel('plano_view').on('postgres_changes',{event:'*',schema:'public',table:TABLE},()=>load()).subscribe(); }catch{}
+  await load();
+})();
+</script>
+</body>
+</html>
