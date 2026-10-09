@@ -17,7 +17,7 @@
     :root{--mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;--mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;--mori-mono:"JetBrains Mono",ui-monospace,monospace}
     html,body{background:#fffbf2!important}
     body{padding-top:max(12px,env(safe-area-inset-top));-webkit-font-smoothing:antialiased}
-    .wrap{width:100%;max-width:1000px;min-height:100vh;margin:0 auto;background:#fffbf2!important;padding:12px 18px 40px;min-width:0}
+    .wrap{width:100%;max-width:1000px;margin:0 auto;background:#fffbf2!important;padding:12px 18px 12px;min-width:0}
     .sec+.sec{margin-top:22px}
     .row{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
     .grow{flex:1;min-width:0}
@@ -34,8 +34,11 @@
     .table-wrap{border:1px solid #1a1917;border-radius:0;background:#fffbf2;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:0}
     .table-wrap::-webkit-scrollbar{display:none}
     .menu-table{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
-    .menu-table thead th{position:sticky;top:0;background:#f7f3e9;font-family:var(--mori-mono);font-size:8px;text-transform:uppercase;height:34px;padding:0 6px;border-bottom:1px solid #1a1917;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .menu-table tbody td{height:46px;padding:0 6px;border-bottom:1px solid rgba(26,25,23,.14);vertical-align:middle}
+    .menu-table thead th{position:sticky;top:0;background:#f7f3e9;font-family:var(--mori-mono);font-size:9px;text-transform:uppercase;height:38px;padding:0 8px;border-bottom:1px solid #1a1917;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .menu-table tbody td{height:52px;padding:0 8px;border-bottom:1px solid rgba(26,25,23,.14);vertical-align:middle}
+    /* Baris terakhir tidak perlu garis bawah: wrapper sudah punya border sendiri,
+       jadi tanpa ini tepi bawah jadi dua garis begitu ada isi. */
+    .menu-table tbody tr:last-child td{border-bottom:none}
     .menu-table tbody tr:hover td{background:#faf6ea}
     .c-no{width:30px;text-align:center;font-family:var(--mori-mono);color:#6e6a64}
     .c-nama{overflow:hidden}
@@ -60,8 +63,7 @@
     .empty{font-family:var(--mori-mono);font-size:11px;font-weight:700;color:#6e6a64;text-transform:uppercase;text-align:center;padding:12px}
     .hint{margin-top:8px;font-family:var(--mori-mono);font-size:10px;color:#b91c1c;border-left:3px solid #b91c1c;background:#fdf1f1;padding:6px 8px}
     .hint[hidden]{display:none}
-    .sec .menu-table.detail{min-width:560px}
-    .menu-table.detail .c-nama{width:180px}
+     .sec .menu-table.detail{min-width:860px}
     .sec .menu-table .c-aksi{position:sticky;right:0;background:#fffbf2;border-left:1px solid rgba(26,25,23,.16);box-shadow:-6px 0 8px -8px rgba(26,25,23,.3)}
     .sec .menu-table thead th.c-aksi{z-index:2;background:#f7f3e9;border-left:1px solid rgba(26,25,23,.16)}
     .sec .menu-table tbody.tambah .c-aksi{background:#fffdf7}
@@ -119,14 +121,14 @@
     /* ===== KOLOM PRODUK (auto = serap semua sisa lebar) ===== */
     .menu-table.detail .c-nama{width:auto}
     .menu-table.detail .c-nama .cell-input{font-size:12px;font-weight:700}
-    .menu-table.detail .c-plu{width:62px}
-    .menu-table.detail .c-barcode{width:72px}
-    .menu-table.detail .c-shelving{width:66px}
-    .menu-table.detail .c-baris{width:38px}
-    .menu-table.detail .c-rh{width:42px}
-    .menu-table.detail .c-tgl{width:98px}
-    .menu-table.detail .c-foto{width:44px}
-    .menu-table.detail .c-aksi{width:88px}
+    .menu-table.detail .c-plu{width:78px}
+    .menu-table.detail .c-barcode{width:100px}
+    .menu-table.detail .c-shelving{width:88px}
+    .menu-table.detail .c-baris{width:48px}
+    .menu-table.detail .c-rh{width:52px}
+    .menu-table.detail .c-tgl{width:108px}
+    .menu-table.detail .c-foto{width:64px}
+    .menu-table.detail .c-aksi{width:96px}
     .menu-table.detail th.g-start,.menu-table.detail td.g-start{border-left:1px solid rgba(26,25,23,.22)}
     /* ED dibaca, bukan diketik: latar bergaris supaya tidak dikira isian. */
     .c-tgl{background:repeating-linear-gradient(45deg,rgba(26,25,23,.045) 0 5px,rgba(26,25,23,.075) 5px 10px)}
@@ -147,12 +149,18 @@
        dan tidak perlu baris tinggi seperti kartu. */
     @media(max-width:680px){
       .sec .menu-table.detail{min-width:0;display:block}
+      /* Di HP tiap baris jadi kartu berborder sendiri, jadi frame wrapper
+         dilepas supaya tidak jadi dua garis tepi. */
+      .sec .table-wrap:has(.menu-table.detail){border:0;background:transparent}
       .sec .menu-table.detail thead{display:none}
       .sec .menu-table.detail tbody{display:block}
       .sec .menu-table.detail tr.grp{display:block;border:1px solid #1a1917;background:#f7f3e9;margin-bottom:10px}
       .sec .menu-table.detail tr.grp td{display:block;border:none;padding:8px 10px}
       .sec .menu-table.detail tr.grp .grp-jml{float:none;display:block;margin-top:2px}
       .sec .menu-table.detail tr[data-id]{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border:1px solid #1a1917;background:#fffbf2;box-shadow:3px 3px 0 rgba(26,25,23,.1);padding:5px 8px;margin-bottom:6px;min-height:44px}
+      /* Kartu terakhir: margin bawah dihapus supaya tidak ada strip kosong
+         dan garis sendiri di bawah tabel produk. */
+      .sec .menu-table.detail tr[data-id]:last-child{margin-bottom:0}
       .sec .menu-table.detail tr[data-id]::-webkit-scrollbar{display:none}
       .sec .menu-table.detail tr[data-id]:hover td{background:transparent}
       .sec .menu-table.detail tr[data-id] td{flex:0 0 auto;width:auto;height:auto;padding:0;border:none;min-width:0;background:transparent}
@@ -232,6 +240,7 @@
   </section>
 
   <section class="sec">
+    <div class="row"><button class="btn-add wide" type="button" id="btnBuatProduk">+ BUAT PRODUK</button></div>
     <div class="table-wrap">
       <table class="menu-table detail">
         <thead><tr><th class="c-no">No</th><th class="c-nama g-start">Produk</th><th class="c-plu">PLU</th><th class="c-barcode">Barcode</th><th class="c-shelving g-start">Shelving</th><th class="c-baris">Baris</th><th class="c-rh g-start" title="Umur barang dalam hari">RH</th><th class="c-tgl" title="Tanggal kedaluwarsa = hari ini + RH">KEDALUWARSA</th><th class="c-foto g-start">Foto</th><th class="c-aksi"><button class="pg-toggle small" id="pgTambah" type="button" title="Tampilkan form tambah produk">+</button></th></tr></thead>
@@ -562,7 +571,7 @@ async function hapusProduk(id){
 }
 /* Panel tambah produk disembunyikan supaya tabel produk tetap bersih. Muncul
    hanya saat tombol "+ TAMBAH" ditekan, dan mengunci rak yang sedang aktif. */
-const tambahRow=document.getElementById('tambahRow'), pgTambah=document.getElementById('pgTambah');
+const tambahRow=document.getElementById('tambahRow'), pgTambah=document.getElementById('pgTambah'), btnBuatProduk=document.getElementById('btnBuatProduk');
 const fBatal=document.getElementById('f_batal');
 function segarkanTgl(){
   const a=document.getElementById('a_rh'), out=document.getElementById('a_tgl');
@@ -582,6 +591,7 @@ function setTambahBaris(buka){
   }
 }
 pgTambah.addEventListener('click',()=>setTambahBaris(tambahRow.hidden));
+if(btnBuatProduk) btnBuatProduk.addEventListener('click',()=>{ setTambahBaris(true); tambahRow.scrollIntoView({behavior:'smooth',block:'start'}); });
 fBatal.addEventListener('click',()=>setTambahBaris(false));
 tambahRow.addEventListener('input',e=>{ if(e.target&&e.target.id==='a_rh') segarkanTgl(); });
 // Enter di panel tambah = simpan.
