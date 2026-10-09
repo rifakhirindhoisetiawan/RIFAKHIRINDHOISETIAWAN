@@ -1,577 +1,132 @@
 <!doctype html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <title>EXP — Expired Date</title>
-    <link rel="manifest" href="../../manifest.json" />
-    <meta name="theme-color" content="#ffffff" />
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      html,
-      body {
-        width: 100%;
-        height: 100%;
-        background: #ffffff;
-        overflow: hidden;
-      }
-
-      body {
-        font-family:
-          "Segoe UI",
-          system-ui,
-          -apple-system,
-          sans-serif;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: stretch;
-        padding: 0;
-        color: #1f2937;
-      }
-
-      .phone {
-        width: 100%;
-        max-width: 100%;
-        background: #ffffff;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-      }
-
-      @media (min-width: 800px) {
-        .phone {
-          max-width: 800px;
-          margin: 0 auto;
-        }
-      }
-
-      /* ===== SEARCH ROW ===== */
-      .search-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 18px 10px;
-        max-width: 800px;
-        width: 100%;
-        margin: 0 auto;
-      }
-      .search-box {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 10px 14px;
-        color: #222;
-        font-size: 14px;
-        background: #f9f9f9;
-      }
-      .search-box:focus-within {
-        border-color: #888;
-        background: #fff;
-      }
-      .search-box input {
-        border: none;
-        background: transparent;
-        outline: none;
-        width: 100%;
-        font-size: 14px;
-        color: #222;
-        font-family: inherit;
-        -webkit-appearance: none;
-        appearance: none;
-        border-radius: 0;
-      }
-      .search-box input::placeholder {
-        color: #c3c8d1;
-      }
-      .search-box svg {
-        flex-shrink: 0;
-        color: #c3c8d1;
-        width: 18px;
-        height: 18px;
-      }
-      .admin-btn {
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        background: #fff;
-        color: #4f46e5;
-        width: 38px;
-        height: 38px;
-        text-decoration: none;
-      }
-      .admin-btn:active {
-        background: #eef2ff;
-      }
-
-      /* ===== FILTER CHIPS ===== */
-      .filter-row {
-        display: flex;
-        gap: 6px;
-        padding: 0 18px 12px;
-        max-width: 800px;
-        width: 100%;
-        margin: 0 auto;
-        overflow-x: auto;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-      .filter-row::-webkit-scrollbar {
-        display: none;
-      }
-      .chip {
-        flex: 0 0 auto;
-        border: 1px solid #e3e6ec;
-        background: #fff;
-        color: #6b7280;
-        font-family: inherit;
-        font-size: 11px;
-        font-weight: 800;
-        padding: 7px 12px;
-        border-radius: 999px;
-        cursor: pointer;
-        white-space: nowrap;
-      }
-      .chip.on {
-        background: #4f46e5;
-        border-color: #4f46e5;
-        color: #fff;
-      }
-
-      /* ===== SUMMARY ===== */
-      .summary {
-        display: flex;
-        gap: 8px;
-        padding: 0 18px 14px;
-        max-width: 800px;
-        width: 100%;
-        margin: 0 auto;
-      }
-      .sum-box {
-        flex: 1;
-        background: #fafbfc;
-        border: 1px solid #e3e6ec;
-        border-radius: 12px;
-        padding: 8px 10px;
-        text-align: center;
-        min-width: 0;
-      }
-      .sum-num {
-        font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 18px;
-        font-weight: 800;
-        line-height: 1.2;
-      }
-      .sum-label {
-        font-size: 9px;
-        font-weight: 800;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        color: #9aa0ab;
-        margin-top: 2px;
-      }
-      .sum-box.danger {
-        background: #fef2f2;
-        border-color: #fecaca;
-      }
-      .sum-box.danger .sum-num {
-        color: #dc2626;
-      }
-      .sum-box.warn {
-        background: #fffbeb;
-        border-color: #fde68a;
-      }
-      .sum-box.warn .sum-num {
-        color: #d97706;
-      }
-      .sum-box.ok .sum-num {
-        color: #059669;
-      }
-
-      /* ===== LIST ===== */
-      .menu-wrap {
-        flex: 1;
-        overflow-y: auto;
-        padding: 0 18px 28px;
-        max-width: 800px;
-        width: 100%;
-        margin: 0 auto;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-      .menu-wrap::-webkit-scrollbar {
-        display: none;
-      }
-
-      .section-label {
-        font-size: 11px;
-        font-weight: 800;
-        color: #9aa0ab;
-        letter-spacing: 0.6px;
-        text-transform: uppercase;
-        margin: 4px 0 10px;
-      }
-
-      .list {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
-      .row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        background: #fafbfc;
-        border: 1px solid #e3e6ec;
-        border-radius: 14px;
-        padding: 11px 12px;
-      }
-      .row.expired {
-        background: #fef2f2;
-        border-color: #fecaca;
-      }
-      .row.soon {
-        background: #fffbeb;
-        border-color: #fde68a;
-      }
-
-      .row-main {
-        flex: 1;
-        min-width: 0;
-      }
-      .row-name {
-        font-size: 13px;
-        font-weight: 800;
-        color: #1f2937;
-        line-height: 1.3;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .row-meta {
-        font-size: 10px;
-        font-weight: 600;
-        color: #9aa0ab;
-        margin-top: 3px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px 8px;
-      }
-      .row-note {
-        font-size: 10px;
-        font-weight: 600;
-        color: #6b7280;
-        margin-top: 4px;
-        line-height: 1.4;
-      }
-
-      .badge {
-        flex-shrink: 0;
-        font-size: 10px;
-        font-weight: 800;
-        letter-spacing: 0.4px;
-        text-transform: uppercase;
-        padding: 5px 9px;
-        border-radius: 999px;
-        white-space: nowrap;
-        font-family: "JetBrains Mono", ui-monospace, monospace;
-      }
-      .badge. expired {
-        background: #fee2e2;
-        color: #b91c1c;
-      }
-      .badge.soon {
-        background: #fef3c7;
-        color: #b45309;
-      }
-      .badge.ok {
-        background: #d1fae5;
-        color: #047857;
-      }
-      .badge.none {
-        background: #f3f4f6;
-        color: #6b7280;
-      }
-
-      .empty {
-        text-align: center;
-        color: #9aa0ab;
-        font-size: 13px;
-        font-weight: 600;
-        padding: 40px 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="phone">
-      <div class="search-row">
-        <div class="search-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="7" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-          <input
-            id="searchInput"
-            type="text"
-            placeholder="Cari produk / PLU / batch..."
-            oninput="renderList()"
-          />
-        </div>
-        <a
-          class="admin-btn"
-          href="exp-admin.html"
-          title="Kelola produk"
-          aria-label="Kelola produk"
-        >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="3" />
-            <path
-              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
-            />
-          </svg>
-        </a>
-      </div>
-
-      <div class="filter-row" id="filterRow"></div>
-
-      <div class="summary">
-        <div class="sum-box danger">
-          <div class="sum-num" id="sumExpired">0</div>
-          <div class="sum-label">Lewat</div>
-        </div>
-        <div class="sum-box warn">
-          <div class="sum-num" id="sumSoon">0</div>
-          <div class="sum-label">≤ 30 Hari</div>
-        </div>
-        <div class="sum-box ok">
-          <div class="sum-num" id="sumOk">0</div>
-          <div class="sum-label">Aman</div>
-        </div>
-      </div>
-
-      <div class="menu-wrap">
-        <div class="section-label">Daftar Produk — <span id="count">0</span></div>
-        <div class="list" id="list"></div>
-      </div>
-    </div>
-
-    <script type="module">
-      import { supabase } from '../kopi/supabase.js';
-
-      const TABLE = 'exp_items';
-      const SOON_DAYS = 30;
-
-      const FILTERS = [
-        { key: 'expired', label: 'Lewat' },
-        { key: 'soon', label: '≤ 30 Hari' },
-        { key: 'ok', label: 'Aman' },
-        { key: 'all', label: 'Semua' },
-      ];
-
-      let items = [];
-      let filter = 'all';
-
-      const listEl = document.getElementById('list');
-      const countEl = document.getElementById('count');
-      const searchInput = document.getElementById('searchInput');
-      const filterRow = document.getElementById('filterRow');
-
-      filterRow.innerHTML = FILTERS.map(
-        (f) =>
-          '<button type="button" class="chip' +
-          (f.key === filter ? ' on' : '') +
-          '" data-filter="' +
-          f.key +
-          '">' +
-          f.label +
-          '</button>',
-      ).join('');
-      filterRow.querySelectorAll('.chip').forEach((chip) => {
-        chip.addEventListener('click', () => {
-          filter = chip.dataset.filter;
-          filterRow
-            .querySelectorAll('.chip')
-            .forEach((c) => c.classList.toggle('on', c.dataset.filter === filter));
-          renderList();
-        });
-      });
-
-      function startOfToday() {
-        const d = new Date();
-        d.setHours(0, 0, 0, 0);
-        return d;
-      }
-
-      // Sisa hari tidak negatif; null kalau tanggal tidak valid / kosong.
-      function daysLeft(expDate) {
-        if (!expDate) return null;
-        const d = new Date(expDate + 'T00:00:00');
-        if (isNaN(d.getTime())) return null;
-        return Math.round((d - startOfToday()) / 86400000);
-      }
-
-      function statusOf(row) {
-        const left = daysLeft(row.exp_date);
-        if (left === null) return { key: 'none', label: '—', days: null };
-        if (left < 0) {
-          return {
-            key: 'expired',
-            label: 'Lewat ' + Math.abs(left) + 'h',
-            days: left,
-          };
-        }
-        if (left === 0) return { key: 'soon', label: 'Hari ini', days: 0 };
-        if (left <= SOON_DAYS) return { key: 'soon', label: left + 'h lagi', days: left };
-        return { key: 'ok', label: left + 'h', days: left };
-      }
-
-      function esc(s) {
-        return String(s == null ? '' : s)
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;');
-      }
-
-      function fmtDate(v) {
-        if (!v) return '-';
-        const d = new Date(v);
-        if (isNaN(d.getTime())) return v;
-        return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
-      }
-
-      function rowHtml(r) {
-        const st = statusOf(r);
-        const meta = [];
-        if (r.plu) meta.push('PLU ' + r.plu);
-        if (r.batch) meta.push('Batch ' + r.batch);
-        if (r.lokasi) meta.push(r.lokasi);
-        if (r.qty != null) meta.push('Qty ' + r.qty);
-        return (
-          '<div class="row ' +
-          (st.key === 'expired' ? 'expired' : st.key === 'soon' ? 'soon' : '') +
-          '">' +
-          '<div class="row-main">' +
-          '<div class="row-name">' +
-          esc(r.name) +
-          "</div>" +
-          '<div class="row-meta"><span>Exp ' +
-          fmtDate(r.exp_date) +
-          "</span>" +
-          meta.map((m) => "<span>" + esc(m) + "</span>").join("") +
-          "</div>" +
-          (r.catatan ? '<div class="row-note">' + esc(r.catatan) + "</div>" : "") +
-          "</div>" +
-          '<div class="badge ' +
-          st.key +
-          '">' +
-          esc(st.label) +
-          "</div>" +
-          "</div>"
-        );
-      }
-
-      function renderList() {
-        const q = searchInput.value.trim().toLowerCase();
-        const matched = items.filter((r) => {
-          if (q) {
-            const hay = [r.name, r.plu, r.batch, r.lokasi, r.catatan]
-              .filter(Boolean)
-              .join(' ')
-              .toLowerCase();
-            if (!hay.includes(q)) return false;
-          }
-          if (filter === 'all') return true;
-          return statusOf(r).key === filter;
-        });
-
-        // paling mendesak dulu: lewat -> <30 hari -> aman, lalu tanggal terdekat
-        const rank = { expired: 0, soon: 1, ok: 2, none: 3 };
-        matched.sort((a, b) => {
-          const sa = statusOf(a);
-          const sb = statusOf(b);
-          if (rank[sa.key] !== rank[sb.key]) return rank[sa.key] - rank[sb.key];
-          const da = sa.days === null ? Infinity : sa.days;
-          const db = sb.days === null ? Infinity : sb.days;
-          if (da !== db) return da - db;
-          return String(a.name || '').localeCompare(String(b.name || ''));
-        });
-
-        const all = items;
-        document.getElementById('sumExpired').textContent = all.filter(
-          (r) => statusOf(r).key === 'expired',
-        ).length;
-        document.getElementById('sumSoon').textContent = all.filter(
-          (r) => statusOf(r).key === 'soon',
-        ).length;
-        document.getElementById('sumOk').textContent = all.filter(
-          (r) => statusOf(r).key === 'ok',
-        ).length;
-
-        countEl.textContent = matched.length;
-        if (!matched.length) {
-          listEl.innerHTML = '<div class="empty">Tidak ada data</div>';
-          return;
-        }
-        listEl.innerHTML = matched.map(rowHtml).join('');
-      }
-
-      async function load() {
-        try {
-          const { data, error } = await supabase
-            .from(TABLE)
-            .select('*')
-            .order('exp_date', { ascending: true, nullsFirst: false });
-          if (error) throw error;
-          items = data || [];
-        } catch (e) {
-          console.warn('Supabase ' + TABLE + ' fallback', e && e.message);
-          items = [];
-        }
-        renderList();
-      }
-
-      renderList();
-      load();
-
-      let rtTimer = null;
-      try {
-        supabase
-          .channel('exp_items_changes')
-          .on('postgres_changes', { event: '*', schema: 'public', table: TABLE }, () => {
-            clearTimeout(rtTimer);
-            rtTimer = setTimeout(() => load(), 400);
-          })
-          .subscribe();
-      } catch (e) {}
-
-      window.renderList = renderList;
-    </script>
-  </body>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>EXP — Expired Date</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+*{scrollbar-width:none;-ms-overflow-style:none}::-webkit-scrollbar{width:0;height:0}
+:root{--mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;--mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;--mori-mono:"JetBrains Mono",ui-monospace,monospace}
+html,body{width:100%;height:100%;background:var(--mori-bg);overflow:hidden}
+body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var(--mori-text);min-height:100vh;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:0;-webkit-font-smoothing:antialiased}
+.phone{width:100%;max-width:100%;background:var(--mori-bg);overflow:hidden;display:flex;flex-direction:column;min-height:100vh}
+@media(min-width:800px){.phone{max-width:800px;margin:0 auto}}
+.search-row{display:flex;align-items:center;gap:10px;padding:12px 18px 10px;max-width:800px;width:100%;margin:0 auto;flex-shrink:0}
+.search-box{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--mori-accent);background:var(--mori-surface);padding:10px 14px;color:var(--mori-text);font-size:14px}
+.search-box:focus-within{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
+.search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:var(--mori-text);font-family:inherit;-webkit-appearance:none;appearance:none}
+.search-box input::placeholder,.search-box svg{color:var(--mori-text-2)}
+.search-box svg{flex-shrink:0;width:18px;height:18px}
+.admin-btn{flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--mori-accent);background:var(--mori-accent);color:var(--mori-bg);width:38px;height:38px;text-decoration:none;box-shadow:2px 2px 0 rgba(26,25,23,.16);transition:transform .12s ease,box-shadow .12s ease}
+.admin-btn:active{transform:translate(2px,2px);box-shadow:none}
+.filter-row{display:flex;gap:6px;padding:0 18px 12px;max-width:800px;width:100%;margin:0 auto;overflow-x:auto}
+.chip{flex:0 0 auto;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:7px 12px;cursor:pointer;white-space:nowrap;transition:background .12s ease,color .12s ease}
+.chip.on{background:var(--mori-accent);border-color:var(--mori-accent);color:var(--mori-bg)}
+.summary{display:flex;gap:8px;padding:0 18px 14px;max-width:800px;width:100%;margin:0 auto}
+.sum-box{flex:1;background:var(--mori-surface);border:1px solid var(--mori-accent);padding:8px 10px;text-align:center;min-width:0;box-shadow:3px 3px 0 rgba(26,25,23,.12)}
+.sum-num{font-family:var(--mori-mono);font-size:18px;font-weight:800;line-height:1.2}
+.sum-label{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text-2);margin-top:2px}
+.sum-box.danger{background:#fdf1f1;border-color:var(--mori-danger)}
+.sum-box.danger .sum-num{color:var(--mori-danger)}
+.sum-box.warn{background:#fef9e6;border-color:#b45309}
+.sum-box.warn .sum-num{color:#b45309}
+.sum-box.ok .sum-num{color:#059669}
+.menu-wrap{flex:1;overflow-y:auto;padding:0 18px 28px;max-width:800px;width:100%;margin:0 auto}
+.section-label{font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text-2);margin:4px 0 10px}
+.list{display:grid;grid-template-columns:1fr;gap:10px}
+.row{display:flex;align-items:center;gap:12px;background:#fffbf2;border:1px solid var(--mori-accent);padding:11px 12px;box-shadow:3px 3px 0 rgba(26,25,23,.12)}
+.row.expired{background:#fdf1f1;border-color:var(--mori-danger)}
+.row.soon{background:#fef9e6;border-color:#b45309}
+.row-main{flex:1;min-width:0}
+.row-name{font-family:var(--mori-mono);font-size:12px;font-weight:800;color:var(--mori-text);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:uppercase}
+.row-meta{font-family:var(--mori-mono);font-size:9px;font-weight:700;color:var(--mori-text-2);margin-top:3px;display:flex;flex-wrap:wrap;gap:4px 8px}
+.row-note{font-family:var(--mori-mono);font-size:9px;font-weight:600;color:var(--mori-text-2);margin-top:4px;line-height:1.4}
+.badge{flex-shrink:0;font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:5px 9px;white-space:nowrap;border:1px solid var(--mori-accent)}
+.badge.expired{background:var(--mori-danger);color:#fff;border-color:var(--mori-danger)}
+.badge.soon{background:#b45309;color:#fff;border-color:#b45309}
+.badge.ok{background:#1a1917;color:var(--mori-bg)}
+.badge.none{background:var(--mori-surface);color:var(--mori-text-2)}
+.empty{text-align:center;font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text-2);padding:40px 0}
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="search-row">
+<div class="search-box">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+<input id="searchInput" type="text" placeholder="Cari produk / PLU / batch..." oninput="renderList()" autocomplete="off" />
+</div>
+<a class="admin-btn" href="exp-admin.html" title="Kelola produk" aria-label="Kelola produk">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+</a>
+</div>
+<div class="filter-row" id="filterRow"></div>
+<div class="summary">
+<div class="sum-box danger"><div class="sum-num" id="sumExpired">0</div><div class="sum-label">Lewat</div></div>
+<div class="sum-box warn"><div class="sum-num" id="sumSoon">0</div><div class="sum-label">≤ 30 Hari</div></div>
+<div class="sum-box ok"><div class="sum-num" id="sumOk">0</div><div class="sum-label">Aman</div></div>
+</div>
+<div class="menu-wrap">
+<div class="section-label">Daftar Produk — <span id="count">0</span></div>
+<div class="list" id="list"></div>
+</div>
+</div>
+<script type="module">
+import { supabase } from '../kopi/supabase.js';
+const TABLE='exp_items';
+const SOON_DAYS=30;
+const FILTERS=[{key:'expired',label:'Lewat'},{key:'soon',label:'≤ 30 Hari'},{key:'ok',label:'Aman'},{key:'all',label:'Semua'}];
+let items=[],filter='all';
+const listEl=document.getElementById('list'),countEl=document.getElementById('count'),searchInput=document.getElementById('searchInput'),filterRow=document.getElementById('filterRow');
+filterRow.innerHTML=FILTERS.map(f=>'<button type="button" class="chip'+(f.key===filter?' on':'')+'" data-filter="'+f.key+'">'+f.label+'</button>').join('');
+filterRow.querySelectorAll('.chip').forEach(chip=>{
+chip.addEventListener('click',()=>{
+filter=chip.dataset.filter;
+filterRow.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c.dataset.filter===filter));
+renderList();
+});
+});
+function startOfToday(){const d=new Date();d.setHours(0,0,0,0);return d;}
+function daysLeft(expDate){if(!expDate) return null;const d=new Date(expDate+'T00:00:00');if(isNaN(d.getTime())) return null;return Math.round((d-startOfToday())/86400000);}
+function statusOf(row){const left=daysLeft(row.exp_date);if(left===null) return {key:'none',label:'—',days:null};if(left<0) return {key:'expired',label:'Lewat '+Math.abs(left)+'h',days:left};if(left===0) return {key:'soon',label:'Hari ini',days:0};if(left<=SOON_DAYS) return {key:'soon',label:left+'h lagi',days:left};return {key:'ok',label:left+'h',days:left};}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtDate(v){if(!v) return '-';const d=new Date(v);if(isNaN(d.getTime())) return v;return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});}
+function rowHtml(r){const st=statusOf(r);const meta=[];if(r.plu) meta.push('PLU '+r.plu);if(r.batch) meta.push('Batch '+r.batch);if(r.lokasi) meta.push(r.lokasi);if(r.qty!=null) meta.push('Qty '+r.qty);return '<div class="row '+(st.key==='expired'?'expired':st.key==='soon'?'soon':'')+'"><div class="row-main"><div class="row-name">'+esc(r.name)+'</div><div class="row-meta"><span>Exp '+fmtDate(r.exp_date)+'</span>'+meta.map(m=>'<span>'+esc(m)+'</span>').join('')+'</div>'+(r.catatan?'<div class="row-note">'+esc(r.catatan)+'</div>':'')+'</div><div class="badge '+st.key+'">'+esc(st.label)+'</div></div>';}
+function renderList(){
+const q=searchInput.value.trim().toLowerCase();
+const matched=items.filter(r=>{
+if(q){const hay=[r.name,r.plu,r.batch,r.lokasi,r.catatan].filter(Boolean).join(' ').toLowerCase();if(!hay.includes(q)) return false;}
+if(filter==='all') return true;
+return statusOf(r).key===filter;
+});
+const rank={expired:0,soon:1,ok:2,none:3};
+matched.sort((a,b)=>{
+const sa=statusOf(a),sb=statusOf(b);
+if(rank[sa.key]!==rank[sb.key]) return rank[sa.key]-rank[sb.key];
+const da=sa.days===null?Infinity:sa.days,db=sb.days===null?Infinity:sb.days;
+if(da!==db) return da-db;
+return String(a.name||'').localeCompare(String(b.name||''));
+});
+const all=items;
+document.getElementById('sumExpired').textContent=all.filter(r=>statusOf(r).key==='expired').length;
+document.getElementById('sumSoon').textContent=all.filter(r=>statusOf(r).key==='soon').length;
+document.getElementById('sumOk').textContent=all.filter(r=>statusOf(r).key==='ok').length;
+countEl.textContent=matched.length;
+if(!matched.length){listEl.innerHTML='<div class="empty">Tidak ada data</div>';return;}
+listEl.innerHTML=matched.map(rowHtml).join('');
+}
+async function load(){
+try{const{data,error}=await supabase.from(TABLE).select('*').order('exp_date',{ascending:true,nullsFirst:false});if(error) throw error;items=data||[];}catch(e){console.warn('Supabase '+TABLE+' fallback',e&&e.message);items=[];}
+renderList();
+}
+renderList();load();
+let rtTimer=null;
+try{supabase.channel('exp_items_changes').on('postgres_changes',{event:'*',schema:'public',table:TABLE},()=>{clearTimeout(rtTimer);rtTimer=setTimeout(()=>load(),400);}).subscribe();}catch(e){}
+window.renderList=renderList;
+</script>
+</body>
 </html>

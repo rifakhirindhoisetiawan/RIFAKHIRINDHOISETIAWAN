@@ -1,330 +1,228 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Admin — EXP Supabase</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{max-width:100%;overflow-x:hidden}
-    html,body{width:100%;height:100%;background:#ffffff}
-    body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;background:#ffffff;color:#1a1a1a;min-height:100vh;overflow-x:hidden}
-    ::-webkit-scrollbar{width:0;height:0}
-    *{scrollbar-width:none;-ms-overflow-style:none}
-    .wrap{width:100%;max-width:800px;min-height:100vh;margin:0 auto;background:#ffffff;padding:12px 18px 40px;min-width:0}
-    .grid{display:grid;grid-template-columns:1fr;gap:20px;max-width:100%}
-    .card{background:transparent;border:none;padding:0;max-width:100%;min-width:0}
-    .section-label{font-size:11px;font-weight:800;color:#9aa0ab;letter-spacing:0.6px;text-transform:uppercase;margin:4px 0 14px}
-    .search-wrapper{display:flex;align-items:center;gap:10px;width:100%;margin-bottom:14px}
-    .search-box{flex:1;display:flex;align-items:center;gap:8px;border:1px solid #ddd;border-radius:10px;padding:10px 14px;color:#222;font-size:14px;background:#f9f9f9;min-width:0}
-    .search-box:focus-within{border-color:#888;background:#fff}
-    .search-box svg{flex-shrink:0;color:#c3c8d1;width:18px;height:18px}
-    .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:#222;font-family:inherit;min-width:0;-webkit-appearance:none;appearance:none;border-radius:0}
-    .search-box input::placeholder{color:#c3c8d1}
-    .back-btn{flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid #e5e7eb;border-radius:10px;background:#fff;color:#4f46e5;width:38px;height:38px;cursor:pointer;text-decoration:none}
-    .form{display:grid;gap:8px;max-width:100%}
-    .form-table{width:100%;border:1px solid #c7d2fe;border-radius:10px;overflow:hidden;background:#fff}
-    .form-table .tr{display:flex;align-items:stretch;border-bottom:1px solid #e5e7eb;min-height:34px}
-    .form-table .tr:last-child{border-bottom:none}
-    .form-table .th{min-width:82px;display:flex;align-items:center;padding:0 8px;font-size:9px;font-weight:800;color:#4f46e5;background:#eef2ff;border-right:1px solid #e5e7eb;text-align:left;letter-spacing:0.4px;text-transform:uppercase}
-    .form-table .td{flex:1;display:flex;align-items:center;padding:4px 8px;min-width:0}
-    .form-table .td input,.form-table .td textarea{width:100%;margin:0 !important;padding:8px 10px;border:1px solid transparent;border-radius:6px;font-size:12px;font-weight:600;color:#111827;background:transparent;outline:none;font-family:inherit;line-height:1.2}
-    .form-table .td input:focus,.form-table .td textarea:focus{border-color:#6366f1;background:#fff;box-shadow:0 0 0 1px #6366f1}
-    .form-table .td input::placeholder{color:#9ca3af;font-weight:500}
-    .btn-save-icon{width:100%;height:44px;border-radius:10px;border:none;background:#6366f1;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0;transition:all .15s ease;font-size:14px;font-weight:700;padding:0 16px;font-family:inherit}
-    .btn-save-icon:active{opacity:.85;transform:scale(.93)}
-    .btn-save-icon:disabled{opacity:.6;cursor:not-allowed;transform:none}
-    .list{display:grid;grid-template-columns:1fr;gap:10px;max-width:100%}
-    .item{display:flex;align-items:center;gap:10px;background:#fafbfc;border:1px solid #e3e6ec;border-radius:12px;padding:10px 12px;min-width:0}
-    .item-main{flex:1;min-width:0}
-    .item-name{font-size:12px;font-weight:800;color:#1f2937;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .item-meta{font-size:10px;font-weight:600;color:#9aa0ab;margin-top:3px;display:flex;flex-wrap:wrap;gap:3px 8px}
-    .item-actions{display:flex;gap:6px;flex-shrink:0}
-    .btn{padding:10px 16px;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;font-family:inherit}
-    .btn-ghost{background:#eef2ff;color:#4f46e5;border:1px solid #c7d2fe}
-    .btn-danger{background:#fef2f2;color:#ef4444;border:1px solid #fecaca}
-    .btn-small{padding:0;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center}
-    .empty{text-align:center;color:#9aa0ab;font-size:13px;font-weight:600;padding:40px 0}
-    .hint{font-size:11px;color:#9aa0ab;line-height:1.5}
-    .badge{flex-shrink:0;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:4px 8px;border-radius:999px;white-space:nowrap;font-family:"JetBrains Mono",ui-monospace,monospace}
-    .badge.expired{background:#fee2e2;color:#b91c1c}
-    .badge.soon{background:#fef3c7;color:#b45309}
-    .badge.ok{background:#d1fae5;color:#047857}
-    .badge.none{background:#f3f4f6;color:#6b7280}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin — EXP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+*{scrollbar-width:none;-ms-overflow-style:none}::-webkit-scrollbar{width:0;height:0}
+:root{--mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;--mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;--mori-mono:"JetBrains Mono",ui-monospace,monospace}
+html,body{width:100%;background:var(--mori-bg)}
+body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var(--mori-text);min-height:100vh;-webkit-font-smoothing:antialiased}
+.wrap{width:100%;max-width:1000px;margin:0 auto;background:var(--mori-bg);padding:12px 18px 24px;min-width:0}
+.sec+.sec{margin-top:18px}
+.row{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.grow{flex:1;min-width:0}
+.search-box{display:flex;align-items:center;gap:8px;border:1px solid var(--mori-accent);background:var(--mori-surface);padding:0 12px;height:36px}
+.search-box:focus-within{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
+.search-box input{border:none;background:transparent;outline:none;width:100%;min-width:0;font-size:14px;font-family:inherit;color:var(--mori-text)}
+.search-box input::placeholder{color:var(--mori-text-2)}
+.back-btn{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-text);text-decoration:none;flex-shrink:0}
+.table-wrap{border:1px solid var(--mori-accent);background:var(--mori-bg);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.menu-table{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+.menu-table thead th{position:sticky;top:0;background:var(--mori-surface);font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;height:34px;padding:0 6px;border-bottom:1px solid var(--mori-accent);white-space:nowrap}
+.menu-table tbody td{height:46px;padding:0 6px;border-bottom:1px solid var(--mori-line);vertical-align:middle}
+.menu-table tbody tr:last-child td{border-bottom:none}
+.menu-table tbody tr:hover td{background:#faf6ea}
+.c-no{width:28px;text-align:center;font-family:var(--mori-mono);color:var(--mori-text-2)}
+.c-nama{overflow:hidden}
+.menu-table .nama{font-family:var(--mori-mono);font-size:10px;font-weight:800;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-plu{width:64px}
+.c-batch{width:78px}
+.c-exp{width:96px}
+.c-sisa{width:64px}
+.c-qty{width:44px}
+.c-lokasi{width:86px}
+.c-aksi{width:72px}
+.badge{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 6px;border:1px solid var(--mori-accent);white-space:nowrap;display:inline-block}
+.badge.expired{background:var(--mori-danger);color:#fff;border-color:var(--mori-danger)}
+.badge.soon{background:#b45309;color:#fff;border-color:#b45309}
+.badge.ok{background:var(--mori-accent);color:var(--mori-bg)}
+.badge.none{background:var(--mori-surface);color:var(--mori-text-2)}
+.btn,.ico{height:28px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-bg);background:var(--mori-accent);border:1px solid var(--mori-accent);cursor:pointer;flex-shrink:0;box-shadow:2px 2px 0 rgba(26,25,23,.16);transition:transform .12s ease,box-shadow .12s ease}
+.ico{width:28px;padding:0}
+.btn:active,.ico:active{transform:translate(2px,2px);box-shadow:none}
+.ico-danger{background:var(--mori-danger);border-color:var(--mori-danger)}
+.ico-ghost{background:var(--mori-surface);color:var(--mori-text);border-color:rgba(26,25,23,.28)}
+.acts{display:flex;gap:6px;justify-content:flex-end;align-items:center}
+.empty{font-family:var(--mori-mono);font-size:11px;font-weight:700;color:var(--mori-text-2);text-transform:uppercase;text-align:center;padding:14px}
+.hint{margin-top:8px;font-family:var(--mori-mono);font-size:10px;color:var(--mori-danger);border-left:3px solid var(--mori-danger);background:#fdf1f1;padding:6px 8px}
+.hint[hidden]{display:none}
+.form-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.form-title{font-family:var(--mori-mono);font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;flex:1}
+.fset{border:1px solid var(--mori-line);background:#fffdf7;padding:10px;margin:0 0 10px}
+.fset legend{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text-2);padding:0 4px}
+.fgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.fgrid label{display:flex;flex-direction:column;gap:4px}
+.fgrid label>span:first-child{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text-2)}
+.cell-input{width:100%;height:32px;padding:0 8px;font-family:var(--mori-mono);font-size:11px;font-weight:700;background:var(--mori-surface);border:1px solid rgba(26,25,23,.28);outline:none}
+.cell-input:focus{background:#fff;border-color:var(--mori-accent);box-shadow:3px 3px 0 rgba(26,25,23,.18)}
+.btn-wide{width:100%;height:38px;font-family:var(--mori-mono);font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.retur-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.retur-title{font-family:var(--mori-mono);font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
+.retur-count{font-family:var(--mori-mono);font-size:9px;font-weight:700;color:var(--mori-text-2)}
+@media(max-width:680px){
+.sec .menu-table.retur{min-width:0;display:block}
+.sec .menu-table.retur thead{display:none}
+.sec .menu-table.retur tbody{display:block}
+.sec .menu-table.retur tr[data-id]{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;overflow-x:auto;border:1px solid var(--mori-accent);background:var(--mori-bg);box-shadow:3px 3px 0 rgba(26,25,23,.1);padding:6px 8px;margin-bottom:6px;min-height:44px}
+.sec .menu-table.retur tr[data-id]:last-child{margin-bottom:0}
+.sec .menu-table.retur tr[data-id] td{flex:0 0 auto;width:auto;height:auto;padding:0;border:none;background:transparent}
+.sec .menu-table.retur tr[data-id] td.c-no{order:1;min-width:18px;font-size:9px;font-weight:800}
+.sec .menu-table.retur tr[data-id] td.c-nama{order:2;flex:1 1 110px;min-width:110px}
+.sec .menu-table.retur tr[data-id] td.c-plu{order:3;width:56px}
+.sec .menu-table.retur tr[data-id] td.c-batch{order:4;width:64px}
+.sec .menu-table.retur tr[data-id] td.c-exp{order:5;width:86px}
+.sec .menu-table.retur tr[data-id] td.c-sisa{order:6;width:64px}
+.sec .menu-table.retur tr[data-id] td.c-qty{order:7;width:36px}
+.sec .menu-table.retur tr[data-id] td.c-lokasi{order:8;width:64px}
+.sec .menu-table.retur tr[data-id] td.c-aksi{order:9;position:sticky;right:0;background:var(--mori-bg);border-left:1px solid var(--mori-line);padding-left:6px}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
-  <div class="grid">
-    <div class="card" style="order:2">
-      <div class="section-label">Daftar Produk — <span id="count">0</span></div>
-      <div class="search-wrapper">
-        <div class="search-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-          <input id="search" type="text" placeholder="Cari produk / PLU / batch..." autocomplete="off" />
-        </div>
-        <a class="back-btn" href="exp.html" title="Kembali" aria-label="Kembali">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-        </a>
-      </div>
-      <div id="list" class="list"><div class="empty">Memuat...</div></div>
-    </div>
-
-    <div class="card" style="order:1">
-      <div class="section-label" id="formLabel">Tambah Produk</div>
-      <form id="form" class="form" onsubmit="return false">
-        <input type="hidden" id="editId" />
-        <div class="form-table">
-          <div class="tr">
-            <div class="th">Nama</div>
-            <div class="td"><input id="f_name" placeholder="cth: Teh Pucuk 350ml" required /></div>
-          </div>
-          <div class="tr">
-            <div class="th">PLU</div>
-            <div class="td"><input id="f_plu" placeholder="cth: 443771" inputmode="numeric" /></div>
-          </div>
-          <div class="tr">
-            <div class="th">Batch</div>
-            <div class="td"><input id="f_batch" placeholder="cth: B20260101" /></div>
-          </div>
-          <div class="tr">
-            <div class="th">Exp Date</div>
-            <div class="td"><input id="f_exp_date" type="date" /></div>
-          </div>
-          <div class="tr">
-            <div class="th">Qty</div>
-            <div class="td"><input id="f_qty" type="number" min="0" step="1" inputmode="numeric" placeholder="0" /></div>
-          </div>
-          <div class="tr">
-            <div class="th">Lokasi</div>
-            <div class="td"><input id="f_lokasi" placeholder="cth: Rak A / Gudang" /></div>
-          </div>
-          <div class="tr">
-            <div class="th">Catatan</div>
-            <div class="td"><input id="f_catatan" placeholder="opsional" /></div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:10px">
-          <button id="btnReset" type="button" class="btn-save-icon" style="background:#eef2ff;color:#4f46e5;flex:1">Batal</button>
-          <button id="btnSave" type="button" class="btn-save-icon" style="flex:2">Simpan</button>
-        </div>
-        <p class="hint" style="margin-top:8px">Status dihitung otomatis dari <b>Exp Date</b>: lewat / ≤ 30 hari / aman. Baris tanpa tanggal akan berstatus “—”.</p>
-      </form>
-    </div>
-  </div>
+<section class="sec">
+<div class="row">
+<div class="search-box grow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="search" type="search" placeholder="Cari produk / PLU / batch" autocomplete="off" /></div>
+<a class="back-btn" href="exp.html" title="Kembali" aria-label="Kembali">&#8592;</a>
 </div>
+</section>
 
+<section class="sec">
+<div class="form-head"><div class="form-title" id="formLabel">TAMBAH BARANG EXP</div><button class="btn" id="btnBatal" type="button" hidden>BATAL</button></div>
+<form id="form" onsubmit="return false">
+<input type="hidden" id="editId" />
+<fieldset class="fset"><legend>PRODUK</legend>
+<div class="fgrid">
+<label><span>NAMA *</span><input class="cell-input" id="f_name" placeholder="Teh Pucuk 350ml" autocomplete="off" /></label>
+<label><span>PLU</span><input class="cell-input" id="f_plu" placeholder="443771" inputmode="numeric" autocomplete="off" /></label>
+<label><span>BATCH</span><input class="cell-input" id="f_batch" placeholder="B20260101" autocomplete="off" /></label>
+</div>
+</fieldset>
+<fieldset class="fset"><legend>EXPIRED</legend>
+<div class="fgrid">
+<label><span>EXP DATE</span><input class="cell-input" id="f_exp_date" type="date" /></label>
+<label><span>QTY</span><input class="cell-input" id="f_qty" type="number" min="0" step="1" inputmode="numeric" placeholder="0" /></label>
+<label><span>LOKASI</span><input class="cell-input" id="f_lokasi" placeholder="Rak A / Gudang" autocomplete="off" /></label>
+<label><span>CATATAN</span><input class="cell-input" id="f_catatan" placeholder="opsional" autocomplete="off" /></label>
+</div>
+</fieldset>
+<button class="btn btn-wide" id="btnSave" type="button">SIMPAN</button>
+<p class="hint" id="hint" hidden></p>
+</form>
+</section>
+
+<section class="sec">
+<div class="retur-head"><div class="retur-title">BARANG EXP SEBELUM RETUR HARIAN</div><span class="retur-count" id="returCount">0 PRODUK</span></div>
+<div class="table-wrap">
+<table class="menu-table retur">
+<thead><tr><th class="c-no">No</th><th class="c-nama">Produk</th><th class="c-plu">PLU</th><th class="c-batch">Batch</th><th class="c-exp">Exp Date</th><th class="c-sisa">Sisa</th><th class="c-qty">Qty</th><th class="c-lokasi">Lokasi</th><th class="c-aksi"></th></tr></thead>
+<tbody id="returList"><tr><td colspan="9"><div class="empty">Memuat...</div></td></tr></tbody>
+</table>
+</div>
+<p class="hint">Hanya barang lewat & ≤ 30 hari. Retur harian = tarik & pisahkan sebelum lewat.</p>
+</section>
+
+<section class="sec">
+<div class="retur-head"><div class="retur-title">SEMUA BARANG</div><span class="retur-count" id="allCount">0 PRODUK</span></div>
+<div class="table-wrap">
+<table class="menu-table">
+<thead><tr><th class="c-no">No</th><th class="c-nama">Produk</th><th class="c-plu">PLU</th><th class="c-batch">Batch</th><th class="c-exp">Exp Date</th><th class="c-sisa">Sisa</th><th class="c-qty">Qty</th><th class="c-lokasi">Lokasi</th><th class="c-aksi"></th></tr></thead>
+<tbody id="list"><tr><td colspan="9"><div class="empty">Memuat...</div></td></tr></tbody>
+</table>
+</div>
+</section>
+</div>
 <script type="module">
-  import { supabase } from '../kopi/supabase.js';
-
-  const TABLE = 'exp_items';
-  const SOON_DAYS = 30;
-
-  const listEl = document.getElementById('list');
-  const countEl = document.getElementById('count');
-  const searchEl = document.getElementById('search');
-  const form = document.getElementById('form');
-  const formLabel = document.getElementById('formLabel');
-  const editId = document.getElementById('editId');
-  const f_name = document.getElementById('f_name');
-  const f_plu = document.getElementById('f_plu');
-  const f_batch = document.getElementById('f_batch');
-  const f_exp_date = document.getElementById('f_exp_date');
-  const f_qty = document.getElementById('f_qty');
-  const f_lokasi = document.getElementById('f_lokasi');
-  const f_catatan = document.getElementById('f_catatan');
-  const btnSave = document.getElementById('btnSave');
-  const btnReset = document.getElementById('btnReset');
-
-  let all = [];
-
-  function startOfToday() {
-    const d = new Date();
-    d.setHours(0, 0, 0, 0);
-    return d;
-  }
-
-  function daysLeft(expDate) {
-    if (!expDate) return null;
-    const d = new Date(expDate + 'T00:00:00');
-    if (isNaN(d.getTime())) return null;
-    return Math.round((d - startOfToday()) / 86400000);
-  }
-
-  function statusOf(row) {
-    const left = daysLeft(row.exp_date);
-    if (left === null) return { key: 'none', label: '—' };
-    if (left < 0) return { key: 'expired', label: 'Lewat ' + Math.abs(left) + 'h' };
-    if (left === 0) return { key: 'soon', label: 'Hari ini' };
-    if (left <= SOON_DAYS) return { key: 'soon', label: left + 'h lagi' };
-    return { key: 'ok', label: left + 'h' };
-  }
-
-  function esc(s) {
-    return String(s == null ? '' : s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-
-  function fmtDate(v) {
-    if (!v) return '-';
-    const d = new Date(v);
-    if (isNaN(d.getTime())) return v;
-    return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
-  }
-
-  function itemHtml(r) {
-    const st = statusOf(r);
-    const meta = ['Exp ' + fmtDate(r.exp_date)];
-    if (r.plu) meta.push('PLU ' + r.plu);
-    if (r.batch) meta.push('Batch ' + r.batch);
-    if (r.lokasi) meta.push(r.lokasi);
-    if (r.qty != null) meta.push('Qty ' + r.qty);
-    return `
-      <div class="item">
-        <div class="item-main">
-          <div class="item-name">${esc(r.name)}</div>
-          <div class="item-meta">${meta.map((m) => `<span>${esc(m)}</span>`).join('')}</div>
-        </div>
-        <div class="badge ${st.key}">${esc(st.label)}</div>
-        <div class="item-actions">
-          <button type="button" class="btn btn-ghost btn-small" data-edit="${r.id}" title="Edit" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-          <button type="button" class="btn btn-danger btn-small" data-del="${r.id}" title="Hapus" aria-label="Hapus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-        </div>
-      </div>`;
-  }
-
-  function render() {
-    const q = searchEl.value.trim().toLowerCase();
-    const filtered = all.filter((r) => {
-      if (!q) return true;
-      return [r.name, r.plu, r.batch, r.lokasi, r.catatan]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase()
-        .includes(q);
-    });
-    filtered.sort((a, b) => {
-      const da = daysLeft(a.exp_date);
-      const db = daysLeft(b.exp_date);
-      const na = da === null ? Infinity : da;
-      const nb = db === null ? Infinity : db;
-      if (na !== nb) return na - nb;
-      return String(a.name || '').localeCompare(String(b.name || ''));
-    });
-    countEl.textContent = filtered.length;
-    if (!filtered.length) {
-      listEl.innerHTML = '<div class="empty">Tidak ada data</div>';
-      return;
-    }
-    listEl.innerHTML = filtered.map(itemHtml).join('');
-    listEl.querySelectorAll('[data-edit]').forEach((btn) => {
-      btn.addEventListener('click', () => editRow(parseInt(btn.dataset.edit)));
-    });
-    listEl.querySelectorAll('[data-del]').forEach((btn) => {
-      btn.addEventListener('click', () => delRow(parseInt(btn.dataset.del)));
-    });
-  }
-
-  async function load() {
-    try {
-      const { data, error } = await supabase
-        .from(TABLE)
-        .select('*')
-        .order('exp_date', { ascending: true, nullsFirst: false });
-      if (error) throw error;
-      all = data || [];
-      render();
-    } catch (e) {
-      listEl.innerHTML = '<div class="empty">Gagal memuat: ' + esc(e.message) + '</div>';
-    }
-  }
-
-  function resetForm() {
-    editId.value = '';
-    form.reset();
-    formLabel.textContent = 'Tambah Produk';
-    btnSave.textContent = 'Simpan';
-  }
-
-  function editRow(id) {
-    const r = all.find((x) => x.id === id);
-    if (!r) return;
-    editId.value = r.id;
-    f_name.value = r.name || '';
-    f_plu.value = r.plu || '';
-    f_batch.value = r.batch || '';
-    f_exp_date.value = r.exp_date || '';
-    f_qty.value = r.qty != null ? r.qty : '';
-    f_lokasi.value = r.lokasi || '';
-    f_catatan.value = r.catatan || '';
-    formLabel.textContent = 'Edit Produk — ' + (r.name || '#' + r.id);
-    btnSave.textContent = 'Update';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  async function delRow(id) {
-    if (!confirm('Hapus produk #' + id + '?')) return;
-    const { error } = await supabase.from(TABLE).delete().eq('id', id);
-    if (error) alert('Gagal hapus: ' + error.message);
-    else {
-      if (parseInt(editId.value) === id) resetForm();
-      await load();
-    }
-  }
-
-  btnSave.addEventListener('click', async () => {
-    const name = f_name.value.trim();
-    if (!name) {
-      alert('Nama wajib');
-      return;
-    }
-    const qtyRaw = f_qty.value.trim();
-    const payload = {
-      name,
-      plu: f_plu.value.trim() || null,
-      batch: f_batch.value.trim() || null,
-      exp_date: f_exp_date.value || null,
-      qty: qtyRaw === '' ? null : parseInt(qtyRaw, 10),
-      lokasi: f_lokasi.value.trim() || null,
-      catatan: f_catatan.value.trim() || null,
-    };
-    btnSave.disabled = true;
-    const res = editId.value
-      ? await supabase.from(TABLE).update(payload).eq('id', parseInt(editId.value))
-      : await supabase.from(TABLE).insert([payload]);
-    btnSave.disabled = false;
-    if (res.error) {
-      if (/PGRST204|Could not find/i.test(res.error.message || '')) {
-        alert(
-          'Tabel exp_items belum ada di Supabase.\nJalankan SQL di scripts/build/supabase-schema.sql bagian 9.',
-        );
-      } else {
-        alert('Gagal simpan: ' + (res.error.message || 'error'));
-      }
-      return;
-    }
-    resetForm();
-    await load();
-  });
-
-  btnReset.addEventListener('click', resetForm);
-  searchEl.addEventListener('input', render);
-
-  let rtTimer = null;
-  try {
-    supabase
-      .channel('admin_exp_items_' + Math.random().toString(36).slice(2))
-      .on('postgres_changes', { event: '*', schema: 'public', table: TABLE }, () => {
-        clearTimeout(rtTimer);
-        rtTimer = setTimeout(() => load(), 300);
-      })
-      .subscribe();
-  } catch (e) {}
-
-  load();
+import { supabase } from '../kopi/supabase.js';
+const TABLE='exp_items', SOON_DAYS=30;
+const listEl=document.getElementById('list'), returList=document.getElementById('returList'), searchEl=document.getElementById('search'), hint=document.getElementById('hint');
+const formLabel=document.getElementById('formLabel'), editId=document.getElementById('editId'), btnSave=document.getElementById('btnSave'), btnBatal=document.getElementById('btnBatal');
+const f_name=document.getElementById('f_name'), f_plu=document.getElementById('f_plu'), f_batch=document.getElementById('f_batch'), f_exp_date=document.getElementById('f_exp_date'), f_qty=document.getElementById('f_qty'), f_lokasi=document.getElementById('f_lokasi'), f_catatan=document.getElementById('f_catatan');
+let all=[];
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function setHint(m){ hint.hidden=!m; hint.textContent=m||''; if(m) setTimeout(()=>hint.hidden=true,4000); }
+function startOfToday(){const d=new Date();d.setHours(0,0,0,0);return d;}
+function daysLeft(v){if(!v) return null;const d=new Date(v+'T00:00:00');if(isNaN(d.getTime())) return null;return Math.round((d-startOfToday())/86400000);}
+function statusOf(r){const n=daysLeft(r.exp_date);if(n===null) return {key:'none',label:'—'};if(n<0) return {key:'expired',label:'Lewat '+Math.abs(n)+'h'};if(n===0) return {key:'soon',label:'Hari ini'};if(n<=SOON_DAYS) return {key:'soon',label:n+'h lagi'};return {key:'ok',label:n+'h'};}
+function fmtDate(v){if(!v) return '—';const d=new Date(v);if(isNaN(d.getTime())) return v;return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
+function rowHtml(r,i){
+const st=statusOf(r);
+return '<tr data-id="'+r.id+'"><td class="c-no">'+(i+1)+'</td><td class="c-nama"><div class="nama">'+esc(r.name||'—')+'</div></td><td class="c-plu">'+esc(r.plu||'—')+'</td><td class="c-batch">'+esc(r.batch||'—')+'</td><td class="c-exp">'+fmtDate(r.exp_date)+'</td><td class="c-sisa"><span class="badge '+st.key+'">'+esc(st.label)+'</span></td><td class="c-qty">'+esc(r.qty!=null?r.qty:'—')+'</td><td class="c-lokasi">'+esc(r.lokasi||'—')+'</td><td class="c-aksi"><div class="acts"><button class="ico" data-edit="'+r.id+'" title="Edit">✎</button><button class="ico ico-danger" data-del="'+r.id+'" title="Hapus">✕</button></div></td></tr>';
+}
+function render(){
+const q=searchEl.value.trim().toLowerCase();
+const cocok=r=>!q||[r.name,r.plu,r.batch,r.lokasi,r.catatan].some(v=>String(v||'').toLowerCase().includes(q));
+let filtered=all.filter(cocok);
+filtered.sort((a,b)=>{
+const da=daysLeft(a.exp_date), db=daysLeft(b.exp_date);
+const na=da===null?Infinity:da, nb=db===null?Infinity:db;
+if(na!==nb) return na-nb;
+return String(a.name||'').localeCompare(String(b.name||''));
+});
+document.getElementById('allCount').textContent=filtered.length+' PRODUK';
+if(!filtered.length){ listEl.innerHTML='<tr><td colspan="9"><div class="empty">Tidak ada data</div></td></tr>'; }
+else { listEl.innerHTML=filtered.map((r,i)=>rowHtml(r,i)).join(''); }
+const retur=filtered.filter(r=>{const k=statusOf(r).key; return k==='expired'||k==='soon';});
+document.getElementById('returCount').textContent=retur.length+' PRODUK';
+if(!retur.length){ returList.innerHTML='<tr><td colspan="9"><div class="empty">Tidak ada barang retur</div></td></tr>'; }
+else { returList.innerHTML=retur.map((r,i)=>rowHtml(r,i)).join(''); }
+listEl.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editRow(parseInt(b.dataset.edit,10)));
+listEl.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delRow(parseInt(b.dataset.del,10)));
+returList.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editRow(parseInt(b.dataset.edit,10)));
+returList.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delRow(parseInt(b.dataset.del,10)));
+}
+async function load(){
+const{data,error}=await supabase.from(TABLE).select('*').order('exp_date',{ascending:true,nullsFirst:false});
+if(error){ const m=esc(error.message); listEl.innerHTML='<tr><td colspan="9"><div class="empty">'+m+'</div></td></tr>'; returList.innerHTML='<tr><td colspan="9"><div class="empty">'+m+'</div></td></tr>'; return; }
+all=data||[]; render();
+}
+function resetForm(){
+editId.value=''; formLabel.textContent='TAMBAH BARANG EXP'; btnSave.textContent='SIMPAN'; btnBatal.hidden=true;
+[f_name,f_plu,f_batch,f_exp_date,f_qty,f_lokasi,f_catatan].forEach(el=>el.value='');
+}
+function editRow(id){
+const r=all.find(x=>x.id===id); if(!r) return;
+editId.value=r.id;
+f_name.value=r.name||''; f_plu.value=r.plu||''; f_batch.value=r.batch||''; f_exp_date.value=r.exp_date||''; f_qty.value=r.qty!=null?r.qty:''; f_lokasi.value=r.lokasi||''; f_catatan.value=r.catatan||'';
+formLabel.textContent='EDIT — '+(r.name||'#'+r.id); btnSave.textContent='UPDATE'; btnBatal.hidden=false;
+window.scrollTo({top:0,behavior:'smooth'});
+}
+async function delRow(id){
+if(!confirm('Hapus #'+id+'?')) return;
+const{error}=await supabase.from(TABLE).delete().eq('id',id);
+if(error){ setHint(error.message); return; }
+if(parseInt(editId.value)===id) resetForm();
+const baru=await supabase.from(TABLE).select('*').order('exp_date',{ascending:true,nullsFirst:false});
+if(!baru.error){ all=baru.data||[]; render(); } else await load();
+}
+btnSave.onclick=async()=>{
+const name=f_name.value.trim(); if(!name){ setHint('Nama wajib'); f_name.focus(); return; }
+const qtyRaw=f_qty.value.trim();
+const payload={name,plu:f_plu.value.trim()||null,batch:f_batch.value.trim()||null,exp_date:f_exp_date.value||null,qty:qtyRaw===''?null:parseInt(qtyRaw,10),lokasi:f_lokasi.value.trim()||null,catatan:f_catatan.value.trim()||null};
+btnSave.disabled=true;
+let res;
+if(editId.value) res=await supabase.from(TABLE).update(payload).eq('id',parseInt(editId.value)).select();
+else res=await supabase.from(TABLE).insert([payload]).select();
+btnSave.disabled=false;
+if(res.error){ if(/PGRST204|Could not find/i.test(res.error.message||'')) setHint('Tabel exp_items belum ada. Jalankan SQL supabase-schema.sql bagian 9.'); else setHint(res.error.message); return; }
+if(res.data&&res.data[0]){
+if(editId.value){ const idx=all.findIndex(x=>String(x.id)===String(editId.value)); if(idx>-1) all[idx]=res.data[0]; else all.push(res.data[0]); }
+else all.push(res.data[0]);
+render();
+}else await load();
+resetForm();
+};
+btnBatal.onclick=resetForm;
+searchEl.oninput=render;
+let rtTimer=null;
+try{ supabase.channel('exp_admin').on('postgres_changes',{event:'*',schema:'public',table:TABLE},()=>{clearTimeout(rtTimer);rtTimer=setTimeout(()=>load(),400);}).subscribe(); }catch{}
+load();
 </script>
 </body>
 </html>
