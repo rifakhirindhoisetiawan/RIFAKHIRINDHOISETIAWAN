@@ -4,51 +4,90 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
     />
-    <title>OFO</title>
+    <title>OFO — Stok Harian</title>
     <link rel="manifest" href="../../manifest.json" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#fffbf2" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
       }
+      * {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+
+      /* ===== TEMA MORI =====
+         Palet dari public/mori/css/variables.css:
+         bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64 */
+      :root {
+        --mori-bg: #fffbf2;
+        --mori-surface: #f7f3e9;
+        --mori-text: #1a1917;
+        --mori-text-2: #6e6a64;
+        --mori-line: rgba(26, 25, 23, 0.14);
+        --mori-accent: #1a1917;
+        --mori-danger: #b91c1c;
+        --mori-ok: #047857;
+        --mori-warn: #b45309;
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
 
       html,
       body {
         width: 100%;
         height: 100%;
-        background: #ffffff;
+        background: var(--mori-bg);
         overflow: hidden;
+      }
+      /* Scroll dibuka kalau form dipakai, biar keyboard HP tidak menutupi field. */
+      html.scroll-free,
+      body.scroll-free {
+        height: auto;
+        min-height: 100%;
+        overflow: visible;
+      }
+      body.scroll-free .phone {
+        min-height: 100dvh;
+        height: auto;
+        overflow: visible;
+      }
+      body.scroll-free .menu-wrap {
+        overflow: visible;
+        flex: none;
       }
 
       body {
-        font-family:
-          "Segoe UI",
-          system-ui,
-          -apple-system,
-          sans-serif;
+        font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+        color: var(--mori-text);
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
-        align-items: stretch;
-        padding: 0;
-        color: #1f2937;
+        -webkit-font-smoothing: antialiased;
       }
 
       .phone {
         width: 100%;
         max-width: 100%;
-        background: #ffffff;
+        background: var(--mori-bg);
         overflow: hidden;
         display: flex;
         flex-direction: column;
         min-height: 100vh;
       }
-
       @media (min-width: 800px) {
         .phone {
           max-width: 800px;
@@ -56,130 +95,677 @@
         }
       }
 
-      .wrap {
-        flex: 1;
+      /* ===== HEADER ===== */
+      .head-row {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        padding: 24px 18px 48px;
-        max-width: 560px;
+        gap: 9px;
+        padding: 12px 18px 10px;
+        max-width: 800px;
         width: 100%;
         margin: 0 auto;
-        text-align: center;
+        flex-shrink: 0;
       }
-
-      .badge {
-        display: inline-block;
-        font-size: 10px;
-        font-weight: 800;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        padding: 5px 11px;
-        border-radius: 999px;
-        background: #eef2ff;
-        color: #4f46e5;
+      .tgl {
+        flex: 1;
+        min-width: 0;
+        height: 38px;
+        padding: 0 10px;
+        font-family: var(--mori-mono);
+        font-size: 13px;
+        font-weight: 700;
+        background: var(--mori-surface);
+        color: var(--mori-text);
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        -webkit-appearance: none;
+        appearance: none;
+        outline: none;
       }
-
-      .logo {
-        width: 76px;
-        height: 76px;
-        border-radius: 20px;
-        margin: 18px 0 14px;
-        background: linear-gradient(135deg, #a5b4fc, #818cf8);
-        color: #fff;
+      .tgl:focus {
+        background: #fffdf7;
+        box-shadow: 4px 4px 0 var(--mori-accent);
+      }
+      .icon-btn {
+        flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 36px;
+        width: 38px;
+        height: 38px;
+        border: 1px solid var(--mori-accent);
+        background: var(--mori-surface);
+        color: var(--mori-text);
+        text-decoration: none;
+        box-shadow: 2px 2px 0 rgba(26, 25, 23, 0.16);
+        transition: transform 0.12s ease, box-shadow 0.12s ease;
+      }
+      .icon-btn:active {
+        transform: translate(2px, 2px);
+        box-shadow: none;
+      }
+      .icon-btn.solid {
+        background: var(--mori-accent);
+        color: var(--mori-bg);
+      }
+      .icon-btn svg {
+        width: 18px;
+        height: 18px;
       }
 
-      h1 {
-        font-size: 20px;
-        font-weight: 800;
-        margin: 0 0 6px;
-      }
-
-      p {
-        color: #6b7280;
-        font-size: 13px;
-        line-height: 1.6;
-        margin: 0 0 20px;
-      }
-
-      .steps {
+      /* ===== FILTER KATEGORI ===== */
+      .filter-row {
+        display: flex;
+        gap: 6px;
+        padding: 0 18px 12px;
+        max-width: 800px;
         width: 100%;
-        text-align: left;
-        background: #fafbfc;
-        border: 1px solid #e3e6ec;
-        border-radius: 14px;
-        padding: 14px 16px;
-        margin-bottom: 16px;
+        margin: 0 auto;
+        overflow-x: auto;
+        flex-shrink: 0;
       }
-      .steps h2 {
-        font-size: 11px;
+      .chip {
+        flex: 0 0 auto;
+        border: 1px solid var(--mori-accent);
+        background: var(--mori-surface);
+        color: var(--mori-text);
+        font-family: var(--mori-mono);
+        font-size: 10px;
         font-weight: 800;
         letter-spacing: 0.6px;
         text-transform: uppercase;
-        color: #9aa0ab;
-        margin: 0 0 10px;
+        padding: 7px 12px;
+        cursor: pointer;
+        white-space: nowrap;
       }
-      .steps ol {
-        margin: 0;
-        padding-left: 20px;
-        color: #4b5563;
-        font-size: 12px;
-        line-height: 1.9;
-      }
-      .steps code {
-        font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 11px;
-        background: #eef2ff;
-        color: #4f46e5;
-        padding: 2px 6px;
-        border-radius: 6px;
+      .chip.on {
+        background: var(--mori-accent);
+        color: var(--mori-bg);
       }
 
-      .back-btn {
-        display: inline-flex;
-        align-items: center;
+      /* ===== RINGKASAN ===== */
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
         gap: 8px;
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        background: #fff;
-        color: #4f46e5;
-        font-family: inherit;
-        font-size: 14px;
-        font-weight: 700;
-        padding: 12px 18px;
-        text-decoration: none;
+        padding: 0 18px 12px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+        flex-shrink: 0;
       }
-      .back-btn:active {
-        background: #eef2ff;
+      .sum-box {
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-accent);
+        padding: 8px 6px;
+        text-align: center;
+        min-width: 0;
+        box-shadow: 3px 3px 0 rgba(26, 25, 23, 0.12);
+      }
+      .sum-num {
+        font-family: var(--mori-mono);
+        font-size: 17px;
+        font-weight: 800;
+        line-height: 1.2;
+      }
+      .sum-label {
+        font-family: var(--mori-mono);
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: var(--mori-text-2);
+        margin-top: 2px;
+      }
+      .sum-box.in .sum-num {
+        color: var(--mori-ok);
+      }
+      .sum-box.out .sum-num {
+        color: var(--mori-danger);
+      }
+      .sum-box.sisa .sum-num {
+        color: var(--mori-accent);
+      }
+      @media (max-width: 380px) {
+        .summary {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      /* ===== DAFTAR BARANG ===== */
+      .menu-wrap {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0 18px 28px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .section-label {
+        font-family: var(--mori-mono);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        color: var(--mori-text);
+        margin: 4px 0 10px;
+      }
+      .list {
+        display: grid;
+        gap: 9px;
+      }
+
+      .item {
+        border: 1px solid var(--mori-accent);
+        background: var(--mori-bg);
+        padding: 10px 12px;
+        box-shadow: 3px 3px 0 rgba(26, 25, 23, 0.1);
+      }
+      .item-top {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 9px;
+      }
+      .kat {
+        flex-shrink: 0;
+        font-family: var(--mori-mono);
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        padding: 3px 7px;
+        border: 1px solid currentColor;
+        white-space: nowrap;
+      }
+      .kat.buah {
+        color: #15803d;
+      }
+      .kat.sayur {
+        color: #b45309;
+      }
+      .kat.telur {
+        color: #1d4ed8;
+      }
+      .item-main {
+        flex: 1;
+        min-width: 0;
+      }
+      .item-name {
+        font-family: var(--mori-mono);
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        line-height: 1.3;
+        color: var(--mori-text);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .item-meta {
+        font-family: var(--mori-mono);
+        font-size: 9px;
+        font-weight: 600;
+        color: var(--mori-text-2);
+        margin-top: 3px;
+      }
+
+      /* Sisa: angka besar di kanan */
+      .sisa-box {
+        flex-shrink: 0;
+        text-align: right;
+        min-width: 62px;
+      }
+      .sisa-num {
+        font-family: var(--mori-mono);
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 1;
+        color: var(--mori-accent);
+      }
+      .sisa-num.neg {
+        color: var(--mori-danger);
+      }
+      .sisa-num.kosong {
+        color: var(--mori-line);
+      }
+      .sisa-satuan {
+        font-family: var(--mori-mono);
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: var(--mori-text-2);
+        margin-top: 2px;
+      }
+
+      /* Baris input masuk / keluar */
+      .item-aksi {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .aksi-grup {
+        display: flex;
+        align-items: stretch;
+        border: 1px solid var(--mori-accent);
+        background: var(--mori-surface);
+      }
+      .aksi-grup label {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        padding: 0 7px;
+        font-family: var(--mori-mono);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        color: var(--mori-text-2);
+        border-right: 1px solid var(--mori-line);
+      }
+      .aksi-grup.in label {
+        color: var(--mori-ok);
+      }
+      .aksi-grup.out label {
+        color: var(--mori-danger);
+      }
+      .aksi-grup input {
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+        height: 36px;
+        padding: 0 8px;
+        font-family: var(--mori-mono);
+        font-size: 16px;
+        font-weight: 700;
+        background: var(--mori-bg);
+        color: var(--mori-text);
+        border: none;
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+        border-radius: 0;
+      }
+      .aksi-grup input::placeholder {
+        color: #b9b4aa;
+        font-size: 11px;
+      }
+      .aksi-grup:focus-within {
+        box-shadow: 3px 3px 0 var(--mori-accent);
+      }
+
+      .kategori-note {
+        font-family: var(--mori-mono);
+        font-size: 9px;
+        font-weight: 600;
+        color: var(--mori-text-2);
+        margin-top: 7px;
+        line-height: 1.5;
+      }
+      .kategori-note b {
+        color: var(--mori-text);
+        font-weight: 800;
+      }
+
+      .empty {
+        text-align: center;
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--mori-text-2);
+        padding: 40px 16px;
+        border: 1px dashed var(--mori-line);
+      }
+      .hint {
+        font-family: var(--mori-mono);
+        font-size: 10px;
+        line-height: 1.6;
+        color: var(--mori-text-2);
+        margin: 0 0 14px;
+      }
+      .err {
+        text-align: center;
+        font-family: var(--mori-mono);
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--mori-danger);
+        border-left: 3px solid var(--mori-danger);
+        background: #fdf1f1;
+        padding: 8px 10px;
+        margin-bottom: 12px;
+      }
+      .err[hidden] {
+        display: none;
       }
     </style>
   </head>
   <body>
     <div class="phone">
-      <div class="wrap">
-        <span class="badge">Modul</span>
-        <div class="logo">🗂️</div>
-        <h1>OFO</h1>
-        <p>Halaman ini masih kerangka. Isi modulnya nanti.</p>
+      <div class="head-row">
+        <input class="tgl" id="tgl" type="date" aria-label="Pilih tanggal" />
+        <button class="icon-btn" id="btnHariIni" type="button" title="Hari ini" aria-label="Hari ini">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </button>
+        <a class="icon-btn" href="ofo-admin.html" title="Kelola barang" aria-label="Kelola barang">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </a>
+      </div>
 
-        <div class="steps">
-          <h2>Yang perlu disiapkan</h2>
-          <ol>
-            <li>Tentukan isi modul OFO (data apa yang dicatat).</li>
-            <li>Tambah tabel di <code>scripts/build/supabase-schema.sql</code>.</li>
-            <li>Buat halaman admin CRUD di <code>ofo-admin.html</code>.</li>
-            <li>Isi UI di <code>ofo.html</code>.</li>
-            <li>Opsional: ganti thumbnail di <code>index.html</code>.</li>
-          </ol>
-        </div>
+      <div class="filter-row" id="filterRow"></div>
 
-        <a class="back-btn" href="../../index.html">&larr; Dashboard utama</a>
+      <div class="summary">
+        <div class="sum-box"><div class="sum-num" id="sumJenis">0</div><div class="sum-label">Jenis</div></div>
+        <div class="sum-box in"><div class="sum-num" id="sumMasuk">0</div><div class="sum-label">Masuk</div></div>
+        <div class="sum-box out"><div class="sum-num" id="sumKeluar">0</div><div class="sum-label">Keluar</div></div>
+        <div class="sum-box sisa"><div class="sum-num" id="sumSisa">0</div><div class="sum-label">Sisa</div></div>
+      </div>
+
+      <div class="menu-wrap">
+        <p class="err" id="err" hidden></p>
+        <p class="hint">
+          Isi angka di <b>Masuk</b> atau <b>Keluar</b>, lalu tekan Enter.
+          Sisa dihitung otomatis &mdash; today + semua hari sebelumnya.
+        </p>
+        <div class="section-label">Stok Harian &mdash; <span id="count">0</span></div>
+        <div class="list" id="list"></div>
       </div>
     </div>
+
+    <script type="module">
+      import { supabase } from "../kopi/supabase.js";
+
+      const T_ITEM = "ofo_items";
+      const T_STOK = "ofo_stok";
+      const KATEGORI = ["buah", "sayur", "telur"];
+
+      const tglEl = document.getElementById("tgl");
+      const filterRow = document.getElementById("filterRow");
+      const listEl = document.getElementById("list");
+      const countEl = document.getElementById("count");
+      const errEl = document.getElementById("err");
+
+      let items = [];   // katalog barang
+      let stok = [];    // catatan stok (semua tanggal)
+      let kategori = "semua";
+
+      const esc = (s) =>
+        String(s == null ? "" : s).replace(
+          /[&<>"']/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+        );
+
+      const tglISOD = (d) =>
+        String(d.getFullYear()) + "-" +
+        String(d.getMonth() + 1).padStart(2, "0") + "-" +
+        String(d.getDate()).padStart(2, "0");
+
+      function tampilErr(m) {
+        errEl.hidden = !m;
+        errEl.textContent = m || "";
+      }
+
+      function scrollLock(aktif) {
+        document.documentElement.classList.toggle("scroll-free", aktif);
+        document.body.classList.toggle("scroll-free", aktif);
+      }
+
+      /* ===== Sisa per barang =====
+         Sisa = SEMUA masuk sampai tanggal terpilih dikurangi semua keluar.
+         Stok tidak disimpan terpisah, selalu dihitung ulang dari ofo_stok,
+         jadi tidak mungkin basi kalau ada data yang dikoreksi. */
+      function hitungSisa(itemId, sampai) {
+        let masuk = 0, keluar = 0;
+        for (const s of stok) {
+          if (s.item_id !== itemId) continue;
+          if (s.tanggal > sampai) continue;
+          masuk += Number(s.masuk) || 0;
+          keluar += Number(s.keluar) || 0;
+        }
+        return { masuk, keluar, sisa: masuk - keluar };
+      }
+
+      // Catatan stok untuk satu barang pada tanggal tertentu.
+      function stokHariIni(itemId, tanggal) {
+        return stok.find((s) => s.item_id === itemId && s.tanggal === tanggal) || null;
+      }
+
+      function renderFilter() {
+        const chips = [{ key: "semua", label: "Semua" }]
+          .concat(KATEGORI.map((k) => ({ key: k, label: k })))
+          .concat([{ key: "habis", label: "Sisa ≤ 0" }]);
+        filterRow.innerHTML = chips
+          .map(
+            (c) =>
+              '<button type="button" class="chip' + (c.key === kategori ? " on" : "") +
+              '" data-k="' + c.key + '">' + c.label + "</button>"
+          )
+          .join("");
+        filterRow.querySelectorAll(".chip").forEach((chip) => {
+          chip.addEventListener("click", () => {
+            kategori = chip.dataset.k;
+            renderFilter();
+            renderList();
+          });
+        });
+      }
+
+      function itemHtml(it) {
+        const tanggal = tglEl.value;
+        const h = hitungSisa(it.id, tanggal);
+        const hari = stokHariIni(it.id, tanggal);
+        const masuk = hari ? Number(hari.masuk) || 0 : 0;
+        const keluar = hari ? Number(hari.keluar) || 0 : 0;
+        const sisaCls = h.sisa < 0 ? "neg" : h.masuk + h.keluar === 0 ? "kosong" : "";
+
+        const meta = [
+          "Sisa total " + h.sisa + " " + it.satuan,
+          it.harga ? "Rp " + Number(it.harga).toLocaleString("id-ID") + "/" + it.satuan : null,
+        ]
+          .filter(Boolean)
+          .join(" \u00b7 ");
+
+        return (
+          '<div class="item" data-id="' + it.id + '">'
+          + '<div class="item-top">'
+            + '<span class="kat ' + esc(it.kategori) + '">' + esc(it.kategori) + "</span>"
+            + '<div class="item-main">'
+              + '<div class="item-name">' + esc(it.nama) + "</div>"
+              + '<div class="item-meta">' + esc(meta) + "</div>"
+            + "</div>"
+            + '<div class="sisa-box">'
+              + '<div class="sisa-num ' + sisaCls + '">' + h.sisa + "</div>"
+              + '<div class="sisa-satuan">' + esc(it.satuan) + "</div>"
+            + "</div>"
+          + "</div>"
+          + '<div class="item-aksi">'
+            + '<div class="aksi-grup in"><label>Masuk</label>'
+              + '<input type="number" step="0.01" min="0" inputmode="decimal" data-kol="masuk" value="' +
+              (masuk || "") + '" placeholder="0" aria-label="Stok masuk ' + esc(it.nama) + '" /></div>'
+            + '<div class="aksi-grup out"><label>Keluar</label>'
+              + '<input type="number" step="0.01" min="0" inputmode="decimal" data-kol="keluar" value="' +
+              (keluar || "") + '" placeholder="0" aria-label="Stok keluar ' + esc(it.nama) + '" /></div>'
+          + "</div>"
+        + "</div>"
+        );
+      }
+
+      function renderList() {
+        const tanggal = tglEl.value;
+        const q = (searchQ || "").toLowerCase();
+
+        let list = items.filter((it) => {
+          if (kategori === "habis") {
+            if (hitungSisa(it.id, tanggal).sisa > 0) return false;
+          } else if (kategori !== "semua") {
+            if (it.kategori !== kategori) return false;
+          }
+          if (q && !String(it.nama || "").toLowerCase().includes(q)) return false;
+          return true;
+        });
+
+        // Habis dulu, lalu sisa terkecil -> yang paling butuh attention.
+        list.sort((a, b) => {
+          const sa = hitungSisa(a.id, tanggal).sisa;
+          const sb = hitungSisa(b.id, tanggal).sisa;
+          if (sa !== sb) return sa - sb;
+          return String(a.nama).localeCompare(String(b.nama));
+        });
+
+        // Ringkasan ikut filter kategori (bukan ikut pencarian).
+        const dasar = items.filter((it) =>
+          kategori === "semua" || it.kategori === kategori
+        );
+        let tm = 0, tk = 0;
+        for (const it of dasar) {
+          const h = hitungSisa(it.id, tanggal);
+          tm += h.masuk;
+          tk += h.keluar;
+        }
+        document.getElementById("sumJenis").textContent = dasar.length;
+        document.getElementById("sumMasuk").textContent = tm;
+        document.getElementById("sumKeluar").textContent = tk;
+        document.getElementById("sumSisa").textContent = tm - tk;
+
+        countEl.textContent = list.length;
+        if (!list.length) {
+          listEl.innerHTML =
+            '<div class="empty">Belum ada barang. Tambah dulu di menu Kelola Barang.</div>';
+          return;
+        }
+        listEl.innerHTML = list.map(itemHtml).join("");
+      }
+
+      let searchQ = "";
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") scrollLock(false);
+      });
+
+      /* ===== Simpan stok harian =====
+         Tabel ofo_stok punya unique (item_id, tanggal), jadi satu barang satu
+         baris per tanggal: INSERT kalau belum ada, UPDATE kalau sudah. */
+      async function simpanStok(itemId, kolom, nilai) {
+        const tanggal = tglEl.value;
+        const n = parseFloat(String(nilai).replace(",", "."));
+        const v = Number.isFinite(n) && n > 0 ? n : 0;
+
+        const lain = kolom === "masuk" ? "keluar" : "masuk";
+        const ada = stokHariIni(itemId, tanggal);
+        const payload = {};
+        payload[kolom] = v;
+        payload[lain] = ada ? Number(ada[lain]) || 0 : 0;
+
+        let res;
+        if (ada) {
+          res = await supabase.from(T_STOK).update(payload).eq("id", ada.id).select();
+        } else {
+          payload.item_id = itemId;
+          payload.tanggal = tanggal;
+          res = await supabase.from(T_STOK).insert([payload]).select();
+        }
+
+        if (res.error) {
+          // Balikin nilai input supaya user tahu gagal.
+          tampilErr("Gagal simpan: " + res.error.message);
+          renderList();
+          return;
+        }
+        tampilErr("");
+
+        // Update cache lokal supaya angka langsung berubah tanpa query ulang.
+        if (res.data && res.data[0]) {
+          const idx = stok.findIndex(
+            (s) => s.item_id === itemId && s.tanggal === tanggal
+          );
+          if (idx > -1) stok[idx] = res.data[0];
+          else stok.push(res.data[0]);
+        }
+        renderList();
+      }
+
+      // Enter di input = simpan. Jangan simpan tiap ketik, itu terlalu banyak
+      // request ke Supabase.
+      listEl.addEventListener("keydown", (e) => {
+        const input = e.target.closest("input[data-kol]");
+        if (!input || e.key !== "Enter") return;
+        e.preventDefault();
+        const itemId = Number(input.closest(".item").dataset.id);
+        simpanStok(itemId, input.dataset.kol, input.value);
+      });
+
+      // Fokus -> buka scroll lock supaya keyboard tidak menutupi input.
+      listEl.addEventListener(
+        "focusin",
+        (e) => {
+          if (e.target.closest("input[data-kol]")) scrollLock(true);
+        },
+        true
+      );
+      listEl.addEventListener(
+        "focusout",
+        (e) => {
+          if (e.target.closest("input[data-kol]")) setTimeout(() => scrollLock(false), 150);
+        },
+        true
+      );
+
+      async function load() {
+        try {
+          const [a, b] = await Promise.all([
+            supabase.from(T_ITEM).select("*").order("kategori").order("nama"),
+            supabase.from(T_STOK).select("*"),
+          ]);
+          if (a.error) throw a.error;
+          if (b.error) throw b.error;
+          items = a.data || [];
+          stok = b.data || [];
+          tampilErr("");
+        } catch (e) {
+          items = [];
+          stok = [];
+          const pesan = String((e && e.message) || e);
+          tampilErr(
+            /relation .* does not exist/i.test(pesan)
+              ? "Tabel OFO belum ada. Jalankan scripts/build/ofo-setup.sql di Supabase > SQL Editor."
+              : "Gagal memuat: " + pesan
+          );
+        }
+        renderList();
+      }
+
+      tglEl.addEventListener("change", () => {
+        renderList();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+      document.getElementById("btnHariIni").addEventListener("click", () => {
+        tglEl.value = tglISOD(new Date());
+        renderList();
+      });
+
+      tglEl.value = tglISOD(new Date());
+      renderFilter();
+      renderList();
+      load();
+
+      // Realtime: stok atau katalog berubah di perangkat lain -> langsung sinkron.
+      let rtTimer = null;
+      const reload = () => {
+        clearTimeout(rtTimer);
+        rtTimer = setTimeout(() => load(), 400);
+      };
+      try {
+        supabase
+          .channel("ofo_stok_changes")
+          .on("postgres_changes", { event: "*", schema: "public", table: T_STOK }, reload)
+          .on("postgres_changes", { event: "*", schema: "public", table: T_ITEM }, reload)
+          .subscribe();
+      } catch (e) {
+        /* realtime tidak wajib */
+      }
+    </script>
   </body>
 </html>

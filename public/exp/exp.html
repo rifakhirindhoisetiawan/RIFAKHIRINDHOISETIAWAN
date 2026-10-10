@@ -11,7 +11,15 @@
 *{box-sizing:border-box;margin:0;padding:0}
 *{scrollbar-width:none;-ms-overflow-style:none}::-webkit-scrollbar{width:0;height:0}
 :root{--mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;--mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;--mori-mono:"JetBrains Mono",ui-monospace,monospace}
+/* ---- Scroll lock, tapi dik.Unlock saat form tambah aktif ----
+   Panel EXP dikunci agar terlihat seperti app shell. Tapi begitu keyboard HP
+   terbuka (user tap PLU/Nama), browser tidak bisa men-scroll field yang
+   difokuskan -> tampilan berantakan. Karena itu scroll dibuka lagi selama
+   panel tambah terbuka. */
 html,body{width:100%;height:100%;background:var(--mori-bg);overflow:hidden}
+html.scroll-free,body.scroll-free{height:auto;min-height:100%;overflow:visible}
+body.scroll-free .phone{min-height:100dvh;height:auto;overflow:visible}
+body.scroll-free .menu-wrap{overflow:visible;flex:none}
 body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var(--mori-text);min-height:100vh;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:0;-webkit-font-smoothing:antialiased}
 .phone{width:100%;max-width:100%;background:var(--mori-bg);overflow:hidden;display:flex;flex-direction:column;min-height:100vh}
 @media(min-width:800px){.phone{max-width:800px;margin:0 auto}}
@@ -21,12 +29,14 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:var(--mori-text);font-family:inherit;-webkit-appearance:none;appearance:none}
 .search-box input::placeholder,.search-box svg{color:var(--mori-text-2)}
 .search-box svg{flex-shrink:0;width:18px;height:18px}
-.admin-btn{flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--mori-accent);background:var(--mori-accent);color:var(--mori-bg);width:38px;height:38px;text-decoration:none;box-shadow:2px 2px 0 rgba(26,25,23,.16);transition:transform .12s ease,box-shadow .12s ease}
-.admin-btn:active{transform:translate(2px,2px);box-shadow:none}
 .filter-row{display:flex;gap:6px;padding:0 18px 12px;max-width:800px;width:100%;margin:0 auto;overflow-x:auto}
 .chip{flex:0 0 auto;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:7px 12px;cursor:pointer;white-space:nowrap;transition:background .12s ease,color .12s ease}
 .chip.on{background:var(--mori-accent);border-color:var(--mori-accent);color:var(--mori-bg)}
 .summary{display:flex;gap:8px;padding:0 18px 14px;max-width:800px;width:100%;margin:0 auto}
+.t-summary{background:var(--mori-accent);color:var(--mori-bg);border:1px solid var(--mori-accent);padding:8px 10px;text-align:center;min-width:0;box-shadow:3px 3px 0 rgba(26,25,23,.12);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+.t-summary:active{transform:translate(2px,2px);box-shadow:none}
+.t-summary .sum-num{font-family:var(--mori-mono);font-size:18px;font-weight:800;line-height:1.2}
+.t-summary .sum-label{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:rgba(255,251,242,.75);margin-top:2px}
 .sum-box{flex:1;background:var(--mori-surface);border:1px solid var(--mori-accent);padding:8px 10px;text-align:center;min-width:0;box-shadow:3px 3px 0 rgba(26,25,23,.12)}
 .sum-num{font-family:var(--mori-mono);font-size:18px;font-weight:800;line-height:1.2}
 .sum-label{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text-2);margin-top:2px}
@@ -51,6 +61,66 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 .badge.ok{background:#1a1917;color:var(--mori-bg)}
 .badge.none{background:var(--mori-surface);color:var(--mori-text-2)}
 .empty{text-align:center;font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text-2);padding:40px 0}
+
+/* ===== TAMBAH CEPAT =====
+   Form tambah produk langsung di halaman utama, jadi tidak perlu masuk
+   ke admin dulu. Field & aturan RH sama persis dengan exp-admin.html:
+   isi RH -> tanggal expired dihitung otomatis, dan sebaliknya. */
+.tambah-btn{flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-accent);width:38px;height:38px;font-family:var(--mori-mono);font-size:19px;font-weight:800;line-height:1;cursor:pointer;box-shadow:2px 2px 0 rgba(26,25,23,.16);transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+.tambah-btn:active{transform:translate(2px,2px);box-shadow:none}
+.tambah-btn.on{background:var(--mori-accent);color:var(--mori-bg)}
+#tambahPanel{display:none;padding:0 18px 14px;max-width:800px;width:100%;margin:0 auto}
+#tambahPanel.on{display:block}
+/* Panel yang terbuka menggeser isi. Jangan sampai ada "lompatan" layout
+   saat dibuka -> tinggi minimal biar transisinya halus. */
+#tambahPanel{animation:panelIn .16s ease-out}
+@keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+/* Fokus: outline browser dihilangkan (sudah ada box-shadow), tapi
+   scrollIntoView dipakai supaya field selalu terlihat di atas keyboard. */
+.t-input:focus{background:#fffdf7;box-shadow:3px 3px 0 var(--mori-accent)}
+.tambah-box{border:1px solid var(--mori-accent);background:var(--mori-surface);padding:12px 14px 14px}
+.tambah-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:420px){.tambah-grid{grid-template-columns:1fr}}
+.tambah-grid label{display:flex;flex-direction:column;gap:4px;min-width:0}
+.tambah-grid label>span{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text-2)}
+.t-input{width:100%;height:36px;padding:0 9px;font-family:var(--mori-mono);font-size:16px;font-weight:700;background:var(--mori-bg);border:1px solid var(--mori-accent);outline:none;-webkit-appearance:none;appearance:none;border-radius:0;color:var(--mori-text)}
+.t-input:focus{background:#fffdf7;box-shadow:3px 3px 0 var(--mori-accent)}
+.t-ket{margin-top:9px;font-family:var(--mori-mono);font-size:9px;font-weight:600;line-height:1.6;color:var(--mori-text-2)}
+.t-ket b{color:var(--mori-text);font-weight:800}
+.t-aksi{display:flex;gap:9px;margin-top:10px}
+.t-btn{flex:1;height:38px;border:1px solid var(--mori-accent);background:var(--mori-accent);color:var(--mori-bg);font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+.t-btn:active{transform:translate(1px,1px)}
+.t-btn.ghost{background:var(--mori-bg);color:var(--mori-text)}
+.t-msg{margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;border-left:3px solid var(--mori-accent);background:#fffdf7;padding:6px 8px;color:var(--mori-text)}
+.t-msg[hidden]{display:none}
+.t-msg.err{border-color:var(--mori-danger);background:#fdf1f1;color:var(--mori-danger)}
+.t-msg.ok{border-color:#047857;background:#f0fdf4;color:#047857}
+
+/* ===== NOTIFIKASI DEKAT EXPIRED =====
+   Tiga lapis:
+   1. Kotak "Dekat" di baris summary -> selalu kelihatan, tanpa izin apa pun
+   2. Panel daftar barang yang harus ditindak
+   3. System notification + badge ikon PWA (opsional, perlu izin) */
+#alertBox{margin:0 18px 14px;max-width:800px;width:100%;margin-left:auto;margin-right:auto;border:1px solid var(--mori-danger);background:#fdf1f1;box-shadow:4px 4px 0 rgba(185,28,28,.18)}
+#alertBox[hidden]{display:none}
+.alert-head{display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid var(--mori-danger);background:var(--mori-danger);color:#fff}
+.alert-title{flex:1;min-width:0;font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.alert-x{flex-shrink:0;width:22px;height:22px;border:1px solid #fff;background:transparent;color:#fff;font-family:var(--mori-mono);font-size:14px;font-weight:800;line-height:1;cursor:pointer}
+.alert-list{max-height:220px;overflow-y:auto;padding:8px 12px;display:grid;gap:7px}
+.alert-row{display:flex;align-items:center;gap:9px;padding:7px 9px;background:#fff;border:1px solid rgba(185,28,28,.28);border-left:3px solid var(--mori-danger)}
+.alert-row.soon{border-left-color:#b45309}
+.alert-main{flex:1;min-width:0}
+.alert-name{font-family:var(--mori-mono);font-size:10px;font-weight:800;text-transform:uppercase;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mori-text)}
+.alert-meta{font-family:var(--mori-mono);font-size:9px;font-weight:600;color:var(--mori-text-2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.alert-tag{flex-shrink:0;font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 7px;border:1px solid currentColor;white-space:nowrap}
+.alert-tag.expired{background:var(--mori-danger);color:#fff;border-color:var(--mori-danger)}
+.alert-tag.soon{background:#b45309;color:#fff;border-color:#b45309)}
+.alert-aksi{display:flex;gap:8px;padding:9px 12px;border-top:1px solid rgba(185,28,28,.22)}
+.alert-btn{flex:1;height:34px;border:1px solid var(--mori-danger);background:var(--mori-danger);color:#fff;font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;cursor:pointer}
+.alert-btn:active{transform:translate(1px,1px)}
+.alert-btn.ghost{background:#fff;color:var(--mori-danger)}
+.alert-btn:disabled{opacity:.5;cursor:default;transform:none}
+.alert-kosong{padding:14px 4px;text-align:center;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--mori-text-2)}
 </style>
 </head>
 <body>
@@ -58,17 +128,45 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 <div class="search-row">
 <div class="search-box">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-<input id="searchInput" type="text" placeholder="Cari produk / PLU / batch..." oninput="renderList()" autocomplete="off" />
+<input id="searchInput" type="text" placeholder="Cari produk / PLU..." oninput="renderList()" autocomplete="off" />
 </div>
-<a class="admin-btn" href="exp-admin.html" title="Kelola produk" aria-label="Kelola produk">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-</a>
+<button class="tambah-btn" id="btnTambah" type="button" title="Tambah produk" aria-label="Tambah produk" aria-expanded="false">+</button>
+</div>
+<div id="tambahPanel">
+<div class="tambah-box">
+<div class="tambah-grid">
+<label><span>PLU</span><input class="t-input" id="t_plu" type="text" inputmode="numeric" placeholder="443771" autocomplete="off" /></label>
+<label><span>NAMA *</span><input class="t-input" id="t_name" type="text" placeholder="Teh Pucuk 350ml" autocomplete="off" /></label>
+<label><span>EXP KAPAN</span><input class="t-input" id="t_exp" type="date" /></label>
+<label><span>RH (HARI)</span><input class="t-input" id="t_rh" type="number" step="1" inputmode="numeric" placeholder="30" autocomplete="off" /></label>
+</div>
+<p class="t-ket">Isi <b>RH</b> -&gt; tanggal expired dihitung sendiri (hari ini + RH). Isi <b>Exp Kapan</b> -&gt; RH dihitung dari tanggal itu.</p>
+<div class="t-aksi">
+<button class="t-btn" id="t_simpan" type="button">SIMPAN</button>
+<button class="t-btn ghost" id="t_batal" type="button">BATAL</button>
+</div>
+<p class="t-msg" id="t_msg" hidden></p>
+</div>
 </div>
 <div class="filter-row" id="filterRow"></div>
 <div class="summary">
 <div class="sum-box danger"><div class="sum-num" id="sumExpired">0</div><div class="sum-label">Lewat</div></div>
 <div class="sum-box warn"><div class="sum-num" id="sumSoon">0</div><div class="sum-label">≤ 30 Hari</div></div>
 <div class="sum-box ok"><div class="sum-num" id="sumOk">0</div><div class="sum-label">Aman</div></div>
+<button class="t-summary" id="sumAlert" type="button" title="Notifikasi barang mendekati expired">
+<div class="sum-num" id="sumAlertN">0</div><div class="sum-label">Dekat</div>
+</button>
+</div>
+<div id="alertBox" hidden>
+<div class="alert-head">
+<div class="alert-title" id="alertTitle">Barang Mendekati Expired</div>
+<button class="alert-x" id="alertClose" type="button" title="Tutup" aria-label="Tutup">&times;</button>
+</div>
+<div class="alert-list" id="alertList"></div>
+<div class="alert-aksi">
+<button class="alert-btn" id="alertNotif" type="button">AKTIFKAN NOTIFIKASI</button>
+<button class="alert-btn ghost" id="alertTutup" type="button">TUTUP</button>
+</div>
 </div>
 <div class="menu-wrap">
 <div class="section-label">Daftar Produk — <span id="count">0</span></div>
@@ -95,11 +193,11 @@ function daysLeft(expDate){if(!expDate) return null;const d=new Date(expDate+'T0
 function statusOf(row){const left=daysLeft(row.exp_date);if(left===null) return {key:'none',label:'—',days:null};if(left<0) return {key:'expired',label:'Lewat '+Math.abs(left)+'h',days:left};if(left===0) return {key:'soon',label:'Hari ini',days:0};if(left<=SOON_DAYS) return {key:'soon',label:left+'h lagi',days:left};return {key:'ok',label:left+'h',days:left};}
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmtDate(v){if(!v) return '-';const d=new Date(v);if(isNaN(d.getTime())) return v;return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});}
-function rowHtml(r){const st=statusOf(r);const meta=[];if(r.plu) meta.push('PLU '+r.plu);if(r.batch) meta.push('Batch '+r.batch);if(r.lokasi) meta.push(r.lokasi);if(r.qty!=null) meta.push('Qty '+r.qty);return '<div class="row '+(st.key==='expired'?'expired':st.key==='soon'?'soon':'')+'"><div class="row-main"><div class="row-name">'+esc(r.name)+'</div><div class="row-meta"><span>Exp '+fmtDate(r.exp_date)+'</span>'+meta.map(m=>'<span>'+esc(m)+'</span>').join('')+'</div>'+(r.catatan?'<div class="row-note">'+esc(r.catatan)+'</div>':'')+'</div><div class="badge '+st.key+'">'+esc(st.label)+'</div></div>';}
+function rowHtml(r){const st=statusOf(r);const meta=[];if(r.plu) meta.push('PLU '+r.plu);if(r.rh!=null) meta.push('RH '+r.rh+'h');return '<div class="row '+(st.key==='expired'?'expired':st.key==='soon'?'soon':'')+'"><div class="row-main"><div class="row-name">'+esc(r.name)+'</div><div class="row-meta"><span>Exp '+fmtDate(r.exp_date)+'</span>'+meta.map(m=>'<span>'+esc(m)+'</span>').join('')+'</div></div><div class="badge '+st.key+'">'+esc(st.label)+'</div></div>';}
 function renderList(){
 const q=searchInput.value.trim().toLowerCase();
 const matched=items.filter(r=>{
-if(q){const hay=[r.name,r.plu,r.batch,r.lokasi,r.catatan].filter(Boolean).join(' ').toLowerCase();if(!hay.includes(q)) return false;}
+if(q){const hay=[r.name,r.plu].filter(Boolean).join(' ').toLowerCase();if(!hay.includes(q)) return false;}
 if(filter==='all') return true;
 return statusOf(r).key===filter;
 });
@@ -116,17 +214,268 @@ document.getElementById('sumExpired').textContent=all.filter(r=>statusOf(r).key=
 document.getElementById('sumSoon').textContent=all.filter(r=>statusOf(r).key==='soon').length;
 document.getElementById('sumOk').textContent=all.filter(r=>statusOf(r).key==='ok').length;
 countEl.textContent=matched.length;
-if(!matched.length){listEl.innerHTML='<div class="empty">Tidak ada data</div>';return;}
-listEl.innerHTML=matched.map(rowHtml).join('');
+ if(!matched.length){listEl.innerHTML='<div class="empty">Tidak ada data</div>';renderAlert();updateNotifikasi();return;}
+ listEl.innerHTML=matched.map(rowHtml).join('');
+ renderAlert();
+ updateNotifikasi();
 }
 async function load(){
 try{const{data,error}=await supabase.from(TABLE).select('*').order('exp_date',{ascending:true,nullsFirst:false});if(error) throw error;items=data||[];}catch(e){console.warn('Supabase '+TABLE+' fallback',e&&e.message);items=[];}
 renderList();
 }
-renderList();load();
 let rtTimer=null;
 try{supabase.channel('exp_items_changes').on('postgres_changes',{event:'*',schema:'public',table:TABLE},()=>{clearTimeout(rtTimer);rtTimer=setTimeout(()=>load(),400);}).subscribe();}catch(e){}
 window.renderList=renderList;
+
+/* ==========================================================================
+   NOTIFIKASI BARANG MENDEKATI EXPIRED
+   Ambang batas: ALERT_DAYS hari ke depan (bisa diubah di bawah).
+   Lapisan:
+     - Badge "Dekat" di baris summary  -> selalu jalan, tanpa izin
+     - Panel daftar                   -> opened by user
+     - Badge ikon PWA                 -> kalu browser dukung Badging API
+     - System notification            -> kalu user memberi izin
+   Notifikasi sistem TIDAK diulang tiap load: kuncinya disimpan di
+   localStorage, jadi tidak spam setiap kali halaman dibuka.
+   ========================================================================== */
+const ALERT_DAYS=30;
+const NOTIF_KEY='mylove_exp_notif_v1';
+
+const sumAlert=document.getElementById('sumAlert'),
+      sumAlertN=document.getElementById('sumAlertN'),
+      alertBox=document.getElementById('alertBox'),
+      alertList=document.getElementById('alertList'),
+      alertTitle=document.getElementById('alertTitle'),
+      alertClose=document.getElementById('alertClose'),
+      alertTutup=document.getElementById('alertTutup'),
+      alertNotif=document.getElementById('alertNotif');
+
+// Barang yang sudah lewat / mau lewat dalam ALERT_DAYS hari.
+function barangDekat(){
+  return items.map(r=>({r:r,st:statusOf(r)}))
+    .filter(x=>x.st.key==='expired'||x.st.key==='soon')
+    .sort((a,b)=>(a.st.days===null?Infinity:a.st.days)-(b.st.days===null?Infinity:b.st.days));
+}
+
+function renderAlert(){
+  const dekat=barangDekat();
+  const n=dekat.length;
+  sumAlertN.textContent=n;
+  sumAlert.hidden=false;
+  if(!n){ alertBox.hidden=true; if(!panel.classList.contains('on')) scrollLock(false); return; }
+
+  const lewat=dekat.filter(x=>x.st.key==='expired').length;
+  alertTitle.textContent=(lewat?lewat+' Lewat · ':'')+(n-lewat)+' Dekat Expired';
+
+  alertList.innerHTML=dekat.map(({r,st})=>{
+    const meta=[r.plu?'PLU '+r.plu:'',r.exp_date?'Exp '+fmtDate(r.exp_date):''].filter(Boolean).join(' · ');
+    return '<div class="alert-row '+(st.key==='soon'?'soon':'')+'">'
+      +'<div class="alert-main"><div class="alert-name">'+esc(r.name||'—')+'</div>'
+      +'<div class="alert-meta">'+esc(meta||'—')+'</div></div>'
+      +'<span class="alert-tag '+st.key+'">'+esc(st.label)+'</span></div>';
+  }).join('');
+}
+
+/* Buka/tutup panel.
+   Scroll lock dilepas saat panel aktif — inilah yang bikin tampilan berantakan
+   pas keyboard HP terbuka: halaman terkunci, browser tidak bisa_naik ke field
+   yang sedang difokuskan. */
+function scrollLock(aktif){
+  document.documentElement.classList.toggle('scroll-free',aktif);
+  document.body.classList.toggle('scroll-free',aktif);
+}
+function alertBuka(v){ alertBox.hidden=!v; sumAlert.classList.toggle('on',v); if(v) scrollLock(true); }
+sumAlert.addEventListener('click',()=>alertBuka(alertBox.hidden));
+alertClose.addEventListener('click',()=>alertBuka(false));
+alertTutup.addEventListener('click',()=>alertBuka(false));
+
+/* ---- Badge ikon PWA (Badging API): Android/Chrome, tanpa izin ---- */
+function setBadge(n){
+  try{
+    if(navigator.setAppBadge) navigator.setAppBadge(n>0?n:0);
+    else if(navigator.clearAppBadge) navigator.clearAppBadge();
+  }catch(e){}
+}
+
+/* ---- System notification: butuh izin, dan hanya sekali per perubahan ---- */
+function notifIzin(){
+  return typeof Notification!=='undefined' && Notification.permission==='granted';
+}
+function setTombolNotif(){
+  if(typeof Notification==='undefined'){ alertNotif.textContent='NOTIFIKASI TIDAK DIDUKUNG'; alertNotif.disabled=true; return; }
+  if(Notification.permission==='granted'){ alertNotif.textContent='NOTIFIKASI AKTIF'; alertNotif.disabled=true; return; }
+  if(Notification.permission==='denied'){ alertNotif.textContent='NOTIFIKASI DITOLAK BROWSER'; alertNotif.disabled=true; return; }
+  alertNotif.textContent='AKTIFKAN NOTIFIKASI';
+  alertNotif.disabled=false;
+}
+alertNotif.addEventListener('click',async()=>{
+  if(typeof Notification==='undefined') return;
+  try{
+    const p=await Notification.requestPermission();
+    setTombolNotif();
+    if(p==='granted') kirimNotif(true);
+  }catch(e){}
+});
+
+function kirimNotif(manual){
+  if(!notifIzin()) return;
+  const dekat=barangDekat();
+  if(!dekat.length){ setBadge(0); return; }
+  const lewat=dekat.filter(x=>x.st.key==='expired').length;
+  // Kunci: nama3 barang terdekat + jumlah. Kalau sama seperti pesan lalu,
+  // tidak dikirim ulang supaya tidak spam.
+  const kunci=dekat.slice(0,3).map(x=>(x.r.name||'')+'@'+x.st.label).join('|')+'#'+dekat.length;
+  let lalu=null;
+  try{ lalu=localStorage.getItem(NOTIF_KEY); }catch(e){}
+  if(!manual&&lalu===kunci) return;
+  try{ localStorage.setItem(NOTIF_KEY,kunci); }catch(e){}
+
+  const judul=lewat?('⚠ '+lewat+' barang lewat expired'):('⏳ '+dekat.length+' barang mendekati expired');
+  const isi=dekat.slice(0,3).map(x=>(x.r.name||'—')+' ('+x.st.label+')').join('\n')
+    +(dekat.length>3?'\n+'+(dekat.length-3)+' lainnya':'');
+  try{
+    if(navigator.serviceWorker&&navigator.serviceWorker.ready){
+      navigator.serviceWorker.ready.then(reg=>{
+        if(reg.showNotification) reg.showNotification(judul,{body:isi,tag:'exp-dekat',badge:'assets/images/favicon.png',icon:'assets/images/favicon.png'});
+        else new Notification(judul,{body:isi,tag:'exp-dekat'});
+      }).catch(()=>{ try{ new Notification(judul,{body:isi,tag:'exp-dekat'}); }catch(e){} });
+    } else {
+      new Notification(judul,{body:isi,tag:'exp-dekat'});
+    }
+  }catch(e){}
+}
+
+// Panggil semua sal notified setiap data berubah.
+function updateNotifikasi(){
+  const n=barangDekat().length;
+  sumAlertN.textContent=n;
+  setBadge(n);
+  if(alertBox.hidden===false) renderAlert();
+  else{
+    const dekat=barangDekat();
+    if(dekat.length){
+      const lewat=dekat.filter(x=>x.st.key==='expired').length;
+      alertTitle.textContent=(lewat?lewat+' Lewat · ':'')+(dekat.length-lewat)+' Dekat Expired';
+    }
+  }
+  kirimNotif(false);
+}
+
+/* ==========================================================================
+   TAMBAH CEPAT — simpan langsung ke Supabase dari halaman utama.
+   Field & aturan RH identik dengan exp-admin.html supaya tidak perlu
+   masuk admin cuma untuk nambah satu barang.
+   ========================================================================== */
+const btnTambah=document.getElementById('btnTambah'),
+      panel=document.getElementById('tambahPanel'),
+      t_plu=document.getElementById('t_plu'),
+      t_name=document.getElementById('t_name'),
+      t_exp=document.getElementById('t_exp'),
+      t_rh=document.getElementById('t_rh'),
+      t_msg=document.getElementById('t_msg'),
+      t_simpan=document.getElementById('t_simpan'),
+      t_batal=document.getElementById('t_batal');
+
+let HAS_RH_T=true;   // kolom rh mungkin belum ada di DB (lihat exp-items-setup.sql)
+
+function tglISOD(d){return String(d.getFullYear())+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function tglDariRh(rh){const n=parseInt(rh,10);if(!Number.isFinite(n)) return '';const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+n);return tglISOD(d);}
+function rhDariTgl(v){if(!v) return '';const d=new Date(v+'T00:00:00');if(isNaN(d.getTime())) return '';const t=new Date();t.setHours(0,0,0,0);return Math.round((d-t)/86400000);}
+
+function tMsg(pesan, jenis){
+ t_msg.textContent=pesan||'';
+ t_msg.className='t-msg'+(jenis?' '+jenis:'');
+ t_msg.hidden=!pesan;
+ clearTimeout(tMsg._t);
+ if(pesan) tMsg._t=setTimeout(()=>{t_msg.hidden=true;},4000);
+}
+
+btnTambah.addEventListener('click',()=>{
+ const buka=!panel.classList.contains('on');
+ panel.classList.toggle('on',buka);
+ btnTambah.classList.toggle('on',buka);
+ btnTambah.setAttribute('aria-expanded',String(buka));
+ scrollLock(buka||!alertBox.hidden);
+ if(buka){ tMsg(''); fokusKe(t_plu); }
+});
+t_batal.addEventListener('click',()=>{
+ panel.classList.remove('on');
+ btnTambah.classList.remove('on');
+ btnTambah.setAttribute('aria-expanded','false');
+ t_plu.value='';t_name.value='';t_exp.value='';t_rh.value='';tMsg('');
+ scrollLock(!alertBox.hidden);
+});
+
+/* Fokus + pastikan field terlihat di atas keyboard HP.
+   scrollIntoView harus jalan SETELAH keyboard naik, jadi diulang beberapa
+   kali dengan jeda — percobaan pertama sering gagal karena viewport masih
+   setinggi layar penuh saat keyboard sedang membuka. */
+function fokusKe(el){
+  if(!el) return;
+  try{ el.focus({preventScroll:true}); }catch(e){ try{ el.focus(); }catch(e2){} }
+  const tampil=()=>{
+    try{ el.scrollIntoView({block:'center',behavior:'smooth'}); }catch(e){}
+  };
+  requestAnimationFrame(tampil);
+  setTimeout(tampil,120);
+  setTimeout(tampil,320);
+}
+
+/* RH <-> Exp Kapan saling isi, sama seperti di admin. */
+t_rh.addEventListener('input',()=>{
+ const v=t_rh.value.trim();
+ if(v==='') return;
+ t_exp.value=tglDariRh(v);
+});
+t_exp.addEventListener('change',()=>{ t_rh.value=rhDariTgl(t_exp.value); });
+[t_plu,t_name,t_rh].forEach(el=>el.addEventListener('keydown',e=>{
+ if(e.key==='Enter'){ e.preventDefault(); t_simpan.click(); }
+}));
+
+t_simpan.addEventListener('click',async()=>{
+ const name=t_name.value.trim();
+ if(!name){ tMsg('Nama wajib','err'); t_name.focus(); return; }
+ const rhRaw=t_rh.value.trim();
+ let exp=t_exp.value||'';
+ if(!exp&&rhRaw!=='') exp=tglDariRh(rhRaw);
+ if(!exp&&rhRaw===''){ tMsg('Isi Exp Kapan atau RH','err'); t_rh.focus(); return; }
+
+ const payload={name:name,plu:t_plu.value.trim()||null,exp_date:exp||null,rh:rhRaw===''?null:parseInt(rhRaw,10)};
+ t_simpan.disabled=true; t_simpan.textContent='MENYIMPAN...';
+ let res=await supabase.from(TABLE).insert([payload]).select();
+
+ // Kolom rh belum ada -> coba lagi tanpa rh, beri tahu sekali saja.
+ if(res.error&&HAS_RH_T&&/PGRST204|Could not find/i.test(res.error.message||'')){
+   HAS_RH_T=false;
+   res=await supabase.from(TABLE).insert([{name:payload.name,plu:payload.plu,exp_date:payload.exp_date}]).select();
+   if(!res.error) tMsg('Tersimpan. Kolom rh belum ada di DB — jalankan scripts/build/exp-items-setup.sql','ok');
+ }
+ t_simpan.disabled=false; t_simpan.textContent='SIMPAN';
+
+ if(res.error){
+   if(/PGRST204|Could not find/i.test(res.error.message||'')) tMsg('Tabel exp_items belum ada. Jalankan scripts/build/supabase-schema.sql bagian 9.','err');
+   else tMsg('Gagal simpan: '+res.error.message,'err');
+   return;
+ }
+ // Masukkan langsung ke cache supaya list tampil tanpa nunggu query ulang.
+ if(res.data&&res.data[0]) items.unshift(res.data[0]);
+ renderList();
+
+ const st=statusOf({exp_date:exp});
+  tMsg('Tersimpan — '+name+' ('+st.label+')','ok');
+  t_plu.value='';t_name.value='';t_exp.value='';t_rh.value='';
+  fokusKe(t_plu);
+});
+
+/* ==========================================================================
+   MULAI
+   Dipindah ke paling bawah: renderList() memanggil renderAlert() dan
+   updateNotifikasi(), yang memakai const di atas. Kalau dipanggil lebih
+   dulu -> ReferenceError (TDZ) dan halaman kosong.
+   ========================================================================== */
+setTombolNotif();
+renderList();
+load();
 </script>
 </body>
 </html>

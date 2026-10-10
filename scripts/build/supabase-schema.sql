@@ -249,6 +249,7 @@ create table if not exists exp_items (
   id bigint generated always as identity primary key,
   name text not null,
   plu text,
+  rh integer,
   batch text,
   exp_date date,
   qty integer,
@@ -266,6 +267,7 @@ create policy "Allow service insert" on exp_items for insert with check (true);
 create policy "Allow service update" on exp_items for update using (true) with check (true);
 create policy "Allow service delete" on exp_items for delete using (true);
 create index if not exists exp_items_exp_date_idx on exp_items (exp_date);
+create index if not exists exp_items_rh_idx on exp_items (rh);
 
 -- 10. MUSNAH / Barang Musnah (public/musnah/musnah.html + musnah-admin.html)
 create table if not exists waste_items (

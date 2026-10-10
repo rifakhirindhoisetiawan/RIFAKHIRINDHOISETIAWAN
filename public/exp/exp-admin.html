@@ -32,11 +32,9 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 .c-nama{overflow:hidden}
 .menu-table .nama{font-family:var(--mori-mono);font-size:10px;font-weight:800;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c-plu{width:64px}
-.c-batch{width:78px}
+.c-rh{width:58px;text-align:center}
 .c-exp{width:96px}
 .c-sisa{width:64px}
-.c-qty{width:44px}
-.c-lokasi{width:86px}
 .c-aksi{width:72px}
 .badge{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 6px;border:1px solid var(--mori-accent);white-space:nowrap;display:inline-block}
 .badge.expired{background:var(--mori-danger);color:#fff;border-color:var(--mori-danger)}
@@ -57,6 +55,10 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 .fset{border:1px solid var(--mori-line);background:#fffdf7;padding:10px;margin:0 0 10px}
 .fset legend{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text-2);padding:0 4px}
 .fgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.fgrid.two{grid-template-columns:1fr 1fr}
+@media(max-width:420px){.fgrid.two{grid-template-columns:minmax(0,1fr)}}
+.ket{margin-top:8px;font-family:var(--mori-mono);font-size:9px;font-weight:600;line-height:1.6;color:var(--mori-text-2)}
+.ket b{color:var(--mori-text);font-weight:800}
 .fgrid label{display:flex;flex-direction:column;gap:4px}
 .fgrid label>span:first-child{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text-2)}
 .cell-input{width:100%;height:32px;padding:0 8px;font-family:var(--mori-mono);font-size:11px;font-weight:700;background:var(--mori-surface);border:1px solid rgba(26,25,23,.28);outline:none}
@@ -75,11 +77,9 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 .sec .menu-table.retur tr[data-id] td.c-no{order:1;min-width:18px;font-size:9px;font-weight:800}
 .sec .menu-table.retur tr[data-id] td.c-nama{order:2;flex:1 1 110px;min-width:110px}
 .sec .menu-table.retur tr[data-id] td.c-plu{order:3;width:56px}
-.sec .menu-table.retur tr[data-id] td.c-batch{order:4;width:64px}
+.sec .menu-table.retur tr[data-id] td.c-rh{order:4;width:52px}
 .sec .menu-table.retur tr[data-id] td.c-exp{order:5;width:86px}
 .sec .menu-table.retur tr[data-id] td.c-sisa{order:6;width:64px}
-.sec .menu-table.retur tr[data-id] td.c-qty{order:7;width:36px}
-.sec .menu-table.retur tr[data-id] td.c-lokasi{order:8;width:64px}
 .sec .menu-table.retur tr[data-id] td.c-aksi{order:9;position:sticky;right:0;background:var(--mori-bg);border-left:1px solid var(--mori-line);padding-left:6px}
 }
 </style>
@@ -88,7 +88,7 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 <div class="wrap">
 <section class="sec">
 <div class="row">
-<div class="search-box grow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="search" type="search" placeholder="Cari produk / PLU / batch" autocomplete="off" /></div>
+<div class="search-box grow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="search" type="search" placeholder="Cari produk / PLU" autocomplete="off" /></div>
 <a class="back-btn" href="exp.html" title="Kembali" aria-label="Kembali">&#8592;</a>
 </div>
 </section>
@@ -98,19 +98,17 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 <form id="form" onsubmit="return false">
 <input type="hidden" id="editId" />
 <fieldset class="fset"><legend>PRODUK</legend>
-<div class="fgrid">
-<label><span>NAMA *</span><input class="cell-input" id="f_name" placeholder="Teh Pucuk 350ml" autocomplete="off" /></label>
+<div class="fgrid two">
 <label><span>PLU</span><input class="cell-input" id="f_plu" placeholder="443771" inputmode="numeric" autocomplete="off" /></label>
-<label><span>BATCH</span><input class="cell-input" id="f_batch" placeholder="B20260101" autocomplete="off" /></label>
+<label><span>NAMA *</span><input class="cell-input" id="f_name" placeholder="Teh Pucuk 350ml" autocomplete="off" /></label>
 </div>
 </fieldset>
 <fieldset class="fset"><legend>EXPIRED</legend>
-<div class="fgrid">
-<label><span>EXP DATE</span><input class="cell-input" id="f_exp_date" type="date" /></label>
-<label><span>QTY</span><input class="cell-input" id="f_qty" type="number" min="0" step="1" inputmode="numeric" placeholder="0" /></label>
-<label><span>LOKASI</span><input class="cell-input" id="f_lokasi" placeholder="Rak A / Gudang" autocomplete="off" /></label>
-<label><span>CATATAN</span><input class="cell-input" id="f_catatan" placeholder="opsional" autocomplete="off" /></label>
+<div class="fgrid two">
+<label><span>EXP KAPAN</span><input class="cell-input" id="f_exp_date" type="date" /></label>
+<label><span>RH (HARI)</span><input class="cell-input" id="f_rh" type="number" step="1" inputmode="numeric" placeholder="30" autocomplete="off" /></label>
 </div>
+<p class="ket">Isi <b>RH</b> saja -> tanggal expired dihitung otomatis (hari ini + RH). Isi <b>Exp Kapan</b> saja -> RH dihitung otomatis dari tanggal itu.</p>
 </fieldset>
 <button class="btn btn-wide" id="btnSave" type="button">SIMPAN</button>
 <p class="hint" id="hint" hidden></p>
@@ -121,8 +119,8 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 <div class="retur-head"><div class="retur-title">BARANG EXP SEBELUM RETUR HARIAN</div><span class="retur-count" id="returCount">0 PRODUK</span></div>
 <div class="table-wrap">
 <table class="menu-table retur">
-<thead><tr><th class="c-no">No</th><th class="c-nama">Produk</th><th class="c-plu">PLU</th><th class="c-batch">Batch</th><th class="c-exp">Exp Date</th><th class="c-sisa">Sisa</th><th class="c-qty">Qty</th><th class="c-lokasi">Lokasi</th><th class="c-aksi"></th></tr></thead>
-<tbody id="returList"><tr><td colspan="9"><div class="empty">Memuat...</div></td></tr></tbody>
+<thead><tr><th class="c-no">No</th><th class="c-nama">Produk</th><th class="c-plu">PLU</th><th class="c-rh">RH</th><th class="c-exp">Exp Date</th><th class="c-sisa">Sisa</th><th class="c-aksi"></th></tr></thead>
+<tbody id="returList"><tr><td colspan="7"><div class="empty">Memuat...</div></td></tr></tbody>
 </table>
 </div>
 <p class="hint">Hanya barang lewat & ≤ 30 hari. Retur harian = tarik & pisahkan sebelum lewat.</p>
@@ -132,8 +130,8 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 <div class="retur-head"><div class="retur-title">SEMUA BARANG</div><span class="retur-count" id="allCount">0 PRODUK</span></div>
 <div class="table-wrap">
 <table class="menu-table">
-<thead><tr><th class="c-no">No</th><th class="c-nama">Produk</th><th class="c-plu">PLU</th><th class="c-batch">Batch</th><th class="c-exp">Exp Date</th><th class="c-sisa">Sisa</th><th class="c-qty">Qty</th><th class="c-lokasi">Lokasi</th><th class="c-aksi"></th></tr></thead>
-<tbody id="list"><tr><td colspan="9"><div class="empty">Memuat...</div></td></tr></tbody>
+<thead><tr><th class="c-no">No</th><th class="c-nama">Produk</th><th class="c-plu">PLU</th><th class="c-rh">RH</th><th class="c-exp">Exp Date</th><th class="c-sisa">Sisa</th><th class="c-aksi"></th></tr></thead>
+<tbody id="list"><tr><td colspan="7"><div class="empty">Memuat...</div></td></tr></tbody>
 </table>
 </div>
 </section>
@@ -143,21 +141,31 @@ import { supabase } from '../kopi/supabase.js';
 const TABLE='exp_items', SOON_DAYS=30;
 const listEl=document.getElementById('list'), returList=document.getElementById('returList'), searchEl=document.getElementById('search'), hint=document.getElementById('hint');
 const formLabel=document.getElementById('formLabel'), editId=document.getElementById('editId'), btnSave=document.getElementById('btnSave'), btnBatal=document.getElementById('btnBatal');
-const f_name=document.getElementById('f_name'), f_plu=document.getElementById('f_plu'), f_batch=document.getElementById('f_batch'), f_exp_date=document.getElementById('f_exp_date'), f_qty=document.getElementById('f_qty'), f_lokasi=document.getElementById('f_lokasi'), f_catatan=document.getElementById('f_catatan');
+const f_name=document.getElementById('f_name'), f_plu=document.getElementById('f_plu'), f_exp_date=document.getElementById('f_exp_date'), f_rh=document.getElementById('f_rh');
 let all=[];
+/* Kolom RH belum tentu ada di DB (butuh scripts/build/exp-items-setup.sql).
+   Simpan payload slim dulu, kalau Supabase bilang kolom tidak ada, kirim
+   tanpa rh — form tetap bisa dipakai walau migrasi belum dijalankan. */
+let HAS_RH=true;
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function setHint(m){ hint.hidden=!m; hint.textContent=m||''; if(m) setTimeout(()=>hint.hidden=true,4000); }
 function startOfToday(){const d=new Date();d.setHours(0,0,0,0);return d;}
+/* Tanggal lokal (bukan toISOString, yang bisa bergeser 1 hari karena UTC). */
+function toISO(d){return String(d.getFullYear())+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function daysLeft(v){if(!v) return null;const d=new Date(v+'T00:00:00');if(isNaN(d.getTime())) return null;return Math.round((d-startOfToday())/86400000);}
+/* Expired = hari ini + RH */
+function expFromRh(rh){const n=parseInt(rh,10);if(!Number.isFinite(n)) return '';const d=startOfToday();d.setDate(d.getDate()+n);return toISO(d);}
+/* RH = expired - hari ini */
+function rhFromExp(exp){const n=daysLeft(exp);return n===null?'':n;}
 function statusOf(r){const n=daysLeft(r.exp_date);if(n===null) return {key:'none',label:'—'};if(n<0) return {key:'expired',label:'Lewat '+Math.abs(n)+'h'};if(n===0) return {key:'soon',label:'Hari ini'};if(n<=SOON_DAYS) return {key:'soon',label:n+'h lagi'};return {key:'ok',label:n+'h'};}
 function fmtDate(v){if(!v) return '—';const d=new Date(v);if(isNaN(d.getTime())) return v;return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
 function rowHtml(r,i){
 const st=statusOf(r);
-return '<tr data-id="'+r.id+'"><td class="c-no">'+(i+1)+'</td><td class="c-nama"><div class="nama">'+esc(r.name||'—')+'</div></td><td class="c-plu">'+esc(r.plu||'—')+'</td><td class="c-batch">'+esc(r.batch||'—')+'</td><td class="c-exp">'+fmtDate(r.exp_date)+'</td><td class="c-sisa"><span class="badge '+st.key+'">'+esc(st.label)+'</span></td><td class="c-qty">'+esc(r.qty!=null?r.qty:'—')+'</td><td class="c-lokasi">'+esc(r.lokasi||'—')+'</td><td class="c-aksi"><div class="acts"><button class="ico" data-edit="'+r.id+'" title="Edit">✎</button><button class="ico ico-danger" data-del="'+r.id+'" title="Hapus">✕</button></div></td></tr>';
+ return '<tr data-id="'+r.id+'"><td class="c-no">'+(i+1)+'</td><td class="c-nama"><div class="nama">'+esc(r.name||'—')+'</div></td><td class="c-plu">'+esc(r.plu||'—')+'</td><td class="c-rh">'+esc(r.rh!=null?r.rh+'h':'—')+'</td><td class="c-exp">'+fmtDate(r.exp_date)+'</td><td class="c-sisa"><span class="badge '+st.key+'">'+esc(st.label)+'</span></td><td class="c-aksi"><div class="acts"><button class="ico" data-edit="'+r.id+'" title="Edit">✎</button><button class="ico ico-danger" data-del="'+r.id+'" title="Hapus">✕</button></div></td></tr>';
 }
 function render(){
-const q=searchEl.value.trim().toLowerCase();
-const cocok=r=>!q||[r.name,r.plu,r.batch,r.lokasi,r.catatan].some(v=>String(v||'').toLowerCase().includes(q));
+ const q=searchEl.value.trim().toLowerCase();
+ const cocok=r=>!q||[r.name,r.plu].some(v=>String(v||'').toLowerCase().includes(q));
 let filtered=all.filter(cocok);
 filtered.sort((a,b)=>{
 const da=daysLeft(a.exp_date), db=daysLeft(b.exp_date);
@@ -166,11 +174,11 @@ if(na!==nb) return na-nb;
 return String(a.name||'').localeCompare(String(b.name||''));
 });
 document.getElementById('allCount').textContent=filtered.length+' PRODUK';
-if(!filtered.length){ listEl.innerHTML='<tr><td colspan="9"><div class="empty">Tidak ada data</div></td></tr>'; }
+if(!filtered.length){ listEl.innerHTML='<tr><td colspan="7"><div class="empty">Tidak ada data</div></td></tr>'; }
 else { listEl.innerHTML=filtered.map((r,i)=>rowHtml(r,i)).join(''); }
 const retur=filtered.filter(r=>{const k=statusOf(r).key; return k==='expired'||k==='soon';});
 document.getElementById('returCount').textContent=retur.length+' PRODUK';
-if(!retur.length){ returList.innerHTML='<tr><td colspan="9"><div class="empty">Tidak ada barang retur</div></td></tr>'; }
+if(!retur.length){ returList.innerHTML='<tr><td colspan="7"><div class="empty">Tidak ada barang retur</div></td></tr>'; }
 else { returList.innerHTML=retur.map((r,i)=>rowHtml(r,i)).join(''); }
 listEl.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editRow(parseInt(b.dataset.edit,10)));
 listEl.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delRow(parseInt(b.dataset.del,10)));
@@ -179,20 +187,36 @@ returList.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delRow(parseIn
 }
 async function load(){
 const{data,error}=await supabase.from(TABLE).select('*').order('exp_date',{ascending:true,nullsFirst:false});
-if(error){ const m=esc(error.message); listEl.innerHTML='<tr><td colspan="9"><div class="empty">'+m+'</div></td></tr>'; returList.innerHTML='<tr><td colspan="9"><div class="empty">'+m+'</div></td></tr>'; return; }
+if(error){ const m=esc(error.message); listEl.innerHTML='<tr><td colspan="7"><div class="empty">'+m+'</div></td></tr>'; returList.innerHTML='<tr><td colspan="7"><div class="empty">'+m+'</div></td></tr>'; return; }
 all=data||[]; render();
 }
 function resetForm(){
-editId.value=''; formLabel.textContent='TAMBAH BARANG EXP'; btnSave.textContent='SIMPAN'; btnBatal.hidden=true;
-[f_name,f_plu,f_batch,f_exp_date,f_qty,f_lokasi,f_catatan].forEach(el=>el.value='');
+ editId.value=''; formLabel.textContent='TAMBAH BARANG EXP'; btnSave.textContent='SIMPAN'; btnBatal.hidden=true;
+ [f_plu,f_name,f_exp_date,f_rh].forEach(el=>el.value='');
 }
 function editRow(id){
-const r=all.find(x=>x.id===id); if(!r) return;
-editId.value=r.id;
-f_name.value=r.name||''; f_plu.value=r.plu||''; f_batch.value=r.batch||''; f_exp_date.value=r.exp_date||''; f_qty.value=r.qty!=null?r.qty:''; f_lokasi.value=r.lokasi||''; f_catatan.value=r.catatan||'';
-formLabel.textContent='EDIT — '+(r.name||'#'+r.id); btnSave.textContent='UPDATE'; btnBatal.hidden=false;
-window.scrollTo({top:0,behavior:'smooth'});
+ const r=all.find(x=>x.id===id); if(!r) return;
+ editId.value=r.id;
+ f_plu.value=r.plu||''; f_name.value=r.name||''; f_exp_date.value=r.exp_date||''; f_rh.value=r.rh!=null?r.rh:'';
+ formLabel.textContent='EDIT — '+(r.name||'#'+r.id); btnSave.textContent='UPDATE'; btnBatal.hidden=false;
+ window.scrollTo({top:0,behavior:'smooth'});
 }
+/* Dua field saling isi: RH -> hitung tanggal, tanggal -> hitung RH. */
+f_rh.addEventListener('input',()=>{
+ const v=f_rh.value.trim();
+ if(v==='') return;                        // kosongkan RH, tanggal dibiarkan
+ f_exp_date.value=expFromRh(v);
+});
+f_exp_date.addEventListener('change',()=>{
+ f_rh.value=rhFromExp(f_exp_date.value);
+});
+// Enter di kolom mana saja = simpan.
+['f_plu','f_name','f_rh'].forEach(el=>el.addEventListener('keydown',e=>{
+ if(e.key==='Enter'){ e.preventDefault(); btnSave.click(); }
+}));
+f_exp_date.addEventListener('keydown',e=>{
+ if(e.key==='Enter'){ e.preventDefault(); btnSave.click(); }
+});
 async function delRow(id){
 if(!confirm('Hapus #'+id+'?')) return;
 const{error}=await supabase.from(TABLE).delete().eq('id',id);
@@ -202,21 +226,33 @@ const baru=await supabase.from(TABLE).select('*').order('exp_date',{ascending:tr
 if(!baru.error){ all=baru.data||[]; render(); } else await load();
 }
 btnSave.onclick=async()=>{
-const name=f_name.value.trim(); if(!name){ setHint('Nama wajib'); f_name.focus(); return; }
-const qtyRaw=f_qty.value.trim();
-const payload={name,plu:f_plu.value.trim()||null,batch:f_batch.value.trim()||null,exp_date:f_exp_date.value||null,qty:qtyRaw===''?null:parseInt(qtyRaw,10),lokasi:f_lokasi.value.trim()||null,catatan:f_catatan.value.trim()||null};
-btnSave.disabled=true;
-let res;
-if(editId.value) res=await supabase.from(TABLE).update(payload).eq('id',parseInt(editId.value)).select();
-else res=await supabase.from(TABLE).insert([payload]).select();
-btnSave.disabled=false;
-if(res.error){ if(/PGRST204|Could not find/i.test(res.error.message||'')) setHint('Tabel exp_items belum ada. Jalankan SQL supabase-schema.sql bagian 9.'); else setHint(res.error.message); return; }
-if(res.data&&res.data[0]){
-if(editId.value){ const idx=all.findIndex(x=>String(x.id)===String(editId.value)); if(idx>-1) all[idx]=res.data[0]; else all.push(res.data[0]); }
-else all.push(res.data[0]);
-render();
-}else await load();
-resetForm();
+ const name=f_name.value.trim(); if(!name){ setHint('Nama wajib'); f_name.focus(); return; }
+ const rhRaw=f_rh.value.trim();
+ let exp=f_exp_date.value||'';
+ // Kalau tanggal kosong tapi RH ada, hitung dari RH.
+ if(!exp&&rhRaw!=='') exp=expFromRh(rhRaw);
+ const payload={name:name,plu:f_plu.value.trim()||null,exp_date:exp||null,rh:rhRaw===''?null:parseInt(rhRaw,10)};
+ btnSave.disabled=true;
+ let res;
+ const kirim=async p=> editId.value
+   ? await supabase.from(TABLE).update(p).eq('id',parseInt(editId.value)).select()
+   : await supabase.from(TABLE).insert([p]).select();
+ res=await kirim(payload);
+ // Kolom rh belum ada di DB -> coba lagi tanpa rh, lalu beri tahu sekali saja.
+ if(res.error&&HAS_RH&&/PGRST204|Could not find/i.test(res.error.message||'')){
+   HAS_RH=false;
+   const tanpaRh={name:payload.name,plu:payload.plu,exp_date:payload.exp_date};
+   res=await kirim(tanpaRh);
+   if(!res.error) setHint('Kolom rh belum ada di DB — jalankan scripts/build/exp-items-setup.sql. Barang tetap tersimpan.');
+ }
+ btnSave.disabled=false;
+ if(res.error){ if(/PGRST204|Could not find/i.test(res.error.message||'')) setHint('Tabel exp_items belum ada. Jalankan scripts/build/supabase-schema.sql bagian 9.'); else setHint(res.error.message); return; }
+ if(res.data&&res.data[0]){
+ if(editId.value){ const idx=all.findIndex(x=>String(x.id)===String(editId.value)); if(idx>-1) all[idx]=res.data[0]; else all.push(res.data[0]); }
+ else all.push(res.data[0]);
+ render();
+ }else await load();
+ resetForm();
 };
 btnBatal.onclick=resetForm;
 searchEl.oninput=render;

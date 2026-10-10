@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>HARGA — Cetak Label</title>
+<link rel="manifest" href="../../manifest.json" />
+<meta name="theme-color" content="#fffbf2" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&family=Permanent+Marker&family=Caveat:wght@700&family=Kalam:wght@700;800&family=Bangers&display=swap" rel="stylesheet" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+/* Tema Mori = sharp. beberapa elemen (button/select/table) bawa radius
+   default dari browser, jadi dikunci 0 di sini. */
+button,select,input,textarea,table,th,td,fieldset,label{border-radius:0}
+table{border-collapse:collapse}
+:root{--mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;--mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;--mori-mono:"JetBrains Mono",ui-monospace,monospace}
+html,body{width:100%;background:var(--mori-bg);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var(--mori-text);min-height:100vh;-webkit-font-smoothing:antialiased}
+.wrap{width:100%;max-width:800px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 18px 32px}
+
+.head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.back{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--mori-accent);background:var(--mori-bg);color:var(--mori-text);text-decoration:none;font-size:18px;line-height:1}
+.back:active{transform:translate(2px,2px)}
+.head h1{font-family:var(--mori-mono);font-size:14px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}
+
+/* ===== FORM (disembunyikan saat print) ===== */
+.sec{background:var(--mori-surface);border:1px solid var(--mori-accent);padding:14px 14px 16px;margin-bottom:16px;border-radius:0}
+.sec-title{font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text-2);margin-bottom:12px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.row>label>span{display:block;font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--mori-text-2);margin-bottom:4px}
+.inp{width:100%;padding:10px 12px;border:1px solid var(--mori-accent);background:var(--mori-bg);font-family:var(--mori-mono);font-size:13px;font-weight:700;color:var(--mori-text);outline:none;-webkit-appearance:none;appearance:none;border-radius:0}
+.inp:focus{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
+.btn{flex:1;padding:13px 10px;border:1px solid var(--mori-accent);background:var(--mori-accent);color:var(--mori-bg);font-family:var(--mori-mono);font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+.btn:active{transform:translate(2px,2px)}
+.btn.ghost{background:var(--mori-bg);color:var(--mori-text)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-row{display:flex;gap:10px;margin-top:10px}
+.hint{font-family:var(--mori-mono);font-size:9px;line-height:1.6;color:var(--mori-text-2);margin-top:8px}
+
+/* ===== PRATINJAU LABEL ===== */
+#areaMeta{font-family:var(--mori-mono);font-size:9px;color:var(--mori-text-2);margin-bottom:14px}
+/* ===== REVIEW LABEL ===== */
+.review{border:1px solid var(--mori-accent);background:var(--mori-bg);padding:14px 14px 16px;margin-top:4px;border-radius:0}
+.review-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--mori-line)}
+.review-title{font-family:var(--mori-mono);font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--mori-text)}
+.review-meta{font-family:var(--mori-mono);font-size:9px;font-weight:700;letter-spacing:.6px;color:var(--mori-text-2);text-align:right}
+
+/* ===== UKURAN KARTU LABEL =====
+   Skala dipakai untuk preview di layar. Angka = lebar label dalam mm,
+   mengikuti ukuran kertas A4 yang paling umum untuk cetak label harga. */
+:root{
+  --lw:70mm;   /* lebar label  */
+  --lh:40mm;   /* tinggi label */
+}
+.label-grid{display:grid;grid-template-columns:repeat(2,var(--lw));gap:6mm;justify-content:start}
+@media(max-width:520px){.label-grid{grid-template-columns:var(--lw);justify-content:center}}
+.label-grid.sq3{grid-template-columns:repeat(3,var(--lw))}
+@media(max-width:900px){.label-grid.sq3{grid-template-columns:repeat(2,var(--lw))}}
+@media(max-width:560px){.label-grid.sq3{grid-template-columns:var(--lw);justify-content:center}}
+.price-card{width:var(--lw);min-height:var(--lh);border:1.5px solid var(--mori-accent);background:#fff;padding:4mm 2mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;page-break-inside:avoid;break-inside:avoid;position:relative;overflow:hidden}
+.price-card .nama{font-family:var(--mori-mono);font-size:14px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:var(--mori-text);line-height:1.3;word-break:break-word}
+/* Layout: "Rp" menempel di ujung kiri atas dekat angka harga, satuan di
+   kanan bawah. Padding kiri/kanan menyisakan ruang buat keduanya supaya
+   angka panjang tidak menabrak. */
+/* Lane "Rp" (kiri) dan satuan (kanan) diposisikan absolut di tepi label.
+   Lebar lane-nya dihitung JS dari lebar teks aslinya, bukan tebakan,
+   supaya keduanya tidak pernah terpotong. */
+.price-card .harga-wrap{position:relative;width:100%;display:flex;align-items:flex-start;justify-content:center;margin-top:10px;padding:0;min-height:1.2em}
+/* white-space:nowrap = harga SELALU satu baris, berapa pun panjangnya. */
+.price-card .harga{font-family:var(--mori-mono);font-size:var(--harga-size,46px);font-weight:800;letter-spacing:-1.5px;color:var(--mori-text);margin-top:2px;line-height:1;white-space:nowrap;word-break:normal;max-width:100%}
+.price-card .rp{position:absolute;left:0;top:50%;transform:translateY(-50%);font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--mori-text-2);white-space:nowrap}
+.price-card .satuan{position:absolute;right:0;bottom:-2px;font-family:var(--mori-mono);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--mori-text);white-space:nowrap}
+
+/* ===== GAYA TULISAN HARGA =====
+   "Spidol" = tulisan tangan seperti alat harga price gun.
+   Ganti font lewat --harga-font di <body> (lihat daftar gaya di bawah). */
+
+/* ---- DIGIT 7-SEGMENT (angka kotak, gaya "88888") ----
+   Angka digambar dari 7 segmen CSS, bukan font. Segmen yang tidak
+   menyala tetap kelihatan tipis — persis seperti display kalkulator. */
+body.g-kotak .price-card .harga{
+  font-family:var(--mori-mono);
+  font-size:var(--harga-size,46px);
+  font-weight:400;
+  letter-spacing:0;
+  line-height:1;
+  /* Angka 7-segmen tidak boleh pernah turun baris. */
+  white-space:nowrap;
+  word-break:normal;
+}
+/* Geometri 7-segmen (em relatif ke font-size harga).
+   Kotak digit W=.62em H=1em, tebal bar T=.13em (SEMUA bar sama tebal).
+
+   dua hal yang harus dijaga:
+   1. Bar horizontal a/g/d SELURUH LEBAR (0 → .62em). Kalau dipendekkan,
+      ujung kiri-kanannya hilang dan 8 / 0 tidak lagi kotak tertutup.
+   2. Ada CELAH kecil antar bar, sonstinya semua segmen menyatu jadi blok
+      padat dan angka kehilangan bentuk 7-segmennya.
+
+   y-layout:  a 0–.13 │ f/b .17–.43 │ g .435–.565 │ e/c .57–.83 │ d .87–1.0
+                    celah .04      .005     .005        .04
+*/
+.seg{display:inline-block;position:relative;flex:0 0 auto;
+  width:.68em;height:1em;margin:0 .05em;vertical-align:top}
+/* Kemiringan halus ala display LED sungguhan. 2.5deg cukup untuk kesan
+   "menyala" tanpa angka terasa miring berlebihan. */
+body.g-kotak .seg{transform:skewX(-2.5deg)}
+.seg i{position:absolute;display:block;background:currentColor;
+  /* Garis tipis = OFF, tebal = ON */
+  opacity:.13;transition:opacity .12s ease}
+.seg i.on{opacity:1}
+/* 7 posisi: a=atas b=kanan-atas c=kanan-bawah d=bawah e=kiri-bawah f=kiri-atas g=tengah */
+/* Bar horizontal: penuh tepi-ke-tepi, tebal .115em */
+.seg i.a{left:0;top:0;width:100%;height:.115em}
+.seg i.g{left:0;top:.4425em;width:100%;height:.115em}
+.seg i.d{left:0;bottom:0;width:100%;height:.115em}
+/* Bar vertikal: sedikit lebih tipis (.10em), berhenti sejengkal dari
+   horizontal -> celah kecil terlihat di setiap sambungan. */
+.seg i.f{left:0;top:.15em;width:.10em;height:.275em}
+.seg i.b{right:0;top:.15em;width:.10em;height:.275em}
+.seg i.e{left:0;top:.575em;width:.10em;height:.275em}
+.seg i.c{right:0;top:.575em;width:.10em;height:.275em}
+
+/* ===== EFEK LED =====
+   Ujung bar dibulat (LED segment tidak punya sudut tajam) + halo saat
+   menyala. Halo hanya di layar - saat print blur hanya jadi boros tinta. */
+.seg i{border-radius:.058em}
+.seg i.on{box-shadow:0 0 .06em currentColor}
+@media print{
+  .seg i{border-radius:.058em}
+  .seg i.on{box-shadow:none}
+  /* Kemiringan tetap ikut saat print supaya bentuk label sama dengan preview. */
+  body.g-kotak .seg{transform:skewX(-2.5deg)}
+}
+
+/* ===== WARNA LED =====
+   Migrasi warna LED ke "Warna Spidol" supaya satu dropdown saja.
+   Hijau/Amber/Putih好看 di atas latar gelap -> class .led-bg. */
+body.c-led-hijau .price-card .harga{color:#25f46a}
+body.c-led-merah .price-card .harga{color:#ff3b30}
+body.c-led-amber .price-card .harga{color:#ffb000}
+body.c-led-biru  .price-card .harga{color:#2f9bff}
+body.c-led-putih .price-card .harga{color:#f2f2f2}
+/* Segmen mati ikut mengikuti warna LED (abu-abu transparan) */
+body.c-led-hijau .price-card .seg i,
+body.c-led-merah .price-card .seg i,
+body.c-led-amber .price-card .seg i,
+body.c-led-biru  .price-card .seg i,
+body.c-led-putih .price-card .seg i{background:currentColor}
+
+/* Latar gelap ala panel LED. Label tetap tercetak, jadi opsional. */
+body.led-bg .price-card{background:#0b0d0c}
+body.led-bg .price-card .nama{color:#d8ded9}
+body.led-bg .price-card .rp{color:#6f7a72}
+body.led-bg .price-card .satuan{color:#d8ded9}
+body.led-bg .price-card{border-color:#2a312c}
+/* Tidak ada elemen pemisah ribuan lagi — semua digit digambar rapat. */
+
+body.g-marker .price-card .harga{font-family:"Permanent Marker","JetBrains Mono",cursive;letter-spacing:0;transform:rotate(-1.5deg)}
+body.g-spidol .price-card .harga{font-family:"Kalam","Permanent Marker",cursive;letter-spacing:0}
+body.g-tangan .price-card .harga{font-family:"Caveat","Kalam",cursive;letter-spacing:1px;font-size:52px}
+body.g-ember .price-card .harga{font-family:"Bangers","Permanent Marker",cursive;letter-spacing:2px}
+body.g-tebal .price-card .harga{font-family:"Inter","JetBrains Mono",sans-serif;font-weight:800;letter-spacing:-2px}
+body.g-hitam .price-card .harga{font-family:"JetBrains Mono",monospace;font-weight:800;letter-spacing:-1px;
+  -webkit-text-stroke:1.5px #000;color:#fff;text-shadow:0 0 0 #000}
+
+/* Nama produk tetap tema Mori (JetBrains Mono bold uppercase) - tidak
+   ikut gaya LED, supaya produk tetap terbaca jelas dan seragam dengan
+   modul lain. Yangadjust hanya kontrasnya saat latar gelap aktif. */
+body.g-kotak .price-card .nama{font-family:var(--mori-mono);font-weight:800;text-transform:uppercase;letter-spacing:.3px}
+body.g-spidol .price-card .nama,
+body.g-tangan .price-card .nama,
+body.g-ember .price-card .nama,
+body.g-tebal .price-card .nama,
+body.g-marker .price-card .nama{font-family:inherit;text-transform:none;letter-spacing:.2px}
+
+/* Warna spidol */
+body.c-merah .price-card .harga{color:#c81e1e}
+body.c-biru .price-card .harga{color:#1d4ed8}
+body.c-hijau .price-card .harga{color:#15803d}
+body.c-oranye .price-card .harga{color:#c2410c}
+.price-card .hapus{position:absolute;top:4px;right:4px;width:22px;height:22px;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-accent);font-family:var(--mori-mono);font-size:12px;font-weight:800;line-height:1;cursor:pointer}
+.price-card .hapus:active{transform:translate(1px,1px)}
+/* Draft live: kartu pratinjau yang belum masuk daftar, tidak ikut tercetak. */
+.price-card.draft{border-style:dashed;border-color:var(--mori-text-2);background:var(--mori-surface)}
+/* Contoh: bentuk label saat form masih kosong, cuma petunjuk isian. */
+.price-card.contoh{border-style:dashed;border-color:var(--mori-line);background:transparent}
+.price-card.contoh .nama{color:var(--mori-text-2)}
+.price-card.contoh .harga{color:var(--mori-text-2)}
+.price-card.contoh .satuan{color:var(--mori-line)}
+@media print{.price-card.draft,.price-card.contoh,.contoh-info{display:none !important}}
+
+/* Info: apa yang masih kurang */
+.contoh-info{border:1px dashed var(--mori-line);background:var(--mori-surface);padding:12px 14px;margin-bottom:14px}
+.contoh-info .ci-judul{font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--mori-text-2);margin-bottom:8px}
+.contoh-info ul{list-style:none;display:grid;gap:5px}
+.contoh-info li{display:flex;align-items:flex-start;gap:7px;font-family:var(--mori-mono);font-size:10px;line-height:1.5;color:var(--mori-text-2)}
+.contoh-info li b{color:var(--mori-text);font-weight:800}
+.contoh-info .centang-i{flex:0 0 auto;width:14px;height:14px;margin-top:1px;border:1px solid var(--mori-line);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800}
+.contoh-info li.ada .centang-i{background:var(--mori-accent);border-color:var(--mori-accent);color:var(--mori-bg)}
+.contoh-info li.ada{color:var(--mori-text-2);text-decoration:line-through;opacity:.65}
+.empty{grid-column:1/-1;text-align:center;font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text-2);padding:40px 0;border:1px dashed var(--mori-line)}
+
+/* ===== DAFTAR ITEM (yang mau dicetak) ===== */
+.daftar-wrap{border:1px solid var(--mori-accent);background:var(--mori-bg);margin-bottom:16px;border-radius:0;overflow:hidden}
+.daftar{width:100%;border-collapse:collapse;font-size:11px;border-radius:0}
+.daftar thead th:first-child{border-top-left-radius:0}
+.daftar thead th:last-child{border-top-right-radius:0}
+.daftar tbody tr:last-child td:first-child{border-bottom-left-radius:0}
+.daftar tbody tr:last-child td:last-child{border-bottom-right-radius:0}
+.daftar thead th{background:var(--mori-surface);font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--mori-text-2);height:32px;padding:0 6px;border-bottom:1px solid var(--mori-accent);text-align:left}
+.daftar tbody td{height:40px;padding:0 6px;border-bottom:1px solid var(--mori-line);vertical-align:middle}
+.daftar tbody tr:last-child td{border-bottom:none}
+.daftar tbody tr.pilih td{background:var(--mori-surface)}
+.d-px{width:34px;text-align:center}
+.d-px input{width:18px;height:18px;accent-color:#1a1917;cursor:pointer}
+.d-nama{min-width:0}
+.d-nama .isi{font-family:var(--mori-mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.d-harga{width:96px;font-family:var(--mori-mono);font-size:11px;font-weight:700;text-align:right;white-space:nowrap}
+.d-sat{width:70px;font-family:var(--mori-mono);font-size:10px;color:var(--mori-text-2);text-transform:uppercase}
+.d-jml{width:52px;text-align:center;font-family:var(--mori-mono);font-size:11px;font-weight:700}
+.d-aksi{width:96px}
+.d-aksi .acts{display:flex;gap:4px;justify-content:flex-end}
+.icobtn{width:26px;height:26px;flex:0 0 26px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-accent);font-family:var(--mori-mono);font-size:11px;font-weight:800;line-height:1;cursor:pointer;padding:0}
+.icobtn:active{transform:translate(1px,1px)}
+.icobtn.hapus{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff}
+.daftar-kosong{text-align:center;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text-2);padding:28px 0}
+
+/* ===== TAMBAH CEPAT (bulk) ===== */
+.bulk{width:100%;min-height:96px;padding:10px 12px;border:1px solid var(--mori-accent);background:var(--mori-bg);font-family:var(--mori-mono);font-size:11px;font-weight:600;color:var(--mori-text);outline:none;resize:vertical;line-height:1.7}
+.bulk:focus{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
+.sec-toggle{width:100%;padding:10px;border:1px solid var(--mori-accent);background:var(--mori-bg);color:var(--mori-accent);font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-bottom:10px}
+.sec-toggle:active{transform:translate(1px,1px)}
+#bulkWrap[hidden]{display:none}
+.inp[type=range]{-webkit-appearance:none;appearance:none;background:transparent;border:0;padding:12px 0;height:auto}
+.inp[type=range]::-webkit-slider-runnable-track{height:4px;background:var(--mori-accent)}
+.inp[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;background:var(--mori-accent);border:2px solid var(--mori-bg);cursor:pointer;margin-top:-8px}
+.inp[type=range]::-moz-range-track{height:4px;background:var(--mori-accent)}
+.inp[type=range]::-moz-range-thumb{width:20px;height:20px;background:var(--mori-accent);border:2px solid var(--mori-bg);cursor:pointer;border-radius:0}
+.inp[type=range]:focus{box-shadow:none;background:transparent}
+
+/* Bingkai label saat cetak bisa dimatikan (dipotong gunting / label thermal). */
+#f_bingkai{appearance:none;-webkit-appearance:none;width:20px;height:20px;flex:0 0 20px;border:1px solid var(--mori-accent);background:var(--mori-bg);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+#f_bingkai:checked{background:var(--mori-accent)}
+#f_bingkai:checked::after{content:'\2713';color:var(--mori-bg);font-size:13px;font-weight:800;line-height:1}
+.check-row{display:flex;align-items:center;gap:8px;font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--mori-text-2);cursor:pointer;user-select:none}
+
+/* ===== PRINT ===== */
+@media print{
+  @page{margin:5mm;size:A4 portrait}
+  body{background:#fff}
+  .no-print{display:none !important}
+  .wrap{max-width:none;padding:0}
+  .review{border:0;background:#fff;padding:0;margin:0}
+  .review-head{display:none}
+
+  /* A4 = 210mm. Margin 5mm kiri+kanan -> area 200mm.
+     Lebar label 63mm x 3 kolom + 2 celah 5.5mm = 200mm (pas, tanpa sisa). */
+  .label-grid,.label-grid.sq3{
+    grid-template-columns:repeat(3,var(--lw));
+    gap:2mm 5.5mm;
+    justify-content:start;
+  }
+  .price-card{width:var(--lw);min-height:var(--lh);border:1px solid #000;padding:3mm 2mm}
+  .price-card .hapus{display:none !important}
+  .price-card .nama{font-size:12px}
+  .price-card .rp{font-size:9px}
+  .price-card .satuan{font-size:10px}
+  /* Ukuran harga SENGAJA tidak ditulis ulang di sini.
+     Dulu print dipaksa 34px / 30px per gaya — itu menimpa slider
+     "Ukuran Harga" sehingga pengaturannya tidak berefek saat cetak.
+     Sekarang ukuran tetap mengikuti --harga-size (sama dengan layar),
+     dan penyesuaian ke lebar label diserahkan ke autofit() yang pakai
+     transform:scale() — scale ikut berlaku saat print. */
+
+  /* Tanpa bingkai: kartu polos, jarak antar label dirapatkan. */
+  body.no-border .price-card{border:0;padding:1.5mm 1mm}
+  body.no-border .label-grid,body.no-border .label-grid.sq3{gap:4mm 5.5mm}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head no-print">
+    <a class="back" href="../../index.html" title="Kembali">&#8592;</a>
+    <h1>Label Harga</h1>
+  </div>
+
+  <div class="sec no-print">
+    <div class="sec-title">Tambah Label</div>
+    <div class="row">
+      <label><span>NAMA PRODUK</span><input class="inp" id="f_nama" type="text" placeholder="Kopi Arabica 250g" autocomplete="off" /></label>
+      <label><span>HARGA</span><input class="inp" id="f_harga" type="text" inputmode="numeric" placeholder="25000" autocomplete="off" /></label>
+    </div>
+    <div class="row">
+      <label><span>SATUAN</span><input class="inp" id="f_sat" type="text" placeholder="pcs" value="pcs" autocomplete="off" /></label>
+      <label><span>Jumlah Label</span><input class="inp" id="f_jml" type="text" inputmode="numeric" placeholder="1" value="1" autocomplete="off" /></label>
+    </div>
+    <div class="row">
+      <label><span>Ukuran Label</span>
+        <select class="inp" id="f_ukuran">
+          <option value="63x40">A4 · 63x40mm · 3/baris</option>
+          <option value="70x40">A4 · 70x40mm · 2/baris</option>
+          <option value="90x45">A4 · 90x45mm · 2/baris</option>
+          <option value="100x50">A4 · 100x50mm · 2/baris</option>
+          <option value="50x30">A4 · 50x30mm · 3/baris</option>
+          <option value="38x20">Thermal 38x20mm</option>
+        </select>
+      </label>
+      <label><span>Kolom Cetak</span>
+        <select class="inp" id="f_kolom">
+          <option value="3">3 kolom</option>
+          <option value="2">2 kolom</option>
+        </select>
+      </label>
+    </div>
+    <div class="row">
+      <label><span>Gaya Tulisan Harga</span>
+        <select class="inp" id="f_gaya">
+          <option value="g-kotak">Kotak 7-Segment (88888)</option>
+          <option value="g-marker">Spidol Marker</option>
+          <option value="g-spidol">Spidol Tulis Tangan</option>
+          <option value="g-tangan">Tangan Rapi</option>
+          <option value="g-ember">Tebal Komik</option>
+          <option value="g-tebal">Tebal Bersih</option>
+          <option value="g-hitam">Digital (8 kosong)</option>
+          <option value="">Mono (default)</option>
+        </select>
+      </label>
+      <label><span>Warna Spidol</span>
+        <select class="inp" id="f_warna">
+          <option value="">Hitam (default)</option>
+          <option value="c-led-hijau">LED Hijau</option>
+          <option value="c-led-merah">LED Merah</option>
+          <option value="c-led-amber">LED Amber</option>
+          <option value="c-led-biru">LED Biru</option>
+          <option value="c-led-putih">LED Putih (pakai latar gelap)</option>
+          <option value="c-merah">Merah</option>
+          <option value="c-biru">Biru</option>
+          <option value="c-hijau">Hijau</option>
+          <option value="c-oranje">Oranje</option>
+        </select>
+      </label>
+    </div>
+    <div class="row">
+      <label><span>Ukuran Harga</span><input class="inp" id="f_ukuranHarga" type="range" min="18" max="60" step="2" value="46" /></label>
+      <label class="check-row" style="align-self:center"><input type="checkbox" id="f_bingkai" checked /> Bingkai cetak</label>
+      <label class="check-row" style="align-self:center"><input type="checkbox" id="f_ledBg" /> Latar gelap (panel LED)</label>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="btnTambah" type="button">+ TAMBAH</button>
+      <button class="btn ghost" id="btnCetak" type="button">CETAK</button>
+      <button class="btn ghost" id="btnBersih" type="button">BERSIHKAN</button>
+    </div>
+    <div style="margin-top:12px">
+      <button class="sec-toggle" id="btnBulk" type="button">+ TAMBAH BANYAK SEKALI</button>
+      <div id="bulkWrap" hidden>
+        <textarea class="bulk" id="bulkTeks" placeholder="Satu baris satu item, pisahkan dengan |. Contoh:&#10;Kopi Arabica 250g | 25000 | pcs&#10;Teh Botol 350ml | 8000 | pcs"></textarea>
+        <div class="btn-row"><button class="btn ghost" id="btnBulkAdd" type="button">TAMBAHKAN SEMUA</button></div>
+      </div>
+    </div>
+    <p class="hint">Enter di kolom mana saja = tambah label. Jumlah &gt; 1 mencetak label kembar. Ukuran label mengikuti kertas A4 — saat print pilih <b>Default margins</b> / matikan <b>Headers and footers</b>, dan pilih skala <b>100%</b> (jangan &ldquo;Fit to page&rdquo;) supaya ukuran mm tidak berubah.</p>
+  </div>
+
+  <div class="sec no-print">
+    <div class="sec-title">Item yang Dicetak</div>
+    <div class="btn-row" style="margin:0 0 10px">
+      <button class="btn ghost sm" id="btnPilihSemua" type="button">PILIH SEMUA</button>
+      <button class="btn ghost sm" id="btnPilihNone" type="button">BATALKAN SEMUA</button>
+    </div>
+    <div class="daftar-wrap">
+      <table class="daftar">
+        <thead><tr><th class="d-px">&#10003;</th><th class="d-nama">Item</th><th class="d-harga">Harga</th><th class="d-sat">Satuan</th><th class="d-jml">x</th><th class="d-aksi"></th></tr></thead>
+        <tbody id="daftarBody"><tr><td colspan="6"><div class="daftar-kosong">Belum ada item</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <div id="info" class="no-print"></div>
+
+  <div class="review no-print">
+    <div class="review-head">
+      <div class="review-title">Review Label</div>
+      <div id="areaMeta" class="review-meta"></div>
+    </div>
+    <div class="label-grid" id="grid"></div>
+  </div>
+</div>
+
+<script>
+const fNama=document.getElementById('f_nama'),
+      fHarga=document.getElementById('f_harga'),
+      fSat=document.getElementById('f_sat'),
+      fJml=document.getElementById('f_jml'),
+      fKolom=document.getElementById('f_kolom'),
+      fUkuran=document.getElementById('f_ukuran'),
+      fBingkai=document.getElementById('f_bingkai'),
+      fGaya=document.getElementById('f_gaya'),
+      fWarna=document.getElementById('f_warna'),
+      fUkuranHarga=document.getElementById('f_ukuranHarga'),
+      fLedBg=document.getElementById('f_ledBg'),
+      grid=document.getElementById('grid'),
+      info=document.getElementById('info'),
+      meta=document.getElementById('areaMeta');
+
+const KEY='mylove_label_harga_v1';
+let items=load();
+
+// Data lama belum punya flag "pilih" -> defaultkan terpilih semua.
+items.forEach(x=>{ if(x.pilih===undefined) x.pilih=true; });
+
+function load(){
+  try{ const a=JSON.parse(localStorage.getItem(KEY)); return Array.isArray(a)?a:[]; }catch(e){ return []; }
+}
+function save(){
+  try{ localStorage.setItem(KEY,JSON.stringify(items)); }catch(e){}
+}
+const terpilih=()=>items.filter(x=>x.pilih);
+
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rupiah=v=>{
+  const n=parseInt(String(v||'').replace(/[^\d]/g,''),10);
+  return Number.isFinite(n)?n.toLocaleString('id-ID'):'';
+};
+const nilai=v=>{ const n=parseInt(String(v||'').replace(/[^\d]/g,''),10); return Number.isFinite(n)&&n>0?n:1; };
+
+/* ===== DIGIT 7-SEGMENT =====
+   Angka "25.000" -&gt; tiap digit digambar dari 7 segmen. Segmen yang mati
+   tetap digambar tipis (opacity .16) supaya terlihat pola 88888 persis
+   seperti display kalkulator / price gun. */
+const SEG={
+  '0':'abcdef','1':'bc',    '2':'abdeg', '3':'abcdg', '4':'bcfg',
+  '5':'acdfg', '6':'acdefg','7':'abc',   '8':'abcdefg','9':'abcdfg',
+};
+const segDigit=d=>{
+  const nyala=SEG[d]||'';
+  let out='<span class="seg">';
+  for(const s of 'abcdefg'){
+    out+='<i class="'+s+(nyala.includes(s)?' on':'')+'"></i>';
+  }
+  return out+'</span>';
+};
+/* Angka tanpa pemisah ribuan — tidak ada titik/koma, semua digit rapat. */
+const seg7=teks=>String(teks).replace(/[.,\s]/g,'').replace(/\d/g,segDigit);
+
+/* ============================================================================
+   AUTOFIT
+   PENTING: SEMUA label memakai SATU skala yang sama, dihitung dari angka
+   paling panjang. Kalau tiap label punya skala sendiri, harga 4 digit
+   terlihat besar sementara harga 7 digit terlihat kecil — di satu lembar
+   A4 itu jelas tidak seragam.
+
+   Urutan:
+     1. Reset inline style semua kartu, lalu ukur lebar natural tiap harga.
+     2. Hitung lane Rp (kiri) & satuan (kanan) dari lebar teks aslinya.
+     3. Ambil rasio TERKECIL dari semua kartu -> angka terpanjang menentukan.
+     4. Rasio itu dipakai oleh SEMUA kartu.
+   Dipanggil setiap render, ganti gaya/ukuran, dan resize/rotate.
+   ============================================================================ */
+function autofit(){
+  const ukur=[];
+
+  document.querySelectorAll('.price-card').forEach(card=>{
+    const wrap=card.querySelector('.harga-wrap');
+    const el=wrap&&wrap.querySelector('.harga');
+    if(!el) return;
+    const rp=wrap.querySelector('.rp'), sat=wrap.querySelector('.satuan');
+
+    // Reset supaya pengukuran tidak membawa skala dari render sebelumnya.
+    el.style.cssText='';
+    wrap.style.padding='0';
+    if(rp) rp.style.fontSize='';
+    if(sat) sat.style.fontSize='';
+
+    const total=wrap.clientWidth;
+    if(total<=0) return;
+
+    // Lane Rp + satuan dibatasi 34% label. Kalau label sempit, keduanya
+    // dikecilkan supaya tetap muat — bukan dipotong.
+    let laneKiri=rp?rp.offsetWidth:0;
+    let laneKanan=sat?sat.offsetWidth:0;
+    const JEDA=6;
+    const MAKS=total*0.34;
+    if(laneKiri+laneKanan+JEDA*2>MAKS){
+      const k=Math.max(0.35,(MAKS-JEDA*2)/(laneKiri+laneKanan||1));
+      if(rp){ rp.style.fontSize=(11*k).toFixed(1)+'px'; laneKiri=rp.offsetWidth; }
+      if(sat){ sat.style.fontSize=(12*k).toFixed(1)+'px'; laneKanan=sat.offsetWidth; }
+    }
+    const avail=total-laneKiri-laneKanan-JEDA*2;
+    if(avail<=0) return;
+
+    ukur.push({el:el,need:el.scrollWidth,avail:avail});
+  });
+
+  if(!ukur.length) return;
+
+  // Rasio terkecil = angka paling panjang menentukan ukuran semua label.
+  let rasio=1;
+  ukur.forEach(u=>{ if(u.need>u.avail) rasio=Math.min(rasio,u.avail/u.need); });
+  if(rasio>=1) return;
+
+  // Diposisikan absolut + translateX(-50%) supaya tetap PUSAT di antara
+  // lane Rp dan lane satuan, berapa pun skalanya.
+  ukur.forEach(u=>{
+    u.el.style.position='absolute';
+    u.el.style.left='50%';
+    u.el.style.top='0';
+    u.el.style.transformOrigin='center top';
+    u.el.style.transform='translateX(-50%) scale('+rasio.toFixed(4)+')';
+  });
+}
+
+function kartu(nama,harga,satuan,del){
+  const angka=fGaya.value==='g-kotak'?seg7(harga):esc(harga);
+  return '<div class="price-card">'
+    +(del!==null?'<button class="hapus no-print" type="button" data-del="'+del+'" title="Hapus" aria-label="Hapus">&#215;</button>':'')
+    +'<div class="nama">'+esc(nama)+'</div>'
+    +'<div class="harga-wrap">'
+      +'<span class="rp">RP</span>'
+      +'<div class="harga">'+angka+'</div>'
+      +'<span class="satuan">'+esc(satuan||'PCS')+'</span>'
+    +'</div></div>';
+}
+
+// Kartu contoh: bentuk label saat form masih kosong, jadi user langsung
+// tahu apa yang belum ada. Tiap slot ditampilkan beda supaya jelas satu
+// baris bisa berisi item yang berlainan, bukan 3 label nama yang sama.
+const CONTOH=[
+  {nama:'PRODUK 1',harga:'25.000',satuan:'PCS'},
+  {nama:'PRODUK 2',harga:'13.500',satuan:'BOX'},
+  {nama:'PRODUK 3',harga:'48.000',satuan:'KG'},
+];
+const contohKartu=i=>{
+  const c=CONTOH[i];
+  const angka=fGaya.value==='g-kotak'?seg7(c.harga):esc(c.harga);
+  return '<div class="price-card contoh">'
+  +'<div class="nama">'+c.nama+'</div>'
+  +'<div class="harga-wrap">'
+    +'<span class="rp">RP</span>'
+    +'<div class="harga">'+angka+'</div>'
+    +'<span class="satuan">'+c.satuan+'</span>'
+  +'</div></div>';
+};
+
+function renderInfo(){
+  if(items.length){ info.innerHTML=''; return; }
+  const cek=(ok,teks)=>'<li class="'+(ok?'ada':'')+'"><span class="centang-i">'+(ok?'&#10003;':'')+'</span><span>'+teks+'</span></li>';
+  const dNama=(fNama.value||'').trim(),
+        dHarga=rupiah(fHarga.value),
+        dSat=(fSat.value||'').trim();
+  info.innerHTML='<div class="contoh-info">'
+    +'<div class="ci-judul">Yang perlu diisi</div><ul>'
+    +cek(!!dNama,'<b>Nama produk</b> — muncul di atas harga')
+    +cek(!!dHarga,'<b>Harga</b> — angka besar di tengah, tanda Rp di kiri atas, satuan di kanan bawah')
+    +cek(!!dSat,'<b>Satuan</b> — di bawah harga (pcs / kg / box)')
+    +cek(!!items.length,'<b>Daftar label</b> — tiap item bebas beda nama, harga &amp; satuan')
+    +'</ul></div>';
+}
+
+// Daftar item: centang = item ikut dicetak, tombol panah mengurutkan.
+const daftarBody=document.getElementById('daftarBody');
+function renderDaftar(){
+  if(!items.length){
+    daftarBody.innerHTML='<tr><td colspan="6"><div class="daftar-kosong">Belum ada item</div></td></tr>';
+    return;
+  }
+  daftarBody.innerHTML=items.map((x,i)=>{
+    const h=parseInt(String(x.harga||'').replace(/[^\d]/g,''),10);
+    const harga=Number.isFinite(h)?h.toLocaleString('id-ID'):(x.harga||'—');
+    return '<tr class="'+(x.pilih?'pilih':'')+'">'
+      +'<td class="d-px"><input type="checkbox" data-pick="'+i+'"'+(x.pilih?' checked':'')+' aria-label="Pilih '+esc(x.nama)+'" /></td>'
+      +'<td class="d-nama"><span class="isi">'+esc(x.nama)+'</span></td>'
+      +'<td class="d-harga">'+esc(harga)+'</td>'
+      +'<td class="d-sat">'+esc(x.satuan||'PCS')+'</td>'
+      +'<td class="d-jml">'+((x.jml||1)>1?(x.jml||1):'—')+'</td>'
+      +'<td class="d-aksi"><div class="acts">'
+        +'<button class="icobtn" type="button" data-naik="'+i+'" title="Naikkan" aria-label="Naikkan" '+(i===0?'disabled style="opacity:.3"':'')+'>&#9650;</button>'
+        +'<button class="icobtn" type="button" data-turun="'+i+'" title="Turunkan" aria-label="Turunkan" '+(i===items.length-1?'disabled style="opacity:.3"':'')+'>&#9660;</button>'
+        +'<button class="icobtn hapus" type="button" data-hapus="'+i+'" title="Hapus" aria-label="Hapus">&#215;</button>'
+      +'</div></td></tr>';
+  }).join('');
+}
+
+function render(){
+  grid.className='label-grid'+(fKolom.value==='3'?' sq3':'');
+  renderDaftar();
+
+  // Draft live: kartu ikut berubah saat user masih mengetik di form.
+  const dNama=(fNama.value||'').trim(),
+        dHarga=rupiah(fHarga.value),
+        dSat=(fSat.value||'').trim()||'PCS';
+  const draft=(dNama&&dHarga)?kartu(dNama,dHarga,dSat,null):'';
+
+  const chosen=terpilih();
+  renderInfo();
+
+  if(!chosen.length&&!draft){
+    // Jumlah kartu contoh ikut kolom cetak: 3 kolom = 3 label per baris.
+    const n=Math.max(2,parseInt(fKolom.value,10)||3);
+    let c='';
+    for(let i=0;i<n;i++) c+=contohKartu(i%CONTOH.length);
+    grid.innerHTML=c;
+    meta.textContent='CONTOH · '+fUkuran.selectedOptions[0].textContent.toUpperCase();
+    autofit();
+    return;
+  }
+  const total=chosen.reduce((n,x)=>n+(x.jml||1),0);
+  const tgl=new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
+  meta.textContent=chosen.length+' ITEM · '+total+' LABEL · '+fKolom.value+' KOLOM · '+tgl.toUpperCase();
+
+  grid.innerHTML=draft+chosen.map((x)=>{
+    let out='';
+    for(let k=0;k<(x.jml||1);k++) out+=kartu(x.nama,x.harga,x.satuan,null);
+    return out;
+  }).join('');
+  autofit();
+}
+
+function tambah(){
+  const nama=(fNama.value||'').trim(),
+        harga=rupiah(fHarga.value),
+        satuan=(fSat.value||'').trim()||'PCS',
+        jml=nilai(fJml.value);
+  if(!nama||!harga){ (nama?fHarga:fNama).focus(); return; }
+  items.push({nama,harga,satuan,jml,pilih:true});
+  fNama.value='';fHarga.value='';fSat.value='';
+  fNama.focus();
+  save(); render();
+  scrollReview();
+}
+
+function hapus(i){
+  items.splice(i,1);
+  save(); render();
+}
+
+function pindah(i,arah){
+  const j=i+arah;
+  if(j<0||j>=items.length) return;
+  const t=items[i]; items[i]=items[j]; items[j]=t;
+  save(); render();
+}
+
+// Tunjuk ke bagian REVIEW setiap kali ada item masuk, supaya user langsung
+// lihat hasilnya tanpa harus scroll sendiri.
+function scrollReview(){
+  const el=document.querySelector('.review');
+  if(!el) return;
+  const y=el.getBoundingClientRect().top+window.pageYOffset-12;
+  window.scrollTo({top:y,behavior:'smooth'});
+}
+
+document.getElementById('btnTambah').addEventListener('click',tambah);
+document.getElementById('btnCetak').addEventListener('click',()=>window.print());
+document.getElementById('btnBersih').addEventListener('click',()=>{
+  if(!items.length) return;
+  if(!confirm('Hapus semua label?')) return;
+  items=[]; save(); render();
+});
+
+// Daftar item: centang pilih / naik / turun / hapus.
+daftarBody.addEventListener('change',e=>{
+  const p=e.target.closest('[data-pick]');
+  if(!p) return;
+  items[parseInt(p.dataset.pick,10)].pilih=p.checked;
+  save(); render();
+});
+daftarBody.addEventListener('click',e=>{
+  const h=e.target.closest('[data-hapus]');
+  if(h){ hapus(parseInt(h.dataset.hapus,10)); return; }
+  const n=e.target.closest('[data-naik]');
+  if(n&&!n.disabled){ pindah(parseInt(n.dataset.naik,10),-1); return; }
+  const t=e.target.closest('[data-turun]');
+  if(t&&!t.disabled){ pindah(parseInt(t.dataset.turun,10),1); }
+});
+
+document.getElementById('btnPilihSemua').addEventListener('click',()=>{
+  items.forEach(x=>x.pilih=true); save(); render();
+});
+document.getElementById('btnPilihNone').addEventListener('click',()=>{
+  items.forEach(x=>x.pilih=false); save(); render();
+});
+
+// Tambah banyak: satu baris = nama | harga | satuan [| jumlah]
+const btnBulk=document.getElementById('btnBulk'),
+      bulkWrap=document.getElementById('bulkWrap'),
+      bulkTeks=document.getElementById('bulkTeks');
+btnBulk.addEventListener('click',()=>{
+  bulkWrap.hidden=!bulkWrap.hidden;
+  if(!bulkWrap.hidden) bulkTeks.focus();
+});
+document.getElementById('btnBulkAdd').addEventListener('click',()=>{
+  const baris=bulkTeks.value.split(/\r?\n/);
+  let n=0;
+  baris.forEach(b=>{
+    const parts=b.split('|').map(s=>s.trim());
+    if(!parts[0]) return;
+    const nama=parts[0];
+    const harga=rupiah(parts[1]||'');
+    if(!harga) return;
+    items.push({nama,harga,satuan:parts[2]||'PCS',jml:nilai(parts[3]||'1'),pilih:true});
+    n++;
+  });
+  if(!n) return;
+  bulkTeks.value='';
+  save(); render();
+  scrollReview();
+});
+
+grid.addEventListener('click',e=>{
+  const b=e.target.closest('[data-del]');
+  if(b) hapus(parseInt(b.dataset.del,10));
+});
+
+[fNama,fHarga,fSat,fJml].forEach(el=>{
+  el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); tambah(); } });
+  // Preview draft + checklist ikut bergerak saat mengetik.
+  el.addEventListener('input',render);
+});
+function ukuranTerapkan(){
+  const [w,h]=String(fUkuran.value||'63x40').split('x');
+  document.documentElement.style.setProperty('--lw',w+'mm');
+  document.documentElement.style.setProperty('--lh',h+'mm');
+  // Kolom otomatis: 210mm (A4) - 10mm margin = 200mm area cetak.
+  const muat=Math.floor((200+5.5)/(parseFloat(w)+5.5));
+  const cols=String(Math.min(Math.max(muat,1),3));
+  fKolom.value=cols;
+  const opt=fKolom.querySelector('option[value="'+cols+'"]');
+  if(opt) opt.disabled=false;
+}
+
+fUkuran.addEventListener('change',()=>{ ukuranTerapkan(); render(); });
+fKolom.addEventListener('change',render);
+ukuranTerapkan();
+// Ukuran label /kolom berubah = lebar label berubah, autofit harus diulang.
+window.addEventListener('resize',autofit);
+window.addEventListener('orientationchange',()=>setTimeout(autofit,120));
+
+// Bingkai hanya berpengaruh saat print, jadi cukup ubah kelas <body>.
+fBingkai.addEventListener('change',()=>{
+  document.body.classList.toggle('no-border',!fBingkai.checked);
+});
+document.body.classList.toggle('no-border',!fBingkai.checked);
+
+// Gaya tulisan & warna spidol -> class di <body>, disimpan biar tetap sama
+// saat halaman dibuka lagi.
+const GAYA_ALL=['','g-kotak','g-marker','g-spidol','g-tangan','g-ember','g-tebal','g-hitam'];
+const WARNA_ALL=['','c-led-hijau','c-led-merah','c-led-amber','c-led-biru','c-led-putih',
+                 'c-merah','c-biru','c-hijau','c-oranje'];
+const SET='mylove_label_harga_style_v1';
+
+function terapkanGaya(){
+  GAYA_ALL.forEach(g=>document.body.classList.toggle(g,!!g&&g===fGaya.value));
+  WARNA_ALL.forEach(c=>document.body.classList.toggle(c,!!c&&c===fWarna.value));
+  document.documentElement.style.setProperty('--harga-size',(fUkuranHarga.value||46)+'px');
+  document.body.classList.toggle('led-bg',fLedBg.checked);
+}
+function simpanGaya(){
+  try{ localStorage.setItem(SET,JSON.stringify({
+    gaya:fGaya.value,warna:fWarna.value,ukuran:fUkuranHarga.value,ledBg:fLedBg.checked
+  })); }catch(e){}
+}
+(function muatGaya(){
+  try{
+    const s=JSON.parse(localStorage.getItem(SET));
+    if(s&&s.gaya)fGaya.value=s.gaya;
+    if(s&&s.warna)fWarna.value=s.warna;
+    if(s&&s.ukuran)fUkuranHarga.value=s.ukuran;
+    if(s&&s.ledBg!=null)fLedBg.checked=!!s.ledBg;
+  }catch(e){}
+})();
+
+fGaya.addEventListener('change',()=>{ terapkanGaya(); simpanGaya(); render(); });
+fWarna.addEventListener('change',()=>{ terapkanGaya(); simpanGaya(); });
+fUkuranHarga.addEventListener('input',()=>{ terapkanGaya(); simpanGaya(); autofit(); });
+fLedBg.addEventListener('change',()=>{ terapkanGaya(); simpanGaya(); });
+terapkanGaya();
+
+render();
+</script>
+</body>
+</html>

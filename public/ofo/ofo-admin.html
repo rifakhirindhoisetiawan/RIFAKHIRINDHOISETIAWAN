@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
+    />
+    <title>Admin — OFO</title>
+    <link rel="manifest" href="../../manifest.json" />
+    <meta name="theme-color" content="#fffbf2" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      * {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+      html,
+      body {
+        width: 100%;
+        background: var(--mori-bg);
+      }
+      body.scroll-free {
+        overflow: visible;
+      }
+
+      /* ===== TEMA MORI ===== */
+      :root {
+        --mori-bg: #fffbf2;
+        --mori-surface: #f7f3e9;
+        --mori-text: #1a1917;
+        --mori-text-2: #6e6a64;
+        --mori-line: rgba(26, 25, 23, 0.14);
+        --mori-accent: #1a1917;
+        --mori-danger: #b91c1c;
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+      html,
+      body {
+        background: var(--mori-bg);
+      }
+      body {
+        font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+        color: var(--mori-text);
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+        padding-top: max(12px, env(safe-area-inset-top));
+      }
+
+      .wrap {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        background: var(--mori-bg);
+        padding: 12px 18px 32px;
+        min-width: 0;
+      }
+      .sec + .sec {
+        margin-top: 20px;
+      }
+
+      .head-row {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 16px;
+      }
+      .back-btn {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border: 1px solid var(--mori-accent);
+        background: var(--mori-bg);
+        color: var(--mori-text);
+        text-decoration: none;
+        box-shadow: 2px 2px 0 rgba(26, 25, 23, 0.16);
+        transition: transform 0.12s ease, box-shadow 0.12s ease;
+      }
+      .back-btn:active {
+        transform: translate(2px, 2px);
+        box-shadow: none;
+      }
+      .back-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+      .head-title {
+        font-family: var(--mori-mono);
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+      }
+      .head-sub {
+        font-family: var(--mori-mono);
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: var(--mori-text-2);
+        margin-top: 2px;
+      }
+
+      /* ===== FORM ===== */
+      .card {
+        border: 1px solid var(--mori-accent);
+        background: var(--mori-surface);
+        padding: 14px 14px 16px;
+        box-shadow: 4px 4px 0 rgba(26, 25, 23, 0.12);
+      }
+      .card-title {
+        font-family: var(--mori-mono);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        color: var(--mori-text-2);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .grid.one {
+        grid-template-columns: 1fr;
+      }
+      @media (max-width: 520px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .field label {
+        display: block;
+        font-family: var(--mori-mono);
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: var(--mori-text-2);
+        margin-bottom: 4px;
+      }
+      .inp {
+        width: 100%;
+        height: 38px;
+        padding: 0 10px;
+        font-family: var(--mori-mono);
+        font-size: 16px;
+        font-weight: 700;
+        background: var(--mori-bg);
+        color: var(--mori-text);
+        border: 1px solid var(--mori-accent);
+        border-radius: 0;
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      select.inp {
+        background: var(--mori-bg);
+      }
+      .inp:focus {
+        background: #fffdf7;
+        box-shadow: 4px 4px 0 var(--mori-accent);
+      }
+      .inp::placeholder {
+        color: #b9b4aa;
+        font-size: 11px;
+      }
+      .btn-row {
+        display: flex;
+        gap: 9px;
+        margin-top: 12px;
+      }
+      .btn {
+        flex: 1;
+        height: 40px;
+        border: 1px solid var(--mori-accent);
+        background: var(--mori-accent);
+        color: var(--mori-bg);
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: transform 0.12s ease, box-shadow 0.12s ease;
+      }
+      .btn.ghost {
+        background: var(--mori-bg);
+        color: var(--mori-text);
+      }
+      .btn:active {
+        transform: translate(1px, 1px);
+        box-shadow: none;
+      }
+      .btn:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+
+      .msg {
+        margin-top: 9px;
+        font-family: var(--mori-mono);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        border-left: 3px solid var(--mori-accent);
+        background: #fffdf7;
+        padding: 7px 9px;
+      }
+      .msg[hidden] {
+        display: none;
+      }
+      .msg.err {
+        border-color: var(--mori-danger);
+        background: #fdf1f1;
+        color: var(--mori-danger);
+      }
+      .msg.ok {
+        border-color: #047857;
+        background: #f0fdf4;
+        color: #047857;
+      }
+
+      /* ===== DAFTAR BARANG ===== */
+      .search-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--mori-accent);
+        background: var(--mori-surface);
+        padding: 0 12px;
+        height: 38px;
+        margin-bottom: 12px;
+      }
+      .search-box:focus-within {
+        background: #fffdf7;
+        box-shadow: 4px 4px 0 var(--mori-accent);
+      }
+      .search-box svg {
+        flex-shrink: 0;
+        width: 16px;
+        height: 16px;
+        color: var(--mori-text-2);
+      }
+      .search-box input {
+        flex: 1;
+        min-width: 0;
+        border: none;
+        background: transparent;
+        outline: none;
+        font-family: inherit;
+        font-size: 14px;
+        color: var(--mori-text);
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      .search-box input::placeholder {
+        color: var(--mori-text-2);
+      }
+
+      .table-wrap {
+        border: 1px solid var(--mori-accent);
+        background: var(--mori-bg);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .tabel {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+        table-layout: fixed;
+      }
+      .tabel thead th {
+        background: var(--mori-surface);
+        color: var(--mori-text);
+        font-family: var(--mori-mono);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        text-align: left;
+        height: 34px;
+        padding: 0 8px;
+        border-bottom: 1px solid var(--mori-accent);
+        white-space: nowrap;
+      }
+      .tabel tbody td {
+        height: 46px;
+        padding: 0 8px;
+        border-bottom: 1px solid var(--mori-line);
+        vertical-align: middle;
+      }
+      .tabel tbody tr:last-child td {
+        border-bottom: none;
+      }
+      .tabel tbody tr:hover td {
+        background: #faf6ea;
+      }
+      .c-no {
+        width: 30px;
+        text-align: center;
+        color: var(--mori-text-2);
+      }
+      .c-nama {
+        min-width: 0;
+        overflow: hidden;
+      }
+      .c-nama .nama {
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+      }
+      .c-kat {
+        width: 74px;
+      }
+      .c-sat {
+        width: 62px;
+      }
+      .c-harga {
+        width: 92px;
+        text-align: right;
+        font-family: var(--mori-mono);
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .c-aksi {
+        width: 84px;
+      }
+      .kat {
+        font-family: var(--mori-mono);
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        padding: 3px 7px;
+        border: 1px solid currentColor;
+        display: inline-block;
+      }
+      .kat.buah {
+        color: #15803d;
+      }
+      .kat.sayur {
+        color: #b45309;
+      }
+      .kat.telur {
+        color: #1d4ed8;
+      }
+      .acts {
+        display: flex;
+        gap: 6px;
+        justify-content: flex-end;
+      }
+      .ico {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--mori-accent);
+        background: var(--mori-surface);
+        color: var(--mori-text);
+        font-family: var(--mori-mono);
+        font-size: 12px;
+        font-weight: 800;
+        line-height: 1;
+        cursor: pointer;
+        box-shadow: 2px 2px 0 rgba(26, 25, 23, 0.16);
+      }
+      .ico:active {
+        transform: translate(2px, 2px);
+        box-shadow: none;
+      }
+      .ico-danger {
+        background: var(--mori-danger);
+        border-color: var(--mori-danger);
+        color: #fff;
+      }
+      .empty {
+        text-align: center;
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--mori-text-2);
+        padding: 34px 16px;
+      }
+      .hint {
+        font-family: var(--mori-mono);
+        font-size: 10px;
+        line-height: 1.6;
+        color: var(--mori-text-2);
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="head-row">
+        <a class="back-btn" href="ofo.html" title="Kembali" aria-label="Kembali">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        </a>
+        <div>
+          <div class="head-title">OFO — Kelola Barang</div>
+          <div class="head-sub">Katalog buah, sayur &amp; telur</div>
+        </div>
+      </div>
+
+      <section class="sec">
+        <div class="card">
+          <div class="card-title">
+            <span id="formLabel">Tambah Barang</span>
+            <button class="btn ghost" id="btnBatal" type="button" hidden
+              style="flex:0 0 auto;height:28px;padding:0 10px;font-size:9px">Batal</button>
+          </div>
+          <div class="grid">
+            <div class="field">
+              <label for="f_nama">Nama Barang *</label>
+              <input class="inp" id="f_nama" type="text" placeholder="Apel Manila" autocomplete="off" />
+            </div>
+            <div class="field">
+              <label for="f_kategori">Kategori</label>
+              <select class="inp" id="f_kategori">
+                <option value="sayur">Sayur</option>
+                <option value="buah">Buah</option>
+                <option value="telur">Telur</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid" style="margin-top:10px">
+            <div class="field">
+              <label for="f_satuan">Satuan</label>
+              <select class="inp" id="f_satuan">
+                <option value="kg">kg</option>
+                <option value="pcs">pcs</option>
+                <option value="porsi">porsi</option>
+                <option value="biji">biji</option>
+                <option value="pack">pack</option>
+                <option value="lubin">lubin</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f_harga">Harga / Satuan</label>
+              <input class="inp" id="f_harga" type="number" step="100" min="0" inputmode="numeric" placeholder="25000" />
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn" id="btnSimpan" type="button">Simpan Barang</button>
+          </div>
+          <p class="msg" id="msg" hidden></p>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="card">
+          <div class="card-title"><span>Daftar Barang</span><span id="jumlah">0</span></div>
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input id="cari" type="search" placeholder="Cari barang..." autocomplete="off" aria-label="Cari barang" />
+          </div>
+          <div class="table-wrap">
+            <table class="tabel">
+              <thead>
+                <tr>
+                  <th class="c-no">No</th>
+                  <th class="c-nama">Barang</th>
+                  <th class="c-kat">Kategori</th>
+                  <th class="c-sat">Satuan</th>
+                  <th class="c-harga">Harga</th>
+                  <th class="c-aksi"></th>
+                </tr>
+              </thead>
+              <tbody id="list">
+                <tr><td colspan="6"><div class="empty">Memuat...</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="hint">
+            Hapus barang akan menghapus semua riwayat stoknya (masuk / keluar).
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <script type="module">
+      import { supabase } from "../kopi/supabase.js";
+
+      const T = "ofo_items";
+
+      const f_nama = document.getElementById("f_nama");
+      const f_kategori = document.getElementById("f_kategori");
+      const f_satuan = document.getElementById("f_satuan");
+      const f_harga = document.getElementById("f_harga");
+      const formLabel = document.getElementById("formLabel");
+      const btnSimpan = document.getElementById("btnSimpan");
+      const btnBatal = document.getElementById("btnBatal");
+      const msgEl = document.getElementById("msg");
+      const listEl = document.getElementById("list");
+      const jumlahEl = document.getElementById("jumlah");
+      const cariEl = document.getElementById("cari");
+
+      let all = [];
+      let editId = null;
+
+      const esc = (s) =>
+        String(s == null ? "" : s).replace(
+          /[&<>"']/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+        );
+
+      function msg(pesan, jenis) {
+        msgEl.textContent = pesan || "";
+        msgEl.className = "msg" + (jenis ? " " + jenis : "");
+        msgEl.hidden = !pesan;
+        clearTimeout(msg._t);
+        if (pesan) msg._t = setTimeout(() => (msgEl.hidden = true), 4000);
+      }
+
+      function resetForm() {
+        editId = null;
+        formLabel.textContent = "Tambah Barang";
+        btnSimpan.textContent = "Simpan Barang";
+        btnBatal.hidden = true;
+        f_nama.value = "";
+        f_kategori.value = "sayur";
+        f_satuan.value = "kg";
+        f_harga.value = "";
+      }
+
+      function rowHtml(r, i) {
+        const harga = r.harga != null ? Number(r.harga).toLocaleString("id-ID") : "-";
+        return (
+          '<tr data-id="' + r.id + '">'
+          + '<td class="c-no">' + (i + 1) + "</td>"
+          + '<td class="c-nama"><span class="nama">' + esc(r.nama) + "</span></td>"
+          + '<td class="c-kat"><span class="kat ' + esc(r.kategori) + '">' + esc(r.kategori) + "</span></td>"
+          + '<td class="c-sat">' + esc(r.satuan) + "</td>"
+          + '<td class="c-harga">' + esc(harga) + "</td>"
+          + '<td class="c-aksi"><div class="acts">'
+            + '<button class="ico" type="button" data-edit="' + r.id + '" title="Edit" aria-label="Edit ' + esc(r.nama) + '">&#9998;</button>'
+            + '<button class="ico ico-danger" type="button" data-del="' + r.id + '" title="Hapus" aria-label="Hapus ' + esc(r.nama) + '">&times;</button>'
+          + "</div></td>"
+          + "</tr>"
+        );
+      }
+
+      function render() {
+        const q = cariEl.value.trim().toLowerCase();
+        const list = all
+          .filter((r) => !q || String(r.nama || "").toLowerCase().includes(q))
+          .slice()
+          .sort((a, b) => {
+            if (a.kategori !== b.kategori) return a.kategori.localeCompare(b.kategori);
+            return String(a.nama).localeCompare(String(b.nama));
+          });
+
+        jumlahEl.textContent = all.length + " BARANG";
+        if (!list.length) {
+          listEl.innerHTML =
+            '<tr><td colspan="6"><div class="empty">' +
+            (all.length ? "Tidak ditemukan" : "Belum ada barang") +
+            "</div></td></tr>";
+          return;
+        }
+        listEl.innerHTML = list.map(rowHtml).join("");
+
+        listEl.querySelectorAll("[data-edit]").forEach((b) => {
+          b.onclick = () => editRow(Number(b.dataset.edit));
+        });
+        listEl.querySelectorAll("[data-del]").forEach((b) => {
+          b.onclick = () => hapus(Number(b.dataset.del));
+        });
+      }
+
+      async function load() {
+        const { data, error } = await supabase
+          .from(T)
+          .select("*")
+          .order("nama");
+        if (error) {
+          const p = String(error.message || "");
+          listEl.innerHTML =
+            '<tr><td colspan="6"><div class="empty">' +
+            esc(
+              /does not exist/i.test(p)
+                ? "Tabel OFO belum ada. Jalankan scripts/build/ofo-setup.sql"
+                : "Error: " + p
+            ) +
+            "</div></td></tr>";
+          return;
+        }
+        all = data || [];
+        render();
+      }
+
+      function editRow(id) {
+        const r = all.find((x) => x.id === id);
+        if (!r) return;
+        editId = id;
+        f_nama.value = r.nama || "";
+        f_kategori.value = r.kategori || "sayur";
+        f_satuan.value = r.satuan || "kg";
+        f_harga.value = r.harga != null ? r.harga : "";
+        formLabel.textContent = "Edit — " + r.nama;
+        btnSimpan.textContent = "Update";
+        btnBatal.hidden = false;
+        document.body.classList.add("scroll-free");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        f_nama.focus();
+      }
+
+      async function hapus(id) {
+        const r = all.find((x) => x.id === id);
+        if (!confirm('Hapus "' + (r ? r.nama : id) + '"?\nSemua riwayat stoknya ikut terhapus.')) return;
+        const { error } = await supabase.from(T).delete().eq("id", id);
+        if (error) {
+          msg("Gagal hapus: " + error.message, "err");
+          return;
+        }
+        if (editId === id) resetForm();
+        msg("Barang dihapus", "ok");
+        await load();
+      }
+
+      btnSimpan.onclick = async () => {
+        const nama = f_nama.value.trim();
+        if (!nama) {
+          msg("Nama barang wajib", "err");
+          f_nama.focus();
+          return;
+        }
+        const hargaRaw = f_harga.value.trim();
+        const payload = {
+          nama: nama,
+          kategori: f_kategori.value,
+          satuan: f_satuan.value,
+          harga: hargaRaw === "" ? null : parseInt(hargaRaw, 10),
+        };
+
+        btnSimpan.disabled = true;
+        btnSimpan.textContent = "Menyimpan...";
+        let res;
+        if (editId) res = await supabase.from(T).update(payload).eq("id", editId).select();
+        else res = await supabase.from(T).insert([payload]).select();
+        btnSimpan.disabled = false;
+        btnSimpan.textContent = editId ? "Update" : "Simpan Barang";
+
+        if (res.error) {
+          msg(
+            /does not exist/i.test(res.error.message || "")
+              ? "Tabel OFO belum ada. Jalankan scripts/build/ofo-setup.sql"
+              : "Gagal simpan: " + res.error.message,
+            "err"
+          );
+          return;
+        }
+        msg(editId ? "Barang diperbarui" : "Barang ditambahkan", "ok");
+        resetForm();
+        await load();
+      };
+
+      btnBatal.onclick = () => {
+        resetForm();
+        document.body.classList.remove("scroll-free");
+      };
+
+      cariEl.oninput = render;
+      [f_nama, f_harga].forEach((el) => {
+        el.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            btnSimpan.click();
+          }
+        });
+      });
+
+      resetForm();
+      load();
+
+      // Realtime: barang ditambah / diubah dari HP lain langsung kelihatan.
+      try {
+        supabase
+          .channel("ofo_items_admin")
+          .on("postgres_changes", { event: "*", schema: "public", table: T }, () => {
+            clearTimeout(load._t);
+            load._t = setTimeout(() => load(), 400);
+          })
+          .subscribe();
+      } catch (e) {
+        /* realtime tidak wajib */
+      }
+    </script>
+  </body>
+</html>
