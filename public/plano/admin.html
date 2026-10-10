@@ -444,6 +444,20 @@ function renderPlano(produk){
     }
   }
   if(!filtered.length){ planoList.innerHTML='<tr><td colspan="10"><div class="empty">Belum ada produk</div></td></tr>'; return; }
+  filtered.sort((a,b)=>{
+    const sa=String(a.shelving||'').trim(), sb=String(b.shelving||'').trim();
+    const na=parseInt(sa,10), nb=parseInt(sb,10);
+    if(Number.isFinite(na)&&Number.isFinite(nb)&&na!==nb) return na-nb;
+    if(sa&&!sb) return -1; if(!sa&&sb) return 1;
+    if(sa!==sb) return sa.localeCompare(sb,undefined,{numeric:true});
+
+    const ba=parseInt(a.baris,10), bb=parseInt(b.baris,10);
+    if(Number.isFinite(ba)&&Number.isFinite(bb)&&ba!==bb) return ba-bb;
+    if(a.baris&&!b.baris) return -1; if(!a.baris&&b.baris) return 1;
+    if(String(a.baris||'')!==String(b.baris||'')) return String(a.baris||'').localeCompare(String(b.baris||''),undefined,{numeric:true});
+
+    return (a.sort_order||0)-(b.sort_order||0);
+  });
   const groups=[];
   filtered.forEach(r=>{
     const key=String(r.rak||'').trim().toUpperCase();

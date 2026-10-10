@@ -14,9 +14,10 @@ const ITEM_TABLE = 'daily_task_items';
 // benar walau halaman dibuka lewat WebView/PWA/hash routing). Cadangan: nama
 // file terakhir, mis. hari.html -> "hari".
 const PERIOD = (() => {
+  const dariQuery = new URLSearchParams(location.search).get('p') || '';
   const dariBody = (document.body && document.body.dataset.period) || '';
   const dariFile = (location.pathname.split('/').pop() || '').replace(/\.html$/i, '');
-  return String(dariBody || dariFile).trim().toLowerCase();
+  return String(dariQuery || dariBody || dariFile).trim().toLowerCase();
 })();
 
 const STORAGE_KEY = 'todo-' + PERIOD;

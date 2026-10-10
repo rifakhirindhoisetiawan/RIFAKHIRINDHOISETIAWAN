@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>NIK & Password</title>
+  <link rel="manifest" href="../../manifest.json" />
+  <meta content="#fffbf2" name="theme-color" />
+  <link rel="stylesheet" href="../mori-style.css" />
+  <style>
+    .pass-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .pass-wrapper input {
+      padding-right: 48px;
+    }
+    .btn-toggle-pass {
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: var(--mori-text-2);
+      padding: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-toggle-pass:hover {
+      color: var(--mori-text);
+    }
+    .data-box {
+      border: 1px solid var(--mori-accent);
+      background: var(--mori-bg);
+      padding: 14px;
+      margin-top: 12px;
+    }
+    .data-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--mori-line);
+    }
+    .data-row:last-child {
+      border-bottom: none;
+    }
+    .data-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--mori-text-2);
+    }
+    .data-val {
+      font-family: var(--mori-mono);
+      font-size: 13px;
+      color: var(--mori-text);
+      word-break: break-all;
+      flex: 1;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="head">
+      <a class="back" href="../../index.html" title="Kembali" aria-label="Kembali">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </a>
+      <div>
+        <div class="head-title">NIK & Password</div>
+        <div class="head-sub">Simpan dan Kelola NIK & Password</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Input Data NIK</h2>
+      
+      <div style="margin-bottom:12px">
+        <label class="head-sub" for="nikInput" style="display:block;margin-bottom:6px">NIK</label>
+        <input id="nikInput" class="field mono" type="text" inputmode="numeric" placeholder="Masukkan NIK..." autocomplete="off" spellcheck="false" />
+      </div>
+
+      <div style="margin-bottom:12px">
+        <label class="head-sub" for="passwordInput" style="display:block;margin-bottom:6px">Password</label>
+        <div class="pass-wrapper">
+          <input id="passwordInput" class="field mono" type="password" placeholder="Masukkan Password..." autocomplete="off" spellcheck="false" />
+          <button id="btnTogglePass" class="btn-toggle-pass" type="button" aria-label="Tampilkan Password" title="Tampilkan Password">
+            <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button id="btnSave" class="btn primary" type="button">Simpan</button>
+        <button id="btnReset" class="btn" type="button">Reset</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Data Tersimpan</h2>
+      <div id="displayContainer">
+        <div class="empty">Belum ada data NIK tersimpan</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module">
+    const KEY = "mylove_nik_data_v1";
+    const nikInput = document.getElementById("nikInput");
+    const passwordInput = document.getElementById("passwordInput");
+    const btnTogglePass = document.getElementById("btnTogglePass");
+    const eyeIcon = document.getElementById("eyeIcon");
+    const btnSave = document.getElementById("btnSave");
+    const btnReset = document.getElementById("btnReset");
+    const displayContainer = document.getElementById("displayContainer");
+    const toastEl = document.getElementById("toast");
+
+    let isPassVisible = false;
+
+    btnTogglePass.addEventListener("click", () => {
+      isPassVisible = !isPassVisible;
+      passwordInput.type = isPassVisible ? "text" : "password";
+      eyeIcon.innerHTML = isPassVisible
+        ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`
+        : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+    });
+
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function saveData(nik, password) {
+      try {
+        localStorage.setItem(KEY, JSON.stringify({ nik, password, updatedAt: new Date().toISOString() }));
+        return true;
+      } catch (e) {
+        toast("Gagal menyimpan data");
+        return false;
+      }
+    }
+
+    function removeData() {
+      try {
+        localStorage.removeItem(KEY);
+      } catch (e) {}
+    }
+
+    let toastTimer = null;
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add("on");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.remove("on"), 2200);
+    }
+
+    function render() {
+      const data = loadData();
+      if (!data || (!data.nik && !data.password)) {
+        displayContainer.innerHTML = '<div class="empty">Belum ada data NIK tersimpan</div>';
+        return;
+      }
+
+      displayContainer.innerHTML = `
+        <div class="data-box">
+          <div class="data-row">
+            <span class="data-label">NIK</span>
+            <span class="data-val">${escapeHtml(data.nik || "-")}</span>
+          </div>
+          <div class="data-row">
+            <span class="data-label">PASSWORD</span>
+            <span class="data-val">${escapeHtml(data.password || "-")}</span>
+          </div>
+          <div class="btn-row" style="margin-top:12px">
+            <button id="btnCopyNik" class="btn sm" type="button">Salin NIK</button>
+            <button id="btnCopyPass" class="btn sm" type="button">Salin Password</button>
+            <button id="btnDelete" class="btn sm danger" type="button">Hapus</button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("btnCopyNik")?.addEventListener("click", () => {
+        if (data.nik) {
+          navigator.clipboard.writeText(data.nik);
+          toast("NIK berhasil disalin");
+        }
+      });
+
+      document.getElementById("btnCopyPass")?.addEventListener("click", () => {
+        if (data.password) {
+          navigator.clipboard.writeText(data.password);
+          toast("Password berhasil disalin");
+        }
+      });
+
+      document.getElementById("btnDelete")?.addEventListener("click", () => {
+        removeData();
+        render();
+        toast("Data berhasil dihapus");
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    btnSave.addEventListener("click", () => {
+      const nik = nikInput.value.trim();
+      const password = passwordInput.value.trim();
+      if (!nik && !password) {
+        toast("Isi NIK atau Password terlebih dahulu");
+        return;
+      }
+      if (saveData(nik, password)) {
+        toast("Data berhasil disimpan");
+        render();
+      }
+    });
+
+    btnReset.addEventListener("click", () => {
+      nikInput.value = "";
+      passwordInput.value = "";
+    });
+
+    // Initial load
+    const saved = loadData();
+    if (saved) {
+      nikInput.value = saved.nik || "";
+      passwordInput.value = saved.password || "";
+    }
+    render();
+  </script>
+</body>
+</html>

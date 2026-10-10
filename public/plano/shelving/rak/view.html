@@ -76,24 +76,26 @@ function render(){
     if(info) info.textContent=list.length+' PRODUK';
     const groups=new Map();
     list.forEach(r=>{
-      const s=String(r.shelving||'').trim(), b=String(r.baris||'').trim()||'—';
-      const k=(s||'')+'\x1f'+b;
-      if(!groups.has(k)) groups.set(k,[]);
-      groups.get(k).push(r);
+      const s=String(r.shelving||'').trim()||'—';
+      if(!groups.has(s)) groups.set(s,[]);
+      groups.get(s).push(r);
     });
     const keys=[...groups.keys()].sort((a,b)=>{
-      const [sa,ba]=a.split('\x1f'), [sb,bb]=b.split('\x1f');
-      if(sa&&sb&&sa!==sb) return sa.localeCompare(sb,undefined,{numeric:true});
-      if(sa&&!sb) return -1; if(!sa&&sb) return 1;
-      const na=parseInt(ba,10), nb=parseInt(bb,10);
-      if(Number.isFinite(na)&&Number.isFinite(nb)) return na-nb;
-      if(ba==='—') return 1; if(bb==='—') return -1;
-      return String(ba).localeCompare(String(bb));
+      if(a==='—') return 1; if(b==='—') return -1;
+      const na=parseInt(a,10), nb=parseInt(b,10);
+      if(Number.isFinite(na)&&Number.isFinite(nb)&&na!==nb) return na-nb;
+      return String(a).localeCompare(String(b),undefined,{numeric:true});
     });
-    shelf.innerHTML=keys.map(k=>{
-      const [s,b]=k.split('\x1f');
-      const label=s? 'SHELVING '+esc(s)+' · BARIS '+esc(b||'—') : 'BARIS '+esc(b||'—');
-      return `<div class="shelf"><div class="shelf-head"><b>${label}</b><span>${groups.get(k).length} PRODUK</span></div><div class="grid">${groups.get(k).map(p=>`<div class="card"><div class="icon">${p.foto_url?`<img src="${esc(fotoBaru(p.foto_url))}" alt="" onerror="this.remove()" />`:'🗄️'}</div><div class="name">${esc(p.name||'—')}</div><div class="sku">${esc([p.plu?'PLU '+p.plu:'',p.barcode||''].filter(Boolean).join(' · ')||'—')}</div><div class="facing">${esc([p.shelving?'SHELVING '+p.shelving:'',p.baris?'BARIS '+p.baris:'',p.rh!=null&&String(p.rh).trim()!==''?hitungED(p.rh):''].filter(Boolean).join(' · ')||'—')}</div></div>`).join('')}</div></div>`;
+    shelf.innerHTML=keys.map(s=>{
+      const items=groups.get(s);
+      items.sort((a,b)=>{
+        const ba=parseInt(a.baris,10), bb=parseInt(b.baris,10);
+        if(Number.isFinite(ba)&&Number.isFinite(bb)&&ba!==bb) return ba-bb;
+        if(a.baris&&!b.baris) return -1; if(!a.baris&&b.baris) return 1;
+        return String(a.baris||'').localeCompare(String(b.baris||''),undefined,{numeric:true});
+      });
+      const label=s!=='—'?'SHELVING '+esc(s):'TANPA SHELVING';
+      return `<div class="shelf"><div class="shelf-head"><b>${label}</b><span>${items.length} PRODUK</span></div><div class="grid">${items.map(p=>`<div class="card"><div class="icon">${p.foto_url?`<img src="${esc(fotoBaru(p.foto_url))}" alt="" onerror="this.remove()" />`:'🗄️'}</div><div class="name">${esc(p.name||'—')}</div><div class="sku">${esc([p.plu?'PLU '+p.plu:'',p.barcode||''].filter(Boolean).join(' · ')||'—')}</div><div class="facing">${esc([p.baris?'BARIS '+p.baris:'',p.rh!=null&&String(p.rh).trim()!==''?hitungED(p.rh):''].filter(Boolean).join(' · ')||'—')}</div></div>`).join('')}</div></div>`;
     }).join('');
   }catch(e){ shelf.innerHTML='<div class="empty">Error render: '+esc(e.message)+'</div>'; console.error(e); }
 }

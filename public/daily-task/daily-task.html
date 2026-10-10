@@ -633,7 +633,7 @@
             const name = p.name || p.title || 'Tanpa nama';
             const slug = p.slug || '';
             const cls = p.cls || '';
-            const href = p.href || (slug ? `utility/${slug}.html` : '#');
+            const href = p.href || (slug ? `utility/index.html?p=${slug}` : '#');
             const isAdmin = slug === ADMIN_SLUG || p.isAdmin;
             return `<a class="item active-modul" href="${href}">
               ${isAdmin ? tileAdmin() : tileFoto(slug, p.foto_url)}
@@ -647,14 +647,18 @@
         try {
           const { data, error } = await supabase.from('daily_tasks').select('*').order('id');
           if (error) throw error;
-          periods = (data || []).map((r) => ({
-            name: r.title || r.name || '',
-            cls: r.cls || '',
-            // link: pakai kolom href/description, fallback ke utility/<slug>.html
-            href: r.href || r.description || '',
-            slug: r.slug || r.period || slugify(r.title || r.name),
-            foto_url: r.foto_url || ''
-          }));
+          periods = (data || []).map((r) => {
+            const slug = r.slug || r.period || slugify(r.title || r.name);
+            let href = r.href || r.description || '';
+            if (/^utility\/[^?]+\.html$/i.test(href)) href = 'utility/index.html?p=' + slug;
+            return {
+              name: r.title || r.name || '',
+              cls: r.cls || '',
+              href,
+              slug,
+              foto_url: r.foto_url || ''
+            };
+          });
           if (periods.length) console.info('daily_tasks: ' + periods.length + ' menu dari Supabase');
           else console.warn('daily_tasks kosong - belum ada menu');
         } catch (e) {
