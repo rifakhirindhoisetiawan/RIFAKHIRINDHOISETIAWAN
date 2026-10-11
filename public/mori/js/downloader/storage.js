@@ -148,35 +148,30 @@ export async function saveToStorage({
             directory: dir,
           }).catch(() => {});
 
-          // Fallback to CapacitorHttp blob download if retries exhausted
-          if (attempts >= maxAttempts && CapacitorHttp) {
+          // Fallback to CapacitorHttp or standard fetch blob download if retries exhausted
+          if (attempts >= maxAttempts) {
             try {
-              const httpRes = await CapacitorHttp.get({
-                url: actualDownloadUrl,
-                responseType: "blob",
-                headers: downloadHeaders,
-                connectTimeout: 20000,
-                readTimeout: 30000,
+              const res = await fetch(actualDownloadUrl, {
+                headers: downloadHeaders || {},
               });
-              if (
-                httpRes &&
-                httpRes.status === 200 &&
-                httpRes.data &&
-                typeof httpRes.data === "string"
-              ) {
+              if (res.ok) {
+                const blob = await res.blob();
+                const reader = new FileReader();
+                const base64Data = await new Promise((resolve, reject) => {
+                  reader.onloadend = () => resolve(reader.result);
+                  reader.onerror = reject;
+                  reader.readAsDataURL(blob);
+                });
                 await Filesystem.writeFile({
                   path: fullPath + "/" + fileName,
-                  data: httpRes.data,
+                  data: base64Data,
                   directory: dir,
                 });
                 savedFile = { path: fullPath + "/" + fileName };
                 successfulDir = dir;
               }
             } catch (fallbackErr) {
-              console.warn(
-                `Http blob fallback on ${dir} failed:`,
-                fallbackErr,
-              );
+              console.warn(`Fetch blob fallback on ${dir} failed:`, fallbackErr);
             }
           }
         }
