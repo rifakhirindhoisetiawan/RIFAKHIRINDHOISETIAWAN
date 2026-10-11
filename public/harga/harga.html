@@ -21,19 +21,21 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 .wrap{width:100%;max-width:800px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 18px 32px}
 
 .head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.back{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--mori-accent);background:var(--mori-bg);color:var(--mori-text);text-decoration:none;font-size:18px;line-height:1}
-.back:active{transform:translate(2px,2px)}
+.back{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-text);text-decoration:none;font-size:18px;line-height:1;border-radius:8px;transition:box-shadow .2s ease,transform .2s ease}
+.back:hover{box-shadow:4px 4px 0 var(--mori-accent)}
+.back:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--mori-accent)}
 .head h1{font-family:var(--mori-mono);font-size:14px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}
 
 /* ===== FORM (disembunyikan saat print) ===== */
-.sec{background:var(--mori-surface);border:1px solid var(--mori-accent);padding:14px 14px 16px;margin-bottom:16px;border-radius:0}
+.sec{background:var(--mori-surface);border:1px solid var(--mori-accent);padding:14px 14px 16px;margin-bottom:16px;border-radius:8px}
 .sec-title{font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text-2);margin-bottom:12px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .row>label>span{display:block;font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--mori-text-2);margin-bottom:4px}
-.inp{width:100%;padding:10px 12px;border:1px solid var(--mori-accent);background:var(--mori-bg);font-family:var(--mori-mono);font-size:13px;font-weight:700;color:var(--mori-text);outline:none;-webkit-appearance:none;appearance:none;border-radius:0}
+.inp{width:100%;padding:10px 12px;border:1px solid var(--mori-accent);background:var(--mori-bg);font-family:var(--mori-mono);font-size:13px;font-weight:700;color:var(--mori-text);outline:none;-webkit-appearance:none;appearance:none;border-radius:8px}
 .inp:focus{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
-.btn{flex:1;padding:13px 10px;border:1px solid var(--mori-accent);background:var(--mori-accent);color:var(--mori-bg);font-family:var(--mori-mono);font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
-.btn:active{transform:translate(2px,2px)}
+.btn{flex:1;padding:13px 10px;border:1px solid var(--mori-accent);background:var(--mori-accent);color:var(--mori-bg);font-family:var(--mori-mono);font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:8px;transition:box-shadow .2s ease,transform .2s ease}
+.btn:hover{box-shadow:4px 4px 0 rgba(26,25,23,.2)}
+.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--mori-accent)}
 .btn.ghost{background:var(--mori-bg);color:var(--mori-text)}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn-row{display:flex;gap:10px;margin-top:10px}
@@ -42,7 +44,7 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 /* ===== PRATINJAU LABEL ===== */
 #areaMeta{font-family:var(--mori-mono);font-size:9px;color:var(--mori-text-2);margin-bottom:14px}
 /* ===== REVIEW LABEL ===== */
-.review{border:1px solid var(--mori-accent);background:var(--mori-bg);padding:14px 14px 16px;margin-top:4px;border-radius:0}
+.review{border:1px solid var(--mori-accent);background:var(--mori-bg);padding:14px 14px 16px;margin-top:4px;border-radius:8px}
 .review-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--mori-line)}
 .review-title{font-family:var(--mori-mono);font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--mori-text)}
 .review-meta{font-family:var(--mori-mono);font-size:9px;font-weight:700;letter-spacing:.6px;color:var(--mori-text-2);text-align:right}
@@ -204,7 +206,7 @@ body.c-oranye .price-card .harga{color:#c2410c}
 .empty{grid-column:1/-1;text-align:center;font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text-2);padding:40px 0;border:1px dashed var(--mori-line)}
 
 /* ===== DAFTAR ITEM (yang mau dicetak) ===== */
-.daftar-wrap{border:1px solid var(--mori-accent);background:var(--mori-bg);margin-bottom:16px;border-radius:0;overflow:hidden}
+.daftar-wrap{border:1px solid var(--mori-accent);background:var(--mori-bg);margin-bottom:16px;border-radius:8px;overflow:hidden}
 .daftar{width:100%;border-collapse:collapse;font-size:11px;border-radius:0}
 .daftar thead th:first-child{border-top-left-radius:0}
 .daftar thead th:last-child{border-top-right-radius:0}
@@ -223,15 +225,15 @@ body.c-oranye .price-card .harga{color:#c2410c}
 .d-jml{width:52px;text-align:center;font-family:var(--mori-mono);font-size:11px;font-weight:700}
 .d-aksi{width:96px}
 .d-aksi .acts{display:flex;gap:4px;justify-content:flex-end}
-.icobtn{width:26px;height:26px;flex:0 0 26px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-accent);font-family:var(--mori-mono);font-size:11px;font-weight:800;line-height:1;cursor:pointer;padding:0}
+.icobtn{width:26px;height:26px;flex:0 0 26px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-accent);font-family:var(--mori-mono);font-size:11px;font-weight:800;line-height:1;cursor:pointer;padding:0;border-radius:6px}
 .icobtn:active{transform:translate(1px,1px)}
 .icobtn.hapus{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff}
 .daftar-kosong{text-align:center;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text-2);padding:28px 0}
 
 /* ===== TAMBAH CEPAT (bulk) ===== */
-.bulk{width:100%;min-height:96px;padding:10px 12px;border:1px solid var(--mori-accent);background:var(--mori-bg);font-family:var(--mori-mono);font-size:11px;font-weight:600;color:var(--mori-text);outline:none;resize:vertical;line-height:1.7}
+.bulk{width:100%;min-height:96px;padding:10px 12px;border:1px solid var(--mori-accent);background:var(--mori-bg);font-family:var(--mori-mono);font-size:11px;font-weight:600;color:var(--mori-text);outline:none;resize:vertical;line-height:1.7;border-radius:8px}
 .bulk:focus{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
-.sec-toggle{width:100%;padding:10px;border:1px solid var(--mori-accent);background:var(--mori-bg);color:var(--mori-accent);font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-bottom:10px}
+.sec-toggle{width:100%;padding:10px;border:1px solid var(--mori-accent);background:var(--mori-bg);color:var(--mori-accent);font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-bottom:10px;border-radius:8px}
 .sec-toggle:active{transform:translate(1px,1px)}
 #bulkWrap[hidden]{display:none}
 .inp[type=range]{-webkit-appearance:none;appearance:none;background:transparent;border:0;padding:12px 0;height:auto}

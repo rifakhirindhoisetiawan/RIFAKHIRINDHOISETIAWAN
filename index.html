@@ -185,7 +185,7 @@
         align-items: center;
         gap: 8px;
         border: 1px solid var(--mori-accent);
-        border-radius: 0;
+        border-radius: 8px;
         padding: 11px 14px;
         color: var(--mori-text);
         font-size: 13px;
@@ -249,13 +249,14 @@
         background-size: 200% 100%;
         animation: shimmer 1.2s infinite;
         border: 1px solid var(--mori-accent);
-        border-radius: 0;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
         margin-bottom: 10px;
         overflow: hidden;
         position: relative;
+        box-shadow: 4px 4px 0 rgba(26, 25, 23, 0.12);
         transition: box-shadow 0.2s ease, transform 0.2s ease;
       }
 
@@ -274,6 +275,7 @@
         object-fit: cover;
         display: block;
         opacity: 0;
+        filter: saturate(0.55) contrast(1.02);
         transition: opacity 0.25s ease;
       }
 
@@ -361,7 +363,7 @@
         { label: "TIME KAMERA", href: "public/time-kamera/time-kamera.html", folder: "time-kamera", ext: "png", thumb: "assets/images/time-kamera/1.png" },
         { label: "DUAL KAMERA", href: "public/dual-kamera/dual-kamera.html", folder: "dual-kamera", ext: "png", thumb: "assets/images/dual-kamera/1.png" },
         { label: "NIK", href: "public/nik/nik.html", folder: "pulang", ext: "png", thumb: "assets/images/pulang/1.png" },
-        { label: "HARGA", href: "public/harga/harga.html", folder: "pagi", ext: "png", thumb: "assets/images/pagi/1.png" },
+        { label: "HARGA", href: "public/harga/harga.html", folder: "mori", ext: "png", thumb: "assets/images/mori/1.png" },
       ];
 
       const disabledLabels = new Set([]);
