@@ -247,7 +247,7 @@
       }
 
       .menu-item .icon-box::after {
-        background: linear-gradient(90deg, #f2eee2 25%, #e8e2d2 50%, #f2eee2 75%);
+        display: none; /* shimmer pindah ke background kotak (sama index) */
       }
 
       .menu-item:hover .icon-box {
@@ -264,6 +264,66 @@
         color: var(--mori-text);
         letter-spacing: 0.6px;
         text-transform: uppercase;
+      }
+
+      /* ============================================================
+         SAMAKAN DENGAN index.html
+         Override sharp di atas memakai radius 0, sementara menu utama
+         (index.html) sudah bulat 8px. Nilai di bawah disalin persis dari
+         index.html supaya dua halaman ini terlihat sama.
+         ============================================================ */
+      .date-box {
+        border-radius: 8px;
+        /* index.html: kotak pencarian tidak punya bayangan diam-diam,
+           bayangan hanya muncul saat fokus */
+        box-shadow: none;
+      }
+
+      .menu-item .icon-box {
+        width: 100%;
+        max-width: 100px; /* index.html: 100px, bukan 110px */
+        aspect-ratio: 9 / 16;
+        border-radius: 8px;
+        border: 1px solid var(--mori-accent);
+        margin-bottom: 10px; /* index.html: 10px, bukan 8px */
+        box-shadow: 4px 4px 0 rgba(26, 25, 23, 0.12);
+        /* index.html shimmer di background kotak, bukan ::after */
+        background: linear-gradient(90deg, #f2eee2 25%, #e8e2d2 50%, #f2eee2 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.2s infinite;
+      }
+      /* begitu foto siap, shimmer disembunyikan (kelas .siap dari JS) */
+      .menu-item .icon-box.siap {
+        animation: none;
+        background: var(--mori-surface);
+      }
+      .menu-item:hover .icon-box {
+        box-shadow: 4px 4px 0 var(--mori-accent);
+      }
+      .menu-item:active .icon-box {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 var(--mori-accent);
+      }
+
+      .menu-item .label {
+        font-size: 9px; /* index.html: 9px */
+        font-weight: 700;
+        line-height: 1.3; /* index.html: 1.3 */
+        letter-spacing: 1px; /* index.html: 1px */
+        color: var(--mori-text);
+        font-family: var(--mori-mono);
+        text-transform: uppercase;
+      }
+
+      @media (max-width: 360px) {
+        .menu-item .icon-box {
+          max-width: 85px; /* index.html: 85px */
+          border-radius: 8px;
+        }
+        .menu-item .label {
+          font-size: 8px; /* index.html: 8px */
+          letter-spacing: 0.6px;
+        }
       }
     </style>
   </head>
