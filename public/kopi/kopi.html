@@ -798,12 +798,32 @@
         animation: pinPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
 
+      /* ===== GESTUR TEKAN-TAHAN =====
+         Tekan-tahan di HP diprioritaskan sebagai "semat menu". Tanpa ini,
+         Android memunculkan callout "Salin / Bagikan" dan membatalkan
+         gestur sebelum timer sematan sempat aktif. */
+      .item,
+      .icon-tile,
+      .item span {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      .icon-tile {
+        /* manipulation = browser tidak menunggu delay zoom 300ms,
+           sehingga-timing tekan-tahan terasa responsif */
+        touch-action: manipulation;
+      }
+
       /* Tombol Semat / Lepas Semat di sheet sudah dihapus (permintaan).
        Sematan menu sekarang hanya lewat tekan-tahan kartu ~450ms.
 
        Toast "Disematkan" / "Lepas sematan" juga dihapus (permintaan).
        Feedback masih ada lewat denyut scale 1 -> 1.07 -> 1 pada kartu
-       yang di-long-press, plus tanda pushpin di pojok foto. */
+       yang di-long-press, getaran singkat 12ms (kalau HP mendukung),
+       dan tanda pushpin di pojok foto. */
     </style>
   </head>
   <body>
@@ -1038,52 +1058,98 @@
                '</' + tag + '>';
       }
 
-      /* Long-press = tekan-tahan ~450ms. Pointer Events dipakai supaya
-         jalan di mouse HP maupun desktop (ctxmenu dimatikan supaya klik
-         kanan tidak memicu). Geser sebelum 450ms berarti batal, jadi
-         scroll daftar tidak ikut menyematkan menu.
+      /* Long-press = tekan-tahan ~450ms.
+
+         Kenapa bukan Pointer Events: di Android, tekan-tahan memicu
+         context menu / seleksi teks, dan browser sering mengirim
+         pointercancel SEBELUM timer 450ms sempat aktif -- sehingga
+         sematan tidak pernah jalan di HP. Touch Events tidak terkena
+         masalah itu, jadi dipakai untuk perangkat sentuh, sedangkan
+         mouse (desktop) tetap pakai mousedown.
+
+         Geser sebelum 450ms = batal, jadi scroll daftar tidak ikut
+         menyematkan menu.
 
          PENTING: togglePin() memanggil renderMenu() yang mengganti DOM,
-         tapi pointer masih di atas kartu yang sudah lepas. Browser tetap
+         tapi jari masih di atas kartu yang sudah lepas. Browser tetap
          mengirim click ke elemen lama itu, yang membuat halaman ikut
          terbuka. Karena itu klik setelah sematan ditekan lewat
-         suppressClickUntil — tanpa ini, setiap long-press = pin + navigate. */
+         suppressClickUntil — tanpa ini, setiap long-press = semat + buka. */
       const PIN_MS = 450;
+      const PIN_MOVE_TOLERANCE = 10; // px sebelum dianggap geser
       // Jeda ini hanya berlaku untuk kartu yang JUSTRU di-long-press.
       // Kalau berlaku global, tap ADMIN (atau menu lain) dalam 700ms
       // setelah sematan ikut tertelan dan tidak terjadi navigasi.
       const CLICK_GRACE_MS = 700;
       let suppressIdx = -1;
       let lpTimer = null;
-      let lpMoved = false;
+      let lpStartX = 0;
+      let lpStartY = 0;
       let lpSlug = null;
       let lpName = null;
       let suppressClickUntil = 0;
+
+      function beginPinHold(el, slug, nama, x, y) {
+        lpSlug = slug;
+        lpName = nama;
+        lpStartX = x;
+        lpStartY = y;
+        clearTimeout(lpTimer);
+        lpTimer = setTimeout(() => {
+          suppressIdx = parseInt(el.dataset.idx, 10);
+          suppressClickUntil = Date.now() + CLICK_GRACE_MS;
+          if (navigator.vibrate) { try { navigator.vibrate(12); } catch (e) {} }
+          togglePin(lpSlug, lpName, el);
+          lpSlug = null;
+          lpName = null;
+        }, PIN_MS);
+      }
+      function cancelPinHold() {
+        clearTimeout(lpTimer);
+        lpSlug = null;
+        lpName = null;
+      }
+
       function bindPinGesture(el, nama) {
-        el.addEventListener('pointerdown', (e) => {
-          if (e.button && e.button !== 0) return;
-          const slug = el.dataset.slug;
-          if (!slug || nama === 'ADMIN') return;
-          lpSlug = slug;
-          lpName = nama;
-          lpMoved = false;
-          clearTimeout(lpTimer);
-          lpTimer = setTimeout(() => {
-            if (lpMoved) return;
-            suppressIdx = parseInt(el.dataset.idx, 10);
-            suppressClickUntil = Date.now() + CLICK_GRACE_MS;
-            togglePin(lpSlug, lpName, el);
-            lpSlug = null;
-            lpName = null;
-          }, PIN_MS);
+        const slug = el.dataset.slug;
+        if (!slug || nama === 'ADMIN') return;
+
+        /* --- perangkat sentuh (HP) --- */
+        el.addEventListener('touchstart', (e) => {
+          const t = e.touches[0];
+          if (!t) return;
+          beginPinHold(el, slug, nama, t.clientX, t.clientY);
+        }, { passive: true });
+
+        el.addEventListener('touchmove', (e) => {
+          const t = e.touches[0];
+          if (!t) { cancelPinHold(); return; }
+          const dx = Math.abs(t.clientX - lpStartX);
+          const dy = Math.abs(t.clientY - lpStartY);
+          if (dx > PIN_MOVE_TOLERANCE || dy > PIN_MOVE_TOLERANCE) cancelPinHold();
+        }, { passive: true });
+
+        el.addEventListener('touchend', cancelPinHold);
+        el.addEventListener('touchcancel', cancelPinHold);
+
+        /* --- mouse (desktop) --- */
+        el.addEventListener('mousedown', (e) => {
+          if (e.button) return;
+          beginPinHold(el, slug, nama, e.clientX, e.clientY);
         });
-        const cancel = () => { lpMoved = true; clearTimeout(lpTimer); lpSlug = null; lpName = null; };
-        el.addEventListener('pointermove', cancel);
-        el.addEventListener('pointerup', () => clearTimeout(lpTimer));
-        el.addEventListener('pointercancel', () => clearTimeout(lpTimer));
-        el.addEventListener('pointerleave', () => clearTimeout(lpTimer));
-        // klik kanan / tekan lama di HP tidak memunculkan menu browser
-        el.addEventListener('contextmenu', (e) => { e.preventDefault(); clearTimeout(lpTimer); });
+        el.addEventListener('mousemove', (e) => {
+          const dx = Math.abs(e.clientX - lpStartX);
+          const dy = Math.abs(e.clientY - lpStartY);
+          if (dx > PIN_MOVE_TOLERANCE || dy > PIN_MOVE_TOLERANCE) cancelPinHold();
+        });
+        el.addEventListener('mouseup', cancelPinHold);
+        el.addEventListener('mouseleave', cancelPinHold);
+
+        /* klik kanan / tekan lama di HP tidak memunculkan menu browser */
+        el.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          cancelPinHold();
+        });
       }
 
       function renderMenu() {
