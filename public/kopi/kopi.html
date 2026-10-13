@@ -798,36 +798,8 @@
         animation: pinPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
 
-      /* tombol unpin di sheet */
-      .sheet-pin {
-        display: block;
-        width: 100%;
-        margin-top: 8px;
-        background: var(--mori-surface);
-        color: var(--mori-text);
-        border: 1px solid var(--mori-accent);
-        border-radius: var(--mori-radius, 5px);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 12px;
-        font-weight: 700;
-        padding: 11px;
-        cursor: pointer;
-        font-family: var(--mori-mono);
-        transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
-      }
-      .sheet-pin:hover {
-        box-shadow: 4px 4px 0 var(--mori-text-2);
-      }
-      .sheet-pin:active {
-        transform: translate(2px, 2px);
-        box-shadow: 2px 2px 0 var(--mori-text-2);
-      }
-      /* sudah dipin -> tombol dibalik jadi "hapus sematan" */
-      .sheet-pin.is-pinned {
-        background: var(--mori-accent);
-        color: var(--mori-bg);
-      }
+      /* Tombol Semat / Lepas Semat di sheet sudah dihapus (permintaan).
+       Sematan menu sekarang hanya lewat tekan-tahan kartu ~450ms. */
 
       .toast-pin {
         position: fixed;
@@ -1138,13 +1110,8 @@
         if (m.cat) html += '<span class="sheet-badge">' + m.cat + '</span>';
         html += '</div>';
         if (pluRows.length) html += '<div class="plu-table">' + pluRows.map(function(r){ return '<div class="plu-row"><div class="plu-th">' + r[0] + '</div><div class="plu-td">' + r[1] + '</div></div>'; }).join('') + '</div>';
-        // Tombol semat: jalur yang jelas untuk yang tidak suka tekan-tahan.
-        // Sheet cuma muncul untuk menu tanpa halaman, jadi selalu >= 1 kartu.
-        const sSlug = slugify(m.name);
-        if (m.name !== 'ADMIN' && sSlug) {
-          const pinnedNow = isPinned(sSlug);
-          html += '<button class="sheet-pin' + (pinnedNow ? ' is-pinned' : '') + '" id="sheetPin" type="button" data-slug="' + sSlug + '">' + (pinnedNow ? 'Lepas Semat' : 'Sematkan') + '</button>';
-        }
+        // Tombol Semat/Lepas Semat di sheet DIHAPUS. Sematan cukup lewat
+        // tekan-tahan kartu menu (~450ms) supaya sheet tetap bersih.
         html += '<button class="sheet-close" id="sheetClose" type="button">Tutup</button>';
         html += '</div></div>';
         function bahanGroup(title, list) {
@@ -1168,15 +1135,6 @@
         sheetBody.innerHTML = html;
         sheetBg.classList.add('open');
         document.getElementById('sheetClose').addEventListener('click', closeSheet);
-        const sheetPin = document.getElementById('sheetPin');
-        // Tombol mengubah label harusSheet ditutup dulu: renderMenu()
-        // menimpa sheetBody, jadi listener lama ikut hilang.
-        if (sheetPin) {
-          sheetPin.addEventListener('click', () => {
-            togglePin(sheetPin.dataset.slug, m.name, null);
-            closeSheet();
-          });
-        }
       }
       function closeSheet() {
         sheetBg.classList.remove('open');
