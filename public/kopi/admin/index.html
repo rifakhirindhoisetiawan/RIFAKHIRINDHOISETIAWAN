@@ -590,13 +590,14 @@
     .pw-btn-danger{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff}
 
     /* ============================================================
-       SUDUT DILEMBUTKAN
+       SUDUT KOTAK
        Override sharp di atas memakai radius 0 / !important. Di sini
-       dikembalikan sedikit melengkung (3px) supaya sudut tidak
-       tajam, tanpa mengubah layout, warna, atau urutan elemen —
-       hanya border-radius. Nilai diubah lewat --mori-radius.
-       ============================== */
-    :root{--mori-radius:3px}
+       dikembalikan melengkung 8px — nilai yang sama dengan
+       index.html dan kopi.html, jadi tiga halaman terlihat satu
+       keluarga. Hanya border-radius yang berubah; layout, warna,
+       dan urutan elemen tidak disentuh.
+       ============================================================ */
+    :root{--mori-radius:8px}
 
     /* daftar menu & pencarian */
     .search-box,
