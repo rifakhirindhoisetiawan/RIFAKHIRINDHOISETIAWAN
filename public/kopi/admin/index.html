@@ -689,66 +689,6 @@
     .form input:focus,.form select:focus,.select-box select:focus{
       border-bottom-color:var(--mori-accent)!important;
     }
-
-    /* ===== SUSUNAN FOTO & LABEL DI HP =====
-       BEFORE: .top-wrap = 2 kolom (foto | tabel). Foto selebar ~115px,
-       jadi tabel PLU + baris tab bahan harus berebut sisa ~200px.
-       Baris PLU jadi sempit, dan 5 tombol tab + 3 tombol foto dipaksa
-       berdesakan dalam grid 4 kolom yang cuma 200px.
-
-       AFTER: foto pindah ke atas sendiri (dipersempit + dipusatkan),
-       tabel PLU dan baris tab bahan dapat lebar penuh. Semua jadi
-       rata dan lapang.
-
-       Desktop (>640px) tidak diubah: dua kolom 50/50 di sana masih
-       lega dan jadi lebih hemat tinggi. */
-    @media (max-width: 640px) {
-      .top-wrap {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 10px !important;
-        padding: 0 0 10px !important;
-      }
-      .top-wrap .foto-box {
-        max-width: 132px !important;
-        width: 132px !important;
-        align-self: center !important;
-        border-radius: var(--mori-radius) !important;
-      }
-      /* tabel PLU + baris tab: lebar penuh, di bawah foto */
-      .top-wrap .form-side-table {
-        width: 100% !important;
-        align-self: stretch !important;
-      }
-      /* 5 tab bahan + 3 tombol foto = 8 tombol -> 4 kolom lega */
-      #tabBar {
-        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-        grid-auto-rows: 34px !important;
-        gap: 4px !important;
-        padding: 4px !important;
-      }
-      #tabBar .tab-btn,
-      #tabBar .foto-act {
-        width: 100% !important;
-        min-width: 0 !important;
-        max-width: 100% !important;
-        height: 34px !important;
-        justify-self: stretch !important;
-      }
-      /* baris PLU: label & kolom input rata, tinggi seragam */
-      .form-side-table .top-row { gap: 6px !important; padding: 2px 0 !important; }
-      .form-side-table .top-row > div:first-child {
-        flex: 0 0 58px !important;
-        width: 58px !important;
-        min-height: 42px !important;
-        border-radius: var(--mori-radius) !important;
-      }
-      .form-side-table .top-row > div:last-child {
-        min-height: 42px !important;
-        display: flex; align-items: center; padding: 0 6px !important;
-      }
-    }
   </style>
 </head>
 <body>
