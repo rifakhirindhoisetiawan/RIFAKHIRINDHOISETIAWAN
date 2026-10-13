@@ -620,13 +620,12 @@
 <div class="wrap">
   <div id="status" class="status" style="display:none">Menghubungkan ke Supabase...</div>
   <div class="grid">
-    <!-- DAFTAR MENU DI ATAS, form di bawahnya.
-         Sebelumnya urutannya dibalik (form order:1), padahal .grid
-         selalu 1 kolom di semua lebar layar. Akibatnya yang muncul
-         duluan adalah form kosong berisi 58 input + 50 baris bahan,
-         sedangkan daftar menu tergeletak ribuan piksel di bawahnya —
-         dari sisi user halaman itu terlihat "kosong". -->
-    <div class="card" style="order:1">
+    <!-- FORM RINGKAS DI ATAS, daftar menu di bawahnya.
+         Aman sekarang karena form sudah mode ringkas (nama + PLU +
+         Simpan, sisa detailnya tersembunyi). Dulu form penuhnya
+         menutupi daftar menu sepenuhnya -- itu yang bikin halaman
+         terlihat "kosong". -->
+    <div class="card" style="order:2">
       <span id="count" style="display:none">0</span>
       <div class="search-wrapper">
         <div class="search-box">
@@ -636,7 +635,7 @@
       </div>
       <div id="list" class="list"><div class="empty">Memuat...</div></div>
     </div>
-    <div class="card" style="order:2">
+    <div class="card" style="order:1">
       <form id="form" class="form is-compact">
         <input type="hidden" id="editId" />
 
