@@ -682,6 +682,21 @@
     .form-side-table .top-row:last-child > div,
     .admin-menu-row:last-child > div{border-bottom:0!important}
 
+    /* ===== KOTAK FOTO =====
+       Penting: aturan sharp di baris 433 memakai selector BERGANDA,
+       `.top-wrap .foto-box` (specificity 0,2,0), sedangkan override
+       umum hanya `.foto-box` (0,1,0). Karena keduanya !important,
+       yang menang adalah specificity TINGGI, bukan yang ditulis
+       belakangan -- jadi override umum kalah dan kotak fotonya tetap
+       siku. Selector di sini harus digandakan juga. */
+    .top-wrap .foto-box,
+    .foto-box{border-radius:var(--mori-radius)!important}
+
+    /* dua selector lain yang terlewat di audit sebelumnya: sama-sama
+       dikunci radius 0 !important dan belum punya padanan override */
+    .admin-plu-table .top-row > div:first-child,
+    .vbadge{border-radius:var(--mori-radius)!important}
+
     /* input & select: garis bawah tipis, bukan kotak hitam */
     .form input,.form select,.select-box select{
       border:0!important;border-bottom:1px solid var(--mori-line)!important;
