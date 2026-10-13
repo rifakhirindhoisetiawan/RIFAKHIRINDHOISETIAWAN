@@ -893,6 +893,8 @@
          ============================================================ */
       const PIN_KEY = 'kopi_pinned_v1';
       const PIN_TABLE = 'kopi_pins';
+      // Penanda bahwa sematan lama sudah pernah diunggah ke server.
+      const PIN_MIGRASI_KEY = 'kopi_pins_migrated_v1';
       function loadPins() {
         try {
           const raw = JSON.parse(localStorage.getItem(PIN_KEY) || '[]');
@@ -934,7 +936,39 @@
             console.info('Pin bersama belum aktif:', error.message);
             return;
           }
-          setServerPins((data || []).map(r => r.slug).filter(Boolean));
+          const server = (data || []).map(r => r.slug).filter(Boolean);
+
+          /* ===== MIGRASI SEKALI =====
+            Menu yang disemat SEBELUM tabel kopi_pins ada hanya ada di
+            localStorage perangkat itu. Kalau tidak dimigrasi, begitu
+            sinkronisasi aktif server membalas [] dan daftar sematan lama
+            itu ikut hilang seketika.
+
+            Jadi: pada sinkronisasi pertama yang sukses, slug yang ada di
+            cache tapi belum ada di server ikut diunggah. Setelah itu
+            tandanya disimpan supaya tidak diulang tiap buka halaman. */
+          try {
+            if (localStorage.getItem(PIN_MIGRASI_KEY) !== '1') {
+              const lokal = loadPins();
+              const kurang = lokal.filter(s => s && !server.includes(s));
+              for (const s of kurang) {
+                try {
+                  await supabase.from(PIN_TABLE).insert({ slug: s, oleh: 'dari HP lama' });
+                  server.push(s);
+                } catch (e) {
+                  // slug bentrok (23505) = sudah ada di server, abaikan
+                }
+              }
+              if (kurang.length) {
+                console.info('Sematan lama dimigrasi ke server:', kurang.length, 'menu');
+              }
+              localStorage.setItem(PIN_MIGRASI_KEY, '1');
+            }
+          } catch (e) {
+            console.info('Migrasi sematan dilewati:', e.message);
+          }
+
+          setServerPins(server);
         } catch (e) {
           console.info('Gagal ambil sematan dari server:', e.message);
         }
