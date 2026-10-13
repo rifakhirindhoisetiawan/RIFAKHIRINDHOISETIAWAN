@@ -416,9 +416,9 @@
 
       .download-bubble-container{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:max(16px,calc((100vw - 500px)/2 + 16px));z-index:1050;display:flex;flex-direction:column;align-items:flex-start;pointer-events:none}
       .download-bubble-container.visible{pointer-events:auto}
-      .download-bubble-btn{width:46px;height:46px;border-radius:50%;background:var(--mori-surface);border:1.5px solid var(--mori-accent);box-shadow:2px 2px 0 var(--mori-accent);position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mori-accent);transition:transform .15s ease,box-shadow .15s ease}
-      .download-bubble-btn:active{transform:scale(.94);box-shadow:1px 1px 0 var(--mori-accent)}
-      .db-badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:var(--mori-accent);color:var(--mori-bg);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--mori-surface)}
+      .download-bubble-btn{width:46px;height:46px;border-radius:50%;background:var(--mori-surface);border:1.5px solid var(--mori-accent);box-shadow:none;position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mori-accent);transition:transform .15s ease,box-shadow .15s ease}
+      .download-bubble-btn:active{transform:scale(.94);box-shadow:none}
+      .db-badge{position:absolute;top:-4px;right:-4px;width:12px;min-width:12px;height:12px;padding:0;border-radius:50%;background:var(--mori-accent);color:var(--mori-bg);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--mori-surface)}
       .db-badge.hidden{opacity:0;transform:scale(.5);pointer-events:none}
       .download-bubble-dropup{position:absolute;bottom:56px;left:0;width:min(320px,calc(100vw - 32px));background:var(--mori-surface);border:1.5px solid var(--mori-accent);border-radius:12px;box-shadow:4px 4px 0 var(--mori-accent);display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(10px) scale(.96);pointer-events:none;transition:opacity .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1)}
       .download-bubble-dropup.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
@@ -434,7 +434,7 @@
       .dl-info .dl-title{font-family:var(--mori-mono);font-size:10px;font-weight:700;color:var(--mori-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       .dl-info .dl-size{font-size:9px;color:var(--mori-text-2)}
       .dl-actions{display:flex;gap:6px}
-      .dl-btn-save,.dl-btn-wa{width:32px;height:32px;flex:0 0 32px;border-radius:0;border:1px solid var(--mori-accent);background:var(--mori-accent);color:var(--mori-bg);display:flex;align-items:center;justify-content:center;cursor:pointer}
+      .dl-btn-save,.dl-btn-wa,.dl-btn-tg{width:32px;height:32px;flex:0 0 32px;border-radius:0;border:1px solid var(--mori-accent);background:var(--mori-accent);color:var(--mori-bg);display:flex;align-items:center;justify-content:center;cursor:pointer}
 
       /* ============================================================
          TEMA MORI — override di atas, logika JS tidak disentuh.
@@ -453,6 +453,12 @@
         --mori-accent: #1a1917;
         --mori-danger: #b91c1c;
         --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+        /* sudut tombol baris atas + kotak besar (naik = makin bulat) */
+        --mori-radius: 5px;
+        /* sudut panel unduhan yang paling besar (dropup kiri bawah) */
+        --mori-radius-lg: 8px;
+        /* sudut kotak kecil di dalamnya (slot, preview, ghost, badge) */
+        --mori-radius-sm: 3px;
       }
 
       html,
@@ -504,7 +510,8 @@
       .layout-cycle,
       .dl-btn,
       .dl-btn-save,
-      .dl-btn-wa {
+      .dl-btn-wa,
+      .dl-btn-tg {
         border-radius: 0;
         border: 1px solid var(--mori-accent);
         background: var(--mori-accent);
@@ -519,7 +526,8 @@
       .layout-cycle:hover:not(:disabled),
       .dl-btn:hover:not(:disabled),
       .dl-btn-save:hover:not(:disabled),
-      .dl-btn-wa:hover:not(:disabled) {
+      .dl-btn-wa:hover:not(:disabled),
+      .dl-btn-tg:hover:not(:disabled) {
         box-shadow: 4px 4px 0 var(--mori-text-2);
       }
 
@@ -530,11 +538,72 @@
       .layout-cycle:active:not(:disabled),
       .dl-btn:active:not(:disabled),
       .dl-btn-save:active:not(:disabled),
-      .dl-btn-wa:active:not(:disabled) {
+      .dl-btn-wa:active:not(:disabled),
+      .dl-btn-tg:active:not(:disabled) {
         transform: translate(2px, 2px);
         box-shadow: 2px 2px 0 var(--mori-text-2);
         opacity: 1;
         background: #33312f;
+      }
+
+      /* ===== TOMBOL & KOTAK: sudut dibulatkan =====
+         Override sharp di atas (radius 0) dikembalikan melengkung di
+         sini. Nilai diubah lewat --mori-radius / --mori-radius-sm
+         (lihat :root), jadi semua kotak ikut berubah dari satu tempat. */
+      .stepper-row .step-btn,
+      .stepper-row .trash-btn,
+      .stepper-row .add-photo-btn,
+      .stepper-row .aspect-btn,
+      .stepper-row .layout-cycle,
+      .stepper-row .dl-btn,
+      .dl-btn-save,
+      .dl-btn-wa,
+      .dl-btn-tg {
+        border-radius: var(--mori-radius, 5px);
+      }
+
+      .dl-preview {
+        border-radius: var(--mori-radius-sm, 3px);
+      }
+
+      /* ===== PANEL UNDUH (kiri bawah) ikut melengkung =====
+         Nilai aslinya masih campuran: tombol bulat 50%, dropup 12px,
+         kartu 8px, badge 4px. Disamakan semua ke variabel di :root
+         supaya nyambung dengan tombol baris atas & bingkai grid. */
+      .download-bubble-dropup {
+        border-radius: var(--mori-radius-lg, 8px);
+      }
+      .dbd-item {
+        border-radius: var(--mori-radius, 5px);
+      }
+      .dbd-count-badge,
+      .dbd-close-btn {
+        border-radius: var(--mori-radius-sm, 3px);
+      }
+      /* tombol unduhan kiri bawah: dari bulat penuh (50%) jadi persegi
+         melengkung, biar sama dengan tombol baris atas.
+         Isinya hitam solid (--mori-accent), sama persis dengan tombol
+         di baris atas, karena --mori-surface nyaris sama dengan
+         latar halaman (#f7f3e9 vs #fffbf2) sehingga tombolnya
+         hampir tak terlihat kalau cuma krem. */
+      .download-bubble-btn {
+        border-radius: var(--mori-radius, 5px);
+        background: var(--mori-accent);
+        border-color: var(--mori-accent);
+        color: var(--mori-bg);
+      }
+      /* lencana angka: dari isi hitam pekat ke krem + garis abu-abu,
+         biar tidak ada hitam di tombol unduhan kiri bawah.
+         Tetap bulat penuh karena ukurannya kecil (18px). */
+      .db-badge {
+        background: var(--mori-surface);
+        color: var(--mori-text-2);
+        border: 1.5px solid var(--mori-text-2);
+        /* titik bulat kecil, bukan lencana berisi angka */
+        width: 12px;
+        min-width: 12px;
+        height: 12px;
+        padding: 0;
       }
 
       /* tombol aktif (aspect terpilih) = kebalik */
@@ -657,16 +726,16 @@
       .grid-frame {
         background: var(--mori-bg);
         border: 1px solid var(--mori-accent);
-        border-radius: 0;
+        border-radius: var(--mori-radius, 5px);
         padding: 6px;
         gap: 3px;
-        box-shadow: 6px 6px 0 rgba(26, 25, 23, 0.12);
+        box-shadow: none;
       }
 
       .slot {
         background: var(--mori-surface);
         border: 1px solid var(--mori-line);
-        border-radius: 0;
+        border-radius: var(--mori-radius-sm, 3px);
       }
 
       .slot.drag-over {
@@ -688,7 +757,7 @@
 
       #dragGhost {
         border: 1px solid var(--mori-accent);
-        border-radius: 0;
+        border-radius: var(--mori-radius-sm, 3px);
         box-shadow: 6px 6px 0 rgba(26, 25, 23, 0.3);
       }
 
@@ -711,7 +780,7 @@
         border: 1px solid var(--mori-accent);
         color: var(--mori-text);
         padding: 12px 20px;
-        border-radius: 0;
+        border-radius: var(--mori-radius, 5px);
         font-family: var(--mori-mono);
         font-size: 11px;
         font-weight: 700;
@@ -908,6 +977,7 @@
                 </div>
                 <div class="dl-actions">
                   <button class="dl-btn-save" id="dlSaveBtn" title="Simpan" aria-label="Simpan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+                  <button class="dl-btn-tg" id="dlShareTgBtn" title="Bagikan Telegram" aria-label="Bagikan Telegram"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21.7 3.3a1.2 1.2 0 0 0-1.3-.2L2.9 10.4c-1 .4-1 1.1-.9 1.6.1.4.4.8.9 1l4.4 1.4 1.7 5.2c.2.6.6 1 1.2 1.1.5.1 1 0 1.4-.4l2.6-2.5 4.4 3.2c.5.4 1.2.4 1.7.1.5-.3.8-.9.9-1.5l2.1-14.7c.1-.6-.3-1.2-.7-1.6zM9.6 14.2l8.5-6.3-6.6 7.5-.3 3.4-1.6-4.6z"/></svg></button>
                   <button class="dl-btn-wa" id="dlShareWaBtn" title="Bagikan WA" aria-label="Bagikan WA"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.94A9.91 9.91 0 0 0 12.04 2C6.58 2 2.14 6.45 2.14 11.9c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.9 0-2.64-1.03-5.13-2.9-7zM12.05 20.03h-.01a8.18 8.18 0 0 1-4.17-1.14l-.3-.18-3.12.82.82-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.22-8.24 8.22zm4.52-6.16c-.25-.12-1.47-.73-1.69-.81-.22-.08-.39-.12-.55.12-.16.25-.63.81-.77.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.55-1.33-.75-1.82-.2-.47-.4-.41-.55-.42h-.47c-.16 0-.43.06-.65.31-.22.25-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.17 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.57.18 1.09.16 1.5.1.46-.07 1.47-.6 1.68-1.18.2-.58.2-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg></button>
                 </div>
               </div>
@@ -916,7 +986,7 @@
         </div>
         <button id="downloadBubbleBtn" class="download-bubble-btn" aria-label="Unduhan" title="Unduhan">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
-          <span class="db-badge" id="dbBadge">1</span>
+          <span class="db-badge hidden" id="dbBadge" aria-hidden="true"></span>
         </button>
       </div>
     </div>
@@ -1489,6 +1559,7 @@
       const dlTitle = document.getElementById("dlTitle");
       const dlSaveBtn = document.getElementById("dlSaveBtn");
       const dlShareWaBtn = document.getElementById("dlShareWaBtn");
+      const dlShareTgBtn = document.getElementById("dlShareTgBtn");
       const bubbleContainer = document.getElementById("downloadBubbleContainer");
       const bubbleBtn = document.getElementById("downloadBubbleBtn");
       const dropup = document.getElementById("downloadBubbleDropup");
@@ -1505,7 +1576,7 @@
       bubbleContainer.classList.remove("visible");
       dbBadge.classList.add("hidden");
       function hideBubble(){ dropup.classList.remove("open"); setTimeout(()=>{ bubbleContainer.classList.remove("visible"); dbBadge.classList.add("hidden"); },200); }
-      function showBubble(){ bubbleContainer.classList.add("visible"); dbBadge.textContent="1"; dbBadge.classList.remove("hidden"); dropup.classList.add("open"); }
+      function showBubble(){ bubbleContainer.classList.add("visible"); dbBadge.textContent=""; dbBadge.classList.remove("hidden"); dropup.classList.add("open"); }
       bubbleBtn.addEventListener("click",(e)=>{ e.stopPropagation(); dropup.classList.toggle("open"); });
       dbdCloseBtn.addEventListener("click",(e)=>{ e.stopPropagation(); dropup.classList.remove("open"); });
       document.addEventListener("click",(e)=>{ if(dropup.classList.contains("open") && !bubbleContainer.contains(e.target)) dropup.classList.remove("open"); });
@@ -1616,7 +1687,9 @@
           const blob = await ambilBlob();
           const file = new File([blob], dlFileName, { type: "image/png" });
           if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({ files: [file], title: dlFileName, text: "Lihat grid fotoku" });
+            // Tanpa `text` supaya WA cuma menerima file, tidak ikut
+            // menempelkan caption apa pun.
+            await navigator.share({ files: [file], title: dlFileName });
             hideBubble();
             return;
           }
@@ -1632,6 +1705,39 @@
           if (err.name !== "AbortError") {
             showToast("Gagal berbagi ke WA: " + err.message, "err");
           }
+        }
+      });
+
+      /* ===== Bagikan Telegram =====
+         Telegram tidak punya share-sheet seperti WA, jadi web tidak bisa
+         mengirim file langsung lewat navigator.share ke aplikasinya.
+         Yang bisa dilakukan: arahkan ke share resmi Telegram, atau kalau
+         orang yangować dikasih link-nya.
+         1. Telegram di HP/desktop: buka share-url resmi (t.me/share/url).
+            File tidak ikut, jadi tetap perlu pilih fotonya manual dari
+            galeri di dalam Telegram.
+         2. Kalau user batal (AbortError) tidak dianggap gagal. */
+      function bukaTelegramShare() {
+        const teks = dlFileName;
+        const url = "https://t.me/share/url?url=&text=" + encodeURIComponent(teks);
+        window.open(url, "_blank", "noopener");
+      }
+
+      dlShareTgBtn.addEventListener("click", async () => {
+        if (!dlDataUrl && !dlBlob) return;
+        try {
+          // Simpan dulu supaya fotonya ada di galeri/file manager, jadi
+          // di Telegram tinggal ambil dari sana tanpa perlu cari lagi.
+          await simpanBlob(await ambilBlob());
+          showToast("Tersimpan. Buka Telegram, kirim dari galeri.");
+        } catch (err) {
+          if (err.name === "AbortError") return;
+        }
+        try {
+          bukaTelegramShare();
+          hideBubble();
+        } catch (tgErr) {
+          showToast("Gagal membuka Telegram: " + tgErr.message, "err");
         }
       });
 
