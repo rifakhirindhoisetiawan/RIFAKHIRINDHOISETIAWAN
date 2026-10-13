@@ -588,43 +588,12 @@
     }
     .pw-btn:active{transform:translate(2px,2px)}
     .pw-btn-danger{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff}
-
-    /* ============================================================
-       FORM RINGKAS
-       Default: yang terlihat hanya nama + PLU 12/16/HOT + Simpan.
-       Foto, tab bahan, dan catatan disembunyikan sampai "Rincian"
-       ditekan. Dipakai aturan display:none per bagian, bukan
-       menyalin input — jadi tidak mungkin ada dua input yang
-       tidak sinkron.
-       ============================================================ */
-    .form-bar{display:flex;align-items:center;gap:6px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(26,25,23,.14)}
-    .form-bar-title{font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--mori-text-2);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .form-bar-btn{display:flex;align-items:center;gap:4px;padding:7px 10px;border:1px solid var(--mori-accent);border-radius:var(--mori-radius,5px);background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;cursor:pointer;flex-shrink:0;transition:box-shadow .2s ease,transform .2s ease}
-    .form-bar-btn svg{transition:transform .2s ease}
-    .form-bar-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
-    .form-bar-btn:active{transform:translate(2px,2px)}
-    .btn-save-bar{flex:0 0 auto;width:auto;height:36px;min-height:36px;padding:0 14px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-family:var(--mori-mono);gap:6px}
-    .form-detail-note{display:none}
-
-    /* mode ringkas: sisanya disembunyikan */
-    .form.is-compact .foto-box,
-    .form.is-compact #tabBar,
-    .form.is-compact .tab-panel,
-    .form.is-compact .catatan-wrap{display:none}
-    .form.is-compact .top-wrap{grid-template-columns:minmax(0,1fr)!important}
-    .form.is-compact .form-detail-note{display:block;margin-top:8px;font-family:var(--mori-mono);font-size:9px;font-weight:700;letter-spacing:.4px;color:var(--mori-text-2);text-transform:uppercase}
-    .form:not(.is-compact) .form-bar-title{color:var(--mori-text)}
   </style>
 </head>
 <body>
 <div class="wrap">
   <div id="status" class="status" style="display:none">Menghubungkan ke Supabase...</div>
   <div class="grid">
-    <!-- FORM RINGKAS DI ATAS, daftar menu di bawahnya.
-         Aman sekarang karena form sudah mode ringkas (nama + PLU +
-         Simpan, sisa detailnya tersembunyi). Dulu form penuhnya
-         menutupi daftar menu sepenuhnya -- itu yang bikin halaman
-         terlihat "kosong". -->
     <div class="card" style="order:2">
       <span id="count" style="display:none">0</span>
       <div class="search-wrapper">
@@ -636,26 +605,8 @@
       <div id="list" class="list"><div class="empty">Memuat...</div></div>
     </div>
     <div class="card" style="order:1">
-      <form id="form" class="form is-compact">
+      <form id="form" class="form">
         <input type="hidden" id="editId" />
-
-        <!-- ===== BARIS RINGKAS =====
-             Default ringkas: nama + PLU + Simpan kelihatan, sisanya
-             (foto, tab bahan, catatan) disembunyikan sampai tombol
-             Rincian ditekan. Semuanya tetap form yang sama, tidak ada
-             input ganda, jadi tidak mungkin tidak sinkron. -->
-        <div class="form-bar">
-          <div class="form-bar-title" id="formBarTitle">Menu Baru</div>
-          <button type="button" class="form-bar-btn" id="btnFormToggle" aria-expanded="false" title="Buka rincian">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            <span id="formToggleText">Rincian</span>
-          </button>
-          <button id="btnSave" type="submit" class="btn-save-icon btn-save-bar" title="Simpan" aria-label="Simpan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg><span id="btnSaveText">Simpan</span></button>
-        </div>
-        <div class="form-detail-note">
-          Foto, tab bahan HOT/P12/P16/12OZ/16OZ, dan catatan disembunyikan
-          saat mode ringkas — tekan <b>Rincian</b> untuk membukanya.
-        </div>
         <div class="top-wrap" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;justify-content:center;align-items:stretch;width:100%;padding:4px;box-sizing:border-box">
           <div class="foto-box" id="fotoBox" style="flex:1 1 0;min-width:0;width:100%;height:100%;min-height:100%;align-self:stretch;aspect-ratio:9/16;border-radius:8px;overflow:hidden;position:relative;border:1px solid #c7d2fe">
              <input id="f_icon_img" type="file" accept="image/*" />
@@ -776,9 +727,9 @@
             <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_10" /></div></div>
           </div>
         </div>
-        <div class="catatan-wrap" style="border:none;border-radius:0;overflow:visible;background:transparent;padding:2px 0;margin-top:6px;display:flex">
+        <div style="border:none;border-radius:0;overflow:visible;background:transparent;padding:2px 0;margin-top:6px;display:flex">
           <div style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:transparent;border-radius:0;padding:2px 0">
-             <div class="table-title-row"><div class="catatan-title" style="flex:1;min-width:0;min-height:46px;display:flex;align-items:center;justify-content:flex-start;text-align:left;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0 12px 8px">CATATAN</div></div>
+             <div class="table-title-row"><div class="catatan-title" style="flex:1;min-width:0;min-height:46px;display:flex;align-items:center;justify-content:flex-start;text-align:left;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;box-shadow:0 1px 2px rgba(99,102,241,0.25);padding:12px 0 12px 8px">CATATAN</div><button id="btnSave" type="submit" class="btn-save-icon btn-save-head" title="Simpan" aria-label="Simpan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button></div>
              <div class="catatan-field" style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_catatan" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" onblur="this.value=this.value.toUpperCase()" /></div>
           </div>
         </div>
@@ -860,39 +811,6 @@
   const f_percepatan16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_percepatan16_' + n));
    const f_catatan = document.getElementById('f_catatan');
    const btnSave = document.getElementById('btnSave');
-   const btnSaveText = document.getElementById('btnSaveText');
-   const btnFormToggle = document.getElementById('btnFormToggle');
-   const formToggleText = document.getElementById('formToggleText');
-   const formBarTitle = document.getElementById('formBarTitle');
-
-   /* ===== Mode ringkas / rinci =====
-      Default ringkas supaya daftar menu tidak tenggelam di bawah form
-      yang sangat panjang. Ketuk "Rincian" untuk membuka sisa form.
-      Status disimpan di localStorage supaya pilihan ini tidak hilang
-      tiap reload. */
-   const FORM_VIEW_KEY = 'kopi_admin_form_view';
-   function setFormCompact(compact) {
-     form.classList.toggle('is-compact', compact);
-     btnFormToggle.setAttribute('aria-expanded', compact ? 'false' : 'true');
-     formToggleText.textContent = compact ? 'Rincian' : 'Tutup';
-     btnFormToggle.title = compact ? 'Buka rincian' : 'Tutup rincian';
-     try { localStorage.setItem(FORM_VIEW_KEY, compact ? 'compact' : 'full'); } catch (e) {}
-   }
-   btnFormToggle.addEventListener('click', () => {
-     setFormCompact(!form.classList.contains('is-compact'));
-   });
-   try {
-     setFormCompact((localStorage.getItem(FORM_VIEW_KEY) || 'compact') === 'compact');
-   } catch (e) {
-     setFormCompact(true);
-   }
-   function syncFormBarTitle() {
-     const nama = (f_name.value || '').trim();
-     formBarTitle.textContent = editId.value
-       ? (nama ? 'Edit: ' + nama.toUpperCase() : 'Edit menu')
-       : (nama ? 'Tambah: ' + nama.toUpperCase() : 'Menu Baru');
-   }
-   f_name.addEventListener('input', syncFormBarTitle);
    const f_icon_img = document.getElementById('f_icon_img');
    const iconPreview = document.getElementById('icon_preview');
    const fotoBox = document.getElementById('fotoBox');
@@ -1589,11 +1507,6 @@ const outW = 540, outH = 960;
     });
     switchTab(tabWithData || 'secHot');
     btnSave.title = 'Update'; btnSave.setAttribute('aria-label', 'Update');
-    if (btnSaveText) btnSaveText.textContent = 'Update';
-    syncFormBarTitle();
-    // Mode ringkas hanya praktis untuk menu baru. Saat mengedit, detail
-    // bahan/foto justru yang dicari -> buka otomatis.
-    setFormCompact(false);
     window.scrollTo({top:0, behavior:'smooth'});
   };
 
@@ -1741,9 +1654,6 @@ const outW = 540, outH = 960;
     if(fotoName) fotoName.textContent = 'Belum ada foto';
     syncFotoBox();
     btnSave.title = 'Simpan'; btnSave.setAttribute('aria-label', 'Simpan');
-    if (btnSaveText) btnSaveText.textContent = 'Simpan';
-    syncFormBarTitle();
-    setFormCompact(true);
   }
 
   form.addEventListener('submit', async (event) => {
@@ -1776,7 +1686,6 @@ const outW = 540, outH = 960;
     btnSave.disabled = true;
     btnSave.title = 'Menyimpan...';
     btnSave.setAttribute('aria-label', 'Menyimpan...');
-    if (btnSaveText) btnSaveText.textContent = '...';
     try {
       if (autoCropPromise) {
         const processed = await autoCropPromise;
@@ -1874,7 +1783,6 @@ const outW = 540, outH = 960;
       btnSave.disabled = false;
       btnSave.title = editId.value ? 'Update' : 'Simpan';
       btnSave.setAttribute('aria-label', btnSave.title);
-      if (btnSaveText) btnSaveText.textContent = editId.value ? 'Update' : 'Simpan';
     }
   });
 
@@ -2031,7 +1939,6 @@ const outW = 540, outH = 960;
   sheetBg.addEventListener('click', (e) => { if (e.target === sheetBg) closeSheet(); });
 
   initBahanTables();
-  syncFormBarTitle();
   load();
 </script>
 </body>
