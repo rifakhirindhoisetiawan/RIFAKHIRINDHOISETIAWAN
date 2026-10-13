@@ -495,11 +495,11 @@
         --mori-accent: #1a1917;
         --mori-mono: "JetBrains Mono", ui-monospace, monospace;
         /* sudut tombol & kotak sedang (naik = makin bulat) */
-        --mori-radius: 5px;
+        --mori-radius: 3px;
         /* sudut panel terbesar (sheet) */
-        --mori-radius-lg: 8px;
+        --mori-radius-lg: 4px;
         /* sudut kotak kecil (handle, tag PLU) */
-        --mori-radius-sm: 3px;
+        --mori-radius-sm: 2px;
       }
 
       html,
@@ -722,13 +722,13 @@
 
       /* sheet menempel di bawah: hanya dua sudut atas yang melengkung */
       .sheet {
-        border-radius: var(--mori-radius-lg, 8px) var(--mori-radius-lg, 8px) 0 0;
+        border-radius: var(--mori-radius-lg, 4px) var(--mori-radius-lg, 4px) 0 0;
       }
 
       /* kotak kecil: handle geser & tag PLU di bawah nama menu */
       .sheet-handle,
       .item span .plu-tag {
-        border-radius: var(--mori-radius-sm, 3px);
+        border-radius: var(--mori-radius-sm, 2px);
       }
 
       /* ============================================================

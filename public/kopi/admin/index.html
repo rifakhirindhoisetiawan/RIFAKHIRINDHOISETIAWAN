@@ -588,6 +588,40 @@
     }
     .pw-btn:active{transform:translate(2px,2px)}
     .pw-btn-danger{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff}
+
+    /* ============================================================
+       SUDUT DILEMBUTKAN
+       Override sharp di atas memakai radius 0 / !important. Di sini
+       dikembalikan sedikit melengkung (3px) supaya sudut tidak
+       tajam, tanpa mengubah layout, warna, atau urutan elemen —
+       hanya border-radius. Nilai diubah lewat --mori-radius.
+       ============================== */
+    :root{--mori-radius:3px}
+
+    /* daftar menu & pencarian */
+    .search-box,
+    .thumb,
+    .item .btn{border-radius:var(--mori-radius)!important}
+
+    /* form: label PLU, header tabel, tombol */
+    .tab-btn,.foto-act,.tab-empty,.bahan-add,.bahan-add-head,
+    .btn-save-icon,.btn-save-icon.btn-save-head,
+    .catatan-title,
+    .tab-panel .form-table .table-title,
+    .form-side-table{border-radius:var(--mori-radius)!important}
+
+    /* sheet detail */
+    .crop-card,.crop-stage,.crop-stage::after,
+    .sheet-note-new,.bahan-input-new,
+    .sheet-close-btn-new,.sheet-close-btn-main-new,.sheet-close,
+    .sheet-photo-wrap-new,.sheet-photo-placeholder-new{border-radius:var(--mori-radius)!important}
+
+    /* sheet menempel bawah: hanya dua sudut atas */
+    .sheet{border-radius:var(--mori-radius) var(--mori-radius) 0 0!important}
+    .sheet-plu-table{border-radius:var(--mori-radius)!important}
+
+    /* modal hapus */
+    .pw-card,.pw-input,.pw-btn{border-radius:var(--mori-radius)!important}
   </style>
 </head>
 <body>
