@@ -799,36 +799,11 @@
       }
 
       /* Tombol Semat / Lepas Semat di sheet sudah dihapus (permintaan).
-       Sematan menu sekarang hanya lewat tekan-tahan kartu ~450ms. */
+       Sematan menu sekarang hanya lewat tekan-tahan kartu ~450ms.
 
-      .toast-pin {
-        position: fixed;
-        left: 50%;
-        bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-        transform: translateX(-50%) translateY(16px);
-        background: var(--mori-accent);
-        color: var(--mori-bg);
-        border: 1px solid var(--mori-accent);
-        border-radius: var(--mori-radius, 5px);
-        font-family: var(--mori-mono);
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 0.6px;
-        text-transform: uppercase;
-        padding: 10px 18px;
-        z-index: 200;
-        opacity: 0;
-        pointer-events: none;
-        white-space: nowrap;
-        max-width: 90vw;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        transition: opacity 0.25s ease, transform 0.25s ease;
-      }
-      .toast-pin.show {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
+       Toast "Disematkan" / "Lepas sematan" juga dihapus (permintaan).
+       Feedback masih ada lewat denyut scale 1 -> 1.07 -> 1 pada kartu
+       yang di-long-press, plus tanda pushpin di pojok foto. */
     </style>
   </head>
   <body>
@@ -864,8 +839,6 @@
         <div id="sheetBody"></div>
       </div>
     </div>
-
-    <div class="toast-pin" id="toastPin" role="status"></div>
 
 
     <script type="module">
@@ -920,14 +893,6 @@
          ============================================================ */
       const PIN_KEY = 'kopi_pinned_v1';
       const PIN_TABLE = 'kopi_pins';
-      let toastTimer = null;
-      function toastPin(pesan) {
-        const t = document.getElementById('toastPin');
-        t.textContent = pesan;
-        t.classList.add('show');
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
-      }
       function loadPins() {
         try {
           const raw = JSON.parse(localStorage.getItem(PIN_KEY) || '[]');
@@ -990,13 +955,14 @@
 
       function togglePin(slug, nama, el) {
         if (!slug) return;
+        // Tanpa popup notifikasi (permintaan): tidak ada toast
+        // "Disematkan"/"Lepas sematan". User tetap tahu lewat denyut
+        // kartu (pinPop) dan tanda pushpin yang muncul/hilang.
         const akanPin = !isPinned(slug);
         if (akanPin) {
           pinned.push(slug);
-          toastPin('Disematkan: ' + nama);
         } else {
           pinned = pinned.filter(s => s !== slug);
-          toastPin('Lepas sematan: ' + nama);
         }
         savePins(pinned);
         renderMenu();
@@ -1051,7 +1017,7 @@
       const PIN_MS = 450;
       // Jeda ini hanya berlaku untuk kartu yang JUSTRU di-long-press.
       // Kalau berlaku global, tap ADMIN (atau menu lain) dalam 700ms
-      // setelah sematan ikut tertelan dan tidak发生 navigasi.
+      // setelah sematan ikut tertelan dan tidak terjadi navigasi.
       const CLICK_GRACE_MS = 700;
       let suppressIdx = -1;
       let lpTimer = null;
