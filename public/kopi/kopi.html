@@ -923,7 +923,10 @@
         if (link.endsWith('.html') && !link.includes('/')) return '../' + link;
         return link;
       }
-      const adminMenu = { name: "ADMIN", foto: "../../assets/images/daily-task/1.jpg", cls: "g-a", link: "admin/", cat: "ADMIN" };
+      // "admin/index.html" bukan "admin/": Android WebView (dipakai app
+      // pembungkus & PWA) tidak selalu mengikuti redirect directory-index
+      // seperti Chrome desktop, dan memunculkan "Failed to Load Page".
+      const adminMenu = { name: "ADMIN", foto: "../../assets/images/daily-task/1.jpg", cls: "g-a", link: "admin/index.html", cat: "ADMIN" };
 
       /* ============================================================
          PIN MENU — state & helper
