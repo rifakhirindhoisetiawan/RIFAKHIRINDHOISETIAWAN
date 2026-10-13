@@ -650,6 +650,45 @@
     /* input & select dikecilkan 4px: tidak siku, tapi juga tidak sebesar
        kotak luarnya */
     .form input,.form select,.select-box select{border-radius:4px!important}
+
+    /* ===== RAPIKAN GARIS =====
+       Tiga masalah yang ketemu saat audit:
+       1. Warna garis pemisah bercampur ada tiga -- #c7d2fe (biru muda),
+          #e5e7eb, dan --mori-line (abu transparan). Semuanya diganti ke
+          --mori-line supaya satu warna, satu ketebalan.
+       2. Baris terakhir di dalam kotak bertedradius membawa garis bawahnya
+          sampai ke sudut yang melengkung, hasilnya kotak terlihat "pecah"
+          di ujung. Garis baris terakhir dihapus.
+       3. Input/select dikotak hitam penuh; diganti garis bawah tipis
+          supaya tidak berat. */
+    .form-table,.form-compact,.admin-plu-table,
+    .plu-photo-grid .form-table,
+    .sheet-plu-table{border-color:var(--mori-accent)}
+
+    /* pemisah baris -> satu warna abu tipis */
+    .plu-row + .plu-row,
+    .resep-row + .resep-row,
+    .form-table .tr + .tr,
+    .form-side-table .top-row > div,
+    .sheet-plu-row + .sheet-plu-row,
+    .sheet-top-new{border-color:var(--mori-line)!important}
+
+    /* garis bawah terakhir: dibuang supaya sudut melengkung-nya utuh */
+    .plu-table .plu-row:last-child,
+    .sheet-plu-table .sheet-plu-row:last-child,
+    .form-table .tr:last-child,
+    .form-compact .tr:last-child,
+    .resep .resep-row:last-child,
+    .form-side-table .top-row:last-child > div,
+    .admin-menu-row:last-child > div{border-bottom:0!important}
+
+    /* input & select: garis bawah tipis, bukan kotak hitam */
+    .form input,.form select,.select-box select{
+      border:0!important;border-bottom:1px solid var(--mori-line)!important;
+    }
+    .form input:focus,.form select:focus,.select-box select:focus{
+      border-bottom-color:var(--mori-accent)!important;
+    }
   </style>
 </head>
 <body>
