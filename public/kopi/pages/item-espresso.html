@@ -10,7 +10,7 @@
       /* ============================================================
          TEMA MORI
          Palet dari public/mori/css/variables.css:
-         bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64
+         bg #fffbf2 Â· surface #f7f3e9 Â· primary #1a1917 Â· text-secondary #6e6a64
          Gaya: sharp (radius 0), border hitam solid, label mono uppercase.
          ============================================================ */
       :root {
@@ -119,6 +119,18 @@
       #status[data-tone="err"] {
         background: #fdf1f1; border-color: var(--mori-accent); color: #b91c1c;
       }
+    
+      /* ===== SUDUT KOTAK =====
+         Override sharp di atas memakai radius 0. Dikembalikan melengkung
+         8px, sama dengan index.html / kopi.html / admin supaya semua
+         halaman KOPI terlihat satu keluarga. Hanya border-radius yang
+         berubah; layout, warna, dan isi tidak disentuh. */
+      :root { --mori-radius: 8px; }
+      .badge,
+      .plu-table,
+      .resep,
+      .catatan,
+      #status { border-radius: var(--mori-radius, 8px); }
     </style>
   </head>
   <body>
