@@ -494,6 +494,12 @@
         --mori-line: rgba(26, 25, 23, 0.14);
         --mori-accent: #1a1917;
         --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+        /* sudut tombol & kotak sedang (naik = makin bulat) */
+        --mori-radius: 5px;
+        /* sudut panel terbesar (sheet) */
+        --mori-radius-lg: 8px;
+        /* sudut kotak kecil (handle, tag PLU) */
+        --mori-radius-sm: 3px;
       }
 
       html,
@@ -694,6 +700,160 @@
         background: #4d7c0f;
         border-color: #1a1917;
       }
+
+      /* ============================================================
+         SUDUT MELENGKUNG
+         Override sharp di atas memakai radius 0. Di sini dikembalikan
+         sedikit melengkung, sama seperti GRID, supaya dua aplikasi
+         terasa satu keluarga. Semua nilai diatur dari --mori-radius,
+         jadi ubah satu angka untuk mengubah semuanya.
+         ============================================================ */
+      .search-box,
+      .icon-tile,
+      .sheet-photo,
+      .sheet-badge,
+      .sheet-note,
+      .sheet-close,
+      .plu-table,
+      .bahan-row,
+      .method-col h4 {
+        border-radius: var(--mori-radius, 5px);
+      }
+
+      /* sheet menempel di bawah: hanya dua sudut atas yang melengkung */
+      .sheet {
+        border-radius: var(--mori-radius-lg, 8px) var(--mori-radius-lg, 8px) 0 0;
+      }
+
+      /* kotak kecil: handle geser & tag PLU di bawah nama menu */
+      .sheet-handle,
+      .item span .plu-tag {
+        border-radius: var(--mori-radius-sm, 3px);
+      }
+
+      /* ============================================================
+         PIN MENU
+         Menu yang dipin dikumpulkan di baris paling atas, terpisah dari
+         daftar utama, jadi yang sering dipakai cepat tanpa scroll.
+         Cara pakai: tekan-tahan (long-press) kartu menu.
+         ============================================================ */
+      .pin-row {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 10px;
+        margin: 0 0 6px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--mori-line);
+      }
+      @media (min-width: 768px) {
+        .pin-row {
+          gap: 22px 14px;
+        }
+      }
+
+      /* label "Disematkan" di atas baris pin */
+      .pin-label {
+        grid-column: 1 / -1;
+        font-family: var(--mori-mono);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        color: var(--mori-text);
+        margin: 0 0 2px;
+      }
+
+      /* tanda kecil di pojok kartu yang sudah dipin */
+      .pin-mark {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        z-index: 3;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: var(--mori-accent);
+        color: var(--mori-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+      }
+      .pin-mark svg {
+        width: 9px;
+        height: 9px;
+      }
+
+      /* denyut saat long-press berhasil, biar kasih feedback */
+      @keyframes pinPop {
+        0% { transform: scale(1); }
+        45% { transform: scale(1.07); }
+        100% { transform: scale(1); }
+      }
+      .item.pinned-pop .icon-tile {
+        animation: pinPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      /* tombol unpin di sheet */
+      .sheet-pin {
+        display: block;
+        width: 100%;
+        margin-top: 8px;
+        background: var(--mori-surface);
+        color: var(--mori-text);
+        border: 1px solid var(--mori-accent);
+        border-radius: var(--mori-radius, 5px);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 11px;
+        cursor: pointer;
+        font-family: var(--mori-mono);
+        transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+      }
+      .sheet-pin:hover {
+        box-shadow: 4px 4px 0 var(--mori-text-2);
+      }
+      .sheet-pin:active {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 var(--mori-text-2);
+      }
+      /* sudah dipin -> tombol dibalik jadi "hapus sematan" */
+      .sheet-pin.is-pinned {
+        background: var(--mori-accent);
+        color: var(--mori-bg);
+      }
+
+      .toast-pin {
+        position: fixed;
+        left: 50%;
+        bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+        transform: translateX(-50%) translateY(16px);
+        background: var(--mori-accent);
+        color: var(--mori-bg);
+        border: 1px solid var(--mori-accent);
+        border-radius: var(--mori-radius, 5px);
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        padding: 10px 18px;
+        z-index: 200;
+        opacity: 0;
+        pointer-events: none;
+        white-space: nowrap;
+        max-width: 90vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: opacity 0.25s ease, transform 0.25s ease;
+      }
+      .toast-pin.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
     </style>
   </head>
   <body>
@@ -730,6 +890,8 @@
       </div>
     </div>
 
+    <div class="toast-pin" id="toastPin" role="status"></div>
+
 
     <script type="module">
       import { supabase } from '../../src/js/supabase.js';
@@ -762,6 +924,138 @@
         return link;
       }
       const adminMenu = { name: "ADMIN", foto: "../../assets/images/daily-task/1.jpg", cls: "g-a", link: "admin/", cat: "ADMIN" };
+
+      /* ============================================================
+         PIN MENU — state & helper
+         Disimpan di localStorage (bukan Supabase) supaya:
+         - tetap jalan offline / saat Supabase gagal
+         - tidak perlu hak tulis ke tabel yang dipakai bersama kasir
+         Kunci simpanannya = slug menu, jadi unik dan tetap valid walau
+         diurutkan ulang. ADMIN tidak bisa dipin (selalu di atas).
+         ============================================================ */
+      const PIN_KEY = 'kopi_pinned_v1';
+      let toastTimer = null;
+      function toastPin(pesan) {
+        const t = document.getElementById('toastPin');
+        t.textContent = pesan;
+        t.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+      }
+      function loadPins() {
+        try {
+          const raw = JSON.parse(localStorage.getItem(PIN_KEY) || '[]');
+          return Array.isArray(raw) ? raw.filter(x => typeof x === 'string') : [];
+        } catch (e) {
+          // data rusak -> mulai dari kosong, jangan gagalkan seluruh halaman
+          return [];
+        }
+      }
+      function savePins(list) {
+        try {
+          localStorage.setItem(PIN_KEY, JSON.stringify(list));
+        } catch (e) {
+          toastPin('Gagal menyimpan sematan');
+        }
+      }
+      let pinned = loadPins();
+      const isPinned = (slug) => pinned.includes(slug);
+      function togglePin(slug, nama, el) {
+        if (!slug) return;
+        if (isPinned(slug)) {
+          pinned = pinned.filter(s => s !== slug);
+          toastPin('Lepas sematan: ' + nama);
+        } else {
+          pinned.push(slug);
+          toastPin('Disematkan: ' + nama);
+        }
+        savePins(pinned);
+        renderMenu();
+        // denyut di kartu yang baru disentuh — setelah render, cari lagi
+        if (el) {
+          const baru = menuGrid.querySelector('[data-slug="' + slug + '"]');
+          const kartu = baru && baru.closest('.item');
+          if (kartu) {
+            kartu.classList.add('pinned-pop');
+            setTimeout(() => kartu.classList.remove('pinned-pop'), 420);
+          }
+        }
+      }
+
+      /* Satu kartu menu. Dipisah dari renderMenu() supaya baris pin dan
+         daftar utama pakai markup yang sama persis. */
+      function tileHtml(m, i) {
+        const slug = slugify(m.name);
+        const isAdmin = m.name === 'ADMIN';
+        const hrefMenu = isAdmin ? (m.link || '') : 'pages/item-' + slug + '.html';
+        const hasLink = !!hrefMenu;
+        const tag = hasLink ? 'a' : 'div';
+        const href = hasLink ? ' href="' + hrefMenu + '"' : '';
+        const isImgIcon = m.name === "ADMIN" ? true : !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
+        let iconHtml;
+        if (isImgIcon) {
+          const thumbUrl = toWebPThumb(m.foto, 80, 80, 70);
+          iconHtml = '<img src="' + thumbUrl + '" alt="" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;border-radius:inherit" onload="this.classList.add(\'loaded\')" onerror="this.style.display=\'none\'"/>';
+        } else {
+          iconHtml = '';
+        }
+        const mark = (isPinned(slug) && !isAdmin)
+          ? '<span class="pin-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.5 2l7.5 7.5-1.5 1.5-2-2-3.6 3.6.6 4.4-1.2 1.2-3.5-3.5-4.6 4.6-1-1L9.8 13 6.3 9.5l1.2-1.2 4.4.6L15.5 5l-2-1.5 1-1z"/></svg></span>'
+          : '';
+        return '<' + tag + ' class="item js-detail' + (hasLink ? ' active-modul' : '') + '"' + href + ' data-idx="' + i + '" data-slug="' + slug + '">' +
+                 '<div class="icon-tile ' + (m.cls || 'g-a') + ' icon-photo" data-slug="' + slug + '"' + (isImgIcon ? ' data-hasimg="1"' : '') + '>' + iconHtml + mark + '</div>' +
+                 '<span>' + m.name + '</span>' +
+               '</' + tag + '>';
+      }
+
+      /* Long-press = tekan-tahan ~450ms. Pointer Events dipakai supaya
+         jalan di mouse HP maupun desktop (ctxmenu dimatikan supaya klik
+         kanan tidak memicu). Geser sebelum 450ms berarti batal, jadi
+         scroll daftar tidak ikut menyematkan menu.
+
+         PENTING: togglePin() memanggil renderMenu() yang mengganti DOM,
+         tapi pointer masih di atas kartu yang sudah lepas. Browser tetap
+         mengirim click ke elemen lama itu, yang membuat halaman ikut
+         terbuka. Karena itu klik setelah sematan ditekan lewat
+         suppressClickUntil — tanpa ini, setiap long-press = pin + navigate. */
+      const PIN_MS = 450;
+      // Jeda ini hanya berlaku untuk kartu yang JUSTRU di-long-press.
+      // Kalau berlaku global, tap ADMIN (atau menu lain) dalam 700ms
+      // setelah sematan ikut tertelan dan tidak发生 navigasi.
+      const CLICK_GRACE_MS = 700;
+      let suppressIdx = -1;
+      let lpTimer = null;
+      let lpMoved = false;
+      let lpSlug = null;
+      let lpName = null;
+      let suppressClickUntil = 0;
+      function bindPinGesture(el, nama) {
+        el.addEventListener('pointerdown', (e) => {
+          if (e.button && e.button !== 0) return;
+          const slug = el.dataset.slug;
+          if (!slug || nama === 'ADMIN') return;
+          lpSlug = slug;
+          lpName = nama;
+          lpMoved = false;
+          clearTimeout(lpTimer);
+          lpTimer = setTimeout(() => {
+            if (lpMoved) return;
+            suppressIdx = parseInt(el.dataset.idx, 10);
+            suppressClickUntil = Date.now() + CLICK_GRACE_MS;
+            togglePin(lpSlug, lpName, el);
+            lpSlug = null;
+            lpName = null;
+          }, PIN_MS);
+        });
+        const cancel = () => { lpMoved = true; clearTimeout(lpTimer); lpSlug = null; lpName = null; };
+        el.addEventListener('pointermove', cancel);
+        el.addEventListener('pointerup', () => clearTimeout(lpTimer));
+        el.addEventListener('pointercancel', () => clearTimeout(lpTimer));
+        el.addEventListener('pointerleave', () => clearTimeout(lpTimer));
+        // klik kanan / tekan lama di HP tidak memunculkan menu browser
+        el.addEventListener('contextmenu', (e) => { e.preventDefault(); clearTimeout(lpTimer); });
+      }
+
       function renderMenu() {
         const q = (searchInput.value || '').trim().toLowerCase();
         const baseFiltered = menus.map(normalizeMenu).filter(m => {
@@ -779,32 +1073,28 @@
           return;
         }
         shownMenus = filtered;
-        menuGrid.innerHTML = filtered.map((m, i) => {
-          const slug = slugify(m.name);
-          const isAdmin = m.name === 'ADMIN';
-          // Setiap menu punya halaman sendiri: public/pages/item-<slug>.html
-          // (dibuat oleh scripts/build/generate-kopi-pages.mjs).
-          // Link dari DB tidak dipakai karena beberapa nilainya salah/tumpang tindih.
-          const hrefMenu = isAdmin ? (m.link || '') : 'pages/item-' + slug + '.html';
-          const hasLink = !!hrefMenu;
-          const tag = hasLink ? 'a' : 'div';
-          const href = hasLink ? ' href="' + hrefMenu + '"' : '';
-          const isImgIcon = m.name === "ADMIN" ? true : !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
-          let iconHtml;
-          if (isImgIcon) {
-            const thumbUrl = toWebPThumb(m.foto, 80, 80, 70);
-            iconHtml = '<img src="' + thumbUrl + '" alt="" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;border-radius:inherit" onload="this.classList.add(\'loaded\')" onerror="this.style.display=\'none\'"/>';
-          } else {
-            iconHtml = '';
-          }
-          return '<' + tag + ' class="item js-detail' + (hasLink ? ' active-modul' : '') + '"' + href + ' data-idx="' + i + '">' +
-                   '<div class="icon-tile ' + (m.cls||'g-a') + ' icon-photo" data-slug="' + slug + '"' + (isImgIcon ? ' data-hasimg="1"' : '') + '>' + iconHtml + '</div>' +
-                   '<span>' + m.name + '</span>' +
-                 '</' + tag + '>';
-        }).join('');
+
+        // ===== Baris pin =====
+        // Menu yang disematkan ditaruh di baris paling atas. Slider yang
+        // sama juga ikut di pin supaya tetap bisa dibuka tanpa search.
+        // ADMIN selalu pertama dan tidak bisa disematkan.
+        const pinIdx = filtered.map((m, i) => i).filter(i => filtered[i].name !== 'ADMIN' && isPinned(slugify(filtered[i].name)));
+        const pinHtml = pinIdx.length
+          ? '<div class="pin-row" id="pinRow"><div class="pin-label">Disematkan</div>' +
+            pinIdx.map(i => tileHtml(filtered[i], i)).join('') + '</div>'
+          : '';
+
+        menuGrid.innerHTML = pinHtml + filtered.map((m, i) => tileHtml(m, i)).join('');
         menuGrid.querySelectorAll('.js-detail').forEach(el => {
+          const m = shownMenus[parseInt(el.dataset.idx)];
           el.addEventListener('click', (e) => {
-            const m = shownMenus[parseInt(el.dataset.idx)];
+            // baru saja long-press -> abaikan klik yg menyusul, TAPI
+            // hanya untuk kartu yang sama (lihat suppressIdx).
+            if (Date.now() < suppressClickUntil && parseInt(el.dataset.idx, 10) === suppressIdx) {
+              e.preventDefault();
+              return;
+            }
+            if (!m) return;
             if (m.name === "ADMIN") return;
             // Semua menu sudah punya halaman -> biarkan browser navigasi.
             // Sheet hanya dipakai kalau Tile tidak punya href (mis. link kosong).
@@ -812,6 +1102,7 @@
             e.preventDefault();
             openSheet(m);
           });
+          if (m && m.name !== 'ADMIN') bindPinGesture(el, m.name);
         });
          // Foto load langsung via <img> onload, tidak pakai lazy loader
          // (lazy loader bisa overwrite <img> dengan background-image)
@@ -841,6 +1132,13 @@
         if (m.cat) html += '<span class="sheet-badge">' + m.cat + '</span>';
         html += '</div>';
         if (pluRows.length) html += '<div class="plu-table">' + pluRows.map(function(r){ return '<div class="plu-row"><div class="plu-th">' + r[0] + '</div><div class="plu-td">' + r[1] + '</div></div>'; }).join('') + '</div>';
+        // Tombol semat: jalur yang jelas untuk yang tidak suka tekan-tahan.
+        // Sheet cuma muncul untuk menu tanpa halaman, jadi selalu >= 1 kartu.
+        const sSlug = slugify(m.name);
+        if (m.name !== 'ADMIN' && sSlug) {
+          const pinnedNow = isPinned(sSlug);
+          html += '<button class="sheet-pin' + (pinnedNow ? ' is-pinned' : '') + '" id="sheetPin" type="button" data-slug="' + sSlug + '">' + (pinnedNow ? 'Lepas Semat' : 'Sematkan') + '</button>';
+        }
         html += '<button class="sheet-close" id="sheetClose" type="button">Tutup</button>';
         html += '</div></div>';
         function bahanGroup(title, list) {
@@ -864,6 +1162,15 @@
         sheetBody.innerHTML = html;
         sheetBg.classList.add('open');
         document.getElementById('sheetClose').addEventListener('click', closeSheet);
+        const sheetPin = document.getElementById('sheetPin');
+        // Tombol mengubah label harusSheet ditutup dulu: renderMenu()
+        // menimpa sheetBody, jadi listener lama ikut hilang.
+        if (sheetPin) {
+          sheetPin.addEventListener('click', () => {
+            togglePin(sheetPin.dataset.slug, m.name, null);
+            closeSheet();
+          });
+        }
       }
       function closeSheet() {
         sheetBg.classList.remove('open');
