@@ -482,10 +482,13 @@
         background: var(--mori-bg);
       }
 
-      /* ===== HEADER: baris tombol ===== */
+      /* ===== HEADER: baris tombol =====
+         Garis pemisah di bawah baris tombol dihapus, sebelumnya
+         border-bottom 1px. Jarak ke area grid dijaga lewat padding
+         supaya tombol tidak terasa nempel ke foto. */
       .stepper-row {
-        border-bottom: 1px solid var(--mori-line);
-        padding-bottom: 12px;
+        border-bottom: none;
+        padding-bottom: 14px;
         align-items: center;
       }
 
