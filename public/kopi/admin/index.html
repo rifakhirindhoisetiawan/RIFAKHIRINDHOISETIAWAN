@@ -623,6 +623,33 @@
 
     /* modal hapus */
     .pw-card,.pw-input,.pw-btn{border-radius:var(--mori-radius)!important}
+
+    /* ===== LENGKUNGAN SUSULAN =====
+        Dari audit: ada 16 selector lain yang dikunci
+        `border-radius:0 !important` oleh override sharp tapi belum ikut
+        dikembalikan melengkung. Yang paling kelihatan di layar:
+          - .foto-box                  kotak foto besar di form
+          - #btnFotoAdd/Save/Cancel    tombol + / ✓ / x di baris tab
+          - .form-table / .admin-plu-table   wadah tabel bahan & PLU
+          - label MENU / PLU (top-row div pertama, #plu16Lab, #pluHotLab)
+          - .btn / .btn-ghost / .btn-danger tombol Edit & Hapus di daftar menu
+          - .crop-icon-btn             tombol crop
+        Pakai !important karena aturan sharp-nya juga !important.
+        Nilai tetap dari --mori-radius (8px), sama seperti index & KOPI. */
+    .btn,.btn-primary,.btn-ghost,.btn-danger,
+    .item-actions .btn,
+    .crop-icon-btn,
+    #btnFotoAdd,#btnFotoSave,#btnFotoCancel,
+    .foto-box,
+    .form-side-table .top-row>div:first-child,
+    #plu16Lab,#pluHotLab,
+    .form-table,.form-compact,.admin-plu-table,
+    .plu-photo-grid .form-table,
+    .tab-panel .form-table .th{border-radius:var(--mori-radius)!important}
+
+    /* input & select dikecilkan 4px: tidak siku, tapi juga tidak sebesar
+       kotak luarnya */
+    .form input,.form select,.select-box select{border-radius:4px!important}
   </style>
 </head>
 <body>
