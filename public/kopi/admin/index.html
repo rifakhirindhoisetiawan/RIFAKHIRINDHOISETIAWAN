@@ -682,6 +682,22 @@
     .form-side-table .top-row:last-child > div,
     .admin-menu-row:last-child > div{border-bottom:0!important}
 
+    /* ===== TOMBOL EDIT & HAPUS SEJAJAR =====
+       Setiap kartu di daftar menu punya 1-3 baris PLU. Karena
+       .col-plu grows sesuai isinya dan tombol Edit/Hapus diletakkan
+       SETELAH .col-plu, kartu dengan 3 PLU membuat tombolnya melorot
+       lebih rendah daripada kartu yang PLU-nya sedikit.
+
+       .col-plu dikunci min-height 3 baris, jadi semua kartu punya
+       tinggi blok PLU yang sama dan tombol Edit/Hapus selalu berada
+       di garis yang sama. */
+    .col-plu{
+      min-height:36px;
+      justify-content:flex-start;
+    }
+    /* jaga jarak tombol tetap sama dari blok PLU */
+    .item-actions{margin-top:6px!important}
+
     /* ===== KOTAK FOTO =====
        Penting: aturan sharp di baris 433 memakai selector BERGANDA,
        `.top-wrap .foto-box` (specificity 0,2,0), sedangkan override
