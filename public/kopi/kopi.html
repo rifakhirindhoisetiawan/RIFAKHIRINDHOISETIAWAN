@@ -495,11 +495,14 @@
         --mori-accent: #1a1917;
         --mori-mono: "JetBrains Mono", ui-monospace, monospace;
         /* sudut tombol & kotak sedang (naik = makin bulat) */
-        --mori-radius: 3px;
-        /* sudut panel terbesar (sheet) */
-        --mori-radius-lg: 4px;
-        /* sudut kotak kecil (handle, tag PLU) */
-        --mori-radius-sm: 2px;
+        /* Disamakan dengan index.html: kotak pencarian + tile menu di sana
+         memakai 8px, jadi KOPI ikut 8px supaya dua halaman ini terlihat
+         sama. Ubah di sini kalau nanti mau geser lagi. */
+        --mori-radius: 8px;
+        /* sudut panel terbesar (sheet, menempel bawah) */
+        --mori-radius-lg: 8px;
+        /* sudut kotak kecil (handle geser, tag PLU) */
+        --mori-radius-sm: 3px;
       }
 
       html,
@@ -722,13 +725,13 @@
 
       /* sheet menempel di bawah: hanya dua sudut atas yang melengkung */
       .sheet {
-        border-radius: var(--mori-radius-lg, 4px) var(--mori-radius-lg, 4px) 0 0;
+        border-radius: var(--mori-radius-lg, 8px) var(--mori-radius-lg, 8px) 0 0;
       }
 
       /* kotak kecil: handle geser & tag PLU di bawah nama menu */
       .sheet-handle,
       .item span .plu-tag {
-        border-radius: var(--mori-radius-sm, 2px);
+        border-radius: var(--mori-radius-sm, 3px);
       }
 
       /* ============================================================
