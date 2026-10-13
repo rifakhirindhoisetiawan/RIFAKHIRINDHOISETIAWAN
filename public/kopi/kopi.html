@@ -905,13 +905,21 @@
 
       /* ============================================================
          PIN MENU — state & helper
-         Disimpan di localStorage (bukan Supabase) supaya:
-         - tetap jalan offline / saat Supabase gagal
-         - tidak perlu hak tulis ke tabel yang dipakai bersama kasir
-         Kunci simpanannya = slug menu, jadi unik dan tetap valid walau
-         diurutkan ulang. ADMIN tidak bisa dipin (selalu di atas).
+
+         SEMATAN BERSAMA: disimpan di tabel Supabase `kopi_pins`
+         (satu baris per slug menu), supaya daftar sematan terlihat
+         di SEMUA HP — bukan cuma di perangkat sendiri.
+
+         localStorage tetap dipakai sebagai CACHE, jadi:
+         - halaman tetap jalan kalau tabel belum dibuat / offline
+         - tidak ada "kedip" tiap reload
+         Sumber kebenaran tetap server kalau bisa dihubungi.
+
+         Cara aktifkan: Supabase Dashboard > SQL Editor > jalankan
+         scripts/build/add-kopi-pins.sql
          ============================================================ */
       const PIN_KEY = 'kopi_pinned_v1';
+      const PIN_TABLE = 'kopi_pins';
       let toastTimer = null;
       function toastPin(pesan) {
         const t = document.getElementById('toastPin');
@@ -933,19 +941,62 @@
         try {
           localStorage.setItem(PIN_KEY, JSON.stringify(list));
         } catch (e) {
-          toastPin('Gagal menyimpan sematan');
+          /* cache gagal (mis. mode privat) -- bukan masalah fatal */
         }
       }
       let pinned = loadPins();
       const isPinned = (slug) => pinned.includes(slug);
+
+      /* ===== Sinkronisasi dengan server =====
+        setServerPins dipanggil begitu tabel terbaca. pinServerReady
+        menandai bahwa tabel ada; kalau belum ada (PGRST205), pilihan
+        user tetap jalan dari localStorage tanpa error. */
+      let pinServerReady = false;
+      function setServerPins(list) {
+        pinned = list;
+        pinServerReady = true;
+        savePins(list);
+        renderMenu();
+      }
+      async function syncPins() {
+        try {
+          const { data, error } = await supabase
+            .from(PIN_TABLE)
+            .select('slug')
+            .order('dibuat', { ascending: true });
+          if (error) {
+            // PGRST205 = tabel belum ada. Jangan ganggu user, andalkan cache.
+            console.info('Pin bersama belum aktif:', error.message);
+            return;
+          }
+          setServerPins((data || []).map(r => r.slug).filter(Boolean));
+        } catch (e) {
+          console.info('Gagal ambil sematan dari server:', e.message);
+        }
+      }
+      // Kirim perubahan ke server tanpa menunggu; tampilan sudah diperbarui
+      // duluan (optimistic) supaya tidak terasa lambat.
+      async function pushPin(slug, nama, add) {
+        try {
+          if (add) {
+            await supabase.from(PIN_TABLE).insert({ slug, oleh: nama });
+          } else {
+            await supabase.from(PIN_TABLE).delete().eq('slug', slug);
+          }
+        } catch (e) {
+          console.warn('Gagal menyimpan sematan ke server:', e.message);
+        }
+      }
+
       function togglePin(slug, nama, el) {
         if (!slug) return;
-        if (isPinned(slug)) {
-          pinned = pinned.filter(s => s !== slug);
-          toastPin('Lepas sematan: ' + nama);
-        } else {
+        const akanPin = !isPinned(slug);
+        if (akanPin) {
           pinned.push(slug);
           toastPin('Disematkan: ' + nama);
+        } else {
+          pinned = pinned.filter(s => s !== slug);
+          toastPin('Lepas sematan: ' + nama);
         }
         savePins(pinned);
         renderMenu();
@@ -958,6 +1009,7 @@
             setTimeout(() => kartu.classList.remove('pinned-pop'), 420);
           }
         }
+        if (pinServerReady) pushPin(slug, nama, akanPin);
       }
 
       /* Satu kartu menu. Dipisah dari renderMenu() supaya baris pin dan
@@ -1210,9 +1262,27 @@
           });
       } catch(e) { console.log('Realtime not enabled', e.message); }
 
-      // Tab kembali aktif -> cek ulang, 基 supaya event yang terlewat tertangkap.
+      /* ===== SEMATAN BERSAMA =====
+        Tarik daftar sematan dari tabel kopi_pins supaya semua HP
+        melihat daftar yang sama, lalu subscribe realtime supaya
+        sematan dari HP lain langsung muncul tanpa reload.
+        Kalau tabelnya belum ada, syncPins() diam-diam kembali ke
+        localStorage dan halaman tetap normal. */
+      syncPins();
+      try {
+        supabase.channel('kopi_pins_changes')
+          .on('postgres_changes', { event: '*', schema: 'public', table: PIN_TABLE }, () => {
+            syncPins();
+          })
+          .subscribe((status) => {
+            if (status === 'SUBSCRIBED') console.log('Realtime sematan aktif');
+          });
+      } catch (e) { console.log('Realtime sematan tidak aktif', e.message); }
+
+      // Tab kembali aktif -> cek ulang, supaya event yang terlewat tertangkap.
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') loadFromSupabase();
+        if (document.visibilityState === 'visible') syncPins();
       });
     </script>
   </body>
