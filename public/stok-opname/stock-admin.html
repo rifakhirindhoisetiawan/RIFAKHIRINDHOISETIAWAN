@@ -676,6 +676,8 @@
         --danger: #b91c1c;
         --mori-bg: #fffbf2;
         --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+        /* sudut kotak (sama dengan index / KOPI / admin KOPI) */
+        --mori-radius: 8px;
       }
 
       html,
@@ -1105,6 +1107,49 @@
         background: var(--danger);
         border-color: var(--danger);
         color: #fff;
+      }
+
+      /* ============================================================
+         SUDUT KOTAK
+         Override sharp di atas memakai radius 0. Di sini dikembalikan
+         melengkung 8px, nilai yang sama dengan index.html, kopi.html,
+         admin KOPI, dan halaman detail menu KOPI -- supaya semua
+         aplikasi di repo ini terlihat satu keluarga.
+
+         Tidak ada !important di sini karena aturan MORI di file ini
+         tidak memakainya (beda dari admin KOPI yang punya
+         `.top-wrap .foto-box` dengan specificity lebih tinggi).
+         ============================================================ */
+      input,
+      .btn,
+      .ico,
+      .qr-btn,
+      .table-wrap,
+      .daftar-wrap,
+      .ringkas-item,
+      .cell-input,
+      .kode-btn,
+      .kode,
+      .c-foto .thumb,
+      .c-foto .kosong,
+      .foto-box,
+      .lightbox-box,
+      .pw-card,
+      .pw-input,
+      .pw-btn {
+        border-radius: var(--mori-radius, 8px);
+      }
+      /* input kolom tabel dikecilkan sedikit supaya tidak sebesar
+         kotaknya, tapi tetap tidak siku */
+      .cell-input {
+        border-radius: 4px;
+      }
+      /* lightbox & thumbnail mengikuti radius induknya */
+      .lightbox img {
+        border-radius: var(--mori-radius, 8px);
+      }
+      .c-foto .thumb img {
+        border-radius: inherit;
       }
     </style>
   </head>
