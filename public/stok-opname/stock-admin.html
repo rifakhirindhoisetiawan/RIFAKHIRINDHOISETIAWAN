@@ -1187,11 +1187,6 @@
         outline: none;
       }
 
-      /* 2b. kotak pencarian menu: jarak dari baris tulis + kolom foto */
-      .menu-cari-row {
-        margin: 10px 0 8px;
-      }
-
       /* 2. abu-abu -> palet MORI */
       .menu-item .nama,
       .daftar-wrap,
@@ -1254,18 +1249,6 @@
           </table>
         </div>
         <button class="btn" type="button" id="mAdd" title="Tambah menu" aria-label="Tambah menu">+</button>
-      </div>
-      <!-- Pencarian menu: sama gaya & perilaku dengan "Cari PLU / Nama barang"
-           di tabel barang, dipakai untuk menyaring daftar menu SO. -->
-      <div class="row menu-cari-row">
-        <input
-          class="cari"
-          type="search"
-          id="cariMenu"
-          placeholder="Cari nama menu"
-          autocomplete="off"
-          aria-label="Cari menu"
-        />
       </div>
       <div class="table-wrap menu-foto-wrap" id="menuFotoWrap" hidden>
         <table class="barang">
@@ -1409,7 +1392,6 @@
       const mMode = document.getElementById('mMode');
       const barangBody = document.getElementById('barangBody');
       const menuFotoBody = document.getElementById('menuFotoBody');
-      const cariMenu = document.getElementById('cariMenu');
       const menuFotoWrap = document.getElementById('menuFotoWrap');
       const menuFotoEmpty = document.getElementById('menuFotoEmpty');
       const menuFotoHint = document.getElementById('menuFotoHint');
@@ -2064,15 +2046,6 @@
         if (fotoData.length) renderBarang(fotoData);
       });
 
-      // Pencarian menu SO: setiap ketikan langsung menyaring ulang tabel
-      // Foto Menu SO. renderFotoMenu() internally memfilter, jadi cukup
-      // panggil ulang dengan daftar LENGKAP (menuFotoData).
-      if (cariMenu) {
-        cariMenu.addEventListener('input', () => {
-          renderFotoMenu(menuFotoData);
-        });
-      }
-
       // Realtime stock_products: tabel barang ikut berubah sendiri begitu
       // stok diubah dari halaman lain (mis. lewat Supabase), jadi tidak
       // perlu refresh manual.
@@ -2335,12 +2308,7 @@
         renderFotoMenu(menuFotoData);
       };
 
-      const renderFotoMenu = (semua) => {
-        //-filter dengan isi kotak pencarian, sama seperti tabel barang
-        const q = (cariMenu ? cariMenu.value : '').trim().toLowerCase();
-        const menus = q
-          ? semua.filter((m) => String(m.name || '').toLowerCase().includes(q))
-          : semua;
+      const renderFotoMenu = (menus) => {
         menuFotoBody.innerHTML = '';
         menus.forEach((menu, i) => {
           const tr = document.createElement('tr');
@@ -2424,17 +2392,7 @@
           menuFotoBody.appendChild(tr);
         });
         menuFotoWrap.hidden = menus.length === 0;
-        if (semua.length === 0) {
-          // belum ada menu sama sekali -> pesan "belum ada menu"
-          menuFotoEmpty.hidden = false;
-          menuFotoEmpty.textContent = 'Belum ada menu SO.';
-        } else if (menus.length === 0) {
-          // ada menu, tapi tidak ada yang cocok dengan pencarian
-          menuFotoEmpty.hidden = false;
-          menuFotoEmpty.textContent = 'Tidak ada menu yang cocok dengan "' + (cariMenu ? cariMenu.value.trim() : '') + '".';
-        } else {
-          menuFotoEmpty.hidden = true;
-        }
+        menuFotoEmpty.hidden = menus.length > 0;
       };
 
       const loadMenus = async () => {
