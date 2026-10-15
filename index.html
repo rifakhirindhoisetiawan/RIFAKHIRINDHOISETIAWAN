@@ -190,12 +190,13 @@
         color: var(--mori-text);
         font-size: 13px;
         background: var(--mori-surface);
-        transition: box-shadow 0.2s ease;
+        transition: background 0.2s ease;
       }
 
+      /* Penanda "sedang mengetik" tetap ada lewat perubahan latar saja,
+         tanpa bayangan. Sebelumnya ada bayangan hitam 4px di sini. */
       .search-box:focus-within {
         background: #fffdf7;
-        box-shadow: 4px 4px 0 var(--mori-accent);
       }
 
       .search-box svg {
@@ -240,10 +241,11 @@
       }
 
       /* Item tile ala Mori: border hitam solid + radius 0 (sharp).
-         Bayangan hanya muncul saat kursor lewat / ditekan, dan selalu
-         warna solid --mori-accent, bukan abu. Sebelumnya tile diam
-         diberi bayangan rgba(26,25,23,0.12) yang tampak sebagai
-         bayangan abu lembut, dan itu dihilangkan. */
+         TANPA bayangan sama sekali -- baik abu maupun hitam. Dulu tile
+         diam punya bayangan rgba(26,25,23,0.12) (abu), lalu hover dan
+         active punya bayangan --mori-accent (hitam). Keduanya dihapus.
+
+         Efek "ditekan" tetap ada lewat transform, tidak lewat bayangan. */
       .menu-item .icon-box {
         width: 100%;
         max-width: 100px;
@@ -259,16 +261,11 @@
         margin-bottom: 10px;
         overflow: hidden;
         position: relative;
-        transition: box-shadow 0.2s ease, transform 0.2s ease;
-      }
-
-      .menu-item:not(.disabled):hover .icon-box {
-        box-shadow: 4px 4px 0 var(--mori-accent);
+        transition: transform 0.2s ease;
       }
 
       .menu-item:not(.disabled):active .icon-box {
         transform: translate(2px, 2px);
-        box-shadow: 2px 2px 0 var(--mori-accent);
       }
 
       .menu-item .icon-box img {
