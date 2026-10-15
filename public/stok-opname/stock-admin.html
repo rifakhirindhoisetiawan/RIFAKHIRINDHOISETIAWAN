@@ -1421,30 +1421,58 @@
       }
       /* ============================================================
          BARIS CARI DI DALAM TABEL BARANG
-         Kotak "Cari PLU / Nama barang" sebelumnya berdiri sendiri di
-         atas tabel. Sekarang jadi baris paling atas di dalam tabel,
-         sama seperti baris "Tulis Menu" di tabel menu -- supaya bagian
-         barang cukup satu blok, tidak ada kotak terpisah di atasnya.
+         Sengaja dibuat PERSIS sama dengan baris "Tulis Menu" di
+         tabel menu: input transparan tanpa garis, tinggi 44px,
+         huruf 13px tebal, teks gelap.
 
-         Inputnya dikunci ke tepi kiri (position:sticky) karena tabel
-         barang punya min-width 620px dan bisa digulir mendatar. Tanpa
-         sticky, sel yang colspan 11 selebar 620px itu, jadi di HP yang
-         hanya menampakkan sekitar 360px, kotak cari akan keluar layar
-         ke kanan. Dengan sticky, kotak tetap utuh di area yang terlihat
-         walau tabel digulir.
+         Sebelumnya input cari memakai gaya bawaan (latar krem +
+         garis gelap + tinggi 36px), jadi kelihatan seperti
+         komponen asing yang ditempel di antara baris tabel, bukan
+         bagian dari tabel. Aturan .cari yang hanya mengubah width
+         dan text-transform ikut ditimpa di sini.
 
-         Baris cari juga diberi garis bawah sendiri: ia satu-satunya
-         anak tbody-nya sehingga qualify sebagai tr:last-child dan
+         .cari-dalam sengaja dibiarkan selebar penuh sel, sama
+         seperti .tulis-in di tabel menu. Dulu sel ini dikunci
+         sticky di tepi kiri supaya tetap terlihat di HP, tapi
+         karena inputnya sekarang transparan, isi kolom lain yang
+         tergulir akan terlihat menindih teks di dalamnya. Sticky
+         dibuang; kotak cari mengikuti lebar tabel seperti baris
+         tulis menu.
+
+         Garis bawah di baris ini supaya terpisah dari baris
+         "Tambah barang" di bawahnya: ia satu-satunya anak
+         tbody-nya sehingga qualify sebagai tr:last-child dan
          garisnya ikut hilang di blok TABEL LEBIH RAPI.
          ============================================================ */
       #barangWrap tbody.cari-body td.cari-sel {
-        padding: 6px 12px;
+        padding: 0 12px;
         border-bottom: 1px solid var(--line);
       }
       #barangWrap tbody.cari-body .cari-dalam {
-        position: sticky;
-        left: 0;
-        width: min(280px, calc(100vw - 44px));
+        display: flex;
+        align-items: center;
+      }
+      #barangWrap tbody.cari-body input.cari {
+        flex: 1;
+        min-width: 0;
+        height: 44px;
+        padding: 0;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        text-transform: uppercase;
+      }
+      /* aturan "tanpa abu-abu" memberi input:focus garis 2px !important.
+         Input baris cari memang tidak boleh punya garis. */
+      #barangWrap tbody.cari-body input.cari:focus {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        outline: none;
       }
     </style>
   </head>
