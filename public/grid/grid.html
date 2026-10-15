@@ -1712,14 +1712,18 @@
       });
 
       /* ===== Bagikan Telegram =====
-         Telegram tidak punya share-sheet seperti WA, jadi web tidak bisa
-         mengirim file langsung lewat navigator.share ke aplikasinya.
-         Yang bisa dilakukan: arahkan ke share resmi Telegram, atau kalau
-         orang yangować dikasih link-nya.
-         1. Telegram di HP/desktop: buka share-url resmi (t.me/share/url).
-            File tidak ikut, jadi tetap perlu pilih fotonya manual dari
-            galeri di dalam Telegram.
-         2. Kalau user batal (AbortError) tidak dianggap gagal. */
+         Cara yang SAMA dengan tombol WA: navigator.share({ files }) membuka
+         share sheet Android, dan Telegram ada di dalamnya. Kalau Telegram
+         yang dipilih, filenya benar-benar ikut terkirim -- persis seperti
+         memilih WhatsApp.
+
+         Kenapa tidak ada deep-link langsung ke Telegram dengan file?
+         Protokol tg:// hanya menerima teks/link (mis. tg://msg?text=...),
+         tidak bisa melampirkan file. Jadi share sheet satu-satunya cara
+         dari halaman web yang benar-benar mengirim file ke Telegram.
+
+         Fallback kalau share sheet tidak didukung (mis. sebagian browser
+         desktop): simpan dulu lalu buka share-url resmi Telegram. */
       function bukaTelegramShare() {
         const teks = dlFileName;
         const url = "https://t.me/share/url?url=&text=" + encodeURIComponent(teks);
@@ -1729,18 +1733,27 @@
       dlShareTgBtn.addEventListener("click", async () => {
         if (!dlDataUrl && !dlBlob) return;
         try {
-          // Simpan dulu supaya fotonya ada di galeri/file manager, jadi
-          // di Telegram tinggal ambil dari sana tanpa perlu cari lagi.
-          await simpanBlob(await ambilBlob());
-          showToast("Tersimpan. Buka Telegram, kirim dari galeri.");
+          const blob = await ambilBlob();
+          const file = new File([blob], dlFileName, { type: "image/png" });
+          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            // Tanpa `text` supaya Telegram cuma menerima file, tidak ikut
+            // menempelkan caption apa pun.
+            await navigator.share({ files: [file], title: dlFileName });
+            hideBubble();
+            return;
+          }
+          // Tidak ada share sheet: simpan dulu, lalu arahkan ke Telegram.
+          try {
+            await simpanBlob(blob);
+            showToast("File diunduh. Buka Telegram, kirim manual dari galeri.");
+            hideBubble();
+          } catch (tgErr) {
+            showToast("Gagal berbagi: " + tgErr.message, "err");
+          }
         } catch (err) {
-          if (err.name === "AbortError") return;
-        }
-        try {
-          bukaTelegramShare();
-          hideBubble();
-        } catch (tgErr) {
-          showToast("Gagal membuka Telegram: " + tgErr.message, "err");
+          if (err.name !== "AbortError") {
+            showToast("Gagal berbagi ke Telegram: " + err.message, "err");
+          }
         }
       });
 
