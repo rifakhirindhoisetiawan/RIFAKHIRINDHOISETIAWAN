@@ -343,6 +343,14 @@
         align-items: center;
         gap: 4px;
       }
+      .kode-plain {
+        font-family: var(--mori-mono);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text);
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
 
       .qr-btn {
         width: 26px;
@@ -2187,15 +2195,11 @@
 
       const kodeTeks = (row) => {
         const td = document.createElement('td');
-        td.className = 'c-kode';
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'kode-btn';
-        btn.textContent = row.kode || '-';
-        btn.title = 'Lihat QR ' + (row.kode || '');
-        btn.setAttribute('aria-label', btn.title);
-        btn.addEventListener('click', () => lihatQr(row.kode));
-        td.appendChild(btn);
+        td.className = 'c-kode kode-plain';
+        td.textContent = row.kode || '-';
+        td.title = 'Lihat QR ' + (row.kode || '');
+        td.setAttribute('aria-label', td.title);
+        td.addEventListener('click', () => lihatQr(row.kode));
         return td;
       };
 
