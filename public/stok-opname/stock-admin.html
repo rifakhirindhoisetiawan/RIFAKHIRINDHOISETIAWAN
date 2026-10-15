@@ -1438,15 +1438,34 @@
          tergulir akan terlihat menindih teks di dalamnya. Sticky
          dibuang; kotak cari mengikuti lebar tabel seperti baris
          tulis menu.
-
-         Garis bawah di baris ini supaya terpisah dari baris
-         "Tambah barang" di bawahnya: ia satu-satunya anak
-         tbody-nya sehingga qualify sebagai tr:last-child dan
-         garisnya ikut hilang di blok TABEL LEBIH RAPI.
          ============================================================ */
+      /* ============================================================
+         AREA INPUT: DUA BARIS ATAS SEPAKAD
+         Baris "Cari barang" dan baris "Tambah barang" sekarang
+         memakai warna latar yang sama, jadi terbaca sebagai satu
+         blok "area input". Sebelumnya baris tambah lebih gelap
+         sementara baris cari dan baris data sama-sama paling
+         terang, sehingga tabel terlihat belang di tengah.
+
+         Garis pemisah antara keduanya dihapus supaya keduanya
+         menyatu, dan garis di bawah blok dibuat tegas (--text)
+         supaya jelas di mana area input berakhir dan baris data
+         mulai.
+         ============================================================ */
+      #barangWrap tbody.cari-body td.cari-sel,
+      #barangWrap tbody.tambah td {
+        background: var(--surface) !important;
+      }
       #barangWrap tbody.cari-body td.cari-sel {
         padding: 0 12px;
-        border-bottom: 1px solid var(--line);
+        border-bottom: 0;
+      }
+      /* Penyesuaian spesifisitas lebih tinggi dari
+         tbody tr:last-child td { border-bottom: 0 } supaya garis
+         tegas di bawah area input tetap tampil walau baris tambah
+         adalah baris terakhir yang terlihat. */
+      #barangWrap tbody.tambah td {
+        border-bottom: 1px solid var(--text);
       }
       #barangWrap tbody.cari-body .cari-dalam {
         display: flex;
