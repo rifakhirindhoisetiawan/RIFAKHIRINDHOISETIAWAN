@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lakasir - buka aplikasi</title>
+<style>
+  :root {
+    --mori-bg: #fffbf2;
+    --mori-surface: #f7f3e9;
+    --mori-text: #1a1917;
+    --mori-text-2: #6e6a64;
+    --mori-line: rgba(26, 25, 23, 0.12);
+    --mori-accent: #1a1917;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: var(--mori-bg);
+    color: var(--mori-text);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .wrap {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 14px 16px 48px;
+  }
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .head a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--mori-accent);
+    border-radius: 8px;
+    background: var(--mori-surface);
+    color: var(--mori-text);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  h1 {
+    font-size: clamp(17px, 4.5vw, 22px);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .sub {
+    font-size: 11px;
+    color: var(--mori-text-2);
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .card {
+    border: 1px solid var(--mori-accent);
+    border-radius: 8px;
+    background: var(--mori-surface);
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .card h2 {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .card p {
+    font-size: 12px;
+    line-height: 1.65;
+    color: var(--mori-text-2);
+  }
+  .card p + p { margin-top: 8px; }
+  .card p b { color: var(--mori-text); }
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  input {
+    width: 100%;
+    height: 38px;
+    padding: 0 12px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--mori-text);
+    background: var(--mori-bg);
+    border: 1px solid var(--mori-accent);
+    border-radius: 8px;
+  }
+  input:focus { outline: none; background: #fffdf7; }
+  .baris { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  button {
+    height: 38px;
+    padding: 0 14px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--mori-bg);
+    background: var(--mori-accent);
+    border: 1px solid var(--mori-accent);
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button.kedua { background: var(--mori-surface); color: var(--mori-text); }
+  button:active { transform: translate(2px, 2px); }
+  #status {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.6;
+    display: none;
+  }
+  #status.ok { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; display: block; }
+  #status.ga { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; display: block; }
+  #status.hr { background: var(--mori-bg); color: var(--mori-text-2); border: 1px solid var(--mori-line); display: block; }
+  code {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    background: var(--mori-bg);
+    border: 1px solid var(--mori-line);
+    border-radius: 6px;
+    padding: 2px 6px;
+    display: inline-block;
+    word-break: break-all;
+  }
+  .langkah { margin: 10px 0 0; padding-left: 18px; }
+  .langkah li { font-size: 12px; line-height: 1.75; color: var(--mori-text-2); margin-bottom: 6px; }
+  .peringatan {
+    font-size: 11px;
+    line-height: 1.65;
+    color: #92400e;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <a href="../index.html" title="Kembali ke menu">&larr;</a>
+    <div>
+      <h1>LAKASIR</h1>
+      <div class="sub">Point of Sale &middot; Laravel + Docker</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Buka aplikasi</h2>
+    <label for="urlApp">Alamat Lakasir</label>
+    <input type="text" id="urlApp" spellcheck="false" placeholder="http://localhost" />
+
+    <div class="baris">
+      <button type="button" id="bBuka">Buka Lakasir</button>
+      <button type="button" class="kedua" id="bCek">Cek koneksi</button>
+      <button type="button" class="kedua" id="bIp" hidden>Pakai IP PC ini</button>
+    </div>
+
+    <div id="status" role="status"></div>
+  </div>
+
+  <div class="card">
+    <h2>Cara menjalankan</h2>
+    <p>Lakasir adalah aplikasi <b>PHP (Laravel)</b>. Halaman ini <b>tidak</b> menjalankan PHP &mdash; aplikasinya berjalan di PC lewat <b>Docker</b>, dan halaman ini cuma pintu masuknya.</p>
+    <ol class="langkah">
+      <li>Buka folder aplikasi di terminal:<br /><code>cd D:\CODING\RIFAKHIRINDHOISETIAWAN\RIFAKHIRINDHOISETIAWAN\lakasir-1.x</code></li>
+      <li>Jalankan <code>docker compose up -d --build</code>. Pertama kali lama karena harus mengunduh PHP, MySQL, Redis, lalu composer install dan npm run build.</li>
+      <li>Sebelum pertama kali, kunci dan database perlu disiapkan:<br />
+        <code>docker compose exec app php artisan key:generate</code><br />
+        <code>docker compose exec app php artisan migrate --path=database/migrations/tenant --seed</code></li>
+      <li>Buka <code>http://localhost</code> di PC.</li>
+    </ol>
+
+    <div class="peringatan" id="peringatanIp" hidden>
+      Halaman ini dibuka dari <b>telepon</b>? <code>localhost</code> artinya telepon itu sendiri, bukan PC. Pastikan telepon satu WiFi dengan PC, lalu tekan tombol <b>Pakai IP PC ini</b>.
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+  const KUNCI = 'lakasir_url';
+  const AWAL = 'http://localhost';
+
+  const input = document.getElementById('urlApp');
+  const kotakStatus = document.getElementById('status');
+  const tombolCek = document.getElementById('bCek');
+
+  const asal = window.location.hostname;
+  const hostLokal = !asal || asal === 'localhost' || asal === '127.0.0.1';
+
+  /* Alamat yang sudah pernah disimpan menang atas tebakan. Kalau belum
+     ada isinya dan halaman dibuka dari GitHub Pages (https), tebakan
+     localhost dipakai -- pengguna bisa ganti sendiri. */
+  let tersimpan = '';
+  try { tersimpan = localStorage.getItem(KUNCI) || ''; } catch { /* storage diblokir */ }
+  input.value = (tersimpan || AWAL).replace(/\/+$/, '');
+
+  const alamatBersih = () => input.value.trim().replace(/\/+$/, '');
+
+  const simpanUrl = () => {
+    try { localStorage.setItem(KUNCI, input.value); } catch { /* biarkan */ }
+  };
+
+  const tampilkanStatus = (kelas, isi) => {
+    kotakStatus.className = kelas;
+    kotakStatus.innerHTML = isi;
+  };
+
+  document.getElementById('bBuka').addEventListener('click', () => {
+    simpanUrl();
+    const tujuan = alamatBersih();
+    if (tujuan) window.location.href = tujuan;
+  });
+
+  document.getElementById('bCek').addEventListener('click', async () => {
+    const tujuan = alamatBersih();
+    if (!tujuan) {
+      tampilkanStatus('ga', 'Alamat belum diisi.');
+      return;
+    }
+    tampilkanStatus('hr', 'Memeriksa <b>' + tujuan + '</b> &hellip;');
+    tombolCek.disabled = true;
+    try {
+      const kendali = new AbortController();
+      const waktu = setTimeout(() => kendali.abort(), 4000);
+      await fetch(tujuan, { mode: 'no-cors', signal: kendali.signal });
+      clearTimeout(waktu);
+      tampilkanStatus('ok', 'Bisa dihubungi. Kalau halaman tidak muncul, buka manual di tab baru: <b>' + tujuan + '</b>');
+    } catch (e) {
+      const sebab = e.name === 'AbortError' ? 'kehabisan waktu tunggu' : 'gagal dihubungkan';
+      tampilkanStatus(
+        'ga',
+        'Tidak merespons (' + sebab + ').<br />Kalau halaman ini dibuka dari <b>GitHub Pages (https)</b>, hasil cek hampir selalu gagal walau aplikasinya jalan &mdash; browser memblokir campuran <code>http</code> dari halaman <code>https</code>. Tekan <b>Buka Lakasir</b> saja.'
+      );
+    } finally {
+      tombolCek.disabled = false;
+    }
+  });
+
+  /* Tombol ini cuma berguna kalau halaman dibuka lewat IP. Dijalankan
+     dari GitHub Pages atau localhost, alamat PC tidak bisa ditebak. */
+  /* Tombol ini cuma berguna kalau halaman dibuka lewat IP. Dijalankan
+     dari GitHub Pages atau localhost, alamat PC tidak bisa ditebak. */
+  if (hostLokal) {
+    document.getElementById('peringatanIp').hidden = false;
+  } else {
+    const tombolIp = document.getElementById('bIp');
+    tombolIp.hidden = false;
+    tombolIp.textContent = 'Pakai IP PC ini (' + asal + ')';
+    tombolIp.addEventListener('click', () => {
+      input.value = 'http://' + asal;
+      simpanUrl();
+      tampilkanStatus('hr', 'Alamat diganti ke <b>' + input.value + '</b>. Sekarang tekan Buka Lakasir.');
+    });
+  }
+</script>
+</body>
+</html>

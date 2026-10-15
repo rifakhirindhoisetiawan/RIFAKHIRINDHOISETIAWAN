@@ -9,3 +9,12 @@ build/
 .cache/
 app-mori/android/app/build/
 app-mori/android/.gradle/
+
+# --- Lakasir (aplikasi Laravel/PHP, dijalankan lewat Docker) ---
+# Tidak di-commit ke repo ini: GitHub Pages hanya bisa melayani file statis,
+# jadi aplikasi PHP tidak akan jalan di sini. Selain itu di dalamnya ada file
+# .env berisi kredensial yang tidak boleh ikut ter-push.
+lakasir-1.x/
+**/.env
+**/.env.backup
+**/.env.production
