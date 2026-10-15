@@ -1153,9 +1153,9 @@
          TANPA SHADOW & TANPA ABU-ABU
 
          1. Semua bayangan dihapus. Tema MORI memang memakai bayangan
-            offset 4px sebagai ciri, tapi di halaman ini sudah让人觉得
+            offset 4px sebagai ciri, tapi di halaman ini sudah terasa
             berat. One-satunya shadow yang berfungsi sebagai penanda fokus
-            (input:focus) diganti jadi garis thicker, bukan bayangan --
+            (input:focus) diganti jadi garis lebih tebal, bukan bayangan --
             kalau ikut dihapus, user tidak tahu sedang di kolom mana.
 
          2. Sisa abu-abu gelap yang masih ada berasal dari aturan dasar
@@ -2513,18 +2513,25 @@
         menuPop.hidden = false;
         anchor.setAttribute('aria-expanded', 'true');
 
-        /* taruh di bawah tombol; kalau tidak muat ke bawah, flip ke
-           atas. Kanan disejajarkan dengan tepi kanan tombol, lalu
-           dijaga tetap di dalam layar. */
+        /* Tombol muncul DI TEMPAT tombol tiga-titik, bukan meleset ke
+           bawah baris. Efeknya tombol tiga-titik berubah jadi tombol
+           aslinya.
+
+           Popup lebih lebar daripada kolom Aksi (tiga tombol 32px
+           ditambah jaraknya), jadi tepi kanannya disejajarkan dengan
+           tepi kanan tombol: popup tumbuh ke arah kiri, ke kolom Nama
+           Menu. Kalau popup ditumpuk dari tepi kiri tombol, di HP kolom
+           Aksi berada di tepi kanan layar sehingga popup keluar layar.
+
+           Vertikal tetap dijaga agar tidak keluar atas/bawah layar. */
         const r = anchor.getBoundingClientRect();
         const p = menuPop.getBoundingClientRect();
-        let top = r.bottom + 6;
-        if (top + p.height > window.innerHeight - 8) {
-          top = Math.max(8, r.top - p.height - 6);
-        }
-        const left = Math.max(8, Math.min(r.right - p.width, window.innerWidth - p.width - 8));
-        menuPop.style.top = top + 'px';
-        menuPop.style.left = left + 'px';
+        const top = r.top + (r.height - p.height) / 2;
+        const left = r.right - p.width;
+        menuPop.style.top =
+          Math.max(8, Math.min(top, window.innerHeight - p.height - 8)) + 'px';
+        menuPop.style.left =
+          Math.max(8, Math.min(left, window.innerWidth - p.width - 8)) + 'px';
       };
 
       document.addEventListener('click', (e) => {
