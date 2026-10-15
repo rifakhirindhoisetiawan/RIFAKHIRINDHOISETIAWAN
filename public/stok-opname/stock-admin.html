@@ -1448,9 +1448,10 @@
          terang, sehingga tabel terlihat belang di tengah.
 
          Garis pemisah antara keduanya dihapus supaya keduanya
-         menyatu, dan garis di bawah blok dibuat tegas (--text)
-         supaya jelas di mana area input berakhir dan baris data
-         mulai.
+         menyatu. Batas bawah blok memakai --line yang sama dengan
+         pembatas baris lain, BUKAN --text: garis gelap yang
+         terlihat seperti coretan hitam di tengah tabel krem.
+         Batas area input sudah jelas dari warnanya saja.
          ============================================================ */
       #barangWrap tbody.cari-body td.cari-sel,
       #barangWrap tbody.tambah td {
@@ -1460,12 +1461,13 @@
         padding: 0 12px;
         border-bottom: 0;
       }
-      /* Penyesuaian spesifisitas lebih tinggi dari
-         tbody tr:last-child td { border-bottom: 0 } supaya garis
-         tegas di bawah area input tetap tampil walau baris tambah
-         adalah baris terakhir yang terlihat. */
+      /* Batas bawah blok area input memakai --line, sama seperti
+         pembatas baris lain. Selector tetap memuat ID supaya
+         spesifisitasnya mengalahkan aturan
+         tbody tr:last-child td { border-bottom: 0 }, karena baris
+         tambah adalah satu-satunya anak tbody-nya. */
       #barangWrap tbody.tambah td {
-        border-bottom: 1px solid var(--text);
+        border-bottom: 1px solid var(--line);
       }
       #barangWrap tbody.cari-body .cari-dalam {
         display: flex;
