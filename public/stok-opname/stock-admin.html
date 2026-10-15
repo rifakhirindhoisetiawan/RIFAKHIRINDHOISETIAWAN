@@ -1419,6 +1419,33 @@
       .menu-foto-wrap .c-aksi {
         width: 56px;
       }
+      /* ============================================================
+         BARIS CARI DI DALAM TABEL BARANG
+         Kotak "Cari PLU / Nama barang" sebelumnya berdiri sendiri di
+         atas tabel. Sekarang jadi baris paling atas di dalam tabel,
+         sama seperti baris "Tulis Menu" di tabel menu -- supaya bagian
+         barang cukup satu blok, tidak ada kotak terpisah di atasnya.
+
+         Inputnya dikunci ke tepi kiri (position:sticky) karena tabel
+         barang punya min-width 620px dan bisa digulir mendatar. Tanpa
+         sticky, sel yang colspan 11 selebar 620px itu, jadi di HP yang
+         hanya menampakkan sekitar 360px, kotak cari akan keluar layar
+         ke kanan. Dengan sticky, kotak tetap utuh di area yang terlihat
+         walau tabel digulir.
+
+         Baris cari juga diberi garis bawah sendiri: ia satu-satunya
+         anak tbody-nya sehingga qualify sebagai tr:last-child dan
+         garisnya ikut hilang di blok TABEL LEBIH RAPI.
+         ============================================================ */
+      #barangWrap tbody.cari-body td.cari-sel {
+        padding: 6px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+      #barangWrap tbody.cari-body .cari-dalam {
+        position: sticky;
+        left: 0;
+        width: min(280px, calc(100vw - 44px));
+      }
     </style>
   </head>
   <body>
@@ -1481,16 +1508,6 @@
     </section>
 
     <section class="sec" id="barangSec" hidden>
-      <div class="row">
-        <input
-          class="cari"
-          type="search"
-          id="cariBarang"
-          placeholder="Cari PLU / Nama barang"
-          autocomplete="off"
-          aria-label="Cari barang"
-        />
-      </div>
       <div class="table-wrap" id="barangWrap">
         <table class="barang">
           <thead>
@@ -1508,6 +1525,28 @@
               <th class="c-aksi"></th>
             </tr>
           </thead>
+          <!-- Baris cari: kotak "Cari PLU / Nama barang" sekarang jadi
+               baris paling atas di dalam tabel, sama seperti baris
+               "Tulis Menu" di tabel menu. Jadi bagian barang cukup
+               satu blok tabel, tidak ada kotak terpisah di atasnya.
+               Harus tbody sendiri: renderBarang() mengosongkan
+               barangBody, jadi baris cari tidak boleh ikut terhapus. -->
+          <tbody class="cari-body">
+            <tr>
+              <td class="cari-sel" colspan="11">
+                <div class="cari-dalam">
+                  <input
+                    class="cari"
+                    type="search"
+                    id="cariBarang"
+                    placeholder="Cari PLU / Nama barang"
+                    autocomplete="off"
+                    aria-label="Cari barang"
+                  />
+                </div>
+              </td>
+            </tr>
+          </tbody>
           <tbody class="tambah">
             <tr>
               <td class="c-no"></td>
