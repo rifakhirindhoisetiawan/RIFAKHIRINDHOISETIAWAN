@@ -1469,6 +1469,44 @@
       #barangWrap tbody.tambah td {
         border-bottom: 1px solid var(--line);
       }
+      /* ============================================================
+         INPUT DI DALAM SEL: TIDAK ADA KOTAK
+         Input kolom (baris "Tambah barang" dan baris data saat
+         diedit) sebelumnya tidak terlihat sama sekali -- background
+         transparan dan border transparan.
+
+         Tapi begitu diklik, aturan input:focus di blok "tanpa
+         abu-abu" memberi border-width 2px !important, sehingga
+         tiba-tiba muncul kotak hitam 2px di sekeliling kolom yang
+         diklik. Kotak yang muncul mendadak seperti itu terlihat
+         jelek.
+
+         Sekarang kotak dihapus di semua keadaan: tidak saat diam,
+         tidak saat kursor lewat, tidak saat difokus. Penanda kolom
+         yang sedang diisi diganti garis bawah 2px di dalam sel --
+         gaya "underline", bukan kotak. Garisnya cuma selebar kolom
+         itu, jadi tidak melintas seluruh tabel seperti garis
+         pembatas baris.
+
+         Semua aturan memakai !important karena harus mengalahkan
+         input:focus { border-width: 2px !important } di blok
+         "tanpa abu-abu", dan di antara dua aturan !important yang
+         menang adalah spesifisitas, bukan urutan. Karena itu
+         selector-nya memakai ID #barangWrap.
+         ============================================================ */
+      #barangWrap input.cell-input,
+      #barangWrap input.cell-input:hover,
+      #barangWrap input.cell-input:focus {
+        background: transparent !important;
+        border: 0 !important;
+        border-bottom: 2px solid transparent !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        outline: none !important;
+      }
+      #barangWrap input.cell-input:focus {
+        border-bottom-color: var(--text) !important;
+      }
       #barangWrap tbody.cari-body .cari-dalam {
         display: flex;
         align-items: center;
