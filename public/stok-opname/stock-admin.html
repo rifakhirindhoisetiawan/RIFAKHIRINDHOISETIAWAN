@@ -1258,8 +1258,17 @@
         border-bottom: 1px solid var(--line);
         vertical-align: middle;
       }
+      /* Tinggi baris 45px, bukan 44px.
+         Karena * { box-sizing: border-box }, tinggi 44px sudah
+         termasuk border-bottom 1px, sehingga ruang isinya cuma
+         44 - 1 = 43px. Foto 44px lalu meluap 1px, baris tumbuh jadi
+         45px, dan foto duduk di tengah dengan celah tipis di atas dan
+         bawah -- itulah sebabnya foto terlihat tidak mepet.
+
+         Dengan 45px, ruang isinya jadi 45 - 1 = 44px, sama persis
+         dengan foto, jadi foto mepet penuh di atas dan bawah. */
       tbody td {
-        height: 44px;
+        height: 45px;
         padding: 0 12px;
         border-bottom: 1px solid var(--line);
         vertical-align: middle;
@@ -1283,11 +1292,24 @@
         width: 78px;
         text-align: center;
       }
+      /* 44x44 persis mengisi ruang isi sel yang 45 - 1 border = 44px,
+         jadi foto mepet di atas dan bawah tanpa celah.
+
+         .kosong (tanda "-" untuk menu yang belum punya foto) juga
+         diberi kotak 44x44 yang sama. Sebelumnya .kosong cuma
+         <span> inline, jadi width/height di atas tidak berlaku dan
+         kotak kosongnya tidak ikut terisi -- baris yang tidak punya
+         foto jadi terlihat lebih pendek. */
       .c-foto .thumb,
       .c-foto .kosong {
         width: 44px;
         height: 44px;
         margin: 0 auto;
+      }
+      .c-foto .kosong {
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       .c-aksi {
         width: 116px;
