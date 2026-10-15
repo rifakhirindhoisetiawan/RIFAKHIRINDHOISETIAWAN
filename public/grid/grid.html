@@ -414,26 +414,21 @@
         display: none;
       }
 
-      /* Tombol unduhan + panelnya: dulu mengambang di KIRI BAWAH, dan
-         panelnya muncul ke ATAS (dropup).
-         Sekarang di KIRI ATAS, panelnya turun ke BAWAH (dropdown),
-         supaya setelah menekan Unduh di baris tombol atas, mata tidak
-         perlu turun ke bawah layar.
+      /* Panel unduh/share sekarang MENEMPEL di tombol Unduh (downloadBtn)
+         di baris tombol atas -- dulu ada tombol awan terpisah yang
+         mengambang, dan itu dihapus.
 
-         Top 52px dipilih supaya tidak menimpa baris tombol atas
-         (stepper-row): tombol 28-32px + padding atas 4px + padding
-         bawah 2-10px. Di semua breakpoint (420px & 360px) masih aman.
-         Safe-area-inset-top ikut supaya aman di HP ber-notch. */
-      .download-bubble-container{position:fixed;top:calc(52px + env(safe-area-inset-top,0px));left:max(16px,calc((100vw - 500px)/2 + 16px));z-index:1050;display:flex;flex-direction:column;align-items:flex-start;pointer-events:none}
+         Container tidak lagi punya top/left tetap: keduanya diisi JS
+         dari posisi tombol Unduh (lihat posisikanPanel()), supaya panel
+         selalu muncul tepat di bawah tombolnya, bukan di sudut layar.
+         Aman saat layar diputar karena posisi dihitung ulang tiap kali
+         panel dibuka. */
+      .download-bubble-container{position:fixed;z-index:1050;display:flex;flex-direction:column;align-items:flex-start;pointer-events:none}
       .download-bubble-container.visible{pointer-events:auto}
-      .download-bubble-btn{width:46px;height:46px;border-radius:50%;background:var(--mori-surface);border:1.5px solid var(--mori-accent);box-shadow:none;position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mori-accent);transition:transform .15s ease,box-shadow .15s ease}
-      .download-bubble-btn:active{transform:scale(.94);box-shadow:none}
-      .db-badge{position:absolute;top:-4px;right:-4px;width:12px;min-width:12px;height:12px;padding:0;border-radius:50%;background:var(--mori-accent);color:var(--mori-bg);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--mori-surface)}
-      .db-badge.hidden{opacity:0;transform:scale(.5);pointer-events:none}
-      /* Panel sekarang turun dari tombol: top (bukan bottom) 56px.
-         Arah animasi juga dibalik: translateY(-10px) saat tertutup,
-         supaya panel "jatuh" dari arah tombol, bukan naik dari bawah. */
-      .download-bubble-dropup{position:absolute;top:56px;left:0;width:min(320px,calc(100vw - 32px));background:var(--mori-surface);border:1.5px solid var(--mori-accent);border-radius:12px;box-shadow:4px 4px 0 var(--mori-accent);display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(-10px) scale(.96);pointer-events:none;transition:opacity .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1)}
+      /* Panelnya ikut mengalir di dalam container (bukan absolute),
+         karena container-nya sendiri yang diposisikan ke tombol Unduh.
+         Arah animasi: turun sedikit dari arah tombol saat dibuka. */
+      .download-bubble-dropup{width:min(320px,calc(100vw - 32px));background:var(--mori-surface);border:1.5px solid var(--mori-accent);border-radius:12px;box-shadow:4px 4px 0 var(--mori-accent);display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(-10px) scale(.96);pointer-events:none;transition:opacity .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1)}
       .download-bubble-dropup.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
       .dbd-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--mori-line);background:rgba(26,25,23,.04)}
       .dbd-title{font-family:var(--mori-mono);font-size:.82rem;font-weight:700;color:var(--mori-text)}
@@ -596,31 +591,9 @@
       .dbd-close-btn {
         border-radius: var(--mori-radius-sm, 3px);
       }
-      /* tombol unduhan kiri bawah: dari bulat penuh (50%) jadi persegi
-         melengkung, biar sama dengan tombol baris atas.
-         Isinya hitam solid (--mori-accent), sama persis dengan tombol
-         di baris atas, karena --mori-surface nyaris sama dengan
-         latar halaman (#f7f3e9 vs #fffbf2) sehingga tombolnya
-         hampir tak terlihat kalau cuma krem. */
-      .download-bubble-btn {
-        border-radius: var(--mori-radius, 5px);
-        background: var(--mori-accent);
-        border-color: var(--mori-accent);
-        color: var(--mori-bg);
-      }
-      /* lencana angka: dari isi hitam pekat ke krem + garis abu-abu,
-         biar tidak ada hitam di tombol unduhan kiri bawah.
-         Tetap bulat penuh karena ukurannya kecil (18px). */
-      .db-badge {
-        background: var(--mori-surface);
-        color: var(--mori-text-2);
-        border: 1.5px solid var(--mori-text-2);
-        /* titik bulat kecil, bukan lencana berisi angka */
-        width: 12px;
-        min-width: 12px;
-        height: 12px;
-        padding: 0;
-      }
+      /* Catatan: tombol awan terpisah (.download-bubble-btn) dan
+         lencana angkanya (.db-badge) sudah dihapus. Panel unduh/share
+         sekarang menempel di tombol Unduh (downloadBtn) di baris atas. */
 
       /* tombol aktif (aspect terpilih) = kebalik */
       .aspect-btn.active {
@@ -1000,10 +973,6 @@
             </div>
           </div>
         </div>
-        <button id="downloadBubbleBtn" class="download-bubble-btn" aria-label="Unduhan" title="Unduhan">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
-          <span class="db-badge hidden" id="dbBadge" aria-hidden="true"></span>
-        </button>
       </div>
     </div>
 
@@ -1577,9 +1546,7 @@
       const dlShareWaBtn = document.getElementById("dlShareWaBtn");
       const dlShareTgBtn = document.getElementById("dlShareTgBtn");
       const bubbleContainer = document.getElementById("downloadBubbleContainer");
-      const bubbleBtn = document.getElementById("downloadBubbleBtn");
       const dropup = document.getElementById("downloadBubbleDropup");
-      const dbBadge = document.getElementById("dbBadge");
       const dbdCloseBtn = document.getElementById("dbdCloseBtn");
       let dlDataUrl = "";
       let dlBlob = null;
@@ -1589,13 +1556,37 @@
         localStorage.setItem("gridDlCounter", String(n));
         return n + ".png";
       }
-      bubbleContainer.classList.remove("visible");
-      dbBadge.classList.add("hidden");
-      function hideBubble(){ dropup.classList.remove("open"); setTimeout(()=>{ bubbleContainer.classList.remove("visible"); dbBadge.classList.add("hidden"); },200); }
-      function showBubble(){ bubbleContainer.classList.add("visible"); dbBadge.textContent=""; dbBadge.classList.remove("hidden"); dropup.classList.add("open"); }
-      bubbleBtn.addEventListener("click",(e)=>{ e.stopPropagation(); dropup.classList.toggle("open"); });
+      /* Posisikan panel tepat di bawah tombol Unduh, bukan di sudut
+         layar. Dihitung setiap kali panel dibuka supaya ikut kalau
+         layar diputar atau tombol pindah tempat. */
+      function posisikanPanel(){
+        const r = downloadBtn.getBoundingClientRect();
+        const w = dropup.offsetWidth || 320;
+        const lebarLayar = window.innerWidth;
+        let left = r.left;
+        /* Jangan keluar kanan layar. */
+        if (left + w > lebarLayar - 12) left = lebarLayar - w - 12;
+        if (left < 12) left = 12;
+        bubbleContainer.style.left = left + "px";
+        bubbleContainer.style.top = (r.bottom + 8) + "px";
+      }
+      /* Naik ke atas tombol kalau ruang di bawah tidak cukup (HP kecil
+         dalam mode landscape). */
+      function posisiAman(){
+        const bawah = bubbleContainer.offsetTop + (dropup.offsetHeight || 0);
+        if (bawah <= window.innerHeight - 12) return;
+        const r = downloadBtn.getBoundingClientRect();
+        bubbleContainer.style.top = Math.max(12, r.top - (dropup.offsetHeight || 0) - 8) + "px";
+      }
+      function hideBubble(){ dropup.classList.remove("open"); }
+      /* Tombol ✕ di kepala panel. e.stopPropagation() penting supaya
+         kliknya tidak ikut ditangkap handler "klik di luar panel" di
+         bawah, yang juga akan menutupnya -- hasilnya sama, tapi ini
+         menjadikan maksudnya jelas. */
       dbdCloseBtn.addEventListener("click",(e)=>{ e.stopPropagation(); dropup.classList.remove("open"); });
-      document.addEventListener("click",(e)=>{ if(dropup.classList.contains("open") && !bubbleContainer.contains(e.target)) dropup.classList.remove("open"); });
+      function showBubble(){ posisikanPanel(); bubbleContainer.classList.add("visible"); dropup.classList.add("open"); posisiAman(); }
+      document.addEventListener("click",(e)=>{ if(dropup.classList.contains("open") && !bubbleContainer.contains(e.target) && !downloadBtn.contains(e.target)) dropup.classList.remove("open"); });
+      window.addEventListener("resize",()=>{ if(dropup.classList.contains("open")) posisikanPanel(); });
 
       /* ===== Toast custom (pola Mori showToast) =====
          Dipakai untuk menggantikan alert() native browser, yang di WebView
