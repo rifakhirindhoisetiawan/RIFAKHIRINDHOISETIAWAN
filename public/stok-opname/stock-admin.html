@@ -1283,43 +1283,33 @@
         width: 44px;
       }
       /* ============================================================
-         TULIS MENU SEBAGAI TABEL
-         Sekarang memakai kelas .barang yang sama dengan tabel lain,
-         jadi header, padding, garis, dan tinggi baris otomatis sama
-         dengan tabel Foto Menu SO dan tabel Barang.
+         TULIS MENU MENYATU DENGAN TABEL MENU
+         Baris tulis tidak lagi tabel terpisah, melainkan baris paling
+         atas di dalam tabel Foto Menu SO (tbody.tulis-body). Jadi tidak
+         ada dua header yang menumpuk dan ruang yang terpakai berkurang
+         satu baris header + satu jarak 12px.
          ============================================================ */
-      .menu-tulis-wrap {
-        margin-bottom: 12px;
+      .menu-foto-wrap tbody.tulis-body td.tulis {
+        padding: 0 12px;
       }
-      .menu-tulis-tabel {
-        min-width: 0;
-        width: 100%;
+      /* baris tulis adalah satu-satunya anak tbody.tulis-body, jadi
+         qualify sebagai tr:last-child dan garis bawahnya ikut hilang.
+         Garis ini justru dipakai memisahkan "tulis baru" dari daftar. */
+      .menu-foto-wrap tbody.tulis-body td {
+        border-bottom: 1px solid var(--line);
       }
-      /* kolom "Aksi" cuma berisi tombol + jadi tidak perlu 116px */
-      .menu-tulis-tabel th.c-aksi,
-      .menu-tulis-tabel td.c-aksi {
-        width: 64px;
-        text-align: center;
-      }
-      /* kolom "Nama Menu" melar penuh. Aslinya .c-nama dibatasi 340px
-         untuk tabel barang, di sini boleh sampai tepi kanan. */
-      .menu-tulis-tabel th.c-nama,
-      .menu-tulis-tabel td.c-nama {
-        max-width: none;
-      }
-      .menu-tulis-tabel td.tulis {
-        padding: 0;
-      }
-      .menu-tulis-tabel .tulis-in {
+      .menu-foto-wrap tbody.tulis-body .tulis-in {
         display: flex;
         align-items: center;
         gap: 8px;
       }
-      .menu-tulis-tabel input {
+      /* input menyatu dengan baris tabel: transparan, tanpa garis,
+         tinggi sama dengan tinggi sel lain (44px) */
+      .menu-foto-wrap tbody.tulis-body input {
         flex: 1;
         min-width: 0;
         height: 44px;
-        padding: 0 12px;
+        padding: 0;
         font: inherit;
         font-size: 13px;
         font-weight: 700;
@@ -1329,18 +1319,20 @@
         border-radius: 0;
         text-transform: uppercase;
       }
-      .menu-tulis-tabel input:focus {
-        background: transparent;
-        border: none;
-        box-shadow: none;
+      /*_rules "tanpa abu-abu" di bawah memakai !important untuk
+         input:focus (border 2px). Input baris tulis memang tidak
+         boleh punya garis, jadi harus ditimpa balik. */
+      .menu-foto-wrap tbody.tulis-body input:focus {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
         outline: none;
       }
-      /* .acts aslinya justify-content:flex-end, di sini diubah ke tengah
-         supaya tombol + duduk di tengah kolom Aksi */
-      .menu-tulis-tabel td.c-aksi .acts {
+      /* tombol + di tengah kolom Aksi, sama seperti .c-aksi */
+      .menu-foto-wrap tbody.tulis-body td.c-aksi .acts {
         justify-content: center;
       }
-      .menu-tulis-tabel .btn {
+      .menu-foto-wrap tbody.tulis-body .btn {
         margin: 0 auto;
       }
     </style>
@@ -1354,20 +1346,26 @@
       </div>
     </div>
     <section class="sec">
-      <!-- Tulis Menu jadi tabel sungguhan dengan header, biar konsisten
-           dengan tabel Foto Menu SO dan tabel Barang di bawahnya.
-           id mName / mMode / mAdd tetap sama, logika JS tidak berubah. -->
-      <div class="table-wrap menu-tulis-wrap">
-        <table class="barang menu-tulis-tabel">
+      <!-- Satu tabel untuk dua keperluan: baris paling atas dipakai untuk
+           menulis menu baru, baris di bawahnya adalah daftar menu hasil
+           renderFotoMenu(). Jadi tidak ada dua tabel yang menumpuk.
+
+           Baris tulis harus punya <tbody> sendiri: renderFotoMenu()
+           mengosongkan menuFotoBody dengan innerHTML = '', dan baris
+           tulis tidak boleh ikut terhapus. -->
+      <div class="table-wrap menu-foto-wrap" id="menuFotoWrap" hidden>
+        <table class="barang">
           <thead>
             <tr>
-              <th class="c-nama">Nama Menu</th>
-              <th class="c-aksi">Aksi</th>
+              <th class="c-no">No</th>
+              <th>Nama Menu</th>
+              <th class="c-foto">Foto</th>
+              <th class="c-aksi"></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="tulis-body">
             <tr>
-              <td class="tulis">
+              <td class="tulis" colspan="3">
                 <div class="tulis-in">
                   <input
                     type="text"
@@ -1386,18 +1384,6 @@
               </td>
             </tr>
           </tbody>
-        </table>
-      </div>
-      <div class="table-wrap menu-foto-wrap" id="menuFotoWrap" hidden>
-        <table class="barang">
-          <thead>
-            <tr>
-              <th class="c-no">No</th>
-              <th>Nama Menu</th>
-              <th class="c-foto">Foto</th>
-              <th class="c-aksi"></th>
-            </tr>
-          </thead>
           <tbody id="menuFotoBody"></tbody>
         </table>
       </div>
@@ -2416,7 +2402,9 @@
           if (hasil.error) {
             console.error('Gagal memuat daftar menu:', hasil.error.message);
             menuFotoBody.innerHTML = '';
-            menuFotoWrap.hidden = true;
+            /* tabel tetap ditampilkan: baris tulis menu berada di dalam
+               tabel ini, jadi harus tetap ada walau daftar gagal dimuat */
+            menuFotoWrap.hidden = false;
             menuFotoEmpty.hidden = true;
             menuFotoHint.hidden = false;
             menuFotoHint.textContent = 'Gagal memuat menu: ' + hasil.error.message;
@@ -2529,7 +2517,11 @@
           tr.appendChild(tdAct);
           menuFotoBody.appendChild(tr);
         });
-        menuFotoWrap.hidden = menus.length === 0;
+        /* menuFotoWrap TIDAK lagi disembunyikan saat daftar kosong, karena
+           baris tulis menu ada di dalam tabel yang sama. Kalau
+           disembunyikan, input untuk menambah menu pertama ikut hilang
+           dan tidak ada cara menambahnya. */
+        menuFotoWrap.hidden = false;
         menuFotoEmpty.hidden = menus.length > 0;
       };
 
