@@ -1151,6 +1151,71 @@
       .c-foto .thumb img {
         border-radius: inherit;
       }
+
+      /* ============================================================
+         TANPA SHADOW & TANPA ABU-ABU
+
+         1. Semua bayangan dihapus. Tema MORI memang memakai bayangan
+            offset 4px sebagai ciri, tapi di halaman ini sudah让人觉得
+            berat. One-satunya shadow yang berfungsi sebagai penanda fokus
+            (input:focus) diganti jadi garis thicker, bukan bayangan --
+            kalau ikut dihapus, user tidak tahu sedang di kolom mana.
+
+         2. Sisa abu-abu gelap yang masih ada berasal dari aturan dasar
+            yang ditulis SEBELUM override MORI, jadi override variabel
+            tidak menjangkau. Warna lamanya ditulis langsung sebagai hex,
+            jadi harus ditimpa per elemen. Semuanya diarahkan ke palet
+            MORI: garis -> --line, latar -> --surface, teks redup -> --muted.
+
+         3. Warna status (hijau td.ok, biru tr.sinkron) dibiarkan -- itu
+            penanda kondisi data, bukan abu-abu, dan perlu tetap terlihat.
+         ============================================================ */
+
+      /* 1. semua bayangan mati */
+      * {
+        box-shadow: none !important;
+      }
+      /* penanda fokus diganti garis, bukan bayangan */
+      input:focus {
+        border-color: var(--text) !important;
+        border-width: 2px !important;
+        outline: none;
+      }
+      .cell-input:focus,
+      .cari:focus {
+        border-color: var(--text) !important;
+        outline: none;
+      }
+
+      /* 2. abu-abu -> palet MORI */
+      .menu-item .nama,
+      .daftar-wrap,
+      tfoot td,
+      .cell-input:hover,
+      .c-foto .thumb {
+        border-color: var(--line) !important;
+      }
+      table.daftar tr + tr td {
+        border-top-color: var(--line) !important;
+      }
+      input,
+      thead th,
+      thead th.c-aksi,
+      tfoot td,
+      .tambah td,
+      .tambah:hover td,
+      tbody tr:hover td,
+      .cell-input:hover,
+      .c-foto .thumb {
+        background: var(--surface) !important;
+      }
+      input::placeholder,
+      table.daftar input::placeholder {
+        color: var(--muted) !important;
+      }
+      tbody td {
+        background: var(--mori-bg) !important;
+      }
     </style>
   </head>
   <body>
