@@ -724,10 +724,21 @@
       /* ===== TOMBOL =====
          Warna tombol memakai warna yang sama persis dengan header
          tabel (baris No | Nama Menu | Foto | Aksi): latar --surface
-         krem, teks --text gelap, garis --text. Sebelumnya tombol
-         memakai --primary yang di tema MORI bernilai #1a1917, jadi
-         tombolnya hitam penuh dan terlihat tidak menyatu dengan
-         tabel.
+         krem, teks --text gelap. Sebelumnya tombol memakai --primary
+         yang di tema MORI bernilai #1a1917, jadi tombolnya hitam
+         penuh dan terlihat tidak menyatu dengan tabel.
+
+         TANPA GARIS. Header tabel tidak punya garis kiri/kanan, cuma
+         garis bawah. Tombol yang diberi garis --text terlihat seperti
+         kotak hitam menindih krem tombolnya, jadi border dihapus
+         seluruhnya, bukan diganti warna lain.
+
+         Batas tombol sekarang dibentuk oleh ikon gelapnya sendiri di
+         atas latar krem. Bayangan juga sudah tidak ada karena blok
+         TANPA SHADOW memakai * { box-shadow: none !important }.
+
+         Ukuran tetap 32x32 karena * { box-sizing: border-box }, jadi
+         menghapus border tidak mengubah ukuran tombol.
 
          Tombol hapus tetap merah karena .ico-danger ada di bawah
          dan aturan itu muncul belakangan, sehingga menimpa latar
@@ -736,7 +747,7 @@
       .ico,
       .qr-btn {
         border-radius: 0;
-        border: 1px solid var(--text);
+        border: none;
         background: var(--surface);
         color: var(--text);
         box-shadow: 3px 3px 0 rgba(26, 25, 23, 0.18);
