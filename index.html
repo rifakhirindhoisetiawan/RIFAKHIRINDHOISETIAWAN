@@ -239,8 +239,11 @@
         cursor: pointer;
       }
 
-      /* Item tile ala Mori: border hitam solid + radius 0 (sharp),
-         shadow offset keras 4px ala .chip:hover di public/mori/css/home.css */
+      /* Item tile ala Mori: border hitam solid + radius 0 (sharp).
+         Bayangan hanya muncul saat kursor lewat / ditekan, dan selalu
+         warna solid --mori-accent, bukan abu. Sebelumnya tile diam
+         diberi bayangan rgba(26,25,23,0.12) yang tampak sebagai
+         bayangan abu lembut, dan itu dihilangkan. */
       .menu-item .icon-box {
         width: 100%;
         max-width: 100px;
@@ -256,7 +259,6 @@
         margin-bottom: 10px;
         overflow: hidden;
         position: relative;
-        box-shadow: 4px 4px 0 rgba(26, 25, 23, 0.12);
         transition: box-shadow 0.2s ease, transform 0.2s ease;
       }
 
