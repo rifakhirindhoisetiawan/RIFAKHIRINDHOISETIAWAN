@@ -1338,17 +1338,23 @@
          Dulu tiap baris menu punya tiga tombol (upload / edit / hapus)
          sehingga kolom Aksi lebar sekali dan baris penuh tombol.
          Sekarang tiap baris cuma satu tombol tiga titik, dan ketika
-         ditekan tombol aslinya muncul -- ikon yang sama persis dengan
-         yang dulu, bukan daftar teks.
+         ditekan tombol aslinya muncul menimpanya -- ikon yang sama
+         persis dengan yang dulu, di baris yang sama.
 
-         Popup memakai position:fixed dan diletakkan di luar tabel,
-         bukan absolute di dalam sel, karena .table-wrap memakai
-         overflow:hidden -- tombol yang muncul di dalam tabel akan
-         terpotong batas tabel. Posisi fixed juga membuat lebar tabel
-         tidak berubah-ubah saat tombol muncul.
+         SENGAJA TANPA KOTAK: tanpa background, border, dan padding.
+         Kotak membuat tombol terlihat melayang di atas tabel, bukan
+         sedatar barisnya. Setelah semua dihapus, container ini hanya
+         berukuran setinggi tombol (32px), sama persis dengan tombol
+         tiga-titik yang digantikannya -- sehingga keduanya menempati
+         baris yang sama dan tabel tidak bergeser.
 
-         z-index 150: di bawah lightbox (200) supaya tombol yang muncul
-         tidak menutupi lightbox.
+         pointer-events:none pada container supaya celah di antara
+         tombol tidak menjadi kotak tak kasat mata yang memblokir klik;
+         hanya tombolnya yang bisa diklik. Tanpa itu, mengetuk celah
+         tidak menutup daftar dan tidak mengenai elemen apa pun.
+
+         Popup tetap di luar tabel (position:fixed) karena .table-wrap
+         memakai overflow:hidden, dan tetap di bawah lightbox (200).
          ============================================================ */
       .menu-pop {
         position: fixed;
@@ -1356,15 +1362,13 @@
         display: flex;
         align-items: center;
         gap: 6px;
-        padding: 5px;
-        background: var(--surface);
-        border: 1px solid var(--line-2);
-        border-radius: var(--mori-radius, 8px);
+        pointer-events: none;
       }
       /* Tombol di dalamnya memakai kelas .ico yang sudah ada, jadi
          ukuran (32x32), warna, dan radiusnya sama persis dengan
          tombol di baris lain -- tidak perlu gaya baru. */
       .menu-pop .ico {
+        pointer-events: auto;
         -webkit-tap-highlight-color: transparent;
       }
       /* kolom Aksi di tabel menu bisa ramping: isinya hanya satu
