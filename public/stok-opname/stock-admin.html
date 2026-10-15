@@ -1328,13 +1328,11 @@
         box-shadow: none !important;
         outline: none;
       }
-      /* tombol + di tengah kolom Aksi, sama seperti .c-aksi */
-      .menu-foto-wrap tbody.tulis-body td.c-aksi .acts {
-        justify-content: center;
-      }
-      .menu-foto-wrap tbody.tulis-body .btn {
-        margin: 0 auto;
-      }
+      /* Tombol + sengaja TIDAK diberi perataan sendiri. .acts aslinya
+         sudah justify-content:flex-end dan kolom .c-aksi rata kanan,
+         jadi tombol + otomatis rata kanan dengan tombol upload (↑),
+         edit (✎) dan hapus (✕) di baris-barus di bawahnya.
+         .btn dan .ico sama-sama 32x32, jadi tepi kanannya ikut lurus. */
     </style>
   </head>
   <body>
