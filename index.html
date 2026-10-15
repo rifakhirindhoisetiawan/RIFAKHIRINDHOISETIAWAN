@@ -178,13 +178,16 @@
         margin-bottom: 14px;
       }
 
-      /* Search box juga sharp + border hitam, konsisten dgn .chip Mori */
+      /* Kotak tanggal/jam di paling atas. Garis tepinya sengaja tidak
+         hitam: pakai --mori-line (abu 12%) supaya kotaknya tidak
+         menjadi lapisan gelap di atas daftar tile. Bayangan juga tidak
+         ada. Sebelumnya garisnya --mori-accent (hitam penuh). */
       .search-box {
         flex: 1;
         display: flex;
         align-items: center;
         gap: 8px;
-        border: 1px solid var(--mori-accent);
+        border: 1px solid var(--mori-line);
         border-radius: 8px;
         padding: 11px 14px;
         color: var(--mori-text);
