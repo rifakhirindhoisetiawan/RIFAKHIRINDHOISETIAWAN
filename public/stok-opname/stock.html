@@ -416,7 +416,29 @@
         }
       };
 
-      addTile('ADMIN STOCK OPNAME', 'stock-admin.html', (await adaFoto(fotoStorage('admin')))
+      /* Nama tile ADMIN disimpan di tabel so_admin (lihat
+         scripts/build/add-so-admin-nama.sql) supaya bisa diubah dari
+         stock-admin.html. Kalau tabelnya belum ada (PGRST205), pakai
+         nama bawaan -- halaman tetap jalan.
+
+         Penting: tile admin ini juga muncul di halaman pelanggan ini,
+         jadi kalau hanya menulis ulang nama di stock-admin.html, nama
+         yang dilihat di HP pelanggan tidak akan ikut berubah. */
+      const NAMA_ADMIN_AWAL = 'ADMIN STOCK OPNAME';
+      let namaAdmin = NAMA_ADMIN_AWAL;
+      try {
+        const { data, error } = await supabase
+          .from('so_admin')
+          .select('name')
+          .eq('id', 'admin')
+          .maybeSingle();
+        const v = !error && data && data.name ? String(data.name).trim() : '';
+        if (v) namaAdmin = v;
+      } catch {
+        /* pakai nama bawaan */
+      }
+
+      addTile(namaAdmin, 'stock-admin.html', (await adaFoto(fotoStorage('admin')))
         ? fotoStorage('admin')
         : THUMB);
 

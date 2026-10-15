@@ -2457,6 +2457,63 @@
 
       const AKUN_TILE = 'admin';
 
+      /* ============================================================
+         NAMA TILE ADMIN
+         Tile admin bukan record so_menus -- id-nya bigint identity,
+         sedangkan tile ini memakai id tetap 'admin' supaya fotonya
+         tinggal dicari di path storage menu/admin.jpg. Karena itu
+         namanya tidak bisa disimpan lewat update so_menus.
+
+         Disimpan di tabel so_admin (scripts/build/add-so-admin-nama.sql).
+         Fallback ke NAMA_ADMIN_AWAL kalau tabelnya belum ada
+         (PGRST205), jadi halaman tetap jalan sebelum SQL dijalankan.
+         localStorage hanya cache, bukan sumber utama: nama harus
+         ikut berubah di HP pelanggan juga (stock.html). */
+      const NAMA_ADMIN_AWAL = 'ADMIN STOCK OPNAME';
+      const NAMA_ADMIN_KEY = 'so_admin_nama';
+      let namaAdmin = localStorage.getItem(NAMA_ADMIN_KEY) || NAMA_ADMIN_AWAL;
+
+      const loadNamaAdmin = async () => {
+        try {
+          const { data, error } = await supabase
+            .from('so_admin')
+            .select('name')
+            .eq('id', AKUN_TILE)
+            .maybeSingle();
+          // PGRST205 = tabel belum ada. Diamkan saja, andalkan nilai awal.
+          if (error) return;
+          const v = data && data.name ? String(data.name).trim() : '';
+          if (!v) return;
+          if (v !== namaAdmin) {
+            namaAdmin = v;
+            localStorage.setItem(NAMA_ADMIN_KEY, v);
+            renderFotoMenu(menuFotoData);
+          }
+        } catch {
+          /* biarkan nilai awal */
+        }
+      };
+
+      const simpanNamaAdmin = async (name) => {
+        namaAdmin = name;
+        localStorage.setItem(NAMA_ADMIN_KEY, name);
+        try {
+          const { error } = await supabase
+            .from('so_admin')
+            .upsert({ id: AKUN_TILE, name }, { onConflict: 'id' });
+          if (error) throw error;
+          return true;
+        } catch (e) {
+          // Tabel belum ada -> nama hanya berubah di perangkat ini.
+          console.info('Nama admin belum tersimpan di server:', e && e.message);
+          menuFotoHint.hidden = false;
+          menuFotoHint.textContent =
+            'Nama tersimpan di HP ini saja. Jalankan scripts/build/add-so-admin-nama.sql di Supabase '
+            + 'supaya semua perangkat ikut berubah.';
+          return false;
+        }
+      };
+
       const pilihMenu = async (id) => {
         stopEdit(true);
         editBarangId = null;
@@ -2518,7 +2575,7 @@
         const urlAdmin = fotoMenuUrl(AKUN_TILE);
         const fotoAdmin = (await adaFotoMenu(urlAdmin)) ? urlAdmin : null;
         menuFotoData = [
-          { id: AKUN_TILE, name: 'ADMIN STOCK OPNAME', foto_url: fotoAdmin },
+          { id: AKUN_TILE, name: namaAdmin, foto_url: fotoAdmin },
         ].concat(menus);
         renderFotoMenu(menuFotoData);
       };
@@ -2652,13 +2709,19 @@
             },
           ];
 
-          // Baris ADMIN bukan record so_menus, jadi tidak bisa diedit/dihapus.
+          /* Edit nama tersedia untuk SEMUA baris, termasuk tile ADMIN
+             -- namanya disimpan di tabel so_admin, bukan di so_menus
+             (lihat blok NAMA TILE ADMIN). */
+          isiMenu.push({
+            ikon: '✎',
+            judul: 'Edit ' + up(menu.name),
+            jalankan: () => editMenu(menu),
+          });
+
+          /* Hapus tetap dikecualikan untuk tile ADMIN: barisnya bukan
+             record menu, dan "hapus" di sini berarti mengembalikan ke
+             nama bawaan, bukan menghapus apa pun dari server. */
           if (menu.id !== AKUN_TILE) {
-            isiMenu.push({
-              ikon: '✎',
-              judul: 'Edit ' + up(menu.name),
-              jalankan: () => editMenu(menu),
-            });
             isiMenu.push({
               ikon: '✕',
               judul: 'Hapus ' + up(menu.name),
@@ -2750,6 +2813,17 @@
         mName.value = name;
 
         if (editMenuId) {
+          /* Tile ADMIN: namanya disimpan di tabel so_admin, bukan di
+             so_menus. Update so_menus dengan id 'admin' pasti gagal
+             karena kolom id-nya bigint identity. */
+          if (editMenuId === AKUN_TILE) {
+            const ok = await simpanNamaAdmin(name);
+            stopEdit(true);
+            if (ok) loadMenus();
+            else renderFotoMenu(menuFotoData);
+            return;
+          }
+
           const { error } = await supabase.from('so_menus').update({ name }).eq('id', editMenuId);
           if (error) {
             console.error('Gagal update menu:', error.message);
@@ -2840,6 +2914,7 @@
 
       setMode();
       loadMenus();
+      loadNamaAdmin();
     </script>
   </body>
 </html>
