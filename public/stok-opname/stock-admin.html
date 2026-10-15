@@ -957,11 +957,8 @@
       }
 
       /* ===== JARAK ANTAR TABEL DI ATAS =====
-         Baris input (+tombol) lalu tabel Foto Menu SO, lalu section
-         barang. Jeda dibuat seragam supaya tidak ada rongga di bawah. */
-      .menu-tulis {
-        margin-bottom: 10px;
-      }
+         Tabel Tulis Menu lalu tabel Foto Menu SO, lalu section barang.
+         Jeda dibuat seragam supaya tidak ada rongga di bawah. */
       .menu-foto-wrap {
         margin-top: 0;
         margin-bottom: 12px;
@@ -1221,39 +1218,6 @@
       }
 
       /* ============================================================
-         BARIS TAMBAH MENU
-         Tadinya input "SO ROTI" diletakkan di dalam <table>, padahal
-         isinya cuma satu kolom. Akibatnya ada garis tabel di sekeliling
-         input, dan inputnya sendiri jadi kotak di dalam kotak.
-
-         Sekarang .menu-tulis diratakan sebagai satu baris biasa:
-         label kecil di atas, input penuh, tombol + di kanan.
-         Wrapper tabelnya dibikin transparan tanpa garis supaya tidak
-         mengarahkan garis dobel.
-         ============================================================ */
-      .menu-tulis {
-        flex-wrap: nowrap;
-        align-items: stretch;
-        gap: 8px;
-        margin-bottom: 10px;
-      }
-      .menu-tulis .table-wrap,
-      .menu-tulis .daftar-wrap {
-        background: transparent;
-        border: none;
-        border-radius: 0;
-        overflow: visible;
-      }
-      table.daftar .tulis-in {
-        display: flex;
-        align-items: center;
-      }
-      table.daftar td.tulis {
-        padding: 0;
-        height: auto;
-      }
-
-      /* ============================================================
          TABEL LEBIH RAPI
          Yang dibersihkan:
          - tinggi header dan sel disamakan di semua tabel
@@ -1318,20 +1282,44 @@
         text-align: center;
         width: 44px;
       }
-      /* kolom tulis: satu baris kosong dengan garis bawah saja, supaya
-         terbaca sebagai "tulis di sini" tanpa kotak tambahan */
-      table.daftar td.tulis {
-        border-bottom: 1px solid var(--line);
-        transition: border-color 0.2s ease;
+      /* ============================================================
+         TULIS MENU SEBAGAI TABEL
+         Sekarang memakai kelas .barang yang sama dengan tabel lain,
+         jadi header, padding, garis, dan tinggi baris otomatis sama
+         dengan tabel Foto Menu SO dan tabel Barang.
+         ============================================================ */
+      .menu-tulis-wrap {
+        margin-bottom: 12px;
       }
-      .menu-tulis .table-wrap:focus-within td.tulis {
-        border-bottom: 2px solid var(--text);
+      .menu-tulis-tabel {
+        min-width: 0;
+        width: 100%;
       }
-      table.daftar input {
+      /* kolom "Aksi" cuma berisi tombol + jadi tidak perlu 116px */
+      .menu-tulis-tabel th.c-aksi,
+      .menu-tulis-tabel td.c-aksi {
+        width: 64px;
+        text-align: center;
+      }
+      /* kolom "Nama Menu" melar penuh. Aslinya .c-nama dibatasi 340px
+         untuk tabel barang, di sini boleh sampai tepi kanan. */
+      .menu-tulis-tabel th.c-nama,
+      .menu-tulis-tabel td.c-nama {
+        max-width: none;
+      }
+      .menu-tulis-tabel td.tulis {
+        padding: 0;
+      }
+      .menu-tulis-tabel .tulis-in {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .menu-tulis-tabel input {
         flex: 1;
         min-width: 0;
-        height: var(--row-h);
-        padding: 0 2px;
+        height: 44px;
+        padding: 0 12px;
         font: inherit;
         font-size: 13px;
         font-weight: 700;
@@ -1341,18 +1329,19 @@
         border-radius: 0;
         text-transform: uppercase;
       }
-      table.daftar input:focus {
+      .menu-tulis-tabel input:focus {
         background: transparent;
         border: none;
         box-shadow: none;
         outline: none;
       }
-      /* tombol + tetap setinggi input */
-      .menu-tulis .btn {
-        flex: 0 0 auto;
-        height: var(--row-h);
-        width: 44px;
-        align-self: stretch;
+      /* .acts aslinya justify-content:flex-end, di sini diubah ke tengah
+         supaya tombol + duduk di tengah kolom Aksi */
+      .menu-tulis-tabel td.c-aksi .acts {
+        justify-content: center;
+      }
+      .menu-tulis-tabel .btn {
+        margin: 0 auto;
       }
     </style>
   </head>
@@ -1365,28 +1354,39 @@
       </div>
     </div>
     <section class="sec">
-      <div class="row menu-tulis">
-        <div class="table-wrap daftar-wrap grow">
-          <table class="daftar">
-            <tbody>
-              <tr>
-                <td class="tulis">
-                  <div class="tulis-in">
-                    <input
-                      type="text"
-                      id="mName"
-                      placeholder="SO ROTI"
-                      autocomplete="off"
-                      aria-label="Nama menu SO"
-                    />
-                    <span class="mode" id="mMode"></span>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <button class="btn" type="button" id="mAdd" title="Tambah menu" aria-label="Tambah menu">+</button>
+      <!-- Tulis Menu jadi tabel sungguhan dengan header, biar konsisten
+           dengan tabel Foto Menu SO dan tabel Barang di bawahnya.
+           id mName / mMode / mAdd tetap sama, logika JS tidak berubah. -->
+      <div class="table-wrap menu-tulis-wrap">
+        <table class="barang menu-tulis-tabel">
+          <thead>
+            <tr>
+              <th class="c-nama">Nama Menu</th>
+              <th class="c-aksi">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="tulis">
+                <div class="tulis-in">
+                  <input
+                    type="text"
+                    id="mName"
+                    placeholder="SO ROTI"
+                    autocomplete="off"
+                    aria-label="Nama menu SO"
+                  />
+                  <span class="mode" id="mMode"></span>
+                </div>
+              </td>
+              <td class="c-aksi">
+                <div class="acts">
+                  <button class="btn" type="button" id="mAdd" title="Tambah menu" aria-label="Tambah menu">+</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="table-wrap menu-foto-wrap" id="menuFotoWrap" hidden>
         <table class="barang">
