@@ -704,6 +704,12 @@
         font-family: var(--mori-mono);
         color: var(--muted);
       }
+      /* pesan gagal, mis. PLU bentrok. Memakai blok pesan yang sudah
+         ada (barangEmpty) supaya tidak menambah elemen baru. */
+      .empty.gagal {
+        color: #b91c1c;
+        font-weight: 700;
+      }
 
       /* ===== INPUT ===== */
       input {
@@ -1641,7 +1647,9 @@
           <tbody class="tambah">
             <tr>
               <td class="c-no"></td>
-              <td class="c-kode"><span class="auto">otomatis</span></td>
+              <td class="c-kode">
+                <input class="cell-input teks mono" type="text" id="bKode" placeholder="otomatis" autocomplete="off" aria-label="PLU barang" />
+              </td>
               <td class="c-nama">
                 <input class="cell-input teks" type="text" id="bName" size="1" placeholder="Nama Barang" autocomplete="off" />
               </td>
@@ -1726,6 +1734,7 @@
       const mAdd = document.getElementById('mAdd');
       const barangSec = document.getElementById('barangSec');
       const bName = document.getElementById('bName');
+      const bKode = document.getElementById('bKode');
       const bSatuan = document.getElementById('bSatuan');
       const bOnhand = document.getElementById('bOnhand');
       const bFisik = document.getElementById('bFisik');
@@ -1806,6 +1815,7 @@
         editMenuId = null;
         if (clearMenu) mName.value = '';
         bName.value = '';
+        bKode.value = '';
         bSatuan.value = 'PCS';
         bOnhand.value = '0';
         bFisik.value = '0';
@@ -2311,6 +2321,10 @@
           barangBody.appendChild(tr);
         });
         renderTotal(tampil);
+        /* Kelas "gagal" dilepas di sini supaya pesan error yang sempat
+           tampil (mis. PLU bentrok) kembali ke gaya pesan biasa begitu
+           daftar digambar ulang. */
+        barangEmpty.className = 'empty';
         barangEmpty.hidden = tampil.length > 0;
         barangEmpty.textContent = q
           ? 'Tidak ada barang yang cocok dengan "' + cariBarang.value.trim() + '".'
@@ -2996,6 +3010,7 @@
         const satuan = bSatuan.value.trim().toUpperCase() || 'PCS';
         const stokSistem = num(bOnhand.value);
         const hpp = num(bHpp.value);
+        const kodeManual = bKode.value.trim().toUpperCase();
 
         const { data: dipakai, error: errBaca } = await supabase
           .from('stock_products')
@@ -3005,7 +3020,22 @@
           console.error('Gagal membuat PLU:', errBaca.message);
           return;
         }
-        const kode = buatKode(menuTerpilih.name, new Set((dipakai || []).map((r) => r.kode)));
+        const kodeTerpakai = new Set((dipakai || []).map((r) => r.kode));
+
+        /* PLU diketik manual: dipakai apa adanya. Kosong: dibuat
+           otomatis seperti sebelumnya dari nama menu.
+
+           Ada index unik (menu_id, kode) di database, jadi PLU yang
+           sudah dipakai harus ditolak lebih dulu -- kalau tidak,
+           insert gagal diam-diam dan user tidak tahu kenapa. */
+        if (kodeManual && kodeTerpakai.has(kodeManual)) {
+          barangEmpty.className = 'empty gagal';
+          barangEmpty.textContent = 'PLU ' + kodeManual + ' sudah dipakai di menu ini.';
+          barangEmpty.hidden = false;
+          bKode.focus();
+          return;
+        }
+        const kode = kodeManual || buatKode(menuTerpilih.name, kodeTerpakai);
         const { error } = await supabase.from('stock_products').insert({
           menu_id: menuAktif,
           kode,
@@ -3024,7 +3054,7 @@
       };
 
       bAdd.addEventListener('click', simpanBarang);
-      [bName, bSatuan, bOnhand, bFisik, bHpp].forEach((input) => {
+      [bKode, bName, bSatuan, bOnhand, bFisik, bHpp].forEach((input) => {
         input.addEventListener('keydown', (e) => {
           if (e.key !== 'Enter') return;
           e.preventDefault();
