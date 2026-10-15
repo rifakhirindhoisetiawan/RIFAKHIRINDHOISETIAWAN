@@ -1674,10 +1674,11 @@
 
       dlSaveBtn.addEventListener("click", async () => {
         if (!dlDataUrl && !dlBlob) return;
+        // Notifikasi "Tersimpan <nama>.png" dihapus (permintaan).
+        // Notifikasi GALAT tetap ditampilkan -- kalau gagal diam-diam,
+        // user mengira file sudah tersimpan padahal tidak.
         try {
-          const blob = await ambilBlob();
-          const ok = await simpanBlob(blob);
-          if (ok) showToast("Tersimpan " + dlFileName);
+          await simpanBlob(await ambilBlob());
         } catch (err) {
           showToast("Gagal menyimpan: " + err.message, "err");
         }
@@ -1696,10 +1697,11 @@
             hideBubble();
             return;
           }
-          // Fallback: unduh dulu, kasih instruksi manual ke WA
+          // Fallback (browser tanpa share sheet): unduh dulu. Notifikasi
+          // "File diunduh..." dihapus sesuai permintaan; kalau benar-benar
+          // gagal, pesan error tetap muncul di bawah.
           try {
             await simpanBlob(blob);
-            showToast("File diunduh. Buka WhatsApp, kirim manual dari galeri.");
             hideBubble();
           } catch (waErr) {
             showToast("Gagal berbagi: " + waErr.message, "err");
@@ -1743,9 +1745,9 @@
             return;
           }
           // Tidak ada share sheet: simpan dulu, lalu arahkan ke Telegram.
+          // Notifikasi "File diunduh..." dihapus sesuai permintaan.
           try {
             await simpanBlob(blob);
-            showToast("File diunduh. Buka Telegram, kirim manual dari galeri.");
             hideBubble();
           } catch (tgErr) {
             showToast("Gagal berbagi: " + tgErr.message, "err");
@@ -1982,7 +1984,10 @@
           : sizeKB + " KB";
         showBubble();
 
-        // Dilempar setelah kartu muncul supaya toast tidak menutupi pratinjau.
+        // Notifikasi ini hanya untuk KEGAGALAN (foto rusak), bukan untuk
+        // keberhasilan -- jadi tetap ditampilkan. Kalau sampai dihapus juga,
+        // foto yang gagal dimuat akan terlihat seperti slot kosong biasa
+        // dan user tidak pernah tahu ada yang salah.
         if (gagalMuat > 0) {
           showToast(
             gagalMuat + " foto gagal dimuat, dilewati. Coba pilih ulang fotonya.",
