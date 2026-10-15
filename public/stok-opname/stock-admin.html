@@ -2205,14 +2205,6 @@
         const td = document.createElement('td');
         td.className = 'c-kode kode-seri';
         td.appendChild(inputTeks(row, 'kode', 'PLU', 'dalem', true).firstChild);
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'qr-btn';
-        btn.textContent = '▦';
-        btn.title = 'Lihat QR ' + (row.kode || '');
-        btn.setAttribute('aria-label', btn.title);
-        btn.addEventListener('click', () => lihatQr(row.kode));
-        td.appendChild(btn);
         return td;
       };
 
@@ -2228,6 +2220,7 @@
         fotoData = barang;
         const q = cariBarang.value.trim().toLowerCase();
         const tampil = barang.filter((row) => cocokCari(row, q));
+        tutupMenuPop();
         barangBody.innerHTML = '';
         tampil.forEach((row, i) => {
           const tr = document.createElement('tr');
@@ -2299,12 +2292,44 @@
             loadBarang();
           });
 
+          /* Aksi diringkas jadi satu tombol tiga titik, sama seperti di
+             tabel Foto Menu SO: lihat QR, edit, dan hapus tidak lagi
+             tampil sebagai tiga kotak di setiap baris.
+
+             Tombol edit dan hapus tetap dibuat seperti sebelumnya, hanya
+             tidak dipasang ke tabel -- dipanggil lewat .click() dari
+             daftar. .click() jalan untuk elemen yang belum masuk DOM,
+             jadi tidak perlu menyalin ulang logikanya. */
+          const dots = document.createElement('button');
+          dots.type = 'button';
+          dots.className = 'ico';
+          dots.textContent = '\u22EE';
+          dots.title = 'Aksi ' + (row.kode || row.name);
+          dots.setAttribute('aria-label', dots.title);
+          dots.setAttribute('aria-haspopup', 'true');
+          dots.setAttribute('aria-expanded', 'false');
+          dots.addEventListener('click', () => {
+            if (!menuPop.hidden && menuPopAnchor === dots) {
+              tutupMenuPop();
+              return;
+            }
+            bukaMenuPop(dots, [
+              {
+                ikon: '\u25A6',
+                judul: 'Lihat QR ' + (row.kode || ''),
+                jalankan: () => lihatQr(row.kode),
+              },
+              { ikon: '\u270E', judul: edit.title, jalankan: () => edit.click() },
+              { ikon: '\u2715', judul: del.title, bahaya: true, jalankan: () => del.click() },
+            ]);
+          });
+
           const tdFoto = isiFoto(row);
           const tdAct = document.createElement('td');
           tdAct.className = 'c-aksi';
           const wrap = document.createElement('div');
           wrap.className = 'acts';
-          wrap.append(edit, del);
+          wrap.appendChild(dots);
           tdAct.appendChild(wrap);
           tr.append(tdFoto, tdAct);
           barangBody.appendChild(tr);
