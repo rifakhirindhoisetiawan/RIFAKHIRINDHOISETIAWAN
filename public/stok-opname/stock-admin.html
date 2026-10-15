@@ -1483,16 +1483,19 @@
 
          Sekarang kotak dihapus di semua keadaan: tidak saat diam,
          tidak saat kursor lewat, tidak saat difokus. Penanda kolom
-         yang sedang diisi diganti garis bawah 2px di dalam sel --
-         gaya "underline", bukan kotak. Garisnya cuma selebar kolom
-         itu, jadi tidak melintas seluruh tabel seperti garis
-         pembatas baris.
+         yang sedang diisi dibuat dengan gelapkan latarnya sedikit,
+         tanpa garis dan tanpa kotak.
 
          Semua aturan memakai !important karena harus mengalahkan
          input:focus { border-width: 2px !important } di blok
          "tanpa abu-abu", dan di antara dua aturan !important yang
          menang adalah spesifisitas, bukan urutan. Karena itu
          selector-nya memakai ID #barangWrap.
+
+         border-bottom 2px sengaja dibuat transparan dan tetap ada:
+         gunanya menyisakan tempat, supaya teks di dalam kolom tidak
+         meloncat naik 2px saat kolom difokus. Garis tersebut tidak
+         terlihat karena warnanya transparan.
          ============================================================ */
       #barangWrap input.cell-input,
       #barangWrap input.cell-input:hover,
@@ -1505,7 +1508,11 @@
         outline: none !important;
       }
       #barangWrap input.cell-input:focus {
-        border-bottom-color: var(--text) !important;
+        /* Penanda kolom aktif: latarnya digelapkan sedikit. Tanpa
+           garis dan tanpa kotak. Warnanya hitam transparan 6%, jadi
+           tidak terikat warna krem yang dipakai: tetap terlihat di
+           atas krem baris tambah maupun krem muda baris data. */
+        background: rgba(26, 25, 23, 0.06) !important;
       }
       #barangWrap tbody.cari-body .cari-dalam {
         display: flex;
