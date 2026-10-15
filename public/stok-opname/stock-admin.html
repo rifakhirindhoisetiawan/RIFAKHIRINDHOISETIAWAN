@@ -1333,6 +1333,56 @@
          jadi tombol + otomatis rata kanan dengan tombol upload (↑),
          edit (✎) dan hapus (✕) di baris-barus di bawahnya.
          .btn dan .ico sama-sama 32x32, jadi tepi kanannya ikut lurus. */
+      /* ============================================================
+         MENU AKSI (⋮)
+         Dulu tiap baris menu punya tiga tombol (upload / edit / hapus)
+         sehingga kolom Aksi lebar sekali dan baris penuh tombol.
+         Sekarang tiap baris cuma satu tombol, aksi aslinya muncul di
+         daftar kecil ini saat ditekan.
+
+         Popup memakai position:fixed dan diletakkan di luar tabel,
+         bukan absolute di dalam sel, karena .table-wrap memakai
+         overflow:hidden -- daftar yang di dalam tabel akan terpotong.
+
+         z-index 150: di bawah lightbox (200) supaya daftar menutup
+         sendiri tidak perlu, dan lightbox tetap di atas.
+         ============================================================ */
+      .menu-pop {
+        position: fixed;
+        z-index: 150;
+        min-width: 150px;
+        max-width: 220px;
+        padding: 4px;
+        background: var(--surface);
+        border: 1px solid var(--line-2);
+        border-radius: var(--mori-radius, 8px);
+      }
+      .menu-pop button {
+        display: block;
+        width: 100%;
+        padding: 9px 10px;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        text-align: left;
+        color: var(--text);
+        background: transparent;
+        border: 0;
+        border-radius: 6px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .menu-pop button:active {
+        background: var(--soft-2);
+      }
+      .menu-pop button.bahaya {
+        color: var(--danger);
+      }
+      /* kolom Aksi di tabel menu bisa ramping: isinya hanya satu
+         tombol 32px, bukan tiga tombol lagi */
+      .menu-foto-wrap .c-aksi {
+        width: 56px;
+      }
     </style>
   </head>
   <body>
@@ -1343,6 +1393,11 @@
         <div class="lightbox-text" id="lightboxText"></div>
       </div>
     </div>
+    <!-- Daftar aksi menu (upload / edit / hapus). Satu elemen dipakai
+         bersama untuk semua baris. HARUS di luar tabel: .table-wrap
+         memakai overflow:hidden, jadi daftar di dalam tabel akan
+         terpotong batas tabel. -->
+    <div class="menu-pop" id="menuPop" hidden role="menu" aria-label="Aksi menu"></div>
     <section class="sec">
       <!-- Satu tabel untuk dua keperluan: baris paling atas dipakai untuk
            menulis menu baru, baris di bawahnya adalah daftar menu hasil
@@ -2432,7 +2487,71 @@
         renderFotoMenu(menuFotoData);
       };
 
+      /* ============================================================
+         MENU AKSI (⋮)
+         Satu daftar dipakai bersama untuk semua baris, jadi tidak ada
+         banyak elemen yang harus dibuat atau dibersihkan tiap render.
+         ============================================================ */
+      const menuPop = document.getElementById('menuPop');
+      let menuPopAnchor = null;
+
+      const tutupMenuPop = () => {
+        /* Jangan sentuh DOM kalau memang sudah tertutup -- listener
+           scroll bisa memicu ini sangat sering. */
+        if (menuPop.hidden && !menuPopAnchor) return;
+        menuPop.hidden = true;
+        menuPop.innerHTML = '';
+        if (menuPopAnchor) menuPopAnchor.setAttribute('aria-expanded', 'false');
+        menuPopAnchor = null;
+      };
+
+      const bukaMenuPop = (anchor, items) => {
+        tutupMenuPop();
+        menuPopAnchor = anchor;
+        items.forEach((it) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.textContent = it.label;
+          if (it.bahaya) b.className = 'bahaya';
+          b.addEventListener('click', () => {
+            tutupMenuPop();
+            it.jalankan();
+          });
+          menuPop.appendChild(b);
+        });
+        menuPop.hidden = false;
+        anchor.setAttribute('aria-expanded', 'true');
+
+        /* taruh di bawah tombol; kalau tidak muat ke bawah, flip ke
+           atas. Kanan disejajarkan dengan tepi kanan tombol, lalu
+           dijaga tetap di dalam layar. */
+        const r = anchor.getBoundingClientRect();
+        const p = menuPop.getBoundingClientRect();
+        let top = r.bottom + 6;
+        if (top + p.height > window.innerHeight - 8) {
+          top = Math.max(8, r.top - p.height - 6);
+        }
+        const left = Math.max(8, Math.min(r.right - p.width, window.innerWidth - p.width - 8));
+        menuPop.style.top = top + 'px';
+        menuPop.style.left = left + 'px';
+      };
+
+      document.addEventListener('click', (e) => {
+        if (menuPop.hidden) return;
+        if (menuPop.contains(e.target)) return;
+        if (menuPopAnchor && menuPopAnchor.contains(e.target)) return;
+        tutupMenuPop();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') tutupMenuPop();
+      });
+      window.addEventListener('resize', tutupMenuPop);
+      /* true = menangkap scroll di semua elemen, bukan hanya window,
+         karena tabelnya yang digulir, bukan halaman. */
+      window.addEventListener('scroll', tutupMenuPop, true);
+
       const renderFotoMenu = (menus) => {
+        tutupMenuPop();
         menuFotoBody.innerHTML = '';
         menus.forEach((menu, i) => {
           const tr = document.createElement('tr');
@@ -2477,39 +2596,36 @@
           const wrap = document.createElement('div');
           wrap.className = 'acts';
 
-          // Tombol upload (↑) foto menu dikembalikan: foto menu boleh diupload/ganti
-          // dari tabel Foto Menu SO. (Foto produk tidak punya tombol upload.)
-          const up2 = document.createElement('button');
-          up2.type = 'button';
-          up2.className = 'ico';
-          up2.textContent = '↑';
-          up2.title = menu.foto_url ? 'Ganti foto ' + up(menu.name) : 'Upload foto ' + up(menu.name);
-          up2.setAttribute('aria-label', up2.title);
-          up2.addEventListener('click', () => pilihFotoMenu(menu.id));
-          wrap.appendChild(up2);
-
-          // Tombol "lihat/preview" (⊙) tetap dihapus: preview lewat thumbnail.
+          /* Dulu baris ini punya tiga tombol (upload / edit / hapus).
+             Sekarang diringkas jadi satu tombol ⋮; aksi aslinya
+             dibangun di sini lalu ditampilkan saat tombol ditekan. */
+          const isiMenu = [
+            {
+              label: menu.foto_url ? 'Ganti foto' : 'Upload foto',
+              jalankan: () => pilihFotoMenu(menu.id),
+            },
+          ];
 
           // Baris ADMIN bukan record so_menus, jadi tidak bisa diedit/dihapus.
           if (menu.id !== AKUN_TILE) {
-            const edit = document.createElement('button');
-            edit.type = 'button';
-            edit.className = 'ico';
-            edit.textContent = '✎';
-            edit.title = 'Edit ' + up(menu.name);
-            edit.setAttribute('aria-label', edit.title);
-            edit.addEventListener('click', () => editMenu(menu));
-            wrap.appendChild(edit);
-
-            const del = document.createElement('button');
-            del.type = 'button';
-            del.className = 'ico ico-danger';
-            del.textContent = '✕';
-            del.title = 'Hapus ' + up(menu.name);
-            del.setAttribute('aria-label', del.title);
-            del.addEventListener('click', () => hapusMenu(menu));
-            wrap.appendChild(del);
+            isiMenu.push({ label: 'Edit nama', jalankan: () => editMenu(menu) });
+            isiMenu.push({ label: 'Hapus menu', bahaya: true, jalankan: () => hapusMenu(menu) });
           }
+
+          const dots = document.createElement('button');
+          dots.type = 'button';
+          dots.className = 'ico';
+          dots.textContent = '\u22EE';
+          dots.title = 'Aksi ' + up(menu.name);
+          dots.setAttribute('aria-label', dots.title);
+          dots.setAttribute('aria-haspopup', 'true');
+          dots.setAttribute('aria-expanded', 'false');
+          dots.addEventListener('click', () => {
+            /* tekan lagi di tombol yang sama = tutup */
+            if (!menuPop.hidden && menuPopAnchor === dots) tutupMenuPop();
+            else bukaMenuPop(dots, isiMenu);
+          });
+          wrap.appendChild(dots);
 
           tdAct.appendChild(wrap);
           tr.appendChild(tdAct);
