@@ -1337,46 +1337,35 @@
          MENU AKSI (⋮)
          Dulu tiap baris menu punya tiga tombol (upload / edit / hapus)
          sehingga kolom Aksi lebar sekali dan baris penuh tombol.
-         Sekarang tiap baris cuma satu tombol, aksi aslinya muncul di
-         daftar kecil ini saat ditekan.
+         Sekarang tiap baris cuma satu tombol tiga titik, dan ketika
+         ditekan tombol aslinya muncul -- ikon yang sama persis dengan
+         yang dulu, bukan daftar teks.
 
          Popup memakai position:fixed dan diletakkan di luar tabel,
          bukan absolute di dalam sel, karena .table-wrap memakai
-         overflow:hidden -- daftar yang di dalam tabel akan terpotong.
+         overflow:hidden -- tombol yang muncul di dalam tabel akan
+         terpotong batas tabel. Posisi fixed juga membuat lebar tabel
+         tidak berubah-ubah saat tombol muncul.
 
-         z-index 150: di bawah lightbox (200) supaya daftar menutup
-         sendiri tidak perlu, dan lightbox tetap di atas.
+         z-index 150: di bawah lightbox (200) supaya tombol yang muncul
+         tidak menutupi lightbox.
          ============================================================ */
       .menu-pop {
         position: fixed;
         z-index: 150;
-        min-width: 150px;
-        max-width: 220px;
-        padding: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px;
         background: var(--surface);
         border: 1px solid var(--line-2);
         border-radius: var(--mori-radius, 8px);
       }
-      .menu-pop button {
-        display: block;
-        width: 100%;
-        padding: 9px 10px;
-        font: inherit;
-        font-size: 12px;
-        font-weight: 700;
-        text-align: left;
-        color: var(--text);
-        background: transparent;
-        border: 0;
-        border-radius: 6px;
-        cursor: pointer;
+      /* Tombol di dalamnya memakai kelas .ico yang sudah ada, jadi
+         ukuran (32x32), warna, dan radiusnya sama persis dengan
+         tombol di baris lain -- tidak perlu gaya baru. */
+      .menu-pop .ico {
         -webkit-tap-highlight-color: transparent;
-      }
-      .menu-pop button:active {
-        background: var(--soft-2);
-      }
-      .menu-pop button.bahaya {
-        color: var(--danger);
       }
       /* kolom Aksi di tabel menu bisa ramping: isinya hanya satu
          tombol 32px, bukan tiga tombol lagi */
@@ -1393,11 +1382,11 @@
         <div class="lightbox-text" id="lightboxText"></div>
       </div>
     </div>
-    <!-- Daftar aksi menu (upload / edit / hapus). Satu elemen dipakai
-         bersama untuk semua baris. HARUS di luar tabel: .table-wrap
-         memakai overflow:hidden, jadi daftar di dalam tabel akan
-         terpotong batas tabel. -->
-    <div class="menu-pop" id="menuPop" hidden role="menu" aria-label="Aksi menu"></div>
+    <!-- Tombol aksi yang muncul saat tombol ⋮ ditekan (upload / edit /
+         hapus). Satu elemen dipakai bersama untuk semua baris.
+         HARUS di luar tabel: .table-wrap memakai overflow:hidden, jadi
+         tombol yang muncul di dalam tabel akan terpotong batas tabel. -->
+    <div class="menu-pop" id="menuPop" hidden role="group" aria-label="Aksi menu"></div>
     <section class="sec">
       <!-- Satu tabel untuk dua keperluan: baris paling atas dipakai untuk
            menulis menu baru, baris di bawahnya adalah daftar menu hasil
@@ -2511,8 +2500,10 @@
         items.forEach((it) => {
           const b = document.createElement('button');
           b.type = 'button';
-          b.textContent = it.label;
-          if (it.bahaya) b.className = 'bahaya';
+          b.className = 'ico' + (it.bahaya ? ' ico-danger' : '');
+          b.textContent = it.ikon;
+          b.title = it.judul;
+          b.setAttribute('aria-label', it.judul);
           b.addEventListener('click', () => {
             tutupMenuPop();
             it.jalankan();
@@ -2597,19 +2588,29 @@
           wrap.className = 'acts';
 
           /* Dulu baris ini punya tiga tombol (upload / edit / hapus).
-             Sekarang diringkas jadi satu tombol ⋮; aksi aslinya
-             dibangun di sini lalu ditampilkan saat tombol ditekan. */
+             Sekarang diringkas jadi satu tombol ⋮; tombol aslinya
+             muncul di posisi yang sama ketika ditekan. */
           const isiMenu = [
             {
-              label: menu.foto_url ? 'Ganti foto' : 'Upload foto',
+              ikon: '↑',
+              judul: menu.foto_url ? 'Ganti foto ' + up(menu.name) : 'Upload foto ' + up(menu.name),
               jalankan: () => pilihFotoMenu(menu.id),
             },
           ];
 
           // Baris ADMIN bukan record so_menus, jadi tidak bisa diedit/dihapus.
           if (menu.id !== AKUN_TILE) {
-            isiMenu.push({ label: 'Edit nama', jalankan: () => editMenu(menu) });
-            isiMenu.push({ label: 'Hapus menu', bahaya: true, jalankan: () => hapusMenu(menu) });
+            isiMenu.push({
+              ikon: '✎',
+              judul: 'Edit ' + up(menu.name),
+              jalankan: () => editMenu(menu),
+            });
+            isiMenu.push({
+              ikon: '✕',
+              judul: 'Hapus ' + up(menu.name),
+              bahaya: true,
+              jalankan: () => hapusMenu(menu),
+            });
           }
 
           const dots = document.createElement('button');
