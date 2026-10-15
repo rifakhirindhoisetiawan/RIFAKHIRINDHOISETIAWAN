@@ -1198,7 +1198,10 @@
       table.daftar tr + tr td {
         border-top-color: var(--line) !important;
       }
-      input,
+      /* `input` SENGAJA TIDAK ikut di daftar ini. Input di dalam sel tabel
+         (mis. kolom tulis menu) sengaja dibuat transparan tanpa garis --
+         kalau dipaksa|latar krem, inputnya jadi kotak di dalam
+         kotak. Aturan `input` yang benar sudah ada di blok MORI di atas. */
       thead th,
       thead th.c-aksi,
       tfoot td,
@@ -1215,6 +1218,75 @@
       }
       tbody td {
         background: var(--mori-bg) !important;
+      }
+
+      /* ============================================================
+         BARIS TAMBAH MENU
+         Tadinya input "SO ROTI" diletakkan di dalam <table>, padahal
+         isinya cuma satu kolom. Akibatnya ada garis tabel di sekeliling
+         input, dan inputnya sendiri jadi kotak di dalam kotak.
+
+         Sekarang .menu-tulis diratakan sebagai satu baris biasa:
+         label kecil di atas, input penuh, tombol + di kanan.
+         Wrapper tabelnya dibikin transparan tanpa garis supaya tidak
+         mengarahkan garis dobel.
+         ============================================================ */
+      .menu-tulis {
+        flex-wrap: nowrap;
+        align-items: stretch;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .menu-tulis .table-wrap,
+      .menu-tulis .daftar-wrap {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        overflow: visible;
+      }
+      table.daftar .tulis-in {
+        display: flex;
+        align-items: center;
+      }
+      table.daftar td.tulis {
+        padding: 0;
+        height: auto;
+      }
+      /* kolom tulis: satu baris kosong dengan garis bawah saja, supaya
+         terbaca sebagai "tulis di sini" tanpa kotak tambahan */
+      table.daftar td.tulis {
+        border-bottom: 1px solid var(--line);
+        transition: border-color 0.2s ease;
+      }
+      .menu-tulis .table-wrap:focus-within td.tulis {
+        border-bottom: 2px solid var(--text);
+      }
+      table.daftar input {
+        flex: 1;
+        min-width: 0;
+        height: var(--row-h);
+        padding: 0 2px;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        text-transform: uppercase;
+      }
+      table.daftar input:focus {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        outline: none;
+      }
+      /* tombol + tetap setinggi input */
+      .menu-tulis .btn {
+        flex: 0 0 auto;
+        height: var(--row-h);
+        width: 44px;
+        align-self: stretch;
       }
     </style>
   </head>
