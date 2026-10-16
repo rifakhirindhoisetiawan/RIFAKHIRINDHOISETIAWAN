@@ -371,6 +371,29 @@
     .tab-btn.active{background:var(--mori-accent) !important;color:var(--mori-bg) !important;
       border-color:var(--mori-accent) !important}
 
+    /* ===== TOMBOL FOTO: satu tombol ⋮ (pola Admin Stok Opname) =====
+       Tiga tombol foto (tambah / pakai / batal) diringkas jadi satu tombol
+       ⋮; tombol aslinya muncul di posisi yang sama ketika ⋮ ditekan
+       (lihat bukaFotoPop di JS). Gaya tetap seragam krem-hitam. */
+    #btnFotoMenu{
+      background:var(--mori-surface) !important;color:var(--mori-accent) !important;
+      border:1px solid var(--mori-accent) !important;border-radius:var(--mori-radius) !important;
+      font-size:17px;font-weight:700;line-height:1;
+    }
+    .foto-pop{
+      position:fixed;z-index:150;display:flex;align-items:center;gap:6px;
+      pointer-events:none;
+    }
+    .foto-pop[hidden]{display:none !important}
+    #fotoPop .foto-act{
+      pointer-events:auto;-webkit-tap-highlight-color:transparent;
+      flex:0 0 auto !important;width:46px !important;min-width:0 !important;max-width:none !important;
+      height:32px !important;min-height:32px !important;padding:0 !important;
+      box-shadow:none !important;border-radius:var(--mori-radius) !important;
+      background:var(--mori-surface) !important;color:var(--mori-accent) !important;
+      border:1px solid var(--mori-accent) !important;
+    }
+
     /* ===== KOTAK FOTO & TABEL PLU: tinggi sama persis =====
    --admin-photo-size = lebar kolom foto (rasio tetap 9/16).
    Tinggi kotak foto diturunkan dari lebar itu, lalu tinggi yang SAMA
@@ -768,6 +791,8 @@
     .form-frame #tabBar{
       padding:6px!important;gap:4px!important;
       border-bottom:1px solid var(--mori-line);
+      /* Enam sel sebaris: 5 tab + 1 tombol ⋮ pengganti tiga tombol foto. */
+      grid-template-columns:repeat(6,minmax(0,1fr))!important;
     }
     .form-frame #tabBar .tab-btn,
     .form-frame #tabBar .foto-act{
@@ -923,9 +948,7 @@
               <button type="button" class="tab-btn" data-tab="secP16">P16</button>
               <button type="button" class="tab-btn" data-tab="sec12oz">12OZ</button>
               <button type="button" class="tab-btn" data-tab="sec16oz">16OZ</button>
-              <button type="button" class="foto-act" id="btnFotoAdd" title="Tambah foto" aria-label="Tambah foto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
-              <button type="button" class="foto-act" id="btnFotoSave" title="Pakai foto" aria-label="Pakai foto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button>
-              <button type="button" class="foto-act" id="btnFotoCancel" title="Batal" aria-label="Batal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+              <button type="button" class="foto-act" id="btnFotoMenu" title="Aksi foto" aria-label="Aksi foto" aria-haspopup="true" aria-expanded="false">⋮</button>
               <div class="tab-empty" aria-hidden="true"></div>
               <div class="tab-empty" aria-hidden="true"></div>
               <div class="tab-empty" aria-hidden="true"></div>
@@ -1059,6 +1082,13 @@
       <button class="pw-btn pw-btn-danger" id="pwOk" type="button">Hapus</button>
     </div>
   </div>
+</div>
+<!-- Tiga tombol foto diringkas jadi satu tombol ⋮ (seperti Admin Stok
+     Opname): tombol aslinya muncul di posisi yang sama ketika ⋮ ditekan. -->
+<div class="foto-pop" id="fotoPop" hidden role="group" aria-label="Aksi foto">
+  <button type="button" class="foto-act" id="btnFotoAdd" title="Tambah foto" aria-label="Tambah foto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+  <button type="button" class="foto-act" id="btnFotoSave" title="Pakai foto" aria-label="Pakai foto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button>
+  <button type="button" class="foto-act" id="btnFotoCancel" title="Batal" aria-label="Batal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
 </div>
 <script type="module">
   import { supabase } from '../../../src/js/supabase.js';
@@ -1253,7 +1283,7 @@
     return operation;
   }
 
-   // Tombol bawah foto: tambah / pakai / batal (tanpa popup)
+   // Tombol bawah foto: tambah / pakai / batal (dipakai dari wadah ⋮)
    btnFotoAdd.addEventListener('click', (e) => { e.stopPropagation(); openPhotoPicker(); });
    btnFotoSave.addEventListener('click', async (e) => { e.stopPropagation(); await fzCapture(); });
    btnFotoCancel.addEventListener('click', (e) => {
@@ -1276,6 +1306,59 @@
      }
      syncFotoBox();
    });
+
+  // Tombol foto diringkas jadi satu tombol ⋮ seperti Admin Stok Opname:
+  // tombol aslinya ( + / ✓ / ✕ ) muncul di posisi yang sama saat ⋮ ditekan.
+  const btnFotoMenu = document.getElementById('btnFotoMenu');
+  const fotoPop = document.getElementById('fotoPop');
+  let fotoPopAnchor = null;
+
+  const tutupFotoPop = () => {
+    if (fotoPop.hidden && !fotoPopAnchor) return;
+    fotoPop.hidden = true;
+    if (fotoPopAnchor) fotoPopAnchor.setAttribute('aria-expanded', 'false');
+    fotoPopAnchor = null;
+  };
+
+  const bukaFotoPop = (anchor) => {
+    tutupFotoPop();
+    fotoPopAnchor = anchor;
+    anchor.setAttribute('aria-expanded', 'true');
+    fotoPop.hidden = false;
+    /* Muncul DI TEMPAT tombol ⋮: tepi kanan wadah disejajarkan dengan tepi
+       kanan tombol (wadah tumbuh ke kiri), vertikal dijaga tetap di layar. */
+    const r = anchor.getBoundingClientRect();
+    const p = fotoPop.getBoundingClientRect();
+    const top = r.top + (r.height - p.height) / 2;
+    const left = r.right - p.width;
+    fotoPop.style.top =
+      Math.max(8, Math.min(top, window.innerHeight - p.height - 8)) + 'px';
+    fotoPop.style.left =
+      Math.max(8, Math.min(left, window.innerWidth - p.width - 8)) + 'px';
+  };
+
+  btnFotoMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+    /* tekan lagi di tombol yang sama = tutup */
+    if (!fotoPop.hidden && fotoPopAnchor === btnFotoMenu) tutupFotoPop();
+    else bukaFotoPop(btnFotoMenu);
+  });
+  /* Tekan aksi mana pun: jalankan aksinya, lalu tombol ⋮ balik menutup.
+     Fase capture dipakai karena listener tombol memakai stopPropagation. */
+  fotoPop.addEventListener('click', () => tutupFotoPop(), true);
+
+  document.addEventListener('click', (e) => {
+    if (fotoPop.hidden) return;
+    if (fotoPop.contains(e.target)) return;
+    if (btnFotoMenu.contains(e.target)) return;
+    tutupFotoPop();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') tutupFotoPop();
+  });
+  window.addEventListener('resize', tutupFotoPop);
+  /* true = ikut menangkap scroll elemen, bukan hanya window. */
+  window.addEventListener('scroll', tutupFotoPop, true);
 
   // Zoom/pan langsung di kotak foto (tanpa popup): scroll=cubit/drag, dobel-klik=reset
   let fzScale = 1, fzTx = 0, fzTy = 0, fzMoved = false;
