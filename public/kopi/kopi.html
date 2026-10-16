@@ -913,9 +913,15 @@
       const sheetBg = document.getElementById('sheetBg');
       const sheetBody = document.getElementById('sheetBody');
       function slugify(str) {
-        // Keterangan dalam kurung di akhir nama (mis. "(Sari Roti)") diabaikan,
-        // supaya link halaman item tetap item-<nama-dasar>.html walau nama diubah.
-        return String(str || '').replace(/\s*\([^()]*\)\s*$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        // Awalan "Sari Roti" dan keterangan dalam kurung di akhir nama tidak
+        // ikut dihitung, supaya link halaman item tetap item-<nama-dasar>.html
+        // walau nama menu diberi penanda seperti itu.
+        return String(str || '')
+          .replace(/^\s*sari\s+roti\b\s*[-–—·•]?\s*/i, '')
+          .replace(/\s*\([^()]*\)\s*$/, '')
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
       }
       function normalizeMenu(m) {
         let link = m.link || '';
