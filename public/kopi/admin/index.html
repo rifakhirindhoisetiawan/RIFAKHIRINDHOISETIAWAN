@@ -733,6 +733,7 @@
       border:1px solid var(--mori-accent);border-radius:var(--mori-radius);
       overflow:hidden;background:var(--mori-bg);
       display:flex;flex-direction:column;
+      --admin-photo-h:calc(var(--admin-photo-size) * 4 / 3);
     }
     .form-frame .top-wrap{
       gap:0!important;padding:0!important;margin:0!important;max-width:none!important;
@@ -800,31 +801,31 @@
       background:var(--mori-surface);color:var(--mori-text);
       font-family:var(--mori-mono);font-size:10px;font-weight:800;
       letter-spacing:.6px;text-transform:uppercase;text-align:left;
-      height:36px;padding:0 12px;border-bottom:1px solid var(--mori-line);
+      height:32px;padding:0 12px;border-bottom:1px solid var(--mori-line);
       white-space:nowrap;
     }
     .menu-tabel th.mt-no,.menu-tabel td.mt-no{
-      width:40px;text-align:center;color:var(--mori-text-2);
+      width:36px;text-align:center;color:var(--mori-text-2);
       font-family:var(--mori-mono);font-size:11px;
     }
     .menu-tabel tbody td{
-      padding:6px 12px;border-bottom:1px solid var(--mori-line);
-      vertical-align:middle;
+      padding:3px 12px;border-bottom:1px solid var(--mori-line);
+      vertical-align:middle;height:46px;
     }
     .menu-tabel #list > tr:last-child > td{border-bottom:0}
     .menu-tabel .item{display:table-row!important}
     .menu-tabel tbody tr:active td{background:var(--mori-surface)}
-    .menu-tabel .mt-cari td{padding:0 12px}
+    .menu-tabel .mt-cari td{padding:0 12px;height:auto!important}
     .menu-tabel .mt-cari .search-box{
       border:0!important;border-radius:0!important;background:transparent!important;
-      padding:11px 0!important;gap:8px;
+      padding:9px 0!important;gap:8px;
     }
     .menu-tabel .mt-cari .search-box:focus-within{
       background:transparent!important;box-shadow:none!important;
     }
-    .menu-tabel .mt-foto{width:76px;text-align:center}
+    .menu-tabel .mt-foto{width:62px;text-align:center}
     .menu-tabel .mt-foto .thumb{
-      width:44px;height:44px;aspect-ratio:auto!important;margin:0 auto;
+      width:38px;height:38px;aspect-ratio:auto!important;margin:0 auto;
       border-radius:var(--mori-radius)!important;
     }
     .menu-tabel .mt-aksi{width:94px}
@@ -832,10 +833,10 @@
       margin-top:0!important;justify-content:flex-end;
       flex-direction:row!important;gap:6px!important;
     }
-    .menu-tabel .item-name{font-size:11px;text-align:left;min-height:0;line-height:1.3}
+    .menu-tabel .item-name{font-size:11px;text-align:left;min-height:0;line-height:1.15}
     .menu-tabel .col-plu{
       min-height:0!important;display:block!important;white-space:nowrap!important;
-      overflow:hidden!important;text-overflow:ellipsis!important;margin-top:2px;
+      overflow:hidden!important;text-overflow:ellipsis!important;margin-top:1px;
       text-align:left!important;
     }
     .menu-tabel .col-plu span + span{margin-left:8px}
