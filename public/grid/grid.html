@@ -538,7 +538,8 @@
       .dl-btn-save:hover:not(:disabled),
       .dl-btn-wa:hover:not(:disabled),
       .dl-btn-tg:hover:not(:disabled) {
-        box-shadow: 4px 4px 0 var(--mori-text-2);
+        /* bayangan abu-abu (--mori-text-2) dihapus; efek hover tetap
+           teras dari border dan warna latar saja */
       }
 
       .step-btn:active:not(:disabled),
@@ -550,8 +551,9 @@
       .dl-btn-save:active:not(:disabled),
       .dl-btn-wa:active:not(:disabled),
       .dl-btn-tg:active:not(:disabled) {
+        /* bayangan abu-abu (--mori-text-2) dihapus; tetap pakai border
+           dan warna latar, tanpa box-shadow tebal */
         transform: translate(2px, 2px);
-        box-shadow: 2px 2px 0 var(--mori-text-2);
         opacity: 1;
         background: #33312f;
       }
