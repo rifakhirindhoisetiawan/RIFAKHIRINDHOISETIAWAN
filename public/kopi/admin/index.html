@@ -835,6 +835,16 @@
       margin-top:0!important;justify-content:flex-end;
       flex-direction:row!important;gap:6px!important;
     }
+    /* Tombol Edit & Hapus diseragamkan dengan tombol lain di halaman:
+       krem + garis hitam + sudut membulat (sebelumnya hitam penuh / merah siku). */
+    .menu-tabel .mt-aksi .btn,
+    .menu-tabel .mt-aksi .btn-ghost,
+    .menu-tabel .mt-aksi .btn-danger{
+      background:var(--mori-surface)!important;
+      border:1px solid var(--mori-accent)!important;
+      border-radius:var(--mori-radius)!important;
+    }
+    .menu-tabel .mt-aksi .btn svg{stroke:var(--mori-text)!important}
     .menu-tabel .item-name{font-size:11px;text-align:left;min-height:0;line-height:1.15}
     .menu-tabel .col-plu{
       min-height:0!important;display:block!important;white-space:nowrap!important;
