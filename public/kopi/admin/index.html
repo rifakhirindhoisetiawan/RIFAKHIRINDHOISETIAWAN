@@ -217,7 +217,7 @@
        .foto-act svg{width:14px;height:14px}
        .foto-act{width:46px!important;height:32px!important;min-height:32px!important;flex-basis:46px!important;max-width:100%!important;border-radius:6px!important;padding:0!important;box-shadow:none!important}
        .foto-act svg{width:14px!important;height:14px!important}
-       #tabBar{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-auto-rows:32px;gap:2px!important;padding:1px!important;overflow:visible!important}
+       #tabBar{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;grid-auto-rows:32px;gap:2px!important;padding:1px!important;overflow:visible!important}
        #tabBar .tab-btn{width:46px!important;min-width:0!important;max-width:100%!important;height:32px!important;justify-self:center}
        #tabBar .foto-act{width:46px!important;justify-self:center}
        #tabBar .tab-empty{display:none!important}
@@ -371,28 +371,36 @@
     .tab-btn.active{background:var(--mori-accent) !important;color:var(--mori-bg) !important;
       border-color:var(--mori-accent) !important}
 
-    /* ===== TOMBOL FOTO: satu tombol ⋮ (pola Admin Stok Opname) =====
-       Tiga tombol foto (tambah / pakai / batal) diringkas jadi satu tombol
-       ⋮; tombol aslinya muncul di posisi yang sama ketika ⋮ ditekan
-       (lihat bukaFotoPop di JS). Gaya tetap seragam krem-hitam. */
-    #btnFotoMenu{
-      background:var(--mori-surface) !important;color:var(--mori-accent) !important;
-      border:1px solid var(--mori-accent) !important;border-radius:var(--mori-radius) !important;
-      font-size:17px;font-weight:700;line-height:1;
+    /* ===== TOMBOL AKSI BARIS DAFTAR: satu tombol ⋮ (pola Admin Stok
+       Opname) =====
+       Tekan ⋮ di baris daftar → tombol aksi (foto / edit / hapus)
+       muncul di posisi yang sama (lihat bukaMenuPop di JS). Gaya
+       seragam krem-hitam, radius 8, tanpa shadow. */
+    .menu-tabel .mt-aksi .btn-dots{
+      display:inline-flex;align-items:center;justify-content:center;
+      vertical-align:middle;
+      width:32px;height:32px;min-height:32px;padding:0;margin:0;
+      background:var(--mori-surface);color:var(--mori-text);
+      border:1px solid var(--mori-accent);border-radius:var(--mori-radius);
+      font-size:17px;font-weight:700;line-height:1;cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
     }
-    .foto-pop{
+    .menu-tabel .mt-aksi .btn-dots:active{transform:scale(.94)}
+    .menu-pop{
       position:fixed;z-index:150;display:flex;align-items:center;gap:6px;
       pointer-events:none;
     }
-    .foto-pop[hidden]{display:none !important}
-    #fotoPop .foto-act{
+    .menu-pop[hidden]{display:none !important}
+    #menuPop .menu-act{
       pointer-events:auto;-webkit-tap-highlight-color:transparent;
-      flex:0 0 auto !important;width:46px !important;min-width:0 !important;max-width:none !important;
-      height:32px !important;min-height:32px !important;padding:0 !important;
-      box-shadow:none !important;border-radius:var(--mori-radius) !important;
-      background:var(--mori-surface) !important;color:var(--mori-accent) !important;
-      border:1px solid var(--mori-accent) !important;
+      width:46px;height:32px;min-height:32px;padding:0;margin:0;
+      display:flex;align-items:center;justify-content:center;
+      background:var(--mori-surface);color:var(--mori-text);
+      border:1px solid var(--mori-accent);border-radius:var(--mori-radius);
+      box-shadow:none;cursor:pointer;
     }
+    #menuPop .menu-act svg{width:14px;height:14px}
+    #menuPop .menu-act:active{transform:scale(.94)}
 
     /* ===== KOTAK FOTO & TABEL PLU: tinggi sama persis =====
    --admin-photo-size = lebar kolom foto (rasio tetap 9/16).
@@ -758,6 +766,43 @@
       display:flex;flex-direction:column;
       --admin-photo-h:144px;
     }
+
+    /* Baris isian MENU + PLU: satu baris mendatar, pola baris tulis di
+       Admin Stok Opname. Menggantikan kotak foto + tabel PLU bertumpuk.
+       Tombol + di ujung = tambah/simpan (berubah ✓ saat sedang edit). */
+    .form-head-row{
+      display:flex;align-items:stretch;gap:2px;
+      padding:4px 8px;border-bottom:1px solid var(--mori-line);
+    }
+    .form-head-row input{
+      flex:1 1 0;min-width:0;margin:0;
+      border:0!important;border-bottom:0!important;border-radius:0!important;
+      background:transparent!important;
+      font-family:inherit;font-size:13px;font-weight:800;
+      letter-spacing:.2px;text-transform:uppercase;color:var(--mori-text);
+      padding:8px 2px;outline:none;
+    }
+    .form-head-row #f_name{flex:1.5 1 0}
+    .form-head-row input::placeholder{
+      color:var(--mori-text-2);font-size:10px;font-weight:700;letter-spacing:.6px;
+    }
+    .form-head-row .head-add{
+      flex:0 0 32px;width:32px;height:32px;min-height:32px;align-self:center;
+      margin-left:4px;padding:0;
+      display:flex;align-items:center;justify-content:center;
+      background:var(--mori-surface);color:var(--mori-text);
+      border:1px solid var(--mori-accent);border-radius:var(--mori-radius);
+      font-size:17px;font-weight:800;line-height:1;cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .form-head-row .head-add:active{transform:scale(.94)}
+    /* Layar sangat sempit (≤380px): kecilkan placeholder agar
+       "PLU 12OZ" tidak terpotong di kolomnya. */
+    @media (max-width:380px){
+      .form-head-row{gap:0;padding:4px 6px}
+      .form-head-row input{padding:8px 1px}
+      .form-head-row input::placeholder{font-size:9px;letter-spacing:0}
+    }
     .form-frame .top-wrap{
       gap:0!important;padding:0!important;margin:0!important;max-width:none!important;
       border-bottom:1px solid var(--mori-line);
@@ -789,22 +834,16 @@
       align-self:stretch!important;min-height:0!important;border-bottom:0!important;
     }
     .form-frame #tabBar{
-      /* Atas 12px: baris tombol diturunkan sedikit dari tabel PLU HOT. */
+      /* Atas 12px: baris tombol diturunkan sedikit dari baris isian. */
       padding:12px 6px 6px!important;gap:4px!important;
       border-bottom:1px solid var(--mori-line);
-      /* Enam sel sebaris: 5 tab + 1 tombol ⋮ pengganti tiga tombol foto. */
-      grid-template-columns:repeat(6,minmax(0,1fr))!important;
+      /* Lima sel sebaris: HOT / P12 / P16 / 12OZ / 16OZ. */
+      grid-template-columns:repeat(5,minmax(0,1fr))!important;
     }
-    .form-frame #tabBar .tab-btn,
-    .form-frame #tabBar .foto-act{
+    .form-frame #tabBar .tab-btn{
       flex:1 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;
       justify-self:stretch!important;
     }
-    .form-frame #tabBar .foto-act{
-      background:var(--mori-surface)!important;color:var(--mori-accent)!important;
-      border:1px solid var(--mori-accent)!important;
-    }
-    .form-frame #tabBar .tab-empty{display:none!important}
     .form-frame .tab-panel{padding:0!important}
     .form-frame .tab-panel .form-table{
       border:0!important;border-radius:0!important;background:transparent!important;
@@ -856,7 +895,7 @@
       width:44px;height:44px;aspect-ratio:auto!important;margin:0 auto;
       border-radius:var(--mori-radius)!important;
     }
-    .menu-tabel .mt-aksi{width:94px}
+    .menu-tabel .mt-aksi{width:56px}
     .menu-tabel .mt-aksi .item-actions{
       margin-top:0!important;justify-content:flex-end;
       flex-direction:row!important;gap:6px!important;
@@ -915,47 +954,20 @@
       <form id="form" class="form">
         <input type="hidden" id="editId" />
         <div class="form-frame">
-        <div class="top-wrap" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;justify-content:center;align-items:stretch;width:100%;padding:4px;box-sizing:border-box">
-          <div class="foto-box" id="fotoBox" style="flex:1 1 0;min-width:0;width:100%;height:100%;min-height:100%;align-self:stretch;aspect-ratio:9/16;border-radius:8px;overflow:hidden;position:relative;border:1px solid #c7d2fe">
-             <input id="f_icon_img" type="file" accept="image/*" />
-            <div class="foto-empty">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            </div>
-            <div id="icon_preview"></div>
-            <span id="fotoName" style="display:none"></span>
-          </div>
-          <div class="form-side-table" style="flex:1 1 0;min-width:0;width:100%;border:1px solid #c7d2fe;border-radius:8px;overflow:visible;display:flex;flex-direction:column;gap:4px;padding:4px;background:#fff;isolation:isolate">
-             <div class="admin-plu-table">
-             <div class="top-row admin-menu-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:stretch;gap:0;background:transparent;border-radius:0;padding:0;min-height:0;border-bottom:none">
-               <div style="flex:0 0 62px;width:62px;min-height:32px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:9px;font-weight:800;border:none;border-radius:0;background:#eef2ff;color:#4f46e5;box-shadow:none;padding:6px 8px">MENU</div>
-               <div style="flex:1;min-height:32px;border:none;border-radius:0;display:flex;align-items:center;padding:6px 10px;min-width:0;border-bottom:0;background:#fff;position:relative;z-index:1"><input id="f_name" required style="width:100%;font-size:12px;font-weight:700;padding:0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" onblur="this.value=this.value.toUpperCase()" /></div>
-             </div>
-             <div class="top-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:6px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
-               <div style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;padding:12px 0">PLU 12OZ</div>
-              <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_plu12" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" onblur="this.value=this.value.toUpperCase()" /></div>
-            </div>
-            <div id="plu16Row" class="top-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:6px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
-              <div id="plu16Lab" style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;padding:12px 0">PLU 16OZ</div>
-              <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_plu16" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-align:left" /></div>
-            </div>
-            <div id="pluHotRow" class="top-row" style="flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:6px;background:transparent;border-radius:0;padding:2px;min-height:0;border-bottom:none">
-              <div id="pluHotLab" style="flex:0 0 52px;width:52px;min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;padding:12px 0">PLU HOT</div>
-              <div style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_pluHot" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-align:left" /></div>
-            </div>
-             </div>
-             <div id="tabBar" style="flex:0 0 auto;display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:transparent;padding:2px">
-              <button type="button" class="tab-btn active" data-tab="secHot">HOT</button>
-              <button type="button" class="tab-btn" data-tab="secP12">P12</button>
-              <button type="button" class="tab-btn" data-tab="secP16">P16</button>
-              <button type="button" class="tab-btn" data-tab="sec12oz">12OZ</button>
-              <button type="button" class="tab-btn" data-tab="sec16oz">16OZ</button>
-              <button type="button" class="foto-act" id="btnFotoMenu" title="Aksi foto" aria-label="Aksi foto" aria-haspopup="true" aria-expanded="false">⋮</button>
-              <div class="tab-empty" aria-hidden="true"></div>
-              <div class="tab-empty" aria-hidden="true"></div>
-              <div class="tab-empty" aria-hidden="true"></div>
-              <div class="tab-empty" aria-hidden="true"></div>
-            </div>
-          </div>
+        <input id="f_icon_img" type="file" accept="image/*" />
+        <div class="form-head-row">
+          <input id="f_name" required placeholder="NAMA MENU" autocomplete="off" onblur="this.value=this.value.toUpperCase()" />
+          <input id="f_plu12" placeholder="PLU 12OZ" onblur="this.value=this.value.toUpperCase()" />
+          <input id="f_plu16" placeholder="PLU 16OZ" />
+          <input id="f_pluHot" placeholder="PLU HOT" />
+          <button type="submit" class="head-add" id="btnHeadAdd" title="Tambah menu" aria-label="Tambah menu">+</button>
+        </div>
+        <div id="tabBar" style="flex:0 0 auto;display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:transparent;padding:2px">
+          <button type="button" class="tab-btn active" data-tab="secHot">HOT</button>
+          <button type="button" class="tab-btn" data-tab="secP12">P12</button>
+          <button type="button" class="tab-btn" data-tab="secP16">P16</button>
+          <button type="button" class="tab-btn" data-tab="sec12oz">12OZ</button>
+          <button type="button" class="tab-btn" data-tab="sec16oz">16OZ</button>
         </div>
         <input type="hidden" id="f_link" />
         <div class="tab-panel active" id="secHot">
@@ -1044,21 +1056,6 @@
     </div>
   </div>
 </div>
-<div class="crop-overlay" id="cropOverlay">
-  <div class="crop-card">
-    <div class="crop-stage" id="cropStage">
-      <img id="cropImg" alt="" draggable="false" />
-    </div>
-    <div class="crop-actions">
-      <button type="button" class="crop-icon-btn" id="cropCancel" title="Batal" aria-label="Batal">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
-      <button type="button" class="crop-icon-btn" id="cropApply" title="Pakai" aria-label="Pakai">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-      </button>
-    </div>
-  </div>
-</div>
 <div class="sheet-bg" id="sheetBg">
   <div class="sheet" role="dialog" aria-modal="true">
     <div class="sheet-handle"></div>
@@ -1084,13 +1081,10 @@
     </div>
   </div>
 </div>
-<!-- Tiga tombol foto diringkas jadi satu tombol ⋮ (seperti Admin Stok
-     Opname): tombol aslinya muncul di posisi yang sama ketika ⋮ ditekan. -->
-<div class="foto-pop" id="fotoPop" hidden role="group" aria-label="Aksi foto">
-  <button type="button" class="foto-act" id="btnFotoAdd" title="Tambah foto" aria-label="Tambah foto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
-  <button type="button" class="foto-act" id="btnFotoSave" title="Pakai foto" aria-label="Pakai foto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button>
-  <button type="button" class="foto-act" id="btnFotoCancel" title="Batal" aria-label="Batal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-</div>
+<!-- Aksi tiap baris daftar diringkas jadi satu tombol ⋮ (seperti Admin
+     Stok Opname): tombol foto / edit / hapus muncul di posisi yang sama
+     ketika ⋮ ditekan (lihat bukaMenuPop di JS). -->
+<div class="menu-pop" id="menuPop" hidden role="group" aria-label="Aksi menu"></div>
 <script type="module">
   import { supabase } from '../../../src/js/supabase.js';
 
@@ -1107,17 +1101,6 @@
   const f_plu12 = document.getElementById('f_plu12');
   const f_plu16 = document.getElementById('f_plu16');
   const f_pluHot = document.getElementById('f_pluHot');
-  const plu16Row = document.getElementById('plu16Row');
-  const pluHotRow = document.getElementById('pluHotRow');
-  function syncPluRows() {
-    const e16 = !f_plu16.value.trim();
-    const eH = !f_pluHot.value.trim();
-    plu16Row.style.opacity = e16 ? '0.5' : '1';
-    pluHotRow.style.opacity = eH ? '0.5' : '1';
-  }
-  f_plu16.addEventListener('input', syncPluRows);
-  f_pluHot.addEventListener('input', syncPluRows);
-  syncPluRows();
   const f_bahan12 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahan12_' + n));
   const f_bahan16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahan16_' + n));
   const f_bahanHot = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_bahanHot_' + n));
@@ -1126,44 +1109,20 @@
    const f_catatan = document.getElementById('f_catatan');
    const btnSave = document.getElementById('btnSave');
    const f_icon_img = document.getElementById('f_icon_img');
-   const iconPreview = document.getElementById('icon_preview');
-   const fotoBox = document.getElementById('fotoBox');
-   const fotoName = document.getElementById('fotoName');
-   const btnFotoAdd = document.getElementById('btnFotoAdd');
-   const btnFotoSave = document.getElementById('btnFotoSave');
-   const btnFotoCancel = document.getElementById('btnFotoCancel');
+   const btnHeadAdd = document.getElementById('btnHeadAdd');
    let currentTable = 'ja_di_menus';
   let existingCat = 'PREMIX';
-  function syncFotoBox() {
-    fotoBox.classList.toggle('has-photo', iconPreview.innerHTML.trim() !== '');
-  }
-  let pendingCroppedFile = null;
-  let photoDirty = false;
-  let photoCapturePromise = null;
-  let autoCropPromise = null;
-  let photoProcessing = false;
-  let photoSaveBlocked = false;
+  let uploadTargetId = '';
+  let uploadingFoto = false;
   let saving = false;
-  let photoRunId = 0;
-  let previewObjectUrl = '';
-  function setPhotoBusy(busy) {
-    photoProcessing = busy;
-    btnFotoAdd.disabled = busy || saving;
-    btnFotoSave.disabled = busy || saving;
-    btnFotoCancel.disabled = saving;
+  function setHeadAddState() {
+    if (!btnHeadAdd) return;
+    const editing = !!editId.value;
+    btnHeadAdd.textContent = editing ? '✓' : '+';
+    btnHeadAdd.title = editing ? 'Simpan perubahan' : 'Tambah menu';
+    btnHeadAdd.setAttribute('aria-label', btnHeadAdd.title);
   }
   f_icon_img.addEventListener('click', (e) => e.stopPropagation());
-  function openPhotoPicker() {
-    if (photoProcessing || saving) return;
-    f_icon_img.value = '';
-    f_icon_img.click();
-  }
-  function clearPreviewUrl() {
-    if (previewObjectUrl) {
-      URL.revokeObjectURL(previewObjectUrl);
-      previewObjectUrl = '';
-    }
-  }
   function canvasToBlob(canvas) {
     return new Promise((resolve, reject) => {
       try {
@@ -1174,75 +1133,31 @@
       } catch (err) { reject(err); }
     });
   }
-  function showExistingPreview(url) {
-    clearPreviewUrl();
-    iconPreview.innerHTML = '';
-    if (!url || !/^(https?:|data:|blob:)/i.test(url)) return false;
-    const previewUrl = url.includes('supabase.co/storage') && !url.includes('?')
-      ? url + '?width=360&height=640&quality=80'
-      : url;
-    const img = document.createElement('img');
-    img.alt = '';
-    img.decoding = 'async';
-    if (/^https?:/i.test(previewUrl)) img.crossOrigin = 'anonymous';
-    let triedRaw = false;
-    img.addEventListener('error', () => {
-      if (previewUrl !== url && !triedRaw) {
-        triedRaw = true;
-        img.src = url;
-        return;
-      }
-      if (img.hasAttribute('crossorigin')) {
-        img.removeAttribute('crossorigin');
-        img.src = url;
-      }
-    });
-    iconPreview.appendChild(img);
-    if (fotoName) fotoName.textContent = String(url).split('/').pop().split('?')[0].slice(0, 24);
-    img.src = previewUrl;
-    return true;
+
+  // ===== FOTO MENU (pola Admin Stok Opname) =====
+  // Kotak foto di form dihapus. Foto diatur dari tombol ⋮ tiap baris
+  // daftar menu: ⋮ → ↑ → pilih file → crop otomatis 9/16 → upload →
+  // kolom Foto baris itu langsung diperbarui.
+  function openFotoPicker(id) {
+    if (uploadingFoto || saving) return;
+    uploadTargetId = id;
+    f_icon_img.value = '';
+    f_icon_img.click();
   }
 
-
-
-  // Klik kotak foto langsung buka file picker (tombol + di bawah P12 fungsinya sama)
-  // Abaikan klik sesudah drag/cubit-zoom agar tidak buka picker tanpa sengaja
-   fotoBox.addEventListener('click', (e) => {
-     if (e.target === f_icon_img || photoProcessing || saving) return;
-     if (typeof fzMoved !== 'undefined' && fzMoved) { fzMoved = false; return; }
-     openPhotoPicker();
-   });
-
-  // Preview langsung di kotak foto (9/16) tanpa popup: auto center-crop
-  function autoCropPreview(file) {
-    if (!file || !(file.type || '').startsWith('image/')) {
-      alert('Pilih file gambar yang didukung');
-      return Promise.resolve(false);
-    }
-    if (file.size > 3 * 1024 * 1024) {
-      photoSaveBlocked = true;
-      f_icon_img.value = '';
-      alert('Foto kebesaran, max 3MB. Kompres dulu ya.');
-      return Promise.resolve(false);
-    }
-    const run = ++photoRunId;
-    pendingCroppedFile = null;
-    photoDirty = false;
-    photoSaveBlocked = false;
-    setPhotoBusy(true);
-    cropFileName = file.name || 'foto.jpg';
+  async function centerCrop9x16(file) {
     const sourceUrl = URL.createObjectURL(file);
-    const img = new Image();
-    img.src = sourceUrl;
-    const operation = waitForImage(img).then(() => {
-      if (run !== photoRunId) return false;
+    try {
+      const img = new Image();
+      img.src = sourceUrl;
+      await waitForImage(img);
       const iw = img.naturalWidth, ih = img.naturalHeight;
       if (!iw || !ih) throw new Error('Ukuran foto tidak valid');
-      const target = 9/16;
-      const imgRatio = iw/ih;
+      const target = 9 / 16;
+      const imgRatio = iw / ih;
       let sx = 0, sy = 0, sw = iw, sh = ih;
-      if (imgRatio > target) { sw = ih*target; sx = (iw-sw)/2; }
-      else { sh = iw/target; sy = (ih-sh)/2; }
+      if (imgRatio > target) { sw = ih * target; sx = (iw - sw) / 2; }
+      else { sh = iw / target; sy = (ih - sh) / 2; }
       const outW = 540, outH = 960;
       const canvas = document.createElement('canvas');
       canvas.width = outW; canvas.height = outH;
@@ -1250,201 +1165,118 @@
       if (!ctx || !canvas.toBlob) throw new Error('Browser tidak mendukung proses foto');
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, outW, outH);
       ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
-      return canvasToBlob(canvas).then((blob) => {
-        if (run !== photoRunId) return false;
-        const base = cropFileName.replace(/\.[^.]+$/, '');
-        const cropped = new File([blob], base + '-9x16.jpg', { type: 'image/jpeg' });
-        pendingCroppedFile = cropped;
-        clearPreviewUrl();
-        const previewUrl = URL.createObjectURL(cropped);
-        previewObjectUrl = previewUrl;
-        iconPreview.innerHTML = '<img src="' + previewUrl + '" alt=""/>';
-        if (fotoName) fotoName.textContent = cropped.name;
-        fzReset();
-        syncFotoBox();
-        return true;
-      });
-    }).catch((err) => {
-      if (run !== photoRunId) return false;
-      console.warn('autoCrop gagal', err);
-      pendingCroppedFile = null;
-      photoDirty = false;
-      photoSaveBlocked = true;
-      f_icon_img.value = '';
-      alert('Gagal memproses foto, coba file lain.');
-      return false;
-    }).finally(() => {
+      const blob = await canvasToBlob(canvas);
+      const base = (file.name || 'foto.jpg').replace(/\.[^.]+$/, '');
+      return new File([blob], base + '-9x16.jpg', { type: 'image/jpeg' });
+    } finally {
       URL.revokeObjectURL(sourceUrl);
-      if (autoCropPromise === operation) {
-        autoCropPromise = null;
-        setPhotoBusy(false);
-      }
-    });
-    autoCropPromise = operation;
-    return operation;
+    }
   }
 
-   // Tombol bawah foto: tambah / pakai / batal (dipakai dari wadah ⋮)
-   btnFotoAdd.addEventListener('click', (e) => { e.stopPropagation(); openPhotoPicker(); });
-   btnFotoSave.addEventListener('click', async (e) => { e.stopPropagation(); await fzCapture(); });
-   btnFotoCancel.addEventListener('click', (e) => {
-     e.stopPropagation();
-     if (saving) return;
-     photoRunId++;
-     autoCropPromise = null;
-     photoCapturePromise = null;
-     pendingCroppedFile = null;
-     photoDirty = false;
-     photoSaveBlocked = false;
-     setPhotoBusy(false);
-     f_icon_img.value = '';
-     fzPtrs.clear();
-     fzReset();
-     showExistingPreview(existingIcon);
-     if (!existingIcon) {
-       iconPreview.innerHTML = '';
-       if (fotoName) fotoName.textContent = '';
-     }
-     syncFotoBox();
-   });
+  async function uploadFotoMenu(file) {
+    const target = uploadTargetId;
+    uploadTargetId = '';
+    if (!target) return;
+    if (uploadingFoto || saving) return;
+    if (!file || !(file.type || '').startsWith('image/')) { alert('Pilih file gambar ya'); return; }
+    if (file.size > 3 * 1024 * 1024) { alert('Foto kebesaran, max 3MB. Kompres dulu ya.'); return; }
+    uploadingFoto = true;
+    try {
+      setStatus('Memproses foto…');
+      const cropped = await centerCrop9x16(file);
+      setStatus('Mengunggah foto…');
+      let iconValue;
+      try {
+        iconValue = await uploadIcon(cropped);
+      } catch (err) {
+        const msg = err.message || '';
+        const isRLS = msg.includes('row-level security') || msg.includes('AccessDenied') || msg.includes('403') || msg.includes('violates');
+        if (!isRLS) throw err;
+        if (!confirm('Upload ke Storage gagal (RLS belum di-set).\n\nDetail: ' + msg + '\n\nMau simpan foto sebagai base64 sementara biar tetap kesimpan?\n(Disarankan tetap RUN scripts/fix-storage-rls.sql nanti)')) return;
+        iconValue = await fileToDataURL(cropped);
+      }
+      const { error } = await supabase.from(currentTable).update({ foto: iconValue }).eq('id', parseInt(target));
+      if (error) throw error;
+      setStatus('📷 Foto diperbarui');
+      await load();
+    } catch (err) {
+      console.error('upload foto gagal', err);
+      alert('Gagal upload foto: ' + (err.message || 'kesalahan tidak diketahui'));
+    } finally {
+      uploadingFoto = false;
+    }
+  }
 
-  // Tombol foto diringkas jadi satu tombol ⋮ seperti Admin Stok Opname:
-  // tombol aslinya ( + / ✓ / ✕ ) muncul di posisi yang sama saat ⋮ ditekan.
-  const btnFotoMenu = document.getElementById('btnFotoMenu');
-  const fotoPop = document.getElementById('fotoPop');
-  let fotoPopAnchor = null;
+  f_icon_img.addEventListener('change', () => {
+    const file = f_icon_img.files && f_icon_img.files[0];
+    f_icon_img.value = '';
+    if (file) uploadFotoMenu(file);
+  });
 
-  const tutupFotoPop = () => {
-    if (fotoPop.hidden && !fotoPopAnchor) return;
-    fotoPop.hidden = true;
-    if (fotoPopAnchor) fotoPopAnchor.setAttribute('aria-expanded', 'false');
-    fotoPopAnchor = null;
+  // ===== POPUP AKSI BARIS DAFTAR (⋮) =====
+  // Satu wadah dipakai bersama semua baris; isinya dibangun saat ⋮
+  // ditekan: naikkan/ganti foto, edit, hapus — sama seperti Admin Stok
+  // Opname. Sengaja TIDAK menutup saat scroll/resize: di HP, sisa
+  // gulir/URL-bar sesaat setelah jari lepas bisa menutup menu ⋮
+  // seketika (kelihatan seperti "tidak bisa dibuka"). Tutup lewat
+  // tekan di luar, Esc, tekan ⋮ lagi, atau setelah salah satu aksi dipakai.
+  const menuPop = document.getElementById('menuPop');
+  let menuPopAnchor = null;
+
+  const tutupMenuPop = () => {
+    if (menuPop.hidden && !menuPopAnchor) return;
+    menuPop.hidden = true;
+    menuPop.innerHTML = '';
+    if (menuPopAnchor) menuPopAnchor.setAttribute('aria-expanded', 'false');
+    menuPopAnchor = null;
   };
 
-  const bukaFotoPop = (anchor) => {
-    tutupFotoPop();
-    fotoPopAnchor = anchor;
+  const ICO_UPLOAD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>';
+  const ICO_EDIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+  const ICO_DEL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
+
+  const bukaMenuPop = (anchor, items) => {
+    tutupMenuPop();
+    menuPopAnchor = anchor;
     anchor.setAttribute('aria-expanded', 'true');
-    fotoPop.hidden = false;
-    /* Muncul DI TEMPAT tombol ⋮: tepi kanan wadah disejajarkan dengan tepi
-       kanan tombol (wadah tumbuh ke kiri), vertikal dijaga tetap di layar. */
+    menuPop.innerHTML = '';
+    items.forEach((it) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'menu-act';
+      b.title = it.judul;
+      b.setAttribute('aria-label', it.judul);
+      b.innerHTML = it.svg;
+      b.addEventListener('click', (e) => {
+        e.stopPropagation();
+        tutupMenuPop();
+        it.jalankan();
+      });
+      menuPop.appendChild(b);
+    });
+    menuPop.hidden = false;
+    /* Muncul DI TEMPAT tombol ⋮: tepi kanan wadah disejajarkan dengan
+       tepi kanan tombol (wadah tumbuh ke kiri), vertikal dijaga tetap
+       di layar. */
     const r = anchor.getBoundingClientRect();
-    const p = fotoPop.getBoundingClientRect();
+    const p = menuPop.getBoundingClientRect();
     const top = r.top + (r.height - p.height) / 2;
     const left = r.right - p.width;
-    fotoPop.style.top =
+    menuPop.style.top =
       Math.max(8, Math.min(top, window.innerHeight - p.height - 8)) + 'px';
-    fotoPop.style.left =
+    menuPop.style.left =
       Math.max(8, Math.min(left, window.innerWidth - p.width - 8)) + 'px';
   };
 
-  btnFotoMenu.addEventListener('click', (e) => {
-    e.stopPropagation();
-    /* tekan lagi di tombol yang sama = tutup */
-    if (!fotoPop.hidden && fotoPopAnchor === btnFotoMenu) tutupFotoPop();
-    else bukaFotoPop(btnFotoMenu);
-  });
-  /* Tekan aksi mana pun: jalankan aksinya, lalu tombol ⋮ balik menutup.
-     Fase capture dipakai karena listener tombol memakai stopPropagation. */
-  fotoPop.addEventListener('click', () => tutupFotoPop(), true);
-
   document.addEventListener('click', (e) => {
-    if (fotoPop.hidden) return;
-    if (fotoPop.contains(e.target)) return;
-    if (btnFotoMenu.contains(e.target)) return;
-    tutupFotoPop();
+    if (menuPop.hidden) return;
+    if (menuPop.contains(e.target)) return;
+    if (e.target.closest && e.target.closest('.btn-dots')) return;
+    tutupMenuPop();
   });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') tutupFotoPop();
+    if (e.key === 'Escape') tutupMenuPop();
   });
-  /* Sengaja TIDAK menutup saat scroll/resize: di HP, sisa gulir/URL-bar
-     sesaat setelah jari lepas bisa menutup menu ⋮ seketika — kelihatan
-     seperti "⋮ tidak bisa dibuka". Menu ditutup lewat tekan di luar,
-     Esc, tekan ⋮ lagi, atau setelah salah satu aksi dipakai. */
-
-  // Zoom/pan langsung di kotak foto (tanpa popup): scroll=cubit/drag, dobel-klik=reset
-  let fzScale = 1, fzTx = 0, fzTy = 0, fzMoved = false;
-  const fzPtrs = new Map();
-  let fzPinchD = 0, fzPinchS = 1, fzDrag = false, fzDownX = 0, fzDownY = 0;
-  function fzApply() { const im = iconPreview.querySelector('img'); if (!im) return; im.style.transform = 'translate(-50%,-50%) translate(' + fzTx + 'px,' + fzTy + 'px) scale(' + fzScale + ')'; }
-  function fzReset() { fzScale = 1; fzTx = 0; fzTy = 0; fzMoved = false; fzApply(); }
-  function fzClamp() {
-    const im = iconPreview.querySelector('img'); if (!im) return;
-    const bR = fotoBox.getBoundingClientRect(); const iR = im.getBoundingClientRect();
-    let dx = 0, dy = 0;
-    if (iR.left > bR.left) dx = bR.left - iR.left;
-    if (iR.right < bR.right) dx = bR.right - iR.right;
-    if (iR.top > bR.top) dy = bR.top - iR.top;
-    if (iR.bottom < bR.bottom) dy = bR.bottom - iR.bottom;
-    fzTx += dx; fzTy += dy; fzApply();
-  }
-  function fzFit() {
-    const im = iconPreview.querySelector('img'); if (!im) return;
-    const bR = fotoBox.getBoundingClientRect();
-    const iw = im.naturalWidth, ih = im.naturalHeight;
-    if (!iw || !ih || !bR.width || !bR.height) return;
-    if ((iw/ih) > (bR.width/bR.height)) { im.style.height = '100%'; im.style.width = 'auto'; }
-    else { im.style.width = '100%'; im.style.height = 'auto'; }
-    fzReset();
-    requestAnimationFrame(() => { fzApply(); fzClamp(); });
-  }
-  function fzBind() { const im = iconPreview.querySelector('img'); if (!im) return; if (im.complete && im.naturalWidth) { fzFit(); } else { im.onload = () => fzFit(); } }
-  new MutationObserver(() => fzBind()).observe(iconPreview, { childList: true });
-   fotoBox.addEventListener('wheel', (e) => {
-     if (!iconPreview.querySelector('img') || photoProcessing || saving) return;
-     e.preventDefault();
-     const nextScale = Math.min(3, Math.max(1, fzScale + (e.deltaY < 0 ? 0.1 : -0.1)));
-     if (nextScale !== fzScale) { fzScale = nextScale; photoDirty = true; photoSaveBlocked = false; fzMoved = true; }
-     fzApply(); fzClamp();
-   }, { passive: false });
-   fotoBox.addEventListener('pointerdown', (e) => {
-     if (!iconPreview.querySelector('img') || photoProcessing || saving) return;
-     try { fotoBox.setPointerCapture(e.pointerId); } catch(err) {}
-     fzPtrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
-     fzMoved = false; fzDownX = e.clientX; fzDownY = e.clientY;
-    if (fzPtrs.size === 2) {
-      const p = Array.from(fzPtrs.values());
-      fzPinchD = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
-      fzPinchS = fzScale;
-    } else { fzDrag = true; }
-  });
-  fotoBox.addEventListener('pointermove', (e) => {
-    if (!fzPtrs.has(e.pointerId)) return;
-    e.preventDefault();
-    const pr = fzPtrs.get(e.pointerId);
-    fzPtrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    if (Math.hypot(e.clientX - fzDownX, e.clientY - fzDownY) > 4) { fzMoved = true; photoDirty = true; }
-    if (fzPtrs.size === 2) {
-      const p = Array.from(fzPtrs.values());
-      const d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
-      if (fzPinchD > 0) {
-        const nextScale = Math.min(3, Math.max(1, fzPinchS * d / fzPinchD));
-        if (nextScale !== fzScale) { fzScale = nextScale; photoDirty = true; photoSaveBlocked = false; fzMoved = true; fzApply(); }
-      }
-      return;
-    }
-    if (!fzDrag) return;
-    const dx = e.clientX - pr.x, dy = e.clientY - pr.y;
-    if (dx || dy) { photoDirty = true; photoSaveBlocked = false; fzMoved = true; }
-    fzTx += dx; fzTy += dy;
-    fzApply();
-  });
-  function fzEnd(e) {
-    fzPtrs.delete(e.pointerId);
-    if (fzPtrs.size < 2) fzPinchD = 0;
-    if (fzPtrs.size === 1) {
-      const p = Array.from(fzPtrs.values())[0];
-      fzDrag = true;
-      fzDownX = p.x;
-      fzDownY = p.y;
-    }
-    if (fzPtrs.size === 0) fzDrag = false;
-    fzClamp();
-  }
-  fotoBox.addEventListener('pointerup', fzEnd);
-  fotoBox.addEventListener('pointercancel', fzEnd);
-  fotoBox.addEventListener('lostpointercapture', fzEnd);
-
 
   function waitForImage(im) {
     if (im.complete) {
@@ -1463,212 +1295,6 @@
       im.addEventListener('error', onError, { once: true });
     });
   }
-  function fzCapture() {
-    if (photoCapturePromise) return photoCapturePromise;
-    const im = iconPreview.querySelector('img');
-    if (!im) { alert('Pilih foto terlebih dahulu'); return Promise.resolve(false); }
-    const run = photoRunId;
-    setPhotoBusy(true);
-    const operation = waitForImage(im).then(() => {
-      if (run !== photoRunId) return false;
-      const bR = fotoBox.getBoundingClientRect();
-      const iR = im.getBoundingClientRect();
-      const iw = im.naturalWidth, ih = im.naturalHeight;
-      if (!iw || !ih || !iR.width || !iR.height || !bR.width || !bR.height) throw new Error('Ukuran foto belum siap');
-      const sx = (bR.left - iR.left) / iR.width * iw;
-      const sy = (bR.top - iR.top) / iR.height * ih;
-      const sw = bR.width / iR.width * iw;
-      const sh = bR.height / iR.height * ih;
-      if (![sx, sy, sw, sh].every(Number.isFinite) || sw <= 0 || sh <= 0) throw new Error('Area foto tidak valid');
-      const base = (cropFileName || 'foto.jpg').replace(/-9x16(\.[^.]+)$/, '$1').replace(/\.[^.]+$/, '');
-      const outW = 540, outH = 960;
-      const canvas = document.createElement('canvas');
-      canvas.width = outW; canvas.height = outH;
-      const ctx = canvas.getContext('2d');
-      if (!ctx || !canvas.toBlob) throw new Error('Browser tidak mendukung proses foto');
-      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, outW, outH);
-      ctx.drawImage(im, sx, sy, sw, sh, 0, 0, outW, outH);
-      return canvasToBlob(canvas).then((blob) => {
-        if (run !== photoRunId) return false;
-        const cropped = new File([blob], base + '-9x16.jpg', { type: 'image/jpeg' });
-        pendingCroppedFile = cropped;
-        clearPreviewUrl();
-        const previewUrl = URL.createObjectURL(cropped);
-        previewObjectUrl = previewUrl;
-        iconPreview.innerHTML = '<img src="' + previewUrl + '" alt=""/>';
-        if (fotoName) fotoName.textContent = cropped.name;
-        fzReset();
-        syncFotoBox();
-        photoSaveBlocked = false;
-        return true;
-      });
-    }).then((result) => {
-      if (result && run === photoRunId) photoDirty = false;
-      return result;
-    }).catch((err) => {
-      if (run === photoRunId) {
-        console.warn('capture gagal', err);
-        photoSaveBlocked = true;
-        alert('Gagal memakai foto di HP. Coba ulangi atau pilih foto lain.');
-      }
-      return false;
-    }).finally(() => {
-      if (photoCapturePromise === operation) {
-        photoCapturePromise = null;
-        if (run === photoRunId) setPhotoBusy(false);
-      }
-    });
-    photoCapturePromise = operation;
-    return operation;
-  }
-
-  // Open crop dari URL gambar yang sudah ada
-  function openCropFromUrl(url) {
-    cropFromExisting = true;
-    cropFileName = 'existing-' + Date.now() + '.jpg';
-    cropImg.onload = () => { fitCropImg(); };
-    cropImg.src = url;
-    cropOverlay.classList.add('show');
-  }
-
-  const cropOverlay = document.getElementById('cropOverlay');
-  const cropStage = document.getElementById('cropStage');
-  const cropImg = document.getElementById('cropImg');
-  const cropCancel = document.getElementById('cropCancel');
-  const cropApply = document.getElementById('cropApply');
-  let cropScale = 1, cropTx = 0, cropTy = 0, cropFileName = 'foto.jpg';
-  let cropDragging = false, cropLastX = 0, cropLastY = 0;
-  const cropPointers = new Map();
-  let cropPinchDist = 0, cropPinchScale = 1;
-
-  function applyCropTransform() {
-    cropImg.style.transform = 'translate(-50%,-50%) translate(' + cropTx + 'px,' + cropTy + 'px) scale(' + cropScale + ')';
-  }
-  function clampCrop() {
-    const sR = cropStage.getBoundingClientRect();
-    const iR = cropImg.getBoundingClientRect();
-    let dx = 0, dy = 0;
-    if (iR.left > sR.left) dx = sR.left - iR.left;
-    if (iR.right < sR.right) dx = sR.right - iR.right;
-    if (iR.top > sR.top) dy = sR.top - iR.top;
-    if (iR.bottom < sR.bottom) dy = sR.bottom - iR.bottom;
-    cropTx += dx; cropTy += dy;
-    applyCropTransform();
-  }
-  function fitCropImg() {
-    const sR = cropStage.getBoundingClientRect();
-    const iw = cropImg.naturalWidth, ih = cropImg.naturalHeight;
-    if (!iw || !ih) return;
-    const stageRatio = sR.width / sR.height;
-    const imgRatio = iw / ih;
-    if (imgRatio > stageRatio) { cropImg.style.height = '100%'; cropImg.style.width = 'auto'; }
-    else { cropImg.style.width = '100%'; cropImg.style.height = 'auto'; }
-    cropScale = 1; cropTx = 0; cropTy = 0;
-    requestAnimationFrame(() => { applyCropTransform(); clampCrop(); });
-  }
-  function openCrop(file) {
-    cropFromExisting = false;
-    if (!file || !file.type.startsWith('image/')) { alert('Pilih file gambar ya'); return; }
-    cropFileName = file.name || 'foto.jpg';
-    const url = URL.createObjectURL(file);
-    cropImg.onload = () => { fitCropImg(); };
-    cropImg.src = url;
-    cropOverlay.classList.add('show');
-  }
-  function closeCrop() {
-    cropOverlay.classList.remove('show');
-  }
-
-  f_icon_img.addEventListener('change', () => {
-    const file = f_icon_img.files[0];
-    if (!file) return;
-    if (photoProcessing || saving) { f_icon_img.value = ''; return; }
-    if (!file.type.startsWith('image/')) { alert('Pilih file gambar ya'); f_icon_img.value = ''; return; }
-    autoCropPreview(file);
-  });
-
-  cropStage.addEventListener('pointerdown', (e) => {
-    cropStage.setPointerCapture(e.pointerId);
-    cropPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    if (cropPointers.size === 2) {
-      const p = Array.from(cropPointers.values());
-      cropPinchDist = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
-      cropPinchScale = cropScale;
-    } else {
-      cropDragging = true; cropLastX = e.clientX; cropLastY = e.clientY;
-    }
-  });
-  cropStage.addEventListener('pointermove', (e) => {
-    if (!cropPointers.has(e.pointerId)) return;
-    cropPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    if (cropPointers.size === 2) {
-      const p = Array.from(cropPointers.values());
-      const d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
-      if (cropPinchDist > 0) {
-        cropScale = Math.min(3, Math.max(1, cropPinchScale * d / cropPinchDist));
-        applyCropTransform();
-      }
-      return;
-    }
-    if (!cropDragging) return;
-    cropTx += e.clientX - cropLastX;
-    cropTy += e.clientY - cropLastY;
-    cropLastX = e.clientX; cropLastY = e.clientY;
-    applyCropTransform();
-  });
-  function endCropPoint(e) {
-    cropPointers.delete(e.pointerId);
-    if (cropPointers.size < 2) cropPinchDist = 0;
-    if (cropPointers.size === 0) cropDragging = false;
-    clampCrop();
-  }
-  cropStage.addEventListener('pointerup', endCropPoint);
-  cropStage.addEventListener('pointercancel', endCropPoint);
-  cropStage.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    cropScale = Math.min(3, Math.max(1, cropScale + (e.deltaY < 0 ? 0.1 : -0.1)));
-    applyCropTransform(); clampCrop();
-  }, { passive: false });
-
-  let cropFromExisting = false;
-
-  cropCancel.addEventListener('click', () => {
-    if (!cropFromExisting) { f_icon_img.value = ''; pendingCroppedFile = null; }
-    closeCrop();
-  });
-  cropOverlay.addEventListener('click', (e) => {
-    if (e.target === cropOverlay) { if (!cropFromExisting) { f_icon_img.value = ''; pendingCroppedFile = null; } closeCrop(); }
-  });
-
-  cropApply.addEventListener('click', () => {
-    const sR = cropStage.getBoundingClientRect();
-    const iR = cropImg.getBoundingClientRect();
-    const iw = cropImg.naturalWidth, ih = cropImg.naturalHeight;
-    if (!iw || !ih) { alert('Foto belum kebaca, coba lagi'); return; }
-    const sx = (sR.left - iR.left) / iR.width * iw;
-    const sy = (sR.top - iR.top) / iR.height * ih;
-    const sw = sR.width / iR.width * iw;
-    const sh = sR.height / iR.height * ih;
-const outW = 540, outH = 960;
-   const thumbW = 120, thumbH = 214;
-    const canvas = document.createElement('canvas');
-    canvas.width = outW; canvas.height = outH;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, outW, outH);
-    ctx.drawImage(cropImg, sx, sy, sw, sh, 0, 0, outW, outH);
-    canvas.toBlob((blob) => {
-      if (!blob) { alert('Gagal motong foto'); return; }
-      const ext = (cropFileName.split('.').pop() || 'jpg').split('?')[0];
-      const cropped = new File([blob], cropFileName.replace(/\.[^.]+$/, '') + '-1x1.' + ext, { type: blob.type || 'image/jpeg' });
-      pendingCroppedFile = cropped;
-      try { const dt = new DataTransfer(); dt.items.add(cropped); f_icon_img.files = dt.files; } catch(e) { console.warn('DataTransfer fallback', e); }
-      const url = URL.createObjectURL(cropped);
-      iconPreview.innerHTML = '<img src="' + url + '" alt=""/>';
-      if (fotoName) fotoName.textContent = cropped.name;
-      syncFotoBox();
-      closeCrop();
-    }, 'image/jpeg', 0.92);
-  });
 
   async function uploadIcon(file) {
     const ext = file.name.split('.').pop();
@@ -1774,10 +1400,7 @@ const outW = 540, outH = 960;
         </td>
         <td class="mt-foto"><div class="thumb">${thumb}</div></td>
         <td class="mt-aksi">
-          <div class="item-actions">
-          <button class="btn btn-ghost btn-small" data-edit="${m.id}" title="Edit" aria-label="Edit" style="width:32px;aspect-ratio:1/1;padding:0;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#6366f1;border:none"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-          <button class="btn btn-danger btn-small" data-del="${m.id}" title="Hapus" aria-label="Hapus" style="width:32px;aspect-ratio:1/1;padding:0;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#fef2f2;border:1px solid #fecaca"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-          </div>
+          <button class="btn-dots" data-menu="${m.id}" title="Aksi" aria-label="Aksi menu" aria-haspopup="true" aria-expanded="false">⋮</button>
         </td>
       </tr>`;
   }
@@ -1822,15 +1445,24 @@ const outW = 540, outH = 960;
       }
     });
 
-    listEl.querySelectorAll('[data-edit]').forEach(btn => {
-      btn.addEventListener('click', () => editRow(parseInt(btn.dataset.edit)));
-    });
-    listEl.querySelectorAll('[data-del]').forEach(btn => {
-      btn.addEventListener('click', () => delRow(parseInt(btn.dataset.del)));
+    listEl.querySelectorAll('[data-menu]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = parseInt(btn.dataset.menu);
+        const m = all.find(x => x.id === id);
+        if (!m) return;
+        /* tekan lagi di tombol yang sama = tutup */
+        if (!menuPop.hidden && menuPopAnchor === btn) { tutupMenuPop(); return; }
+        bukaMenuPop(btn, [
+          { svg: ICO_UPLOAD, judul: (m.foto && /^https?:/i.test(m.foto) ? 'Ganti foto ' : 'Upload foto ') + (m.name || ''), jalankan: () => openFotoPicker(id) },
+          { svg: ICO_EDIT, judul: 'Edit ' + (m.name || ''), jalankan: () => editRow(id) },
+          { svg: ICO_DEL, judul: 'Hapus ' + (m.name || ''), jalankan: () => delRow(id) },
+        ]);
+      });
     });
     listEl.querySelectorAll('.item[data-view]').forEach(el => {
       el.addEventListener('click', (e) => {
-        if (e.target.closest('[data-edit],[data-del]')) return;
+        if (e.target.closest('[data-menu]')) return;
         const m = all.find(x => String(x.id) === el.dataset.view);
         if (m) openSheet(m);
       });
@@ -1844,42 +1476,26 @@ const outW = 540, outH = 960;
     editId.value = m.id;
     f_name.value = (m.name || '').toUpperCase();
     existingIcon = m.foto||'';
-    cropFileName = existingIcon ? String(existingIcon).split('/').pop().split('?')[0] || 'foto.jpg' : 'foto.jpg';
     existingCls = m.cls||'g-a';
     existingCat = m.cat || 'PREMIX';
     f_link.value = m.link||'';
     f_plu12.value = (m.plu_12oz||'').toUpperCase();
     f_plu16.value = m.plu_16oz||'';
     if(f_pluHot) f_pluHot.value = m.plu_hot||'';
-    syncPluRows();
     f_bahan12.forEach((inp, i) => { inp.value = m['bahan_12oz_' + (i+1)] || ''; });
     f_bahan16.forEach((inp, i) => { inp.value = m['bahan_16oz_' + (i+1)] || ''; });
     f_bahanHot.forEach((inp, i) => { inp.value = m['bahan_hot_' + (i+1)] || ''; });
     f_percepatan12.forEach((inp, i) => { inp.value = m['percepatan_12oz_' + (i+1)] || ''; });
     f_percepatan16.forEach((inp, i) => { inp.value = m['percepatan_16oz_' + (i+1)] || ''; });
     f_catatan.value = (m.catatan || '').toUpperCase();
-    photoRunId++;
-    autoCropPromise = null;
-    photoCapturePromise = null;
-    pendingCroppedFile = null;
-    photoDirty = false;
-    photoSaveBlocked = false;
-    fzPtrs.clear();
-    fzReset();
-    clearPreviewUrl();
-    setPhotoBusy(false);
     f_icon_img.value = '';
-    if (!showExistingPreview(m.foto)) {
-      iconPreview.innerHTML = '';
-      if(fotoName) fotoName.textContent = m.foto || 'Belum ada foto';
-    }
-    syncFotoBox();
     const tabWithData = ['secHot','secP12','secP16','sec12oz','sec16oz'].find(tid => {
       const p = document.getElementById(tid);
       return p && p.querySelector('input') && Array.from(p.querySelectorAll('input')).some(i => i.value.trim());
     });
     switchTab(tabWithData || 'secHot');
     btnSave.title = 'Update'; btnSave.setAttribute('aria-label', 'Update');
+    setHeadAddState();
     window.scrollTo({top:0, behavior:'smooth'});
   };
 
@@ -2007,25 +1623,11 @@ const outW = 540, outH = 960;
   function resetForm() {
     editId.value = '';
     existingIcon = '';
-    cropFileName = 'foto.jpg';
     existingCls = 'g-a';
     existingCat = 'PREMIX';
-    photoRunId++;
-    autoCropPromise = null;
-    photoCapturePromise = null;
-    pendingCroppedFile = null;
-    photoDirty = false;
-    photoSaveBlocked = false;
-    fzPtrs.clear();
-    fzReset();
-    clearPreviewUrl();
-    setPhotoBusy(false);
     f_icon_img.value = '';
     form.reset();
-    syncPluRows();
-    iconPreview.innerHTML = '';
-    if(fotoName) fotoName.textContent = 'Belum ada foto';
-    syncFotoBox();
+    setHeadAddState();
     btnSave.title = 'Simpan'; btnSave.setAttribute('aria-label', 'Simpan');
   }
 
@@ -2034,12 +1636,10 @@ const outW = 540, outH = 960;
     if (saving) return;
     const name = f_name.value.trim().toUpperCase();
     if (!name) { alert('Menu wajib'); return; }
-    if (photoSaveBlocked) { alert('Foto belum berhasil diproses. Pilih foto lagi atau tekan Batal.'); return; }
     const targetId = editId.value;
     const targetTable = currentTable;
     const targetCls = existingCls;
     const targetIcon = existingIcon;
-    const initialPhotoRun = photoRunId;
     const snapshot = {
       name,
       link: f_link.value.trim(),
@@ -2055,44 +1655,13 @@ const outW = 540, outH = 960;
     };
     saving = true;
     form.classList.add('saving');
-    setPhotoBusy(photoProcessing);
     btnSave.disabled = true;
     btnSave.title = 'Menyimpan...';
     btnSave.setAttribute('aria-label', 'Menyimpan...');
     try {
-      if (autoCropPromise) {
-        const processed = await autoCropPromise;
-        if (!processed) return;
-      }
-      if (photoCapturePromise) {
-        const captured = await photoCapturePromise;
-        if (!captured) return;
-      }
-      if (photoProcessing) { alert('Tunggu foto selesai diproses'); return; }
-      if (photoDirty) {
-        const captured = await fzCapture();
-        if (!captured) return;
-      }
-      if (photoSaveBlocked || photoRunId !== initialPhotoRun) {
-        alert('Foto berubah atau belum siap. Ulangi proses foto.');
-        return;
-      }
-      let iconValue = targetIcon || '☕';
-      const pendingFile = pendingCroppedFile || f_icon_img.files[0];
-      if (pendingFile) {
-        const file = pendingFile;
-        if (file.size > 3 * 1024 * 1024) { alert('Foto kebesaran, max 3MB. Kompres dulu ya.'); return; }
-        try {
-          iconValue = await uploadIcon(file);
-        } catch (err) {
-          const msg = err.message || '';
-          const isRLS = msg.includes('row-level security') || msg.includes('AccessDenied') || msg.includes('403') || msg.includes('violates');
-          if (!isRLS) { alert('Gagal upload gambar: ' + msg); return; }
-          if (!confirm('Upload ke Storage gagal (RLS belum di-set).\n\nDetail: ' + msg + '\n\nMau simpan foto sebagai base64 sementara biar tetap kesimpan?\n(Disarankan tetap RUN scripts/fix-storage-rls.sql nanti)')) return;
-          try { iconValue = await fileToDataURL(file); }
-          catch (convertError) { alert('Gagal convert foto: ' + convertError.message); return; }
-        }
-      }
+      /* Foto tidak lagi diatur dari form — diatur dari tombol ⋮ tiap
+         baris daftar. Simpan form hanya mempertahankan foto yang ada. */
+      const iconValue = targetIcon || '☕';
       const autoLink = 'pages/item-' + slugify(snapshot.name) + '.html';
       const payload = {
         name: snapshot.name,
@@ -2152,7 +1721,6 @@ const outW = 540, outH = 960;
     } finally {
       saving = false;
       form.classList.remove('saving');
-      setPhotoBusy(photoProcessing);
       btnSave.disabled = false;
       btnSave.title = editId.value ? 'Update' : 'Simpan';
       btnSave.setAttribute('aria-label', btnSave.title);
@@ -2162,8 +1730,6 @@ const outW = 540, outH = 960;
   searchEl.addEventListener('input', render);
 
   // bahan cuma 1 baris tampil, plus nambah baris biar nyatu ke tabel 1
-  // strip tab dipindah keluar kepala form → jadi baris tabel selebar bingkai
-  document.querySelector('.form-frame > .top-wrap')?.after(document.getElementById('tabBar'));
   // tab switching
   const tabBar = document.getElementById('tabBar');
   const tabPanels = document.querySelectorAll('.tab-panel');
