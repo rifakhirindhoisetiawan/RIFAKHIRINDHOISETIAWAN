@@ -789,7 +789,8 @@
       align-self:stretch!important;min-height:0!important;border-bottom:0!important;
     }
     .form-frame #tabBar{
-      padding:6px!important;gap:4px!important;
+      /* Atas 12px: baris tombol diturunkan sedikit dari tabel PLU HOT. */
+      padding:12px 6px 6px!important;gap:4px!important;
       border-bottom:1px solid var(--mori-line);
       /* Enam sel sebaris: 5 tab + 1 tombol ⋮ pengganti tiga tombol foto. */
       grid-template-columns:repeat(6,minmax(0,1fr))!important;
