@@ -1356,9 +1356,10 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') tutupFotoPop();
   });
-  window.addEventListener('resize', tutupFotoPop);
-  /* true = ikut menangkap scroll elemen, bukan hanya window. */
-  window.addEventListener('scroll', tutupFotoPop, true);
+  /* Sengaja TIDAK menutup saat scroll/resize: di HP, sisa gulir/URL-bar
+     sesaat setelah jari lepas bisa menutup menu ⋮ seketika — kelihatan
+     seperti "⋮ tidak bisa dibuka". Menu ditutup lewat tekan di luar,
+     Esc, tekan ⋮ lagi, atau setelah salah satu aksi dipakai. */
 
   // Zoom/pan langsung di kotak foto (tanpa popup): scroll=cubit/drag, dobel-klik=reset
   let fzScale = 1, fzTx = 0, fzTy = 0, fzMoved = false;
