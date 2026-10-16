@@ -748,9 +748,34 @@
     }
     .form-frame .admin-plu-table{
       border:0!important;border-radius:0!important;background:transparent!important;
+      padding:0!important;gap:0!important;
     }
-    .form-frame .admin-plu-table .top-row{padding:0!important;border-radius:0!important}
-    .form-frame #tabBar{padding:6px!important}
+    .form-frame .admin-plu-table .top-row{
+      padding:0!important;margin:0!important;gap:0!important;border-radius:0!important;
+      align-items:stretch!important;
+      border-bottom:1px solid var(--mori-line);
+    }
+    .form-frame .admin-plu-table .top-row:last-child{border-bottom:0!important}
+    .form-frame .admin-plu-table .top-row > div:first-child{
+      align-self:stretch!important;min-height:0!important;height:auto!important;
+    }
+    .form-frame .admin-plu-table .top-row > div:last-child{
+      align-self:stretch!important;min-height:0!important;border-bottom:0!important;
+    }
+    .form-frame #tabBar{
+      padding:6px!important;gap:4px!important;
+      border-bottom:1px solid var(--mori-line);
+    }
+    .form-frame #tabBar .tab-btn,
+    .form-frame #tabBar .foto-act{
+      flex:1 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;
+      justify-self:stretch!important;
+    }
+    .form-frame #tabBar .foto-act{
+      background:var(--mori-surface)!important;color:var(--mori-accent)!important;
+      border:1px solid var(--mori-accent)!important;
+    }
+    .form-frame #tabBar .tab-empty{display:none!important}
     .form-frame .tab-panel{padding:0!important}
     .form-frame .tab-panel .form-table{
       border:0!important;border-radius:0!important;background:transparent!important;
@@ -809,9 +834,10 @@
     }
     .menu-tabel .item-name{font-size:11px;text-align:left;min-height:0;line-height:1.3}
     .menu-tabel .col-plu{
-      min-height:0;flex-direction:row;flex-wrap:wrap;gap:8px;
-      align-items:center;margin-top:2px;
+      min-height:0!important;display:block!important;white-space:nowrap!important;
+      overflow:hidden!important;text-overflow:ellipsis!important;margin-top:2px;
     }
+    .menu-tabel .col-plu span + span{margin-left:8px}
     .menu-tabel .mt-empty td{border-bottom:0}
   </style>
 </head>
@@ -2037,6 +2063,8 @@ const outW = 540, outH = 960;
   searchEl.addEventListener('input', render);
 
   // bahan cuma 1 baris tampil, plus nambah baris biar nyatu ke tabel 1
+  // strip tab dipindah keluar kepala form → jadi baris tabel selebar bingkai
+  document.querySelector('.form-frame > .top-wrap')?.after(document.getElementById('tabBar'));
   // tab switching
   const tabBar = document.getElementById('tabBar');
   const tabPanels = document.querySelectorAll('.tab-panel');
