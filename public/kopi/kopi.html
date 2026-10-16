@@ -913,7 +913,9 @@
       const sheetBg = document.getElementById('sheetBg');
       const sheetBody = document.getElementById('sheetBody');
       function slugify(str) {
-        return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        // Keterangan dalam kurung di akhir nama (mis. "(Sari Roti)") diabaikan,
+        // supaya link halaman item tetap item-<nama-dasar>.html walau nama diubah.
+        return String(str || '').replace(/\s*\([^()]*\)\s*$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
       }
       function normalizeMenu(m) {
         let link = m.link || '';
@@ -1228,7 +1230,15 @@
         const filtered = adminMatch ? [adminMenu, ...baseFiltered] : baseFiltered;
         if (filtered.length === 0) {
           shownMenus = [];
-          menuGrid.innerHTML = '<div class="empty-msg">Tidak ditemukan</div>';
+          // Bedakan "sedang memuat / gagal ambil data / memang tidak ada",
+          // supaya di perangkat yang gagal koneksi langsung kelihatan sebabnya.
+          let pesanKosong = 'Tidak ditemukan';
+          if (!menus.length) {
+            if (statusMuat === 'memuat') pesanKosong = 'Memuat menu...';
+            else if (statusMuat === 'gagal') pesanKosong = 'Gagal memuat menu - periksa internet';
+            else pesanKosong = 'Menu belum tersedia';
+          }
+          menuGrid.innerHTML = '<div class="empty-msg">' + pesanKosong + '</div>';
           return;
         }
         shownMenus = filtered;
@@ -1348,6 +1358,8 @@
       let lastSig = null;
       let sedangLoad = false;
       let rtTimer = null;
+      // 'memuat' -> 'ok' (berhasil ambil) / 'gagal' (tidak bisa ambil data)
+      let statusMuat = 'memuat';
 
       // ===== Supabase = satu-satunya sumber data (ADMIN tetap hardcoded) =====
       // Halaman tidak lagi membaca data-kopi.json sama sekali.
@@ -1360,6 +1372,7 @@
         try {
           const { data, error } = await supabase.from('ja_di_menus').select('*').order('id', { ascending: true });
           if (error) throw error;
+          statusMuat = 'ok';
           if (data && data.length > 0) {
             const next = data.map(m => ({ ...m, cat: m.cat || '', plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || m.plu || '' }));
             const sig = signature(next);
@@ -1373,8 +1386,10 @@
             console.warn('ja_di_menus kosong - belum ada menu');
           }
         } catch (e) {
-          // Error hanya dicatat di console, tidak ditampilkan di UI.
+          // Error ditampilkan sebagai pesan kecil di daftar (bukan popup),
+          // hanya kalau memang belum ada satu menu pun yang berhasil dimuat.
           console.warn('Supabase error:', e.message);
+          if (!menus.length) { statusMuat = 'gagal'; renderMenu(); }
         } finally {
           sedangLoad = false;
         }

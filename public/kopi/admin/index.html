@@ -1512,7 +1512,7 @@ const outW = 540, outH = 960;
     else if (/\bICE\b/i.test(n)) v.push('ICE');
     return v.join(' • ');
   }
-  function slugify(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+  function slugify(s){ return String(s||'').replace(/\s*\([^()]*\)\s*$/,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
   function itemHtml(m) {
     const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
     let thumb;
