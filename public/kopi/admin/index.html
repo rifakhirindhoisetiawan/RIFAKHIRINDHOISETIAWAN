@@ -720,6 +720,99 @@
     .form input:focus,.form select:focus,.select-box select:focus{
       border-bottom-color:var(--mori-accent)!important;
     }
+
+    /* ============================================================
+       FORM JADI SATU TABEL
+       Kotak foto, kotak MENU/PLU, kotak bahan (per tab), dan CATATAN
+       digabung jadi satu bingkai menyambung tanpa celah antar kotak —
+       pola yang sama dengan tabel barang di Admin Stok Opname. Isi
+       baris (label, input, tombol) tidak diubah, hanya bingkai &
+       celahnya yang disatukan.
+       ============================================================ */
+    .form-frame{
+      border:1px solid var(--mori-accent);border-radius:var(--mori-radius);
+      overflow:hidden;background:var(--mori-bg);
+      display:flex;flex-direction:column;
+    }
+    .form-frame .top-wrap{
+      gap:0!important;padding:0!important;margin:0!important;max-width:none!important;
+      border-bottom:1px solid var(--mori-line);
+    }
+    .form-frame .foto-box{
+      border:0!important;border-right:1px solid var(--mori-line)!important;
+      border-radius:0!important;background:var(--mori-surface)!important;
+    }
+    .form-frame .form-side-table{
+      border:0!important;border-radius:0!important;background:transparent!important;
+      gap:0!important;padding:0!important;
+    }
+    .form-frame .admin-plu-table{
+      border:0!important;border-radius:0!important;background:transparent!important;
+    }
+    .form-frame .admin-plu-table .top-row{padding:0!important;border-radius:0!important}
+    .form-frame #tabBar{padding:6px!important}
+    .form-frame .tab-panel{padding:0!important}
+    .form-frame .tab-panel .form-table{
+      border:0!important;border-radius:0!important;background:transparent!important;
+      gap:0!important;padding:0!important;
+    }
+    .form-frame .tab-panel .form-table .tr{padding:0!important;gap:0!important}
+    .form-frame > div:last-child{padding:0!important;margin-top:0!important}
+    .form-frame > div:last-child > div{padding:0!important}
+
+    /* ============================================================
+       DAFTAR MENU JADI TABEL
+       Kotak cari dipindah jadi baris pertama DI DALAM tabel, kartu
+       foto diganti baris: No | Nama Menu | Foto | Aksi — seperti
+       daftar "Foto Menu SO" di Admin Stok Opname.
+       ============================================================ */
+    .menu-tabel{
+      border:1px solid var(--mori-accent);border-radius:var(--mori-radius);
+      overflow:hidden;background:var(--mori-bg);
+    }
+    .menu-tabel table{width:100%;border-collapse:collapse}
+    .menu-tabel thead th{
+      background:var(--mori-surface);color:var(--mori-text);
+      font-family:var(--mori-mono);font-size:10px;font-weight:800;
+      letter-spacing:.6px;text-transform:uppercase;text-align:left;
+      height:36px;padding:0 12px;border-bottom:1px solid var(--mori-line);
+      white-space:nowrap;
+    }
+    .menu-tabel th.mt-no,.menu-tabel td.mt-no{
+      width:40px;text-align:center;color:var(--mori-text-2);
+      font-family:var(--mori-mono);font-size:11px;
+    }
+    .menu-tabel tbody td{
+      padding:6px 12px;border-bottom:1px solid var(--mori-line);
+      vertical-align:middle;
+    }
+    .menu-tabel #list > tr:last-child > td{border-bottom:0}
+    .menu-tabel .item{display:table-row!important}
+    .menu-tabel tbody tr:active td{background:var(--mori-surface)}
+    .menu-tabel .mt-cari td{padding:0 12px}
+    .menu-tabel .mt-cari .search-box{
+      border:0!important;border-radius:0!important;background:transparent!important;
+      padding:11px 0!important;gap:8px;
+    }
+    .menu-tabel .mt-cari .search-box:focus-within{
+      background:transparent!important;box-shadow:none!important;
+    }
+    .menu-tabel .mt-foto{width:76px;text-align:center}
+    .menu-tabel .mt-foto .thumb{
+      width:44px;height:44px;aspect-ratio:auto!important;margin:0 auto;
+      border-radius:var(--mori-radius)!important;
+    }
+    .menu-tabel .mt-aksi{width:94px}
+    .menu-tabel .mt-aksi .item-actions{
+      margin-top:0!important;justify-content:flex-end;
+      flex-direction:row!important;gap:6px!important;
+    }
+    .menu-tabel .item-name{font-size:11px;text-align:left;min-height:0;line-height:1.3}
+    .menu-tabel .col-plu{
+      min-height:0;flex-direction:row;flex-wrap:wrap;gap:8px;
+      align-items:center;margin-top:2px;
+    }
+    .menu-tabel .mt-empty td{border-bottom:0}
   </style>
 </head>
 <body>
@@ -728,17 +821,34 @@
   <div class="grid">
     <div class="card" style="order:2">
       <span id="count" style="display:none">0</span>
-      <div class="search-wrapper">
-        <div class="search-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-          <input id="search" type="text" placeholder="Cari menu..." autocomplete="off" />
-        </div>
+      <div class="menu-tabel">
+        <table>
+          <thead>
+            <tr>
+              <th class="mt-no">No</th>
+              <th>Nama Menu</th>
+              <th class="mt-foto">Foto</th>
+              <th class="mt-aksi"></th>
+            </tr>
+          </thead>
+          <tbody class="mt-cari">
+            <tr>
+              <td colspan="4">
+                <div class="search-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                  <input id="search" type="text" placeholder="Cari menu..." autocomplete="off" />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tbody id="list"><tr class="mt-empty"><td colspan="4"><div class="empty">Memuat...</div></td></tr></tbody>
+        </table>
       </div>
-      <div id="list" class="list"><div class="empty">Memuat...</div></div>
     </div>
     <div class="card" style="order:1">
       <form id="form" class="form">
         <input type="hidden" id="editId" />
+        <div class="form-frame">
         <div class="top-wrap" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;justify-content:center;align-items:stretch;width:100%;padding:4px;box-sizing:border-box">
           <div class="foto-box" id="fotoBox" style="flex:1 1 0;min-width:0;width:100%;height:100%;min-height:100%;align-self:stretch;aspect-ratio:9/16;border-radius:8px;overflow:hidden;position:relative;border:1px solid #c7d2fe">
              <input id="f_icon_img" type="file" accept="image/*" />
@@ -864,6 +974,7 @@
              <div class="table-title-row"><div class="catatan-title" style="flex:1;min-width:0;min-height:46px;display:flex;align-items:center;justify-content:flex-start;text-align:left;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;padding:12px 0 12px 8px">CATATAN</div><button id="btnSave" type="submit" class="btn-save-icon btn-save-head" title="Simpan" aria-label="Simpan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button></div>
              <div class="catatan-field" style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_catatan" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" onblur="this.value=this.value.toUpperCase()" /></div>
           </div>
+        </div>
         </div>
       </form>
     </div>
@@ -1471,13 +1582,13 @@ const outW = 540, outH = 960;
       if (error) {
         if (error.code === 'PGRST205' || error.message.includes('Could not find the table')) {
           setStatus('Tabel ' + currentTable + ' belum ada.', false);
-          listEl.innerHTML = '<div class="empty">Tabel belum ada.</div>';
+          listEl.innerHTML = '<tr class="mt-empty"><td colspan="4"><div class="empty">Tabel belum ada.</div></td></tr>';
           countEl.textContent = '0';
           render();
           return;
         }
         setStatus('Error: ' + error.message, false);
-        listEl.innerHTML = '<div class="empty">Error: ' + error.message + '</div>';
+        listEl.innerHTML = '<tr class="mt-empty"><td colspan="4"><div class="empty">Error: ' + error.message + '</div></td></tr>';
         countEl.textContent = '0';
         render();
         return;
@@ -1513,13 +1624,13 @@ const outW = 540, outH = 960;
     return v.join(' • ');
   }
   function slugify(s){ return String(s||'').replace(/^\s*sari\s+roti\b\s*[-–—·•]?\s*/i,'').replace(/\s*\([^()]*\)\s*$/,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
-  function itemHtml(m) {
+  function itemHtml(m, no) {
     const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
     let thumb;
     if (isImg) {
       const url = m.foto;
       const thumbUrl = url.includes('supabase.co/storage') && !url.includes('?')
-        ? url + '?width=120&height=214&quality=70&format=webp'
+        ? url + '?width=88&height=88&quality=70&format=webp'
         : url;
       thumb = '<img data-src="' + thumbUrl + '" alt="" loading="lazy" decoding="async"/>';
     } else {
@@ -1530,15 +1641,20 @@ const outW = 540, outH = 960;
       .filter(r => String(r[1] || '').trim() !== '')
       .map(r => '<span>' + esc(r[1]) + '</span>').join('');
     return `
-      <div class="item" data-view="${m.id}" style="cursor:pointer">
-        <div class="thumb">${thumb}</div>
-        <div class="item-name">${m.name}</div>
-        <div class="col-plu" style="font-size:8px;line-height:1.2;margin-top:2px">${pluHtml}</div>
-        <div class="item-actions" style="margin-top:6px;gap:6px">
+      <tr class="item" data-view="${m.id}">
+        <td class="mt-no">${no}</td>
+        <td class="mt-nama">
+          <div class="item-name">${m.name}</div>
+          <div class="col-plu">${pluHtml}</div>
+        </td>
+        <td class="mt-foto"><div class="thumb">${thumb}</div></td>
+        <td class="mt-aksi">
+          <div class="item-actions">
           <button class="btn btn-ghost btn-small" data-edit="${m.id}" title="Edit" aria-label="Edit" style="width:32px;aspect-ratio:1/1;padding:0;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#6366f1;border:none"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
           <button class="btn btn-danger btn-small" data-del="${m.id}" title="Hapus" aria-label="Hapus" style="width:32px;aspect-ratio:1/1;padding:0;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#fef2f2;border:1px solid #fecaca"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-        </div>
-      </div>`;
+          </div>
+        </td>
+      </tr>`;
   }
   function render() {
     const q = searchEl.value.trim().toLowerCase();
@@ -1553,9 +1669,9 @@ const outW = 540, outH = 960;
     }
     countEl.textContent = filtered.length;
     const label = currentTable === 'ja_di_menus' ? 'JA-DI' : 'Dr Coffee';
-    if (!filtered.length) { listEl.innerHTML = '<div class="empty">Tidak ada data — ' + label + ' konek Supabase OK (0 menu)</div>'; return; }
+    if (!filtered.length) { listEl.innerHTML = '<tr class="mt-empty"><td colspan="4"><div class="empty">Tidak ada data — ' + label + ' konek Supabase OK (0 menu)</div></td></tr>'; return; }
     filtered.sort((a,b)=> a.name.localeCompare(b.name));
-    listEl.innerHTML = filtered.map(itemHtml).join('');
+    listEl.innerHTML = filtered.map((m, i) => itemHtml(m, i + 1)).join('');
     
     // Lazy load images with IntersectionObserver (like index.html)
     const thumbObserver = new IntersectionObserver((entries, obs) => {
