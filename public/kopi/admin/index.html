@@ -795,7 +795,7 @@
       border:1px solid var(--mori-accent);border-radius:var(--mori-radius);
       overflow:hidden;background:var(--mori-bg);
     }
-    .menu-tabel table{width:100%;border-collapse:collapse}
+    .menu-tabel table{width:100%;border-collapse:collapse;table-layout:fixed}
     .menu-tabel thead th{
       background:var(--mori-surface);color:var(--mori-text);
       font-family:var(--mori-mono);font-size:10px;font-weight:800;
@@ -836,6 +836,7 @@
     .menu-tabel .col-plu{
       min-height:0!important;display:block!important;white-space:nowrap!important;
       overflow:hidden!important;text-overflow:ellipsis!important;margin-top:2px;
+      text-align:left!important;
     }
     .menu-tabel .col-plu span + span{margin-left:8px}
     .menu-tabel .mt-empty td{border-bottom:0}
