@@ -7,6 +7,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+    <!-- Render rumus (pecahan bertumpuk dgn garis bagi) untuk catatan berawalan "Rumus ..." -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" onload="window.dispatchEvent(new Event('katex-siap'))"></script>
     <style>
       :root {
         --mori-bg: #fffbf2;
@@ -94,6 +97,18 @@
         display: block; margin-top: 5px; padding: 7px 9px;
         background: var(--mori-surface); border: 1px solid var(--mori-line);
         font-size: 12.5px; line-height: 1.6; letter-spacing: .2px;
+      }
+      /* Rumus LaTeX ($$...$$) dirender KaTeX: pecahan bertumpuk + garis bagi */
+      .tabel .c-teks .isi .rumus-math {
+        display: block; margin-top: 5px; padding: 7px 9px;
+        background: var(--mori-surface); border: 1px solid var(--mori-line);
+        font-size: 12px; overflow-x: auto; overflow-y: hidden;
+      }
+      .tabel .c-teks .isi .rumus-math .katex { font-size: 1.06em; }
+      .tabel .c-teks .isi .rumus-math .katex-display { margin: 0; }
+      .tabel .c-teks .isi .rumus-nota {
+        display: block; margin-top: 6px; font-size: 10.5px; line-height: 1.55;
+        color: var(--mori-text-2);
       }
       .c-aksi { width: 72px; }
       .acts { display: flex; gap: 6px; justify-content: flex-end; }
@@ -242,6 +257,17 @@
           const pisah = sisa.indexOf(':');
           const label = pisah >= 0 ? sisa.slice(0, pisah) : 'Rumus';
           const badan = pisah >= 0 ? sisa.slice(pisah + 1).trim() : sisa.trim();
+          // Badan berisi "$$...$$" = rumus LaTeX (pecahan bertumpuk) -> KaTeX.
+          const mm = badan.match(/\$\$([\s\S]*?)\$\$([\s\S]*)$/);
+          if (mm) {
+            const tex = mm[1].trim();
+            const nota = mm[2].trim();
+            return '<div class="isi rumus" title="' + escAttr(asli) + '">' +
+              '<span class="rumus-label">' + escHtml(label) + '</span>' +
+              '<span class="rumus-math" data-tex="' + escAttr(tex) + '"></span>' +
+              (nota ? '<span class="rumus-nota">' + escHtml(nota) + '</span>' : '') +
+              '</div>';
+          }
           return '<div class="isi rumus" title="' + escAttr(asli) + '">' +
             '<span class="rumus-label">' + escHtml(label) + '</span>' +
             '<span class="rumus-badan">' + escHtml(badan) + '</span>' +
@@ -264,6 +290,19 @@
           '<button type="button" class="ico ico-danger" data-del="' + e.id + '" title="Hapus">✕</button>' +
           '</div></td></tr>'
         ).join('');
+
+        // Rumus LaTeX: render pakai KaTeX (kalau library belum termuat, tampil
+        // teks aslinya dulu; begitu KaTeX siap, listener 'katex-siap' render ulang).
+        tbody.querySelectorAll('.rumus-math').forEach((el) => {
+          const tex = el.getAttribute('data-tex') || '';
+          if (!tex) return;
+          if (window.katex) {
+            try { window.katex.render(tex, el, { displayMode: true, throwOnError: false }); }
+            catch (err) { el.textContent = tex; }
+          } else {
+            el.textContent = tex;
+          }
+        });
       }
 
       async function tambah() {
@@ -352,6 +391,10 @@
           .on('postgres_changes', { event: '*', schema: 'public', table: 'note_entries', filter: 'menu_id=eq.' + menuId }, () => loadEntries())
           .subscribe();
       } catch(e) {}
+
+      // Kalau KaTeX baru termuat belakangan (CDN lambat), render ulang agar
+      // rumus langsung tampil bergaya matematika.
+      window.addEventListener('katex-siap', () => { if (entries.length) render(); });
 
       if (menuId) { loadJudul(); loadEntries(); }
     </script>
