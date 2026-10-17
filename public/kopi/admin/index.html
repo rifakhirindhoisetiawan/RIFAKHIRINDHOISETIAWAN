@@ -217,8 +217,8 @@
        .foto-act svg{width:14px;height:14px}
        .foto-act{width:46px!important;height:32px!important;min-height:32px!important;flex-basis:46px!important;max-width:100%!important;border-radius:6px!important;padding:0!important;box-shadow:none!important}
        .foto-act svg{width:14px!important;height:14px!important}
-       #tabBar{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-auto-rows:32px;gap:2px!important;padding:1px!important;overflow:visible!important}
-       #tabBar .tab-btn{width:100%!important;min-width:0!important;max-width:100%!important;height:32px!important;justify-self:stretch}
+       #tabBar{display:grid!important;grid-template-columns:max-content!important;grid-auto-rows:32px;gap:2px!important;padding:1px!important;overflow:visible!important}
+       #tabBar .tab-btn{width:auto!important;min-width:0!important;max-width:none!important;height:32px!important;justify-self:start}
        #tabBar .foto-act{width:46px!important;justify-self:center}
        #tabBar .tab-empty{display:none!important}
        .tab-panel .form-table .table-title{min-height:32px!important;height:32px!important;padding:4px 0!important;font-size:9px!important}
@@ -370,9 +370,9 @@
     }
     .tab-btn.active{background:var(--mori-accent) !important;color:var(--mori-bg) !important;
       border-color:var(--mori-accent) !important}
-    /* Satu tombol bergilir: ketuk = pindah bagian (HOT → P12 → P16 → 12OZ → 16OZ).
+    /* Satu tombol bergilir kecil: ketuk = pindah bagian (HOT → P12 → P16 → 12OZ → 16OZ).
        Label ikut bagian aktif, ikon kecil tanda bisa diketuk ganti. */
-    #tabCycleBtn{gap:6px}
+    #tabCycleBtn{gap:6px;padding:6px 14px;min-height:32px}
     #tabCycleBtn .tab-cycle-ico{width:12px;height:12px;flex:0 0 auto;opacity:.85}
 
     /* ===== TOMBOL AKSI BARIS DAFTAR: satu tombol ⋮ (pola Admin Stok
@@ -841,12 +841,12 @@
       /* Atas 12px: baris tombol diturunkan sedikit dari baris isian. */
       padding:12px 6px 6px!important;gap:4px!important;
       border-bottom:1px solid var(--mori-line);
-      /* Satu tombol bergilir: ketuk = ganti bagian (HOT / P12 / P16 / 12OZ / 16OZ). */
-      grid-template-columns:minmax(0,1fr)!important;
+      /* Satu tombol bergilir kecil: ketuk = ganti bagian (HOT / P12 / P16 / 12OZ / 16OZ). */
+      grid-template-columns:max-content!important;
     }
     .form-frame #tabBar .tab-btn{
-      flex:1 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;
-      justify-self:stretch!important;
+      flex:0 0 auto!important;width:auto!important;min-width:0!important;max-width:none!important;
+      justify-self:start!important;
     }
     .form-frame .tab-panel{padding:0!important}
     .form-frame .tab-panel .form-table{
