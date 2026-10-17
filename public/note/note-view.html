@@ -78,7 +78,10 @@
       .tabel .c-teks .isi {
         font-family: var(--mori-mono); font-size: 12px; font-weight: 700;
         letter-spacing: .4px; text-transform: uppercase;
-        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        /* Catatan panjang (hasil ketikan berparagraf) turun baris supaya
+           kebaca utuh — catatan pendek tetap tampil satu baris seperti sebelumnya. */
+        white-space: normal; overflow-wrap: break-word;
+        line-height: 1.5; padding: 7px 0;
       }
       .c-aksi { width: 72px; }
       .acts { display: flex; gap: 6px; justify-content: flex-end; }
