@@ -83,6 +83,18 @@
         white-space: normal; overflow-wrap: break-word;
         line-height: 1.5; padding: 7px 0;
       }
+      /* Catatan yang diawali "Rumus ..." tampil seperti lembar rumus:
+         label kecil di atas + badan rumus dalam kotak (tidak kapital penuh). */
+      .tabel .c-teks .isi.rumus { text-transform: none; }
+      .tabel .c-teks .isi .rumus-label {
+        display: block; font-size: 10px; font-weight: 700; letter-spacing: .8px;
+        text-transform: uppercase; color: var(--mori-text-2);
+      }
+      .tabel .c-teks .isi .rumus-badan {
+        display: block; margin-top: 5px; padding: 7px 9px;
+        background: var(--mori-surface); border: 1px solid var(--mori-line);
+        font-size: 12.5px; line-height: 1.6; letter-spacing: .2px;
+      }
       .c-aksi { width: 72px; }
       .acts { display: flex; gap: 6px; justify-content: flex-end; }
       .ico {
@@ -216,6 +228,28 @@
         render();
       }
 
+      const escHtml = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const escAttr = (s) => escHtml(s).replace(/"/g, '&quot;');
+
+      // Catatan yang diawali "Rumus ..." tampil ala lembar rumus:
+      // "Rumus OOS (stock out): OOS = (...)" -> label "OOS (stock out)" +
+      // badan "OOS = (...)" dalam kotak (huruf asli, tidak dikapitalkan).
+      function isiTeks(e) {
+        const asli = String(e.content || '');
+        const m = asli.match(/^rumus\s+([\s\S]+)$/i);
+        if (m) {
+          const sisa = m[1];
+          const pisah = sisa.indexOf(':');
+          const label = pisah >= 0 ? sisa.slice(0, pisah) : 'Rumus';
+          const badan = pisah >= 0 ? sisa.slice(pisah + 1).trim() : sisa.trim();
+          return '<div class="isi rumus" title="' + escAttr(asli) + '">' +
+            '<span class="rumus-label">' + escHtml(label) + '</span>' +
+            '<span class="rumus-badan">' + escHtml(badan) + '</span>' +
+            '</div>';
+        }
+        return '<div class="isi" title="' + escAttr(asli) + '">' + escHtml(asli.toUpperCase()) + '</div>';
+      }
+
       function render() {
         if (entries.length === 0) {
           tbody.innerHTML = '<tr><td class="c-no"></td><td class="c-teks"><div class="empty">Belum ada catatan penting</div></td><td class="c-aksi"></td></tr>';
@@ -224,7 +258,7 @@
         tbody.innerHTML = entries.map((e, i) =>
           '<tr data-id="' + e.id + '">' +
           '<td class="c-no">' + (i + 1) + '</td>' +
-          '<td class="c-teks"><div class="isi" title="' + String(e.content || '').replace(/"/g,'&quot;') + '">' + String(e.content || '').toUpperCase() + '</div></td>' +
+          '<td class="c-teks">' + isiTeks(e) + '</td>' +
           '<td class="c-aksi"><div class="acts">' +
           '<button type="button" class="ico" data-edit="' + e.id + '" title="Edit">✎</button>' +
           '<button type="button" class="ico ico-danger" data-del="' + e.id + '" title="Hapus">✕</button>' +
