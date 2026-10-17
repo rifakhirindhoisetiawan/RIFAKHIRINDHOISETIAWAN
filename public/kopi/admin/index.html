@@ -489,16 +489,21 @@
       background:var(--mori-surface) !important;color:var(--mori-text) !important;
       border-right:1px solid var(--mori-line) !important;
     }
-    /* kolom input: garis bawah + latar */
+    /* kolom input: garis bawah + latar (semua kolom isian: bahan & catatan) */
     .form-side-table .top-row>div:last-child,
     .tab-panel .form-table .td,
     .catatan-field{
-      background:var(--mori-bg) !important;border-bottom-color:var(--mori-line) !important;
       border-color:var(--mori-line) !important;
+      background:var(--mori-surface) !important;border-bottom-color:rgba(26,25,23,.35) !important;
     }
     .form-side-table .top-row>div:last-child input,
     .tab-panel .form-table .td input,
     .catatan-field input{color:var(--mori-text) !important}
+    /* isi kolom transparan — warna & garis kolom tampil dari .td/.catatan-field */
+    .form-frame .tab-panel .form-table .td input,
+    .form-frame .catatan-field input{
+      background:transparent !important;border:0 !important;border-radius:0 !important;
+    }
     .form-table,.form-compact,.admin-plu-table,.plu-photo-grid .form-table{
       border:1px solid var(--mori-accent) !important;border-radius:0 !important;
       background:var(--mori-bg) !important;
