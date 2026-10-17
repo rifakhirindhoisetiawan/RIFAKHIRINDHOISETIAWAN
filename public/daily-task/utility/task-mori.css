@@ -179,9 +179,12 @@ body {
   font-weight: 700;
   letter-spacing: 0.4px;
   text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* Teks panjang (jobdesk / SOP) turun baris supaya kebaca utuh —
+     kegiatan pendek tetap tampil satu baris seperti sebelumnya. */
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.5;
+  padding: 7px 0;
 }
 .c-aksi {
   width: 60px;
