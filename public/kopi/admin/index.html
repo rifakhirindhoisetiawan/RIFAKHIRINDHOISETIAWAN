@@ -966,6 +966,16 @@
     #catatanWrap .catatan-field{display:none!important}
     #catatanWrap.buka .catatan-field{display:flex!important}
     .catatan-title{cursor:pointer!important}
+    /* ===== CATATAN KECIL DI ATAS =====
+       CATATAN KECIL DI ATAS
+       Tombol CATATAN di paling atas form, ukuran kecil; ketuk = kolom
+       catatan muncul di bawahnya. */
+    #catatanWrap .catatan-title{
+      min-height:34px!important;height:34px!important;font-size:14px!important;padding:0 8px!important;
+    }
+    @media(max-width:640px){
+      #catatanWrap .catatan-title{min-height:28px!important;height:28px!important;font-size:12px!important;padding:0 8px!important}
+    }
   </style>
 </head>
 <body>
@@ -1002,6 +1012,12 @@
       <form id="form" class="form">
         <input type="hidden" id="editId" />
         <div class="form-frame">
+        <div style="border:none;border-radius:0;overflow:visible;background:transparent;padding:2px 0;margin-top:0;display:flex">
+          <div id="catatanWrap" style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:transparent;border-radius:0;padding:2px 0">
+             <div class="table-title-row"><div class="catatan-title" role="button" tabindex="0" style="flex:1;min-width:0;min-height:46px;display:flex;align-items:center;justify-content:flex-start;text-align:left;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;padding:12px 0 12px 8px">CATATAN</div></div>
+             <div class="catatan-field" style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_catatan" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" onblur="this.value=this.value.toUpperCase()" /></div>
+          </div>
+        </div>
         <input id="f_icon_img" type="file" accept="image/*" />
         <div class="form-head-row">
           <input id="f_name" required placeholder="NAMA MENU" autocomplete="off" onblur="this.value=this.value.toUpperCase()" />
@@ -1085,12 +1101,6 @@
             <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_8" /></div></div>
             <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_9" /></div></div>
             <div class="tr hidden"><div class="th">16OZ</div><div class="td"><input id="f_bahan16_10" /></div></div>
-          </div>
-        </div>
-        <div style="border:none;border-radius:0;overflow:visible;background:transparent;padding:2px 0;margin-top:6px;display:flex">
-          <div id="catatanWrap" style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:transparent;border-radius:0;padding:2px 0">
-             <div class="table-title-row"><div class="catatan-title" role="button" tabindex="0" style="flex:1;min-width:0;min-height:46px;display:flex;align-items:center;justify-content:flex-start;text-align:left;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;padding:12px 0 12px 8px">CATATAN</div></div>
-             <div class="catatan-field" style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_catatan" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" onblur="this.value=this.value.toUpperCase()" /></div>
           </div>
         </div>
         </div>
