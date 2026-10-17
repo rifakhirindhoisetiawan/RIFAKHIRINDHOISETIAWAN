@@ -777,7 +777,8 @@
 
     /* Baris isian MENU + PLU: satu baris mendatar, pola baris tulis di
        Admin Stok Opname. Menggantikan kotak foto + tabel PLU bertumpuk.
-       Tombol + di ujung = tambah/simpan (berubah ✓ saat sedang edit). */
+       Tombol + di ujung = tambah/simpan (berubah ✓ saat sedang edit).
+       Tanpa garis: satu bidang warna polos. */
     .form-head-row{
       display:flex;align-items:stretch;gap:2px;
       padding:4px 8px;
@@ -785,7 +786,7 @@
     }
     .form-head-row input{
       flex:1 1 0;min-width:0;margin:0;
-      border:0!important;border-bottom:1px solid rgba(26,25,23,.35)!important;border-radius:0!important;
+      border:0!important;border-bottom:0!important;border-radius:0!important;
       background:var(--mori-surface)!important;
       font-family:inherit;font-size:13px;font-weight:800;
       letter-spacing:.2px;text-transform:uppercase;color:var(--mori-text);
