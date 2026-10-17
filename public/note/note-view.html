@@ -103,12 +103,16 @@
       .tabel tbody tr.tr-rumus-head td { border-bottom: 0; }
       .tabel tbody tr.tr-math td { height: auto; padding: 0 8px 12px; vertical-align: top; }
       .tabel .rumus-math {
-        display: block; padding: 8px 10px;
+        display: block; padding: 8px 8px;
         background: var(--mori-surface); border: 1px solid var(--mori-line);
         font-size: 12px; overflow-x: auto; overflow-y: hidden;
       }
       .tabel .rumus-math .katex { font-size: .9em; }
       .tabel .rumus-math .katex-display { margin: 0; }
+      @media (max-width: 400px) {
+        /* layar sempit: kecilkan sedikit supaya rumus panjang tetap utuh */
+        .tabel .rumus-math .katex { font-size: .76em; }
+      }
       .tabel .rumus-nota {
         display: block; margin-top: 6px; font-size: 10.5px; line-height: 1.55;
         color: var(--mori-text-2);
