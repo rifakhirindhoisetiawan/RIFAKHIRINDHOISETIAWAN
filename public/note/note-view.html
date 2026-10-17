@@ -98,15 +98,18 @@
         background: var(--mori-surface); border: 1px solid var(--mori-line);
         font-size: 12.5px; line-height: 1.6; letter-spacing: .2px;
       }
-      /* Rumus LaTeX ($$...$$) dirender KaTeX: pecahan bertumpuk + garis bagi */
-      .tabel .c-teks .isi .rumus-math {
-        display: block; margin-top: 5px; padding: 7px 9px;
+      /* Rumus LaTeX ($$...$$) dirender KaTeX: pecahan bertumpuk + garis bagi.
+         Rumus ditaruh di baris kedua selebar tabel (colspan) supaya utuh. */
+      .tabel tbody tr.tr-rumus-head td { border-bottom: 0; }
+      .tabel tbody tr.tr-math td { height: auto; padding: 0 8px 12px; vertical-align: top; }
+      .tabel .rumus-math {
+        display: block; padding: 8px 10px;
         background: var(--mori-surface); border: 1px solid var(--mori-line);
         font-size: 12px; overflow-x: auto; overflow-y: hidden;
       }
-      .tabel .c-teks .isi .rumus-math .katex { font-size: 1.06em; }
-      .tabel .c-teks .isi .rumus-math .katex-display { margin: 0; }
-      .tabel .c-teks .isi .rumus-nota {
+      .tabel .rumus-math .katex { font-size: .9em; }
+      .tabel .rumus-math .katex-display { margin: 0; }
+      .tabel .rumus-nota {
         display: block; margin-top: 6px; font-size: 10.5px; line-height: 1.55;
         color: var(--mori-text-2);
       }
@@ -246,28 +249,30 @@
       const escHtml = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       const escAttr = (s) => escHtml(s).replace(/"/g, '&quot;');
 
-      // Catatan yang diawali "Rumus ..." tampil ala lembar rumus:
-      // "Rumus OOS (stock out): OOS = (...)" -> label "OOS (stock out)" +
-      // badan "OOS = (...)" dalam kotak (huruf asli, tidak dikapitalkan).
+      // Format rumus: "Rumus <label>: $$<latex>$$ <catatan kecil opsional>".
+      // Dipisah jadi { label, tex, nota } supaya render() bisa menaruh rumus
+      // di barisnya sendiri selebar tabel (colspan) dan dirender KaTeX.
+      function bagiRumus(e) {
+        const asli = String(e.content || '');
+        const m = asli.match(/^rumus\s+([\s\S]+)$/i);
+        if (!m) return null;
+        const pisah = m[1].indexOf(':');
+        if (pisah < 0) return null;
+        const badan = m[1].slice(pisah + 1).trim();
+        const mm = badan.match(/^\$\$([\s\S]*?)\$\$([\s\S]*)$/);
+        if (!mm) return null;
+        return { label: m[1].slice(0, pisah), tex: mm[1].trim(), nota: mm[2].trim() };
+      }
+
+      // Catatan berawalan "Rumus ..." yang isinya teks biasa tetap tampil ala
+      // lembar rumus: label kecil + badan dalam kotak (huruf asli, bukan kapital).
       function isiTeks(e) {
         const asli = String(e.content || '');
         const m = asli.match(/^rumus\s+([\s\S]+)$/i);
         if (m) {
-          const sisa = m[1];
-          const pisah = sisa.indexOf(':');
-          const label = pisah >= 0 ? sisa.slice(0, pisah) : 'Rumus';
-          const badan = pisah >= 0 ? sisa.slice(pisah + 1).trim() : sisa.trim();
-          // Badan berisi "$$...$$" = rumus LaTeX (pecahan bertumpuk) -> KaTeX.
-          const mm = badan.match(/\$\$([\s\S]*?)\$\$([\s\S]*)$/);
-          if (mm) {
-            const tex = mm[1].trim();
-            const nota = mm[2].trim();
-            return '<div class="isi rumus" title="' + escAttr(asli) + '">' +
-              '<span class="rumus-label">' + escHtml(label) + '</span>' +
-              '<span class="rumus-math" data-tex="' + escAttr(tex) + '"></span>' +
-              (nota ? '<span class="rumus-nota">' + escHtml(nota) + '</span>' : '') +
-              '</div>';
-          }
+          const pisah = m[1].indexOf(':');
+          const label = pisah >= 0 ? m[1].slice(0, pisah) : 'Rumus';
+          const badan = pisah >= 0 ? m[1].slice(pisah + 1).trim() : m[1].trim();
           return '<div class="isi rumus" title="' + escAttr(asli) + '">' +
             '<span class="rumus-label">' + escHtml(label) + '</span>' +
             '<span class="rumus-badan">' + escHtml(badan) + '</span>' +
@@ -281,15 +286,29 @@
           tbody.innerHTML = '<tr><td class="c-no"></td><td class="c-teks"><div class="empty">Belum ada catatan penting</div></td><td class="c-aksi"></td></tr>';
           return;
         }
-        tbody.innerHTML = entries.map((e, i) =>
-          '<tr data-id="' + e.id + '">' +
-          '<td class="c-no">' + (i + 1) + '</td>' +
-          '<td class="c-teks">' + isiTeks(e) + '</td>' +
-          '<td class="c-aksi"><div class="acts">' +
-          '<button type="button" class="ico" data-edit="' + e.id + '" title="Edit">✎</button>' +
-          '<button type="button" class="ico ico-danger" data-del="' + e.id + '" title="Hapus">✕</button>' +
-          '</div></td></tr>'
-        ).join('');
+        tbody.innerHTML = entries.map((e, i) => {
+          const aksi = '<td class="c-aksi"><div class="acts">' +
+            '<button type="button" class="ico" data-edit="' + e.id + '" title="Edit">✎</button>' +
+            '<button type="button" class="ico ico-danger" data-del="' + e.id + '" title="Hapus">✕</button>' +
+            '</div></td>';
+          const fr = bagiRumus(e);
+          if (fr) {
+            // Rumus LaTeX: baris label + tombol, lalu baris kotak rumus
+            // selebar tabel (colspan 3) supaya pecahannya utuh kebaca.
+            return '<tr class="tr-rumus-head" data-id="' + e.id + '">' +
+              '<td class="c-no">' + (i + 1) + '</td>' +
+              '<td class="c-teks"><div class="isi rumus"><span class="rumus-label">' + escHtml(fr.label) + '</span></div></td>' +
+              aksi + '</tr>' +
+              '<tr class="tr-math"><td colspan="3">' +
+              '<div class="rumus-math" data-tex="' + escAttr(fr.tex) + '"></div>' +
+              (fr.nota ? '<div class="rumus-nota">' + escHtml(fr.nota) + '</div>' : '') +
+              '</td></tr>';
+          }
+          return '<tr data-id="' + e.id + '">' +
+            '<td class="c-no">' + (i + 1) + '</td>' +
+            '<td class="c-teks">' + isiTeks(e) + '</td>' +
+            aksi + '</tr>';
+        }).join('');
 
         // Rumus LaTeX: render pakai KaTeX (kalau library belum termuat, tampil
         // teks aslinya dulu; begitu KaTeX siap, listener 'katex-siap' render ulang).
