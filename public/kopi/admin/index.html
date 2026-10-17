@@ -933,6 +933,30 @@
     }
     .menu-tabel .col-plu span + span{margin-left:8px}
     .menu-tabel .mt-empty td{border-bottom:0}
+
+    /* ===== JUDUL BAGIAN JADI SATU BAR KREM =====
+       Permintaan: tulisan macam menu (label HOT/P12/…) jangan bulat /
+       terkurung / jangan hitam — langsung nyatu sama tabel, kayak judul
+       tabel. Bar lama + tombol bulat "HOT" dilebur jadi SATU bar krem
+       (sewarna baris bahan) selebar tabel: ketuk nama = ganti bagian,
+       tombol + nempel di ujung kanan tanpa celah. (CATATAN belum ikut.) */
+    .tab-panel .form-table .table-title{display:none!important}
+    .tab-panel .form-table .table-title-row{gap:0!important}
+    #tabCycleBtn{
+      flex:1 1 auto!important;width:auto!important;min-width:0!important;max-width:none!important;
+      height:46px!important;min-height:46px!important;padding:0 10px!important;
+      border:0!important;border-bottom:1px solid var(--mori-line)!important;border-radius:0!important;
+      background:var(--mori-surface)!important;color:var(--mori-text)!important;
+      font-family:var(--mori-mono)!important;font-size:15px!important;font-weight:800!important;
+      letter-spacing:1px!important;line-height:1!important;justify-content:flex-start!important;
+    }
+    #tabCycleBtn:active{opacity:.8!important;transform:none!important}
+    .tab-panel .form-table .table-title-row .bahan-add-head{
+      border-radius:0!important;border-color:var(--mori-accent)!important;
+    }
+    @media(max-width:640px){
+      #tabCycleBtn{height:32px!important;min-height:32px!important;font-size:10px!important;padding:0 8px!important}
+    }
   </style>
 </head>
 <body>
