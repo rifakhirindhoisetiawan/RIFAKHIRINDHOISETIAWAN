@@ -217,8 +217,8 @@
        .foto-act svg{width:14px;height:14px}
        .foto-act{width:46px!important;height:32px!important;min-height:32px!important;flex-basis:46px!important;max-width:100%!important;border-radius:6px!important;padding:0!important;box-shadow:none!important}
        .foto-act svg{width:14px!important;height:14px!important}
-       #tabBar{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;grid-auto-rows:32px;gap:2px!important;padding:1px!important;overflow:visible!important}
-       #tabBar .tab-btn{width:46px!important;min-width:0!important;max-width:100%!important;height:32px!important;justify-self:center}
+       #tabBar{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-auto-rows:32px;gap:2px!important;padding:1px!important;overflow:visible!important}
+       #tabBar .tab-btn{width:100%!important;min-width:0!important;max-width:100%!important;height:32px!important;justify-self:stretch}
        #tabBar .foto-act{width:46px!important;justify-self:center}
        #tabBar .tab-empty{display:none!important}
        .tab-panel .form-table .table-title{min-height:32px!important;height:32px!important;padding:4px 0!important;font-size:9px!important}
@@ -370,6 +370,10 @@
     }
     .tab-btn.active{background:var(--mori-accent) !important;color:var(--mori-bg) !important;
       border-color:var(--mori-accent) !important}
+    /* Satu tombol bergilir: ketuk = pindah bagian (HOT → P12 → P16 → 12OZ → 16OZ).
+       Label ikut bagian aktif, ikon kecil tanda bisa diketuk ganti. */
+    #tabCycleBtn{gap:6px}
+    #tabCycleBtn .tab-cycle-ico{width:12px;height:12px;flex:0 0 auto;opacity:.85}
 
     /* ===== TOMBOL AKSI BARIS DAFTAR: satu tombol ⋮ (pola Admin Stok
        Opname) =====
@@ -837,8 +841,8 @@
       /* Atas 12px: baris tombol diturunkan sedikit dari baris isian. */
       padding:12px 6px 6px!important;gap:4px!important;
       border-bottom:1px solid var(--mori-line);
-      /* Lima sel sebaris: HOT / P12 / P16 / 12OZ / 16OZ. */
-      grid-template-columns:repeat(5,minmax(0,1fr))!important;
+      /* Satu tombol bergilir: ketuk = ganti bagian (HOT / P12 / P16 / 12OZ / 16OZ). */
+      grid-template-columns:minmax(0,1fr)!important;
     }
     .form-frame #tabBar .tab-btn{
       flex:1 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;
@@ -963,11 +967,10 @@
           <button type="submit" class="head-add" id="btnHeadAdd" title="Tambah menu" aria-label="Tambah menu">+</button>
         </div>
         <div id="tabBar" style="flex:0 0 auto;display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:transparent;padding:2px">
-          <button type="button" class="tab-btn active" data-tab="secHot">HOT</button>
-          <button type="button" class="tab-btn" data-tab="secP12">P12</button>
-          <button type="button" class="tab-btn" data-tab="secP16">P16</button>
-          <button type="button" class="tab-btn" data-tab="sec12oz">12OZ</button>
-          <button type="button" class="tab-btn" data-tab="sec16oz">16OZ</button>
+          <button type="button" class="tab-btn" id="tabCycleBtn" data-tab="secHot" title="Ketuk untuk ganti bagian: HOT → P12 → P16 → 12OZ → 16OZ" aria-label="Ganti bagian bahan">
+            <span id="tabCycleLabel">HOT</span>
+            <svg class="tab-cycle-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          </button>
         </div>
         <input type="hidden" id="f_link" />
         <div class="tab-panel active" id="secHot">
@@ -1730,20 +1733,28 @@
   searchEl.addEventListener('input', render);
 
   // bahan cuma 1 baris tampil, plus nambah baris biar nyatu ke tabel 1
-  // tab switching
+  // tab bergilir: satu tombol, tiap ketuk pindah bagian
+  // HOT -> P12 -> P16 -> 12OZ -> 16OZ -> balik HOT
   const tabBar = document.getElementById('tabBar');
   const tabPanels = document.querySelectorAll('.tab-panel');
-  const tabBtns = tabBar.querySelectorAll('.tab-btn');
+  const tabCycleBtn = document.getElementById('tabCycleBtn');
+  const tabCycleLabel = document.getElementById('tabCycleLabel');
+  const TAB_ORDER = ['secHot', 'secP12', 'secP16', 'sec12oz', 'sec16oz'];
+  const TAB_LABEL = { secHot: 'HOT', secP12: 'P12', secP16: 'P16', sec12oz: '12OZ', sec16oz: '16OZ' };
   let activeTab = 'secHot';
 
   function switchTab(tabId) {
     activeTab = tabId;
-    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+    if (tabCycleBtn) tabCycleBtn.dataset.tab = tabId;
+    if (tabCycleLabel) tabCycleLabel.textContent = TAB_LABEL[tabId] || 'HOT';
     tabPanels.forEach(p => p.classList.toggle('active', p.id === tabId));
     const panel = document.getElementById(tabId);
     if (panel) showFilledRows(panel);
   }
-  tabBtns.forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
+  if (tabCycleBtn) tabCycleBtn.addEventListener('click', () => {
+    const i = TAB_ORDER.indexOf(activeTab);
+    switchTab(TAB_ORDER[(i + 1) % TAB_ORDER.length]);
+  });
 
   function showFilledRows(panel) {
     panel.querySelectorAll('.form-table .tr.hidden').forEach(r => r.classList.remove('hidden'));
