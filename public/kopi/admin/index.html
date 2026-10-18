@@ -959,22 +959,21 @@
       #tabCycleBtn{height:32px!important;min-height:32px!important;font-size:10px!important;padding:0 8px!important}
     }
 
-    /* ===== CATATAN JADI TOMBOL =====
-       CATATAN JADI TOMBOL
-       Ketuk bar CATATAN = kolom catatan muncul di bawahnya; ketuk lagi =
-       tutup. Kolom tidak tampil sebelum diketuk. */
-    #catatanWrap .catatan-field{display:none!important}
-    #catatanWrap.buka .catatan-field{display:flex!important}
-    .catatan-title{cursor:pointer!important}
-    /* ===== CATATAN TOMBOL SIMBOL =====
-       CATATAN TOMBOL SIMBOL
-       Tombol CATATAN kecil bergambar (simbol catatan), bukan teks. */
-    #catatanWrap .catatan-title{
+    /* ===== CATATAN TOMBOL DI BARIS JUDUL =====
+       CATATAN TOMBOL DI BARIS JUDUL
+       Tombol CATATAN kecil ber ikon, di baris judul bagian (di samping
+       tombol +). Ketuk = kolom catatan muncul tepat di bawah judul. */
+    #btnCatatan{
       flex:0 0 32px!important;width:32px!important;min-width:32px!important;max-width:32px!important;
       height:32px!important;min-height:32px!important;padding:0!important;
-      justify-content:center!important;border-radius:var(--mori-radius)!important;
+      display:flex!important;align-items:center!important;justify-content:center!important;
+      border-radius:var(--mori-radius)!important;background:var(--mori-accent)!important;color:var(--mori-bg)!important;
+      border:1px solid var(--mori-accent)!important;
     }
-    #catatanWrap .catatan-title svg{width:17px!important;height:17px!important;display:block!important}
+    #btnCatatan:active{transform:scale(.94)}
+    #btnCatatan svg{width:17px!important;height:17px!important;display:block!important}
+    #catatanField{display:none!important}
+    #catatanField.buka{display:flex!important}
   </style>
 </head>
 <body>
@@ -1011,12 +1010,6 @@
       <form id="form" class="form">
         <input type="hidden" id="editId" />
         <div class="form-frame">
-        <div style="border:none;border-radius:0;overflow:visible;background:transparent;padding:2px 0;margin-top:0;display:flex">
-          <div id="catatanWrap" style="flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:transparent;border-radius:0;padding:2px 0">
-             <div class="table-title-row"><div class="catatan-title" role="button" tabindex="0" style="flex:1;min-width:0;min-height:46px;display:flex;align-items:center;justify-content:flex-start;text-align:left;font-size:15px;font-weight:800;border:none;border-radius:6px;background:#6366f1;color:#fff;flex-shrink:0;padding:12px 0 12px 8px" title="Catatan" aria-label="Catatan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"></rect><line x1="9" y1="8" x2="15" y2="8"></line><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="13" y2="16"></line></svg></div></div>
-             <div class="catatan-field" style="flex:1;min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_catatan" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" onblur="this.value=this.value.toUpperCase()" /></div>
-          </div>
-        </div>
         <input id="f_icon_img" type="file" accept="image/*" />
         <div class="form-head-row">
           <input id="f_name" required placeholder="NAMA MENU" autocomplete="off" onblur="this.value=this.value.toUpperCase()" />
@@ -1029,7 +1022,8 @@
         <input type="hidden" id="f_link" />
         <div class="tab-panel active" id="secHot">
           <div class="form-table">
-            <div class="table-title-row"><div class="table-title">HOT</div><button type="button" class="tab-btn" id="tabCycleBtn" data-tab="secHot" title="Ketuk untuk ganti bagian: HOT → P12 → P16 → 12OZ → 16OZ" aria-label="Ganti bagian bahan"><span id="tabCycleLabel">HOT</span></button><button type="button" class="bahan-add bahan-add-head" title="Tambah baris" aria-label="Tambah baris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+            <div class="table-title-row"><div class="table-title">HOT</div><button type="button" class="tab-btn" id="tabCycleBtn" data-tab="secHot" title="Ketuk untuk ganti bagian: HOT → P12 → P16 → 12OZ → 16OZ" aria-label="Ganti bagian bahan"><span id="tabCycleLabel">HOT</span></button><button type="button" class="catatan-btn" id="btnCatatan" title="Catatan" aria-label="Catatan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"></rect><line x1="9" y1="8" x2="15" y2="8"></line><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="13" y2="16"></line></svg></button><button type="button" class="bahan-add bahan-add-head" title="Tambah baris" aria-label="Tambah baris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+            <div class="catatan-field" id="catatanField" style="min-height:40px;border:none;border-radius:0;display:flex;align-items:center;padding:0 4px;min-width:0;border-bottom:1px solid #c7d2fe;background:#fff;position:relative;z-index:1"><input id="f_catatan" style="width:100%;font-size:15px;font-weight:800;padding:6px 0;border:none;background:transparent;outline:none;font-family:inherit;text-transform:uppercase;text-align:left" onblur="this.value=this.value.toUpperCase()" /></div>
             <div class="tr"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_1" /></div></div>
             <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_2" /></div></div>
             <div class="tr hidden"><div class="th">HOT</div><div class="td"><input id="f_bahanHot_3" /></div></div>
@@ -1158,13 +1152,13 @@
   const f_percepatan12 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_percepatan12_' + n));
   const f_percepatan16 = [1,2,3,4,5,6,7,8,9,10].map(n => document.getElementById('f_percepatan16_' + n));
    const f_catatan = document.getElementById('f_catatan');
-  // CATATAN jadi tombol: ketuk bar = kolom catatan muncul di bawah; ketuk lagi = tutup
-  const catatanWrap = document.getElementById('catatanWrap');
-  const catatanTitle = document.querySelector('.catatan-title');
-  if (catatanWrap && catatanTitle) {
-    const toggleCatatan = () => catatanWrap.classList.toggle('buka');
-    catatanTitle.addEventListener('click', toggleCatatan);
-    catatanTitle.addEventListener('keydown', (e) => {
+  // Tombol CATATAN (baris judul bagian): ketuk = kolom catatan muncul di bawah judul; ketuk lagi = tutup
+  const btnCatatan = document.getElementById('btnCatatan');
+  const catatanField = document.getElementById('catatanField');
+  if (btnCatatan && catatanField) {
+    const toggleCatatan = () => catatanField.classList.toggle('buka');
+    btnCatatan.addEventListener('click', toggleCatatan);
+    btnCatatan.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCatatan(); }
     });
   }
@@ -1812,6 +1806,16 @@
       const addHead = titleRow && titleRow.querySelector('.bahan-add-head');
       if (addHead && tabCycleBtn && tabCycleBtn.parentElement !== titleRow) {
         titleRow.insertBefore(tabCycleBtn, addHead);
+      }
+      if (btnCatatan && addHead && btnCatatan.parentElement !== titleRow) {
+        titleRow.insertBefore(btnCatatan, addHead);
+      }
+      if (catatanField) {
+        const table = panel.querySelector('.form-table');
+        const titleRowEl = table && table.querySelector('.table-title-row');
+        if (titleRowEl && catatanField.parentElement !== table) {
+          table.insertBefore(catatanField, titleRowEl.nextElementSibling);
+        }
       }
       showFilledRows(panel);
     }
