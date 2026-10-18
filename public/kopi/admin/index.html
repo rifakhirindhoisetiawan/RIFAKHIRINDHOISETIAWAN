@@ -403,7 +403,10 @@
       width:32px;height:32px;min-height:32px;padding:0;margin:0;
       display:flex;align-items:center;justify-content:center;
       background:var(--mori-surface);color:var(--mori-text);
-      border:1px solid var(--mori-accent);border-radius:var(--mori-radius);
+      /* TOMBOL POPUP KAYAK ADMIN STOK OPNAME: kotak hitam di keliling
+         tombol popup (foto/edit/hapus) dilepas — sama seperti tombol
+         aksi di Admin Stok Opname yang krem polos tanpa garis. */
+      border:0;border-radius:var(--mori-radius);
       box-shadow:none;cursor:pointer;
     }
     #menuPop .menu-act svg{width:14px;height:14px}
@@ -897,9 +900,11 @@
        daftar "Foto Menu SO" di Admin Stok Opname.
        ============================================================ */
     .menu-tabel{
-      /* GARIS HITAM KARTU DAFTAR DIHAPUS: bingkai hitam keliling kartu
-         daftar dilepas — sama seperti kartu form. */
-      border:0;border-radius:var(--mori-radius);
+      /* TABEL KAYAK ADMIN STOK OPNAME: bingkai lembut tipis (--mori-line)
+         + sudut membulat — persis bingkai tabel menu "Foto Menu SO" di
+         Admin Stok Opname (bukan garis hitam pekat, bukan pula tanpa
+         bingkai sama sekali). */
+      border:1px solid var(--mori-line);border-radius:var(--mori-radius);
       overflow:hidden;background:var(--mori-bg);
     }
     .menu-tabel table{width:100%;border-collapse:collapse;table-layout:fixed}
@@ -932,6 +937,9 @@
     .menu-tabel .mt-foto{width:68px;text-align:center}
     .menu-tabel .mt-foto .thumb{
       width:44px;height:44px;aspect-ratio:auto!important;margin:0 auto;
+      /* FOTO DAFTAR KAYAK ADMIN STOK OPNAME: garis keliling foto
+         dilembutkan mengikuti --mori-line (bukan garis hitam pekat). */
+      border:1px solid var(--mori-line);
       border-radius:var(--mori-radius)!important;
     }
     .menu-tabel .mt-aksi{width:56px}
