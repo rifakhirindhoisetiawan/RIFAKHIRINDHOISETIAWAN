@@ -498,6 +498,11 @@
       border-color:var(--mori-line) !important;
       background:var(--mori-surface) !important;border-bottom-color:rgba(26,25,23,.35) !important;
     }
+    /* GARIS BARIS BAHAN SAAT MENULIS: garis bawah baris bahan (termasuk
+       yang tepat di bawah bar HOT) hanya tampil saat baris itu sedang
+       ditulis (fokus) — hilang begitu tidak lagi menulis. */
+    .tab-panel .form-table .td{border-bottom-color:transparent !important}
+    .tab-panel .form-table .td:focus-within{border-bottom-color:rgba(26,25,23,.35) !important}
     .form-side-table .top-row>div:last-child input,
     .tab-panel .form-table .td input,
     .catatan-field input{color:var(--mori-text) !important}
