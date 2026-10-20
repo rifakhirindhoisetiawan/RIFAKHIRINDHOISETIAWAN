@@ -736,8 +736,9 @@
 
       /* ============================================================
          PIN MENU
-         Menu yang dipin dikumpulkan di baris paling atas, terpisah dari
-         daftar utama, jadi yang sering dipakai cepat tanpa scroll.
+         MENU ADMIN selalu di kartu paling depan (tidak bisa disematkan).
+         Menu yang dipin menempel di baris yang sama, di samping kartu
+         ADMIN, jadi yang sering dipakai cepat tanpa scroll.
          Cara pakai: tekan-tahan (long-press) kartu menu.
          ============================================================ */
       .pin-row {
@@ -755,21 +756,12 @@
         }
       }
 
-      /* label "Disematkan" di atas baris pin */
-      .pin-label {
-        grid-column: 1 / -1;
-        font-family: var(--mori-mono);
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 1.4px;
-        text-transform: uppercase;
-        color: var(--mori-text);
-        margin: 0 0 2px;
-      }
+      /* label "Disematkan" dihapus: menu tersemat sekarang menyatu di
+         baris yang sama dengan kartu ADMIN. */
 
       /* Lencana pushpin di pojok kartu DIHAPUS (permintaan). Menu yang
-         disemat sudah terlihat jelas karena dipindah ke baris
-         "Disematkan" paling atas, jadi tanda zusanya tidak perlu. */
+         disemat sudah terlihat dari posisinya di baris paling atas,
+         jadi tanda zusanya tidak perlu. */
 
       /* denyut saat long-press berhasil, biar kasih feedback */
       @keyframes pinPop {
@@ -1249,17 +1241,24 @@
         }
         shownMenus = filtered;
 
-        // ===== Baris pin =====
-        // Menu yang disematkan ditaruh di baris paling atas. Slider yang
-        // sama juga ikut di pin supaya tetap bisa dibuka tanpa search.
-        // ADMIN selalu pertama dan tidak bisa disematkan.
+        // ===== Baris atas: ADMIN + menu yang disematkan =====
+        // ADMIN selalu paling depan (tidak bisa disematkan); menu yang
+        // disematkan menempel di sampingnya, sisanya menyusul di bawah.
+        // Kalau belum ada sematan, ADMIN tetap jadi kartu pertama grid.
         const pinIdx = filtered.map((m, i) => i).filter(i => filtered[i].name !== 'ADMIN' && isPinned(slugify(filtered[i].name)));
-        const pinHtml = pinIdx.length
-          ? '<div class="pin-row" id="pinRow"><div class="pin-label">Disematkan</div>' +
-            pinIdx.map(i => tileHtml(filtered[i], i)).join('') + '</div>'
-          : '';
+        const adminIdx = filtered.findIndex(m => m.name === 'ADMIN');
+        let topHtml = '';
+        let mainHtml = filtered.map((m, i) => tileHtml(m, i)).join('');
+        if (pinIdx.length) {
+          const topIdx = (adminIdx >= 0 ? [adminIdx] : []).concat(pinIdx);
+          topHtml = '<div class="pin-row" id="pinRow">' +
+            topIdx.map(i => tileHtml(filtered[i], i)).join('') + '</div>';
+          mainHtml = filtered.map((m, i) => i)
+            .filter(i => i !== adminIdx && !pinIdx.includes(i))
+            .map(i => tileHtml(filtered[i], i)).join('');
+        }
 
-        menuGrid.innerHTML = pinHtml + filtered.map((m, i) => tileHtml(m, i)).join('');
+        menuGrid.innerHTML = topHtml + mainHtml;
         menuGrid.querySelectorAll('.js-detail').forEach(el => {
           const m = shownMenus[parseInt(el.dataset.idx)];
           el.addEventListener('click', (e) => {
