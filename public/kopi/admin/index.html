@@ -958,7 +958,23 @@
       border:1px solid var(--mori-line);
       border-radius:var(--mori-radius)!important;
     }
-    .menu-tabel .mt-aksi{width:56px}
+    .menu-tabel .mt-aksi{width:80px;white-space:nowrap}
+    /* TOMBOL SEMAT: menu tersemat naik ke baris paling atas daftar.
+       Pin hitam = tersemat, pin krem = belum. Sematan disimpan di
+       tempat yang sama dengan halaman KOPI (localStorage + kopi_pins). */
+    .menu-tabel .mt-aksi .btn-pin{
+      display:inline-flex;align-items:center;justify-content:center;
+      vertical-align:middle;
+      width:28px;height:28px;min-height:28px;padding:0;margin:0 2px 0 0;
+      background:var(--mori-surface);color:var(--mori-text-2);
+      border:0;border-radius:var(--mori-radius);
+      cursor:pointer;-webkit-tap-highlight-color:transparent;
+    }
+    .menu-tabel .mt-aksi .btn-pin svg{width:14px;height:14px}
+    .menu-tabel .mt-aksi .btn-pin:active{transform:scale(.94)}
+    .menu-tabel .mt-aksi .btn-pin[aria-pressed="true"]{
+      background:var(--mori-accent);color:var(--mori-bg);
+    }
     .menu-tabel .mt-aksi .item-actions{
       margin-top:0!important;justify-content:flex-end;
       flex-direction:row!important;gap:6px!important;
@@ -1252,6 +1268,60 @@
    const f_icon_img = document.getElementById('f_icon_img');
    const btnHeadAdd = document.getElementById('btnHeadAdd');
    let currentTable = 'ja_di_menus';
+
+  /* ===== SEMAT MENU (PIN) =====
+     Sama persis dengan halaman KOPI: slug yang disemat disimpan di
+     localStorage 'kopi_pinned_v1' (cache) dan tabel Supabase `kopi_pins`
+     (dipakai bersama semua perangkat). Menu tersemat tampil paling atas
+     di daftar admin dan di baris "Disematkan" halaman KOPI. */
+  const PIN_KEY = 'kopi_pinned_v1';
+  const PIN_TABLE = 'kopi_pins';
+  function loadPins(){
+    try {
+      const raw = JSON.parse(localStorage.getItem(PIN_KEY) || '[]');
+      return Array.isArray(raw) ? raw.filter(x => typeof x === 'string') : [];
+    } catch (e) { return []; }
+  }
+  function savePins(list){
+    try { localStorage.setItem(PIN_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+  let pinned = loadPins();
+  const isPinned = (slug) => pinned.includes(slug);
+  async function syncPins(){
+    try {
+      const { data, error } = await supabase
+        .from(PIN_TABLE)
+        .select('slug')
+        .order('dibuat', { ascending: true });
+      // Tabel belum ada / offline -> tetap pakai cache localStorage.
+      if (error) return;
+      pinned = (data || []).map(r => r.slug).filter(Boolean);
+      savePins(pinned);
+      render();
+    } catch (e) { /* diamkan, cache tetap dipakai */ }
+  }
+  async function pushPin(slug, nama, add){
+    try {
+      if (add) {
+        const { error } = await supabase.from(PIN_TABLE).insert({ slug, oleh: nama });
+        // 23505 = slug sudah ada di server -> tidak perlu apa-apa
+        if (error && error.code !== '23505') console.warn('pin:', error.message);
+      } else {
+        await supabase.from(PIN_TABLE).delete().eq('slug', slug);
+      }
+    } catch (e) {
+      console.warn('Gagal menyimpan sematan:', e.message);
+    }
+  }
+  function togglePin(slug, nama){
+    if (!slug) return;
+    const akanPin = !isPinned(slug);
+    if (akanPin) pinned.push(slug);
+    else pinned = pinned.filter(s => s !== slug);
+    savePins(pinned);
+    render();
+    pushPin(slug, nama, akanPin);
+  }
   let existingCat = 'PREMIX';
   let uploadTargetId = '';
   let uploadingFoto = false;
@@ -1378,6 +1448,7 @@
   const ICO_SAVE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>';
   const ICO_PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>';
   const ICO_NOTE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"></rect><line x1="9" y1="8" x2="15" y2="8"></line><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="13" y2="16"></line></svg>';
+  const ICO_PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"/></svg>';
 
   const bukaMenuPop = (anchor, items) => {
     tutupMenuPop();
@@ -1534,6 +1605,9 @@
   }
   function slugify(s){ return String(s||'').replace(/^\s*sari\s+roti\b\s*[-–—·•]?\s*/i,'').replace(/\s*\([^()]*\)\s*$/,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
   function itemHtml(m, no) {
+    const slug = slugify(m.name);
+    const dipin = isPinned(slug);
+    const pinTitle = (dipin ? 'Lepas sematan ' : 'Sematkan ke atas ') + (m.name || '');
     const isImg = !!(m.foto && typeof m.foto === 'string' && /^(https?:|data:|blob:)/i.test(m.foto));
     let thumb;
     if (isImg) {
@@ -1558,6 +1632,7 @@
         </td>
         <td class="mt-foto"><div class="thumb">${thumb}</div></td>
         <td class="mt-aksi">
+          <button class="btn-pin" data-pin="${slug}" aria-pressed="${dipin ? 'true' : 'false'}" title="${esc(pinTitle)}" aria-label="${esc(pinTitle)}">${ICO_PIN}</button>
           <button class="btn-dots" data-menu="${m.id}" title="Aksi" aria-label="Aksi menu" aria-haspopup="true" aria-expanded="false">⋮</button>
         </td>
       </tr>`;
@@ -1576,7 +1651,9 @@
     countEl.textContent = filtered.length;
     const label = currentTable === 'ja_di_menus' ? 'JA-DI' : 'Dr Coffee';
     if (!filtered.length) { listEl.innerHTML = '<tr class="mt-empty"><td colspan="4"><div class="empty">Tidak ada data — ' + label + ' konek Supabase OK (0 menu)</div></td></tr>'; return; }
-    filtered.sort((a,b)=> a.name.localeCompare(b.name));
+    // Sematan di atas: menu yang disemat dulu (urutan semat), sisanya A-Z.
+    const pinRank = (m) => { const i = pinned.indexOf(slugify(m.name)); return i === -1 ? Number.MAX_SAFE_INTEGER : i; };
+    filtered.sort((a, b) => { const ra = pinRank(a), rb = pinRank(b); return ra !== rb ? ra - rb : a.name.localeCompare(b.name); });
     listEl.innerHTML = filtered.map((m, i) => itemHtml(m, i + 1)).join('');
     
     // Lazy load images with IntersectionObserver (like index.html)
@@ -1618,9 +1695,18 @@
         ]);
       });
     });
+    listEl.querySelectorAll('[data-pin]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const slug = btn.dataset.pin;
+        const m = all.find(x => slugify(x.name) === slug);
+        togglePin(slug, m ? m.name : slug);
+      });
+    });
     listEl.querySelectorAll('.item[data-view]').forEach(el => {
       el.addEventListener('click', (e) => {
         if (e.target.closest('[data-menu]')) return;
+        if (e.target.closest('[data-pin]')) return;
         const m = all.find(x => String(x.id) === el.dataset.view);
         if (m) openSheet(m);
       });
@@ -1990,6 +2076,17 @@
   });
   subscribeRealtime();
 
+  // Sematan dari halaman KOPI / perangkat lain langsung ikut tampil.
+  let pinChannel = null;
+  try {
+    pinChannel = supabase.channel('admin_kopi_pins_' + Math.random().toString(36).slice(2))
+      .on('postgres_changes', { event: '*', schema: 'public', table: PIN_TABLE }, () => syncPins())
+      .subscribe();
+  } catch (e) { /* realtime tidak wajib */ }
+  window.addEventListener('beforeunload', () => {
+    if (pinChannel) supabase.removeChannel(pinChannel);
+  });
+
   // ===== Bottom sheet pratinjau (gaya JA-DI) =====
   const sheetBg = document.getElementById('sheetBg');
   const sheetBody = document.getElementById('sheetBody');
@@ -2070,6 +2167,7 @@
 
   initBahanTables();
   load();
+  syncPins();
 </script>
 </body>
 </html>
