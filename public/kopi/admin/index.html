@@ -808,15 +808,17 @@
        Admin Stok Opname. Menggantikan kotak foto + tabel PLU bertumpuk.
        Tombol + di ujung = tambah/simpan (berubah ✓ saat sedang edit).
        Tanpa garis: satu bidang warna polos. */
+    /* WARNA BARIS ATAS BEDA DARI BAR HOT: baris NAMA MENU/PLU pakai tan,
+       jelas beda dari bar HOT (krem tua) dan isi bahan (terang). */
     .form-head-row{
       display:flex;align-items:stretch;gap:2px;
       padding:4px 8px;
-      background:var(--mori-surface)!important;
+      background:#d9ccb2!important;
     }
     .form-head-row input{
       flex:1 1 0;min-width:0;margin:0;
       border:0!important;border-bottom:0!important;border-radius:0!important;
-      background:var(--mori-surface)!important;
+      background:#d9ccb2!important;
       /* FONT DI ATAS TIDAK KETEBALAN: teks yang diketik di baris paling
          atas (NAMA MENU / PLU) pakai tebal 700 — sama dengan isi bahan. */
       font-family:inherit;font-size:13px;font-weight:700;
@@ -831,9 +833,9 @@
       flex:0 0 32px;width:32px;height:32px;min-height:32px;align-self:center;
       margin-left:4px;padding:0;
       display:flex;align-items:center;justify-content:center;
-      /* TOMBOL PLUS BEDA DARI BAR HOT: tombol +/✓ pakai warna tan (bukan
-         hitam, bukan krem bar HOT) supaya warnanya beda dari bar HOT. */
-      background:#d9ccb2;color:var(--mori-text);
+      /* TOMBOL PLUS TERANG DI BARIS ATAS: tombol +/✓ pakai krem muda,
+         kontras di baris atas yang tan. */
+      background:var(--mori-surface);color:var(--mori-text);
       border:0;border-radius:var(--mori-radius);
       font-size:17px;font-weight:800;line-height:1;cursor:pointer;
       -webkit-tap-highlight-color:transparent;
