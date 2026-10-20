@@ -90,11 +90,11 @@ body {
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 .back:hover {
-  box-shadow: 4px 4px 0 var(--mori-accent);
+  box-shadow: none;
 }
 .back:active {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--mori-accent);
+  box-shadow: none;
 }
 
 .head-title {
@@ -148,7 +148,7 @@ body {
   transition: box-shadow 0.2s ease;
 }
 .field:focus {
-  box-shadow: 4px 4px 0 var(--mori-accent);
+  box-shadow: none;
 }
 .field::placeholder {
   color: var(--mori-text-2);
@@ -185,11 +185,11 @@ textarea.field {
   transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
 }
 .btn:hover:not(:disabled) {
-  box-shadow: 4px 4px 0 var(--mori-accent);
+  box-shadow: none;
 }
 .btn:active:not(:disabled) {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--mori-accent);
+  box-shadow: none;
 }
 .btn:disabled {
   opacity: 0.4;
@@ -200,7 +200,7 @@ textarea.field {
   color: var(--mori-bg);
 }
 .btn.primary:hover:not(:disabled) {
-  box-shadow: 4px 4px 0 var(--mori-text-2);
+  box-shadow: none;
 }
 .btn.danger {
   color: var(--mori-danger);
@@ -394,7 +394,7 @@ textarea.field {
   text-transform: uppercase;
   padding: 12px 18px;
   border: 1px solid var(--mori-accent);
-  box-shadow: 4px 4px 0 rgba(26, 25, 23, 0.35);
+  box-shadow: none;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;

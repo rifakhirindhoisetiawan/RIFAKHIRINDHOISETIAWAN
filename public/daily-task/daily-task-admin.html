@@ -23,7 +23,7 @@
     .form{display:grid;gap:8px;max-width:100%}
     .form label{font-size:10px;font-weight:700;color:#374151;display:block;min-width:0;max-width:100%;line-height:1.2}
     .form input,.form select{display:block;width:100%;max-width:100%;min-width:0;margin-top:3px;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;color:#111827;background:#fff;outline:none;font-family:inherit}
-    .form input:focus,.form select:focus{border-color:#6366f1;box-shadow:0 0 0 1px #6366f1}
+    .form input:focus,.form select:focus{border-color:#6366f1;box-shadow: none}
     .form input::placeholder{color:#9ca3af;font-size:12px}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:100%}
     .row>*{min-width:0}
@@ -40,7 +40,7 @@
     .form-table .th{min-width:70px;display:flex;align-items:center;justify-content:center;padding:0 8px;font-size:9px;font-weight:800;color:#4f46e5;background:#eef2ff;border-right:1px solid #e5e7eb;text-align:left;letter-spacing:0.4px;text-transform:uppercase}
     .form-table .td{flex:1;display:flex;align-items:center;padding:4px 8px}
     .form-table .td input{width:100%;margin:0 !important;padding:8px 10px;border:1px solid transparent;border-radius:6px;font-size:12px;font-weight:600;color:#111827;background:transparent;outline:none;font-family:inherit;line-height:1.2}
-    .form-table .td input:focus{border-color:#6366f1;background:#fff;box-shadow:0 0 0 1px #6366f1}
+    .form-table .td input:focus{border-color:#6366f1;background:#fff;box-shadow: none}
     .empty{text-align:center;color:#9aa0ab;font-size:13px;font-weight:600;padding:40px 0}
 
     /* ============================================================
@@ -97,7 +97,7 @@
       padding:10px 14px;font-size:14px;
       transition:box-shadow .2s ease;
     }
-    .search-box:focus-within{background:#fffdf7 !important;box-shadow:4px 4px 0 var(--mori-accent)}
+    .search-box:focus-within{background:#fffdf7 !important;box-shadow: none}
     .search-box svg{flex-shrink:0;color:var(--mori-text-2) !important;width:18px;height:18px}
     .search-box input{
       border:none;background:transparent;outline:none;width:100%;font-size:14px;
@@ -157,7 +157,7 @@
       border:1px solid var(--mori-accent);border-radius:0;outline:none;
       transition:box-shadow .2s ease;
     }
-    .menu-table tbody tr.tambah input:focus{background:#fffdf7;box-shadow:3px 3px 0 rgba(26,25,23,.15)}
+    .menu-table tbody tr.tambah input:focus{background:#fffdf7;box-shadow: none}
     .menu-table tbody tr.tambah input::placeholder{color:var(--mori-text-2)}
 
     /* Thumbnail kecil 38x38, persis seperti .c-foto .thumb di stock-admin */
@@ -232,7 +232,7 @@
       font-family:inherit;font-size:14px;font-weight:800;line-height:1;
       color:var(--mori-bg);background:var(--mori-accent);
       border:1px solid var(--mori-accent);border-radius:0;
-      box-shadow:3px 3px 0 rgba(26,25,23,.18);
+      box-shadow: none;
       cursor:pointer;flex-shrink:0;outline:none;
       transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
     }
@@ -243,7 +243,7 @@
     /* tombol hapus tetap merah, tombol upload/edit tetap hitam */
     .ico-danger{
       background:var(--mori-danger);border-color:var(--mori-danger);color:#fff;
-      box-shadow:3px 3px 0 rgba(26,25,23,.18);
+      box-shadow: none;
     }
     .ico-danger:active{box-shadow:none}
     .btn-small svg{width:14px !important;height:14px !important;flex:0 0 auto !important;display:block !important}
@@ -278,7 +278,7 @@
       border: 1px solid var(--mori-accent);
       border-radius: 0;
       cursor: pointer;
-      box-shadow: 3px 3px 0 rgba(26, 25, 23, 0.18);
+      box-shadow: none;
       transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
     }
     .btn-add:active {
@@ -297,7 +297,7 @@
       outline:none;
     }
     #f_title::placeholder{color:var(--mori-text-2) !important;letter-spacing:.4px}
-    #f_title:focus{background:#fffdf7 !important;box-shadow:4px 4px 0 var(--mori-accent) !important}
+    #f_title:focus{background:#fffdf7 !important;box-shadow: none}
 
     .form label{
       font-family:var(--mori-mono);font-size:9px;font-weight:700;
@@ -310,7 +310,7 @@
     }
     .form input:focus,.form select:focus{
       border-color:var(--mori-accent) !important;background:#fffdf7 !important;
-      box-shadow:4px 4px 0 var(--mori-accent) !important;
+      box-shadow: none;
     }
     .form input::placeholder{color:var(--mori-text-2) !important}
 
@@ -329,7 +329,7 @@
     }
     .form-table .td input:focus{
       border-color:var(--mori-accent) !important;background:#fffdf7 !important;
-      box-shadow:3px 3px 0 rgba(26,25,23,.15) !important;
+      box-shadow: none;
     }
 
 
@@ -351,7 +351,7 @@
     .pw-card{
       width:100%;max-width:360px;margin:auto;max-height:100%;overflow-y:auto;
       background:var(--mori-bg);border:1px solid var(--mori-accent);border-radius:0;
-      padding:18px;box-shadow:6px 6px 0 rgba(26,25,23,.2);overscroll-behavior:contain;
+      padding:18px;box-shadow: none;overscroll-behavior:contain;
     }
     .pw-title{
       font-family:var(--mori-mono);font-size:13px;font-weight:700;
@@ -365,7 +365,7 @@
       color:var(--mori-text);background:var(--mori-surface);
       border:1px solid var(--mori-accent);border-radius:0;outline:none;
     }
-    .pw-input:focus{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
+    .pw-input:focus{background:#fffdf7;box-shadow: none}
     .pw-error{
       margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;
       letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger);

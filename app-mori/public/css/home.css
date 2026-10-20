@@ -42,7 +42,7 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
-  box-shadow: 4px 4px 0px var(--primary);
+  box-shadow: none;
 }
 
 .input-action-btn {
@@ -381,7 +381,7 @@ input[type="text"]:focus {
   overflow: hidden;
   margin-top: 15px;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
 }
 
 .progress-bar {
@@ -526,7 +526,7 @@ input[type="text"]:focus {
   height: 11px;
   background: #fff;
   border-radius: 50%;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  box-shadow: none;
 }
 
 .mori-player-cur,
@@ -930,14 +930,14 @@ body.mori-has-fullscreen {
 
 .chip:hover,
 .chip:active {
-  box-shadow: 4px 4px 0px var(--primary);
+  box-shadow: none;
   background-color: var(--surface);
   color: var(--text-main);
 }
 
 .chip:active {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px var(--primary);
+  box-shadow: none;
 }
 
 .chip span {
@@ -980,7 +980,7 @@ body.mori-has-fullscreen {
 }
 
 .batch-url-textarea:focus {
-  box-shadow: 4px 4px 0px var(--primary);
+  box-shadow: none;
 }
 
 .batch-toggle-btn {

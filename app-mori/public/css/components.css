@@ -34,7 +34,7 @@
   text-align: center;
   line-height: 1.35;
   white-space: pre-wrap;
-  box-shadow: 4px 4px 0px var(--primary);
+  box-shadow: none;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   opacity: 0;
@@ -73,7 +73,7 @@
   border-radius: 50%;
   background: var(--surface);
   border: 1.5px solid var(--primary);
-  box-shadow: 2px 2px 0px var(--primary);
+  box-shadow: none;
   position: relative;
   display: flex;
   align-items: center;
@@ -91,12 +91,12 @@
 
 .download-bubble-btn:hover {
   transform: scale(1.06);
-  box-shadow: 3px 3px 0px var(--primary);
+  box-shadow: none;
 }
 
 .download-bubble-btn:active {
   transform: scale(0.94);
-  box-shadow: 1px 1px 0px var(--primary);
+  box-shadow: none;
 }
 
 .db-ring-svg {
@@ -164,7 +164,7 @@
   align-items: center;
   justify-content: center;
   border: 1.5px solid var(--surface);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: none;
   transition:
     transform 0.2s ease,
     opacity 0.2s ease;
@@ -185,7 +185,7 @@
   background: var(--surface);
   border: 1.5px solid var(--primary);
   border-radius: 12px;
-  box-shadow: 4px 4px 0px var(--primary);
+  box-shadow: none;
   display: flex;
   flex-direction: column;
   overflow: hidden;

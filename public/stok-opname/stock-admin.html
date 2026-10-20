@@ -400,7 +400,7 @@
         position: sticky;
         right: 0;
         background: #ffffff;
-        box-shadow: -7px 0 9px -7px rgba(17, 24, 39, 0.22);
+        box-shadow: none;
       }
 
       thead th.c-aksi {
@@ -724,7 +724,7 @@
       input:focus {
         background: #fffdf7;
         border-color: var(--text);
-        box-shadow: 4px 4px 0 var(--text);
+        box-shadow: none;
       }
 
       /* ===== TOMBOL =====
@@ -741,7 +741,7 @@
 
          Batas tombol sekarang dibentuk oleh ikon gelapnya sendiri di
          atas latar krem. Bayangan juga sudah tidak ada karena blok
-         TANPA SHADOW memakai * { box-shadow: none !important }.
+         TANPA SHADOW memakai * { box-shadow: none}.
 
          Ukuran tetap 32x32 karena * { box-sizing: border-box }, jadi
          menghapus border tidak mengubah ukuran tombol.
@@ -756,7 +756,7 @@
         border: none;
         background: var(--surface);
         color: var(--text);
-        box-shadow: 3px 3px 0 rgba(26, 25, 23, 0.18);
+        box-shadow: none;
         transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
       }
       .btn:active,
@@ -823,7 +823,7 @@
       }
       .c-aksi {
         background: var(--mori-bg);
-        box-shadow: -7px 0 9px -7px rgba(26, 25, 23, 0.3);
+        box-shadow: none;
       }
       tbody tr.ok td.c-aksi {
         background: #f2f7f0;
@@ -916,7 +916,7 @@
       .cell-input:focus {
         background: #fffdf7;
         border-color: var(--text);
-        box-shadow: 3px 3px 0 rgba(26, 25, 23, 0.15);
+        box-shadow: none;
       }
       .kode-btn {
         border-radius: 0;
@@ -940,7 +940,7 @@
         background: var(--mori-bg);
         border: 1px solid var(--text);
         border-radius: 0;
-        box-shadow: 6px 6px 0 rgba(26, 25, 23, 0.2);
+        box-shadow: none;
       }
       .lightbox img {
         border-radius: 0;
@@ -955,7 +955,7 @@
         background: var(--danger);
         border-color: var(--danger);
         color: #fff;
-        box-shadow: 3px 3px 0 rgba(26, 25, 23, 0.18);
+        box-shadow: none;
       }
       .ico-danger:active {
         box-shadow: none;
@@ -1052,7 +1052,7 @@
         border: 1px solid var(--text);
         border-radius: 0;
         padding: 18px;
-        box-shadow: 6px 6px 0 rgba(26, 25, 23, 0.2);
+        box-shadow: none;
         overscroll-behavior: contain;
       }
       .pw-title {
@@ -1086,7 +1086,7 @@
       }
       .pw-input:focus {
         background: #fffdf7;
-        box-shadow: 4px 4px 0 var(--text);
+        box-shadow: none;
       }
       .pw-error {
         margin-top: 8px;
@@ -1192,7 +1192,7 @@
 
       /* 1. semua bayangan mati */
       * {
-        box-shadow: none !important;
+        box-shadow: none;
       }
       /* penanda fokus diganti garis, bukan bayangan */
       input:focus {
@@ -1369,7 +1369,7 @@
       .menu-foto-wrap tbody.tulis-body input:focus {
         background: transparent !important;
         border: none !important;
-        box-shadow: none !important;
+        box-shadow: none;
         outline: none;
       }
       /* Tombol + sengaja TIDAK diberi perataan sendiri. .acts aslinya
@@ -1509,7 +1509,7 @@
         border: 0 !important;
         border-bottom: 2px solid transparent !important;
         border-radius: 0 !important;
-        box-shadow: none !important;
+        box-shadow: none;
         outline: none !important;
       }
       #barangWrap tbody.cari-body .cari-dalam {
@@ -1535,7 +1535,7 @@
       #barangWrap tbody.cari-body input.cari:focus {
         background: transparent !important;
         border: none !important;
-        box-shadow: none !important;
+        box-shadow: none;
         outline: none;
       }
     </style>

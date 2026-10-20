@@ -25,7 +25,7 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 @media(min-width:800px){.phone{max-width:800px;margin:0 auto}}
 .search-row{display:flex;align-items:center;gap:10px;padding:12px 18px 10px;max-width:800px;width:100%;margin:0 auto;flex-shrink:0}
 .search-box{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--mori-accent);background:var(--mori-surface);padding:10px 14px;color:var(--mori-text);font-size:14px}
-.search-box:focus-within{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
+.search-box:focus-within{background:#fffdf7;box-shadow: none}
 .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:var(--mori-text);font-family:inherit;-webkit-appearance:none;appearance:none}
 .search-box input::placeholder,.search-box svg{color:var(--mori-text-2)}
 .search-box svg{flex-shrink:0;width:18px;height:18px}
@@ -33,11 +33,11 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 .chip{flex:0 0 auto;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:7px 12px;cursor:pointer;white-space:nowrap;transition:background .12s ease,color .12s ease}
 .chip.on{background:var(--mori-accent);border-color:var(--mori-accent);color:var(--mori-bg)}
 .summary{display:flex;gap:8px;padding:0 18px 14px;max-width:800px;width:100%;margin:0 auto}
-.t-summary{background:var(--mori-accent);color:var(--mori-bg);border:1px solid var(--mori-accent);padding:8px 10px;text-align:center;min-width:0;box-shadow:3px 3px 0 rgba(26,25,23,.12);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+.t-summary{background:var(--mori-accent);color:var(--mori-bg);border:1px solid var(--mori-accent);padding:8px 10px;text-align:center;min-width:0;box-shadow: none;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
 .t-summary:active{transform:translate(2px,2px);box-shadow:none}
 .t-summary .sum-num{font-family:var(--mori-mono);font-size:18px;font-weight:800;line-height:1.2}
 .t-summary .sum-label{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:rgba(255,251,242,.75);margin-top:2px}
-.sum-box{flex:1;background:var(--mori-surface);border:1px solid var(--mori-accent);padding:8px 10px;text-align:center;min-width:0;box-shadow:3px 3px 0 rgba(26,25,23,.12)}
+.sum-box{flex:1;background:var(--mori-surface);border:1px solid var(--mori-accent);padding:8px 10px;text-align:center;min-width:0;box-shadow: none}
 .sum-num{font-family:var(--mori-mono);font-size:18px;font-weight:800;line-height:1.2}
 .sum-label{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text-2);margin-top:2px}
 .sum-box.danger{background:#fdf1f1;border-color:var(--mori-danger)}
@@ -48,7 +48,7 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 .menu-wrap{flex:1;overflow-y:auto;padding:0 18px 28px;max-width:800px;width:100%;margin:0 auto}
 .section-label{font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text-2);margin:4px 0 10px}
 .list{display:grid;grid-template-columns:1fr;gap:10px}
-.row{display:flex;align-items:center;gap:12px;background:#fffbf2;border:1px solid var(--mori-accent);padding:11px 12px;box-shadow:3px 3px 0 rgba(26,25,23,.12)}
+.row{display:flex;align-items:center;gap:12px;background:#fffbf2;border:1px solid var(--mori-accent);padding:11px 12px;box-shadow: none}
 .row.expired{background:#fdf1f1;border-color:var(--mori-danger)}
 .row.soon{background:#fef9e6;border-color:#b45309}
 .row-main{flex:1;min-width:0}
@@ -66,7 +66,7 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
    Form tambah produk langsung di halaman utama, jadi tidak perlu masuk
    ke admin dulu. Field & aturan RH sama persis dengan exp-admin.html:
    isi RH -> tanggal expired dihitung otomatis, dan sebaliknya. */
-.tambah-btn{flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-accent);width:38px;height:38px;font-family:var(--mori-mono);font-size:19px;font-weight:800;line-height:1;cursor:pointer;box-shadow:2px 2px 0 rgba(26,25,23,.16);transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+.tambah-btn{flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-accent);width:38px;height:38px;font-family:var(--mori-mono);font-size:19px;font-weight:800;line-height:1;cursor:pointer;box-shadow: none;transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
 .tambah-btn:active{transform:translate(2px,2px);box-shadow:none}
 .tambah-btn.on{background:var(--mori-accent);color:var(--mori-bg)}
 #tambahPanel{display:none;padding:0 18px 14px;max-width:800px;width:100%;margin:0 auto}
@@ -77,14 +77,14 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 @keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 /* Fokus: outline browser dihilangkan (sudah ada box-shadow), tapi
    scrollIntoView dipakai supaya field selalu terlihat di atas keyboard. */
-.t-input:focus{background:#fffdf7;box-shadow:3px 3px 0 var(--mori-accent)}
+.t-input:focus{background:#fffdf7;box-shadow: none}
 .tambah-box{border:1px solid var(--mori-accent);background:var(--mori-surface);padding:12px 14px 14px}
 .tambah-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 @media(max-width:420px){.tambah-grid{grid-template-columns:1fr}}
 .tambah-grid label{display:flex;flex-direction:column;gap:4px;min-width:0}
 .tambah-grid label>span{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text-2)}
 .t-input{width:100%;height:36px;padding:0 9px;font-family:var(--mori-mono);font-size:16px;font-weight:700;background:var(--mori-bg);border:1px solid var(--mori-accent);outline:none;-webkit-appearance:none;appearance:none;border-radius:0;color:var(--mori-text)}
-.t-input:focus{background:#fffdf7;box-shadow:3px 3px 0 var(--mori-accent)}
+.t-input:focus{background:#fffdf7;box-shadow: none}
 .t-ket{margin-top:9px;font-family:var(--mori-mono);font-size:9px;font-weight:600;line-height:1.6;color:var(--mori-text-2)}
 .t-ket b{color:var(--mori-text);font-weight:800}
 .t-aksi{display:flex;gap:9px;margin-top:10px}
@@ -101,7 +101,7 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
    1. Kotak "Dekat" di baris summary -> selalu kelihatan, tanpa izin apa pun
    2. Panel daftar barang yang harus ditindak
    3. System notification + badge ikon PWA (opsional, perlu izin) */
-#alertBox{margin:0 18px 14px;max-width:800px;width:100%;margin-left:auto;margin-right:auto;border:1px solid var(--mori-danger);background:#fdf1f1;box-shadow:4px 4px 0 rgba(185,28,28,.18)}
+#alertBox{margin:0 18px 14px;max-width:800px;width:100%;margin-left:auto;margin-right:auto;border:1px solid var(--mori-danger);background:#fdf1f1;box-shadow: none}
 #alertBox[hidden]{display:none}
 .alert-head{display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid var(--mori-danger);background:var(--mori-danger);color:#fff}
 .alert-title{flex:1;min-width:0;font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase}

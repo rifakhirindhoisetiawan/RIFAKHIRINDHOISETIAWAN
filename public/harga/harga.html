@@ -22,8 +22,8 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 
 .head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
 .back{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-text);text-decoration:none;font-size:18px;line-height:1;border-radius:8px;transition:box-shadow .2s ease,transform .2s ease}
-.back:hover{box-shadow:4px 4px 0 var(--mori-accent)}
-.back:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--mori-accent)}
+.back:hover{box-shadow: none}
+.back:active{transform:translate(2px,2px);box-shadow: none}
 .head h1{font-family:var(--mori-mono);font-size:14px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}
 
 /* ===== FORM (disembunyikan saat print) ===== */
@@ -32,10 +32,10 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .row>label>span{display:block;font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--mori-text-2);margin-bottom:4px}
 .inp{width:100%;padding:10px 12px;border:1px solid var(--mori-accent);background:var(--mori-bg);font-family:var(--mori-mono);font-size:13px;font-weight:700;color:var(--mori-text);outline:none;-webkit-appearance:none;appearance:none;border-radius:8px}
-.inp:focus{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
+.inp:focus{background:#fffdf7;box-shadow: none}
 .btn{flex:1;padding:13px 10px;border:1px solid var(--mori-accent);background:var(--mori-accent);color:var(--mori-bg);font-family:var(--mori-mono);font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:8px;transition:box-shadow .2s ease,transform .2s ease}
-.btn:hover{box-shadow:4px 4px 0 rgba(26,25,23,.2)}
-.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--mori-accent)}
+.btn:hover{box-shadow: none}
+.btn:active{transform:translate(2px,2px);box-shadow: none}
 .btn.ghost{background:var(--mori-bg);color:var(--mori-text)}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn-row{display:flex;gap:10px;margin-top:10px}
@@ -129,7 +129,7 @@ body.g-kotak .seg{transform:skewX(-2.5deg)}
    Ujung bar dibulat (LED segment tidak punya sudut tajam) + halo saat
    menyala. Halo hanya di layar - saat print blur hanya jadi boros tinta. */
 .seg i{border-radius:.058em}
-.seg i.on{box-shadow:0 0 .06em currentColor}
+.seg i.on{box-shadow: none}
 @media print{
   .seg i{border-radius:.058em}
   .seg i.on{box-shadow:none}
@@ -232,7 +232,7 @@ body.c-oranye .price-card .harga{color:#c2410c}
 
 /* ===== TAMBAH CEPAT (bulk) ===== */
 .bulk{width:100%;min-height:96px;padding:10px 12px;border:1px solid var(--mori-accent);background:var(--mori-bg);font-family:var(--mori-mono);font-size:11px;font-weight:600;color:var(--mori-text);outline:none;resize:vertical;line-height:1.7;border-radius:8px}
-.bulk:focus{background:#fffdf7;box-shadow:4px 4px 0 var(--mori-accent)}
+.bulk:focus{background:#fffdf7;box-shadow: none}
 .sec-toggle{width:100%;padding:10px;border:1px solid var(--mori-accent);background:var(--mori-bg);color:var(--mori-accent);font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-bottom:10px;border-radius:8px}
 .sec-toggle:active{transform:translate(1px,1px)}
 #bulkWrap[hidden]{display:none}

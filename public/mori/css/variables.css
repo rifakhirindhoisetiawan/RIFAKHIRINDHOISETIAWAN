@@ -147,9 +147,7 @@ body.glass-deep .path-setting-item {
   backdrop-filter: blur(14px) saturate(135%) !important;
   -webkit-backdrop-filter: blur(14px) saturate(135%) !important;
   border: 1px solid rgba(var(--primary-rgb), 0.22) !important;
-  box-shadow:
-    0 10px 32px rgba(0, 0, 0, 0.05),
-    inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+  box-shadow: none;
 }
 
 body.glass-deep .bottom-nav {
@@ -157,9 +155,7 @@ body.glass-deep .bottom-nav {
   backdrop-filter: blur(14px) saturate(140%) !important;
   -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
   border-top: 1px solid rgba(var(--primary-rgb), 0.22) !important;
-  box-shadow:
-    0 -8px 32px rgba(0, 0, 0, 0.06),
-    inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  box-shadow: none;
 }
 
 body.glass-deep .settings-item {
@@ -177,17 +173,13 @@ body.glass-deep .settings-item {
 [data-theme="dark"] body.glass-deep .path-setting-item {
   background: rgba(var(--surface-rgb), 0.84) !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
-  box-shadow:
-    0 14px 40px rgba(0, 0, 0, 0.35),
-    inset 0 1px 1px rgba(255, 255, 255, 0.12) !important;
+  box-shadow: none;
 }
 
 [data-theme="dark"] body.glass-deep .bottom-nav {
   background: rgba(var(--bg-rgb), 0.82) !important;
   border-top: 1px solid rgba(255, 255, 255, 0.14) !important;
-  box-shadow:
-    0 -10px 36px rgba(0, 0, 0, 0.35),
-    inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none;
 }
 
 [data-theme="dark"] body.glass-deep .settings-item {

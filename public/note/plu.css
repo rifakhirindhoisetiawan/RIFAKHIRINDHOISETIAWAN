@@ -62,7 +62,7 @@ body {
 }
 .search-box:focus-within {
   background: #fffdf7;
-  box-shadow: 4px 4px 0 var(--mori-accent);
+  box-shadow: none;
 }
 .search-box svg {
   flex-shrink: 0;

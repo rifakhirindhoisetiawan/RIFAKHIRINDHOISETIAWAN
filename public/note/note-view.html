@@ -48,7 +48,7 @@
         border: 1px solid var(--mori-accent); border-radius: 0; outline: none;
         transition: box-shadow .2s ease, background .2s ease;
       }
-      .form-tambah input:focus { background: #fffdf7; box-shadow: 4px 4px 0 var(--mori-accent); }
+      .form-tambah input:focus { background: #fffdf7; box-shadow: none; }
       .form-tambah input::placeholder { color: var(--mori-text-2); }
       .btn-add {
         flex: 0 0 44px; width: 44px; height: 44px; padding: 0;
@@ -56,7 +56,7 @@
         font-family: inherit; font-size: 22px; line-height: 1;
         color: var(--mori-bg); background: var(--mori-accent);
         border: 1px solid var(--mori-accent); border-radius: 0; cursor: pointer;
-        box-shadow: 3px 3px 0 rgba(26,25,23,.18);
+        box-shadow: none;
         transition: box-shadow .2s ease, transform .2s ease;
       }
       .btn-add:active { transform: translate(2px,2px); box-shadow: none; }
@@ -125,7 +125,7 @@
         font-family: inherit; font-size: 14px; font-weight: 800; line-height: 1;
         color: var(--mori-bg); background: var(--mori-accent);
         border: 1px solid var(--mori-accent); border-radius: 0;
-        box-shadow: 3px 3px 0 rgba(26,25,23,.18); cursor: pointer;
+        box-shadow: none; cursor: pointer;
         transition: box-shadow .2s ease, transform .2s ease;
       }
       .ico:active { transform: translate(2px,2px); box-shadow: none; }
@@ -144,11 +144,11 @@
       /* modal password */
       .pw-bg { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(26,25,23,.45); align-items: center; justify-content: center; padding: 16px; }
       .pw-bg.open { display: flex; }
-      .pw-card { width: 100%; max-width: 360px; background: var(--mori-bg); border: 1px solid var(--mori-accent); padding: 18px; box-shadow: 6px 6px 0 rgba(26,25,23,.2); }
+      .pw-card { width: 100%; max-width: 360px; background: var(--mori-bg); border: 1px solid var(--mori-accent); padding: 18px; box-shadow: none; }
       .pw-title { font-family: var(--mori-mono); font-size: 13px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px; }
       .pw-msg { font-size: 12px; color: var(--mori-text-2); line-height: 1.5; margin-bottom: 12px; white-space: pre-line; }
       .pw-input { width: 100%; padding: 11px 12px; font-family: var(--mori-mono); font-size: 15px; background: var(--mori-surface); border: 1px solid var(--mori-accent); border-radius: 0; outline: none; }
-      .pw-input:focus { background: #fffdf7; box-shadow: 4px 4px 0 var(--mori-accent); }
+      .pw-input:focus { background: #fffdf7; box-shadow: none; }
       .pw-error { margin-top: 8px; font-family: var(--mori-mono); font-size: 10px; font-weight: 700; color: var(--mori-danger); }
       .pw-error[hidden] { display: none; }
       .pw-actions { display: flex; gap: 8px; margin-top: 16px; }
@@ -159,12 +159,12 @@
       /* modal edit */
       .edit-bg { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(26,25,23,.45); align-items: center; justify-content: center; padding: 16px; }
       .edit-bg.open { display: flex; }
-      .edit-card { width: 100%; max-width: 480px; background: var(--mori-bg); border: 1px solid var(--mori-accent); padding: 18px; box-shadow: 6px 6px 0 rgba(26,25,23,.2); }
+      .edit-card { width: 100%; max-width: 480px; background: var(--mori-bg); border: 1px solid var(--mori-accent); padding: 18px; box-shadow: none; }
       .edit-card textarea {
         width: 100%; min-height: 120px; padding: 12px; font-family: inherit; font-size: 13px;
         border: 1px solid var(--mori-accent); background: var(--mori-surface); outline: none; resize: vertical;
       }
-      .edit-card textarea:focus { background: #fffdf7; box-shadow: 4px 4px 0 var(--mori-accent); }
+      .edit-card textarea:focus { background: #fffdf7; box-shadow: none; }
     </style>
   </head>
   <body>
