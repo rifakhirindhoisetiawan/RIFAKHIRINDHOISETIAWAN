@@ -498,10 +498,17 @@
     }
     /* kolom input: garis bawah + latar (semua kolom isian: bahan & catatan) */
     .form-side-table .top-row>div:last-child,
-    .tab-panel .form-table .td,
     .catatan-field{
       border-color:var(--mori-line) !important;
       background:var(--mori-surface) !important;border-bottom-color:rgba(26,25,23,.35) !important;
+    }
+    /* ISI BAHAN BEDA WARNA DARI JUDUL: latar kolom bahan dibuat lebih
+       terang (--mori-bg) daripada bar judul bagian & baris atas yang
+       tetap krem (--mori-surface) — pola sel tabel Admin Stok Opname. */
+    .tab-panel .form-table .td{
+      border-color:var(--mori-line) !important;
+      background:var(--mori-bg) !important;
+      border-bottom-color:rgba(26,25,23,.35) !important;
     }
     /* GARIS BARIS BAHAN SAAT MENULIS: garis bawah baris bahan (termasuk
        yang tepat di bawah bar HOT) hanya tampil saat baris itu sedang
@@ -786,9 +793,10 @@
        celahnya yang disatukan.
        ============================================================ */
     .form-frame{
-      /* GARIS HITAM KARTU FORM DIHAPUS: bingkai hitam keliling kartu
-         form tidak dipakai lagi — form tampil menyatu dengan halaman. */
-      border:0;border-radius:var(--mori-radius);
+      /* TEPIAN TABEL FORM KAYAK ADMIN STOK OPNAME: bingkai lembut tipis
+         (--mori-line) + sudut membulat, sama persis dengan tepian tabel
+         daftar menu di bawahnya. */
+      border:1px solid var(--mori-line);border-radius:var(--mori-radius);
       overflow:hidden;background:var(--mori-surface);
       /* WARNA KARTU SATU: latar kartu = warna tabel (krem), supaya tidak
          ada pita warna beda di dalam kartu (belang). */
