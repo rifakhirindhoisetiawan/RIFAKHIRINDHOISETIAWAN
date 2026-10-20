@@ -515,6 +515,9 @@
        menu baru. Saat baris sedang ditulis (fokus), garisnya lebih tegas. */
     .tab-panel .form-table .td{border-bottom-color:var(--mori-line) !important}
     .tab-panel .form-table .td:focus-within{border-bottom-color:rgba(26,25,23,.35) !important}
+    /* ISI BAHAN JANGAN GANTI WARNA: input bahan tetap sewarna barisnya
+       saat disentuh/diisi — penanda fokus cukup garis bawah yang tegas. */
+    .tab-panel .form-table .td input:focus{background:var(--mori-bg) !important}
     .form-side-table .top-row>div:last-child input,
     .tab-panel .form-table .td input,
     .catatan-field input{color:var(--mori-text) !important}
@@ -826,6 +829,9 @@
       padding:8px 6px;outline:none;
     }
     .form-head-row #f_name{flex:1.5 1 0}
+    /* ISI MENU JANGAN GANTI WARNA: input baris atas tetap tan saat
+       disentuh/diisi — tidak berubah jadi terang saat fokus. */
+    .form-head-row input:focus{background:#e3dac5!important}
     .form-head-row input::placeholder{
       color:var(--mori-text-2);font-size:10px;font-weight:700;letter-spacing:.6px;
     }
