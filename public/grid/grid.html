@@ -1622,42 +1622,11 @@
         };
       }
 
-      // Menyimpan tanpa memicu notifikasi Download Manager browser.
-      // 1. Desktop Chrome/Edge: File System Access API, user pilih lokasi sendiri.
-      // 2. Android: API itu tidak ada, jadi lewat share sheet (Galeri/Files).
-      // 3. Sisanya: a[download] — notifikasi browser muncul, tidak ada pilihan lain.
+      // Menyimpan file: SELALU unduh langsung lewat a[download] —
+      // tidak lagi lewat share sheet Android / dialog simpan desktop,
+      // supaya tombol Simpan tidak memunculkan popup lain yang beda-beda
+      // tergantung perangkat.
       async function simpanBlob(blob) {
-        if (window.showSaveFilePicker) {
-          const { ext, mime } = mimeDariName(dlFileName);
-          try {
-            const handle = await window.showSaveFilePicker({
-              suggestedName: dlFileName,
-              types: [{ description: "Gambar", accept: { [mime]: ["." + ext] } }],
-            });
-            const w = await handle.createWritable();
-            await w.write(blob);
-            await w.close();
-            return true;
-          } catch (err) {
-            // User menekan batal = tidak ada yang perlu disimpan, jadi
-            // jangan fallback ke a[download] yang memunculkan notifikasi.
-            if (err && err.name === "AbortError") return false;
-          }
-        }
-
-        if (isAndroid && navigator.share) {
-          const { mime } = mimeDariName(dlFileName);
-          const file = new File([blob], dlFileName, { type: mime });
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            try {
-              await navigator.share({ files: [file], title: dlFileName });
-              return true;
-            } catch (err) {
-              if (err && err.name === "AbortError") return false;
-            }
-          }
-        }
-
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.download = dlFileName;
