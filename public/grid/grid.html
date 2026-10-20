@@ -427,7 +427,7 @@
       /* Panelnya ikut mengalir di dalam container (bukan absolute),
          karena container-nya sendiri yang diposisikan ke tombol Unduh.
          Arah animasi: turun sedikit dari arah tombol saat dibuka. */
-      .download-bubble-dropup{width:min(320px,calc(100vw - 32px));background:var(--mori-surface);border:1.5px solid var(--mori-accent);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(-10px) scale(.96);pointer-events:none;transition:opacity .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1)}
+      .download-bubble-dropup{width:min(264px,calc(100vw - 32px));background:var(--mori-surface);border:1.5px solid var(--mori-accent);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(-10px) scale(.96);pointer-events:none;transition:opacity .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1)}
       .download-bubble-dropup.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
       /* PANAH PANEL UNDUH: segitiga kecil di tepi atas panel yang menunjuk
          ke tombol Unduh — panel terasa keluar dari tombolnya, bukan muncul
@@ -1590,7 +1590,7 @@
            dipakai sebagai transform-origin supaya animasi buka terlihat
            keluar dari tombolnya. */
         let arrowX = (r.left + r.width / 2) - left;
-        arrowX = Math.max(18, Math.min(w - 18, arrowX));
+        arrowX = Math.max(14, Math.min(w - 14, arrowX));
         bubbleContainer.style.setProperty("--arrow-x", arrowX + "px");
         dropup.style.transformOrigin = arrowX + "px 0";
         bubbleContainer.classList.remove("above");
