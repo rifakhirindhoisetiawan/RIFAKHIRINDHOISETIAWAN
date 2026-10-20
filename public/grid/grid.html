@@ -429,6 +429,24 @@
          Arah animasi: turun sedikit dari arah tombol saat dibuka. */
       .download-bubble-dropup{width:min(320px,calc(100vw - 32px));background:var(--mori-surface);border:1.5px solid var(--mori-accent);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(-10px) scale(.96);pointer-events:none;transition:opacity .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1)}
       .download-bubble-dropup.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+      /* PANAH PANEL UNDUH: segitiga kecil di tepi atas panel yang menunjuk
+         ke tombol Unduh — panel terasa keluar dari tombolnya, bukan muncul
+         entah dari mana. Posisi x diatur JS lewat --arrow-x. */
+      .download-bubble-container::before{
+        content:"";position:absolute;top:0;left:var(--arrow-x,26px);
+        width:12px;height:12px;margin-left:-6px;box-sizing:border-box;
+        background:var(--mori-surface);
+        border-left:1.5px solid var(--mori-accent);
+        border-top:1.5px solid var(--mori-accent);
+        border-top-left-radius:1px;
+        transform:translateY(-50%) rotate(45deg);
+        pointer-events:none;opacity:0;transition:opacity .2s ease;
+      }
+      .download-bubble-container.visible::before{opacity:1}
+      /* Kalau panel terpaksa muncul di ATAS tombol, panah pindah ke bawah. */
+      .download-bubble-container.above::before{
+        top:auto;bottom:0;transform:translateY(50%) rotate(225deg);
+      }
       .dbd-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--mori-line);background:rgba(26,25,23,.04)}
       .dbd-title{font-family:var(--mori-mono);font-size:.82rem;font-weight:700;color:var(--mori-text)}
       .dbd-count-badge{font-size:.68rem;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(26,25,23,.1);color:var(--mori-accent)}
@@ -1568,6 +1586,14 @@
         if (left < 12) left = 12;
         bubbleContainer.style.left = left + "px";
         bubbleContainer.style.top = (r.bottom + 8) + "px";
+        /* Panah panel menunjuk ke tengah tombol Unduh; titik itu juga
+           dipakai sebagai transform-origin supaya animasi buka terlihat
+           keluar dari tombolnya. */
+        let arrowX = (r.left + r.width / 2) - left;
+        arrowX = Math.max(18, Math.min(w - 18, arrowX));
+        bubbleContainer.style.setProperty("--arrow-x", arrowX + "px");
+        dropup.style.transformOrigin = arrowX + "px 0";
+        bubbleContainer.classList.remove("above");
       }
       /* Naik ke atas tombol kalau ruang di bawah tidak cukup (HP kecil
          dalam mode landscape). */
@@ -1576,6 +1602,7 @@
         if (bawah <= window.innerHeight - 12) return;
         const r = downloadBtn.getBoundingClientRect();
         bubbleContainer.style.top = Math.max(12, r.top - (dropup.offsetHeight || 0) - 8) + "px";
+        bubbleContainer.classList.add("above");
       }
       function hideBubble(){ dropup.classList.remove("open"); }
       /* Tombol ✕ di kepala panel. e.stopPropagation() penting supaya
