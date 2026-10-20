@@ -510,10 +510,10 @@
       background:var(--mori-bg) !important;
       border-bottom-color:rgba(26,25,23,.35) !important;
     }
-    /* GARIS BARIS BAHAN SAAT MENULIS: garis bawah baris bahan (termasuk
-       yang tepat di bawah bar HOT) hanya tampil saat baris itu sedang
-       ditulis (fokus) — hilang begitu tidak lagi menulis. */
-    .tab-panel .form-table .td{border-bottom-color:transparent !important}
+    /* GARIS BARIS BAHAN: garis bawah tiap baris bahan selalu tampil tipis
+       (--mori-line) supaya barisnya kelihatan — termasuk baris kosong di
+       menu baru. Saat baris sedang ditulis (fokus), garisnya lebih tegas. */
+    .tab-panel .form-table .td{border-bottom-color:var(--mori-line) !important}
     .tab-panel .form-table .td:focus-within{border-bottom-color:rgba(26,25,23,.35) !important}
     .form-side-table .top-row>div:last-child input,
     .tab-panel .form-table .td input,
@@ -895,7 +895,7 @@
     .form-frame .tab-panel{padding:0!important}
     .form-frame .tab-panel .form-table{
       border:0!important;border-radius:0!important;background:transparent!important;
-      gap:0!important;padding:0!important;
+      gap:0!important;padding:0!important;margin-bottom:0!important;
     }
     .form-frame .tab-panel .form-table .tr{padding:0!important;gap:0!important}
     .form-frame > div:last-child{padding:0!important;margin-top:0!important}
@@ -1035,7 +1035,9 @@
        tepi kanan kartu, tombol ⋮ dipindah ke DALAM bar di ujung kanan —
        ada jarak dari garis tepi kartu (khususnya kelihatan di HP),
        tulisan bagian tetap pas di tengah bar. */
-    .tab-panel .form-table .table-title-row{position:relative;background:var(--mori-surface)!important}
+    /* GARIS BAR HOT: garis bawah bar judul bagian (HOT/12OZ/16OZ) —
+       memisahkan bar dari isi bahan yang lebih terang. */
+    .tab-panel .form-table .table-title-row{position:relative;background:var(--mori-surface)!important;border-bottom:1px solid var(--mori-line)!important}
     #btnPanelMenu{
       position:absolute;right:6px;top:50%;transform:translateY(-50%);
       z-index:2;
