@@ -831,9 +831,9 @@
       flex:0 0 32px;width:32px;height:32px;min-height:32px;align-self:center;
       margin-left:4px;padding:0;
       display:flex;align-items:center;justify-content:center;
-      /* TOMBOL PLUS BLOK HITAM: tombol +/✓ dibuat blok hitam dengan ikon
-         putih, beda jelas dari baris atas yang krem. */
-      background:var(--mori-text);color:#fff;
+      /* TOMBOL PLUS KREM TUA: tombol +/✓ pakai krem lebih tua (bukan
+         hitam), tetap beda dari baris atas yang krem muda. */
+      background:#ece4d2;color:var(--mori-text);
       border:0;border-radius:var(--mori-radius);
       font-size:17px;font-weight:800;line-height:1;cursor:pointer;
       -webkit-tap-highlight-color:transparent;
@@ -1037,8 +1037,9 @@
        tulisan bagian tetap pas di tengah bar. */
     /* WARNA BAR HOT: bar judul bagian (HOT/12OZ/16OZ) dibuat krem lebih
        tua dari baris atas — beda jelas dari baris atas (krem muda) dan
-       isi bahan (terang). */
-    .tab-panel .form-table .table-title-row{position:relative;background:#ece4d2!important;border-bottom:1px solid var(--mori-line)!important}
+       isi bahan (terang). GARIS ATAS BAR HOT: garis tipis di atas bar
+       supaya tidak menyatu dengan baris atas. */
+    .tab-panel .form-table .table-title-row{position:relative;background:#ece4d2!important;border-top:1px solid var(--mori-line)!important;border-bottom:1px solid var(--mori-line)!important}
     #btnPanelMenu{
       position:absolute;right:6px;top:50%;transform:translateY(-50%);
       z-index:2;
