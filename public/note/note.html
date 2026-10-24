@@ -90,7 +90,8 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        border: 1px solid var(--mori-accent);
+        /* garis lembut seperti index.html (bukan hitam penuh) */
+        border: 1px solid var(--mori-line);
         border-radius: 0;
         padding: 10px 14px;
         color: var(--mori-text);
@@ -162,7 +163,8 @@
         width: 100%;
         max-width: 160px;
         aspect-ratio: 9 / 16;
-        border: 1px solid var(--mori-accent);
+        /* tanpa garis hitam (permintaan), sama seperti index.html */
+        border: none;
         border-radius: 0;
         overflow: hidden;
         margin-bottom: 8px;
@@ -210,8 +212,7 @@
           #f2eee2 0 6px,
           #ece6d6 6px 12px
         );
-        border-style: dashed;
-        border-color: var(--mori-text-2);
+        border: 1px dashed var(--mori-text-2);
       }
       .icon-tile-foto .tanpa-ikon {
         position: absolute;

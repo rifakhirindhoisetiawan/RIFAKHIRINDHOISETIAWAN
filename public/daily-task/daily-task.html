@@ -282,7 +282,8 @@
 
       /* ===== SEARCH ===== */
       .search-box {
-        border: 1px solid var(--mori-accent);
+        /* garis lembut seperti index.html (bukan hitam penuh) */
+        border: 1px solid var(--mori-line);
         border-radius: 0;
         background: var(--mori-surface);
         color: var(--mori-text);
@@ -363,14 +364,14 @@
       }
 
       /* ===== TILE MENU: tema MORI =====
-         Bingkai foto 9:16 berlatar krem, garis hitam tipis, radius 0,
-         shadow offset 4px seperti kartu MORI lainnya. */
+         Bingkai foto 9:16 berlatar krem, TANPA garis (permintaan),
+         radius 0, shadow none seperti kartu MORI lainnya. */
       .icon-tile-foto {
         position: relative;
         width: 100%;
         max-width: 160px;
         aspect-ratio: 9 / 16;
-        border: 1px solid var(--mori-accent);
+        border: none;
         border-radius: 0;
         overflow: hidden;
         margin-bottom: 8px;
@@ -414,8 +415,8 @@
         );
         background-size: auto;
         animation: none;
-        border-style: dashed;
-        border-color: var(--mori-text-2);
+        /* tile kosong tetap bergaris putus-putus abu (bukan hitam) */
+        border: 1px dashed var(--mori-text-2);
       }
       /* Ikon upload di tengah kotak kosong (dipasang lewat JS) */
       .icon-tile-foto .tanpa-ikon {
