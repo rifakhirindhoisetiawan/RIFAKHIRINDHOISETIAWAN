@@ -213,10 +213,11 @@
         background: var(--mori-bg);
       }
 
-      /* ===== BARIS TANGGAL + JAM ===== */
+      /* ===== BARIS TANGGAL + JAM =====
+         Sama seperti index.html: garis tepi lembut (bukan hitam penuh). */
       .date-box {
         background: var(--mori-surface);
-        border: 1px solid var(--mori-accent);
+        border: 1px solid var(--mori-line);
         border-radius: 0;
         box-shadow: none;
       }
@@ -240,7 +241,8 @@
       /* ===== TILE MENU ===== */
       .menu-item .icon-box {
         background: var(--mori-surface);
-        border: 1px solid var(--mori-accent);
+        /* tanpa garis hitam (permintaan) */
+        border: none;
         border-radius: 0;
         box-shadow: none;
         transition: box-shadow 0.2s ease, transform 0.2s ease;
@@ -284,7 +286,8 @@
         max-width: 100px; /* index.html: 100px, bukan 110px */
         aspect-ratio: 9 / 16;
         border-radius: 8px;
-        border: 1px solid var(--mori-accent);
+        /* sama seperti index.html: tile menu tanpa garis hitam */
+        border: none;
         margin-bottom: 10px; /* index.html: 10px, bukan 8px */
         box-shadow: none;
         /* index.html shimmer di background kotak, bukan ::after */
