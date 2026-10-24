@@ -30,14 +30,14 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 .search-box input::placeholder,.search-box svg{color:var(--mori-text-2)}
 .search-box svg{flex-shrink:0;width:18px;height:18px}
 .filter-row{display:flex;gap:6px;padding:0 18px 12px;max-width:800px;width:100%;margin:0 auto;overflow-x:auto}
-.chip{flex:0 0 auto;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:7px 12px;cursor:pointer;white-space:nowrap;transition:background .12s ease,color .12s ease}
-.chip.on{background:var(--mori-accent);border-color:var(--mori-accent);color:var(--mori-bg)}
+.chip{flex:0 0 auto;border:1px solid var(--mori-line);background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:7px 12px;cursor:pointer;white-space:nowrap;transition:background .12s ease,color .12s ease}
+.chip.on{background:var(--mori-accent);border-color:var(--mori-line);color:var(--mori-bg)}
 .summary{display:flex;gap:8px;padding:0 18px 14px;max-width:800px;width:100%;margin:0 auto}
-.t-summary{background:var(--mori-accent);color:var(--mori-bg);border:1px solid var(--mori-accent);padding:8px 10px;text-align:center;min-width:0;box-shadow: none;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+.t-summary{background:var(--mori-accent);color:var(--mori-bg);border:1px solid var(--mori-line);padding:8px 10px;text-align:center;min-width:0;box-shadow: none;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
 .t-summary:active{transform:translate(2px,2px);box-shadow:none}
 .t-summary .sum-num{font-family:var(--mori-mono);font-size:18px;font-weight:800;line-height:1.2}
 .t-summary .sum-label{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:rgba(255,251,242,.75);margin-top:2px}
-.sum-box{flex:1;background:var(--mori-surface);border:1px solid var(--mori-accent);padding:8px 10px;text-align:center;min-width:0;box-shadow: none}
+.sum-box{flex:1;background:var(--mori-surface);border:1px solid var(--mori-line);padding:8px 10px;text-align:center;min-width:0;box-shadow: none}
 .sum-num{font-family:var(--mori-mono);font-size:18px;font-weight:800;line-height:1.2}
 .sum-label{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text-2);margin-top:2px}
 .sum-box.danger{background:#fdf1f1;border-color:var(--mori-danger)}
@@ -48,14 +48,14 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 .menu-wrap{flex:1;overflow-y:auto;padding:0 18px 28px;max-width:800px;width:100%;margin:0 auto}
 .section-label{font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text-2);margin:4px 0 10px}
 .list{display:grid;grid-template-columns:1fr;gap:10px}
-.row{display:flex;align-items:center;gap:12px;background:#fffbf2;border:1px solid var(--mori-accent);padding:11px 12px;box-shadow: none}
+.row{display:flex;align-items:center;gap:12px;background:#fffbf2;border:1px solid var(--mori-line);padding:11px 12px;box-shadow: none}
 .row.expired{background:#fdf1f1;border-color:var(--mori-danger)}
 .row.soon{background:#fef9e6;border-color:#b45309}
 .row-main{flex:1;min-width:0}
 .row-name{font-family:var(--mori-mono);font-size:12px;font-weight:800;color:var(--mori-text);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:uppercase}
 .row-meta{font-family:var(--mori-mono);font-size:9px;font-weight:700;color:var(--mori-text-2);margin-top:3px;display:flex;flex-wrap:wrap;gap:4px 8px}
 .row-note{font-family:var(--mori-mono);font-size:9px;font-weight:600;color:var(--mori-text-2);margin-top:4px;line-height:1.4}
-.badge{flex-shrink:0;font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:5px 9px;white-space:nowrap;border:1px solid var(--mori-accent)}
+.badge{flex-shrink:0;font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:5px 9px;white-space:nowrap;border:1px solid var(--mori-line)}
 .badge.expired{background:var(--mori-danger);color:#fff;border-color:var(--mori-danger)}
 .badge.soon{background:#b45309;color:#fff;border-color:#b45309}
 .badge.ok{background:#1a1917;color:var(--mori-bg)}
@@ -66,7 +66,7 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
    Form tambah produk langsung di halaman utama, jadi tidak perlu masuk
    ke admin dulu. Field & aturan RH sama persis dengan exp-admin.html:
    isi RH -> tanggal expired dihitung otomatis, dan sebaliknya. */
-.tambah-btn{flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--mori-accent);background:var(--mori-surface);color:var(--mori-accent);width:38px;height:38px;font-family:var(--mori-mono);font-size:19px;font-weight:800;line-height:1;cursor:pointer;box-shadow: none;transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+.tambah-btn{flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--mori-line);background:var(--mori-surface);color:var(--mori-accent);width:38px;height:38px;font-family:var(--mori-mono);font-size:19px;font-weight:800;line-height:1;cursor:pointer;box-shadow: none;transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
 .tambah-btn:active{transform:translate(2px,2px);box-shadow:none}
 .tambah-btn.on{background:var(--mori-accent);color:var(--mori-bg)}
 #tambahPanel{display:none;padding:0 18px 14px;max-width:800px;width:100%;margin:0 auto}
@@ -78,20 +78,20 @@ body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var
 /* Fokus: outline browser dihilangkan (sudah ada box-shadow), tapi
    scrollIntoView dipakai supaya field selalu terlihat di atas keyboard. */
 .t-input:focus{background:#fffdf7;box-shadow: none}
-.tambah-box{border:1px solid var(--mori-accent);background:var(--mori-surface);padding:12px 14px 14px}
+.tambah-box{border:1px solid var(--mori-line);background:var(--mori-surface);padding:12px 14px 14px}
 .tambah-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 @media(max-width:420px){.tambah-grid{grid-template-columns:1fr}}
 .tambah-grid label{display:flex;flex-direction:column;gap:4px;min-width:0}
 .tambah-grid label>span{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text-2)}
-.t-input{width:100%;height:36px;padding:0 9px;font-family:var(--mori-mono);font-size:16px;font-weight:700;background:var(--mori-bg);border:1px solid var(--mori-accent);outline:none;-webkit-appearance:none;appearance:none;border-radius:0;color:var(--mori-text)}
+.t-input{width:100%;height:36px;padding:0 9px;font-family:var(--mori-mono);font-size:16px;font-weight:700;background:var(--mori-bg);border:1px solid var(--mori-line);outline:none;-webkit-appearance:none;appearance:none;border-radius:0;color:var(--mori-text)}
 .t-input:focus{background:#fffdf7;box-shadow: none}
 .t-ket{margin-top:9px;font-family:var(--mori-mono);font-size:9px;font-weight:600;line-height:1.6;color:var(--mori-text-2)}
 .t-ket b{color:var(--mori-text);font-weight:800}
 .t-aksi{display:flex;gap:9px;margin-top:10px}
-.t-btn{flex:1;height:38px;border:1px solid var(--mori-accent);background:var(--mori-accent);color:var(--mori-bg);font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+.t-btn{flex:1;height:38px;border:1px solid var(--mori-line);background:var(--mori-accent);color:var(--mori-bg);font-family:var(--mori-mono);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
 .t-btn:active{transform:translate(1px,1px)}
 .t-btn.ghost{background:var(--mori-bg);color:var(--mori-text)}
-.t-msg{margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;border-left:3px solid var(--mori-accent);background:#fffdf7;padding:6px 8px;color:var(--mori-text)}
+.t-msg{margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;border-left:3px solid var(--mori-line);background:#fffdf7;padding:6px 8px;color:var(--mori-text)}
 .t-msg[hidden]{display:none}
 .t-msg.err{border-color:var(--mori-danger);background:#fdf1f1;color:var(--mori-danger)}
 .t-msg.ok{border-color:#047857;background:#f0fdf4;color:#047857}

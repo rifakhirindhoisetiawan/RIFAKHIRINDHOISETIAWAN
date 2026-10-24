@@ -83,7 +83,7 @@ body {
   justify-content: center;
   width: 38px;
   height: 38px;
-  border: 1px solid var(--mori-accent);
+  border: 1px solid var(--mori-line);
   background: var(--mori-surface);
   color: var(--mori-accent);
   text-decoration: none;
@@ -115,7 +115,7 @@ body {
 
 /* ===== CARD ===== */
 .card {
-  border: 1px solid var(--mori-accent);
+  border: 1px solid var(--mori-line);
   background: var(--mori-surface);
   padding: 16px;
   margin-bottom: 14px;
@@ -137,7 +137,7 @@ body {
 .field {
   display: block;
   width: 100%;
-  border: 1px solid var(--mori-accent);
+  border: 1px solid var(--mori-line);
   border-radius: 0;
   background: var(--mori-bg);
   color: var(--mori-text);
@@ -170,7 +170,7 @@ textarea.field {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid var(--mori-accent);
+  border: 1px solid var(--mori-line);
   border-radius: 0;
   background: var(--mori-bg);
   color: var(--mori-accent);
@@ -315,7 +315,7 @@ textarea.field {
 .cam-stage {
   position: relative;
   background: #0d0d0f;
-  border: 1px solid var(--mori-accent);
+  border: 1px solid var(--mori-line);
   overflow: hidden;
 }
 .cam-stage video,
@@ -393,7 +393,7 @@ textarea.field {
   letter-spacing: 1px;
   text-transform: uppercase;
   padding: 12px 18px;
-  border: 1px solid var(--mori-accent);
+  border: 1px solid var(--mori-line);
   box-shadow: none;
   opacity: 0;
   pointer-events: none;
