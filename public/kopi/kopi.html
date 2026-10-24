@@ -556,8 +556,10 @@
         color: var(--mori-text);
       }
 
+      /* Kartu menu tanpa tepi hitam (permintaan): hanya foto/latar krem
+         dengan sudut melengkung. */
       .icon-tile {
-        border: 1px solid var(--mori-accent);
+        border: none;
         border-radius: 0;
         transition: transform 0.2s ease;
       }
@@ -799,8 +801,9 @@
         color: var(--mori-bg);
       }
       body.pin-mode .icon-tile {
-        border-style: dashed;
-        border-color: var(--mori-accent);
+        /* garis putus-putus hanya muncul saat mode semat menyala,
+           sebagai penanda kartu bisa diketuk */
+        border: 1px dashed var(--mori-accent);
         cursor: pointer;
       }
       body.pin-mode .item.active-modul:active .icon-tile {
