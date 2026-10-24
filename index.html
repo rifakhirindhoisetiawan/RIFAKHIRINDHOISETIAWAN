@@ -243,12 +243,11 @@
         cursor: pointer;
       }
 
-      /* Item tile ala Mori: border hitam solid + radius 0 (sharp).
-         TANPA bayangan sama sekali -- baik abu maupun hitam. Dulu tile
-         diam punya bayangan rgba(26,25,23,0.12) (abu), lalu hover dan
-         active punya bayangan --mori-accent (hitam). Keduanya dihapus.
+      /* Item tile ala Mori: TANPA border dan TANPA bayangan (permintaan).
+         Dulu tile punya garis hitam solid + bayangan abu saat diam dan
+         bayangan hitam saat hover/active; semuanya dihapus.
 
-         Efek "ditekan" tetap ada lewat transform, tidak lewat bayangan. */
+         Efek "ditekan" tetap ada lewat transform, tidak lewat garis. */
       .menu-item .icon-box {
         width: 100%;
         max-width: 100px;
@@ -256,7 +255,7 @@
         background: linear-gradient(90deg, #f2eee2 25%, #e8e2d2 50%, #f2eee2 75%);
         background-size: 200% 100%;
         animation: shimmer 1.2s infinite;
-        border: 1px solid var(--mori-accent);
+        border: none;
         border-radius: 8px;
         display: flex;
         align-items: center;
