@@ -624,7 +624,6 @@
               <th class="c-num">Onhand</th>
               <th class="c-num">Stok Fisik</th>
               <th class="c-num">Selisih (Qty)</th>
-              <th class="c-total">Total Nominal Selisih</th>
               <th>Keterangan</th>
             </tr>
           </thead>
@@ -636,7 +635,7 @@
     </section>
 
     <section class="sec">
-      <!-- Riwayat dibuat simple: 4 kolom (Waktu, Kode, Selisih, Nominal),
+      <!-- Riwayat dibuat simple: 3 kolom (Waktu, Kode, Selisih),
            disembunyikan sampai menekan tombol, maksimal 20 baris. -->
       <div class="row riwayat-head">
         <button
@@ -658,7 +657,6 @@
               <th>Waktu</th>
               <th>Kode</th>
               <th class="c-num">Selisih</th>
-              <th class="c-total">Nominal</th>
             </tr>
           </thead>
           <tbody id="riwayatBody"></tbody>
@@ -800,11 +798,6 @@
         tdSelisih.textContent = selisih > 0 ? '+' + selisih : String(selisih);
         tdSelisih.className = 'selisih ' + (selisih === 0 ? '' : selisih < 0 ? 'minus' : 'plus');
 
-        const tdNominal = tr.querySelector('.nominal');
-        tdNominal.textContent = rupiah(nominal);
-        tdNominal.dataset.value = String(nominal);
-        tdNominal.className = 'nominal c-total ' + (nominal === 0 ? '' : nominal < 0 ? 'minus' : 'plus');
-
         const tdKet = tr.querySelector('.keterangan');
         tdKet.textContent = ket.text;
         tdKet.className = 'keterangan ' + ket.cls;
@@ -930,7 +923,6 @@
 
           const hpp = num(row.hpp);
           tr.dataset.hpp = String(hpp);
-          tr.appendChild(cell('0', 'nominal c-total'));
           tr.appendChild(cell('Sesuai', 'keterangan'));
 
           hitungBaris(tr);
@@ -1039,8 +1031,7 @@
           tr.append(
             cell(formatWaktu(row.opname_date || row.created_at)),
             cell(row.product_plu || '-', 'kode'),
-            cell(selisih > 0 ? '+' + selisih : String(selisih), 'c-num selisih ' + (selisih === 0 ? '' : selisih < 0 ? 'minus' : 'plus')),
-            cell(rupiah(row.total_nominal), 'c-total ' + (num(row.total_nominal) === 0 ? '' : num(row.total_nominal) < 0 ? 'minus' : 'plus'))
+            cell(selisih > 0 ? '+' + selisih : String(selisih), 'c-num selisih ' + (selisih === 0 ? '' : selisih < 0 ? 'minus' : 'plus'))
           );
           riwayatBody.appendChild(tr);
         });
