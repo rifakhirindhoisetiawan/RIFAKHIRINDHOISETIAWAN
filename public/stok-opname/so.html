@@ -806,8 +806,8 @@
         barangBody.querySelectorAll('tr').forEach((tr) => {
           const s = num(tr.querySelector('.in-sistem').value);
           const f = num(tr.querySelector('.in-fisik').value);
-          const n = num(tr.querySelector('.nominal').dataset.value);
           const d = f - s;
+          const n = d * num(tr.dataset.hpp);
           total.sistem += s;
           total.fisik += f;
           total.selisih += d;
@@ -832,22 +832,19 @@
         const baris = (label, a, ket, ketCls) => {
           const tr = document.createElement('tr');
           const tdLabel = cell(label);
-          tdLabel.colSpan = 5;
+          tdLabel.colSpan = 4;
           tr.append(
             tdLabel,
             cell(String(a.sistem), 'c-num'),
             cell(String(a.fisik), 'c-num'),
-            cell(angka(a.selisih), 'c-num selisih ' + warna(a.selisih)),
-            cell('-', 'c-num'),
-            cell(rupiah(a.nominal), 'nominal c-total ' + warna(a.nominal)),
-            cell(ket, 'keterangan ' + (ketCls || ''))
+            cell(angka(a.selisih), 'c-num selisih ' + warna(a.selisih))
           );
           return tr;
         };
 
         const rincian = [];
         if (plus.jumlah) rincian.push(plus.jumlah + ' PLUS');
-        if (minus.jumlah) rincian.push(minus.jumlah + ' MINUS (' + rupiah(Math.abs(minus.nominal)) + ')');
+        if (minus.jumlah) rincian.push(minus.jumlah + ' MINUS');
 
         barangFoot.innerHTML = '';
         barangFoot.appendChild(
