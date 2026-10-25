@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#ffffff" />
     <style>
       :root {
-        --background: transparent;
+        --background: #f8fafc;
         --surface: #ffffff;
         --text: #0f172a;
         --muted: #64748b;
@@ -49,7 +49,7 @@
         min-height: 100dvh;
         margin: 0 auto;
         padding: max(16px, env(safe-area-inset-top)) 18px 28px;
-        background: transparent;
+        background: var(--surface);
       }
 
       .topbar {
@@ -69,14 +69,14 @@
         border: none;
         border-radius: 12px;
         color: var(--primary);
-        background: transparent;
+        background: var(--surface);
         text-decoration: none;
         font-size: 22px;
         line-height: 1;
       }
 
       .back:active {
-        background: transparent;
+        background: #eff6ff;
       }
 
       .heading {
@@ -119,13 +119,13 @@
         padding: 0 14px;
         border: none;
         border-radius: 12px;
-        background: transparent;
+        background: #f8fafc;
         color: #94a3b8;
       }
 
       .search-box:focus-within {
         border-color: #93c5fd;
-        background: transparent;
+        background: var(--surface);
       }
 
       .search-box svg {
@@ -160,7 +160,7 @@
         width: 100%;
         min-width: 500px;
         border-collapse: collapse;
-        background: transparent;
+        background: var(--surface);
         font-size: 13px;
       }
 
@@ -168,7 +168,7 @@
         position: sticky;
         top: 0;
         z-index: 1;
-        background: transparent;
+        background: #f1f5f9;
       }
 
       th,
@@ -193,7 +193,7 @@
       }
 
       tbody tr:hover {
-        background: transparent;
+        background: #f8fafc;
       }
 
       .plu {
