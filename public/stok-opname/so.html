@@ -624,7 +624,6 @@
               <th class="c-num">Onhand</th>
               <th class="c-num">Stok Fisik</th>
               <th class="c-num">Selisih (Qty)</th>
-              <th class="c-num">HPP / Satuan</th>
               <th class="c-total">Total Nominal Selisih</th>
               <th>Keterangan</th>
             </tr>
@@ -792,7 +791,7 @@
       const hitungBaris = (tr) => {
         const sistem = num(tr.querySelector('.in-sistem').value);
         const fisik = num(tr.querySelector('.in-fisik').value);
-        const hpp = num(tr.querySelector('.hpp').dataset.value);
+        const hpp = num(tr.dataset.hpp);
         const selisih = fisik - sistem;
         const nominal = selisih * hpp;
         const ket = keteranganOf(selisih);
@@ -930,12 +929,8 @@
           tr.appendChild(cell('0', 'selisih'));
 
           const hpp = num(row.hpp);
-          const tdHpp = cell(rupiah(hpp), 'c-num');
-          tdHpp.classList.add('hpp');
-          tdHpp.dataset.value = String(hpp);
-          tr.appendChild(tdHpp);
-
-          tr.appendChild(cell('Rp 0', 'nominal c-total'));
+          tr.dataset.hpp = String(hpp);
+          tr.appendChild(cell('0', 'nominal c-total'));
           tr.appendChild(cell('Sesuai', 'keterangan'));
 
           hitungBaris(tr);
