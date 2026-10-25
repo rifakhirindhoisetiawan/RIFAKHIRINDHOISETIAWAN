@@ -624,7 +624,6 @@
               <th class="c-num">Onhand</th>
               <th class="c-num">Stok Fisik</th>
               <th class="c-num">Selisih (Qty)</th>
-              <th>Keterangan</th>
             </tr>
           </thead>
           <tbody id="barangBody"></tbody>
@@ -797,10 +796,6 @@
         const tdSelisih = tr.querySelector('.selisih');
         tdSelisih.textContent = selisih > 0 ? '+' + selisih : String(selisih);
         tdSelisih.className = 'selisih ' + (selisih === 0 ? '' : selisih < 0 ? 'minus' : 'plus');
-
-        const tdKet = tr.querySelector('.keterangan');
-        tdKet.textContent = ket.text;
-        tdKet.className = 'keterangan ' + ket.cls;
       };
 
       const hitungTotal = () => {
@@ -923,8 +918,6 @@
 
           const hpp = num(row.hpp);
           tr.dataset.hpp = String(hpp);
-          tr.appendChild(cell('Sesuai', 'keterangan'));
-
           hitungBaris(tr);
           barangBody.appendChild(tr);
         });
