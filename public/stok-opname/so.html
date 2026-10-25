@@ -702,7 +702,7 @@
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
       });
-      const rupiah = (value) => 'Rp ' + formatRupiah.format(num(value));
+      const rupiah = (value) => formatRupiah.format(num(value));
       const formatTanggal = (value) => {
         const d = new Date(value);
         const pad = (n) => String(n).padStart(2, '0');
