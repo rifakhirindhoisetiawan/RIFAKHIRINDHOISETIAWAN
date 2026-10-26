@@ -2031,6 +2031,8 @@
           ? (sizeKB / 1024).toFixed(1) + " MB"
           : sizeKB + " KB";
         dlSize.textContent = dlFileName + "  \u00b7  " + sizeText;
+        const badge = document.getElementById("dbdCountBadge");
+        if (badge) badge.textContent = dlFileName + "  \u00b7  " + sizeText;
         showBubble();
 
         // Notifikasi ini hanya untuk KEGAGALAN (foto rusak), bukan untuk
