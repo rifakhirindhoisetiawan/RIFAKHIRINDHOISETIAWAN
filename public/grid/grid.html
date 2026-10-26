@@ -427,7 +427,7 @@
       /* Panelnya ikut mengalir di dalam container (bukan absolute),
          karena container-nya sendiri yang diposisikan ke tombol Unduh.
          Arah animasi: turun sedikit dari arah tombol saat dibuka. */
-      .download-bubble-dropup{width:min(200px,calc(100vw - 32px));background:var(--mori-surface);border:1.5px solid var(--mori-line);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(-10px) scale(.96);pointer-events:none;transition:opacity .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1);position:relative;z-index:1}
+      .download-bubble-dropup{width:min(260px,calc(100vw - 32px));background:var(--mori-surface);border:1.5px solid var(--mori-line);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(-10px) scale(.96);pointer-events:none;transition:opacity .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1);position:relative;z-index:1}
       .download-bubble-dropup.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
       /* PANAH PANEL UNDUH: segitiga kecil di tepi atas panel yang menunjuk
          ke tombol Unduh — panel terasa keluar dari tombolnya, bukan muncul
@@ -461,17 +461,17 @@
       }
       .download-bubble-container.above::after{top:auto;bottom:0}
       .dbd-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--mori-line);background:rgba(26,25,23,.04)}
-      .dbd-count-badge{font-size:.68rem;font-weight:700;padding:2px 6px;border-radius:4px;background:transparent;color:var(--mori-accent);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .dbd-count-badge{font-size:.68rem;font-weight:700;padding:2px 6px;border-radius:4px;background:transparent;color:var(--mori-accent);max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
       .dbd-close-btn{background:transparent;border:none;font-weight:700;color:var(--mori-text-2);cursor:pointer;padding:2px 6px;border-radius:4px}
       .dbd-body{padding:8px}
       .dbd-item{background:rgba(26,25,23,.03);border:1px solid var(--mori-line);border-radius:8px;padding:6px 8px;display:flex;align-items:center;gap:8px}
-      .dl-preview{width:48px;height:48px;flex:0 0 48px;border-radius:0;overflow:hidden;background:var(--mori-bg);border:1px solid var(--mori-line);flex-shrink:0}
+      .dl-preview{width:100px;height:100px;flex:0 0 100px;border-radius:0;overflow:hidden;background:var(--mori-bg);border:1px solid var(--mori-line);flex-shrink:0}
       .dl-preview img{width:100%;height:100%;display:block;object-fit:cover}
       .dl-right{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;justify-content:center}
       .dl-info .dl-title{font-family:var(--mori-mono);font-size:10px;font-weight:700;color:var(--mori-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       .dl-info .dl-size{font-size:9px;color:var(--mori-text-2)}
-      .dl-actions{display:grid;grid-template-columns:repeat(2,28px);gap:3px;justify-content:start;justify-items:start}
-      .dl-btn-save,.dl-btn-wa,.dl-btn-tg{width:28px;height:28px;flex:0 0 28px;border-radius:0;border:1px solid var(--mori-line);background:var(--mori-accent);color:var(--mori-bg);display:flex;align-items:center;justify-content:center;cursor:pointer}
+      .dl-actions{display:grid;grid-template-columns:repeat(2,30px);gap:4px;justify-content:start;justify-items:start}
+      .dl-btn-save,.dl-btn-wa,.dl-btn-tg{width:30px;height:30px;flex:0 0 30px;border-radius:0;border:1px solid var(--mori-line);background:var(--mori-accent);color:var(--mori-bg);display:flex;align-items:center;justify-content:center;cursor:pointer}
 
       /* ============================================================
          TEMA MORI — override di atas, logika JS tidak disentuh.
