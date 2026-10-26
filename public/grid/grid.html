@@ -1621,9 +1621,9 @@
          kliknya tidak ikut ditangkap handler "klik di luar panel" di
          bawah, yang juga akan menutupnya -- hasilnya sama, tapi ini
          menjadikan maksudnya jelas. */
-      dbdCloseBtn.addEventListener("click",(e)=>{ e.stopPropagation(); dropup.classList.remove("open"); });
+      dbdCloseBtn.addEventListener("click",(e)=>{ e.stopPropagation(); hideBubble(); });
       function showBubble(){ posisikanPanel(); bubbleContainer.classList.add("visible"); dropup.classList.add("open"); posisiAman(); }
-      document.addEventListener("click",(e)=>{ if(dropup.classList.contains("open") && !bubbleContainer.contains(e.target) && !downloadBtn.contains(e.target)) dropup.classList.remove("open"); });
+      document.addEventListener("click",(e)=>{ if(dropup.classList.contains("open") && !bubbleContainer.contains(e.target) && !downloadBtn.contains(e.target)) hideBubble(); });
       window.addEventListener("resize",()=>{ if(dropup.classList.contains("open")) posisikanPanel(); });
 
       /* ===== Toast custom (pola Mori showToast) =====
