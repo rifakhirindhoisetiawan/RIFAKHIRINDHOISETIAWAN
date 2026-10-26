@@ -1340,7 +1340,7 @@
         canvas.toBlob((blob) => {
           if (blob) resolve(blob);
           else reject(new Error('Gagal membuat foto'));
-        }, 'image/jpeg', 0.92);
+        }, 'image/jpeg', 0.78);
       } catch (err) { reject(err); }
     });
   }
@@ -1369,7 +1369,7 @@
       let sx = 0, sy = 0, sw = iw, sh = ih;
       if (imgRatio > target) { sw = ih * target; sx = (iw - sw) / 2; }
       else { sh = iw / target; sy = (ih - sh) / 2; }
-      const outW = 540, outH = 960;
+      const outW = 480, outH = Math.round(480 * 16 / 9);
       const canvas = document.createElement('canvas');
       canvas.width = outW; canvas.height = outH;
       const ctx = canvas.getContext('2d');
@@ -1390,7 +1390,7 @@
     if (!target) return;
     if (uploadingFoto || saving) return;
     if (!file || !(file.type || '').startsWith('image/')) { alert('Pilih file gambar ya'); return; }
-    if (file.size > 3 * 1024 * 1024) { alert('Foto kebesaran, max 3MB. Kompres dulu ya.'); return; }
+    if (file.size > 10 * 1024 * 1024) { alert('Foto kebesaran, max 10MB.'); return; }
     uploadingFoto = true;
     try {
       setStatus('Memproses foto…');
