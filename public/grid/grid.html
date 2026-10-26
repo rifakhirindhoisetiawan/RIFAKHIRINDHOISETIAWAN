@@ -1622,7 +1622,7 @@
         bubbleContainer.style.top = Math.max(12, r.top - (dropup.offsetHeight || 0) - 8) + "px";
         bubbleContainer.classList.add("above");
       }
-      function hideBubble(){ dropup.classList.remove("open"); }
+      function hideBubble(){ dropup.classList.remove("open"); bubbleContainer.classList.remove("visible"); bubbleContainer.classList.remove("above"); }
       /* Tombol ✕ di kepala panel. e.stopPropagation() penting supaya
          kliknya tidak ikut ditangkap handler "klik di luar panel" di
          bawah, yang juga akan menutupnya -- hasilnya sama, tapi ini
@@ -1731,6 +1731,9 @@
           showToast("Gagal menyimpan: " + err.message, "err");
         }
         hideBubble();
+        dlDataUrl = "";
+        dlBlob = null;
+        if (dlPreviewImg) dlPreviewImg.src = "";
       });
 
       dlShareWaBtn.addEventListener("click", async () => {
