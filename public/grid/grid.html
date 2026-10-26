@@ -427,7 +427,7 @@
       /* Panelnya ikut mengalir di dalam container (bukan absolute),
          karena container-nya sendiri yang diposisikan ke tombol Unduh.
          Arah animasi: turun sedikit dari arah tombol saat dibuka. */
-      .download-bubble-dropup{width:min(232px,calc(100vw - 32px));background:var(--mori-surface);border:1.5px solid var(--mori-accent);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(-10px) scale(.96);pointer-events:none;transition:opacity .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1);position:relative;z-index:1}
+      .download-bubble-dropup{width:min(232px,calc(100vw - 32px));background:var(--mori-surface);border:1.5px solid var(--mori-line);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(-10px) scale(.96);pointer-events:none;transition:opacity .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1);position:relative;z-index:1}
       .download-bubble-dropup.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
       /* PANAH PANEL UNDUH: segitiga kecil di tepi atas panel yang menunjuk
          ke tombol Unduh — panel terasa keluar dari tombolnya, bukan muncul
@@ -437,8 +437,8 @@
         width:12px;height:12px;margin-left:-6px;box-sizing:border-box;
         background:#eeeae1;
         background:color-mix(in srgb, var(--mori-text) 4%, var(--mori-surface));
-        border-left:1.5px solid var(--mori-accent);
-        border-top:1.5px solid var(--mori-accent);
+        border-left:1.5px solid var(--mori-line);
+        border-top:1.5px solid var(--mori-line);
         border-top-left-radius:1px;
         transform:translateY(-50%) rotate(45deg);
         pointer-events:none;opacity:0;transition:opacity .2s ease;
