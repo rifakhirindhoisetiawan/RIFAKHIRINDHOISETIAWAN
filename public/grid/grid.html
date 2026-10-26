@@ -461,8 +461,7 @@
       }
       .download-bubble-container.above::after{top:auto;bottom:0}
       .dbd-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--mori-line);background:rgba(26,25,23,.04)}
-      .dbd-title{font-family:var(--mori-mono);font-size:.82rem;font-weight:700;color:var(--mori-text)}
-      .dbd-count-badge{font-size:.68rem;font-weight:700;padding:2px 6px;border-radius:4px;background:transparent;color:var(--mori-accent);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .dbd-count-badge{font-size:.68rem;font-weight:700;padding:2px 6px;border-radius:4px;background:transparent;color:var(--mori-accent);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
       .dbd-close-btn{background:transparent;border:none;font-weight:700;color:var(--mori-text-2);cursor:pointer;padding:2px 6px;border-radius:4px}
       .dbd-body{padding:8px}
       .dbd-item{background:rgba(26,25,23,.03);border:1px solid var(--mori-line);border-radius:8px;padding:6px 8px;display:flex;align-items:center;gap:8px}
@@ -471,8 +470,7 @@
       .dl-right{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;justify-content:center}
       .dl-info .dl-title{font-family:var(--mori-mono);font-size:10px;font-weight:700;color:var(--mori-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       .dl-info .dl-size{font-size:9px;color:var(--mori-text-2)}
-      .dl-actions{display:grid;grid-template-columns:repeat(2,28px);gap:3px;justify-content:center;justify-items:center}
-      .dl-actions>:nth-child(3){grid-column:1/-1;justify-self:center}
+      .dl-actions{display:grid;grid-template-columns:repeat(2,28px);gap:3px;justify-content:start;justify-items:start}
       .dl-btn-save,.dl-btn-wa,.dl-btn-tg{width:28px;height:28px;flex:0 0 28px;border-radius:0;border:1px solid var(--mori-line);background:var(--mori-accent);color:var(--mori-bg);display:flex;align-items:center;justify-content:center;cursor:pointer}
 
       /* ============================================================
@@ -983,7 +981,6 @@
       <div id="downloadBubbleContainer" class="download-bubble-container">
         <div id="downloadBubbleDropup" class="download-bubble-dropup">
           <div class="dbd-header">
-            <span class="dbd-title">Unduhan</span>
             <span class="dbd-count-badge" id="dbdCountBadge">1 file</span>
             <button class="dbd-close-btn" id="dbdCloseBtn" aria-label="Tutup">✕</button>
           </div>
