@@ -2586,7 +2586,7 @@
         renderFotoMenu(menuFotoData);
       });
 
-      const kompresFoto = async (file, maxSisi = 1200, kualitas = 0.82) => {
+      const kompresFoto = async (file, maxSisi = 600, kualitas = 0.76) => {
         if (!file || !/^image\//.test(file.type || '')) return file;
         let gambar = null;
         try {
