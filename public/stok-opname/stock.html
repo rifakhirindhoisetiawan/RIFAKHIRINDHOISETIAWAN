@@ -395,7 +395,7 @@
           <div class="icon-box">
             <img
               alt="${label}"
-              src="${fotoBaru(thumb)}"
+              data-src="${fotoBaru(thumb)}"
               loading="lazy"
               decoding="async"
               onload="this.classList.add('loaded');this.parentElement.classList.add('siap')"
@@ -462,6 +462,17 @@
         }
         addTile(menu.name, 'so.html?m=' + menu.id, thumb);
       }
+
+      // IntersectionObserver lazy load untuk foto stok opname
+      const soLazy = new IntersectionObserver((entries, obs) => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          const img = e.target.querySelector('img[data-src]');
+          if (img) { img.src = img.dataset.src; img.removeAttribute('data-src'); }
+          obs.unobserve(e.target);
+        });
+      }, { rootMargin: '200px' });
+      document.querySelectorAll('.menu-item').forEach(el => soLazy.observe(el));
     </script>
   </body>
 </html>
