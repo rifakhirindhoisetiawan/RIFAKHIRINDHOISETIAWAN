@@ -1371,7 +1371,18 @@
 
       // ===== Supabase = satu-satunya sumber data (ADMIN tetap hardcoded) =====
       // Halaman tidak lagi membaca data-kopi.json sama sekali.
-      renderMenu();
+      let cachedMenus = null;
+      try {
+        const rawCache = localStorage.getItem('kopi_menus_cache_v1');
+        if (rawCache) {
+          cachedMenus = JSON.parse(rawCache);
+          if (Array.isArray(cachedMenus) && cachedMenus.length > 0) {
+            menus = cachedMenus;
+            renderMenu();
+          }
+        }
+      } catch (e) {}
+
       loadFromSupabase();
 
       async function loadFromSupabase() {
@@ -1387,6 +1398,7 @@
             if (sig !== lastSig) {
               menus = next;
               lastSig = sig;
+              try { localStorage.setItem('kopi_menus_cache_v1', JSON.stringify(next)); } catch(e) {}
               renderMenu();
             }
             console.info('ja_di_menus: ' + data.length + ' menu dari Supabase');
