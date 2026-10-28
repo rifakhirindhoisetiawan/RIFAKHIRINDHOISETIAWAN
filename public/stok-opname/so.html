@@ -200,10 +200,6 @@
         text-align: center;
       }
 
-      .c-satuan {
-        width: 58px;
-      }
-
       .c-num {
         width: 76px;
         text-align: right;
@@ -644,7 +640,6 @@
               <th class="c-tgl">Tanggal SO</th>
               <th class="c-kode">PLU</th>
               <th>Nama Barang</th>
-              <th class="c-satuan">Satuan</th>
               <th class="c-num">Onhand</th>
               <th class="c-num">Stok Fisik</th>
               <th class="c-num">Selisih</th>
@@ -656,7 +651,7 @@
                cari tidak boleh ikut terhapus. -->
           <tbody class="cari-body">
             <tr>
-              <td class="cari-sel" colspan="8">
+              <td class="cari-sel" colspan="7">
                 <div class="cari-dalam">
                   <input
                     class="cari"
@@ -925,7 +920,7 @@
           potong.textContent = up(row.name);
           potong.title = up(row.name);
           tdNama.appendChild(potong);
-          tr.append(cellKode(row.kode), tdNama, cell(row.satuan || 'PCS', 'c-satuan'));
+          tr.append(cellKode(row.kode), tdNama);
 
           ['sistem', 'fisik'].forEach((jenis) => {
             const td = document.createElement('td');
