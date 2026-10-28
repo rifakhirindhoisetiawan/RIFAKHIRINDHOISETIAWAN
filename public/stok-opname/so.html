@@ -657,7 +657,7 @@
                     class="cari"
                     type="search"
                     id="cariBarang"
-                    placeholder="Cari PLU / Nama barang"
+                    placeholder="Cari"
                     autocomplete="off"
                     aria-label="Cari barang"
                   />
@@ -997,7 +997,7 @@
         }
         // Nama menu tidak lagi jadi judul di atas (kotak search sudah di paling
         // atas). Sekarang cuma jadi petunjuk di placeholder kotak search.
-        cariBarang.placeholder = 'Cari di ' + up(menu.name) + ' — PLU / Nama barang';
+        cariBarang.placeholder = 'Cari';
         tanggalSo = formatTanggal(new Date());
 
         const { data: barang, error: errBarang } = await supabase
