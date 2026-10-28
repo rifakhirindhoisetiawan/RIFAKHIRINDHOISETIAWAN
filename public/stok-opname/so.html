@@ -484,6 +484,40 @@
         background: transparent;
       }
 
+      /* ===== SEARCH: baris cari di dalam tabel (pola admin) =====
+         Kotak pencarian bukan lagi komponen terpisah di atas tabel,
+         tapi baris paling atas dalam tabel: input transparan tanpa
+         garis/kotak, tinggi 44px, teks 13px tebal.
+         .cari-dalam selebar penuh sel; tbody sendiri supaya saat
+         barangBody dikosongkan baris cari tetap utuh. */
+      #barangWrap tbody.cari-body td.cari-sel {
+        background: var(--surface);
+        padding: 0 12px;
+        border-bottom: 0;
+      }
+      #barangWrap tbody.cari-body .cari-dalam {
+        display: flex;
+        align-items: center;
+      }
+      #barangWrap tbody.cari-body input.cari,
+      #barangWrap tbody.cari-body input.cari:focus {
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+        height: 44px;
+        padding: 0;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        outline: none;
+        text-transform: uppercase;
+      }
+
       .c-no,
       .c-tgl {
         color: var(--muted);
@@ -601,17 +635,6 @@
     <section class="sec">
       <!-- Tulisan nama menu dihapus: kotak pencarian langsung di paling atas.
            Nama menu pindah dari judul ke placeholder input. -->
-      <div class="row menu-cari-row">
-        <input
-          class="cari"
-          type="search"
-          id="cariBarang"
-          placeholder="Cari PLU / Nama barang"
-          autocomplete="off"
-          aria-label="Cari barang"
-        />
-      </div>
-
       <div class="table-wrap" id="barangWrap">
         <table class="laporan">
           <thead>
@@ -626,6 +649,26 @@
               <th class="c-num">Selisih (Qty)</th>
             </tr>
           </thead>
+          <!-- Baris cari: kotak pencarian jadi baris paling atas di dalam
+               tabel, persis pola admin (stock-admin.html). Harus tbody
+               sendiri: barangBody dikosongkan saat render, jadi baris
+               cari tidak boleh ikut terhapus. -->
+          <tbody class="cari-body">
+            <tr>
+              <td class="cari-sel" colspan="8">
+                <div class="cari-dalam">
+                  <input
+                    class="cari"
+                    type="search"
+                    id="cariBarang"
+                    placeholder="Cari PLU / Nama barang"
+                    autocomplete="off"
+                    aria-label="Cari barang"
+                  />
+                </div>
+              </td>
+            </tr>
+          </tbody>
           <tbody id="barangBody"></tbody>
           <tfoot id="barangFoot"></tfoot>
         </table>
