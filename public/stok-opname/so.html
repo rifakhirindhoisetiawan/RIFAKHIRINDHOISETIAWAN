@@ -204,6 +204,34 @@
         width: 76px;
         text-align: right;
       }
+      .fisik-wrap {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+      .btn-pm {
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        background: var(--surface);
+        border: 1px solid var(--mori-line, rgba(26,25,23,0.14));
+        border-radius: 4px;
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text);
+      }
+      .btn-pm:hover {
+        background: #f0eee2;
+      }
+      .fisik-wrap .in-fisik {
+        width: 28px !important;
+        text-align: center;
+        padding: 0 !important;
+      }
 
       .hpp {
         width: 100px;
@@ -925,28 +953,55 @@
           ['sistem', 'fisik'].forEach((jenis) => {
             const td = document.createElement('td');
             td.className = 'c-num';
-            const input = document.createElement('input');
-            input.type = 'number';
-            // min 0 hanya untuk Onhand; Stok Fisik boleh negatif (barang hilang).
-            if (jenis === 'sistem') input.min = '0';
-            input.inputMode = 'numeric';
-            input.className = 'cell-input in-' + jenis;
-            input.value = String(
-              jenis === 'sistem' ? sistem : num(row.stok_fisik)
-            );
-            input.setAttribute('aria-label', (jenis === 'sistem' ? 'Onhand' : 'Stok Fisik') + ' ' + (row.kode || row.name || i + 1));
-            // Onhand & Stok Fisik = data, hanya boleh diubah dari ADMIN.
-            // Di halaman SO keduanya read-only supaya tidak ada input yang
-            // bisa menulis ke database; hitungan selisih tetap jalan.
-            input.readOnly = true;
-            input.tabIndex = -1;
-            input.classList.add('baca');
-            input.title = (jenis === 'sistem' ? 'Onhand' : 'Stok Fisik') + ' hanya bisa diubah di menu ADMIN';
-            input.addEventListener('input', () => {
-              hitungBaris(tr);
-              hitungTotal();
-            });
-            td.appendChild(input);
+            if (jenis === 'sistem') {
+              const input = document.createElement('input');
+              input.type = 'number';
+              input.min = '0';
+              input.inputMode = 'numeric';
+              input.className = 'cell-input in-sistem';
+              input.value = String(sistem);
+              input.readOnly = true;
+              input.tabIndex = -1;
+              input.classList.add('baca');
+              td.appendChild(input);
+            } else {
+              // Stok Fisik: tombol - , angka fisik, tombol +
+              td.className = 'c-num c-fisik-ctrl';
+              const wrap = document.createElement('div');
+              wrap.className = 'fisik-wrap';
+              
+              const btnMin = document.createElement('button');
+              btnMin.type = 'button';
+              btnMin.className = 'btn-pm';
+              btnMin.textContent = '-';
+              
+              const input = document.createElement('input');
+              input.type = 'number';
+              input.inputMode = 'numeric';
+              input.className = 'cell-input in-fisik';
+              input.value = String(num(row.stok_fisik));
+              
+              const btnPlus = document.createElement('button');
+              btnPlus.type = 'button';
+              btnPlus.className = 'btn-pm';
+              btnPlus.textContent = '+';
+
+              const updateFisik = (val) => {
+                input.value = String(val);
+                hitungBaris(tr);
+                hitungTotal();
+              };
+
+              btnMin.addEventListener('click', () => updateFisik(num(input.value) - 1));
+              btnPlus.addEventListener('click', () => updateFisik(num(input.value) + 1));
+              input.addEventListener('input', () => {
+                hitungBaris(tr);
+                hitungTotal();
+              });
+
+              wrap.append(btnMin, input, btnPlus);
+              td.appendChild(wrap);
+            }
             tr.appendChild(td);
           });
 
