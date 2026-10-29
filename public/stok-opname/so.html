@@ -1253,19 +1253,20 @@
             hitungTotal();
           });
           btnSave.addEventListener('click', () => {
-            showSaveChoiceModal(row.name || row.kode, (mode) => {
-              simpanFisikBaris(inputFisik.value, mode);
-            });
-          });
-          btnReset.addEventListener('click', () => {
-            showCustomConfirm('Reset stok fisik "' + (row.name || row.kode) + '" menjadi 0?', () => simpanFisikBaris(0));
+            if (num(inputFisik.value) === 0) {
+              showCustomConfirm('Reset stok fisik "' + (row.name || row.kode) + '" menjadi 0?', () => simpanFisikBaris(0));
+            } else {
+              showSaveChoiceModal(row.name || row.kode, (mode) => {
+                simpanFisikBaris(inputFisik.value, mode);
+              });
+            }
           });
           inputFisik.addEventListener('input', () => {
             hitungBaris(tr);
             hitungTotal();
           });
 
-          wrap.append(btnMin, inputFisik, btnPlus, btnSave, btnReset);
+          wrap.append(btnMin, inputFisik, btnPlus, btnSave);
           tdFisik.appendChild(wrap);
           tr.appendChild(tdFisik);
 
