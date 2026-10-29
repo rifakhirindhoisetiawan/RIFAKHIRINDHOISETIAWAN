@@ -1040,7 +1040,9 @@
           });
           btnSave.addEventListener('click', () => simpanFisikBaris(inputFisik.value));
           btnReset.addEventListener('click', () => {
-            if (confirm('Reset stok fisik "' + (row.name || row.kode) + '" menjadi 0?')) {
+            if (window.showConfirm) {
+              window.showConfirm('Konfirmasi', 'Reset stok fisik "' + (row.name || row.kode) + '" menjadi 0?', () => simpanFisikBaris(0));
+            } else if (confirm('Reset stok fisik "' + (row.name || row.kode) + '" menjadi 0?')) {
               simpanFisikBaris(0);
             }
           });
