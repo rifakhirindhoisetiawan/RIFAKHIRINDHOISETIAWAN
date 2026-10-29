@@ -654,9 +654,81 @@
       .sec {
         margin-bottom: 10px;
       }
+    
+      .confirm-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        padding: 16px;
+      }
+      .confirm-overlay[hidden] {
+        display: none;
+      }
+      .confirm-box {
+        background: var(--mori-bg, #fffbf2);
+        border: 1.5px solid var(--mori-line, rgba(26,25,23,0.14));
+        border-radius: 12px;
+        padding: 20px;
+        width: 100%;
+        max-width: 320px;
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .confirm-title {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--text);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .confirm-msg {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .confirm-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+      }
+      .confirm-btn {
+        padding: 6px 14px;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 1px solid var(--mori-line, rgba(26,25,23,0.14));
+        background: var(--surface);
+        color: var(--text);
+      }
+      .confirm-btn.yes {
+        background: var(--text);
+        color: var(--mori-bg);
+        border-color: var(--text);
+      }
+
     </style>
   </head>
   <body>
+
+    <div class="confirm-overlay" id="confirmOverlay" hidden>
+      <div class="confirm-box">
+        <div class="confirm-title" id="confirmTitle">Konfirmasi</div>
+        <div class="confirm-msg" id="confirmMsg">Apakah Anda yakin?</div>
+        <div class="confirm-actions">
+          <button type="button" class="confirm-btn" id="confirmBatal">Batal</button>
+          <button type="button" class="confirm-btn yes" id="confirmYa">Ya</button>
+        </div>
+      </div>
+    </div>
+
     <div class="lightbox" id="lightbox" hidden>
       <div class="lightbox-box">
         <canvas class="qr" id="lightboxQr" width="220" height="220"></canvas>
@@ -710,6 +782,38 @@
 
     <script type="module">
       import { supabase } from '../../js/supabase.js';
+
+      
+      const confirmOverlay = document.getElementById('confirmOverlay');
+      const confirmTitle = document.getElementById('confirmTitle');
+      const confirmMsg = document.getElementById('confirmMsg');
+      const confirmYa = document.getElementById('confirmYa');
+      const confirmBatal = document.getElementById('confirmBatal');
+      let confirmCallback = null;
+
+      const showCustomConfirm = (msg, onYes) => {
+        confirmMsg.textContent = msg;
+        confirmCallback = onYes;
+        confirmOverlay.hidden = false;
+      };
+
+      confirmBatal.addEventListener('click', () => {
+        confirmOverlay.hidden = true;
+        confirmCallback = null;
+      });
+
+      confirmYa.addEventListener('click', () => {
+        confirmOverlay.hidden = true;
+        if (typeof confirmCallback === 'function') confirmCallback();
+        confirmCallback = null;
+      });
+
+      confirmOverlay.addEventListener('click', (e) => {
+        if (e.target === confirmOverlay) {
+          confirmOverlay.hidden = true;
+          confirmCallback = null;
+        }
+      });
 
       const cariBarang = document.getElementById('cariBarang');
       const barangBody = document.getElementById('barangBody');
@@ -1040,11 +1144,7 @@
           });
           btnSave.addEventListener('click', () => simpanFisikBaris(inputFisik.value));
           btnReset.addEventListener('click', () => {
-            if (window.showConfirm) {
-              window.showConfirm('Konfirmasi', 'Reset stok fisik "' + (row.name || row.kode) + '" menjadi 0?', () => simpanFisikBaris(0));
-            } else if (confirm('Reset stok fisik "' + (row.name || row.kode) + '" menjadi 0?')) {
-              simpanFisikBaris(0);
-            }
+            showCustomConfirm('Reset stok fisik "' + (row.name || row.kode) + '" menjadi 0?', () => simpanFisikBaris(0));
           });
           inputFisik.addEventListener('input', () => {
             hitungBaris(tr);
