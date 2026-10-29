@@ -685,7 +685,7 @@
           <tbody class="cari-body">
             <tr>
               <td class="cari-sel" colspan="7">
-                <div class="cari-dalam">
+                <div class="cari-dalam" style="display: flex; gap: 8px; align-items: center; justify-content: space-between;">
                   <input
                     class="cari"
                     type="search"
@@ -693,7 +693,9 @@
                     placeholder="Cari"
                     autocomplete="off"
                     aria-label="Cari barang"
+                    style="flex: 1;"
                   />
+                  <button type="button" id="btnSaveAll" class="btn-action" style="padding: 6px 16px; background: var(--mori-btn-bg, #1a1917); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">Save</button>
                 </div>
               </td>
             </tr>
@@ -1064,9 +1066,37 @@
         
       };
 
-      // Fungsi simpanBaris + barisOpname dihapus: tidak ada lagi input yang
-      // bisa diedit di halaman SO, jadi tidak ada yang perlu di-commit ke
-      // stock_opname maupun stock_products dari sini.
+      document.getElementById('btnSaveAll').addEventListener('click', async () => {
+        const btn = document.getElementById('btnSaveAll');
+        btn.textContent = 'Menyimpan...';
+        btn.disabled = true;
+
+        for (const row of cacheBarang) {
+          const tr = barangBody.querySelector(`tr[data-id="${row.id}"]`);
+          if (!tr) continue;
+          const input = tr.querySelector('.in-fisik');
+          if (!input) continue;
+          const nilai = Math.round(num(input.value));
+          if (nilai === num(row.stok_fisik)) continue;
+
+          const { error } = await supabase
+            .from('stock_products')
+            .update({ stok_fisik: nilai, onhand: nilai })
+            .eq('id', row.id);
+          
+          if (!error) {
+            row.stok_fisik = nilai;
+            row.onhand = nilai;
+            const tdOnhand = tr.children[4];
+            if (tdOnhand) tdOnhand.textContent = rupiah(nilai);
+          }
+        }
+
+        btn.textContent = 'Save';
+        btn.disabled = false;
+        alert('Berhasil menyimpan semua perubahan fisik dan onhand!');
+        load();
+      });
 
       // Waktu ringkas satu baris: "24/10 14:30" (tanpa tahun, tanpa detik).
       const formatWaktu = (value) => {
