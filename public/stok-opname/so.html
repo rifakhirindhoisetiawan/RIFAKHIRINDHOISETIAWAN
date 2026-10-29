@@ -990,10 +990,11 @@
             const tdTgl = tr.querySelector('.c-tgl');
             if (tdTgl) tdTgl.textContent = formatTanggal(new Date());
 
-            const { error } = await supabase
+            const { data: updated, error } = await supabase
               .from('stock_products')
               .update({ stok_fisik: nilai, onhand: nilai })
-              .eq('id', row.id);
+              .eq('id', row.id)
+              .select();
             if (error) {
               console.error('Gagal update stok fisik/onhand:', error.message);
               alert('Gagal menyimpan ke database: ' + error.message);
