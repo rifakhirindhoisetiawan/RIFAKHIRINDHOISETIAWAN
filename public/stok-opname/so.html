@@ -674,8 +674,8 @@
               <th class="c-kode">PLU</th>
               <th>Nama Barang</th>
               <th class="c-num">Onhand</th>
-              <th class="c-num">Stok Fisik</th>
               <th class="c-num">Selisih</th>
+              <th class="c-num">Stok Fisik</th>
             </tr>
           </thead>
           <!-- Baris cari: kotak pencarian jadi baris paling atas di dalam
@@ -685,7 +685,7 @@
           <tbody class="cari-body">
             <tr>
               <td class="cari-sel" colspan="7">
-                <div class="cari-dalam" style="display: flex; gap: 8px; align-items: center; justify-content: space-between;">
+                <div class="cari-dalam">
                   <input
                     class="cari"
                     type="search"
@@ -693,9 +693,7 @@
                     placeholder="Cari"
                     autocomplete="off"
                     aria-label="Cari barang"
-                    style="flex: 1;"
                   />
-                  <button type="button" id="btnSaveAll" class="btn-action" style="padding: 6px 16px; background: var(--mori-btn-bg, #1a1917); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">Save</button>
                 </div>
               </td>
             </tr>
@@ -915,81 +913,105 @@
           tdNama.appendChild(potong);
           tr.append(cellKode(row.kode), tdNama);
 
-          ['sistem', 'fisik'].forEach((jenis) => {
-            const td = document.createElement('td');
-            td.className = 'c-num';
-            if (jenis === 'sistem') {
-              const input = document.createElement('input');
-              input.type = 'number';
-              input.min = '0';
-              input.inputMode = 'numeric';
-              input.className = 'cell-input in-sistem';
-              input.value = String(sistem);
-              input.readOnly = true;
-              input.tabIndex = -1;
-              input.classList.add('baca');
-              td.appendChild(input);
-            } else {
-              // Stok Fisik: tombol - , angka fisik, tombol +
-              td.className = 'c-num c-fisik-ctrl';
-              const wrap = document.createElement('div');
-              wrap.className = 'fisik-wrap';
-              
-              const btnMin = document.createElement('button');
-              btnMin.type = 'button';
-              btnMin.className = 'btn-pm';
-              btnMin.textContent = '-';
-              
-              const input = document.createElement('input');
-              input.type = 'number';
-              input.inputMode = 'numeric';
-              input.className = 'cell-input in-fisik';
-              input.value = String(num(row.stok_fisik));
-              
-              const btnPlus = document.createElement('button');
-              btnPlus.type = 'button';
-              btnPlus.className = 'btn-pm';
-              btnPlus.textContent = '+';
+                    const tdSistem = document.createElement('td');
+          tdSistem.className = 'c-num';
+          const inputSistem = document.createElement('input');
+          inputSistem.type = 'number';
+          inputSistem.min = '0';
+          inputSistem.inputMode = 'numeric';
+          inputSistem.className = 'cell-input in-sistem';
+          inputSistem.value = String(sistem);
+          inputSistem.readOnly = true;
+          inputSistem.tabIndex = -1;
+          inputSistem.classList.add('baca');
+          tdSistem.appendChild(inputSistem);
+          tr.appendChild(tdSistem);
 
-              const simpanFisik = async (val) => {
-                const nilai = Math.round(num(val));
-                input.value = String(nilai);
-                hitungBaris(tr);
-                hitungTotal();
-                
-                // Update tanggal baris jadi hari ini otomatis saat diedit
-                const tdTgl = tr.querySelector('.c-tgl');
-                if (tdTgl) tdTgl.textContent = formatTanggal(new Date());
+          const tdSelisih = document.createElement('td');
+          tdSelisih.className = 'c-num selisih';
+          tdSelisih.textContent = '0';
+          tr.appendChild(tdSelisih);
 
-                const { error } = await supabase
-                  .from('stock_products')
-                  .update({ stok_fisik: nilai })
-                  .eq('id', row.id);
-                if (error) {
-                  console.error('Gagal update stok fisik:', error.message);
-                  return;
-                }
-                row.stok_fisik = nilai;
-                tr.classList.add('sinkron');
-                setTimeout(() => tr.classList.remove('sinkron'), 900);
-              };
+          const tdFisik = document.createElement('td');
+          tdFisik.className = 'c-num c-fisik-ctrl';
+          const wrap = document.createElement('div');
+          wrap.className = 'fisik-wrap';
+          wrap.style.display = 'flex';
+          wrap.style.gap = '4px';
+          wrap.style.alignItems = 'center';
+          wrap.style.justifyContent = 'flex-end';
 
-              btnMin.addEventListener('click', () => simpanFisik(num(input.value) - 1));
-              btnPlus.addEventListener('click', () => simpanFisik(num(input.value) + 1));
-              input.addEventListener('change', () => simpanFisik(input.value));
-              input.addEventListener('blur', () => simpanFisik(input.value));
-              input.addEventListener('input', () => {
-                hitungBaris(tr);
-                hitungTotal();
-              });
+          const btnMin = document.createElement('button');
+          btnMin.type = 'button';
+          btnMin.className = 'btn-pm';
+          btnMin.textContent = '-';
 
-              wrap.append(btnMin, input, btnPlus);
-              td.appendChild(wrap);
+          const inputFisik = document.createElement('input');
+          inputFisik.type = 'number';
+          inputFisik.min = '0';
+          inputFisik.inputMode = 'numeric';
+          inputFisik.className = 'cell-input in-fisik';
+          inputFisik.value = String(num(row.stok_fisik));
+
+          const btnPlus = document.createElement('button');
+          btnPlus.type = 'button';
+          btnPlus.className = 'btn-pm';
+          btnPlus.textContent = '+';
+
+          const btnSave = document.createElement('button');
+          btnSave.type = 'button';
+          btnSave.className = 'btn-action';
+          btnSave.textContent = 'Save';
+          btnSave.style.padding = '4px 8px';
+          btnSave.style.fontSize = '12px';
+          btnSave.style.background = 'var(--mori-btn-bg, #1a1917)';
+          btnSave.style.color = '#fff';
+          btnSave.style.border = 'none';
+          btnSave.style.borderRadius = '4px';
+          btnSave.style.cursor = 'pointer';
+
+          const simpanFisikBaris = async () => {
+            const nilai = Math.round(num(inputFisik.value));
+            inputFisik.value = String(nilai);
+            hitungBaris(tr);
+            hitungTotal();
+
+            const tdTgl = tr.querySelector('.c-tgl');
+            if (tdTgl) tdTgl.textContent = formatTanggal(new Date());
+
+            const { error } = await supabase
+              .from('stock_products')
+              .update({ stok_fisik: nilai, onhand: nilai })
+              .eq('id', row.id);
+            if (error) {
+              console.error('Gagal update stok fisik:', error.message);
+              return;
             }
-            tr.appendChild(td);
+            row.stok_fisik = nilai;
+            row.onhand = nilai;
+            tr.classList.add('sinkron');
+            setTimeout(() => tr.classList.remove('sinkron'), 900);
+          };
+
+          btnMin.addEventListener('click', () => {
+            inputFisik.value = String(num(inputFisik.value) - 1);
+            hitungBaris(tr);
+            hitungTotal();
+          });
+          btnPlus.addEventListener('click', () => {
+            inputFisik.value = String(num(inputFisik.value) + 1);
+            hitungBaris(tr);
+            hitungTotal();
+          });
+          btnSave.addEventListener('click', () => simpanFisikBaris());
+          inputFisik.addEventListener('input', () => {
+            hitungBaris(tr);
+            hitungTotal();
           });
 
-          tr.appendChild(cell('0', 'selisih'));
+          wrap.append(btnMin, inputFisik, btnPlus, btnSave);
+          tdFisik.appendChild(wrap);
+          tr.appendChild(tdFisik);
 
           const hpp = num(row.hpp);
           tr.dataset.hpp = String(hpp);
