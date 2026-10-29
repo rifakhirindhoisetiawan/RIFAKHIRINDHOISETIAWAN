@@ -695,22 +695,29 @@
       .confirm-actions {
         display: flex;
         gap: 8px;
-        justify-content: flex-end;
+        margin-top: 4px;
       }
       .confirm-btn {
-        padding: 6px 14px;
-        font: inherit;
-        font-size: 12px;
+        flex: 1;
+        padding: 12px;
+        font-family: var(--mori-mono, ui-monospace, monospace);
+        font-size: 11px;
         font-weight: 700;
-        border-radius: 6px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
         cursor: pointer;
         border: 1px solid var(--mori-line, rgba(26,25,23,0.14));
         background: var(--surface);
         color: var(--text);
+        border-radius: 0;
+        transition: transform 0.1s ease;
+      }
+      .confirm-btn:active {
+        transform: translate(2px, 2px);
       }
       .confirm-btn.yes {
         background: var(--text);
-        color: var(--mori-bg);
+        color: var(--mori-bg, #fffbf2);
         border-color: var(--text);
       }
 
@@ -724,7 +731,7 @@
         <div class="confirm-msg" id="confirmMsg">Apakah Anda yakin?</div>
         <div class="confirm-actions">
           <button type="button" class="confirm-btn" id="confirmBatal">Batal</button>
-          <button type="button" class="confirm-btn yes" id="confirmYa">Ya</button>
+          <button type="button" class="confirm-btn yes" id="confirmYa">Ya, Reset</button>
         </div>
       </div>
     </div>
