@@ -1308,15 +1308,7 @@
             hitungBaris(tr);
             hitungTotal();
           });
-          btnSave.addEventListener('click', () => {
-            if (num(inputFisik.value) === 0) {
-              showCustomConfirm('Reset stok fisik "' + (row.name || row.kode) + '" menjadi 0?', () => simpanFisikBaris(0));
-            } else {
-              showSaveChoiceModal(row.name || row.kode, (mode) => {
-                simpanFisikBaris(inputFisik.value, mode);
-              });
-            }
-          });
+
           inputFisik.addEventListener('input', () => {
             hitungBaris(tr);
             hitungTotal();
