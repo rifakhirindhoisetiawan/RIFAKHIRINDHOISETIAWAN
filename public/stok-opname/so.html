@@ -981,8 +981,30 @@
           btnSave.style.flexShrink = '0';
           btnSave.style.outline = 'none';
 
-          const simpanFisikBaris = async () => {
-            const nilai = Math.round(num(inputFisik.value));
+          const btnReset = document.createElement('button');
+          btnReset.type = 'button';
+          btnReset.className = 'ico';
+          btnReset.textContent = '↺';
+          btnReset.title = 'Reset stok fisik ke 0';
+          btnReset.style.width = '32px';
+          btnReset.style.height = '32px';
+          btnReset.style.padding = '0';
+          btnReset.style.display = 'flex';
+          btnReset.style.alignItems = 'center';
+          btnReset.style.justifyContent = 'center';
+          btnReset.style.font = 'inherit';
+          btnReset.style.fontSize = '14px';
+          btnReset.style.fontWeight = '800';
+          btnReset.style.color = 'var(--text)';
+          btnReset.style.background = 'var(--surface)';
+          btnReset.style.border = '1px solid var(--mori-line, rgba(26,25,23,0.14))';
+          btnReset.style.borderRadius = '8px';
+          btnReset.style.cursor = 'pointer';
+          btnReset.style.flexShrink = '0';
+          btnReset.style.outline = 'none';
+
+          const simpanFisikBaris = async (nilaiBaru) => {
+            const nilai = Math.round(num(nilaiBaru));
             inputFisik.value = String(nilai);
             hitungBaris(tr);
             hitungTotal();
@@ -996,19 +1018,11 @@
               .eq('id', row.id)
               .select();
             if (error) {
-              console.error('Gagal update stok fisik/onhand:', error.message);
+              console.error('Gagal update stok fisik:', error.message);
               alert('Gagal menyimpan ke database: ' + error.message);
               return;
             }
             row.stok_fisik = nilai;
-            row.onhand = nilai;
-            
-            // Perbarui nilai di kolom Onhand (index 4)
-            const tdSistem = tr.children[4];
-            if (tdSistem) {
-              const inp = tdSistem.querySelector('input');
-              if (inp) inp.value = String(nilai);
-            }
 
             tr.classList.add('sinkron');
             setTimeout(() => tr.classList.remove('sinkron'), 900);
@@ -1024,13 +1038,14 @@
             hitungBaris(tr);
             hitungTotal();
           });
-          btnSave.addEventListener('click', () => simpanFisikBaris());
+          btnSave.addEventListener('click', () => simpanFisikBaris(inputFisik.value));
+          btnReset.addEventListener('click', () => simpanFisikBaris(0));
           inputFisik.addEventListener('input', () => {
             hitungBaris(tr);
             hitungTotal();
           });
 
-          wrap.append(btnMin, inputFisik, btnPlus, btnSave);
+          wrap.append(btnMin, inputFisik, btnPlus, btnSave, btnReset);
           tdFisik.appendChild(wrap);
           tr.appendChild(tdFisik);
 
