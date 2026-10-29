@@ -714,22 +714,6 @@
       const barangBody = document.getElementById('barangBody');
       const barangFoot = document.getElementById('barangFoot');
       const barangEmpty = document.getElementById('barangEmpty');
-      const riwayatWrap = document.getElementById('riwayatWrap');
-      const riwayatBody = document.getElementById('riwayatBody');
-      const riwayatEmpty = document.getElementById('riwayatEmpty');
-      const riwayatToggle = document.getElementById('riwayatToggle');
-      const riwayatCaret = document.getElementById('riwayatCaret');
-      const riwayatCount = document.getElementById('riwayatCount');
-      let riwayatTerbuka = false;
-
-      riwayatToggle.addEventListener('click', () => {
-        riwayatTerbuka = !riwayatTerbuka;
-        riwayatToggle.setAttribute('aria-expanded', String(riwayatTerbuka));
-        riwayatCaret.textContent = riwayatTerbuka ? '−' : '+';
-        riwayatWrap.hidden = !riwayatTerbuka || riwayatBody.children.length === 0;
-        riwayatEmpty.hidden = riwayatTerbuka || riwayatBody.children.length > 0;
-      });
-
       let menuId = Number(new URLSearchParams(location.search).get('m')) || 0;
 
       const up = (value) => String(value ?? '').toUpperCase();
