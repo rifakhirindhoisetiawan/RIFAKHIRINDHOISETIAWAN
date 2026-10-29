@@ -979,7 +979,7 @@
                   total_nominal: nominal,
                   opname_date: new Date().toISOString()
                 });
-                loadRiwayat();
+                
               };
 
               btnMin.addEventListener('click', () => simpanFisik(num(input.value) - 1));
@@ -1066,12 +1066,12 @@
             return;
           }
           renderBarang(ulang.data || []);
-          loadRiwayat();
+          
           return;
         }
 
         renderBarang(barang || []);
-        loadRiwayat();
+        
       };
 
       // Fungsi simpanBaris + barisOpname dihapus: tidak ada lagi input yang
