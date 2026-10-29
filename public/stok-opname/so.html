@@ -960,17 +960,25 @@
 
           const btnSave = document.createElement('button');
           btnSave.type = 'button';
-          btnSave.className = 'btn-pm';
+          btnSave.className = 'ico';
           btnSave.textContent = '✓';
           btnSave.title = 'Simpan perubahan stok fisik';
           btnSave.style.width = '32px';
           btnSave.style.height = '32px';
-          btnSave.style.borderRadius = '0';
+          btnSave.style.padding = '0';
+          btnSave.style.display = 'flex';
+          btnSave.style.alignItems = 'center';
+          btnSave.style.justifyContent = 'center';
+          btnSave.style.font = 'inherit';
           btnSave.style.fontSize = '14px';
-          btnSave.style.background = 'var(--surface)';
-          btnSave.style.color = 'var(--text)';
-          btnSave.style.border = '1px solid var(--mori-line, rgba(26,25,23,.14))';
+          btnSave.style.fontWeight = '800';
+          btnSave.style.color = '#ffffff';
+          btnSave.style.background = '#6366f1';
+          btnSave.style.border = 'none';
+          btnSave.style.borderRadius = '8px';
           btnSave.style.cursor = 'pointer';
+          btnSave.style.flexShrink = '0';
+          btnSave.style.outline = 'none';
 
           const simpanFisikBaris = async () => {
             const nilai = Math.round(num(inputFisik.value));
