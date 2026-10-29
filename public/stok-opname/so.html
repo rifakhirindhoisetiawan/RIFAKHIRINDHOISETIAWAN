@@ -1084,7 +1084,7 @@
 
         const { data: barang, error: errBarang } = await supabase
           .from('stock_products')
-          .select('id, kode, name, satuan, stok_sistem, stok_fisik, hpp')
+          .select('id, menu_id, kode, name, satuan, stok_sistem, stok_fisik, onhand, hpp')
           .eq('menu_id', menuId)
           .order('kode');
         if (errBarang) {
