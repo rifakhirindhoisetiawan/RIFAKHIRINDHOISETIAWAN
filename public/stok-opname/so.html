@@ -328,12 +328,14 @@
 
       .c-nama {
         min-width: 160px;
+        white-space: nowrap;
       }
 
       .potong {
         max-width: none;
-        white-space: normal;
-        word-break: break-word;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .keterangan {
