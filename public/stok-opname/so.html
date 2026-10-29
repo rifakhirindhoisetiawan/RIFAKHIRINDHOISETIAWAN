@@ -1007,6 +1007,24 @@
                 row.stok_fisik = nilai;
                 tr.classList.add('sinkron');
                 setTimeout(() => tr.classList.remove('sinkron'), 900);
+
+                // Catat ke tabel stock_opname (riwayat)
+                const sistem = num(row.stok_sistem);
+                const selisih = nilai - sistem;
+                const nominal = selisih * num(row.hpp);
+                await supabase.from('stock_opname').insert({
+                  menu_id: menuId,
+                  product_id: row.id,
+                  product_plu: row.kode || '',
+                  product_name: row.name || '',
+                  stok_sistem: sistem,
+                  stok_fisik: nilai,
+                  selisih: selisih,
+                  hpp: num(row.hpp),
+                  total_nominal: nominal,
+                  opname_date: new Date().toISOString()
+                });
+                loadRiwayat();
               };
 
               btnMin.addEventListener('click', () => simpanFisik(num(input.value) - 1));
