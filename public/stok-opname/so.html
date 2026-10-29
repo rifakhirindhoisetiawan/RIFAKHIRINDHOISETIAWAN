@@ -995,11 +995,20 @@
               .update({ stok_fisik: nilai, onhand: nilai })
               .eq('id', row.id);
             if (error) {
-              console.error('Gagal update stok fisik:', error.message);
+              console.error('Gagal update stok fisik/onhand:', error.message);
+              alert('Gagal menyimpan ke database: ' + error.message);
               return;
             }
             row.stok_fisik = nilai;
             row.onhand = nilai;
+            
+            // Perbarui nilai di kolom Onhand (index 4)
+            const tdSistem = tr.children[4];
+            if (tdSistem) {
+              const inp = tdSistem.querySelector('input');
+              if (inp) inp.value = String(nilai);
+            }
+
             tr.classList.add('sinkron');
             setTimeout(() => tr.classList.remove('sinkron'), 900);
           };
