@@ -884,9 +884,12 @@
         );
       };
 
+      let cacheBarang = [];
+
       const renderBarang = (barang) => {
+        cacheBarang = barang;
         const q = cariBarang.value.trim().toLowerCase();
-        const tampil = barang.filter((row) =>
+        const tampil = cacheBarang.filter((row) =>
           !q ||
           String(row.kode || '').toLowerCase().includes(q) ||
           String(row.name || '').toLowerCase().includes(q)
@@ -1012,7 +1015,7 @@
         hitungTotal();
       };
 
-      cariBarang.addEventListener('input', () => load());
+      cariBarang.addEventListener('input', () => renderBarang(cacheBarang));
 
 
       const pilihMenuOtomatis = async () => {
