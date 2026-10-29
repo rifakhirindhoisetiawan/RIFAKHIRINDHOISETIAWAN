@@ -1234,6 +1234,11 @@
             tr.classList.add('sinkron');
             setTimeout(() => tr.classList.remove('sinkron'), 900);
             renderSelisih(cacheBarang);
+
+            // Reset input opname kembali ke 0 agar siap hitung input baru
+            inputFisik.value = '0';
+            hitungBaris(tr);
+            hitungTotal();
           };
 
           btnMin.addEventListener('click', () => {
