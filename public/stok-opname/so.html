@@ -756,7 +756,7 @@
               <th>Nama Barang</th>
               <th class="c-num">Onhand</th>
               <th class="c-num">Selisih</th>
-              <th class="c-num">Stok Fisik</th>
+              <th class="c-num">Opname</th>
             </tr>
           </thead>
           <!-- Baris cari: kotak pencarian jadi baris paling atas di dalam
@@ -798,6 +798,43 @@
       const confirmYa = document.getElementById('confirmYa');
       const confirmBatal = document.getElementById('confirmBatal');
       let confirmCallback = null;
+
+      
+      const saveOverlay = document.getElementById('saveOverlay');
+      const saveOptFisik = document.getElementById('saveOptFisik');
+      const saveOptOnhand = document.getElementById('saveOptOnhand');
+      const saveOptBatal = document.getElementById('saveOptBatal');
+      let saveChoiceCallback = null;
+
+      const showSaveChoiceModal = (itemName, onChoice) => {
+        document.getElementById('saveTitle').textContent = 'Simpan: ' + itemName;
+        saveChoiceCallback = onChoice;
+        saveOverlay.hidden = false;
+      };
+
+      saveOptBatal.addEventListener('click', () => {
+        saveOverlay.hidden = true;
+        saveChoiceCallback = null;
+      });
+
+      saveOptFisik.addEventListener('click', () => {
+        saveOverlay.hidden = true;
+        if (typeof saveChoiceCallback === 'function') saveChoiceCallback('fisik');
+        saveChoiceCallback = null;
+      });
+
+      saveOptOnhand.addEventListener('click', () => {
+        saveOverlay.hidden = true;
+        if (typeof saveChoiceCallback === 'function') saveChoiceCallback('onhand');
+        saveChoiceCallback = null;
+      });
+
+      saveOverlay.addEventListener('click', (e) => {
+        if (e.target === saveOverlay) {
+          saveOverlay.hidden = true;
+          saveChoiceCallback = null;
+        }
+      });
 
       const showCustomConfirm = (msg, onYes) => {
         confirmMsg.textContent = msg;
@@ -1151,7 +1188,7 @@
           btnReset.style.flexShrink = '0';
           btnReset.style.outline = 'none';
 
-          const simpanFisikBaris = async (nilaiBaru) => {
+          const simpanFisikBaris = async (nilaiBaru, mode) => {
             const nilai = Math.round(num(nilaiBaru));
             inputFisik.value = String(nilai);
             hitungBaris(tr);
@@ -1160,9 +1197,11 @@
             const tdTgl = tr.querySelector('.c-tgl');
             if (tdTgl) tdTgl.textContent = formatTanggal(new Date());
 
+            const updateData = mode === 'onhand' ? { stok_fisik: nilai, onhand: nilai } : { stok_fisik: nilai };
+
             const { error } = await supabase
               .from('stock_products')
-              .update({ stok_fisik: nilai })
+              .update(updateData)
               .eq('id', row.id);
             if (error) {
               console.error('Gagal update stok fisik:', error.message);
@@ -1170,6 +1209,14 @@
               return;
             }
             row.stok_fisik = nilai;
+            if (mode === 'onhand') {
+              row.onhand = nilai;
+              const tdSistem = tr.children[4];
+              if (tdSistem) {
+                const inp = tdSistem.querySelector('input');
+                if (inp) inp.value = String(nilai);
+              }
+            }
 
             tr.classList.add('sinkron');
             setTimeout(() => tr.classList.remove('sinkron'), 900);
@@ -1177,7 +1224,7 @@
           };
 
           btnMin.addEventListener('click', () => {
-            inputFisik.value = String(num(inputFisik.value) - 1);
+            inputFisik.value = String(num(inputFisik.value - 1));
             hitungBaris(tr);
             hitungTotal();
           });
@@ -1186,7 +1233,11 @@
             hitungBaris(tr);
             hitungTotal();
           });
-          btnSave.addEventListener('click', () => simpanFisikBaris(inputFisik.value));
+          btnSave.addEventListener('click', () => {
+            showSaveChoiceModal(row.name || row.kode, (mode) => {
+              simpanFisikBaris(inputFisik.value, mode);
+            });
+          });
           btnReset.addEventListener('click', () => {
             showCustomConfirm('Reset stok fisik "' + (row.name || row.kode) + '" menjadi 0?', () => simpanFisikBaris(0));
           });
