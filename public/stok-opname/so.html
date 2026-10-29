@@ -998,6 +998,40 @@
 
       let cacheBarang = [];
 
+      
+      const renderSelisih = (barang) => {
+        const selisihBody = document.getElementById('selisihBody');
+        const selisihEmpty = document.getElementById('selisihEmpty');
+        selisihBody.innerHTML = '';
+        const bedaList = barang.filter((row) => num(row.stok_fisik) !== num(row.stok_sistem));
+        
+        bedaList.forEach((row, i) => {
+          const sistem = num(row.stok_sistem);
+          const fisik = num(row.stok_fisik);
+          const selisih = fisik - sistem;
+          const tr = document.createElement('tr');
+          tr.append(cell(String(i + 1), 'c-no'), cellKode(row.kode));
+
+          const tdNama = document.createElement('td');
+          tdNama.className = 'c-nama';
+          const potong = document.createElement('div');
+          potong.className = 'potong';
+          potong.textContent = up(row.name);
+          potong.title = up(row.name);
+          tdNama.appendChild(potong);
+          tr.appendChild(tdNama);
+
+          tr.append(
+            cell(String(sistem), 'c-num'),
+            cell(String(fisik), 'c-num'),
+            cell(selisih > 0 ? '+' + selisih : String(selisih), 'c-num selisih ' + (selisih > 0 ? 'plus' : 'minus'))
+          );
+          selisihBody.appendChild(tr);
+        });
+        selisihEmpty.hidden = bedaList.length > 0;
+        document.getElementById('selisihWrap').hidden = bedaList.length === 0;
+      };
+
       const renderBarang = (barang) => {
         cacheBarang = barang;
         const q = cariBarang.value.trim().toLowerCase();
@@ -1234,6 +1268,7 @@
         }
 
         renderBarang(barang || []);
+        renderSelisih(barang || []);
         
       };
 
