@@ -1088,37 +1088,7 @@
         
       };
 
-      document.getElementById('btnSaveAll').addEventListener('click', async () => {
-        const btn = document.getElementById('btnSaveAll');
-        btn.textContent = 'Menyimpan...';
-        btn.disabled = true;
-
-        for (const row of cacheBarang) {
-          const tr = barangBody.querySelector(`tr[data-id="${row.id}"]`);
-          if (!tr) continue;
-          const input = tr.querySelector('.in-fisik');
-          if (!input) continue;
-          const nilai = Math.round(num(input.value));
-          if (nilai === num(row.stok_fisik)) continue;
-
-          const { error } = await supabase
-            .from('stock_products')
-            .update({ stok_fisik: nilai, onhand: nilai })
-            .eq('id', row.id);
-          
-          if (!error) {
-            row.stok_fisik = nilai;
-            row.onhand = nilai;
-            const tdOnhand = tr.children[4];
-            if (tdOnhand) tdOnhand.textContent = rupiah(nilai);
-          }
-        }
-
-        btn.textContent = 'Save';
-        btn.disabled = false;
-        alert('Berhasil menyimpan semua perubahan fisik dan onhand!');
-        load();
-      });
+      
 
       // Waktu ringkas satu baris: "24/10 14:30" (tanpa tahun, tanpa detik).
       const formatWaktu = (value) => {
