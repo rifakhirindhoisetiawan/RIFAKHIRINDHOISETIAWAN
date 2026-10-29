@@ -1002,6 +1002,8 @@
       const renderSelisih = (barang) => {
         const selisihBody = document.getElementById('selisihBody');
         const selisihEmpty = document.getElementById('selisihEmpty');
+        const selisihWrap = document.getElementById('selisihWrap');
+        if (!selisihBody || !selisihEmpty || !selisihWrap) return;
         selisihBody.innerHTML = '';
         const bedaList = barang.filter((row) => num(row.stok_fisik) !== num(row.stok_sistem));
         
