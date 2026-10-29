@@ -737,6 +737,19 @@
       </div>
     </div>
 
+    
+    <div class="confirm-overlay" id="saveOverlay" hidden>
+      <div class="confirm-box">
+        <div class="confirm-title" id="saveTitle">Simpan Perubahan</div>
+        <div class="confirm-msg" id="saveMsg">Pilih tujuan penyimpanan untuk item ini:</div>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
+          <button type="button" class="confirm-btn yes" id="saveOptFisik" style="width: 100%;">Simpan ke Stok Fisik Saja</button>
+          <button type="button" class="confirm-btn yes" id="saveOptOnhand" style="width: 100%; background: var(--text); color: var(--mori-bg);">Simpan ke Stok Fisik & Onhand</button>
+          <button type="button" class="confirm-btn" id="saveOptBatal" style="width: 100%; margin-top: 4px; border-radius: 10px;">Batal</button>
+        </div>
+      </div>
+    </div>
+
     <div class="lightbox" id="lightbox" hidden>
       <div class="lightbox-box">
         <canvas class="qr" id="lightboxQr" width="220" height="220"></canvas>
