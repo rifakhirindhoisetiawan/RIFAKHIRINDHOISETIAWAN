@@ -1241,6 +1241,10 @@
             dropdown.hidden = !dropdown.hidden;
           });
 
+          dropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+          });
+
           document.addEventListener('click', () => {
             dropdown.hidden = true;
           });
