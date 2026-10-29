@@ -1210,7 +1210,7 @@
             const tdTgl = tr.querySelector('.c-tgl');
             if (tdTgl) tdTgl.textContent = formatTanggal(new Date());
 
-            const updateData = mode === 'onhand' ? { stok_fisik: nilai, onhand: nilai } : { stok_fisik: nilai };
+            const updateData = mode === 'onhand' ? { stok_fisik: nilai, stok_sistem: nilai } : { stok_fisik: nilai };
 
             const { error } = await supabase
               .from('stock_products')
