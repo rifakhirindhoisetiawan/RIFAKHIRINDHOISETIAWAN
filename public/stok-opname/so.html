@@ -722,6 +722,41 @@
         border-color: var(--text);
       }
 
+    
+      .menu-wrap {
+        position: relative;
+        display: inline-block;
+      }
+      .dropdown-menu {
+        position: absolute;
+        right: 0;
+        top: 36px;
+        background: var(--mori-bg, #fffbf2);
+        border: 1px solid var(--mori-line, rgba(26,25,23,0.14));
+        border-radius: 8px;
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+        min-width: 140px;
+        z-index: 50;
+        overflow: hidden;
+      }
+      .dropdown-item {
+        padding: 8px 12px;
+        text-align: left;
+        background: transparent;
+        border: none;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+      .dropdown-item:hover {
+        background: rgba(26,25,23,0.06);
+      }
+
     </style>
   </head>
   <body>
@@ -1157,49 +1192,70 @@
           btnPlus.className = 'btn-pm';
           btnPlus.textContent = '+';
 
-          const btnSave = document.createElement('button');
-          btnSave.type = 'button';
-          btnSave.className = 'ico';
-          btnSave.textContent = '✓';
-          btnSave.title = 'Simpan perubahan stok fisik';
-          btnSave.style.width = '32px';
-          btnSave.style.height = '32px';
-          btnSave.style.padding = '0';
-          btnSave.style.display = 'flex';
-          btnSave.style.alignItems = 'center';
-          btnSave.style.justifyContent = 'center';
-          btnSave.style.font = 'inherit';
-          btnSave.style.fontSize = '14px';
-          btnSave.style.fontWeight = '800';
-          btnSave.style.color = 'var(--text)';
-          btnSave.style.background = 'var(--surface)';
-          btnSave.style.border = '1px solid var(--mori-line, rgba(26,25,23,0.14))';
-          btnSave.style.borderRadius = '8px';
-          btnSave.style.cursor = 'pointer';
-          btnSave.style.flexShrink = '0';
-          btnSave.style.outline = 'none';
+          const menuWrap = document.createElement('div');
+          menuWrap.className = 'menu-wrap';
 
-          const btnReset = document.createElement('button');
-          btnReset.type = 'button';
-          btnReset.className = 'ico';
-          btnReset.textContent = '↺';
-          btnReset.title = 'Reset stok fisik ke 0';
-          btnReset.style.width = '32px';
-          btnReset.style.height = '32px';
-          btnReset.style.padding = '0';
-          btnReset.style.display = 'flex';
-          btnReset.style.alignItems = 'center';
-          btnReset.style.justifyContent = 'center';
-          btnReset.style.font = 'inherit';
-          btnReset.style.fontSize = '14px';
-          btnReset.style.fontWeight = '800';
-          btnReset.style.color = 'var(--text)';
-          btnReset.style.background = 'var(--surface)';
-          btnReset.style.border = '1px solid var(--mori-line, rgba(26,25,23,0.14))';
-          btnReset.style.borderRadius = '8px';
-          btnReset.style.cursor = 'pointer';
-          btnReset.style.flexShrink = '0';
-          btnReset.style.outline = 'none';
+          const btnMenu = document.createElement('button');
+          btnMenu.type = 'button';
+          btnMenu.className = 'ico';
+          btnMenu.textContent = '⋮';
+          btnMenu.title = 'Opsi';
+          btnMenu.style.width = '32px';
+          btnMenu.style.height = '32px';
+          btnMenu.style.padding = '0';
+          btnMenu.style.display = 'flex';
+          btnMenu.style.alignItems = 'center';
+          btnMenu.style.justifyContent = 'center';
+          btnMenu.style.font = 'inherit';
+          btnMenu.style.fontSize = '16px';
+          btnMenu.style.fontWeight = '800';
+          btnMenu.style.color = 'var(--text)';
+          btnMenu.style.background = 'var(--surface)';
+          btnMenu.style.border = '1px solid var(--mori-line, rgba(26,25,23,0.14))';
+          btnMenu.style.borderRadius = '8px';
+          btnMenu.style.cursor = 'pointer';
+          btnMenu.style.flexShrink = '0';
+          btnMenu.style.outline = 'none';
+
+          const dropdown = document.createElement('div');
+          dropdown.className = 'dropdown-menu';
+          dropdown.hidden = true;
+
+          const btnSaveOpt = document.createElement('button');
+          btnSaveOpt.type = 'button';
+          btnSaveOpt.className = 'dropdown-item';
+          btnSaveOpt.textContent = 'Simpan';
+
+          const btnResetOpt = document.createElement('button');
+          btnResetOpt.type = 'button';
+          btnResetOpt.className = 'dropdown-item';
+          btnResetOpt.textContent = 'Reset (0)';
+
+          dropdown.append(btnSaveOpt, btnResetOpt);
+          menuWrap.append(btnMenu, dropdown);
+
+          btnMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // Tutup dropdown lain yang terbuka
+            document.querySelectorAll('.dropdown-menu').forEach(d => { if (d !== dropdown) d.hidden = true; });
+            dropdown.hidden = !dropdown.hidden;
+          });
+
+          document.addEventListener('click', () => {
+            dropdown.hidden = true;
+          });
+
+          btnSaveOpt.addEventListener('click', () => {
+            dropdown.hidden = true;
+            showSaveChoiceModal(row.name || row.kode, (mode) => {
+              simpanFisikBaris(inputFisik.value, mode);
+            });
+          });
+
+          btnResetOpt.addEventListener('click', () => {
+            dropdown.hidden = true;
+            showCustomConfirm('Reset stok fisik "' + (row.name || row.kode) + '" menjadi 0?', () => simpanFisikBaris(0));
+          });
 
           const simpanFisikBaris = async (nilaiBaru, mode) => {
             const nilai = Math.round(num(nilaiBaru));
@@ -1266,7 +1322,7 @@
             hitungTotal();
           });
 
-          wrap.append(btnMin, inputFisik, btnPlus, btnSave);
+          wrap.append(btnMin, inputFisik, btnPlus, menuWrap);
           tdFisik.appendChild(wrap);
           tr.appendChild(tdFisik);
 
