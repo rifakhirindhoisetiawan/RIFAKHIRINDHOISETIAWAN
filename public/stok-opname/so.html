@@ -705,36 +705,7 @@
       <div class="empty" id="barangEmpty" hidden>Belum ada barang. Tambah lewat menu ADMIN.</div>
     </section>
 
-    <section class="sec">
-      <!-- Riwayat dibuat simple: 3 kolom (Waktu, Kode, Selisih),
-           disembunyikan sampai menekan tombol, maksimal 20 baris. -->
-      <div class="row riwayat-head">
-        <button
-          class="riwayat-toggle"
-          id="riwayatToggle"
-          type="button"
-          aria-expanded="false"
-          aria-controls="riwayatWrap"
-        >
-          <span class="riwayat-caret" id="riwayatCaret">+</span>
-          <span>Riwayat</span>
-          <span class="riwayat-count" id="riwayatCount"></span>
-        </button>
-      </div>
-      <div class="table-wrap" id="riwayatWrap" hidden>
-        <table class="riwayat">
-          <thead>
-            <tr>
-              <th>Waktu</th>
-              <th>Kode</th>
-              <th class="c-num">Selisih</th>
-            </tr>
-          </thead>
-          <tbody id="riwayatBody"></tbody>
-        </table>
-      </div>
-      <div class="empty" id="riwayatEmpty" hidden>Belum ada riwayat.</div>
-    </section>
+    <!-- Section riwayat dihapus -->
 
     <script type="module">
       import { supabase } from '../../js/supabase.js';
