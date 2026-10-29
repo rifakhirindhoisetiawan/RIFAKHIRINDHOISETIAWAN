@@ -991,14 +991,28 @@
               btnPlus.className = 'btn-pm';
               btnPlus.textContent = '+';
 
-              const updateFisik = (val) => {
-                input.value = String(val);
+              const simpanFisik = async (val) => {
+                const nilai = Math.round(num(val));
+                input.value = String(nilai);
                 hitungBaris(tr);
                 hitungTotal();
+                const { error } = await supabase
+                  .from('stock_products')
+                  .update({ stok_fisik: nilai })
+                  .eq('id', row.id);
+                if (error) {
+                  console.error('Gagal update stok fisik:', error.message);
+                  return;
+                }
+                row.stok_fisik = nilai;
+                tr.classList.add('sinkron');
+                setTimeout(() => tr.classList.remove('sinkron'), 900);
               };
 
-              btnMin.addEventListener('click', () => updateFisik(num(input.value) - 1));
-              btnPlus.addEventListener('click', () => updateFisik(num(input.value) + 1));
+              btnMin.addEventListener('click', () => simpanFisik(num(input.value) - 1));
+              btnPlus.addEventListener('click', () => simpanFisik(num(input.value) + 1));
+              input.addEventListener('change', () => simpanFisik(input.value));
+              input.addEventListener('blur', () => simpanFisik(input.value));
               input.addEventListener('input', () => {
                 hitungBaris(tr);
                 hitungTotal();
