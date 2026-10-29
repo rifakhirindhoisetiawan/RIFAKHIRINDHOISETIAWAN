@@ -1212,7 +1212,7 @@
 
             const sistemLama = num(row.stok_sistem);
             const nilaiBaruSistem = mode === 'onhand' ? sistemLama + nilai : sistemLama;
-            const updateData = mode === 'onhand' ? { stok_fisik: nilai, stok_sistem: nilaiBaruSistem } : { stok_fisik: nilai };
+            const updateData = mode === 'onhand' ? { stok_fisik: 0, stok_sistem: nilaiBaruSistem } : { stok_fisik: nilai };
 
             const { error } = await supabase
               .from('stock_products')
