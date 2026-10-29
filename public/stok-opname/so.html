@@ -1125,11 +1125,10 @@
             const tdTgl = tr.querySelector('.c-tgl');
             if (tdTgl) tdTgl.textContent = formatTanggal(new Date());
 
-            const { data: updated, error } = await supabase
+            const { error } = await supabase
               .from('stock_products')
               .update({ stok_fisik: nilai })
-              .eq('id', row.id)
-              .select();
+              .eq('id', row.id);
             if (error) {
               console.error('Gagal update stok fisik:', error.message);
               alert('Gagal menyimpan ke database: ' + error.message);
@@ -1139,6 +1138,7 @@
 
             tr.classList.add('sinkron');
             setTimeout(() => tr.classList.remove('sinkron'), 900);
+            renderSelisih(cacheBarang);
           };
 
           btnMin.addEventListener('click', () => {
