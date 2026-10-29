@@ -744,7 +744,7 @@
         <div class="confirm-msg" id="saveMsg">Pilih tujuan penyimpanan untuk item ini:</div>
         <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
           <button type="button" class="confirm-btn yes" id="saveOptFisik" style="width: 100%;">Simpan ke Stok Fisik Saja</button>
-          <button type="button" class="confirm-btn yes" id="saveOptOnhand" style="width: 100%; background: var(--text); color: var(--mori-bg);">Simpan ke Stok Fisik & Onhand</button>
+          <button type="button" class="confirm-btn yes" id="saveOptOnhand" style="width: 100%; background: var(--text); color: var(--mori-bg);">Tambah ke Onhand (Akumulasi)</button>
           <button type="button" class="confirm-btn" id="saveOptBatal" style="width: 100%; margin-top: 4px; border-radius: 10px;">Batal</button>
         </div>
       </div>
@@ -1210,7 +1210,9 @@
             const tdTgl = tr.querySelector('.c-tgl');
             if (tdTgl) tdTgl.textContent = formatTanggal(new Date());
 
-            const updateData = mode === 'onhand' ? { stok_fisik: nilai, stok_sistem: nilai } : { stok_fisik: nilai };
+            const sistemLama = num(row.stok_sistem);
+            const nilaiBaruSistem = mode === 'onhand' ? sistemLama + nilai : sistemLama;
+            const updateData = mode === 'onhand' ? { stok_fisik: nilai, stok_sistem: nilaiBaruSistem } : { stok_fisik: nilai };
 
             const { error } = await supabase
               .from('stock_products')
@@ -1223,11 +1225,11 @@
             }
             row.stok_fisik = nilai;
             if (mode === 'onhand') {
-              row.onhand = nilai;
+              row.stok_sistem = nilaiBaruSistem;
               const tdSistem = tr.children[4];
               if (tdSistem) {
                 const inp = tdSistem.querySelector('input');
-                if (inp) inp.value = String(nilai);
+                if (inp) inp.value = String(nilaiBaruSistem);
               }
             }
 
