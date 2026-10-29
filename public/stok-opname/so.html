@@ -1235,10 +1235,7 @@
             setTimeout(() => tr.classList.remove('sinkron'), 900);
             renderSelisih(cacheBarang);
 
-            // Reset input opname kembali ke 0 agar siap hitung input baru
-            inputFisik.value = '0';
-            hitungBaris(tr);
-            hitungTotal();
+            // Jangan reset ke 0 otomatis setelah save, biarkan nilai tetap atau sesuai keinginan (hanya reset jika tombol reset ↺ ditekan)
           };
 
           btnMin.addEventListener('click', () => {
