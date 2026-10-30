@@ -368,8 +368,8 @@
         position: absolute;
         top: 6px;
         right: 6px;
-        width: 26px;
-        height: 26px;
+        width: 28px;
+        height: 28px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -380,6 +380,10 @@
         z-index: 10;
         padding: 0;
         color: var(--mori-text-2);
+        font-family: inherit;
+        font-size: 16px;
+        font-weight: 800;
+        line-height: 1;
         transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
       }
       .btn-pin:active {
@@ -389,10 +393,6 @@
         background: var(--mori-text);
         color: var(--mori-bg);
         border-color: var(--mori-text);
-      }
-      .btn-pin svg {
-        width: 13px;
-        height: 13px;
       }
 
     </style>
@@ -487,7 +487,7 @@
           btnPin.setAttribute('aria-pressed', dipin ? 'true' : 'false');
           btnPin.title = pinTitle;
           btnPin.setAttribute('aria-label', pinTitle);
-          btnPin.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>';
+          btnPin.textContent = '\u22EE';
 
           btnPin.addEventListener('click', (e) => {
             e.preventDefault();
