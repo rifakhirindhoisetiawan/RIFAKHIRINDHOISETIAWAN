@@ -507,7 +507,7 @@
           if (isDisabled) a.setAttribute("aria-disabled", "true");
           
           a.innerHTML = `
-            <div class="icon-box">
+            <div class="icon-box" style="position:relative;">
               <img
                 alt="${item.label}"
                 ${item.thumb ? '' : `data-menu="${item.folder}"`}
@@ -522,9 +522,6 @@
           `;
           
           menuList.appendChild(a);
-        });
-          wrap.append(a, btnPin);
-          menuList.appendChild(wrap);
         });
 
         document.querySelectorAll('img[data-menu]').forEach((img) => {
