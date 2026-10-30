@@ -358,41 +358,36 @@
         }
       }
     
-      .menu-item-wrap {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      .btn-pin {
-        position: absolute;
-        top: 6px;
-        right: 6px;
-        width: 28px;
-        height: 28px;
+      .notif-btn, .header-pin-btn {
+        flex: 0 0 auto;
+        width: 46px;
+        height: 46px;
         display: flex;
         align-items: center;
         justify-content: center;
         background: var(--mori-surface);
         border: 1px solid var(--mori-line);
-        border-radius: 6px;
-        cursor: pointer;
-        z-index: 10;
-        padding: 0;
+        border-radius: 8px;
         color: var(--mori-text-2);
+        cursor: pointer;
+        padding: 0;
         font-family: inherit;
-        font-size: 16px;
+        font-size: 20px;
         font-weight: 800;
         line-height: 1;
-        transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+        transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
       }
-      .btn-pin:active {
-        transform: scale(0.92);
+      .notif-btn:active, .header-pin-btn:active {
+        transform: translate(2px, 2px);
       }
-      .btn-pin[aria-pressed="true"] {
+      .header-pin-btn[aria-pressed="true"] {
         background: var(--mori-text);
         color: var(--mori-bg);
         border-color: var(--mori-text);
+      }
+      .notif-btn svg {
+        width: 20px;
+        height: 20px;
       }
 
     </style>
@@ -455,19 +450,45 @@
           return ra - rb;
         });
 
+
+        let pinEditMode = false;
+        const headerPinBtn = document.getElementById('headerPinBtn');
+        if (headerPinBtn) {
+          headerPinBtn.onclick = () => {
+            pinEditMode = !pinEditMode;
+            headerPinBtn.setAttribute('aria-pressed', pinEditMode ? 'true' : 'false');
+            renderMenu();
+          };
+        }
+
         sortedItems.forEach((item) => {
           const isDisabled = item.href === "#" || disabledLabels.has(item.label);
           const dipin = isPinned(item.label);
 
-          const wrap = document.createElement('div');
-          wrap.className = 'menu-item-wrap';
-
           const a = document.createElement(isDisabled ? "div" : "a");
-          a.className = "menu-item" + (isDisabled ? " disabled" : "");
-          if (!isDisabled) a.href = item.href;
+          a.className = "menu-item" + (isDisabled ? " disabled" : "") + (dipin ? " pinned" : "");
+          if (!isDisabled && !pinEditMode) a.href = item.href;
           if (isDisabled) a.setAttribute("aria-disabled", "true");
+          
+          if (pinEditMode) {
+            a.style.cursor = 'pointer';
+            a.onclick = (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (isPinned(item.label)) {
+                pinned = pinned.filter(l => l !== item.label);
+              } else {
+                pinned.push(item.label);
+              }
+              try {
+                localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
+              } catch {}
+              renderMenu();
+            };
+          }
+
           a.innerHTML = `
-            <div class="icon-box">
+            <div class="icon-box" style="${pinEditMode && dipin ? 'border: 2px solid var(--mori-text);' : ''}">
               <img
                 alt="${item.label}"
                 ${item.thumb ? '' : `data-menu="${item.folder}"`}
@@ -476,33 +497,13 @@
                 decoding="async"
                 onload="this.classList.add('loaded')"
               />
+              ${dipin ? '<span style="position:absolute;top:4px;right:4px;background:var(--mori-text);color:var(--mori-bg);font-size:10px;font-weight:800;padding:2px 6px;border-radius:4px;">PIN</span>' : ''}
             </div>
-            <span class="label">${item.label}</span>
+            <span class="label">${item.label} ${pinEditMode ? (dipin ? '(Lepas)' : '(Semat)') : ''}</span>
           `;
-
-          const pinTitle = (dipin ? 'Lepas sematan ' : 'Sematkan ke atas ') + item.label;
-          const btnPin = document.createElement('button');
-          btnPin.type = 'button';
-          btnPin.className = 'btn-pin';
-          btnPin.setAttribute('aria-pressed', dipin ? 'true' : 'false');
-          btnPin.title = pinTitle;
-          btnPin.setAttribute('aria-label', pinTitle);
-          btnPin.textContent = '\u22EE';
-
-          btnPin.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (isPinned(item.label)) {
-              pinned = pinned.filter(l => l !== item.label);
-            } else {
-              pinned.push(item.label);
-            }
-            try {
-              localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
-            } catch {}
-            renderMenu();
-          });
-
+          
+          menuList.appendChild(a);
+        });
           wrap.append(a, btnPin);
           menuList.appendChild(wrap);
         });
