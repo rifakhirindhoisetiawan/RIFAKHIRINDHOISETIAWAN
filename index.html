@@ -357,6 +357,44 @@
           letter-spacing: 0.6px;
         }
       }
+    
+      .menu-item-wrap {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .btn-pin {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 26px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-line);
+        border-radius: 6px;
+        cursor: pointer;
+        z-index: 10;
+        padding: 0;
+        color: var(--mori-text-2);
+        transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+      }
+      .btn-pin:active {
+        transform: scale(0.92);
+      }
+      .btn-pin[aria-pressed="true"] {
+        background: var(--mori-text);
+        color: var(--mori-bg);
+        border-color: var(--mori-text);
+      }
+      .btn-pin svg {
+        width: 13px;
+        height: 13px;
+      }
+
     </style>
   </head>
   <body>
@@ -397,27 +435,85 @@
 
       const disabledLabels = new Set([]);
       const menuList = document.getElementById("menuList");
-      menuItems.forEach((item, idx) => {
-        const isDisabled = item.href === "#" || disabledLabels.has(item.label);
-        const a = document.createElement(isDisabled ? "div" : "a");
-        a.className = "menu-item" + (isDisabled ? " disabled" : "");
-        if (!isDisabled) a.href = item.href;
-        if (isDisabled) a.setAttribute("aria-disabled", "true");
-        a.innerHTML = `
-          <div class="icon-box">
-            <img
-              alt="${item.label}"
-              ${item.thumb ? '' : `data-menu="${item.folder}"`}
-              src="${item.thumb || `assets/images/${item.folder}/1.${item.ext}`}"
-              loading="lazy"
-              decoding="async"
-              onload="this.classList.add('loaded')"
-            />
-          </div>
-          <span class="label">${item.label}</span>
-        `;
-        menuList.appendChild(a);
-      });
+      
+      const PIN_KEY = 'home_pinned_menus_v1';
+      let pinned = [];
+      try {
+        pinned = JSON.parse(localStorage.getItem(PIN_KEY)) || [];
+      } catch {
+        pinned = [];
+      }
+
+      const isPinned = (label) => pinned.includes(label);
+
+      const renderMenu = () => {
+        menuList.innerHTML = '';
+        
+        const sortedItems = [...menuItems].sort((a, b) => {
+          const ra = isPinned(a.label) ? 0 : 1;
+          const rb = isPinned(b.label) ? 0 : 1;
+          return ra - rb;
+        });
+
+        sortedItems.forEach((item) => {
+          const isDisabled = item.href === "#" || disabledLabels.has(item.label);
+          const dipin = isPinned(item.label);
+
+          const wrap = document.createElement('div');
+          wrap.className = 'menu-item-wrap';
+
+          const a = document.createElement(isDisabled ? "div" : "a");
+          a.className = "menu-item" + (isDisabled ? " disabled" : "");
+          if (!isDisabled) a.href = item.href;
+          if (isDisabled) a.setAttribute("aria-disabled", "true");
+          a.innerHTML = `
+            <div class="icon-box">
+              <img
+                alt="${item.label}"
+                ${item.thumb ? '' : `data-menu="${item.folder}"`}
+                src="${item.thumb || `assets/images/${item.folder}/1.${item.ext}`}"
+                loading="lazy"
+                decoding="async"
+                onload="this.classList.add('loaded')"
+              />
+            </div>
+            <span class="label">${item.label}</span>
+          `;
+
+          const pinTitle = (dipin ? 'Lepas sematan ' : 'Sematkan ke atas ') + item.label;
+          const btnPin = document.createElement('button');
+          btnPin.type = 'button';
+          btnPin.className = 'btn-pin';
+          btnPin.setAttribute('aria-pressed', dipin ? 'true' : 'false');
+          btnPin.title = pinTitle;
+          btnPin.setAttribute('aria-label', pinTitle);
+          btnPin.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>';
+
+          btnPin.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (isPinned(item.label)) {
+              pinned = pinned.filter(l => l !== item.label);
+            } else {
+              pinned.push(item.label);
+            }
+            try {
+              localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
+            } catch {}
+            renderMenu();
+          });
+
+          wrap.append(a, btnPin);
+          menuList.appendChild(wrap);
+        });
+
+        document.querySelectorAll('img[data-menu]').forEach((img) => {
+          lazyLoader.observe(img);
+        });
+      };
+
+      renderMenu();
+
 
       const dateTimeEl = document.getElementById("dateTime");
       function updateDateTime(){
