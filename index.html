@@ -390,17 +390,58 @@
         height: 20px;
       }
 
+    
+      .menu-item-wrap {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .btn-pin {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-line);
+        border-radius: 6px;
+        cursor: pointer;
+        z-index: 10;
+        padding: 0;
+        color: var(--mori-text-2);
+        transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+      }
+      .btn-pin:active {
+        transform: scale(0.92);
+      }
+      .btn-pin[aria-pressed="true"] {
+        background: var(--mori-text);
+        color: var(--mori-bg);
+        border-color: var(--mori-text);
+      }
+      .btn-pin svg {
+        width: 14px;
+        height: 14px;
+      }
+
     </style>
   </head>
   <body>
     <div class="container">
       <div class="search-wrapper">
-          <div class="search-box" style="flex:1;min-width:0">
+        <div class="search-box" style="flex:1;min-width:0">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           <div id="dateTime" style="flex:1;min-width:0;font-family:'Inter',sans-serif;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:space-between">Memuat...</div>
         </div>
         <button class="notif-btn" type="button" aria-label="Notifikasi" title="Notifikasi (sementara)" onclick="alert('Notifikasi: belum ada (masih ide)')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
+        <button class="notif-btn" id="headerPinBtn" type="button" aria-label="Kelola Sematan Menu" title="Kelola Sematan Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"/></svg>
         </button>
       </div>
       <div class="menu-list" id="menuList"></div>
@@ -430,7 +471,15 @@
 
       const disabledLabels = new Set([]);
       const menuList = document.getElementById("menuList");
-      
+
+      // Lazy load foto menu (harus didefinisikan sebelum renderMenu dipanggil)
+      const lazyLoader = createLazyLoader(async (img) => {
+        const menu = img.dataset.menu;
+        await loadIndexPhoto(menu, img);
+        img.classList.add('loaded');
+      });
+
+      // --- Sematan (pin) menu, gaya sama dengan KOPI ---
       const PIN_KEY = 'home_pinned_menus_v1';
       let pinned = [];
       try {
@@ -440,74 +489,32 @@
       }
 
       const isPinned = (label) => pinned.includes(label);
+      const ICO_PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"/></svg>';
 
       const renderMenu = () => {
         menuList.innerHTML = '';
-        
-        const sortedItems = [...menuItems].sort((a, b) => {
-          const ra = isPinned(a.label) ? 0 : 1;
-          const rb = isPinned(b.label) ? 0 : 1;
-          return ra - rb;
-        });
 
-
-        const headerPinBtn = document.getElementById('headerPinBtn');
-        if (headerPinBtn && !headerPinBtn.dataset.bound) {
-          headerPinBtn.dataset.bound = 'true';
-          headerPinBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            let modal = document.getElementById('pinModal');
-            if (!modal) {
-              modal = document.createElement('div');
-              modal.id = 'pinModal';
-              modal.style.cssText = 'position:absolute;top:70px;right:18px;background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:10px;padding:12px;box-shadow:none;z-index:100;min-width:200px;max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;';
-              document.body.appendChild(modal);
-
-              document.addEventListener('click', (ev) => {
-                if (modal && !modal.contains(ev.target) && ev.target !== headerPinBtn) {
-                  modal.hidden = true;
-                }
-              });
-            }
-            modal.hidden = !modal.hidden;
-            if (!modal.hidden) {
-              modal.innerHTML = '<div style="font-size:12px;font-weight:700;margin-bottom:4px;color:var(--mori-text);">Kelola Sematan Menu</div>';
-              menuItems.forEach((m) => {
-                const isP = isPinned(m.label);
-                const row = document.createElement('button');
-                row.type = 'button';
-                row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;background:var(--mori-surface);border:1px solid var(--mori-line);padding:6px 10px;border-radius:6px;font:inherit;font-size:12px;cursor:pointer;width:100%;text-align:left;';
-                row.innerHTML = '<span>' + m.label + '</span><span style="font-weight:700;color:' + (isP ? 'var(--mori-text)' : 'var(--mori-text-2)') + ';">' + (isP ? '✓ Disemat' : '+ Semat') + '</span>';
-                row.onclick = (ev) => {
-                  ev.stopPropagation();
-                  if (isPinned(m.label)) {
-                    pinned = pinned.filter(l => l !== m.label);
-                  } else {
-                    pinned.push(m.label);
-                  }
-                  try {
-                    localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
-                  } catch {}
-                  renderMenu();
-                  headerPinBtn.click(); // Refresh modal
-                };
-                modal.appendChild(row);
-              });
-            }
-          });
-        }
+        // Menu tersemat naik ke atas (urutan semat), sisanya urutan asli.
+        const rank = (item) => {
+          const i = pinned.indexOf(item.label);
+          return i === -1 ? Number.MAX_SAFE_INTEGER : i;
+        };
+        const sortedItems = [...menuItems].sort((a, b) => rank(a) - rank(b));
 
         sortedItems.forEach((item) => {
           const isDisabled = item.href === "#" || disabledLabels.has(item.label);
           const dipin = isPinned(item.label);
+          const pinTitle = (dipin ? 'Lepas sematan ' : 'Sematkan ke atas ') + item.label;
+
+          const wrap = document.createElement('div');
+          wrap.className = 'menu-item-wrap';
 
           const a = document.createElement(isDisabled ? "div" : "a");
           a.className = "menu-item" + (isDisabled ? " disabled" : "");
           if (!isDisabled) a.href = item.href;
           if (isDisabled) a.setAttribute("aria-disabled", "true");
-          
           a.innerHTML = `
-            <div class="icon-box" style="position:relative;">
+            <div class="icon-box">
               <img
                 alt="${item.label}"
                 ${item.thumb ? '' : `data-menu="${item.folder}"`}
@@ -516,12 +523,34 @@
                 decoding="async"
                 onload="this.classList.add('loaded')"
               />
-              ${dipin ? '<span style="position:absolute;top:4px;right:4px;background:var(--mori-text);color:var(--mori-bg);font-size:9px;font-weight:800;padding:2px 5px;border-radius:4px;">PIN</span>' : ''}
             </div>
             <span class="label">${item.label}</span>
           `;
-          
-          menuList.appendChild(a);
+
+          const btnPin = document.createElement('button');
+          btnPin.type = 'button';
+          btnPin.className = 'btn-pin';
+          btnPin.setAttribute('aria-pressed', dipin ? 'true' : 'false');
+          btnPin.title = pinTitle;
+          btnPin.setAttribute('aria-label', pinTitle);
+          btnPin.innerHTML = ICO_PIN;
+
+          btnPin.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (isPinned(item.label)) {
+              pinned = pinned.filter(l => l !== item.label);
+            } else {
+              pinned.push(item.label);
+            }
+            try {
+              localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
+            } catch {}
+            renderMenu();
+          });
+
+          wrap.append(a, btnPin);
+          menuList.appendChild(wrap);
         });
 
         document.querySelectorAll('img[data-menu]').forEach((img) => {
@@ -530,7 +559,6 @@
       };
 
       renderMenu();
-
 
       const dateTimeEl = document.getElementById("dateTime");
       function updateDateTime(){
@@ -541,17 +569,6 @@
       }
       updateDateTime();
       setInterval(updateDateTime, 1000);
-
-      // Lazy load dengan IntersectionObserver
-      const lazyLoader = createLazyLoader(async (img) => {
-        const menu = img.dataset.menu;
-        await loadIndexPhoto(menu, img);
-        img.classList.add('loaded');
-      });
-
-      document.querySelectorAll('img[data-menu]').forEach((img) => {
-        lazyLoader.observe(img);
-      });
     </script>
   </body>
 </html>
