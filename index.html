@@ -391,30 +391,8 @@
       }
 
     
-      .menu-item-wrap {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      .btn-pin {
-        position: absolute;
-        top: 6px;
-        right: 6px;
-        width: 28px;
-        height: 28px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--mori-surface);
-        border: 1px solid var(--mori-line);
-        border-radius: 6px;
-        cursor: pointer;
-        z-index: 10;
-        padding: 0;
-        color: var(--mori-text-2);
-        transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
-      }
+      
+      
       .btn-pin:active {
         transform: scale(0.92);
       }
@@ -501,13 +479,8 @@
         };
         const sortedItems = [...menuItems].sort((a, b) => rank(a) - rank(b));
 
-        sortedItems.forEach((item) => {
+                sortedItems.forEach((item) => {
           const isDisabled = item.href === "#" || disabledLabels.has(item.label);
-          const dipin = isPinned(item.label);
-          const pinTitle = (dipin ? 'Lepas sematan ' : 'Sematkan ke atas ') + item.label;
-
-          const wrap = document.createElement('div');
-          wrap.className = 'menu-item-wrap';
 
           const a = document.createElement(isDisabled ? "div" : "a");
           a.className = "menu-item" + (isDisabled ? " disabled" : "");
@@ -527,33 +500,10 @@
             <span class="label">${item.label}</span>
           `;
 
-          const btnPin = document.createElement('button');
-          btnPin.type = 'button';
-          btnPin.className = 'btn-pin';
-          btnPin.setAttribute('aria-pressed', dipin ? 'true' : 'false');
-          btnPin.title = pinTitle;
-          btnPin.setAttribute('aria-label', pinTitle);
-          btnPin.innerHTML = ICO_PIN;
-
-          btnPin.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (isPinned(item.label)) {
-              pinned = pinned.filter(l => l !== item.label);
-            } else {
-              pinned.push(item.label);
-            }
-            try {
-              localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
-            } catch {}
-            renderMenu();
-          });
-
-          wrap.append(a, btnPin);
-          menuList.appendChild(wrap);
+          menuList.appendChild(a);
         });
 
-        document.querySelectorAll('img[data-menu]').forEach((img) => {
+document.querySelectorAll('img[data-menu]').forEach((img) => {
           lazyLoader.observe(img);
         });
       };
