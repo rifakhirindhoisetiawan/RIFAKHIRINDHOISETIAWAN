@@ -451,14 +451,50 @@
         });
 
 
-        let pinEditMode = false;
         const headerPinBtn = document.getElementById('headerPinBtn');
-        if (headerPinBtn) {
-          headerPinBtn.onclick = () => {
-            pinEditMode = !pinEditMode;
-            headerPinBtn.setAttribute('aria-pressed', pinEditMode ? 'true' : 'false');
-            renderMenu();
-          };
+        if (headerPinBtn && !headerPinBtn.dataset.bound) {
+          headerPinBtn.dataset.bound = 'true';
+          headerPinBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            let modal = document.getElementById('pinModal');
+            if (!modal) {
+              modal = document.createElement('div');
+              modal.id = 'pinModal';
+              modal.style.cssText = 'position:absolute;top:70px;right:18px;background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:10px;padding:12px;box-shadow:none;z-index:100;min-width:200px;max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;';
+              document.body.appendChild(modal);
+
+              document.addEventListener('click', (ev) => {
+                if (modal && !modal.contains(ev.target) && ev.target !== headerPinBtn) {
+                  modal.hidden = true;
+                }
+              });
+            }
+            modal.hidden = !modal.hidden;
+            if (!modal.hidden) {
+              modal.innerHTML = '<div style="font-size:12px;font-weight:700;margin-bottom:4px;color:var(--mori-text);">Kelola Sematan Menu</div>';
+              menuItems.forEach((m) => {
+                const isP = isPinned(m.label);
+                const row = document.createElement('button');
+                row.type = 'button';
+                row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;background:var(--mori-surface);border:1px solid var(--mori-line);padding:6px 10px;border-radius:6px;font:inherit;font-size:12px;cursor:pointer;width:100%;text-align:left;';
+                row.innerHTML = '<span>' + m.label + '</span><span style="font-weight:700;color:' + (isP ? 'var(--mori-text)' : 'var(--mori-text-2)') + ';">' + (isP ? '✓ Disemat' : '+ Semat') + '</span>';
+                row.onclick = (ev) => {
+                  ev.stopPropagation();
+                  if (isPinned(m.label)) {
+                    pinned = pinned.filter(l => l !== m.label);
+                  } else {
+                    pinned.push(m.label);
+                  }
+                  try {
+                    localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
+                  } catch {}
+                  renderMenu();
+                  headerPinBtn.click(); // Refresh modal
+                };
+                modal.appendChild(row);
+              });
+            }
+          });
         }
 
         sortedItems.forEach((item) => {
@@ -466,29 +502,12 @@
           const dipin = isPinned(item.label);
 
           const a = document.createElement(isDisabled ? "div" : "a");
-          a.className = "menu-item" + (isDisabled ? " disabled" : "") + (dipin ? " pinned" : "");
-          if (!isDisabled && !pinEditMode) a.href = item.href;
+          a.className = "menu-item" + (isDisabled ? " disabled" : "");
+          if (!isDisabled) a.href = item.href;
           if (isDisabled) a.setAttribute("aria-disabled", "true");
           
-          if (pinEditMode) {
-            a.style.cursor = 'pointer';
-            a.onclick = (e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              if (isPinned(item.label)) {
-                pinned = pinned.filter(l => l !== item.label);
-              } else {
-                pinned.push(item.label);
-              }
-              try {
-                localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
-              } catch {}
-              renderMenu();
-            };
-          }
-
           a.innerHTML = `
-            <div class="icon-box" style="${pinEditMode && dipin ? 'border: 2px solid var(--mori-text);' : ''}">
+            <div class="icon-box">
               <img
                 alt="${item.label}"
                 ${item.thumb ? '' : `data-menu="${item.folder}"`}
@@ -497,9 +516,9 @@
                 decoding="async"
                 onload="this.classList.add('loaded')"
               />
-              ${dipin ? '<span style="position:absolute;top:4px;right:4px;background:var(--mori-text);color:var(--mori-bg);font-size:10px;font-weight:800;padding:2px 6px;border-radius:4px;">PIN</span>' : ''}
+              ${dipin ? '<span style="position:absolute;top:4px;right:4px;background:var(--mori-text);color:var(--mori-bg);font-size:9px;font-weight:800;padding:2px 5px;border-radius:4px;">PIN</span>' : ''}
             </div>
-            <span class="label">${item.label} ${pinEditMode ? (dipin ? '(Lepas)' : '(Semat)') : ''}</span>
+            <span class="label">${item.label}</span>
           `;
           
           menuList.appendChild(a);
