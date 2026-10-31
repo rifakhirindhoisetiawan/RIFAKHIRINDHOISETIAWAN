@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>REVIEW - Tampilan & Fitur</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --mori-bg: #fffbf2;
+        --mori-surface: #f7f3e9;
+        --mori-text: #1a1917;
+        --mori-text-2: #6e6a64;
+        --mori-line: rgba(26, 25, 23, 0.14);
+        --mori-accent: #1a1917;
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: var(--mori-bg);
+        overflow: hidden;
+      }
+
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--mori-text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .phone {
+        width: 100%;
+        max-width: 100%;
+        background: var(--mori-bg);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+      }
+
+      @media (min-width: 800px) {
+        .phone {
+          max-width: 800px;
+          margin: 0 auto;
+        }
+      }
+
+      .search-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 18px 14px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .search-box {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 46px;
+        box-sizing: border-box;
+        border: 1px solid var(--mori-line);
+        border-radius: 8px;
+        padding: 0 14px;
+        color: var(--mori-text);
+        font-size: 13px;
+        background: var(--mori-surface);
+      }
+      .search-box:focus-within {
+        background: #fffdf7;
+      }
+      .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        font-size: 14px;
+        color: var(--mori-text);
+        font-family: inherit;
+      }
+      .search-box svg {
+        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+        color: var(--mori-text-2);
+      }
+
+      .header-pin-btn {
+        flex: 0 0 auto;
+        width: 46px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-line);
+        border-radius: 8px;
+        color: var(--mori-text-2);
+        cursor: pointer;
+        padding: 0;
+      }
+      .header-pin-btn[aria-pressed="true"] {
+        background: var(--mori-text);
+        color: var(--mori-bg);
+        border-color: var(--mori-text);
+      }
+
+      .content-wrap {
+        flex: 1;
+        overflow-y: auto;
+        padding: 12px 18px 40px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .pin-row {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 10px;
+        margin: 0 0 14px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--mori-line);
+      }
+      @media (min-width: 768px) {
+        .pin-row {
+          gap: 22px 14px;
+        }
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 10px;
+        width: 100%;
+      }
+
+      .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        text-decoration: none;
+        color: var(--mori-text);
+      }
+      .item.pinned .icon-box {
+        box-shadow: 0 0 0 2px var(--mori-text);
+      }
+
+      .icon-box {
+        position: relative;
+        width: 100%;
+        max-width: 100px;
+        aspect-ratio: 9 / 16;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        background: var(--mori-surface);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--mori-mono);
+        font-size: 12px;
+        color: var(--mori-text-2);
+        border: 1px solid var(--mori-line);
+      }
+      .icon-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .item span {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+      }
+
+      body.pin-mode .item:not([data-admin="true"]) .icon-box {
+        border: 1px dashed var(--mori-text-2);
+        cursor: pointer;
+      }
+
+      /* Lightbox 9:16 */
+      .lightbox {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(26, 25, 23, 0.75);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        padding: 16px;
+      }
+      .lightbox[hidden] {
+        display: none;
+      }
+      .lightbox-box {
+        background: var(--mori-bg);
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        max-width: 400px;
+        width: 100%;
+      }
+      .lightbox img {
+        width: 100%;
+        max-width: min(88vw, 360px);
+        aspect-ratio: 9 / 16;
+        height: auto;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+      .lightbox-text {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--mori-text);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+      }
+      .lightbox-desc {
+        font-size: 12px;
+        color: var(--mori-text-2);
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone">
+      <div class="search-row">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="searchInput" type="text" placeholder="Cari review fitur..." autocomplete="off" />
+        </div>
+        <button class="header-pin-btn" id="headerPinBtn" type="button" aria-label="Mode Semat" title="Mode Semat">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"/></svg>
+        </button>
+      </div>
+      <div class="content-wrap">
+        <div class="grid" id="reviewGrid"></div>
+      </div>
+    </div>
+
+    <div class="lightbox" id="lightbox" hidden>
+      <div class="lightbox-box">
+        <img id="lightboxImg" alt="preview" />
+        <div class="lightbox-text" id="lightboxText"></div>
+        <div class="lightbox-desc" id="lightboxDesc"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { supabase } from '../kopi/supabase.js';
+
+      const reviewGrid = document.getElementById('reviewGrid');
+      const searchInput = document.getElementById('searchInput');
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxText = document.getElementById('lightboxText');
+      const lightboxDesc = document.getElementById('lightboxDesc');
+
+      if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+          if (e.target === lightbox) {
+            lightbox.hidden = true;
+          }
+        });
+      }
+
+      const reviewItems = [
+        { label: "Foto Admin 9:16", desc: "Ukuran kotak foto form admin diperbesar memenuhi layar HP rasio 9:16", status: "Selesai", thumb: "../../assets/images/mori/1.jpg" },
+        { label: "Lightbox 9:16", desc: "Preview popup foto rasio 9:16 full layar saat diklik", status: "Selesai", thumb: "../../assets/images/exp/1.jpg" },
+        { label: "Realtime Pin", desc: "Sinkronisasi pin menu bersama antar perangkat via Supabase", status: "Aktif", thumb: "../../assets/images/time-kamera/1.jpg" },
+        { label: "Search & Header", desc: "Tinggi 46px selaras dengan border Mori halus", status: "Selesai", thumb: "../../assets/images/siang/1.jpg" },
+        { label: "PWA Fullscreen", desc: "Mode aplikasi layar penuh tanpa browser chrome", status: "Aktif", thumb: "../../assets/images/pulang/1.jpg" }
+      ];
+
+      const PIN_KEY = 'review_pinned_v1';
+      const PIN_TABLE = 'review_pins';
+      const PIN_MIGRASI_KEY = 'review_pins_migrated_v1';
+
+      function loadPins() {
+        try {
+          const raw = JSON.parse(localStorage.getItem(PIN_KEY) || '[]');
+          return Array.isArray(raw) ? raw.filter(x => typeof x === 'string') : [];
+        } catch {
+          return [];
+        }
+      }
+      function savePins(list) {
+        try {
+          localStorage.setItem(PIN_KEY, JSON.stringify(list));
+        } catch {}
+      }
+
+      let pinned = loadPins();
+      const isPinned = (label) => pinned.includes(label);
+
+      let pinServerReady = false;
+      function setServerPins(list) {
+        pinned = list;
+        pinServerReady = true;
+        savePins(list);
+        renderGrid();
+      }
+
+      async function syncPins() {
+        try {
+          const { data, error } = await supabase
+            .from(PIN_TABLE)
+            .select('label')
+            .order('dibuat', { ascending: true });
+          if (error) return;
+          const server = (data || []).map(r => r.label).filter(Boolean);
+          try {
+            if (localStorage.getItem(PIN_MIGRASI_KEY) !== '1') {
+              const lokal = loadPins();
+              const kurang = lokal.filter(l => l && !server.includes(l));
+              for (const l of kurang) {
+                try {
+                  await supabase.from(PIN_TABLE).insert({ label: l });
+                  server.push(l);
+                } catch {}
+              }
+              localStorage.setItem(PIN_MIGRASI_KEY, '1');
+            }
+          } catch {}
+          setServerPins(server);
+        } catch {}
+      }
+
+      async function pushPin(label, add) {
+        try {
+          if (add) {
+            await supabase.from(PIN_TABLE).insert({ label });
+          } else {
+            await supabase.from(PIN_TABLE).delete().eq('label', label);
+          }
+        } catch {}
+      }
+
+      let modeSemat = false;
+      const headerPinBtn = document.getElementById('headerPinBtn');
+      if (headerPinBtn) {
+        headerPinBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          modeSemat = !modeSemat;
+          headerPinBtn.setAttribute('aria-pressed', modeSemat ? 'true' : 'false');
+          document.body.classList.toggle('pin-mode', modeSemat);
+        });
+      }
+
+      function renderGrid() {
+        reviewGrid.innerHTML = '';
+        const q = searchInput.value.trim().toLowerCase();
+        const filtered = reviewItems.filter(item => !q || item.label.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q));
+
+        const pinnedItems = pinned.map(label => filtered.find(item => item.label === label)).filter(Boolean);
+        const unpinnedItems = filtered.filter(item => !pinned.includes(item.label));
+
+        const createItemEl = (item) => {
+          const a = document.createElement('div');
+          a.className = 'item' + (isPinned(item.label) ? ' pinned' : '');
+          a.innerHTML = `
+            <div class="icon-box">
+              <img src="${item.thumb}" alt="${item.label}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='../../assets/images/mori/1.jpg';" />
+            </div>
+            <span>${item.label}</span>
+          `;
+          a.addEventListener('click', (e) => {
+            if (modeSemat) {
+              e.preventDefault();
+              e.stopPropagation();
+              const akanPin = !isPinned(item.label);
+              if (akanPin) {
+                pinned.push(item.label);
+              } else {
+                pinned = pinned.filter(l => l !== item.label);
+              }
+              savePins(pinned);
+              renderGrid();
+              if (pinServerReady) pushPin(item.label, akanPin);
+            } else {
+              e.preventDefault();
+              lightboxImg.src = item.thumb;
+              lightboxText.textContent = item.label;
+              lightboxDesc.textContent = item.desc + ' — ' + item.status;
+              lightbox.hidden = false;
+            }
+          });
+          return a;
+        };
+
+        if (pinnedItems.length > 0) {
+          const pinRowEl = document.createElement('div');
+          pinRowEl.className = 'pin-row';
+          pinnedItems.forEach(item => {
+            pinRowEl.appendChild(createItemEl(item));
+          });
+          reviewGrid.appendChild(pinRowEl);
+
+          unpinnedItems.forEach(item => {
+            reviewGrid.appendChild(createItemEl(item));
+          });
+        } else {
+          unpinnedItems.forEach(item => {
+            reviewGrid.appendChild(createItemEl(item));
+          });
+        }
+
+        if (reviewGrid.children.length === 0) {
+          reviewGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--mori-text-2);padding:24px">Tidak ditemukan</div>';
+        }
+      }
+
+      searchInput.addEventListener('input', renderGrid);
+      renderGrid();
+      syncPins();
+      try {
+        supabase.channel('review_pins_changes')
+          .on('postgres_changes', { event: '*', schema: 'public', table: PIN_TABLE }, () => {
+            syncPins();
+          })
+          .subscribe();
+      } catch {}
+    </script>
+  </body>
+</html>

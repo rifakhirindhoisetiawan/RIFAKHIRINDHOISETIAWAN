@@ -631,12 +631,12 @@
       }
 
       .lightbox img {
-        max-width: 92vw;
-        max-height: 82vh;
-        width: auto;
+        width: 100%;
+        max-width: min(88vw, 380px);
+        aspect-ratio: 9 / 16;
         height: auto;
         border-radius: 8px;
-        object-fit: contain;
+        object-fit: cover;
       }
 
       .lightbox .qr {
