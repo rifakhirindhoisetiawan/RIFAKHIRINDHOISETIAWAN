@@ -92,6 +92,21 @@
         margin-left: auto;
       }
 
+      .pin-row {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 10px;
+        margin: 0 0 14px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--mori-line);
+      }
+      @media (min-width: 768px) {
+        .pin-row {
+          gap: 22px 14px;
+        }
+      }
+
       .menu-list {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -357,9 +372,11 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        height: 46px;
+        box-sizing: border-box;
         border: 1px solid var(--mori-line);
         border-radius: 8px;
-        padding: 11px 14px;
+        padding: 0 14px;
         color: var(--mori-text, #1a1917);
         font-size: 13px;
         background: var(--mori-surface, #f7f3e9);
@@ -389,24 +406,14 @@
         width: 18px;
         height: 18px;
       }
-      body.pin-mode .menu-item:not([data-admin="true"]) {
-        position: relative;
+      body.pin-mode .menu-item:not([data-admin="true"]) .icon-box {
+        border: 1px dashed var(--mori-text-2);
         cursor: pointer;
       }
-      body.pin-mode .menu-item:not([data-admin="true"])::after {
-        content: '';
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        width: 14px;
-        height: 14px;
-        background: var(--mori-text);
-        border-radius: 50%;
-        box-shadow: 0 0 0 2px var(--mori-bg);
+      body.pin-mode .menu-item:not([data-admin="true"]):active .icon-box {
+        transform: translate(2px, 2px);
       }
-      body.pin-mode .menu-item:not([data-admin="true"]).pinned::after {
-        background: #ef4444;
-      }
+
     </style>
   </head>
   <body>
@@ -473,13 +480,69 @@
       };
 
       const PIN_KEY = 'so_pinned_v1';
-      let pinned = [];
-      try {
-        pinned = JSON.parse(localStorage.getItem(PIN_KEY)) || [];
-      } catch {
-        pinned = [];
+      const PIN_TABLE = 'stock_pins';
+      const PIN_MIGRASI_KEY = 'stock_pins_migrated_v1';
+
+      function loadPins() {
+        try {
+          const raw = JSON.parse(localStorage.getItem(PIN_KEY) || '[]');
+          return Array.isArray(raw) ? raw.filter(x => typeof x === 'string') : [];
+        } catch {
+          return [];
+        }
       }
+      function savePins(list) {
+        try {
+          localStorage.setItem(PIN_KEY, JSON.stringify(list));
+        } catch {}
+      }
+
+      let pinned = loadPins();
       const isPinned = (label) => pinned.includes(label);
+
+      let pinServerReady = false;
+      function setServerPins(list) {
+        pinned = list;
+        pinServerReady = true;
+        savePins(list);
+        renderMenu();
+      }
+
+      async function syncPins() {
+        try {
+          const { data, error } = await supabase
+            .from(PIN_TABLE)
+            .select('label')
+            .order('dibuat', { ascending: true });
+          if (error) return;
+          const server = (data || []).map(r => r.label).filter(Boolean);
+          try {
+            if (localStorage.getItem(PIN_MIGRASI_KEY) !== '1') {
+              const lokal = loadPins();
+              const kurang = lokal.filter(l => l && !server.includes(l));
+              for (const l of kurang) {
+                try {
+                  await supabase.from(PIN_TABLE).insert({ label: l });
+                  server.push(l);
+                } catch {}
+              }
+              localStorage.setItem(PIN_MIGRASI_KEY, '1');
+            }
+          } catch {}
+          setServerPins(server);
+        } catch {}
+      }
+
+      async function pushPin(label, add) {
+        try {
+          if (add) {
+            await supabase.from(PIN_TABLE).insert({ label });
+          } else {
+            await supabase.from(PIN_TABLE).delete().eq('label', label);
+          }
+        } catch {}
+      }
+
       let modeSemat = false;
       const pinModeBtn = document.getElementById('pinModeBtn');
       if (pinModeBtn) {
@@ -504,15 +567,15 @@
       const renderMenu = () => {
         menuList.innerHTML = '';
         const q = searchInput ? searchInput.value.toLowerCase().trim() : '';
-        const rank = (item) => {
-          if (item.isAdmin) return -1;
-          const i = pinned.indexOf(item.label);
-          return i === -1 ? Number.MAX_SAFE_INTEGER : i;
-        };
         const filtered = allItems.filter(item => !q || item.label.toLowerCase().includes(q));
-        const sorted = [...filtered].sort((a, b) => rank(a) - rank(b));
 
-        sorted.forEach(item => {
+        const adminItem = filtered.find(item => item.isAdmin);
+        const normalFiltered = filtered.filter(item => !item.isAdmin);
+
+        const pinnedItems = pinned.map(label => normalFiltered.find(item => item.label === label)).filter(Boolean);
+        const unpinnedItems = normalFiltered.filter(item => !pinned.includes(item.label));
+
+        const createItemEl = (item) => {
           const a = document.createElement('a');
           a.className = 'menu-item' + (isPinned(item.label) ? ' pinned' : '');
           a.href = item.href;
@@ -534,19 +597,42 @@
             if (modeSemat && !item.isAdmin) {
               e.preventDefault();
               e.stopPropagation();
-              if (isPinned(item.label)) {
-                pinned = pinned.filter(l => l !== item.label);
-              } else {
+              const akanPin = !isPinned(item.label);
+              if (akanPin) {
                 pinned.push(item.label);
+              } else {
+                pinned = pinned.filter(l => l !== item.label);
               }
-              try {
-                localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
-              } catch {}
+              savePins(pinned);
               renderMenu();
+              if (pinServerReady) pushPin(item.label, akanPin);
             }
           });
-          menuList.appendChild(a);
-        });
+          return a;
+        };
+
+        if (pinnedItems.length > 0) {
+          const pinRowEl = document.createElement('div');
+          pinRowEl.className = 'pin-row';
+          if (adminItem && (!q || adminItem.label.toLowerCase().includes(q))) {
+            pinRowEl.appendChild(createItemEl(adminItem));
+          }
+          pinnedItems.forEach(item => {
+            pinRowEl.appendChild(createItemEl(item));
+          });
+          menuList.appendChild(pinRowEl);
+
+          unpinnedItems.forEach(item => {
+            menuList.appendChild(createItemEl(item));
+          });
+        } else {
+          if (adminItem && (!q || adminItem.label.toLowerCase().includes(q))) {
+            menuList.appendChild(createItemEl(adminItem));
+          }
+          unpinnedItems.forEach(item => {
+            menuList.appendChild(createItemEl(item));
+          });
+        }
 
         document.querySelectorAll('.menu-item').forEach(el => soLazy.observe(el));
       };
@@ -597,6 +683,14 @@
       }
 
       renderMenu();
+      syncPins();
+      try {
+        supabase.channel('stock_pins_changes')
+          .on('postgres_changes', { event: '*', schema: 'public', table: PIN_TABLE }, () => {
+            syncPins();
+          })
+          .subscribe();
+      } catch {}
     </script>
   </body>
 </html>
