@@ -3,7 +3,8 @@
   "short_name": "MyLove",
   "start_url": "./index.html",
   "scope": "./",
-  "display": "standalone",
+  "display": "fullscreen",
+  "orientation": "portrait",
   "background_color": "#fffbf2",
   "theme_color": "#fffbf2",
   "description": "My Love"
