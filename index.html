@@ -211,9 +211,11 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        height: 46px;
+        box-sizing: border-box;
         border: 1px solid var(--mori-line);
         border-radius: 8px;
-        padding: 11px 14px;
+        padding: 0 14px;
         color: var(--mori-text);
         font-size: 13px;
         background: var(--mori-surface);
@@ -248,6 +250,21 @@
 
       .search-box input::placeholder {
         color: var(--mori-text-2);
+      }
+
+      .pin-row {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 10px;
+        margin: 0 0 14px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--mori-line);
+      }
+      @media (min-width: 768px) {
+        .pin-row {
+          gap: 22px 14px;
+        }
       }
 
       .menu-list {
@@ -546,14 +563,10 @@
       const renderMenu = () => {
         menuList.innerHTML = '';
 
-        // Menu tersemat naik ke atas (urutan semat), sisanya urutan asli tanpa baris terpisah.
-        const rank = (item) => {
-          const i = pinned.indexOf(item.label);
-          return i === -1 ? Number.MAX_SAFE_INTEGER : i;
-        };
-        const sortedItems = [...menuItems].sort((a, b) => rank(a) - rank(b));
+        const pinnedItems = pinned.map(label => menuItems.find(m => m.label === label)).filter(Boolean);
+        const unpinnedItems = menuItems.filter(item => !pinned.includes(item.label));
 
-        sortedItems.forEach((item) => {
+        const createItemEl = (item) => {
           const isDisabled = item.href === "#" || disabledLabels.has(item.label);
 
           const a = document.createElement(isDisabled ? "div" : "a");
@@ -593,7 +606,20 @@
             }
           });
 
-          menuList.appendChild(a);
+          return a;
+        };
+
+        if (pinnedItems.length > 0) {
+          const pinRowEl = document.createElement('div');
+          pinRowEl.className = 'pin-row';
+          pinnedItems.forEach(item => {
+            pinRowEl.appendChild(createItemEl(item));
+          });
+          menuList.appendChild(pinRowEl);
+        }
+
+        unpinnedItems.forEach(item => {
+          menuList.appendChild(createItemEl(item));
         });
 
         document.querySelectorAll('img[data-menu]').forEach((img) => {
