@@ -20,9 +20,9 @@
       --mori-mono:"JetBrains Mono",ui-monospace,monospace;
     }
     html,body{background:var(--mori-bg) !important}
-    body{padding-top:max(12px,env(safe-area-inset-top));-webkit-font-smoothing:antialiased}
-    .wrap{width:100%;max-width:800px;min-height:100vh;margin:0 auto;background:var(--mori-bg) !important;padding:12px 18px 40px;min-width:0}
-    .back-row{display:flex;justify-content:flex-end;margin-bottom:10px}
+    body{padding-top:max(4px,env(safe-area-inset-top));-webkit-font-smoothing:antialiased}
+    .wrap{width:100%;max-width:800px;min-height:100vh;margin:0 auto;background:var(--mori-bg) !important;padding:4px 18px 40px;min-width:0}
+    .back-row{display:flex;justify-content:flex-end;margin-bottom:6px}
     .btn-back{
       font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
       text-decoration:none;color:var(--mori-text);padding:6px 10px;
@@ -32,59 +32,82 @@
 
     .judul-row{display:flex;align-items:stretch;gap:8px}
     .judul-row #f_title{flex:1 1 auto;min-width:0}
+    .judul-row #f_qty{flex:0 0 76px;width:76px;text-align:center}
+    .qty-btn{
+      flex:0 0 32px;width:32px;height:38px;padding:0;display:flex;align-items:center;justify-content:center;
+      font-family:var(--mori-mono);font-size:16px;font-weight:700;
+      color:var(--mori-text);background:transparent;border:0;cursor:pointer;
+    }
+    .qty-sm-btn{
+      flex:0 0 32px !important;width:32px !important;height:32px !important;min-height:32px !important;max-height:32px !important;padding:0 !important;margin:0 !important;display:flex !important;align-items:center !important;justify-content:center !important;
+      font-family:var(--mori-mono);font-size:16px;font-weight:800;line-height:1;
+      color:var(--mori-text);background:var(--mori-surface);border:1px solid var(--mori-line);border-radius:8px !important;cursor:pointer;
+    }
+    .qty-btn:active, .qty-sm-btn:active{transform:translate(1px,1px)}
     .btn-add{
-      flex:0 0 44px;width:44px;padding:0;display:flex;align-items:center;justify-content:center;
-      font-family:inherit;font-size:22px;font-weight:700;line-height:1;
-      color:var(--mori-bg);background:var(--mori-accent);border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;
+      flex:0 0 38px;width:38px;height:38px;padding:0;display:flex;align-items:center;justify-content:center;
+      font-family:var(--mori-mono);font-size:24px;font-weight:800;line-height:1;
+      color:var(--mori-text);background:#ffffff;border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;
       transition:transform .2s ease;
     }
     .btn-add:active{transform:translate(2px,2px)}
-    #f_title{
-      flex:1 1 auto;min-width:0;width:auto;max-width:100%;margin:0;height:44px;padding:0 14px;
-      font-family:var(--mori-mono);font-size:13px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
-      color:var(--mori-text) !important;background:var(--mori-surface) !important;
-      border:1px solid var(--mori-line) !important;border-radius:8px !important;outline:none;
+    #f_title, #f_qty{
+      flex:1 1 auto;min-width:0;width:auto;max-width:100%;margin:0;height:38px;padding:0 12px;
+      font-family:var(--mori-mono);font-size:12px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
+      color:var(--mori-text) !important;background:transparent !important;
+      border:0 !important;border-radius:0 !important;outline:none;
     }
-    #f_title::placeholder{color:var(--mori-text-2) !important;letter-spacing:.4px;text-transform:none}
-    #f_title:focus{background:#fffdf7 !important}
+    #f_title::placeholder, #f_qty::placeholder{color:var(--mori-text-2) !important;letter-spacing:.4px;text-transform:none}
+    #f_title:focus, #f_qty:focus{background:transparent !important}
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
 
-    .table-wrap{border:1px solid var(--mori-line);border-radius:8px;background:var(--mori-bg);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;margin-top:12px}
-    .menu-table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
-    .menu-table thead th{
-      position:sticky;top:0;z-index:1;background:var(--mori-surface);color:var(--mori-text);
-      font-family:var(--mori-mono);font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;text-align:left;
-      height:34px;padding:0 6px;border-bottom:1px solid var(--mori-line);white-space:nowrap;
+    :root{
+      --mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;
+      --mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;
+      --mori-mono:"JetBrains Mono",ui-monospace,monospace;
     }
-    .menu-table tbody td{height:46px;padding:0 6px;border-bottom:1px solid var(--mori-line);vertical-align:middle}
-    .menu-table tbody tr:hover td{background:#faf6ea}
-    .menu-table tbody tr:last-child td{border-bottom:0}
-    .c-no{width:36px;text-align:center;font-family:var(--mori-mono);color:var(--mori-text-2);font-size:11px}
-    .c-nama{min-width:0;overflow:hidden}
-    .menu-table .c-nama .nama{font-family:var(--mori-mono);color:var(--mori-text);font-weight:700;font-size:11px;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .c-foto{width:52px}
-    .c-aksi{width:116px}
-    .c-foto .thumb{width:38px;height:38px;display:block;border:1px solid var(--mori-line);border-radius:8px;background:var(--mori-surface);overflow:hidden}
-    .c-foto .thumb img{width:100%;height:100%;object-fit:cover;filter:saturate(.4) brightness(1.04);display:block}
-    .c-foto .thumb.kosong{background:repeating-linear-gradient(45deg,#f2eee2 0 5px,#ece6d6 5px 10px);border-color:var(--mori-line)}
-    .c-foto .thumb.sibuk{background:var(--mori-surface) !important}
-    .c-foto .thumb.thumb-admin{display:flex;align-items:center;justify-content:center;background:var(--mori-accent);border-radius:8px}
-    .c-foto .thumb.thumb-admin svg{width:18px;height:18px;color:var(--mori-bg)}
-    .menu-table tbody tr.is-admin td{background:#faf6ea}
-    .menu-table tbody tr.is-admin .c-nama .nama{color:var(--mori-accent)}
-    .acts{display:flex;gap:6px;justify-content:flex-end}
+    .table-wrap{border:0 !important;border-radius:0 !important;background:transparent !important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;margin-top:12px;box-shadow:none !important}
+    .menu-table{width:100%;min-width:560px;border-collapse:collapse;font-size:12px;table-layout:fixed;border:1px solid var(--mori-line);border-radius:8px;background:var(--mori-surface);overflow:hidden}
+    .menu-table thead th{
+      background:var(--mori-surface);color:var(--mori-text);
+      font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;text-align:left;
+      padding:12px 10px;border-bottom:1px solid var(--mori-line);white-space:nowrap;
+    }
+    .c-no{width:36px;text-align:left;padding-left:12px !important;padding-right:0 !important;font-family:var(--mori-mono);color:var(--mori-text-2);font-size:11px}
+    .menu-table thead th.c-no{text-align:left;padding-left:12px !important;padding-right:0 !important}
+    .c-nama{padding-left:12px !important}
+    .menu-table tbody td{height:46px;padding:8px 8px;border-bottom:1px solid var(--mori-line);vertical-align:middle;background:var(--mori-bg)}
+    .c-check{width:42px;text-align:center}
+    .mori-check{appearance:none;-webkit-appearance:none;width:32px;height:32px;border:1px solid var(--mori-line);border-radius:8px;background:var(--mori-bg);outline:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+    .mori-check:checked{background:var(--mori-text);border-color:var(--mori-text)}
+    .mori-check:checked::after{content:'';width:6px;height:12px;border:solid var(--mori-bg);border-width:0 2.5px 2.5px 0;transform:rotate(45deg);margin-top:-2px}
+    .row-checked td{opacity:0.45;background:rgba(0,0,0,0.015)}
+    .row-checked .nama{text-decoration:line-through}
+    .c-nama{min-width:140px}
+    .menu-table .c-nama .nama{font-family:var(--mori-mono);color:var(--mori-text);font-weight:700;font-size:11px;letter-spacing:.3px;text-transform:uppercase;white-space:normal;word-break:break-word}
+    .c-aksi{width:44px;text-align:right;padding-right:6px !important}
+    .c-qty{width:148px;text-align:center}
+    .acts{display:flex;gap:4px;justify-content:flex-end;align-items:center}
     .ico{
       width:32px !important;height:32px !important;flex:0 0 32px !important;min-height:32px !important;max-height:32px !important;
       padding:0 !important;margin:0 !important;display:flex !important;align-items:center !important;justify-content:center !important;
-      font-family:inherit;font-size:14px;font-weight:800;line-height:1;color:var(--mori-bg);background:var(--mori-accent);
+      font-family:inherit;font-size:13px;font-weight:800;line-height:1;color:var(--mori-bg);background:var(--mori-text);
       border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;flex-shrink:0;outline:none;
-      transition:transform .2s ease;
+      transition:transform .15s ease;
     }
-    .ico:active{transform:translate(2px,2px)}
-    .ico-danger{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff}
+    .ico:active{transform:scale(0.95)}
+    .ico-danger{background:#b91c1c !important;border-color:transparent !important;color:#fff !important}
 
     .search-wrapper{display:flex;align-items:center;gap:10px;width:100%;margin:12px 0 0}
-    .search-box {flex:1;display:flex;align-items:center;gap:8px;min-width:0;border: 1px solid var(--mori-line);border-radius:8px !important;background:var(--mori-surface) !important;color:var(--mori-text);padding:10px 14px;font-size:14px}
-    .search-box:focus-within{background:#fffdf7 !important}
+    .search-box {flex:1;display:flex;align-items:center;gap:8px;min-width:0;border:0 !important;border-radius:0 !important;background:transparent !important;color:var(--mori-text);padding:6px 8px;font-size:13px}
+    .search-box:focus-within{background:transparent !important}
     .search-box svg{flex-shrink:0;color:var(--mori-text-2) !important;width:18px;height:18px}
     .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:var(--mori-text) !important;font-family:inherit;min-width:0;-webkit-appearance:none;appearance:none;border-radius:0}
     .search-box input::placeholder{color:var(--mori-text-2) !important}
@@ -103,6 +126,31 @@
     .pw-error[hidden]{display:none}
     .pw-actions{display:flex;gap:8px;margin-top:16px}
     .pw-btn{flex:1;padding:12px;border:1px solid var(--mori-line);border-radius:8px;background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+    .btn-dots{
+      display:inline-flex;align-items:center;justify-content:center;
+      vertical-align:middle;
+      width:32px;height:32px;min-height:32px;padding:0;margin:0;
+      background:var(--mori-surface);color:var(--mori-text);
+      border:1px solid var(--mori-line);border-radius:8px;
+      font-size:17px;font-weight:700;line-height:1;cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .btn-dots:active{transform:scale(.94)}
+    .menu-pop{
+      position:fixed;z-index:150;display:flex;align-items:center;gap:6px;
+      pointer-events:none;
+    }
+    .menu-pop[hidden]{display:none !important}
+    #menuPop .menu-act{
+      pointer-events:auto;-webkit-tap-highlight-color:transparent;
+      width:32px;height:32px;min-height:32px;padding:0;margin:0;
+      display:flex;align-items:center;justify-content:center;
+      background:var(--mori-surface);color:var(--mori-text);
+      border:1px solid var(--mori-line);border-radius:8px;
+      box-shadow:none;cursor:pointer;font-size:13px;font-weight:700;
+    }
+    #menuPop .menu-act:active{transform:scale(.94)}
+    #menuPop .menu-act.danger{background:var(--mori-danger);color:#fff;border-color:var(--mori-danger)}
   </style>
 </head>
 <body>
@@ -112,6 +160,7 @@
   <div class="pw-card" role="dialog" aria-modal="true">
     <div class="pw-title">Konfirmasi Hapus</div>
     <div class="pw-msg" id="pwMsg"></div>
+    <input class="pw-input" id="pwEmail" type="email" autocomplete="username" placeholder="Email admin" style="margin-bottom:8px" />
     <input class="pw-input" id="pwInput" type="password" autocomplete="current-password" placeholder="Password" />
     <div class="pw-error" id="pwError" hidden>Gagal masuk.</div>
     <div class="pw-actions">
@@ -120,41 +169,58 @@
     </div>
   </div>
 </div>
+<div class="menu-pop" id="menuPop" hidden role="group" aria-label="Aksi menu"></div>
 
 <div class="wrap">
-
-
-  <form id="form" onsubmit="return false">
-    <input type="hidden" id="editId" value="" />
-    <div class="judul-row">
-      <input id="f_title" type="text" placeholder="Nama kategori/menu, cth: BARANG EXPIRED" autocomplete="off" />
-      <button class="btn-add" type="button" id="btnAdd" title="Tambah menu">+</button>
-    </div>
-  </form>
-
-  <div class="table-wrap" id="listWrap">
-    <table class="menu-table">
-      <thead>
-        <tr>
-          <th class="c-no">No</th>
-          <th>Nama Menu</th>
-          <th class="c-foto">Foto</th>
-          <th class="c-aksi"></th>
-        </tr>
-      </thead>
-      <tbody id="list">
-        <tr><td class="c-no"></td><td class="c-nama"><div class="empty">Memuat...</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>
-      </tbody>
-    </table>
+  <div class="table-wrap" id="listWrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--mori-line);border-radius:12px;background:var(--mori-surface)">
+      <table class="menu-table" style="width:100%;min-width:560px;border-collapse:collapse;font-size:12px;table-layout:fixed;background:var(--mori-surface)">
+        <thead>
+          <tr>
+            <th colspan="6" style="padding:8px 10px;background:var(--mori-surface);border-bottom:1px solid var(--mori-line)">
+              <form id="form" onsubmit="return false" style="margin:0;min-width:540px">
+                <input type="hidden" id="editId" value="" />
+                <div style="display:grid;grid-template-columns: 36px 1fr 76px 140px 100px 44px;gap:6px;align-items:center">
+                  <div></div>
+                  <input id="f_title" type="text" placeholder="NAMA MENU / CATATAN" autocomplete="off" style="width:100%;background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:8px;outline:none;height:38px;padding:0 10px;font-family:var(--mori-mono);font-size:11px;font-weight:700;color:var(--mori-text);min-width:0" />
+                  <input id="f_hpp" type="number" step="any" placeholder="HPP" autocomplete="off" style="width:100%;height:38px;padding:0 4px;font-family:var(--mori-mono);font-size:11px;font-weight:700;color:var(--mori-text);background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:8px;outline:none;text-align:center" />
+                  <div style="display:flex;align-items:center;gap:1px;width:100%">
+                    <button type="button" class="qty-sm-btn" id="btnMinus" style="height:38px !important;width:28px !important;flex:0 0 28px !important">-</button>
+                    <input id="f_qty" type="number" step="any" placeholder="QTY" autocomplete="off" style="flex:1 1 0;min-width:0;background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:8px;outline:none;height:38px;padding:0 2px;font-family:var(--mori-mono);font-size:11px;font-weight:700;color:var(--mori-text);text-align:center" />
+                    <button type="button" class="qty-sm-btn" id="btnPlus" style="height:38px !important;width:28px !important;flex:0 0 28px !important">+</button>
+                  </div>
+                  <div></div>
+                  <button class="btn-add" type="button" id="btnAdd" title="Tambah item" style="width:38px;height:38px">+</button>
+                </div>
+              </form>
+            </th>
+          </tr>
+          <tr>
+            <th colspan="6" style="padding:6px 10px;background:var(--mori-bg);border-bottom:1px solid var(--mori-line)">
+              <div class="search-box" style="margin:0;width:100%;min-width:540px">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                <input id="search" type="text" placeholder="Cari menu..." autocomplete="off" />
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <th class="c-no">NO</th>
+            <th>NAMA MENU</th>
+            <th style="width:76px;text-align:center">HPP</th>
+            <th style="width:140px;text-align:center">QTY</th>
+            <th style="width:100px;text-align:right">TOTAL (RP)</th>
+            <th style="width:44px;text-align:right">AKSI</th>
+          </tr>
+        </thead>
+        <tbody id="list">
+          <tr><td class="c-no"></td><td class="c-nama"><div class="empty">Memuat...</div></td><td class="c-aksi"></td></tr>
+        </tbody>
+      </table>
+  </div>
+  <div id="grandTotalBar" style="margin-top:12px;padding:12px 16px;background:var(--mori-surface);border:1px solid var(--mori-line);border-radius:12px;font-family:var(--mori-mono);font-size:12px;font-weight:700;display:flex;justify-content:space-between;align-items:center">
+    <span>TOTAL KESELURUHAN (RUPIAH):</span>
+    <span id="grandTotalVal" style="color:var(--mori-text);font-size:14px">Rp 0</span>
   </div>
   <div class="foto-hint" id="fotoHint" hidden></div>
-
-  <div class="search-wrapper">
-    <div class="search-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-      <input id="search" type="text" placeholder="Cari menu..." autocomplete="off" />
-    </div>
-  </div>
 </div>
 
 <script type="module">
@@ -166,20 +232,14 @@
   const searchEl = document.getElementById('search');
   const editId = document.getElementById('editId');
   const f_title = document.getElementById('f_title');
+  const f_hpp = document.getElementById('f_hpp');
+  const f_qty = document.getElementById('f_qty');
   const btnAdd = document.getElementById('btnAdd');
   const fotoInput = document.getElementById('fotoInput');
   const fotoHint = document.getElementById('fotoHint');
 
   let all = [];
   let fotoTargetId = null;
-
-  const AKUN_TILE = 'admin';
-  const barisAdmin = {
-    id: AKUN_TILE,
-    title: 'ADMIN (FOTO UTAMA MUSNAH)',
-    isAdmin: true,
-    foto_url: localStorage.getItem('musnah_admin_foto') || ''
-  };
 
   function fotoBaru(url) {
     if (!url) return '';
@@ -189,7 +249,7 @@
   async function load() {
     const { data, error } = await supabase.from(TABLE).select('*').order('created_at', { ascending: true });
     if (error) {
-      listEl.innerHTML = '<tr><td class="c-no"></td><td class="c-nama"><div class="empty">' + error.message + '</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>';
+      listEl.innerHTML = '<tr><td class="c-no"></td><td class="c-nama"><div class="empty">' + error.message + '</div></td><td class="c-aksi"></td></tr>';
       return;
     }
     all = data || [];
@@ -197,147 +257,349 @@
   }
 
   function barisKosong(pesan) {
-    return '<tr><td class="c-no"></td><td class="c-nama"><div class="empty">' + pesan + '</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>';
+    return '<tr><td class="c-no"></td><td class="c-nama"><div class="empty">' + pesan + '</div></td><td class="c-qty"></td><td></td><td class="c-aksi"></td></tr>';
   }
 
   function render() {
     const q = searchEl.value.trim().toLowerCase();
-    const filtered = all.filter(m => !q || (m.title || '').toLowerCase().includes(q));
-    const rows = (q ? [] : [barisAdmin]).concat(filtered);
+    const sorted = [...all].sort((a, b) => {
+      if (a.is_checked === b.is_checked) return new Date(b.created_at || 0) - new Date(b.created_at || 0);
+      return a.is_checked ? 1 : -1;
+    });
+    const rows = sorted.filter(m => !q || (m.title || '').toLowerCase().includes(q));
     if (!rows.length) {
       listEl.innerHTML = barisKosong(all.length ? 'Tidak ada yang cocok' : 'Belum ada menu. Tambah di atas.');
+      recalcGrandTotal();
       return;
     }
+    const formatTgl = (iso) => {
+      if (!iso) return '';
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return '';
+      const tgl = String(d.getDate()).padStart(2, '0');
+      const bln = String(d.getMonth() + 1).padStart(2, '0');
+      const thn = d.getFullYear();
+      const jam = String(d.getHours()).padStart(2, '0');
+      const mnt = String(d.getMinutes()).padStart(2, '0');
+      return tgl + '/' + bln + '/' + thn + ' ' + jam + ':' + mnt;
+    };
+
     listEl.innerHTML = rows.map((m, i) => {
-      const url = m.foto_url ? fotoBaru(m.foto_url) : '';
-      const isAdmin = !!m.isAdmin;
-      let thumb;
-      if (isAdmin) {
-        thumb = url
-          ? '<div class="thumb thumb-admin"><img src="' + url + '" alt="" loading="lazy" decoding="async" /></div>'
-          : '<div class="thumb thumb-admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v2" /><path d="M8 9h8" /><rect x="4" y="4" width="16" height="16" rx="1" /></svg></div>';
-      } else {
-        thumb = url ? '<div class="thumb"><img src="' + url + '" alt="" loading="lazy" decoding="async" /></div>' : '<div class="thumb kosong"></div>';
-      }
-      const aksi = isAdmin
-        ? '<button type="button" class="ico" data-foto="' + m.id + '" title="Ganti foto ADMIN">↑</button>'
-        : '<button type="button" class="ico" data-foto="' + m.id + '" title="Upload foto">↑</button>' +
-          '<button type="button" class="ico" data-edit="' + m.id + '" title="Edit">✎</button>' +
-          '<button type="button" class="ico ico-danger" data-del="' + m.id + '" title="Hapus">✕</button>';
-      return '<tr data-id="' + m.id + '"' + (isAdmin ? ' class="is-admin"' : '') + '>' +
+      const isChecked = !!m.is_checked;
+      const tglStr = formatTgl(m.updated_at || m.created_at);
+      const qtyVal = m.qty !== undefined && m.qty !== null ? m.qty : 1;
+      const hppVal = m.hpp !== undefined && m.hpp !== null ? m.hpp : '';
+      const totalVal = (parseFloat(hppVal) || 0) * (parseFloat(qtyVal) || 0);
+      const chk = '<input type="checkbox" class="mori-check" data-check="' + m.id + '" ' + (isChecked ? 'checked' : '') + ' />';
+      const aksi = chk + '<button type="button" class="btn-dots" data-menu="' + m.id + '" title="Aksi" aria-label="Aksi">⋮</button>';
+      return '<tr data-id="' + m.id + '"' + (isChecked ? ' class="row-checked"' : '') + '>' +
         '<td class="c-no">' + (i + 1) + '</td>' +
-        '<td class="c-nama"><div class="nama">' + (m.title || '') + '</div></td>' +
-        '<td class="c-foto">' + thumb + '</td>' +
+        '<td class="c-nama"><div class="nama" contenteditable="true" data-edit-title="' + m.id + '" style="outline:none;padding:2px 4px;border-radius:4px">' + (m.title || '') + '</div><div style="font-size:10px;color:var(--mori-text-2);margin-top:2px;font-family:var(--mori-mono)">' + tglStr + '</div></td>' +
+        '<td style="text-align:center"><input type="number" step="any" class="hpp-inline" data-edit-hpp="' + m.id + '" value="' + hppVal + '" placeholder="0" style="width:76px;background:transparent;border:0;border-radius:0;padding:4px 0;font-family:var(--mori-mono);font-weight:700;font-size:12px;color:var(--mori-text);text-align:center;outline:none" /></td>' +
+        '<td class="c-qty"><div style="display:flex;align-items:center;justify-content:center;gap:1px">' +
+        '<button type="button" class="qty-sm-btn" data-qty-minus="' + m.id + '">-</button>' +
+        '<input type="number" step="any" class="qty-inline" data-edit-qty="' + m.id + '" value="' + qtyVal + '" style="width:50px;background:transparent;border:0;border-radius:0;padding:4px 0;font-family:var(--mori-mono);font-weight:700;font-size:12px;color:var(--mori-text);text-align:center;outline:none" />' +
+        '<button type="button" class="qty-sm-btn" data-qty-plus="' + m.id + '">+</button>' +
+        '</div></td>' +
+        '<td style="text-align:right;font-family:var(--mori-mono);font-size:12px;font-weight:700;color:var(--mori-text);padding-right:12px" data-row-total="' + m.id + '">' + (totalVal ? totalVal.toLocaleString('id-ID') : '0') + '</td>' +
         '<td class="c-aksi"><div class="acts">' + aksi + '</div></td></tr>';
     }).join('');
 
-    const idDari = v => (v === AKUN_TILE ? AKUN_TILE : parseInt(v, 10));
-    listEl.querySelectorAll('[data-foto]').forEach(b => b.addEventListener('click', () => pilihFoto(idDari(b.dataset.foto))));
-    listEl.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => isiForm(parseInt(b.dataset.edit, 10))));
-    listEl.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => mintaHapus(parseInt(b.dataset.del, 10))));
+    listEl.querySelectorAll('[data-check]').forEach(cb => cb.addEventListener('change', async e => {
+      const id = cb.dataset.check;
+      const is_checked = cb.checked;
+      const { error } = await supabase.from(TABLE).update({ is_checked }).eq('id', id);
+      if (error) {
+        alert('Gagal update: ' + error.message);
+        cb.checked = !is_checked;
+        return;
+      }
+      const item = all.find(x => x.id === id);
+      if (item) item.is_checked = is_checked;
+      render();
+    }));
+
+    listEl.querySelectorAll('.hpp-inline, .qty-inline').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const id = inp.dataset.editHpp || inp.dataset.editQty;
+        recalcRow(id);
+      });
+    });
+
+    recalcGrandTotal();
+
+    listEl.querySelectorAll('[data-save-inline]').forEach(btn => btn.addEventListener('click', async () => {
+      const id = btn.dataset.saveInline;
+      const row = listEl.querySelector('tr[data-id="' + id + '"]');
+      const titleEl = row.querySelector('[data-edit-title="' + id + '"]');
+      const hppEl = row.querySelector('[data-edit-hpp="' + id + '"]');
+      const qtyEl = row.querySelector('[data-edit-qty="' + id + '"]');
+      const title = (titleEl.textContent || '').trim();
+      const hpp = hppEl.value !== '' ? parseFloat(hppEl.value) : 0;
+      const qty = qtyEl.value !== '' ? parseFloat(qtyEl.value) : 1;
+      if (!title) { titleEl.focus(); return; }
+
+      const isDuplicate = all.some(m => (m.title || '').trim().toLowerCase() === title.toLowerCase() && m.id !== id);
+      if (isDuplicate) {
+        alert('Nama menu/catatan "' + title + '" sudah ada!');
+        return;
+      }
+
+      const { error } = await supabase.from(TABLE).update({ title, hpp, qty, updated_at: new Date().toISOString() }).eq('id', id);
+      if (error) {
+        alert('Gagal simpan: ' + error.message);
+        return;
+      }
+      load();
+    }));
+
+    listEl.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => {
+      const id = b.dataset.edit;
+      const row = listEl.querySelector('tr[data-id="' + id + '"]');
+      const titleEl = row.querySelector('[data-edit-title="' + id + '"]');
+      if (titleEl) {
+        titleEl.focus();
+        const range = document.createRange();
+        range.selectNodeContents(titleEl);
+        range.collapse(false);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    }));
+    listEl.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => mintaHapus(b.dataset.del)));
+    listEl.querySelectorAll('[data-qty-minus]').forEach(btn => btn.addEventListener('click', async () => {
+      const id = btn.dataset.qtyMinus;
+      const item = all.find(x => x.id === id);
+      if (!item) return;
+      let qty = (item.qty !== undefined && item.qty !== null ? parseFloat(item.qty) : 1) - 1;
+      qty = Math.max(0, qty);
+      const { error } = await supabase.from(TABLE).update({ qty, updated_at: new Date().toISOString() }).eq('id', id);
+      if (!error) load();
+    }));
+    listEl.querySelectorAll('[data-qty-plus]').forEach(btn => btn.addEventListener('click', async () => {
+      const id = btn.dataset.qtyPlus;
+      const item = all.find(x => x.id === id);
+      if (!item) return;
+      let qty = (item.qty !== undefined && item.qty !== null ? parseFloat(item.qty) : 1) + 1;
+      const { error } = await supabase.from(TABLE).update({ qty, updated_at: new Date().toISOString() }).eq('id', id);
+      if (!error) load();
+    }));
+    listEl.querySelectorAll('[data-menu]').forEach(b => b.addEventListener('click', e => {
+      e.stopPropagation();
+      bukaMenuPop(b, b.dataset.menu);
+    }));
   }
+
+  const menuPop = document.getElementById('menuPop');
+  let menuPopAnchor = null;
+
+  function tutupMenuPop() {
+    if (menuPop.hidden && !menuPopAnchor) return;
+    menuPop.hidden = true;
+    menuPop.innerHTML = '';
+    if (menuPopAnchor) menuPopAnchor.setAttribute('aria-expanded', 'false');
+    menuPopAnchor = null;
+  }
+
+  function bukaMenuPop(anchor, id) {
+    if (!menuPop.hidden && menuPopAnchor === anchor) { tutupMenuPop(); return; }
+    menuPopAnchor = anchor;
+    anchor.setAttribute('aria-expanded', 'true');
+    menuPop.innerHTML = '';
+
+    const bEdit = document.createElement('button');
+    bEdit.type = 'button';
+    bEdit.className = 'menu-act';
+    bEdit.title = 'Edit';
+    bEdit.innerHTML = '✎';
+    bEdit.onclick = () => {
+      tutupMenuPop();
+      const row = listEl.querySelector('tr[data-id="' + id + '"]');
+      const titleEl = row.querySelector('[data-edit-title="' + id + '"]');
+      if (titleEl) {
+        titleEl.focus();
+        const range = document.createRange();
+        range.selectNodeContents(titleEl);
+        range.collapse(false);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    };
+
+    const bSave = document.createElement('button');
+    bSave.type = 'button';
+    bSave.className = 'menu-act';
+    bSave.title = 'Simpan';
+    bSave.innerHTML = '✓';
+    bSave.style.background = 'var(--mori-text)';
+    bSave.style.color = 'var(--mori-bg)';
+    bSave.onclick = async () => {
+      tutupMenuPop();
+      const row = listEl.querySelector('tr[data-id="' + id + '"]');
+      const titleEl = row.querySelector('[data-edit-title="' + id + '"]');
+      const hppEl = row.querySelector('[data-edit-hpp="' + id + '"]');
+      const qtyEl = row.querySelector('[data-edit-qty="' + id + '"]');
+      const title = (titleEl.textContent || '').trim();
+      const hpp = hppEl.value !== '' ? parseFloat(hppEl.value) : 0;
+      const qty = qtyEl.value !== '' ? parseFloat(qtyEl.value) : 1;
+      if (!title) { titleEl.focus(); return; }
+
+      const isDuplicate = all.some(m => (m.title || '').trim().toLowerCase() === title.toLowerCase() && m.id !== id);
+      if (isDuplicate) {
+        alert('Nama menu/catatan "' + title + '" sudah ada!');
+        return;
+      }
+
+      const { error } = await supabase.from(TABLE).update({ title, hpp, qty, updated_at: new Date().toISOString() }).eq('id', id);
+      if (error) { alert('Gagal simpan: ' + error.message); return; }
+      load();
+    };
+
+    const bDel = document.createElement('button');
+    bDel.type = 'button';
+    bDel.className = 'menu-act danger';
+    bDel.title = 'Hapus';
+    bDel.innerHTML = '✕';
+    bDel.onclick = () => {
+      tutupMenuPop();
+      mintaHapus(id);
+    };
+
+    menuPop.appendChild(bEdit);
+    menuPop.appendChild(bSave);
+    menuPop.appendChild(bDel);
+    menuPop.hidden = false;
+
+    const r = anchor.getBoundingClientRect();
+    const p = menuPop.getBoundingClientRect();
+    const top = r.top + (r.height - p.height) / 2;
+    const left = r.right - p.width;
+    menuPop.style.top = Math.max(8, Math.min(top, window.innerHeight - p.height - 8)) + 'px';
+    menuPop.style.left = Math.max(8, Math.min(left, window.innerWidth - p.width - 8)) + 'px';
+  }
+
+  document.addEventListener('click', e => {
+    if (!menuPop.hidden && menuPopAnchor && !menuPop.contains(e.target) && !menuPopAnchor.contains(e.target)) {
+      tutupMenuPop();
+    }
+  });
+
+  window.addEventListener('scroll', () => { if (!menuPop.hidden) tutupMenuPop(); }, { passive: true });
 
   searchEl.addEventListener('input', render);
 
   async function simpan() {
     const title = (f_title.value || '').trim();
+    const hpp = f_hpp.value !== '' ? parseFloat(f_hpp.value) : 0;
+    const qty = f_qty.value !== '' ? parseFloat(f_qty.value) : 1;
     if (!title) { f_title.focus(); return; }
-    const id = editId.value ? parseInt(editId.value, 10) : null;
+
+    // Cek duplikat nama (tidak boleh sama, kecuali item yang sedang diedit)
+    const currentEditId = editId.value ? editId.value : null;
+    const isDuplicate = all.some(m => (m.title || '').trim().toLowerCase() === title.toLowerCase() && m.id !== currentEditId);
+    if (isDuplicate) {
+      alert('Nama menu/catatan "' + title + '" sudah ada! Tidak boleh sama.');
+      f_title.focus();
+      btnAdd.disabled = false;
+      return;
+    }
+
+    const id = currentEditId;
     btnAdd.disabled = true;
 
     if (id) {
-      const { error } = await supabase.from(TABLE).update({ title }).eq('id', id);
+      const { error } = await supabase.from(TABLE).update({ title, hpp, qty, updated_at: new Date().toISOString() }).eq('id', id);
       if (error) { alert('Gagal ubah: ' + error.message); btnAdd.disabled = false; return; }
     } else {
-      const { error } = await supabase.from(TABLE).insert([{ title }]);
+      const { error } = await supabase.from(TABLE).insert([{ title, hpp, qty, updated_at: new Date().toISOString() }]);
       if (error) { alert('Gagal tambah: ' + error.message); btnAdd.disabled = false; return; }
     }
 
     f_title.value = '';
+    f_hpp.value = '';
+    f_qty.value = '';
     editId.value = '';
     btnAdd.textContent = '+';
     btnAdd.disabled = false;
     load();
   }
 
+  function recalcRow(id) {
+    const row = listEl.querySelector('tr[data-id="' + id + '"]');
+    if (!row) return;
+    const hpp = parseFloat(row.querySelector('[data-edit-hpp="' + id + '"]').value) || 0;
+    const qty = parseFloat(row.querySelector('[data-edit-qty="' + id + '"]').value) || 0;
+    const tot = hpp * qty;
+    const totEl = row.querySelector('[data-row-total="' + id + '"]');
+    if (totEl) totEl.textContent = tot ? tot.toLocaleString('id-ID') : '0';
+    recalcGrandTotal();
+  }
+
+  function recalcGrandTotal() {
+    let grand = 0;
+    listEl.querySelectorAll('tr[data-id]').forEach(row => {
+      const id = row.dataset.id;
+      const hpp = parseFloat(row.querySelector('[data-edit-hpp="' + id + '"]')?.value) || 0;
+      const qty = parseFloat(row.querySelector('[data-edit-qty="' + id + '"]')?.value) || 0;
+      grand += hpp * qty;
+    });
+    const gt = document.getElementById('grandTotalVal');
+    if (gt) gt.textContent = 'Rp ' + grand.toLocaleString('id-ID');
+  }
+
   btnAdd.addEventListener('click', simpan);
   f_title.addEventListener('keydown', e => { if (e.key === 'Enter') simpan(); });
+  f_qty.addEventListener('keydown', e => { if (e.key === 'Enter') simpan(); });
+  f_hpp.addEventListener('keydown', e => { if (e.key === 'Enter') simpan(); });
+  document.getElementById('btnMinus').addEventListener('click', () => {
+    let val = parseFloat(f_qty.value) || 0;
+    f_qty.value = Math.max(0, val - 1);
+  });
+  document.getElementById('btnPlus').addEventListener('click', () => {
+    let val = parseFloat(f_qty.value) || 0;
+    f_qty.value = val + 1;
+  });
 
   function isiForm(id) {
     const m = all.find(x => x.id === id);
     if (!m) return;
     editId.value = m.id;
     f_title.value = m.title || '';
+    f_hpp.value = m.hpp !== undefined && m.hpp !== null ? m.hpp : '';
+    f_qty.value = m.qty !== undefined && m.qty !== null ? m.qty : '';
     btnAdd.textContent = '✓';
-    f_title.focus();
-  }
-
-  // Foto upload
-  function pilihFoto(id) {
-    fotoTargetId = id;
-    fotoInput.value = '';
-    fotoInput.click();
-  }
-
-  async function kompresFoto(file, maxSisi = 1200, kualitas = 0.82) {
-    if (!file || !/^image\//.test(file.type || '')) return file;
-    let gambar = null; try { gambar = await createImageBitmap(file); } catch { return file; }
-    if (!gambar) return file;
-    const sisi = Math.max(gambar.width, gambar.height), skala = Math.min(1, maxSisi / sisi);
-    if (skala === 1 && file.size < 400 * 1024) { if (gambar.close) gambar.close(); return file; }
-    const w = Math.max(1, Math.round(gambar.width * skala)), h = Math.max(1, Math.round(gambar.height * skala));
-    const kanvas = document.createElement('canvas'); kanvas.width = w; kanvas.height = h;
-    kanvas.getContext('2d').drawImage(gambar, 0, 0, w, h); if (gambar.close) gambar.close();
-    const blob = await new Promise(res => kanvas.toBlob(res, 'image/jpeg', kualitas)); if (!blob) return file;
-    return new File([blob], (file.name || 'foto').replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg', lastModified: Date.now() });
-  }
-
-  fotoInput.addEventListener('change', async e => {
-    const file = e.target.files && e.target.files[0];
-    if (!file || fotoTargetId === null) return;
-    const fKompres = await kompresFoto(file);
-    const isAkun = fotoTargetId === AKUN_TILE;
-    const path = isAkun ? 'musnah/admin.jpg' : 'musnah-' + fotoTargetId + '.jpg';
-
-    fotoHint.textContent = 'Mengunggah foto...';
-    fotoHint.hidden = false;
-
-    const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, fKompres, { upsert: true, cacheControl: '3600' });
-    if (upErr) {
-      fotoHint.textContent = 'Gagal upload: ' + upErr.message;
-      return;
+    const tr = listEl.querySelector('tr[data-id="' + id + '"]');
+    if (tr) {
+      tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      tr.style.background = '#fef3c7';
+      setTimeout(() => { tr.style.background = ''; }, 1200);
     }
+  }
 
-    const { data: pubData } = supabase.storage.from(BUCKET).getPublicUrl(path);
-    const foto_url = pubData ? pubData.publicUrl : '';
+  const pwBg = document.getElementById('pwBg');
+  const pwMsg = document.getElementById('pwMsg');
+  const pwEmail = document.getElementById('pwEmail');
+  const pwInput = document.getElementById('pwInput');
+  const pwError = document.getElementById('pwError');
+  const pwOk = document.getElementById('pwOk');
+  const pwCancel = document.getElementById('pwCancel');
+  let pwResolve = null;
 
-    if (isAkun) {
-      localStorage.setItem('musnah_admin_foto', foto_url);
-      barisAdmin.foto_url = foto_url;
-      render();
-      fotoHint.hidden = true;
-    } else {
-      const { error: dbErr } = await supabase.from(TABLE).update({ foto_url }).eq('id', fotoTargetId);
-      if (dbErr) {
-        fotoHint.textContent = 'Gagal simpan URL: ' + dbErr.message;
-      } else {
-        fotoHint.hidden = true;
-        load();
-      }
-    }
-  });
-
-  // Password / Hapus modal
-  const pwBg = document.getElementById('pwBg'), pwMsg = document.getElementById('pwMsg'), pwInput = document.getElementById('pwInput'), pwError = document.getElementById('pwError'), pwOk = document.getElementById('pwOk'), pwCancel = document.getElementById('pwCancel');
-  let pwResolve = null, pendingDelId = null;
+  async function sudahMasukAdmin() {
+    try { const { data } = await supabase.auth.getSession(); return !!data.session; } catch { return false; }
+  }
 
   async function askDelPassword(msg) {
+    if (await sudahMasukAdmin()) return true;
     if (pwResolve) closePw(false);
-    pwMsg.textContent = msg || '';
+    pwMsg.textContent = msg || 'Konfirmasi Hapus';
+    pwEmail.value = '';
     pwInput.value = '';
     pwError.hidden = true;
     pwBg.classList.add('open');
-    try { pwInput.focus(); } catch (e) {}
+    try { pwEmail.focus({ preventScroll: true }); } catch (e) { pwEmail.focus(); }
     return new Promise(res => { pwResolve = res; });
   }
 
@@ -349,10 +611,18 @@
   }
 
   pwOk.addEventListener('click', async () => {
+    const email = (pwEmail.value || '').trim();
     const pass = pwInput.value || '';
-    if (!pass) {
-      pwError.textContent = 'Password wajib diisi.';
+    if (!email || !pass) {
+      pwError.textContent = 'Email dan password wajib diisi.';
       pwError.hidden = false;
+      return;
+    }
+    const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
+    if (error) {
+      pwError.textContent = 'Gagal masuk: ' + error.message;
+      pwError.hidden = false;
+      pwInput.value = '';
       return;
     }
     closePw(true);
@@ -360,13 +630,16 @@
 
   pwCancel.addEventListener('click', () => closePw(false));
   pwBg.addEventListener('click', e => { if (e.target === pwBg) closePw(false); });
-  pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') pwOk.click(); if (e.key === 'Escape') closePw(false); });
 
   async function mintaHapus(id) {
     const m = all.find(x => x.id === id);
-    const ok = await askDelPassword('Hapus kategori "' + (m ? m.title : id) + '"?');
+    const title = m ? (m.title || 'Item') : 'Item';
+    const ok = await askDelPassword('Hapus "' + title + '"?');
     if (!ok) return;
+    hapusData(id);
+  }
 
+  async function hapusData(id) {
     const { error } = await supabase.from(TABLE).delete().eq('id', id);
     if (error) {
       alert('Gagal hapus: ' + error.message);
