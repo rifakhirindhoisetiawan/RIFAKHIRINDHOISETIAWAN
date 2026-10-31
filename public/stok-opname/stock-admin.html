@@ -590,10 +590,12 @@
       }
 
       .c-foto .thumb {
-        width: 34px;
-        height: 34px;
+        width: 100%;
+        max-width: 36px;
+        aspect-ratio: 9 / 16;
+        height: auto;
         border: none;
-        border-radius: 8px;
+        border-radius: 6px;
         object-fit: cover;
         display: block;
         cursor: pointer;
@@ -1308,8 +1310,10 @@
          foto jadi terlihat lebih pendek. */
       .c-foto .thumb,
       .c-foto .kosong {
-        width: 34px;
-        height: 34px;
+        width: 100%;
+        max-width: 36px;
+        aspect-ratio: 9 / 16;
+        height: auto;
         margin: 0 auto;
       }
       .c-foto .kosong {

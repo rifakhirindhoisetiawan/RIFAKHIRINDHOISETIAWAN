@@ -434,9 +434,44 @@
         border-color: var(--mori-text);
       }
 
+      .splash-screen {
+        position: fixed;
+        inset: 0;
+        background: var(--mori-bg);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.4s ease;
+      }
+      .splash-screen.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .splash-box {
+        width: 100%;
+        max-width: 320px;
+        aspect-ratio: 9 / 16;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-line);
+      }
+      .splash-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
     </style>
   </head>
   <body>
+    <div class="splash-screen" id="splashScreen">
+      <div class="splash-box">
+        <img src="public/grid/image-index.jpg" alt="Splash" onerror="this.src='assets/images/time-kamera/1.jpg';" />
+      </div>
+    </div>
     <div class="container">
       <div class="search-wrapper">
         <div class="search-box" style="flex:1;min-width:0">
@@ -647,6 +682,18 @@
       }
       updateDateTime();
       setInterval(updateDateTime, 1000);
+
+      const splash = document.getElementById('splashScreen');
+      if (splash) {
+        setTimeout(() => {
+          splash.classList.add('fade-out');
+          setTimeout(() => splash.remove(), 400);
+        }, 1500);
+        splash.addEventListener('click', () => {
+          splash.classList.add('fade-out');
+          setTimeout(() => splash.remove(), 400);
+        });
+      }
     </script>
   </body>
 </html>
