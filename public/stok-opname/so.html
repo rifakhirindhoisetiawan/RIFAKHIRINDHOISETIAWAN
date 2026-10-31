@@ -195,7 +195,12 @@
         -webkit-appearance: none;
       }
 
-      .c-kode {
+      .c-num {
+        text-align: right;
+      }
+      thead th.c-num {
+        text-align: right;
+      }
         width: 92px;
         text-align: center;
       }
@@ -673,44 +678,44 @@
         background: var(--mori-bg, #fffbf2);
         border: 1.5px solid var(--mori-line, rgba(26,25,23,0.14));
         border-radius: 12px;
-        padding: 20px;
+        padding: 12px 14px;
         width: 100%;
-        max-width: 320px;
+        max-width: 380px;
         box-shadow: none;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 8px;
       }
       .confirm-title {
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 800;
         color: var(--text);
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
       .confirm-msg {
-        font-size: 13px;
+        font-size: 12px;
         color: var(--muted);
-        line-height: 1.4;
+        line-height: 1.35;
       }
       .confirm-actions {
         display: flex;
-        gap: 8px;
-        margin-top: 4px;
+        gap: 6px;
+        margin-top: 2px;
       }
       .confirm-btn {
         flex: 1;
-        padding: 12px;
+        padding: 8px 10px;
         font-family: var(--mori-mono, ui-monospace, monospace);
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 700;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
         text-transform: uppercase;
         cursor: pointer;
         border: 1px solid var(--mori-line, rgba(26,25,23,0.14));
         background: var(--surface);
         color: var(--text);
-        border-radius: 10px;
+        border-radius: 8px;
         transition: transform 0.1s ease;
       }
       .confirm-btn:active {
@@ -727,34 +732,46 @@
         position: relative;
         display: inline-block;
       }
-      .dropdown-menu {
-        position: absolute;
-        right: 0;
-        top: 36px;
-        background: var(--mori-bg, #fffbf2);
-        border: 1px solid var(--mori-line, rgba(26,25,23,0.14));
-        border-radius: 8px;
-        box-shadow: none;
+      .menu-pop {
+        position: fixed;
+        z-index: 150;
         display: flex;
-        flex-direction: column;
-        min-width: 140px;
-        z-index: 50;
-        overflow: hidden;
-      }
-      .dropdown-item {
-        padding: 8px 12px;
-        text-align: left;
+        align-items: center;
+        gap: 6px;
         background: transparent;
         border: none;
+        box-shadow: none;
+        overflow: visible;
+      }
+      .menu-pop[hidden] {
+        display: none !important;
+      }
+      .dropdown-item {
+        width: 32px;
+        height: 32px;
+        min-height: 32px;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--surface);
+        border: 1px solid var(--mori-line, rgba(26,25,23,0.14));
+        border-radius: 8px;
         font: inherit;
-        font-size: 13px;
-        font-weight: 600;
+        font-size: 14px;
+        font-weight: 700;
         color: var(--text);
         cursor: pointer;
-        transition: background 0.15s ease;
+        transition: transform 0.1s ease;
       }
-      .dropdown-item:hover {
-        background: rgba(26,25,23,0.06);
+      .dropdown-item:active {
+        transform: scale(0.94);
+      }
+      .dropdown-item.danger {
+        background: #dc2626;
+        color: #ffffff;
+        border-color: #dc2626;
       }
 
     </style>
@@ -774,13 +791,11 @@
 
     
     <div class="confirm-overlay" id="saveOverlay" hidden>
-      <div class="confirm-box">
-        <div class="confirm-title" id="saveTitle">Simpan Perubahan</div>
-        <div class="confirm-msg" id="saveMsg">Pilih tujuan penyimpanan untuk item ini:</div>
-        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
-          <button type="button" class="confirm-btn yes" id="saveOptFisik" style="width: 100%;">Simpan ke Stok Fisik Saja</button>
-          <button type="button" class="confirm-btn yes" id="saveOptOnhand" style="width: 100%; background: var(--text); color: var(--mori-bg);">Tambah ke Onhand (Akumulasi)</button>
-          <button type="button" class="confirm-btn" id="saveOptBatal" style="width: 100%; margin-top: 4px; border-radius: 10px;">Batal</button>
+      <div class="confirm-box" style="max-width: 260px; background: transparent; border: none; box-shadow: none; padding: 0;">
+        <div class="menu-pop" id="saveMenuPop" style="position: static; display: flex; align-items: center; gap: 6px; width: 100%;">
+          <button type="button" class="confirm-btn yes" id="saveOptFisik" style="height: 32px; min-height: 32px; padding: 0 10px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 11px; white-space: nowrap;" title="Simpan Fisik">Simpan</button>
+          <button type="button" class="confirm-btn yes" id="saveOptOnhand" style="height: 32px; min-height: 32px; padding: 0 10px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 11px; white-space: nowrap;" title="Tambah Onhand">Onhand</button>
+          <button type="button" class="confirm-btn" id="saveOptBatal" style="height: 32px; min-height: 32px; padding: 0 10px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 11px; white-space: nowrap;" title="Batal">Batal</button>
         </div>
       </div>
     </div>
@@ -962,7 +977,7 @@
       const formatTanggal = (value) => {
         const d = new Date(value);
         const pad = (n) => String(n).padStart(2, '0');
-        return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + String(d.getFullYear()).slice(-2);
+        return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear();
       };
 
       let tanggalSo = formatTanggal(new Date());
@@ -974,6 +989,56 @@
         if (cls) td.className = cls;
         return td;
       };
+
+      const ICO_SAVE = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>';
+      const ICO_RESET = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.73-5.73"/></svg>';
+
+      const menuPop = document.createElement('div');
+      menuPop.className = 'menu-pop';
+      menuPop.hidden = true;
+      document.body.appendChild(menuPop);
+      let menuPopAnchor = null;
+
+      const tutupMenuPop = () => {
+        if (menuPop.hidden && !menuPopAnchor) return;
+        menuPop.hidden = true;
+        menuPop.innerHTML = '';
+        menuPopAnchor = null;
+      };
+
+      const bukaMenuPop = (anchor, items) => {
+        tutupMenuPop();
+        menuPopAnchor = anchor;
+        items.forEach((it) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'dropdown-item';
+          b.innerHTML = it.svg;
+          b.title = it.judul;
+          b.addEventListener('click', (e) => {
+            e.stopPropagation();
+            tutupMenuPop();
+            it.jalankan();
+          });
+          menuPop.appendChild(b);
+        });
+        menuPop.hidden = false;
+        anchor.setAttribute('aria-expanded', 'true');
+
+        const r = anchor.getBoundingClientRect();
+        menuPop.style.top = r.top + 'px';
+        menuPop.style.right = (window.innerWidth - r.left + 4) + 'px';
+        menuPop.style.left = 'auto';
+      };
+
+      document.addEventListener('click', (e) => {
+        if (menuPop.hidden) return;
+        if (menuPop.contains(e.target)) return;
+        if (menuPopAnchor && menuPopAnchor.contains(e.target)) return;
+        tutupMenuPop();
+      });
+      window.addEventListener('resize', tutupMenuPop);
+      window.addEventListener('scroll', tutupMenuPop, true);
 
       const lightbox = document.getElementById('lightbox');
       const lightboxQr = document.getElementById('lightboxQr');
@@ -1133,7 +1198,9 @@
           const sistem = num(row.stok_sistem);
           const tr = document.createElement('tr');
           tr.dataset.id = row.id;
-          tr.append(cell(String(i + 1), 'c-no'), cell(tanggalSo, 'c-tgl'));
+          const savedTgl = localStorage.getItem('so_tgl_' + row.id);
+          const tglVal = savedTgl || row.updated_at;
+          tr.append(cell(String(i + 1), 'c-no'), cell(tglVal ? formatTanggal(tglVal) : '-', 'c-tgl'));
 
           // Kolom foto produk dihapus (data foto tetap diambil dari DB,
           // tidak dipakai untuk render di halaman ini).
@@ -1217,48 +1284,30 @@
           btnMenu.style.flexShrink = '0';
           btnMenu.style.outline = 'none';
 
-          const dropdown = document.createElement('div');
-          dropdown.className = 'dropdown-menu';
-          dropdown.hidden = true;
-
-          const btnSaveOpt = document.createElement('button');
-          btnSaveOpt.type = 'button';
-          btnSaveOpt.className = 'dropdown-item';
-          btnSaveOpt.textContent = 'Simpan';
-
-          const btnResetOpt = document.createElement('button');
-          btnResetOpt.type = 'button';
-          btnResetOpt.className = 'dropdown-item';
-          btnResetOpt.textContent = 'Reset (0)';
-
-          dropdown.append(btnSaveOpt, btnResetOpt);
-          menuWrap.append(btnMenu, dropdown);
+          menuWrap.append(btnMenu);
 
           btnMenu.addEventListener('click', (e) => {
             e.stopPropagation();
-            // Tutup dropdown lain yang terbuka
-            document.querySelectorAll('.dropdown-menu').forEach(d => { if (d !== dropdown) d.hidden = true; });
-            dropdown.hidden = !dropdown.hidden;
-          });
-
-          dropdown.addEventListener('click', (e) => {
-            e.stopPropagation();
-          });
-
-          document.addEventListener('click', () => {
-            dropdown.hidden = true;
-          });
-
-          btnSaveOpt.addEventListener('click', () => {
-            dropdown.hidden = true;
-            showSaveChoiceModal(row.name || row.kode, (mode) => {
-              simpanFisikBaris(inputFisik.value, mode);
-            });
-          });
-
-          btnResetOpt.addEventListener('click', () => {
-            dropdown.hidden = true;
-            showCustomConfirm('Reset stok fisik "' + (row.name || row.kode) + '" menjadi 0?', () => simpanFisikBaris(0));
+            if (!menuPop.hidden && menuPopAnchor === btnMenu) {
+              tutupMenuPop();
+            } else {
+              bukaMenuPop(btnMenu, [
+                {
+                  svg: ICO_SAVE,
+                  judul: 'Simpan',
+                  jalankan: () => {
+                    simpanFisikBaris(inputFisik.value, 'onhand');
+                  }
+                },
+                {
+                  svg: ICO_RESET,
+                  judul: 'Reset',
+                  jalankan: () => {
+                    showCustomConfirm('Reset stok fisik "' + (row.name || row.kode) + '" menjadi 0?', () => simpanFisikBaris(0));
+                  }
+                }
+              ]);
+            }
           });
 
           const simpanFisikBaris = async (nilaiBaru, mode) => {
@@ -1267,12 +1316,17 @@
             hitungBaris(tr);
             hitungTotal();
 
+            const nowIso = new Date().toISOString();
             const tdTgl = tr.querySelector('.c-tgl');
-            if (tdTgl) tdTgl.textContent = formatTanggal(new Date());
+            if (tdTgl) tdTgl.textContent = formatTanggal(nowIso);
 
             const sistemLama = num(row.stok_sistem);
             const nilaiBaruSistem = mode === 'onhand' ? sistemLama + nilai : sistemLama;
-            const updateData = mode === 'onhand' ? { stok_fisik: 0, stok_sistem: nilaiBaruSistem } : { stok_fisik: nilai };
+            const updateData = mode === 'onhand' 
+              ? { stok_fisik: 0, stok_sistem: nilaiBaruSistem } 
+              : { stok_fisik: nilai };
+            row.updated_at = nowIso;
+            localStorage.setItem('so_tgl_' + row.id, nowIso);
 
             const { error } = await supabase
               .from('stock_products')

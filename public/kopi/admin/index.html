@@ -19,7 +19,7 @@
     .card{background:transparent;border:none;padding:0;max-width:100%;min-width:0}
     .section-label{font-size:11px;font-weight:800;color:#9aa0ab;letter-spacing:0.6px;text-transform:uppercase;margin:4px 0 14px}
     .search-wrapper{display:flex;align-items:center;gap:10px;width:100%;margin-bottom:14px}
-    .search-box{flex:1;display:flex;align-items:center;gap:8px;border:1px solid #ddd;border-radius:10px;padding:10px 14px;color:#222;font-size:14px;background:#f9f9f9;min-width:0}
+    .search-box {flex:1;display:flex;align-items:center;gap:8px;border: 1px solid var(--mori-line);border-radius:10px;padding:10px 14px;color:#222;font-size:14px;background:#f9f9f9;min-width:0}
     .search-box:focus-within{border-color:#888;background:#fff}
     .search-box svg{flex-shrink:0;color:#c3c8d1;width:18px;height:18px}
     .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:#222;font-family:inherit;min-width:0;-webkit-appearance:none;appearance:none;border-radius:0}
@@ -275,8 +275,8 @@
       font-family:var(--mori-mono);font-size:10px;font-weight:700;
       color:var(--mori-text);letter-spacing:1.4px;
     }
-    .search-box{
-      border:1px solid var(--mori-line) !important;border-radius:0 !important;
+    .search-box {
+      border: 1px solid var(--mori-line);border-radius:0 !important;
       background:var(--mori-surface) !important;color:var(--mori-text);
       transition:box-shadow .2s ease;
     }
@@ -384,9 +384,7 @@
       vertical-align:middle;
       width:32px;height:32px;min-height:32px;padding:0;margin:0;
       background:var(--mori-surface);color:var(--mori-text);
-      /* GARIS HITAM TOMBOL DIHAPUS: kotak hitam di keliling tombol ⋮
-         dilepas — tinggal titik-tiganya. */
-      border:0;border-radius:var(--mori-radius);
+      border:1px solid var(--mori-line);border-radius:var(--mori-radius);
       font-size:17px;font-weight:700;line-height:1;cursor:pointer;
       -webkit-tap-highlight-color:transparent;
     }
@@ -403,10 +401,7 @@
       width:32px;height:32px;min-height:32px;padding:0;margin:0;
       display:flex;align-items:center;justify-content:center;
       background:var(--mori-surface);color:var(--mori-text);
-      /* TOMBOL POPUP KAYAK ADMIN STOK OPNAME: kotak hitam di keliling
-         tombol popup (foto/edit/hapus) dilepas — sama seperti tombol
-         aksi di Admin Stok Opname yang krem polos tanpa garis. */
-      border:0;border-radius:var(--mori-radius);
+      border:1px solid var(--mori-line);border-radius:var(--mori-radius);
       box-shadow:none;cursor:pointer;
     }
     #menuPop .menu-act svg{width:14px;height:14px}
@@ -943,8 +938,8 @@
     .menu-tabel .item{display:table-row!important}
     .menu-tabel tbody tr:active td{background:var(--mori-surface)}
     .menu-tabel .mt-cari td{padding:0 12px;height:auto!important}
-    .menu-tabel .mt-cari .search-box{
-      border:0!important;border-radius:0!important;background:transparent!important;
+    .menu-tabel .mt-cari .search-box {
+      border: 0 !important;border-radius:0!important;background:transparent!important;
       padding:9px 0!important;gap:8px;
     }
     .menu-tabel .mt-cari .search-box:focus-within{
@@ -967,7 +962,7 @@
       vertical-align:middle;
       width:28px;height:28px;min-height:28px;padding:0;margin:0 2px 0 0;
       background:var(--mori-surface);color:var(--mori-text-2);
-      border:0;border-radius:var(--mori-radius);
+      border:1px solid var(--mori-line);border-radius:var(--mori-radius);
       cursor:pointer;-webkit-tap-highlight-color:transparent;
     }
     .menu-tabel .mt-aksi .btn-pin svg{width:14px;height:14px}
@@ -1072,7 +1067,7 @@
       /* TOMBOL TITIK-TIGA BEDA WARNA DARI BAR HOT: chip terang, kontras
          dengan bar HOT yang krem tua. */
       background:#fffbf2;color:var(--mori-text);
-      border:0;border-radius:var(--mori-radius);
+      border:1px solid var(--mori-line);border-radius:var(--mori-radius);
       font-size:17px;font-weight:700;line-height:1;cursor:pointer;
       -webkit-tap-highlight-color:transparent;
     }

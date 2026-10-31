@@ -377,6 +377,7 @@
 
       .c-kode {
         width: 128px;
+        text-align: center;
       }
 
       .c-no {
@@ -589,8 +590,8 @@
       }
 
       .c-foto .thumb {
-        width: 38px;
-        height: 38px;
+        width: 34px;
+        height: 34px;
         border: none;
         border-radius: 8px;
         object-fit: cover;
@@ -752,8 +753,8 @@
       .btn,
       .ico,
       .qr-btn {
-        border-radius: 0;
-        border: none;
+        border-radius: 8px;
+        border: 1px solid var(--mori-line, rgba(26,25,23,0.14));
         background: var(--surface);
         color: var(--text);
         box-shadow: none;
@@ -1305,8 +1306,8 @@
          foto jadi terlihat lebih pendek. */
       .c-foto .thumb,
       .c-foto .kosong {
-        width: 44px;
-        height: 44px;
+        width: 34px;
+        height: 34px;
         margin: 0 auto;
       }
       .c-foto .kosong {
@@ -2756,13 +2757,17 @@
         if (menuPop.hidden && !menuPopAnchor) return;
         menuPop.hidden = true;
         menuPop.innerHTML = '';
-        if (menuPopAnchor) menuPopAnchor.setAttribute('aria-expanded', 'false');
+        if (menuPopAnchor) {
+          menuPopAnchor.setAttribute('aria-expanded', 'false');
+          menuPopAnchor.style.visibility = '';
+        }
         menuPopAnchor = null;
       };
 
       const bukaMenuPop = (anchor, items) => {
         tutupMenuPop();
         menuPopAnchor = anchor;
+        anchor.style.visibility = 'hidden';
         items.forEach((it) => {
           const b = document.createElement('button');
           b.type = 'button';
@@ -2779,25 +2784,10 @@
         menuPop.hidden = false;
         anchor.setAttribute('aria-expanded', 'true');
 
-        /* Tombol muncul DI TEMPAT tombol tiga-titik, bukan meleset ke
-           bawah baris. Efeknya tombol tiga-titik berubah jadi tombol
-           aslinya.
-
-           Popup lebih lebar daripada kolom Aksi (tiga tombol 32px
-           ditambah jaraknya), jadi tepi kanannya disejajarkan dengan
-           tepi kanan tombol: popup tumbuh ke arah kiri, ke kolom Nama
-           Menu. Kalau popup ditumpuk dari tepi kiri tombol, di HP kolom
-           Aksi berada di tepi kanan layar sehingga popup keluar layar.
-
-           Vertikal tetap dijaga agar tidak keluar atas/bawah layar. */
         const r = anchor.getBoundingClientRect();
-        const p = menuPop.getBoundingClientRect();
-        const top = r.top + (r.height - p.height) / 2;
-        const left = r.right - p.width;
-        menuPop.style.top =
-          Math.max(8, Math.min(top, window.innerHeight - p.height - 8)) + 'px';
-        menuPop.style.left =
-          Math.max(8, Math.min(left, window.innerWidth - p.width - 8)) + 'px';
+        menuPop.style.top = r.top + 'px';
+        menuPop.style.right = (window.innerWidth - r.right) + 'px';
+        menuPop.style.left = 'auto';
       };
 
       document.addEventListener('click', (e) => {

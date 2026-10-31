@@ -408,7 +408,7 @@
 
     
       body.pin-mode .icon-box {
-        border: 2px dashed var(--mori-text) !important;
+        border: 1px dashed var(--mori-text-2) !important;
         cursor: pointer;
       }
       .header-pin-btn[aria-pressed="true"], #headerPinBtn[aria-pressed="true"] {
@@ -480,23 +480,39 @@
       const isPinned = (label) => pinned.includes(label);
       const ICO_PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"/></svg>';
 
+      // Mode semat seperti di KOPI
+      let modeSemat = false;
+      const headerPinBtn = document.getElementById('headerPinBtn');
+
+      if (headerPinBtn && !headerPinBtn.dataset.bound) {
+        headerPinBtn.dataset.bound = 'true';
+        headerPinBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          modeSemat = !modeSemat;
+          headerPinBtn.setAttribute('aria-pressed', modeSemat ? 'true' : 'false');
+          document.body.classList.toggle('pin-mode', modeSemat);
+        });
+      }
+
       const renderMenu = () => {
         menuList.innerHTML = '';
 
-        // Menu tersemat naik ke atas (urutan semat), sisanya urutan asli.
+        // Menu tersemat naik ke atas (urutan semat), sisanya urutan asli tanpa baris terpisah.
         const rank = (item) => {
           const i = pinned.indexOf(item.label);
           return i === -1 ? Number.MAX_SAFE_INTEGER : i;
         };
         const sortedItems = [...menuItems].sort((a, b) => rank(a) - rank(b));
 
-                sortedItems.forEach((item) => {
+        sortedItems.forEach((item) => {
           const isDisabled = item.href === "#" || disabledLabels.has(item.label);
 
           const a = document.createElement(isDisabled ? "div" : "a");
           a.className = "menu-item" + (isDisabled ? " disabled" : "");
           if (!isDisabled) a.href = item.href;
           if (isDisabled) a.setAttribute("aria-disabled", "true");
+          
           a.innerHTML = `
             <div class="icon-box">
               <img
@@ -511,63 +527,29 @@
             <span class="label">${item.label}</span>
           `;
 
+          a.addEventListener('click', (e) => {
+            if (modeSemat) {
+              e.preventDefault();
+              e.stopPropagation();
+              if (isPinned(item.label)) {
+                pinned = pinned.filter(l => l !== item.label);
+              } else {
+                pinned.push(item.label);
+              }
+              try {
+                localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
+              } catch {}
+              renderMenu();
+            }
+          });
+
           menuList.appendChild(a);
         });
 
-document.querySelectorAll('img[data-menu]').forEach((img) => {
+        document.querySelectorAll('img[data-menu]').forEach((img) => {
           lazyLoader.observe(img);
         });
       };
-
-      // --- Pop-up Kelola Sematan Menu ---
-      const headerPinBtn = document.getElementById('headerPinBtn');
-      if (headerPinBtn && !headerPinBtn.dataset.bound) {
-        headerPinBtn.dataset.bound = 'true';
-        headerPinBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          let modal = document.getElementById('pinModal');
-          if (!modal) {
-            modal = document.createElement('div');
-            modal.id = 'pinModal';
-            modal.style.cssText = 'position:absolute;top:70px;right:18px;background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:10px;padding:12px;box-shadow:none;z-index:100;min-width:220px;max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;';
-            document.body.appendChild(modal);
-
-            document.addEventListener('click', (ev) => {
-              if (modal && !modal.contains(ev.target) && ev.target !== headerPinBtn) {
-                modal.hidden = true;
-              }
-            });
-          }
-          modal.hidden = !modal.hidden;
-          if (!modal.hidden) {
-            const renderPinContent = () => {
-              modal.innerHTML = '<div style="font-size:12px;font-weight:700;margin-bottom:4px;color:var(--mori-text);">Kelola Sematan Menu</div>';
-              menuItems.forEach((m) => {
-                const isP = isPinned(m.label);
-                const row = document.createElement('button');
-                row.type = 'button';
-                row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;background:var(--mori-surface);border:1px solid var(--mori-line);padding:6px 10px;border-radius:6px;font:inherit;font-size:12px;cursor:pointer;width:100%;text-align:left;';
-                row.innerHTML = '<span>' + m.label + '</span><span style="font-weight:700;color:' + (isP ? 'var(--mori-text)' : 'var(--mori-text-2)') + ';">' + (isP ? '✓ Disemat' : '+ Semat') + '</span>';
-                row.onclick = (ev) => {
-                  ev.stopPropagation();
-                  if (isPinned(m.label)) {
-                    pinned = pinned.filter(l => l !== m.label);
-                  } else {
-                    pinned.push(m.label);
-                  }
-                  try {
-                    localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
-                  } catch {}
-                  renderMenu();
-                  renderPinContent();
-                };
-                modal.appendChild(row);
-              });
-            };
-            renderPinContent();
-          }
-        });
-      }
 
       renderMenu();
 

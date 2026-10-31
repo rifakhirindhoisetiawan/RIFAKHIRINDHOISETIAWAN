@@ -43,19 +43,19 @@
       /* form tambah catatan */
       .form-tambah { display: flex; gap: 8px; margin-bottom: 12px; }
       .form-tambah input {
-        flex: 1; padding: 11px 12px; font-size: 13px; font-family: inherit;
+        flex: 1; padding: 7px 10px; font-size: 13px; font-family: inherit;
         color: var(--mori-text); background: var(--mori-surface);
-        border: 1px solid var(--mori-line); border-radius: 0; outline: none;
+        border: 1px solid var(--mori-line); border-radius: 8px; outline: none;
         transition: box-shadow .2s ease, background .2s ease;
       }
       .form-tambah input:focus { background: #fffdf7; box-shadow: none; }
       .form-tambah input::placeholder { color: var(--mori-text-2); }
       .btn-add {
-        flex: 0 0 44px; width: 44px; height: 44px; padding: 0;
+        flex: 0 0 32px; width: 32px; height: 32px; padding: 0;
         display: flex; align-items: center; justify-content: center;
-        font-family: inherit; font-size: 22px; line-height: 1;
+        font-family: inherit; font-size: 18px; line-height: 1;
         color: var(--mori-bg); background: var(--mori-accent);
-        border: 1px solid var(--mori-line); border-radius: 0; cursor: pointer;
+        border: 1px solid var(--mori-line); border-radius: 8px; cursor: pointer;
         box-shadow: none;
         transition: box-shadow .2s ease, transform .2s ease;
       }
@@ -63,7 +63,7 @@
 
       /* tabel - sama persis task-mori.css */
       .table-wrap {
-        border: 1px solid var(--mori-line); border-radius: 0;
+        border: 1px solid var(--mori-line); border-radius: 12px;
         background: var(--mori-bg); overflow-x: auto; -webkit-overflow-scrolling: touch;
       }
       .tabel { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
@@ -124,7 +124,7 @@
         display: flex; align-items: center; justify-content: center;
         font-family: inherit; font-size: 14px; font-weight: 800; line-height: 1;
         color: var(--mori-bg); background: var(--mori-accent);
-        border: 1px solid var(--mori-line); border-radius: 0;
+        border: 1px solid var(--mori-line); border-radius: 8px;
         box-shadow: none; cursor: pointer;
         transition: box-shadow .2s ease, transform .2s ease;
       }
@@ -144,22 +144,22 @@
       /* modal password */
       .pw-bg { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(26,25,23,.45); align-items: center; justify-content: center; padding: 16px; }
       .pw-bg.open { display: flex; }
-      .pw-card { width: 100%; max-width: 360px; background: var(--mori-bg); border: 1px solid var(--mori-line); padding: 18px; box-shadow: none; }
+      .pw-card { width: 100%; max-width: 360px; background: var(--mori-bg); border: 1px solid var(--mori-line); border-radius: 12px; padding: 18px; box-shadow: none; }
       .pw-title { font-family: var(--mori-mono); font-size: 13px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px; }
       .pw-msg { font-size: 12px; color: var(--mori-text-2); line-height: 1.5; margin-bottom: 12px; white-space: pre-line; }
-      .pw-input { width: 100%; padding: 11px 12px; font-family: var(--mori-mono); font-size: 15px; background: var(--mori-surface); border: 1px solid var(--mori-line); border-radius: 0; outline: none; }
+      .pw-input { width: 100%; padding: 11px 12px; font-family: var(--mori-mono); font-size: 15px; background: var(--mori-surface); border: 1px solid var(--mori-line); border-radius: 8px; outline: none; }
       .pw-input:focus { background: #fffdf7; box-shadow: none; }
       .pw-error { margin-top: 8px; font-family: var(--mori-mono); font-size: 10px; font-weight: 700; color: var(--mori-danger); }
       .pw-error[hidden] { display: none; }
       .pw-actions { display: flex; gap: 8px; margin-top: 16px; }
-      .pw-btn { flex: 1; padding: 12px; border: 1px solid var(--mori-line); background: var(--mori-surface); color: var(--mori-text); font-family: var(--mori-mono); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+      .pw-btn { flex: 1; padding: 12px; border: 1px solid var(--mori-line); border-radius: 8px; background: var(--mori-surface); color: var(--mori-text); font-family: var(--mori-mono); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
       .pw-btn:active { transform: translate(2px,2px); }
       .pw-btn-danger { background: var(--mori-danger); border-color: var(--mori-danger); color: #fff; }
 
       /* modal edit */
       .edit-bg { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(26,25,23,.45); align-items: center; justify-content: center; padding: 16px; }
       .edit-bg.open { display: flex; }
-      .edit-card { width: 100%; max-width: 480px; background: var(--mori-bg); border: 1px solid var(--mori-line); padding: 18px; box-shadow: none; }
+      .edit-card { width: 100%; max-width: 480px; background: var(--mori-bg); border: 1px solid var(--mori-line); border-radius: 12px; padding: 18px; box-shadow: none; }
       .edit-card textarea {
         width: 100%; min-height: 120px; padding: 12px; font-family: inherit; font-size: 13px;
         border: 1px solid var(--mori-line); background: var(--mori-surface); outline: none; resize: vertical;
@@ -169,18 +169,17 @@
   </head>
   <body>
     <div class="wrap">
-      <div class="form-tambah">
-        <input id="f_catatan" type="text" placeholder="Tulis catatan penting..." autocomplete="off" />
-        <button class="btn-add" type="button" id="btnAdd" title="Tambah catatan">+</button>
-      </div>
-
       <div class="table-wrap">
         <table class="tabel">
           <thead>
             <tr>
               <th class="c-no">No</th>
-              <th>Catatan Penting</th>
-              <th class="c-aksi"></th>
+              <th colspan="2" style="padding: 4px 6px;">
+                <div class="form-tambah" style="margin: 0;">
+                  <input id="f_catatan" type="text" placeholder="Tulis catatan penting..." autocomplete="off" />
+                  <button class="btn-add" type="button" id="btnAdd" title="Tambah catatan">+</button>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>
@@ -193,7 +192,6 @@
       <div class="pw-card">
         <div class="pw-title">Konfirmasi Hapus</div>
         <div class="pw-msg" id="pwMsg"></div>
-        <input class="pw-input" id="pwEmail" type="email" autocomplete="username" placeholder="Email admin" />
         <input class="pw-input" id="pwInput" type="password" autocomplete="current-password" placeholder="Password" />
         <div class="pw-error" id="pwError" hidden>Gagal masuk.</div>
         <div class="pw-actions">
@@ -357,7 +355,6 @@
       /* delete modal — dikunci Supabase Auth, bukan password di source */
       const pwBg = document.getElementById('pwBg');
       const pwMsg = document.getElementById('pwMsg');
-      const pwEmail = document.getElementById('pwEmail');
       const pwInput = document.getElementById('pwInput');
       const pwError = document.getElementById('pwError');
       const pwOk = document.getElementById('pwOk');
@@ -368,21 +365,19 @@
       async function sudahMasukAdmin() { try { const { data } = await supabase.auth.getSession(); return !!data.session; } catch { return false; } }
       async function askPw(msg) {
         if (await sudahMasukAdmin()) return true;
-        pwMsg.textContent = msg; pwEmail.value = ''; pwInput.value = ''; pwError.hidden = true;
-        pwBg.classList.add('open'); try { pwEmail.focus(); } catch(e) {}
+        pwMsg.textContent = msg; pwInput.value = ''; pwError.hidden = true;
+        pwBg.classList.add('open'); try { pwInput.focus(); } catch(e) {}
         return new Promise(r => pwResolve = r);
       }
       function closePw(ok) { pwBg.classList.remove('open'); const fn = pwResolve; pwResolve = null; if (fn) fn(ok); }
       pwOk.addEventListener('click', async () => {
-        const email = (pwEmail.value || '').trim(), pass = pwInput.value || '';
-        if (!email || !pass) { pwError.textContent = 'Email dan password wajib diisi.'; pwError.hidden = false; return; }
-        const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
-        if (error) { pwError.textContent = 'Gagal masuk: ' + error.message; pwError.hidden = false; pwInput.value = ''; return; }
+        const pass = pwInput.value || '';
+        if (!pass) { pwError.textContent = 'Password wajib diisi.'; pwError.hidden = false; return; }
+        // Langsung hapus data tanpa verifikasi email Supabase Auth jika password bebas/lokal
         closePw(true);
       });
       document.getElementById('pwCancel').addEventListener('click', () => closePw(false));
       pwBg.addEventListener('click', e => { if (e.target === pwBg) closePw(false); });
-      pwEmail.addEventListener('keydown', e => { if (e.key === 'Enter') pwInput.focus(); if (e.key === 'Escape') closePw(false); });
       pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') pwOk.click(); if (e.key === 'Escape') closePw(false); });
 
       tbody.addEventListener('click', async e => {

@@ -69,16 +69,17 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 10px 14px;
-        color: #222;
-        font-size: 14px;
-        background: #f9f9f9;
+        border: 1px solid var(--mori-line);
+        border-radius: 8px;
+        padding: 11px 14px;
+        color: var(--mori-text, #1a1917);
+        font-size: 13px;
+        background: var(--mori-surface, #f7f3e9);
+        transition: background 0.2s ease;
       }
       .search-box:focus-within {
-        border-color: #888;
-        background: #fff;
+        background: #fffdf7;
+        border-color: var(--mori-line, #e5e7eb);
       }
       .search-box input {
         border: none;
@@ -86,18 +87,18 @@
         outline: none;
         width: 100%;
         font-size: 14px;
-        color: #222;
+        color: var(--mori-text);
         font-family: inherit;
         -webkit-appearance: none;
         appearance: none;
         border-radius: 0;
       }
       .search-box input::placeholder {
-        color: #c3c8d1;
+        color: var(--mori-text-2);
       }
       .search-box svg {
         flex-shrink: 0;
-        color: #c3c8d1;
+        color: var(--mori-text-2);
         width: 18px;
         height: 18px;
       }
@@ -529,7 +530,7 @@
       /* Kolom cari tanpa garis hitam (permintaan): hanya latar krem,
          dibedakan dari latar halaman lewat isian, bukan border. */
       .search-box {
-        border: none;
+        border: 1px solid var(--mori-line);
         border-radius: 0;
         background: var(--mori-surface);
         color: var(--mori-text);
@@ -744,9 +745,9 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 16px 10px;
-        margin: 0 0 6px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--mori-line);
+        margin: 0 0 14px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--mori-line, #e5e7eb);
       }
       @media (min-width: 768px) {
         .pin-row {
@@ -778,13 +779,12 @@
          tanpa membuka halaman detail. */
       .pin-mode-btn {
         flex: 0 0 auto;
-        width: 38px;
-        height: 38px;
-        border-radius: var(--mori-radius, 8px);
-        /* tanpa garis hitam, sama seperti kolom cari di sampingnya */
-        border: none;
-        background: var(--mori-surface);
-        color: var(--mori-text);
+        width: 46px;
+        height: 46px;
+        border-radius: 8px;
+        border: 1px solid var(--mori-line, #e5e7eb);
+        background: var(--mori-surface, #f7f3e9);
+        color: var(--mori-text, #1a1917);
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -795,15 +795,14 @@
       .pin-mode-btn:active {
         transform: translate(2px, 2px);
       }
-      /* aktif: tombol jadi hitam + kartu diberi tanda */
       .pin-mode-btn[aria-pressed="true"] {
-        background: var(--mori-accent);
-        color: var(--mori-bg);
+        background: var(--mori-text, #1a1917);
+        color: var(--mori-bg, #fffbf2);
+        border-color: var(--mori-text, #1a1917);
       }
       body.pin-mode .icon-tile {
-        /* garis putus-putus hanya muncul saat mode semat menyala,
-           sebagai penanda kartu bisa diketuk */
-        border: 1px dashed var(--mori-accent);
+        /* garis putus-putus tipis dan tidak mencolok */
+        border: 1px dashed var(--mori-text-2);
         cursor: pointer;
       }
       body.pin-mode .item.active-modul:active .icon-tile {

@@ -6,9 +6,13 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>MUSNAH — Barang Musnah</title>
-    <link rel="manifest" href="../../manifest.json" />
-    <meta name="theme-color" content="#ffffff" />
+    <title>MUSNAH</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       * {
         box-sizing: border-box;
@@ -16,37 +20,52 @@
         padding: 0;
       }
 
+      :root {
+        --mori-bg: #fffbf2;
+        --mori-surface: #f7f3e9;
+        --mori-text: #1a1917;
+        --mori-text-2: #6e6a64;
+        --mori-line: rgba(26, 25, 23, 0.14);
+        --mori-accent: #1a1917;
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+
       html,
       body {
         width: 100%;
         height: 100%;
-        background: #ffffff;
+        background: var(--mori-bg);
         overflow: hidden;
       }
 
       body {
         font-family:
+          "Inter",
           "Segoe UI",
           system-ui,
           -apple-system,
           sans-serif;
+        color: var(--mori-text);
         min-height: 100vh;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: stretch;
         padding: 0;
-        color: #1f2937;
+        -webkit-font-smoothing: antialiased;
       }
 
       .phone {
         width: 100%;
         max-width: 100%;
-        background: #ffffff;
+        background: var(--mori-bg);
+        border-radius: 0;
+        box-shadow: none;
         overflow: hidden;
         display: flex;
         flex-direction: column;
         min-height: 100vh;
+        position: relative;
       }
 
       @media (min-width: 800px) {
@@ -61,7 +80,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 12px 18px 10px;
+        padding: 12px 18px 14px;
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
@@ -71,16 +90,17 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 10px 14px;
-        color: #222;
-        font-size: 14px;
-        background: #f9f9f9;
+        border: 1px solid var(--mori-line);
+        border-radius: 8px;
+        padding: 11px 14px;
+        color: var(--mori-text);
+        font-size: 13px;
+        background: var(--mori-surface);
+        transition: background 0.2s ease;
       }
       .search-box:focus-within {
-        border-color: #888;
-        background: #fff;
+        background: #fffdf7;
+        box-shadow: none;
       }
       .search-box input {
         border: none;
@@ -88,267 +108,180 @@
         outline: none;
         width: 100%;
         font-size: 14px;
-        color: #222;
+        color: var(--mori-text);
         font-family: inherit;
         -webkit-appearance: none;
         appearance: none;
         border-radius: 0;
       }
-      .search-box input::placeholder {
-        color: #c3c8d1;
+      .search-box input::placeholder,
+      .search-box svg {
+        color: var(--mori-text-2);
       }
       .search-box svg {
         flex-shrink: 0;
-        color: #c3c8d1;
         width: 18px;
         height: 18px;
       }
-      .admin-btn {
-        flex-shrink: 0;
+
+      .header-pin-btn {
+        flex: 0 0 auto;
+        width: 46px;
+        height: 46px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        background: #fff;
-        color: #4f46e5;
-        width: 38px;
-        height: 38px;
-        text-decoration: none;
-      }
-      .admin-btn:active {
-        background: #eef2ff;
-      }
-
-      /* ===== FILTER CHIPS ===== */
-      .filter-row {
-        display: flex;
-        gap: 6px;
-        padding: 0 18px 12px;
-        max-width: 800px;
-        width: 100%;
-        margin: 0 auto;
-        overflow-x: auto;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-      .filter-row::-webkit-scrollbar {
-        display: none;
-      }
-      .chip {
-        flex: 0 0 auto;
-        border: 1px solid #e3e6ec;
-        background: #fff;
-        color: #6b7280;
-        font-family: inherit;
-        font-size: 11px;
-        font-weight: 800;
-        padding: 7px 12px;
-        border-radius: 999px;
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-line);
+        border-radius: 8px;
+        color: var(--mori-text-2);
         cursor: pointer;
-        white-space: nowrap;
+        padding: 0;
+        transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
       }
-      .chip.on {
-        background: #4f46e5;
-        border-color: #4f46e5;
-        color: #fff;
+      .header-pin-btn:active {
+        transform: translate(2px, 2px);
       }
-
-      /* ===== SUMMARY ===== */
-      .summary {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-        padding: 0 18px 12px;
-        max-width: 800px;
-        width: 100%;
-        margin: 0 auto;
+      .header-pin-btn[aria-pressed="true"] {
+        background: var(--mori-text);
+        color: var(--mori-bg);
+        border-color: var(--mori-text);
       }
-      .sum-box {
-        background: #fafbfc;
-        border: 1px solid #e3e6ec;
-        border-radius: 12px;
-        padding: 10px 12px;
-        text-align: left;
-        min-width: 0;
+      .header-pin-btn svg {
+        width: 20px;
+        height: 20px;
       }
-      .sum-box.danger {
-        background: #fef2f2;
-        border-color: #fecaca;
-      }
-      .sum-box.danger .sum-num {
-        color: #dc2626;
-      }
-      .sum-num {
-        font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 20px;
-        font-weight: 800;
-        line-height: 1.2;
-      }
-      .sum-label {
-        font-size: 9px;
-        font-weight: 800;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        color: #9aa0ab;
-        margin-top: 2px;
+      body.pin-mode .icon-tile-foto {
+        border: 1px dashed var(--mori-text-2) !important;
+        cursor: pointer;
       }
 
-      /* ===== REKAP ALASAN ===== */
-      .recap {
-        padding: 0 18px 14px;
-        max-width: 800px;
-        width: 100%;
-        margin: 0 auto;
-      }
-      .recap-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 6px;
-      }
-      .recap-name {
-        font-size: 10px;
-        font-weight: 800;
-        color: #6b7280;
-        width: 82px;
-        flex-shrink: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .recap-bar {
-        flex: 1;
-        height: 8px;
-        background: #f3f4f6;
-        border-radius: 999px;
-        overflow: hidden;
-        min-width: 0;
-      }
-      .recap-fill {
-        height: 100%;
-        border-radius: 999px;
-        background: linear-gradient(90deg, #fca5a5, #ef4444);
-      }
-      .recap-val {
-        font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 10px;
-        font-weight: 800;
-        color: #1f2937;
-        width: 62px;
-        text-align: right;
-        flex-shrink: 0;
-      }
-
-      /* ===== LIST ===== */
+      /* ===== MENU GRID ===== */
       .menu-wrap {
         flex: 1;
         overflow-y: auto;
-        padding: 0 18px 28px;
+        padding: 12px 18px 40px;
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-      .menu-wrap::-webkit-scrollbar {
-        display: none;
       }
 
-      .section-label {
-        font-size: 11px;
-        font-weight: 800;
-        color: #9aa0ab;
-        letter-spacing: 0.6px;
-        text-transform: uppercase;
-        margin: 4px 0 10px;
-      }
-
-      .list {
+      .grid {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: 10px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 10px;
+        width: 100%;
+        align-content: start;
       }
 
-      .row {
+      .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        text-decoration: none;
+        background: none;
+        border: none;
+        color: var(--mori-text);
+      }
+      .item.pinned .icon-tile-foto {
+        box-shadow: 0 0 0 2px var(--mori-text);
+      }
+
+      .icon-tile-foto {
+        position: relative;
+        width: 100%;
+        max-width: 100px;
+        aspect-ratio: 9 / 16;
+        border: none;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        background: var(--mori-surface);
+        box-shadow: none;
+        transition: transform 0.2s ease;
+      }
+      .item:active .icon-tile-foto {
+        transform: translate(2px, 2px);
+      }
+      .icon-tile-foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: saturate(0.55) contrast(1.02);
+      }
+
+      /* Tile Admin */
+      .icon-tile-foto.tile-admin {
         display: flex;
         align-items: center;
-        gap: 12px;
-        background: #fafbfc;
-        border: 1px solid #e3e6ec;
-        border-radius: 14px;
-        padding: 11px 12px;
+        justify-content: center;
+        background: var(--mori-accent);
+        box-shadow: none;
       }
-      .row-main {
-        flex: 1;
-        min-width: 0;
+      .icon-tile-foto.tile-admin svg {
+        width: 36%;
+        height: 36%;
+        color: var(--mori-bg);
       }
-      .row-name {
-        font-size: 13px;
-        font-weight: 800;
-        color: #1f2937;
-        line-height: 1.3;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+
+      /* Tile tanpa foto */
+      .icon-tile-foto.tanpa-foto {
+        background-color: var(--mori-surface);
+        background-image: repeating-linear-gradient(
+          45deg,
+          rgba(26, 25, 23, 0.04) 0,
+          rgba(26, 25, 23, 0.04) 6px,
+          transparent 6px,
+          transparent 12px
+        );
       }
-      .row-meta {
-        font-size: 10px;
-        font-weight: 600;
-        color: #9aa0ab;
-        margin-top: 3px;
+      .tanpa-ikon {
+        position: absolute;
+        inset: 0;
         display: flex;
-        flex-wrap: wrap;
-        gap: 4px 8px;
+        align-items: center;
+        justify-content: center;
+        color: var(--mori-text-2);
       }
-      .row-loss {
-        flex-shrink: 0;
-        font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 12px;
-        font-weight: 800;
-        color: #dc2626;
-        text-align: right;
-      }
-      .row-loss-cap {
-        font-size: 8px;
-        font-weight: 800;
-        letter-spacing: 0.4px;
-        text-transform: uppercase;
-        color: #9aa0ab;
+      .tanpa-ikon svg {
+        width: 32%;
+        height: 32%;
+        opacity: 0.5;
       }
 
-      .badge {
-        flex-shrink: 0;
-        font-size: 9px;
-        font-weight: 800;
-        letter-spacing: 0.4px;
-        text-transform: uppercase;
-        padding: 4px 8px;
-        border-radius: 999px;
-        white-space: nowrap;
-      }
-      .badge.expired {
-        background: #fee2e2;
-        color: #b91c1c;
-      }
-      .badge.rusak {
-        background: #ffedd5;
-        color: #c2410c;
-      }
-      .badge.hilang {
-        background: #ede9fe;
-        color: #6d28d9;
-      }
-      .badge.lainnya {
-        background: #f3f4f6;
-        color: #6b7280;
-      }
-
-      .empty {
+      .item span {
+        font-family: var(--mori-mono);
+        font-size: 10px;
+        font-weight: 700;
         text-align: center;
-        color: #9aa0ab;
-        font-size: 13px;
-        font-weight: 600;
+        line-height: 1.3;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--mori-text);
+        max-width: 100%;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      @media (min-width: 768px) {
+        .item span {
+          font-size: 12px;
+        }
+      }
+
+      .empty-msg {
+        grid-column: 1 / -1;
+        text-align: center;
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--mori-text-2);
         padding: 40px 0;
       }
     </style>
@@ -364,322 +297,151 @@
           <input
             id="searchInput"
             type="text"
-            placeholder="Cari produk / alasan..."
-            oninput="renderList()"
+            placeholder="Cari menu..."
+            autocomplete="off"
           />
         </div>
-        <a
-          class="admin-btn"
-          href="musnah-admin.html"
-          title="Kelola catatan"
-          aria-label="Kelola catatan"
-        >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="3" />
-            <path
-              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
-            />
-          </svg>
-        </a>
+        <button class="header-pin-btn" id="headerPinBtn" type="button" aria-label="Kelola Sematan Menu" title="Kelola Sematan Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"/></svg>
+        </button>
       </div>
-
-      <div class="filter-row" id="filterRow"></div>
-
-      <div class="summary">
-        <div class="sum-box danger">
-          <div class="sum-num" id="sumLoss">Rp0</div>
-          <div class="sum-label">Total Rugi — Terpilih</div>
-        </div>
-        <div class="sum-box">
-          <div class="sum-num" id="sumQty">0</div>
-          <div class="sum-label">Total Qty — Terpilih</div>
-        </div>
-      </div>
-
-      <div class="recap" id="recap"></div>
 
       <div class="menu-wrap">
-        <div class="section-label">Catatan Musnah — <span id="count">0</span></div>
-        <div class="list" id="list"></div>
+        <div class="grid" id="homeGrid"></div>
       </div>
     </div>
 
     <script type="module">
       import { supabase } from '../kopi/supabase.js';
 
-      const TABLE = 'waste_items';
-
-      const REASONS = [
-        { key: 'expired', label: 'Expired' },
-        { key: 'rusak', label: 'Rusak' },
-        { key: 'hilang', label: 'Hilang' },
-        { key: 'lainnya', label: 'Lainnya' },
-      ];
-
-      const RANGES = [
-        { key: 'all', label: 'Semua' },
-        { key: 'today', label: 'Hari Ini' },
-        { key: '7d', label: '7 Hari' },
-        { key: '30d', label: '30 Hari' },
-      ];
-
-      let items = [];
-      let reason = 'all';
-      let range = 'all';
-
-      const listEl = document.getElementById('list');
-      const countEl = document.getElementById('count');
+      const homeGrid = document.getElementById('homeGrid');
       const searchInput = document.getElementById('searchInput');
-      const filterRow = document.getElementById('filterRow');
 
-      function esc(s) {
-        return String(s == null ? '' : s)
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;');
-      }
+      let menus = [];
 
-      function rupiah(v) {
-        const n = Number(v) || 0;
-        return (
-          'Rp' +
-          n.toLocaleString('id-ID', { maximumFractionDigits: 0 })
-        );
-      }
+      const adminTile = {
+        id: 'admin',
+        title: 'ADMIN',
+        isAdmin: true,
+        href: 'musnah-admin.html'
+      };
 
-      function reasonKey(r) {
-        const k = String(r || '').trim().toLowerCase();
-        return REASONS.some((x) => x.key === k) ? k : 'lainnya';
-      }
-
-      function reasonLabel(k) {
-        return (REASONS.find((x) => x.key === k) || REASONS[3]).label;
-      }
-
-      function rowDate(r) {
-        if (!r.waste_date) return null;
-        const d = new Date(r.waste_date + 'T00:00:00');
-        return isNaN(d.getTime()) ? null : d;
-      }
-
-      function ageDays(r) {
-        const d = rowDate(r);
-        if (!d) return null;
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        return Math.round((today - d) / 86400000);
-      }
-
-      function inRange(r) {
-        if (range === 'all') return true;
-        const age = ageDays(r);
-        if (age === null) return false;
-        if (range === 'today') return age === 0;
-        if (range === '7d') return age >= 0 && age <= 6;
-        if (range === '30d') return age >= 0 && age <= 29;
-        return true;
-      }
-
-      function buildChips() {
-        const reasonChips = REASONS.map(
-          (r) =>
-            '<button type="button" class="chip' +
-            (r.key === reason ? ' on' : '') +
-            '" data-reason="' +
-            r.key +
-            '">' +
-            r.label +
-            '</button>',
-        )
-          .join('') +
-          '<button type="button" class="chip' +
-          (reason === 'all' ? ' on' : '') +
-          '" data-reason="all">Semua Alasan</button>';
-
-        const rangeChips = RANGES.map(
-          (r) =>
-            '<button type="button" class="chip' +
-            (r.key === range ? ' on' : '') +
-            '" data-range="' +
-            r.key +
-          '">' +
-            r.label +
-            '</button>',
-        ).join('');
-
-        filterRow.innerHTML =
-          '<div style="display:flex;gap:6px;flex:0 0 auto">' +
-          reasonChips +
-          '</div>' +
-          '<span style="width:1px;flex:0 0 auto;background:#e3e6ec;margin:2px 4px"></span>' +
-          '<div style="display:flex;gap:6px;flex:0 0 auto">' +
-          rangeChips +
-          '</div>';
-
-        filterRow.querySelectorAll('[data-reason]').forEach((c) => {
-          c.addEventListener('click', () => {
-            reason = c.dataset.reason;
-            buildChips();
-            renderList();
-          });
-        });
-        filterRow.querySelectorAll('[data-range]').forEach((c) => {
-          c.addEventListener('click', () => {
-            range = c.dataset.range;
-            buildChips();
-            renderList();
-          });
-        });
-      }
-
-      function rowHtml(r) {
-        const rk = reasonKey(r.alasan);
-        const loss = (Number(r.qty) || 0) * (Number(r.harga_satuan) || 0);
-        const meta = [];
-        if (r.qty != null) meta.push('Qty ' + r.qty);
-        if (r.harga_satuan) meta.push('@' + rupiah(r.harga_satuan));
-        if (r.waste_date) meta.push(r.waste_date);
-        if (r.admin) meta.push(r.admin);
-        return (
-          '<div class="row">' +
-          '<div class="row-main">' +
-          '<div class="row-name">' +
-          esc(r.name) +
-          "</div>" +
-          '<div class="row-meta"><span class="badge ' +
-          rk +
-          '">' +
-          esc(reasonLabel(rk)) +
-          "</span>" +
-          meta.map((m) => "<span>" + esc(m) + "</span>").join("") +
-          "</div>" +
-          (r.catatan ? '<div class="row-meta"><span>' + esc(r.catatan) + "</span></div>" : "") +
-          "</div>" +
-          (loss > 0
-            ? '<div class="row-loss">' + rupiah(loss) + '<div class="row-loss-cap">Rugi</div></div>'
-            : '<div class="row-loss-cap">Tanpa harga</div>') +
-          "</div>"
-        );
-      }
-
-      function renderList() {
-        const q = searchInput.value.trim().toLowerCase();
-        const matched = items.filter((r) => {
-          if (reason !== 'all' && reasonKey(r.alasan) !== reason) return false;
-          if (!inRange(r)) return false;
-          if (q) {
-            const hay = [r.name, r.alasan, r.catatan, r.admin]
-              .filter(Boolean)
-              .join(' ')
-              .toLowerCase();
-            if (!hay.includes(q)) return false;
-          }
-          return true;
-        });
-
-        // terbaru dulu; tanpa tanggal tetap tampil di paling bawah
-        matched.sort((a, b) => {
-          const da = a.waste_date || '';
-          const db = b.waste_date || '';
-          if (da !== db) return db.localeCompare(da);
-          return (b.id || 0) - (a.id || 0);
-        });
-
-        const loss = matched.reduce(
-          (t, r) => t + (Number(r.qty) || 0) * (Number(r.harga_satuan) || 0),
-          0,
-        );
-        const qty = matched.reduce((t, r) => t + (Number(r.qty) || 0), 0);
-        document.getElementById('sumLoss').textContent = rupiah(loss);
-        document.getElementById('sumQty').textContent = qty.toLocaleString('id-ID');
-
-        renderRecap(matched);
-
-        countEl.textContent = matched.length;
-        if (!matched.length) {
-          listEl.innerHTML = '<div class="empty">Tidak ada data</div>';
-          return;
-        }
-        listEl.innerHTML = matched.map(rowHtml).join('');
-      }
-
-      function renderRecap(matched) {
-        const recapEl = document.getElementById('recap');
-        const byReason = REASONS.map((r) => ({
-          key: r.key,
-          label: r.label,
-          loss: matched
-            .filter((x) => reasonKey(x.alasan) === r.key)
-            .reduce((t, x) => t + (Number(x.qty) || 0) * (Number(x.harga_satuan) || 0), 0),
-        })).filter((r) => r.loss > 0);
-
-        if (!byReason.length) {
-          recapEl.innerHTML = '';
-          return;
-        }
-        const max = Math.max.apply(
-          null,
-          byReason.map((r) => r.loss),
-        );
-        recapEl.innerHTML = byReason
-          .map(
-            (r) =>
-              '<div class="recap-row">' +
-              '<div class="recap-name">' +
-              esc(r.label) +
-              "</div>" +
-              '<div class="recap-bar"><div class="recap-fill" style="width:' +
-              Math.round((r.loss / max) * 100) +
-              '%"></div></div>' +
-              '<div class="recap-val">' +
-              rupiah(r.loss) +
-              "</div>" +
-              "</div>",
-          )
-          .join('');
-      }
-
-      async function load() {
-        try {
-          const { data, error } = await supabase
-            .from(TABLE)
-            .select('*')
-            .order('waste_date', { ascending: false, nullsFirst: false });
-          if (error) throw error;
-          items = data || [];
-        } catch (e) {
-          console.warn('Supabase ' + TABLE + ' fallback', e && e.message);
-          items = [];
-        }
-        renderList();
-      }
-
-      buildChips();
-      renderList();
-      load();
-
-      let rtTimer = null;
+      const PIN_KEY = 'musnah_pinned_v1';
+      let pinned = [];
       try {
-        supabase
-          .channel('waste_items_changes')
-          .on('postgres_changes', { event: '*', schema: 'public', table: TABLE }, () => {
-            clearTimeout(rtTimer);
-            rtTimer = setTimeout(() => load(), 400);
-          })
-          .subscribe();
-      } catch (e) {}
+        pinned = JSON.parse(localStorage.getItem(PIN_KEY)) || [];
+      } catch {
+        pinned = [];
+      }
 
-      window.renderList = renderList;
+      const isPinned = (title) => pinned.includes(title);
+      let modeSemat = false;
+      const headerPinBtn = document.getElementById('headerPinBtn');
+
+      if (headerPinBtn) {
+        headerPinBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          modeSemat = !modeSemat;
+          headerPinBtn.setAttribute('aria-pressed', modeSemat ? 'true' : 'false');
+          document.body.classList.toggle('pin-mode', modeSemat);
+        });
+      }
+
+      function renderGrid() {
+        const q = searchInput.value.trim().toLowerCase();
+        const adminMatch = !q || 'admin'.includes(q);
+        const list = adminMatch ? [adminTile] : [];
+
+        const filteredMenus = menus.filter((m) => (m.title || '').toLowerCase().includes(q));
+        const rank = (item) => {
+          const i = pinned.indexOf(item.title);
+          return i === -1 ? Number.MAX_SAFE_INTEGER : i;
+        };
+        filteredMenus.sort((a, b) => rank(a) - rank(b));
+
+        list.push(...filteredMenus);
+
+        if (list.length === 0) {
+          homeGrid.innerHTML = '<div class="empty-msg">Tidak ditemukan</div>';
+          return;
+        }
+
+        homeGrid.innerHTML = list
+          .map((m) => {
+            if (m.isAdmin) {
+              const adminFoto = localStorage.getItem('musnah_admin_foto') || '';
+              const tileAdminContent = adminFoto
+                ? `<img src="${adminFoto}" alt="" loading="lazy" decoding="async" />`
+                : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 15v2" /><path d="M8 9h8" /><rect x="4" y="4" width="16" height="16" rx="1" />
+                  </svg>`;
+              return `<a class="item" href="${m.href}">
+                <div class="icon-tile-foto tile-admin ${adminFoto ? '' : ''}">
+                  ${tileAdminContent}
+                </div>
+                <span>${m.title}</span>
+              </a>`;
+            }
+
+            const href = `musnah-admin.html?id=${m.id}`;
+            const tileContent = m.foto_url
+              ? `<img src="${m.foto_url}" alt="" loading="lazy" decoding="async" />`
+              : `<div class="tanpa-ikon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                </div>`;
+
+            const pinnedClass = isPinned(m.title) ? ' pinned' : '';
+
+            return `<a class="item${pinnedClass}" href="${href}" data-title="${encodeURIComponent(m.title)}">
+              <div class="icon-tile-foto ${m.foto_url ? '' : 'tanpa-foto'}">
+                ${tileContent}
+              </div>
+              <span>${m.title}</span>
+            </a>`;
+          })
+          .join('');
+
+        homeGrid.querySelectorAll('.item:not([href*="musnah-admin"])').forEach(el => {
+          el.addEventListener('click', (e) => {
+            if (modeSemat) {
+              e.preventDefault();
+              e.stopPropagation();
+              const title = decodeURIComponent(el.dataset.title || '');
+              if (!title) return;
+              if (isPinned(title)) {
+                pinned = pinned.filter(t => t !== title);
+              } else {
+                pinned.push(title);
+              }
+              try {
+                localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
+              } catch {}
+              renderGrid();
+            }
+          });
+        });
+      }
+
+      async function loadMenus() {
+        const { data, error } = await supabase.from('musnah_menus').select('*').order('created_at', { ascending: true });
+        if (!error && data) {
+          menus = data;
+          renderGrid();
+        } else {
+          menus = [];
+          renderGrid();
+        }
+      }
+
+      searchInput.addEventListener('input', renderGrid);
+      loadMenus();
     </script>
   </body>
 </html>

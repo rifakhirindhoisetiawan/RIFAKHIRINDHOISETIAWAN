@@ -50,7 +50,7 @@
     #f_title:focus{background:#fffdf7 !important;box-shadow: none}
 
     /* tabel — sama menu-table daily-task-admin */
-    .table-wrap{border:1px solid var(--mori-line);border-radius:0;background:var(--mori-bg);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+    .table-wrap{border:1px solid var(--mori-line);border-radius:8px;background:var(--mori-bg);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
     .menu-table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
     .menu-table thead th{
       position:sticky;top:0;z-index:1;background:var(--mori-surface);color:var(--mori-text);
@@ -65,11 +65,11 @@
     .menu-table .c-nama .nama{font-family:var(--mori-mono);color:var(--mori-text);font-weight:700;font-size:11px;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .c-foto{width:52px}
     .c-aksi{width:116px}
-    .c-foto .thumb{width:38px;height:38px;display:block;border:1px solid var(--mori-line);border-radius:0;background:var(--mori-surface);overflow:hidden}
+    .c-foto .thumb{width:38px;height:38px;display:block;border:1px solid var(--mori-line);border-radius:8px;background:var(--mori-surface);overflow:hidden}
     .c-foto .thumb img{width:100%;height:100%;object-fit:cover;filter:saturate(.4) brightness(1.04);display:block}
     .c-foto .thumb.kosong{background:repeating-linear-gradient(45deg,#f2eee2 0 5px,#ece6d6 5px 10px);border-color:var(--mori-line)}
     .c-foto .thumb.sibuk{background:var(--mori-surface) !important}
-    .c-foto .thumb.thumb-admin{display:flex;align-items:center;justify-content:center;background:var(--mori-accent)}
+    .c-foto .thumb.thumb-admin{display:flex;align-items:center;justify-content:center;background:var(--mori-accent);border-radius:8px}
     .c-foto .thumb.thumb-admin svg{width:18px;height:18px;color:var(--mori-bg)}
     .menu-table tbody tr.is-admin td{background:#faf6ea}
     .menu-table tbody tr.is-admin .c-nama .nama{color:var(--mori-accent)}
@@ -78,7 +78,7 @@
       width:32px !important;height:32px !important;flex:0 0 32px !important;min-height:32px !important;max-height:32px !important;
       padding:0 !important;margin:0 !important;display:flex !important;align-items:center !important;justify-content:center !important;
       font-family:inherit;font-size:14px;font-weight:800;line-height:1;color:var(--mori-bg);background:var(--mori-accent);
-      border:1px solid var(--mori-line);border-radius:0;box-shadow: none;cursor:pointer;flex-shrink:0;outline:none;
+      border:1px solid var(--mori-line);border-radius:8px;box-shadow: none;cursor:pointer;flex-shrink:0;outline:none;
       transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
     }
     .ico:active{opacity:1;transform:translate(2px,2px);box-shadow:none}
@@ -86,7 +86,7 @@
     .ico-danger:active{box-shadow:none}
 
     .search-wrapper{display:flex;align-items:center;gap:10px;width:100%;margin:12px 0 0}
-    .search-box{flex:1;display:flex;align-items:center;gap:8px;min-width:0;border:1px solid var(--mori-line) !important;border-radius:0 !important;background:var(--mori-surface) !important;color:var(--mori-text);padding:10px 14px;font-size:14px;transition:box-shadow .2s ease}
+    .search-box {flex:1;display:flex;align-items:center;gap:8px;min-width:0;border: 1px solid var(--mori-line);border-radius:8px !important;background:var(--mori-surface) !important;color:var(--mori-text);padding:10px 14px;font-size:14px;transition:box-shadow .2s ease}
     .search-box:focus-within{background:#fffdf7 !important;box-shadow: none}
     .search-box svg{flex-shrink:0;color:var(--mori-text-2) !important;width:18px;height:18px}
     .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:var(--mori-text) !important;font-family:inherit;min-width:0;-webkit-appearance:none;appearance:none;border-radius:0}
@@ -99,15 +99,15 @@
     .pw-bg{display:none;position:fixed;left:0;right:0;top:0;bottom:0;z-index:200;background:rgba(26,25,23,.45);align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));overscroll-behavior:contain}
     .pw-bg.open{display:flex}
     html.pw-open{overflow:hidden;overscroll-behavior:none}
-    .pw-card{width:100%;max-width:360px;margin:auto;max-height:100%;overflow-y:auto;background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:0;padding:18px;box-shadow: none;overscroll-behavior:contain}
+    .pw-card{width:100%;max-width:360px;margin:auto;max-height:100%;overflow-y:auto;background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:12px;padding:18px;box-shadow: none;overscroll-behavior:contain}
     .pw-title{font-family:var(--mori-mono);font-size:13px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--mori-text);margin-bottom:8px}
     .pw-msg{font-size:12px;color:var(--mori-text-2);line-height:1.5;margin-bottom:12px;white-space:pre-line}
-    .pw-input{width:100%;height:auto;padding:11px 12px;font-family:var(--mori-mono);font-size:15px;letter-spacing:2px;color:var(--mori-text);background:var(--mori-surface);border:1px solid var(--mori-line);border-radius:0;outline:none}
+    .pw-input{width:100%;height:auto;padding:11px 12px;font-family:var(--mori-mono);font-size:15px;letter-spacing:2px;color:var(--mori-text);background:var(--mori-surface);border:1px solid var(--mori-line);border-radius:8px;outline:none}
     .pw-input:focus{background:#fffdf7;box-shadow: none}
     .pw-error{margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger)}
     .pw-error[hidden]{display:none}
     .pw-actions{display:flex;gap:8px;margin-top:16px}
-    .pw-btn{flex:1;padding:12px;border:1px solid var(--mori-line);border-radius:0;background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+    .pw-btn{flex:1;padding:12px;border:1px solid var(--mori-line);border-radius:8px;background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
     .pw-btn:active{transform:translate(2px,2px)}
     .pw-btn-danger{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff}
   </style>
