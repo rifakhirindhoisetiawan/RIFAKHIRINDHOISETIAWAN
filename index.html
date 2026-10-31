@@ -468,8 +468,11 @@
         img.classList.add('loaded');
       });
 
-      // --- Sematan (pin) menu, gaya sama dengan KOPI ---
-      const PIN_KEY = 'kopi_pinned_v1';
+      // --- Sematan (pin) menu, tersinkronisasi lewat Supabase (bisa dilihat semua orang) ---
+      const PIN_KEY = 'portal_pinned_v1';
+      const PIN_TABLE = 'portal_pins';
+      const PIN_MIGRASI_KEY = 'portal_pins_migrated_v1';
+
       let pinned = [];
       try {
         pinned = JSON.parse(localStorage.getItem(PIN_KEY)) || [];
@@ -479,6 +482,50 @@
 
       const isPinned = (label) => pinned.includes(label);
       const ICO_PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"/></svg>';
+
+      let pinServerReady = false;
+      function setServerPins(list) {
+        pinned = list;
+        pinServerReady = true;
+        try { localStorage.setItem(PIN_KEY, JSON.stringify(list)); } catch {}
+        renderMenu();
+      }
+
+      async function syncPins() {
+        try {
+          const { data, error } = await supabase
+            .from(PIN_TABLE)
+            .select('label')
+            .order('dibuat', { ascending: true });
+          if (error) {
+            return;
+          }
+          const server = (data || []).map(r => r.label).filter(Boolean);
+          try {
+            if (localStorage.getItem(PIN_MIGRASI_KEY) !== '1') {
+              const kurang = pinned.filter(l => l && !server.includes(l));
+              for (const l of kurang) {
+                try {
+                  await supabase.from(PIN_TABLE).insert({ label: l });
+                  server.push(l);
+                } catch {}
+              }
+              localStorage.setItem(PIN_MIGRASI_KEY, '1');
+            }
+          } catch {}
+          setServerPins(server);
+        } catch {}
+      }
+
+      async function pushPin(label, add) {
+        try {
+          if (add) {
+            await supabase.from(PIN_TABLE).insert({ label });
+          } else {
+            await supabase.from(PIN_TABLE).delete().eq('label', label);
+          }
+        } catch {}
+      }
 
       // Mode semat seperti di KOPI
       let modeSemat = false;
@@ -531,15 +578,17 @@
             if (modeSemat) {
               e.preventDefault();
               e.stopPropagation();
-              if (isPinned(item.label)) {
-                pinned = pinned.filter(l => l !== item.label);
-              } else {
+              const akanPin = !isPinned(item.label);
+              if (akanPin) {
                 pinned.push(item.label);
+              } else {
+                pinned = pinned.filter(l => l !== item.label);
               }
               try {
                 localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
               } catch {}
               renderMenu();
+              if (pinServerReady) pushPin(item.label, akanPin);
             }
           });
 
@@ -552,6 +601,14 @@
       };
 
       renderMenu();
+      syncPins();
+      try {
+        supabase.channel('portal_pins_changes')
+          .on('postgres_changes', { event: '*', schema: 'public', table: PIN_TABLE }, () => {
+            syncPins();
+          })
+          .subscribe();
+      } catch {}
 
       const dateTimeEl = document.getElementById("dateTime");
       function updateDateTime(){
