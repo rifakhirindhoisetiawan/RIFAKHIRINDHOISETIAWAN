@@ -427,7 +427,7 @@
       /* Panelnya ikut mengalir di dalam container (bukan absolute),
          karena container-nya sendiri yang diposisikan ke tombol Unduh.
          Arah animasi: turun sedikit dari arah tombol saat dibuka. */
-      .download-bubble-dropup{width:min(208px,calc(100vw - 32px));background:var(--mori-surface);border:1.5px solid var(--mori-line);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(-10px) scale(.96);pointer-events:none;transition:opacity .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1);position:relative;z-index:1}
+      .download-bubble-dropup{width:min(186px,calc(100vw - 32px));background:var(--mori-surface);border:1.5px solid var(--mori-line);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(-10px) scale(.96);pointer-events:none;transition:opacity .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1);position:relative;z-index:1}
       .download-bubble-dropup.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
       /* PANAH PANEL UNDUH: segitiga kecil di tepi atas panel yang menunjuk
          ke tombol Unduh — panel terasa keluar dari tombolnya, bukan muncul
@@ -460,9 +460,9 @@
         top:auto;bottom:0;transform:translateY(50%) rotate(225deg);
       }
       .download-bubble-container.above::after{top:auto;bottom:0}
-      .dbd-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--mori-line);background:rgba(26,25,23,.04)}
-      .dbd-count-badge{font-size:.68rem;font-weight:700;padding:2px 6px;border-radius:4px;background:transparent;color:var(--mori-accent);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-      .dbd-close-btn{background:transparent;border:none;font-weight:700;color:var(--mori-text-2);cursor:pointer;padding:2px 6px;border-radius:4px}
+      .dbd-header{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 10px;border-bottom:1px solid var(--mori-line);background:rgba(26,25,23,.04)}
+      .dbd-count-badge{font-family:var(--mori-mono);font-size:9.5px;font-weight:700;padding:2px 0;border-radius:4px;background:transparent;color:var(--mori-accent);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .dbd-close-btn{background:transparent;border:none;font-weight:700;color:var(--mori-text-2);cursor:pointer;padding:2px 4px;border-radius:4px;flex-shrink:0}
       .dbd-body{padding:8px}
       .dbd-item{background:rgba(26,25,23,.03);border:1px solid var(--mori-line);border-radius:8px;padding:6px 8px;display:flex;align-items:center;gap:8px}
       .dl-preview{width:76px;height:76px;flex:0 0 76px;border-radius:0;overflow:hidden;background:var(--mori-bg);border:1px solid var(--mori-line);flex-shrink:0}
