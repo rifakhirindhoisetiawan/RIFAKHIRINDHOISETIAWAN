@@ -10,7 +10,7 @@
       /* ============================================================
          TEMA MORI
          Palet dari public/mori/css/variables.css:
-         bg #fffbf2 Â· surface #f7f3e9 Â· primary #1a1917 Â· text-secondary #6e6a64
+         bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64
          Gaya: sharp (radius 0), border hitam solid, label mono uppercase.
          ============================================================ */
       :root {
@@ -21,6 +21,7 @@
         --mori-line: rgba(26, 25, 23, 0.14);
         --mori-accent: #1a1917;
         --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+        --mori-radius: 12px;
       }
       html, body { min-height: 100%; background: var(--mori-bg); }
       /* Scrollbar disembunyikan, scrolling tetap normal (HP) */
@@ -52,13 +53,13 @@
       .badge {
         align-self: flex-start;
         font-family: var(--mori-mono);
-        font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: 0;
-        background: var(--mori-surface); border: 1px solid var(--mori-line);
+        font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: var(--mori-radius, 12px);
+        background: var(--mori-surface); border: 1px solid var(--mori-accent);
         color: var(--mori-text); letter-spacing: 0.8px; text-transform: uppercase;
       }
       /* ===== TABEL PLU ===== */
       .plu-table {
-        border: 1px solid var(--mori-line); border-radius: 0;
+        border: 1px solid var(--mori-accent); border-radius: var(--mori-radius, 12px);
         overflow: hidden; background: var(--mori-bg);
       }
       .plu-row { display: flex; align-items: stretch; }
@@ -83,7 +84,7 @@
       }
       /* ===== TABEL RESEP / BAHAN ===== */
       .resep {
-        border: 1px solid var(--mori-line); border-radius: 0;
+        border: 1px solid var(--mori-accent); border-radius: var(--mori-radius, 12px);
         overflow: hidden; background: var(--mori-bg);
       }
       .resep-row { display: flex; align-items: stretch; }
@@ -97,14 +98,11 @@
       }
       .resep-nama {
         flex: 1; display: flex; align-items: center; padding: 9px 12px;
-        font-family: var(--mori-mono); font-size: 12.5px; font-weight: 700;
-        letter-spacing: .4px; text-transform: uppercase; color: var(--mori-text);
+        font-size: 13px; font-weight: 600; color: var(--mori-text);
       }
-      /* FONT RESEP IKUT NOTE: isi resep memakai huruf mono yang sama
-         dengan aplikasi NOTE (JetBrains Mono, tebal, huruf besar). */
       .catatan {
-        background: var(--mori-surface); border: 1px solid var(--mori-line); border-radius: 0;
-        padding: 10px 12px; font-size: 13px; color: var(--mori-text); line-height: 1.5;
+        background: var(--mori-surface); border: 1px solid var(--mori-accent); border-radius: var(--mori-radius, 12px);
+        padding: 12px 14px; font-size: 13px; color: var(--mori-text); line-height: 1.5;
       }
       .empty {
         text-align: center; color: var(--mori-text-2);
@@ -112,27 +110,15 @@
         letter-spacing: 0.6px; text-transform: uppercase; padding: 24px 0;
       }
       #status {
-        margin: 10px 0 0; padding: 6px 9px; border-radius: 0;
+        margin: 10px 0 0; padding: 6px 9px; border-radius: var(--mori-radius, 12px);
         background: var(--mori-surface); border: 1px solid var(--mori-line);
         color: var(--mori-text-2); font-family: var(--mori-mono);
         font-size: 10px; font-weight: 700; letter-spacing: 0.4px;
       }
       #status[hidden] { display: none; }
       #status[data-tone="err"] {
-        background: #fdf1f1; border-color: var(--mori-line); color: #b91c1c;
+        background: #fdf1f1; border-color: var(--mori-accent); color: #b91c1c;
       }
-    
-      /* ===== SUDUT KOTAK =====
-         Override sharp di atas memakai radius 0. Dikembalikan melengkung
-         8px, sama dengan index.html / kopi.html / admin supaya semua
-         halaman KOPI terlihat satu keluarga. Hanya border-radius yang
-         berubah; layout, warna, dan isi tidak disentuh. */
-      :root { --mori-radius: 8px; }
-      .badge,
-      .plu-table,
-      .resep,
-      .catatan,
-      #status { border-radius: var(--mori-radius, 8px); }
     </style>
   </head>
   <body>

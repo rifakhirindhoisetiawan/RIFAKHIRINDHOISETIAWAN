@@ -8,9 +8,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const ROOT = process.cwd();
-const src = fs.readFileSync(path.join(ROOT, "js", "supabase.js"), "utf8");
-const URL_ = src.match(/SUPABASE_URL\s*=\s*"([^"]+)"/)[1];
-const KEY = src.match(/SUPABASE_KEY\s*=\s*"([^"]+)"/)[1];
+import { SUPABASE_URL as URL_, SUPABASE_KEY as KEY } from "../lib/supabase.mjs";
 
 const slugify = (s) =>
   String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
@@ -74,6 +72,7 @@ function halaman(m, slug) {
         --mori-line: rgba(26, 25, 23, 0.14);
         --mori-accent: #1a1917;
         --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+        --mori-radius: 12px;
       }
       html, body { min-height: 100%; background: var(--mori-bg); }
       /* Scrollbar disembunyikan, scrolling tetap normal (HP) */
@@ -105,13 +104,13 @@ function halaman(m, slug) {
       .badge {
         align-self: flex-start;
         font-family: var(--mori-mono);
-        font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: 0;
+        font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: var(--mori-radius, 12px);
         background: var(--mori-surface); border: 1px solid var(--mori-accent);
         color: var(--mori-text); letter-spacing: 0.8px; text-transform: uppercase;
       }
       /* ===== TABEL PLU ===== */
       .plu-table {
-        border: 1px solid var(--mori-accent); border-radius: 0;
+        border: 1px solid var(--mori-accent); border-radius: var(--mori-radius, 12px);
         overflow: hidden; background: var(--mori-bg);
       }
       .plu-row { display: flex; align-items: stretch; }
@@ -136,9 +135,8 @@ function halaman(m, slug) {
       }
       /* ===== TABEL RESEP / BAHAN ===== */
       .resep {
-        border: 1px solid var(--mori-accent); border-radius: 0;
+        border: 1px solid var(--mori-accent); border-radius: var(--mori-radius, 12px);
         overflow: hidden; background: var(--mori-bg);
-        box-shadow: 4px 4px 0 rgba(26, 25, 23, 0.1);
       }
       .resep-row { display: flex; align-items: stretch; }
       .resep-row + .resep-row { border-top: 1px solid var(--mori-line); }
@@ -154,8 +152,8 @@ function halaman(m, slug) {
         font-size: 13px; font-weight: 600; color: var(--mori-text);
       }
       .catatan {
-        background: var(--mori-surface); border: 1px solid var(--mori-accent); border-radius: 0;
-        padding: 10px 12px; font-size: 13px; color: var(--mori-text); line-height: 1.5;
+        background: var(--mori-surface); border: 1px solid var(--mori-accent); border-radius: var(--mori-radius, 12px);
+        padding: 12px 14px; font-size: 13px; color: var(--mori-text); line-height: 1.5;
       }
       .empty {
         text-align: center; color: var(--mori-text-2);
@@ -163,7 +161,7 @@ function halaman(m, slug) {
         letter-spacing: 0.6px; text-transform: uppercase; padding: 24px 0;
       }
       #status {
-        margin: 10px 0 0; padding: 6px 9px; border-radius: 0;
+        margin: 10px 0 0; padding: 6px 9px; border-radius: var(--mori-radius, 12px);
         background: var(--mori-surface); border: 1px solid var(--mori-line);
         color: var(--mori-text-2); font-family: var(--mori-mono);
         font-size: 10px; font-weight: 700; letter-spacing: 0.4px;

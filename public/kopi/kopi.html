@@ -501,7 +501,7 @@
         /* Disamakan dengan index.html: kotak pencarian + tile menu di sana
          memakai 8px, jadi KOPI ikut 8px supaya dua halaman ini terlihat
          sama. Ubah di sini kalau nanti mau geser lagi. */
-        --mori-radius: 8px;
+        --mori-radius: 12px;
         /* sudut panel terbesar (sheet, menempel bawah) */
         --mori-radius-lg: 8px;
         /* sudut kotak kecil (handle geser, tag PLU) */
@@ -563,7 +563,7 @@
          dengan sudut melengkung. */
       .icon-tile {
         border: none;
-        border-radius: 0;
+        border-radius: var(--mori-radius, 12px);
         transition: transform 0.2s ease;
       }
       .icon-tile:not(.has-photo) {
@@ -641,7 +641,8 @@
       .sheet-note {
         background: var(--mori-surface);
         border: 1px solid var(--mori-line);
-        border-radius: 0;
+        border-radius: var(--mori-radius, 12px);
+        padding: 12px 14px;
         color: var(--mori-text);
       }
       .sheet-close {
@@ -1374,7 +1375,7 @@
       // Halaman tidak lagi membaca data-kopi.json sama sekali.
       let cachedMenus = null;
       try {
-        const rawCache = localStorage.getItem('kopi_menus_cache_v1');
+        const rawCache = localStorage.getItem('kopi_menus_cache_v2');
         if (rawCache) {
           cachedMenus = JSON.parse(rawCache);
           if (Array.isArray(cachedMenus) && cachedMenus.length > 0) {
@@ -1399,7 +1400,7 @@
             if (sig !== lastSig) {
               menus = next;
               lastSig = sig;
-              try { localStorage.setItem('kopi_menus_cache_v1', JSON.stringify(next)); } catch(e) {}
+              try { localStorage.setItem('kopi_menus_cache_v2', JSON.stringify(next)); } catch(e) {}
               renderMenu();
             }
             console.info('ja_di_menus: ' + data.length + ' menu dari Supabase');
