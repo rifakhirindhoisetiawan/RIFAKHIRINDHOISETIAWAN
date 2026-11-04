@@ -73,7 +73,8 @@
       --mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;
       --mori-mono:"JetBrains Mono",ui-monospace,monospace;
     }
-    .table-wrap{border:1px solid var(--mori-line) !important;border-radius:12px !important;background:var(--mori-surface) !important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;margin-top:12px;box-shadow:none !important}
+    .table-wrap::-webkit-scrollbar { width: 0; height: 0; display: none; }
+    .table-wrap { scrollbar-width: none; -ms-overflow-style: none; }
     .menu-table{width:100%;min-width:560px;border-collapse:collapse;font-size:12px;table-layout:fixed;border:0;background:var(--mori-surface);overflow:hidden}
     .menu-table tbody td{height:46px;padding:8px 8px;border-bottom:1px solid var(--mori-line);border-right:0;vertical-align:middle;background:var(--mori-bg)}
     .menu-table tbody td:last-child{border-right:none}
