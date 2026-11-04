@@ -298,7 +298,7 @@
       const aksi = chk + '<button type="button" class="btn-dots" data-menu="' + m.id + '" title="Aksi" aria-label="Aksi">⋮</button>';
       return '<tr data-id="' + m.id + '"' + (isChecked ? ' class="row-checked"' : '') + '>' +
         '<td class="c-no">' + (i + 1) + '</td>' +
-        '<td class="c-nama"><div style="display:flex;align-items:center;gap:6px"><div class="nama" contenteditable="true" data-edit-title="' + m.id + '" style="outline:none;padding:2px 4px;border-radius:4px">' + (m.title || '') + '</div>' + (tglStr ? '<div style="font-size:9px;color:var(--mori-text-2);font-family:var(--mori-mono);font-weight:700;white-space:nowrap">' + tglStr + '</div>' : '') + '</div></td>' +
+        '<td class="c-nama"><div style="display:flex;flex-direction:column;gap:1px"><div class="nama" contenteditable="true" data-edit-title="' + m.id + '" style="outline:none;padding:2px 4px;border-radius:4px">' + (m.title || '') + '</div>' + (tglStr ? '<div style="font-size:9px;color:var(--mori-text-2);font-family:var(--mori-mono);font-weight:700;white-space:nowrap">' + tglStr + '</div>' : '') + '</div></td>' +
         '<td style="text-align:center"><input type="number" step="any" class="hpp-inline" data-edit-hpp="' + m.id + '" value="' + hppVal + '" placeholder="0" style="width:76px;background:transparent;border:0;border-radius:0;padding:4px 0;font-family:var(--mori-mono);font-weight:700;font-size:12px;color:var(--mori-text);text-align:center;outline:none" /></td>' +
         '<td class="c-qty"><div style="display:flex;align-items:center;justify-content:center;gap:1px">' +
         '<button type="button" class="qty-sm-btn" data-qty-minus="' + m.id + '">-</button>' +
