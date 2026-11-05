@@ -299,10 +299,11 @@ function halaman(m, slug) {
           return;
         }
         commentList.innerHTML = list.map(c => {
-          const t = new Date(c.created_at || Date.now()).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
-          return '<div style="background:var(--mori-surface);border:1px solid var(--mori-line);border-radius:var(--mori-radius, 12px);padding:10px 12px;display:flex;flex-direction:column;gap:4px;">' +
-            '<div style="font-size:12.5px;color:var(--mori-text);word-break:break-word;">' + escHtml(c.comment) + '</div>' +
-            '<div style="font-size:9.5px;color:var(--mori-text-2);align-self:flex-end;font-family:var(--mori-mono)">' + t + '</div>' +
+          const t = new Date(c.created_at || c.dibuat || Date.now()).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
+          const text = c.comment || c.leh || c.oleh || '';
+          return '<div style="background:var(--mori-surface);border:1px solid var(--mori-line);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:3px;">' +
+            '<div style="font-size:12px;color:var(--mori-text);word-break:break-word;">' + escHtml(text) + '</div>' +
+            '<div style="font-size:9px;color:var(--mori-text-2);align-self:flex-end;font-family:var(--mori-mono)">' + t + '</div>' +
             '</div>';
         }).join('');
       }
@@ -319,9 +320,14 @@ function halaman(m, slug) {
             .from(COMMENT_TABLE)
             .select('*')
             .eq('slug', SLUG)
-            .order('created_at', { ascending: false });
+            .order('dibuat', { ascending: false });
           if (!error && data) {
-            renderComments(data);
+            const mapped = data.map(d => ({
+              slug: d.slug,
+              comment: d.leh || d.oleh || '',
+              created_at: d.dibuat
+            })).filter(c => c.comment);
+            renderComments(mapped);
           }
         } catch (e) {}
       }
@@ -331,13 +337,28 @@ function halaman(m, slug) {
         const text = commentInput.value.trim();
         if (!text) return;
         commentInput.value = '';
+        const newC = {
+          slug: SLUG,
+          menu_name: MENU_NAME,
+          comment: text,
+          created_at: new Date().toISOString()
+        };
         try {
+          const lokal = getLocalComments();
+          lokal.unshift(newC);
+          localStorage.setItem(COMMENT_KEY, JSON.stringify(lokal));
+          renderComments(lokal);
+
           await supabase.from(COMMENT_TABLE).insert({
             slug: SLUG,
-            menu_name: MENU_NAME,
-            comment: text
+            leh: text,
+            dibuat: new Date().toISOString()
           });
           loadComments();
+        } catch (err) {
+          alert('Gagal mengirim komentar: ' + err.message);
+        }
+      });
 
       const openCommentModal = document.getElementById('openCommentModal');
       const closeCommentModal = document.getElementById('closeCommentModal');
