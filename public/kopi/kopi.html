@@ -1464,7 +1464,7 @@
 
       /* ===== KOMENTAR / LAPOR KESALAHAN ===== */
       const COMMENT_KEY = 'kopi_comments_v1';
-      const COMMENT_TABLE = 'kopi_pins';
+      const NOTE_MENU_ID = 64;
 
       function loadLocalComments() {
         try {
@@ -1485,21 +1485,28 @@
       async function syncComments() {
         try {
           const { data, error } = await supabase
-            .from(COMMENT_TABLE)
+            .from('note_entries')
             .select('*')
-            .order('dibuat', { ascending: false });
+            .eq('menu_id', NOTE_MENU_ID)
+            .order('created_at', { ascending: false });
           if (!error && data) {
-            const validNames = new Set((menus || []).map(m => (m.name || '').trim().toLowerCase()));
             const mapped = data.map(d => {
-              const name = d.oleh || d.menu_name || '';
+              const text = d.content || '';
+              let menuName = 'Umum';
+              let commentText = text;
+              const match = text.match(/^\[(.*?)\]\s*(.*)$/);
+              if (match) {
+                menuName = match[1];
+                commentText = match[2];
+              }
               return {
-                id: d.id || ('sup_' + Math.random()),
-                slug: d.slug || 'general',
-                menu_name: name,
-                comment: d.leh || '',
-                created_at: d.dibuat || new Date().toISOString()
+                id: d.id,
+                slug: slugify(menuName),
+                menu_name: menuName,
+                comment: commentText,
+                created_at: d.created_at
               };
-            }).filter(c => c.comment && validNames.has(c.menu_name.trim().toLowerCase()));
+            }).filter(c => c.comment);
             allComments = mapped;
             saveLocalComments(mapped);
           }
@@ -1510,20 +1517,20 @@
       syncComments();
 
       async function pushComment(slug, menuName, text) {
+        const fullContent = '[' + (menuName || 'UMUM') + '] ' + text;
         const newC = {
           id: 'local_' + Date.now(),
-          slug: slug || 'general',
-          menu_name: menuName || 'Umum',
+          slug: slug || slugify(menuName || 'umum'),
+          menu_name: menuName || 'UMUM',
           comment: text,
           created_at: new Date().toISOString()
         };
         allComments.unshift(newC);
         saveLocalComments(allComments);
         try {
-          await supabase.from(COMMENT_TABLE).insert({
-            slug: slug || 'general',
-            oleh: menuName || 'Umum',
-            leh: text
+          await supabase.from('note_entries').insert({
+            menu_id: NOTE_MENU_ID,
+            content: fullContent
           });
           syncComments();
         } catch (e) {
