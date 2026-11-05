@@ -114,20 +114,17 @@
 </head>
 <body>
 <div class="wrap">
-  <form id="form" onsubmit="return false">
-    <input type="hidden" id="editId" />
-    <div class="judul-row">
-      <input id="f_title" type="text" placeholder="Nama menu, cth: Catatan Penting" autocomplete="off" />
-      <button class="btn-add" type="button" id="btnAdd" title="Tambah menu">+</button>
-    </div>
-  </form>
-
   <div class="table-wrap" id="listWrap" style="margin-top:12px">
     <table class="menu-table">
       <thead>
         <tr>
-          <th class="c-no">No</th>
-          <th>Nama Menu</th>
+          <th class="c-no" style="width:40px;">No</th>
+          <th>
+            <div style="display:flex;align-items:center;gap:6px;width:100%;">
+              <input id="f_title" type="text" placeholder="Nama menu..." autocomplete="off" style="flex:1;height:24px;background:transparent;border:none;outline:none;font-family:inherit;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mori-text);padding:0;" />
+              <button type="button" id="btnAdd" title="Tambah menu" style="background:var(--mori-accent);color:var(--mori-bg);border:none;border-radius:4px;width:22px;height:22px;font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">+</button>
+            </div>
+          </th>
           <th class="c-foto">Foto</th>
           <th class="c-aksi"></th>
         </tr>
