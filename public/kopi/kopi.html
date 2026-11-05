@@ -1529,7 +1529,15 @@
 
         html += '<form id="commentForm" style="display:flex;flex-direction:column;gap:8px;width:100%;margin-top:4px;">';
         if (!slug) {
-          html += '<input type="text" id="commentMenuInput" placeholder="Nama menu..." required style="padding:8px 10px;font-size:12px;border:1px solid rgba(26,25,23,0.2);border-radius:8px;outline:none;font-family:inherit;background:#fff" />';
+          html += '<select id="commentMenuInput" required style="padding:8px 10px;font-size:12px;border:1px solid rgba(26,25,23,0.2);border-radius:8px;outline:none;font-family:inherit;background:#fff;color:#1a1917;">';
+          html += '<option value="" disabled selected>Pilih menu...</option>';
+          if (menus && menus.length) {
+            menus.forEach(m => {
+              const mName = m.name || '';
+              html += '<option value="' + escHtml(mName) + '">' + escHtml(mName) + '</option>';
+            });
+          }
+          html += '</select>';
         }
         html += '<textarea id="commentTextInput" rows="3" placeholder="Tulis komentar atau jika ada yang salah..." required style="padding:8px 10px;font-size:12px;border:1px solid rgba(26,25,23,0.2);border-radius:8px;outline:none;font-family:inherit;resize:none;background:#fff"></textarea>';
         html += '<button type="submit" style="padding:8px 14px;background:#1a1917;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;align-self:flex-end;">Kirim Komentar</button>';
