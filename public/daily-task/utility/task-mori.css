@@ -76,13 +76,13 @@ body {
 }
 .form-tambah input {
   flex: 1;
-  padding: 10px 14px;
+  padding: 7px 10px;
   font-size: 13px;
   font-family: inherit;
   color: var(--mori-text);
   background: var(--mori-surface);
   border: 1px solid var(--mori-line);
-  border-radius: 12px;
+  border-radius: 8px;
   outline: none;
   transition: box-shadow 0.2s ease, background 0.2s ease;
 }
@@ -94,21 +94,20 @@ body {
   color: var(--mori-text-2);
 }
 .btn-add {
-  flex: 0 0 42px;
-  width: 42px;
-  height: 42px;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: inherit;
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 18px;
   line-height: 1;
   color: var(--mori-bg);
   background: var(--mori-accent);
   border: 1px solid var(--mori-line);
-  border-radius: 12px;
+  border-radius: 8px;
   cursor: pointer;
   box-shadow: none;
   transition: box-shadow 0.2s ease, transform 0.2s ease;
