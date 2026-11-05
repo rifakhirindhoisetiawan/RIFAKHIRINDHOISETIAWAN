@@ -803,28 +803,6 @@
         color: var(--mori-bg, #fffbf2);
         border-color: var(--mori-text, #1a1917);
       }
-      .tile-comment-btn {
-        position: absolute;
-        top: 6px;
-        right: 6px;
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        background: rgba(26, 25, 23, 0.75);
-        color: #fff;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        z-index: 3;
-        opacity: 0.85;
-        transition: opacity 0.2s ease, transform 0.2s ease;
-      }
-      .tile-comment-btn:hover, .tile-comment-btn:active {
-        opacity: 1;
-        transform: scale(1.1);
-      }
       body.pin-mode .icon-tile {
         /* garis putus-putus tipis dan tidak mencolok */
         border: 1px dashed var(--mori-text-2);
@@ -1122,12 +1100,9 @@
         } else {
           iconHtml = '';
         }
-        const commentBtn = isAdmin ? '' : '<button type="button" class="tile-comment-btn" data-comment-slug="' + slug + '" data-comment-name="' + m.name.replace(/"/g, '&quot;') + '" title="Komentar / Lapor Salah" aria-label="Komentar ' + m.name + '">' +
-          '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>' +
-          '</button>';
-
+        // Tidak ada lencana pushpin di pojok kartu (permintaan).
         return '<' + tag + ' class="item js-detail' + (hasLink ? ' active-modul' : '') + '"' + href + ' data-idx="' + i + '" data-slug="' + slug + '">' +
-                 '<div class="icon-tile ' + (m.cls || 'g-a') + ' icon-photo" data-slug="' + slug + '"' + (isImgIcon ? ' data-hasimg="1"' : '') + '>' + iconHtml + commentBtn + '</div>' +
+                 '<div class="icon-tile ' + (m.cls || 'g-a') + ' icon-photo" data-slug="' + slug + '"' + (isImgIcon ? ' data-hasimg="1"' : '') + '>' + iconHtml + '</div>' +
                  '<span>' + m.name + '</span>' +
                '</' + tag + '>';
       }

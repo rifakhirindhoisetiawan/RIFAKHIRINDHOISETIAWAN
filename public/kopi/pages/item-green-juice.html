@@ -132,6 +132,13 @@
       </div>
 
       <div id="bahanWrap"></div>
+
+      <h2>Komentar / Lapor Kesalahan</h2>
+      <form id="commentForm" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
+        <textarea id="commentInput" rows="3" placeholder="Tulis komentar atau jika ada resep yang salah..." required style="padding:10px 12px;font-size:12.5px;font-family:inherit;background:var(--mori-surface);border:1px solid var(--mori-accent);border-radius:var(--mori-radius, 12px);outline:none;resize:none;color:var(--mori-text)"></textarea>
+        <button type="submit" style="align-self:flex-end;padding:8px 16px;background:var(--mori-accent);color:var(--mori-bg);border:none;border-radius:var(--mori-radius, 12px);font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;cursor:pointer">Kirim Komentar</button>
+      </form>
+      <div id="commentList" style="display:flex;flex-direction:column;gap:8px;"></div>
       <div id="status" role="status" aria-live="polite" hidden></div>
     </div>
 
@@ -207,6 +214,75 @@
         console.warn(e);
         setStatus('Gagal memuat data (' + e.message.slice(0, 50) + ')', 'err');
       }
+
+      /* ===== KOMENTAR DI DALAM MENU ===== */
+      const COMMENT_KEY = 'kopi_comments_v1';
+      const COMMENT_TABLE = 'kopi_comments';
+      const SLUG = "green-juice";
+      const MENU_NAME = "GREEN JUICE";
+
+      const commentForm = document.getElementById('commentForm');
+      const commentInput = document.getElementById('commentInput');
+      const commentList = document.getElementById('commentList');
+
+      function getLocalComments() {
+        try {
+          const raw = JSON.parse(localStorage.getItem(COMMENT_KEY) || '[]');
+          return Array.isArray(raw) ? raw.filter(c => c.slug === SLUG) : [];
+        } catch { return []; }
+      }
+
+      function renderComments(list) {
+        if (!list.length) {
+          commentList.innerHTML = '<div class="empty" style="padding:12px 0;">Belum ada komentar untuk menu ini.</div>';
+          return;
+        }
+        commentList.innerHTML = list.map(c => {
+          const t = new Date(c.created_at || Date.now()).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
+          return '<div style="background:var(--mori-surface);border:1px solid var(--mori-line);border-radius:var(--mori-radius, 12px);padding:10px 12px;display:flex;flex-direction:column;gap:4px;">' +
+            '<div style="font-size:12.5px;color:var(--mori-text);word-break:break-word;">' + escHtml(c.comment) + '</div>' +
+            '<div style="font-size:9.5px;color:var(--mori-text-2);align-self:flex-end;font-family:var(--mori-mono)">' + t + '</div>' +
+            '</div>';
+        }).join('');
+      }
+
+      function escHtml(s) {
+        return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      async function loadComments() {
+        const lokal = getLocalComments();
+        renderComments(lokal);
+        try {
+          const { data, error } = await supabase
+            .from(COMMENT_TABLE)
+            .select('*')
+            .eq('slug', SLUG)
+            .order('created_at', { ascending: false });
+          if (!error && data) {
+            renderComments(data);
+          }
+        } catch (e) {}
+      }
+
+      commentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const text = commentInput.value.trim();
+        if (!text) return;
+        commentInput.value = '';
+        try {
+          await supabase.from(COMMENT_TABLE).insert({
+            slug: SLUG,
+            menu_name: MENU_NAME,
+            comment: text
+          });
+          loadComments();
+        } catch (err) {
+          alert('Gagal mengirim komentar: ' + err.message);
+        }
+      });
+
+      loadComments();
     </script>
   </body>
 </html>
