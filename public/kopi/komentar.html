@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0" />
+    <title>Komentar & Laporan Resep Kopi</title>
+    <meta name="theme-color" content="#fffbf2" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      :root {
+        --mori-bg: #fffbf2;
+        --mori-surface: #f7f3e9;
+        --mori-text: #1a1917;
+        --mori-text-2: #6e6a64;
+        --mori-line: rgba(26, 25, 23, 0.14);
+        --mori-accent: #1a1917;
+        --mori-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+      body {
+        background: var(--mori-bg);
+        color: var(--mori-text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--mori-line);
+        padding-bottom: 12px;
+      }
+      h1 {
+        font-size: 16px;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-family: var(--mori-mono);
+      }
+      .back-btn {
+        background: var(--mori-accent);
+        color: var(--mori-bg);
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-family: var(--mori-mono);
+        text-decoration: none;
+        font-weight: 700;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-line);
+      }
+      th, td {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--mori-line);
+        text-align: left;
+      }
+      th {
+        font-family: var(--mori-mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        color: var(--mori-text-2);
+        background: rgba(0,0,0,0.02);
+      }
+      td.menu-col {
+        font-weight: 800;
+        text-transform: uppercase;
+        font-family: var(--mori-mono);
+        font-size: 11px;
+      }
+      td.action-col {
+        text-align: right;
+        white-space: nowrap;
+      }
+      .btn-buka {
+        background: var(--mori-accent);
+        color: var(--mori-bg);
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-family: var(--mori-mono);
+        text-decoration: none;
+        font-weight: 700;
+        display: inline-block;
+      }
+      .empty {
+        text-align: center;
+        padding: 40px;
+        font-family: var(--mori-mono);
+        color: var(--mori-text-2);
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Komentar & Laporan Resep Kopi</h1>
+      <a href="../kopi.html" class="back-btn">← Kembali</a>
+    </div>
+
+    <div id="contentWrap">
+      <div class="empty">Memuat data komentar...</div>
+    </div>
+
+    <script type="module">
+      import { supabase } from '../scripts/lib/supabase.mjs';
+
+      const slugify = (s) =>
+        String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+
+      async function init() {
+        const wrap = document.getElementById('contentWrap');
+        try {
+          // Ambil daftar menu untuk mapping link
+          const { data: menuData } = await supabase.from('ja_di_menus').select('name,link');
+          const menus = menuData || [];
+
+          // Ambil note_entries dari menu_id 64 (KOPI & RESEP)
+          const { data, error } = await supabase
+            .from('note_entries')
+            .select('*')
+            .eq('menu_id', 64)
+            .order('created_at', { ascending: false });
+
+          if (error) throw error;
+          if (!data || data.length === 0) {
+            wrap.innerHTML = '<div class="empty">Belum ada komentar atau laporan.</div>';
+            return;
+          }
+
+          let html = '<table><thead><tr><th>Menu</th><th>Komentar</th><th style="text-align:right">Aksi</th></tr></thead><tbody>';
+          data.forEach(d => {
+            const text = d.content || '';
+            let menuName = 'UMUM';
+            let commentText = text;
+            const match = text.match(/^\[(.*?)\]\s*(.*)$/);
+            if (match) {
+              menuName = match[1];
+              commentText = match[2];
+            }
+            const t = new Date(d.created_at || Date.now()).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
+            const mObj = menus.find(m => (m.name || '').trim().toLowerCase() === menuName.trim().toLowerCase());
+            const linkUrl = mObj ? (mObj.link || ('pages/item-' + slugify(menuName) + '.html')) : ('pages/item-' + slugify(menuName) + '.html');
+
+            html += '<tr>';
+            html += '<td class="menu-col">' + menuName + '</td>';
+            html += '<td>' + commentText + '<div style="font-size:9px;color:var(--mori-text-2);font-family:var(--mori-mono);margin-top:2px;">' + t + '</div></td>';
+            html += '<td class="action-col"><a href="' + linkUrl + '" class="btn-buka">Buka →</a></td>';
+            html += '</tr>';
+          });
+          html += '</tbody></table>';
+          wrap.innerHTML = html;
+        } catch (e) {
+          wrap.innerHTML = '<div class="empty">Gagal memuat data: ' + e.message + '</div>';
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>
