@@ -191,14 +191,11 @@ function halaman(m, slug) {
 
       <!-- Modal Komentar -->
       <div id="commentModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:100; align-items:center; justify-content:center; padding:16px;">
-        <div style="background:var(--mori-bg); width:100%; max-width:440px; border-radius:12px; border:1px solid var(--mori-line); padding:16px; display:flex; flex-direction:column; gap:10px; box-shadow:0 8px 24px rgba(0,0,0,0.15);">
-          <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-            <h2 style="margin:0; font-size:12px; font-weight:800; letter-spacing:0.5px; text-transform:uppercase;">Komentar</h2>
-            <button id="closeCommentModal" type="button" style="background:none; border:none; font-size:16px; font-weight:700; cursor:pointer; color:var(--mori-text)">✕</button>
-          </div>
-          <form id="commentForm" style="display:flex; flex-direction:column; gap:8px;">
-            <textarea id="commentInput" rows="2" placeholder="Tulis komentar atau lapor kesalahan..." required style="padding:8px 10px; font-size:12px; font-family:inherit; background:var(--mori-surface); border:1px solid var(--mori-line); border-radius:8px; outline:none; resize:none; color:var(--mori-text)"></textarea>
-            <button type="submit" style="align-self:flex-end; padding:6px 12px; background:var(--mori-accent); color:var(--mori-bg); border:none; border-radius:8px; font-family:var(--mori-mono); font-size:10px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; cursor:pointer">Kirim</button>
+        <div style="background:var(--mori-bg); width:100%; max-width:400px; border-radius:12px; border:1px solid var(--mori-line); padding:14px; display:flex; flex-direction:column; gap:8px; box-shadow:0 8px 24px rgba(0,0,0,0.15);">
+          <form id="commentForm" style="display:flex; gap:6px; align-items:center;">
+            <input type="text" id="commentInput" placeholder="Tulis komentar..." required style="flex:1; height:36px; padding:0 10px; font-size:12px; font-family:inherit; background:var(--mori-surface); border:1px solid var(--mori-line); border-radius:8px; outline:none; color:var(--mori-text);" />
+            <button type="submit" style="height:36px; padding:0 14px; background:var(--mori-accent); color:var(--mori-bg); border:none; border-radius:8px; font-family:var(--mori-mono); font-size:10px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; cursor:pointer; flex-shrink:0;">Kirim</button>
+            <button id="closeCommentModal" type="button" style="height:36px; width:36px; background:transparent; border:1px solid var(--mori-line); border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; color:var(--mori-text); display:flex; align-items:center; justify-content:center; flex-shrink:0;" title="Tutup">✕</button>
           </form>
           <div id="commentList" style="display:flex; flex-direction:column; gap:6px; max-height:35vh; overflow-y:auto; border-top:1px solid var(--mori-line); padding-top:8px;"></div>
         </div>
