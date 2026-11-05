@@ -1418,7 +1418,8 @@
           const { data, error } = await supabase.from('ja_di_menus').select('*').order('id', { ascending: true });
           if (error) throw error;
           statusMuat = 'ok';
-          const next = data.map(m => ({ ...m, cat: m.cat || '', plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || '' }));
+          if (data && data.length > 0) {
+            const next = data.map(m => ({ ...m, cat: m.cat || '', plu: [m.plu_12oz, m.plu_16oz].filter(Boolean).join(' / ') || m.plu_hot || '' }));
             const sig = signature(next);
             if (sig !== lastSig) {
               menus = next;
