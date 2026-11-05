@@ -68,52 +68,54 @@ body {
   color: var(--mori-text-2);
 }
 
-/* ===== SEARCH ===== */
-.search-row {
+/* ===== FORM TAMBAH ===== */
+.form-tambah {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 12px;
 }
-.search-box {
+.form-tambah input {
   flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--mori-text);
+  background: var(--mori-surface);
   border: 1px solid var(--mori-line);
   border-radius: 12px;
-  background: var(--mori-surface);
-  padding: 10px 14px;
-  font-size: 14px;
-  color: var(--mori-text);
-  transition: box-shadow 0.2s ease;
+  outline: none;
+  transition: box-shadow 0.2s ease, background 0.2s ease;
 }
-.search-box:focus-within {
+.form-tambah input:focus {
   background: #fffdf7;
   box-shadow: none;
 }
-.search-box svg {
-  flex-shrink: 0;
+.form-tambah input::placeholder {
   color: var(--mori-text-2);
-  width: 18px;
-  height: 18px;
 }
-.search-box input {
-  border: none;
-  background: transparent;
-  outline: none;
-  width: 100%;
-  min-width: 0;
-  font-size: 14px;
+.btn-add {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: inherit;
-  color: var(--mori-text);
-  -webkit-appearance: none;
-  appearance: none;
-  border-radius: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--mori-bg);
+  background: var(--mori-accent);
+  border: 1px solid var(--mori-line);
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
-.search-box input::placeholder {
-  color: var(--mori-text-2);
+.btn-add:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
 }
 
 /* ===== TABEL KEGIATAN ===== */

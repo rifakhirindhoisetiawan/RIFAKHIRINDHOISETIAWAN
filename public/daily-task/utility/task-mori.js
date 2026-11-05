@@ -25,7 +25,8 @@ const JUDUL = PERIOD.toUpperCase();
 
 const el = (id) => document.getElementById(id);
 const body = el('kegiatanBody');
-const cari = el('cari');
+const inputBaru = el('inputBaru');
+const formTambah = el('formTambah');
 const hintEl = el('hint');
 
 // Semua huruf jadi kapital, sama seperti di halaman admin.
@@ -82,11 +83,9 @@ async function muatKegiatan() {
 // Halaman menu ini read-only untuk datanya: kegiatan hanya bisa ditambah /
 // dihapus dari menu ADMIN. Di sini cukup mencentang yang sudah dikerjakan.
 function render() {
-  const q = (cari.value || '').trim().toLowerCase();
   const status = bacaStatus();
 
   const rows = kegiatan
-    .filter((d) => !q || (d.text || '').toLowerCase().includes(q))
     .map((d, i) => {
       const selesai = !!status[d.id];
       return (
@@ -104,7 +103,7 @@ function render() {
   const isi =
     kegiatan.length === 0
       ? '<tr><td class="c-no"></td><td class="c-teks"><div class="empty">Belum ada kegiatan</div></td><td class="c-aksi"></td></tr>'
-      : rows || '<tr><td class="c-no"></td><td class="c-teks"><div class="empty">Tidak ada yang cocok</div></td><td class="c-aksi"></td></tr>';
+      : rows;
 
   body.innerHTML = isi;
 }
@@ -120,12 +119,35 @@ function toggleSelesai(id) {
 /* ===== Event =====
    Hanya menyalakan/mematikan centang. Penambahan kegiatan tidak diizinkan
    di halaman menu — tugasnya milik menu ADMIN. */
+async function tambahKegiatan(teks) {
+  const bersih = String(teks || '').trim();
+  if (!bersih) return;
+  const maxOrder = kegiatan.reduce((m, d) => Math.max(m, d.sort_order || 0), 0);
+  const { error } = await supabase.from(ITEM_TABLE).insert([
+    {
+      period: PERIOD,
+      text: bersih,
+      sort_order: maxOrder + 1,
+    },
+  ]);
+  if (error) {
+    setHint('Gagal menambah: ' + error.message);
+  } else {
+    inputBaru.value = '';
+    setHint('');
+    await muatKegiatan();
+  }
+}
+
 body.addEventListener('click', (e) => {
   const toggle = e.target.closest('[data-toggle]');
   if (toggle) toggleSelesai(parseInt(toggle.dataset.toggle, 10));
 });
 
-cari.addEventListener('input', render);
+formTambah.addEventListener('submit', (e) => {
+  e.preventDefault();
+  tambahKegiatan(inputBaru.value);
+});
 
 /* ===== Realtime: sinkron otomatis dengan menu admin ===== */
 try {
