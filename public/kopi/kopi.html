@@ -1464,7 +1464,7 @@
 
       /* ===== KOMENTAR / LAPOR KESALAHAN ===== */
       const COMMENT_KEY = 'kopi_comments_v1';
-      const COMMENT_TABLE = 'kopi_comments';
+      const COMMENT_TABLE = 'kopi_pins';
 
       function loadLocalComments() {
         try {
@@ -1487,15 +1487,23 @@
           const { data, error } = await supabase
             .from(COMMENT_TABLE)
             .select('*')
-            .order('created_at', { ascending: false });
+            .order('dibuat', { ascending: false });
           if (!error && data) {
-            allComments = data;
-            saveLocalComments(data);
+            const mapped = data.map(d => ({
+              id: d.id || ('sup_' + Math.random()),
+              slug: d.slug || 'general',
+              menu_name: d.oleh || d.menu_name || 'Umum',
+              comment: d.leh || d.oleh || '',
+              created_at: d.dibuat || new Date().toISOString()
+            })).filter(c => c.comment);
+            allComments = mapped;
+            saveLocalComments(mapped);
           }
         } catch (e) {
           console.info('Gagal sync komentar dari server:', e.message);
         }
       }
+      syncComments();
 
       async function pushComment(slug, menuName, text) {
         const newC = {
@@ -1510,8 +1518,8 @@
         try {
           await supabase.from(COMMENT_TABLE).insert({
             slug: slug || 'general',
-            menu_name: menuName || 'Umum',
-            comment: text
+            oleh: menuName || 'Umum',
+            leh: text
           });
           syncComments();
         } catch (e) {
