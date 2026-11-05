@@ -1623,8 +1623,11 @@
 
       const pinModeBtn = document.getElementById('pinModeBtn');
       if (pinModeBtn) {
-        pinModeBtn.addEventListener('click', () => {
+        pinModeBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           menuDropdown.style.display = 'none';
+          setModeSemat(!modeSemat);
         });
       }
 
