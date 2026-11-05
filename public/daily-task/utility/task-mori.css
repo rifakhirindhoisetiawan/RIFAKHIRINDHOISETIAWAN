@@ -130,20 +130,7 @@ body {
   font-size: 13px;
   table-layout: fixed;
 }
-.tabel thead th {
-  background: var(--mori-surface);
-  color: var(--mori-text);
-  font-family: var(--mori-mono);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  text-align: left;
-  height: 34px;
-  padding: 0 8px;
-  border-bottom: 1px solid var(--mori-line);
-  white-space: nowrap;
-}
+.tabel thead { display: none; }
 .tabel tbody td {
   height: 46px;
   padding: 0 8px;
