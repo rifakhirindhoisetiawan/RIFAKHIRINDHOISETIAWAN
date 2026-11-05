@@ -16,23 +16,16 @@
   </head>
   <body>
     <div class="wrap">
-      <div class="search-row">
-        <form class="form-tambah" id="formTambah" onsubmit="return false">
-          <input id="inputBaru" type="text" placeholder="Tambah kegiatan baru..." autocomplete="off" />
-          <button type="submit" class="btn-add" id="btnAdd" title="Tambah kegiatan">+</button>
-        </form>
-      </div>
-
       <div class="table-wrap">
         <table class="tabel">
           <thead>
             <tr>
               <th colspan="3" style="padding:0;background:transparent;border:0">
-                <div style="display:flex;align-items:center;height:34px;background:var(--mori-surface);border-bottom:1px solid var(--mori-line);padding:0 8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text)">
-                  <span style="width:34px;text-align:center">No</span>
-                  <span style="flex:1;padding-left:8px">Kegiatan</span>
-                  <span style="width:60px"></span>
-                </div>
+                <form class="form-tambah" id="formTambah" onsubmit="return false" style="display:flex;align-items:center;height:38px;background:var(--mori-surface);border-bottom:1px solid var(--mori-line);padding:0 8px;gap:8px;margin:0">
+                  <span style="width:34px;text-align:center;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text)">No</span>
+                  <input id="inputBaru" type="text" placeholder="Tulis kegiatan penting..." autocomplete="off" style="flex:1;height:28px;padding:0 8px;font-size:12px;font-family:var(--mori-mono);color:var(--mori-text);background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:6px;outline:none;" />
+                  <button type="submit" class="btn-add" id="btnAdd" title="Tambah kegiatan" style="width:28px;height:28px;flex:0 0 28px;display:flex;align-items:center;justify-content:center;font-family:var(--mori-mono);font-size:16px;font-weight:700;color:var(--mori-bg);background:var(--mori-accent);border:1px solid var(--mori-line);border-radius:6px;cursor:pointer;">+</button>
+                </form>
               </th>
             </tr>
           </thead>
