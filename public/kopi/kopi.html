@@ -1543,25 +1543,25 @@
         html += '<button type="submit" style="padding:8px 14px;background:#1a1917;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;align-self:flex-end;">Kirim Komentar</button>';
         html += '</form>';
 
-        html += '<div style="width:100%;border-top:1px solid rgba(26,25,23,0.1);margin-top:8px;padding-top:12px;max-height:45vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;">';
+        html += '<div style="width:100%;border-top:1px solid rgba(26,25,23,0.1);margin-top:8px;padding-top:12px;max-height:45vh;overflow-y:auto;">';
         if (filtered.length === 0) {
           html += '<div style="color:#6e6a64;font-size:12px;text-align:center;padding:20px 0;font-family:var(--mori-mono, monospace)">Belum ada komentar.</div>';
         } else {
+          html += '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+          html += '<thead><tr style="border-bottom:1px solid rgba(26,25,23,0.2);text-align:left;font-family:var(--mori-mono, monospace);font-size:10px;color:#6e6a64;"><th style="padding:6px;">Menu</th><th style="padding:6px;">Komentar</th><th style="padding:6px;text-align:right;">Aksi</th></tr></thead>';
+          html += '<tbody>';
           filtered.forEach(c => {
             const t = new Date(c.created_at || Date.now()).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
-            html += '<div style="background:#f7f3e9;border:1px solid rgba(26,25,23,0.1);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;">';
-            if (!slug) {
-              const mObj = menus.find(m => slugify(m.name) === c.slug || (m.name || '').toLowerCase() === (c.menu_name || '').toLowerCase());
-              const linkUrl = mObj ? (mObj.link || ('pages/item-' + c.slug + '.html')) : ('pages/item-' + c.slug + '.html');
-              html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
-              html += '<span style="font-size:10px;font-weight:800;text-transform:uppercase;color:#1a1917;font-family:var(--mori-mono, monospace)">' + (c.menu_name || c.slug) + '</span>';
-              html += '<a href="' + linkUrl + '" style="font-size:10px;font-weight:700;text-decoration:none;background:#1a1917;color:#fff;padding:3px 8px;border-radius:6px;font-family:var(--mori-mono, monospace);">Buka Menu →</a>';
-              html += '</div>';
-            }
-            html += '<div style="font-size:12.5px;color:#1a1917;word-break:break-word;">' + escHtml(c.comment) + '</div>';
-            html += '<div style="font-size:9.5px;color:#6e6a64;align-self:flex-end;font-family:var(--mori-mono, monospace)">' + t + '</div>';
-            html += '</div>';
+            const mObj = menus.find(m => slugify(m.name) === c.slug || (m.name || '').toLowerCase() === (c.menu_name || '').toLowerCase());
+            const linkUrl = mObj ? (mObj.link || ('pages/item-' + c.slug + '.html')) : ('pages/item-' + c.slug + '.html');
+            const menuTitle = c.menu_name || c.slug || '';
+            html += '<tr style="border-bottom:1px solid rgba(26,25,23,0.08);vertical-align:top;">';
+            html += '<td style="padding:8px 6px;font-weight:800;text-transform:uppercase;font-family:var(--mori-mono, monospace);font-size:10.5px;color:#1a1917;">' + escHtml(menuTitle) + '</td>';
+            html += '<td style="padding:8px 6px;color:#1a1917;word-break:break-word;">' + escHtml(c.comment) + '<div style="font-size:9px;color:#6e6a64;font-family:var(--mori-mono, monospace);margin-top:2px;">' + t + '</div></td>';
+            html += '<td style="padding:8px 6px;text-align:right;white-space:nowrap;"><a href="' + linkUrl + '" style="font-size:10px;font-weight:700;text-decoration:none;background:#1a1917;color:#fff;padding:4px 8px;border-radius:6px;font-family:var(--mori-mono, monospace);display:inline-block;">Buka →</a></td>';
+            html += '</tr>';
           });
+          html += '</tbody></table>';
         }
         html += '</div>';
 
