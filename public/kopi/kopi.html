@@ -1489,13 +1489,17 @@
             .select('*')
             .order('dibuat', { ascending: false });
           if (!error && data) {
-            const mapped = data.map(d => ({
-              id: d.id || ('sup_' + Math.random()),
-              slug: d.slug || 'general',
-              menu_name: d.oleh || d.menu_name || 'Umum',
-              comment: d.leh || d.oleh || '',
-              created_at: d.dibuat || new Date().toISOString()
-            })).filter(c => c.comment);
+            const validNames = new Set((menus || []).map(m => (m.name || '').trim().toLowerCase()));
+            const mapped = data.map(d => {
+              const name = d.oleh || d.menu_name || '';
+              return {
+                id: d.id || ('sup_' + Math.random()),
+                slug: d.slug || 'general',
+                menu_name: name,
+                comment: d.leh || '',
+                created_at: d.dibuat || new Date().toISOString()
+              };
+            }).filter(c => c.comment && validNames.has(c.menu_name.trim().toLowerCase()));
             allComments = mapped;
             saveLocalComments(mapped);
           }
