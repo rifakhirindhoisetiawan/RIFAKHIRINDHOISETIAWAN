@@ -323,25 +323,43 @@
 
       /* ===== SEARCH ===== */
       .search-box {
-        /* garis lembut seperti index.html (bukan hitam penuh) */
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 46px;
+        box-sizing: border-box;
         border: 1px solid var(--mori-line);
         border-radius: 12px;
-        height: 46px;
         padding: 0 14px;
         background: var(--mori-surface);
         color: var(--mori-text);
-        transition: box-shadow 0.2s ease;
+        transition: background 0.2s ease;
       }
       .search-box:focus-within {
         background: #fffdf7;
         box-shadow: none;
       }
       .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        font-size: 14px;
         color: var(--mori-text);
+        font-family: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        border-radius: 0;
       }
       .search-box input::placeholder,
       .search-box svg {
         color: var(--mori-text-2);
+      }
+      .search-box svg {
+        flex-shrink: 0;
+        width: 16px;
+        height: 16px;
       }
 
       /* ===== MENU ADMIN =====
