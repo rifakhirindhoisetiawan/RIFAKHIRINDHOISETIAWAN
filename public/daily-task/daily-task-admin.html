@@ -391,29 +391,25 @@
        sudah dihapus (halaman ini hanya mengatur judul menu & foto). -->
   <div class="grid" style="grid-template-columns:1fr;gap:0">
     <div class="card" style="order:1">
-      <form id="form" class="form" onsubmit="return false">
-        <input type="hidden" id="editId" />
-        <!-- Baris judul: input + tombol "+" di kanan atas (sama seperti
-             tombol Tambah Menu di Admin Stok Opname). Tombol ini juga
-             jadi tombol Simpan saat sedang mengedit. -->
-        <div class="judul-row">
-          <input
-            id="f_title"
-            type="text"
-            placeholder="Judul menu, cth: HARI"
-            aria-label="Judul menu"
-            autocomplete="off"
-            required
-          />
-          <button class="btn-add" type="button" id="btnAdd" title="Tambah menu" aria-label="Tambah menu">+</button>
-        </div>
-      </form>
-
-      <!-- Judul "Daftar Menu" dihapus (sama seperti Admin Stok Opname):
-           tabelnya langsung menempel di bawah baris input + "+". -->
       <div class="table-wrap" id="listWrap" style="margin-top:12px">
         <table class="menu-table">
           <thead>
+            <tr>
+              <th colspan="4" style="padding:0;background:transparent;border:0">
+                <div class="judul-row" style="display:flex;align-items:center;height:42px;background:var(--mori-surface);border-bottom:1px solid var(--mori-line);padding:0 8px;gap:8px">
+                  <input
+                    id="f_title"
+                    type="text"
+                    placeholder="Judul menu, cth: HARI"
+                    aria-label="Judul menu"
+                    autocomplete="off"
+                    required
+                    style="flex:1;height:28px;padding:0 8px;font-size:12px;font-family:var(--mori-mono);color:var(--mori-text);background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:6px;outline:none;"
+                  />
+                  <button class="btn-add" type="button" id="btnAdd" title="Tambah menu" aria-label="Tambah menu" style="width:28px;height:28px;flex:0 0 28px;display:flex;align-items:center;justify-content:center;font-family:var(--mori-mono);font-size:16px;font-weight:700;color:var(--mori-bg);background:var(--mori-accent);border:1px solid var(--mori-line);border-radius:6px;cursor:pointer;">+</button>
+                </div>
+              </th>
+            </tr>
             <tr>
               <th class="c-no">No</th>
               <th>Nama Menu</th>
