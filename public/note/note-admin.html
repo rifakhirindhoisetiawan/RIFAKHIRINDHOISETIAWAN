@@ -118,18 +118,27 @@
     <table class="menu-table">
       <thead>
         <tr>
-          <th class="c-no" style="width:40px;">No</th>
-          <th>
-            <div style="display:flex;align-items:center;gap:6px;width:100%;">
-              <input id="f_title" type="text" placeholder="Nama menu..." autocomplete="off" style="flex:1;height:24px;background:transparent;border:none;outline:none;font-family:inherit;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mori-text);padding:0;" />
-              <button type="button" id="btnAdd" title="Tambah menu" style="background:var(--mori-accent);color:var(--mori-bg);border:none;border-radius:4px;width:22px;height:22px;font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">+</button>
-            </div>
-          </th>
-          <th class="c-foto">Foto</th>
+          <th class="c-no" style="width:40px;">NO</th>
+          <th>NAMA MENU</th>
+          <th class="c-foto">FOTO</th>
           <th class="c-aksi"></th>
         </tr>
       </thead>
       <tbody id="list">
+        <tr class="is-admin">
+          <td class="c-no"></td>
+          <td class="c-nama">
+            <div style="display:flex;align-items:center;gap:6px;width:100%;">
+              <input id="f_title" type="text" placeholder="NAMA MENU..." autocomplete="off" style="flex:1;height:28px;background:transparent;border:none;outline:none;font-family:var(--mori-mono);font-size:11px;font-weight:700;text-transform:uppercase;color:var(--mori-text);padding:0;" />
+            </div>
+          </td>
+          <td class="c-foto"></td>
+          <td class="c-aksi">
+            <div class="acts">
+              <button type="button" id="btnAdd" title="Tambah menu" class="ico" style="background:var(--mori-accent);color:var(--mori-bg);border-radius:8px;">+</button>
+            </div>
+          </td>
+        </tr>
         <tr><td class="c-no"></td><td class="c-nama"><div class="empty">Memuat...</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>
       </tbody>
     </table>
