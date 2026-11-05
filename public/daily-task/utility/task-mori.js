@@ -93,9 +93,7 @@ function render() {
         '<td class="c-no">' + (i + 1) + '</td>' +
         '<td class="c-teks"><div class="isi" title="' + String(d.text).replace(/"/g, '&quot;') + '">' + kapital(d.text) + '</div></td>' +
         '<td class="c-aksi"><div class="acts">' +
-        '<button type="button" class="centang" data-toggle="' + d.id + '" title="' + (selesai ? 'Batalkan selesai' : 'Tandai selesai') + '" aria-label="' + (selesai ? 'Batalkan selesai' : 'Tandai selesai') + '">' +
-        (selesai ? '↺' : '') +
-        '</button></div></td></tr>'
+        '<button type="button" class="centang" data-toggle="' + d.id + '" title="' + (selesai ? 'Batalkan selesai' : 'Tandai selesai') + '" aria-label="' + (selesai ? 'Batalkan selesai' : 'Tandai selesai') + '"></button></div></td></tr>'
       );
     })
     .join('');
