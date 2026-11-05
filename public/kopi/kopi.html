@@ -1546,27 +1546,7 @@
         html += '<button id="commentSheetClose" type="button" style="background:none;border:none;font-size:20px;cursor:pointer;font-weight:700">✕</button>';
         html += '</div>';
 
-        html += '<form id="commentForm" style="display:flex;flex-direction:column;gap:8px;width:100%;margin-top:4px;">';
-        if (!slug) {
-          html += '<select id="commentMenuInput" required style="padding:8px 10px;font-size:12px;border:1px solid rgba(26,25,23,0.2);border-radius:8px;outline:none;font-family:inherit;background:#fff;color:#1a1917;">';
-          html += '<option value="" disabled selected>Pilih menu...</option>';
-          if (menus && menus.length) {
-            const kopiMenus = menus.filter(m => {
-              const cls = (m.cls || '').toLowerCase();
-              const name = (m.name || '').toLowerCase();
-              return cls.includes('kopi') || name.includes('latte') || name.includes('espresso') || name.includes('kopi') || name.includes('cappuccino') || name.includes('mocha') || name.includes('americano') || name.includes('vanilla') || name.includes('chocolate') || name.includes('matcha') || name.includes('ube') || name.includes('pandan') || name.includes('dolce') || name.includes('affogato') || name.includes('kolak') || name.includes('frappe') || name.includes('macchiato');
-            });
-            const listToUse = kopiMenus.length ? kopiMenus : menus;
-            listToUse.forEach(m => {
-              const mName = m.name || '';
-              html += '<option value="' + escHtml(mName) + '">' + escHtml(mName) + '</option>';
-            });
-          }
-          html += '</select>';
-        }
-        html += '<textarea id="commentTextInput" rows="3" placeholder="Tulis komentar atau jika ada yang salah..." required style="padding:8px 10px;font-size:12px;border:1px solid rgba(26,25,23,0.2);border-radius:8px;outline:none;font-family:inherit;resize:none;background:#fff"></textarea>';
-        html += '<button type="submit" style="padding:8px 14px;background:#1a1917;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;align-self:flex-end;">Kirim Komentar</button>';
-        html += '</form>';
+        html += '<form id="commentForm" style="display:none;"></form>';
 
         html += '<div style="width:100%;border-top:1px solid rgba(26,25,23,0.1);margin-top:8px;padding-top:12px;max-height:45vh;overflow-y:auto;">';
         if (filtered.length === 0) {
