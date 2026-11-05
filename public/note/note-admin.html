@@ -121,23 +121,18 @@
           <th class="c-no" style="width:40px;">NO</th>
           <th>NAMA MENU</th>
           <th class="c-foto">FOTO</th>
-          <th class="c-aksi"></th>
+          <th class="c-aksi" style="text-align:right;padding-right:8px;">
+            <button type="button" id="btnAdd" title="Tambah menu" style="background:var(--mori-bg);color:var(--mori-text);border:1px solid var(--mori-line);border-radius:8px;width:28px;height:28px;font-weight:800;font-size:16px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:1;">+</button>
+          </th>
         </tr>
       </thead>
       <tbody id="list">
         <tr class="is-admin">
           <td class="c-no"></td>
-          <td class="c-nama">
-            <div style="display:flex;align-items:center;gap:6px;width:100%;">
-              <input id="f_title" type="text" placeholder="NAMA MENU..." autocomplete="off" style="flex:1;height:32px;background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:6px;outline:none;font-family:var(--mori-mono);font-size:11px;font-weight:700;text-transform:uppercase;color:var(--mori-text);padding:0 8px;" />
-            </div>
+          <td class="c-nama" colspan="2">
+            <input id="f_title" type="text" placeholder="NAMA MENU..." autocomplete="off" style="width:100%;height:32px;background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:6px;outline:none;font-family:var(--mori-mono);font-size:11px;font-weight:700;text-transform:uppercase;color:var(--mori-text);padding:0 8px;" />
           </td>
-          <td class="c-foto"></td>
-          <td class="c-aksi">
-            <div class="acts">
-              <button type="button" id="btnAdd" title="Tambah menu" class="ico" style="background:var(--mori-accent);color:var(--mori-bg);border-radius:8px;">+</button>
-            </div>
-          </td>
+          <td class="c-aksi"></td>
         </tr>
         <tr><td class="c-no"></td><td class="c-nama"><div class="empty">Memuat...</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>
       </tbody>
