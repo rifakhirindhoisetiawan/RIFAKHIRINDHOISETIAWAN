@@ -1549,9 +1549,14 @@
         } else {
           filtered.forEach(c => {
             const t = new Date(c.created_at || Date.now()).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
-            html += '<div style="background:#f7f3e9;border:1px solid rgba(26,25,23,0.1);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px;">';
+            html += '<div style="background:#f7f3e9;border:1px solid rgba(26,25,23,0.1);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;">';
             if (!slug) {
-              html += '<div style="font-size:10px;font-weight:800;text-transform:uppercase;color:#1a1917;font-family:var(--mori-mono, monospace)">' + (c.menu_name || c.slug) + '</div>';
+              const mObj = menus.find(m => slugify(m.name) === c.slug || (m.name || '').toLowerCase() === (c.menu_name || '').toLowerCase());
+              const linkUrl = mObj ? (mObj.link || ('pages/item-' + c.slug + '.html')) : ('pages/item-' + c.slug + '.html');
+              html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+              html += '<span style="font-size:10px;font-weight:800;text-transform:uppercase;color:#1a1917;font-family:var(--mori-mono, monospace)">' + (c.menu_name || c.slug) + '</span>';
+              html += '<a href="' + linkUrl + '" style="font-size:10px;font-weight:700;text-decoration:none;background:#1a1917;color:#fff;padding:3px 8px;border-radius:6px;font-family:var(--mori-mono, monospace);">Buka Menu →</a>';
+              html += '</div>';
             }
             html += '<div style="font-size:12.5px;color:#1a1917;word-break:break-word;">' + escHtml(c.comment) + '</div>';
             html += '<div style="font-size:9.5px;color:#6e6a64;align-self:flex-end;font-family:var(--mori-mono, monospace)">' + t + '</div>';
