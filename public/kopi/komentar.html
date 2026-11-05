@@ -107,6 +107,33 @@
       <div class="empty">Memuat data komentar...</div>
     </div>
 
+    <script>
+      try {
+        const cached = localStorage.getItem('kopi_comments_v1');
+        if (cached) {
+          const data = JSON.parse(cached);
+          if (Array.isArray(data) && data.length > 0) {
+            const slugify = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+            let html = '<table><thead><tr><th>Menu</th><th>Komentar</th><th style="text-align:right">Aksi</th></tr></thead><tbody>';
+            data.forEach(d => {
+              const menuName = d.menu_name || 'UMUM';
+              const commentText = d.comment || '';
+              const t = new Date(d.created_at || Date.now()).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
+              const slug = d.slug || slugify(menuName);
+              const linkUrl = 'pages/item-' + slug + '.html';
+              html += '<tr>';
+              html += '<td class="menu-col">' + menuName + '</td>';
+              html += '<td>' + commentText + '<div style="font-size:9px;color:var(--mori-text-2);font-family:var(--mori-mono);margin-top:2px;">' + t + '</div></td>';
+              html += '<td class="action-col"><a href="' + linkUrl + '" class="btn-buka">Buka →</a></td>';
+              html += '</tr>';
+            });
+            html += '</tbody></table>';
+            document.getElementById('contentWrap').innerHTML = html;
+          }
+        }
+      } catch(e) {}
+    </script>
+
     <script type="module">
       import { supabase } from '../scripts/lib/supabase.mjs';
 
