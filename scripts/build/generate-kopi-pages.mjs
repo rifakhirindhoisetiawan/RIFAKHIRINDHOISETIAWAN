@@ -278,7 +278,7 @@ function halaman(m, slug) {
 
       /* ===== KOMENTAR DI DALAM MENU ===== */
       const COMMENT_KEY = 'kopi_comments_v1';
-      const COMMENT_TABLE = 'kopi_comments';
+      const COMMENT_TABLE = 'kopi_pins';
       const SLUG = ${JSON.stringify(slug)};
       const MENU_NAME = ${JSON.stringify(m.name)};
 
