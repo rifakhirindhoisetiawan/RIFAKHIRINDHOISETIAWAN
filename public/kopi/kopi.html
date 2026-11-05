@@ -803,6 +803,28 @@
         color: var(--mori-bg, #fffbf2);
         border-color: var(--mori-text, #1a1917);
       }
+      .tile-comment-btn {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: rgba(26, 25, 23, 0.75);
+        color: #fff;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 3;
+        opacity: 0.85;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+      .tile-comment-btn:hover, .tile-comment-btn:active {
+        opacity: 1;
+        transform: scale(1.1);
+      }
       body.pin-mode .icon-tile {
         /* garis putus-putus tipis dan tidak mencolok */
         border: 1px dashed var(--mori-text-2);
@@ -878,6 +900,16 @@
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 17v5"></path>
               <path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"></path>
+            </svg>
+          </button>
+          <button
+            class="pin-mode-btn"
+            id="checkCommentsBtn"
+            type="button"
+            title="Cek Komentar"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
           </button>
         </div>
@@ -1090,9 +1122,12 @@
         } else {
           iconHtml = '';
         }
-        // Tidak ada lencana pushpin di pojok kartu (permintaan).
+        const commentBtn = isAdmin ? '' : '<button type="button" class="tile-comment-btn" data-comment-slug="' + slug + '" data-comment-name="' + m.name.replace(/"/g, '&quot;') + '" title="Komentar / Lapor Salah" aria-label="Komentar ' + m.name + '">' +
+          '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>' +
+          '</button>';
+
         return '<' + tag + ' class="item js-detail' + (hasLink ? ' active-modul' : '') + '"' + href + ' data-idx="' + i + '" data-slug="' + slug + '">' +
-                 '<div class="icon-tile ' + (m.cls || 'g-a') + ' icon-photo" data-slug="' + slug + '"' + (isImgIcon ? ' data-hasimg="1"' : '') + '>' + iconHtml + '</div>' +
+                 '<div class="icon-tile ' + (m.cls || 'g-a') + ' icon-photo" data-slug="' + slug + '"' + (isImgIcon ? ' data-hasimg="1"' : '') + '>' + iconHtml + commentBtn + '</div>' +
                  '<span>' + m.name + '</span>' +
                '</' + tag + '>';
       }
@@ -1451,10 +1486,153 @@
           });
       } catch (e) { console.log('Realtime sematan tidak aktif', e.message); }
 
+      /* ===== KOMENTAR / LAPOR KESALAHAN ===== */
+      const COMMENT_KEY = 'kopi_comments_v1';
+      const COMMENT_TABLE = 'kopi_comments';
+
+      function loadLocalComments() {
+        try {
+          const raw = JSON.parse(localStorage.getItem(COMMENT_KEY) || '[]');
+          return Array.isArray(raw) ? raw : [];
+        } catch {
+          return [];
+        }
+      }
+      function saveLocalComments(list) {
+        try {
+          localStorage.setItem(COMMENT_KEY, JSON.stringify(list));
+        } catch {}
+      }
+
+      let allComments = loadLocalComments();
+
+      async function syncComments() {
+        try {
+          const { data, error } = await supabase
+            .from(COMMENT_TABLE)
+            .select('*')
+            .order('created_at', { ascending: false });
+          if (!error && data) {
+            allComments = data;
+            saveLocalComments(data);
+          }
+        } catch (e) {
+          console.info('Gagal sync komentar dari server:', e.message);
+        }
+      }
+
+      async function pushComment(slug, menuName, text) {
+        const newC = {
+          id: 'local_' + Date.now(),
+          slug: slug || 'general',
+          menu_name: menuName || 'Umum',
+          comment: text,
+          created_at: new Date().toISOString()
+        };
+        allComments.unshift(newC);
+        saveLocalComments(allComments);
+        try {
+          await supabase.from(COMMENT_TABLE).insert({
+            slug: slug || 'general',
+            menu_name: menuName || 'Umum',
+            comment: text
+          });
+          syncComments();
+        } catch (e) {
+          console.warn('Gagal kirim komentar ke server:', e.message);
+        }
+      }
+
+      function openCommentSheet(slug, menuName) {
+        const filtered = slug ? allComments.filter(c => c.slug === slug) : allComments;
+        let html = '<div class="sheet-top" style="flex-direction:column;gap:12px;">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;">';
+        html += '<h2 id="commentSheetTitle" style="font-size:15px;font-weight:800;text-transform:uppercase;font-family:var(--mori-mono, monospace)">' + (menuName ? 'Komentar: ' + menuName : 'Semua Komentar') + '</h2>';
+        html += '<button id="commentSheetClose" type="button" style="background:none;border:none;font-size:20px;cursor:pointer;font-weight:700">✕</button>';
+        html += '</div>';
+
+        html += '<form id="commentForm" style="display:flex;flex-direction:column;gap:8px;width:100%;margin-top:4px;">';
+        if (!slug) {
+          html += '<input type="text" id="commentMenuInput" placeholder="Nama menu..." required style="padding:8px 10px;font-size:12px;border:1px solid rgba(26,25,23,0.2);border-radius:8px;outline:none;font-family:inherit;background:#fff" />';
+        }
+        html += '<textarea id="commentTextInput" rows="3" placeholder="Tulis komentar atau jika ada yang salah..." required style="padding:8px 10px;font-size:12px;border:1px solid rgba(26,25,23,0.2);border-radius:8px;outline:none;font-family:inherit;resize:none;background:#fff"></textarea>';
+        html += '<button type="submit" style="padding:8px 14px;background:#1a1917;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;align-self:flex-end;">Kirim Komentar</button>';
+        html += '</form>';
+
+        html += '<div style="width:100%;border-top:1px solid rgba(26,25,23,0.1);margin-top:8px;padding-top:12px;max-height:45vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;">';
+        if (filtered.length === 0) {
+          html += '<div style="color:#6e6a64;font-size:12px;text-align:center;padding:20px 0;font-family:var(--mori-mono, monospace)">Belum ada komentar.</div>';
+        } else {
+          filtered.forEach(c => {
+            const t = new Date(c.created_at || Date.now()).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
+            html += '<div style="background:#f7f3e9;border:1px solid rgba(26,25,23,0.1);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px;">';
+            if (!slug) {
+              html += '<div style="font-size:10px;font-weight:800;text-transform:uppercase;color:#1a1917;font-family:var(--mori-mono, monospace)">' + (c.menu_name || c.slug) + '</div>';
+            }
+            html += '<div style="font-size:12.5px;color:#1a1917;word-break:break-word;">' + escHtml(c.comment) + '</div>';
+            html += '<div style="font-size:9.5px;color:#6e6a64;align-self:flex-end;font-family:var(--mori-mono, monospace)">' + t + '</div>';
+            html += '</div>';
+          });
+        }
+        html += '</div>';
+
+        html += '</div>';
+        sheetBody.innerHTML = html;
+        sheetBg.classList.add('open');
+
+        document.getElementById('commentSheetClose').addEventListener('click', closeSheet);
+        document.getElementById('commentForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const txt = document.getElementById('commentTextInput').value.trim();
+          const mInput = document.getElementById('commentMenuInput');
+          const mName = mInput ? mInput.value.trim() : (menuName || 'Umum');
+          const mSlug = mInput ? slugify(mName) : (slug || 'general');
+          if (!txt) return;
+          await pushComment(mSlug, mName, txt);
+          openCommentSheet(slug, menuName);
+        });
+      }
+
+      function escHtml(s) {
+        return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      // Event listener untuk tombol komentar di kartu menu
+      menuGrid.addEventListener('click', (e) => {
+        const commentBtn = e.target.closest('.tile-comment-btn');
+        if (commentBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          const slug = commentBtn.dataset.commentSlug;
+          const name = commentBtn.dataset.commentName;
+          openCommentSheet(slug, name);
+          return;
+        }
+      });
+
+      const checkCommentsBtn = document.getElementById('checkCommentsBtn');
+      if (checkCommentsBtn) {
+        checkCommentsBtn.addEventListener('click', () => {
+          openCommentSheet(null, 'Semua Komentar / Laporan');
+        });
+      }
+
+      syncComments();
+      try {
+        supabase.channel('kopi_comments_changes')
+          .on('postgres_changes', { event: '*', schema: 'public', table: COMMENT_TABLE }, () => {
+            syncComments();
+          })
+          .subscribe((status) => {
+            if (status === 'SUBSCRIBED') console.log('Realtime komentar aktif');
+          });
+      } catch (e) { console.log('Realtime komentar tidak aktif', e.message); }
+
       // Tab kembali aktif -> cek ulang, supaya event yang terlewat tertangkap.
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') loadFromSupabase();
         if (document.visibilityState === 'visible') syncPins();
+        if (document.visibilityState === 'visible') syncComments();
       });
     </script>
   </body>
