@@ -261,7 +261,7 @@
       }
       const aksi = isAdmin
         ? '<button type="button" class="ico" data-foto="'+m.id+'" title="Ganti foto ADMIN">↑</button>'
-        : '<button type="button" class="ico" data-foto="'+m.id+'" title="Upload foto">↑</button><button type="button" class="ico" data-edit="'+m.id+'" title="Edit">✎</button><button type="button" class="ico ico-danger" data-del="'+m.id+'" title="Hapus">✕</button>';
+        : '<button type="button" class="ico" data-foto="'+m.id+'" title="Upload foto">↑</button><button type="button" class="ico ico-danger" data-del="'+m.id+'" title="Hapus">✕</button>';
       return '<tr data-id="'+m.id+'"'+(isAdmin?' class="is-admin"':'')+'><td class="c-no">'+(i+1)+'</td><td class="c-nama"><div class="nama">'+(m.title||'')+'</div></td><td class="c-foto">'+thumb+'</td><td class="c-aksi"><div class="acts">'+aksi+'</div></td></tr>';
     }).join('');
     const idDari = v => (v === AKUN_TILE ? AKUN_TILE : parseInt(v, 10));
