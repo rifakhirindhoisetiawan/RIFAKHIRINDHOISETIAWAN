@@ -868,40 +868,28 @@
                WebView (browser membatalkan gestur sebelum timer aktif),
                jadi dipakai tombol yang kasat mata di samping pencarian.
                Nyalakan -> tap kartu mana pun untuk semat/lepas. -->
-          <!-- Tombol Titik Tiga (Menu Aksi) -->
-          <div style="position:relative; display:inline-block;">
-            <button
-              class="pin-mode-btn"
-              id="menuMoreBtn"
-              type="button"
-              title="Menu Aksi"
-            >
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="1"></circle>
-                <circle cx="12" cy="5" r="1"></circle>
-                <circle cx="12" cy="19" r="1"></circle>
-              </svg>
-            </button>
-            <div id="menuDropdown" style="display:none; position:absolute; right:0; top:52px; background:var(--mori-bg, #fffbf2); border:1px solid var(--mori-line, rgba(26,25,23,0.14)); border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); z-index:100; min-width:160px; padding:6px; flex-direction:column; gap:4px;">
-              <button
-                id="pinModeBtn"
-                type="button"
-                aria-pressed="false"
-                style="display:flex; align-items:center; gap:8px; width:100%; padding:8px 10px; background:transparent; border:none; border-radius:6px; color:var(--mori-text, #1a1917); font-size:13px; font-family:inherit; cursor:pointer; text-align:left;"
-              >
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"></path><path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"></path></svg>
-                <span>Mode Semat</span>
-              </button>
-              <button
-                id="checkCommentsBtn"
-                type="button"
-                style="display:flex; align-items:center; gap:8px; width:100%; padding:8px 10px; background:transparent; border:none; border-radius:6px; color:var(--mori-text, #1a1917); font-size:13px; font-family:inherit; cursor:pointer; text-align:left;"
-              >
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                <span>Cek Komentar</span>
-              </button>
-            </div>
-          </div>
+          <button
+            class="pin-mode-btn"
+            id="pinModeBtn"
+            type="button"
+            aria-pressed="false"
+            title="Mode Semat"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 17v5"></path>
+              <path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"></path>
+            </svg>
+          </button>
+          <button
+            class="pin-mode-btn"
+            id="checkCommentsBtn"
+            type="button"
+            title="Cek Komentar"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </button>
         </div>
 
         <div class="grid" id="menuGrid"></div>
@@ -1597,37 +1585,10 @@
         }
       });
 
-      const menuMoreBtn = document.getElementById('menuMoreBtn');
-      const menuDropdown = document.getElementById('menuDropdown');
-      if (menuMoreBtn && menuDropdown) {
-        menuMoreBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const isVisible = menuDropdown.style.display === 'flex';
-          menuDropdown.style.display = isVisible ? 'none' : 'flex';
-        });
-        document.addEventListener('click', () => {
-          menuDropdown.style.display = 'none';
-        });
-        menuDropdown.addEventListener('click', (e) => {
-          e.stopPropagation();
-        });
-      }
-
       const checkCommentsBtn = document.getElementById('checkCommentsBtn');
       if (checkCommentsBtn) {
         checkCommentsBtn.addEventListener('click', () => {
-          menuDropdown.style.display = 'none';
           openCommentSheet(null, 'Semua Komentar / Laporan');
-        });
-      }
-
-      const pinModeBtn = document.getElementById('pinModeBtn');
-      if (pinModeBtn) {
-        pinModeBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          menuDropdown.style.display = 'none';
-          setModeSemat(!modeSemat);
         });
       }
 
