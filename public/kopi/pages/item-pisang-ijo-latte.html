@@ -280,13 +280,28 @@
         const text = commentInput.value.trim();
         if (!text) return;
         commentInput.value = '';
+        const newC = {
+          slug: SLUG,
+          menu_name: MENU_NAME,
+          comment: text,
+          created_at: new Date().toISOString()
+        };
         try {
+          const lokal = getLocalComments();
+          lokal.unshift(newC);
+          localStorage.setItem(COMMENT_KEY, JSON.stringify(lokal));
+          renderComments(lokal);
+
           await supabase.from(COMMENT_TABLE).insert({
             slug: SLUG,
             menu_name: MENU_NAME,
             comment: text
           });
           loadComments();
+        } catch (err) {
+          alert('Gagal mengirim komentar: ' + err.message);
+        }
+      });
 
       const openCommentModal = document.getElementById('openCommentModal');
       const closeCommentModal = document.getElementById('closeCommentModal');
