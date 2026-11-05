@@ -190,8 +190,8 @@ function halaman(m, slug) {
       <div id="bahanWrap"></div>
 
       <!-- Modal Komentar -->
-      <div id="commentModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:100; align-items:flex-end; justify-content:center;">
-        <div style="background:var(--mori-bg); width:100%; max-width:800px; max-height:85vh; border-radius:20px 20px 0 0; padding:16px 18px 32px; display:flex; flex-direction:column; gap:12px; overflow-y:auto;">
+      <div id="commentModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:100; align-items:center; justify-content:center; padding:16px;">
+        <div style="background:var(--mori-bg); width:100%; max-width:500px; max-height:85vh; border-radius:var(--mori-radius, 16px); border:1px solid var(--mori-line); padding:20px; display:flex; flex-direction:column; gap:12px; overflow-y:auto; box-shadow:0 8px 24px rgba(0,0,0,0.15);">
           <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
             <h2 style="margin:0; font-size:13px;">Komentar / Lapor Kesalahan</h2>
             <button id="closeCommentModal" type="button" style="background:none; border:none; font-size:18px; font-weight:700; cursor:pointer; color:var(--mori-text)">✕</button>
