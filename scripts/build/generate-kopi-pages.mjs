@@ -191,16 +191,16 @@ function halaman(m, slug) {
 
       <!-- Modal Komentar -->
       <div id="commentModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:100; align-items:center; justify-content:center; padding:16px;">
-        <div style="background:var(--mori-bg); width:100%; max-width:500px; max-height:85vh; border-radius:var(--mori-radius, 16px); border:1px solid var(--mori-line); padding:20px; display:flex; flex-direction:column; gap:12px; overflow-y:auto; box-shadow:0 8px 24px rgba(0,0,0,0.15);">
+        <div style="background:var(--mori-bg); width:100%; max-width:440px; border-radius:12px; border:1px solid var(--mori-line); padding:16px; display:flex; flex-direction:column; gap:10px; box-shadow:0 8px 24px rgba(0,0,0,0.15);">
           <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-            <h2 style="margin:0; font-size:13px;">Komentar / Lapor Kesalahan</h2>
-            <button id="closeCommentModal" type="button" style="background:none; border:none; font-size:18px; font-weight:700; cursor:pointer; color:var(--mori-text)">✕</button>
+            <h2 style="margin:0; font-size:12px; font-weight:800; letter-spacing:0.5px; text-transform:uppercase;">Komentar</h2>
+            <button id="closeCommentModal" type="button" style="background:none; border:none; font-size:16px; font-weight:700; cursor:pointer; color:var(--mori-text)">✕</button>
           </div>
           <form id="commentForm" style="display:flex; flex-direction:column; gap:8px;">
-            <textarea id="commentInput" rows="3" placeholder="Tulis komentar atau jika ada resep yang salah..." required style="padding:10px 12px; font-size:12.5px; font-family:inherit; background:var(--mori-surface); border:1px solid var(--mori-accent); border-radius:var(--mori-radius, 12px); outline:none; resize:none; color:var(--mori-text)"></textarea>
-            <button type="submit" style="align-self:flex-end; padding:8px 16px; background:var(--mori-accent); color:var(--mori-bg); border:none; border-radius:var(--mori-radius, 12px); font-family:var(--mori-mono); font-size:11px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; cursor:pointer">Kirim Komentar</button>
+            <textarea id="commentInput" rows="2" placeholder="Tulis komentar atau lapor kesalahan..." required style="padding:8px 10px; font-size:12px; font-family:inherit; background:var(--mori-surface); border:1px solid var(--mori-line); border-radius:8px; outline:none; resize:none; color:var(--mori-text)"></textarea>
+            <button type="submit" style="align-self:flex-end; padding:6px 12px; background:var(--mori-accent); color:var(--mori-bg); border:none; border-radius:8px; font-family:var(--mori-mono); font-size:10px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; cursor:pointer">Kirim</button>
           </form>
-          <div id="commentList" style="display:flex; flex-direction:column; gap:8px; max-height:45vh; overflow-y:auto; border-top:1px solid var(--mori-line); padding-top:10px;"></div>
+          <div id="commentList" style="display:flex; flex-direction:column; gap:6px; max-height:35vh; overflow-y:auto; border-top:1px solid var(--mori-line); padding-top:8px;"></div>
         </div>
       </div>
       <div id="status" role="status" aria-live="polite" hidden></div>
