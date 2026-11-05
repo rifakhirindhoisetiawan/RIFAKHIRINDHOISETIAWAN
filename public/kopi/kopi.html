@@ -1551,7 +1551,13 @@
           html += '<select id="commentMenuInput" required style="padding:8px 10px;font-size:12px;border:1px solid rgba(26,25,23,0.2);border-radius:8px;outline:none;font-family:inherit;background:#fff;color:#1a1917;">';
           html += '<option value="" disabled selected>Pilih menu...</option>';
           if (menus && menus.length) {
-            menus.forEach(m => {
+            const kopiMenus = menus.filter(m => {
+              const cls = (m.cls || '').toLowerCase();
+              const name = (m.name || '').toLowerCase();
+              return cls.includes('kopi') || name.includes('latte') || name.includes('espresso') || name.includes('kopi') || name.includes('cappuccino') || name.includes('mocha') || name.includes('americano') || name.includes('vanilla') || name.includes('chocolate') || name.includes('matcha') || name.includes('ube') || name.includes('pandan') || name.includes('dolce') || name.includes('affogato') || name.includes('kolak') || name.includes('frappe') || name.includes('macchiato');
+            });
+            const listToUse = kopiMenus.length ? kopiMenus : menus;
+            listToUse.forEach(m => {
               const mName = m.name || '';
               html += '<option value="' + escHtml(mName) + '">' + escHtml(mName) + '</option>';
             });
