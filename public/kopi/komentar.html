@@ -83,13 +83,15 @@
       .btn-buka {
         background: var(--mori-accent);
         color: var(--mori-bg);
-        padding: 5px 10px;
+        width: 28px;
+        height: 28px;
         border-radius: 6px;
-        font-size: 10px;
-        font-family: var(--mori-mono);
-        text-decoration: none;
+        font-size: 14px;
         font-weight: 700;
-        display: inline-block;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
       .empty {
         text-align: center;
@@ -127,7 +129,7 @@
               html += '<tr>';
               html += '<td class="menu-col">' + menuName + '</td>';
               html += '<td>' + commentText + '<div style="font-size:9px;color:var(--mori-text-2);font-family:var(--mori-mono);margin-top:2px;">' + t + '</div></td>';
-              html += '<td class="action-col"><a href="' + linkUrl + '" class="btn-buka">Buka →</a></td>';
+              html += '<td class="action-col"><a href="' + linkUrl + '" class="btn-buka" title="Buka">→</a></td>';
               html += '</tr>';
             });
             html += '</tbody></table>';
