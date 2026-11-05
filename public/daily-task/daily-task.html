@@ -107,13 +107,54 @@
       .search-box input::placeholder {
         color: #c3c8d1;
       }
-      /* .admin-btn (tombol ⚙ di header) sudah dihapus: menu ADMIN kini
-         jadi tile sendiri di dalam grid. */
-      .search-box svg {
-        flex-shrink: 0;
-        color: #c3c8d1;
-        width: 18px;
-        height: 18px;
+      .pin-row {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 10px;
+        margin: 0 0 14px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--mori-line);
+      }
+      @media (min-width: 768px) {
+        .pin-row {
+          gap: 22px 14px;
+        }
+      }
+
+      .header-pin-btn {
+        flex: 0 0 auto;
+        width: 46px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-line);
+        border-radius: 12px;
+        color: var(--mori-text-2);
+        cursor: pointer;
+        padding: 0;
+        transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+      }
+      .header-pin-btn:active {
+        transform: translate(2px, 2px);
+      }
+      .header-pin-btn[aria-pressed="true"] {
+        background: var(--mori-text);
+        color: var(--mori-bg);
+        border-color: var(--mori-text);
+      }
+      .header-pin-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+      body.pin-mode .icon-tile-foto {
+        border: 1px dashed var(--mori-text-2) !important;
+        cursor: pointer;
+      }
+      .item.pinned .icon-tile-foto {
+        box-shadow: 0 0 0 2px var(--mori-text);
       }
 
       /* ===== MENU GRID ===== */
@@ -497,6 +538,9 @@
             oninput="renderGrid()"
           />
         </div>
+        <button class="header-pin-btn" id="headerPinBtn" type="button" aria-label="Kelola Sematan Menu" title="Kelola Sematan Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"/></svg>
+        </button>
       </div>
 
       <div class="menu-wrap">
@@ -612,38 +656,159 @@
         next();
       };
 
+      const PIN_KEY = 'daily_task_pinned_v1';
+      const PIN_TABLE = 'daily_task_pins';
+      const PIN_MIGRASI_KEY = 'daily_task_pins_migrated_v1';
+
+      function loadPins() {
+        try {
+          const raw = JSON.parse(localStorage.getItem(PIN_KEY) || '[]');
+          return Array.isArray(raw) ? raw.filter(x => typeof x === 'string') : [];
+        } catch {
+          return [];
+        }
+      }
+      function savePins(list) {
+        try {
+          localStorage.setItem(PIN_KEY, JSON.stringify(list));
+        } catch {}
+      }
+
+      let pinned = loadPins();
+      const isPinned = (name) => pinned.includes(name);
+
+      let pinServerReady = false;
+      function setServerPins(list) {
+        pinned = list;
+        pinServerReady = true;
+        savePins(list);
+        renderGrid();
+      }
+
+      async function syncPins() {
+        try {
+          const { data, error } = await supabase
+            .from(PIN_TABLE)
+            .select('label')
+            .order('dibuat', { ascending: true });
+          if (error) return;
+          const server = (data || []).map(r => r.label).filter(Boolean);
+          try {
+            if (localStorage.getItem(PIN_MIGRASI_KEY) !== '1') {
+              const lokal = loadPins();
+              const kurang = lokal.filter(l => l && !server.includes(l));
+              for (const l of kurang) {
+                try {
+                  await supabase.from(PIN_TABLE).insert({ label: l });
+                  server.push(l);
+                } catch {}
+              }
+              localStorage.setItem(PIN_MIGRASI_KEY, '1');
+            }
+          } catch {}
+          setServerPins(server);
+        } catch {}
+      }
+      syncPins();
+
+      async function pushPin(label, add) {
+        try {
+          if (add) {
+            await supabase.from(PIN_TABLE).insert({ label });
+          } else {
+            await supabase.from(PIN_TABLE).delete().eq('label', label);
+          }
+        } catch {}
+      }
+
+      let modeSemat = false;
+      const headerPinBtn = document.getElementById('headerPinBtn');
+
+      if (headerPinBtn) {
+        headerPinBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          modeSemat = !modeSemat;
+          headerPinBtn.setAttribute('aria-pressed', modeSemat ? 'true' : 'false');
+          document.body.classList.toggle('pin-mode', modeSemat);
+        });
+      }
+
       function renderGrid() {
         const q = searchInput.value.trim().toLowerCase();
-        // ADMIN selalu jadi tile pertama; ikut difilter saat mengetik.
         const adminMatch = !q || adminMenu.name.toLowerCase().includes(q);
-        const daftar = adminMatch ? [adminMenu] : [];
-        daftar.push(
-          ...periods.filter((p) => {
-            const name = (p.name || p.title || '').toLowerCase();
-            return name.includes(q);
-          })
-        );
+        const adminItem = adminMatch ? adminMenu : null;
 
-        if (daftar.length === 0) {
+        const filtered = periods.filter((p) => {
+          const name = (p.name || p.title || '').toLowerCase();
+          return name.includes(q);
+        });
+
+        const pinnedItems = pinned.map(name => filtered.find(p => (p.name || p.title) === name)).filter(Boolean);
+        const unpinnedItems = filtered.filter(p => !pinned.includes(p.name || p.title));
+
+        homeGrid.innerHTML = '';
+
+        const createItemEl = (p, isAdm = false) => {
+          const name = p.name || p.title || 'Tanpa nama';
+          const slug = p.slug || '';
+          const href = p.href || (slug ? `utility/index.html?p=${slug}` : '#');
+          const isAdmin = isAdm || slug === ADMIN_SLUG || p.isAdmin;
+          const pinnedClass = !isAdmin && isPinned(name) ? ' pinned' : '';
+
+          const a = document.createElement('a');
+          a.className = 'item active-modul' + pinnedClass;
+          a.href = href;
+          a.innerHTML = `
+            ${isAdmin ? tileAdmin() : tileFoto(slug, p.foto_url)}
+            <span>${name}</span>
+          `;
+          a.addEventListener('click', (e) => {
+            if (modeSemat && !isAdmin) {
+              e.preventDefault();
+              e.stopPropagation();
+              const akanPin = !isPinned(name);
+              if (akanPin) {
+                pinned.push(name);
+              } else {
+                pinned = pinned.filter(t => t !== name);
+              }
+              savePins(pinned);
+              renderGrid();
+              if (pinServerReady) pushPin(name, akanPin);
+            }
+          });
+          return a;
+        };
+
+        if (pinnedItems.length > 0 || (adminItem && adminMatch)) {
+          const pinRowEl = document.createElement('div');
+          pinRowEl.className = 'pin-row';
+          if (adminItem) {
+            pinRowEl.appendChild(createItemEl(adminItem, true));
+          }
+          pinnedItems.forEach(p => {
+            pinRowEl.appendChild(createItemEl(p, false));
+          });
+          homeGrid.appendChild(pinRowEl);
+
+          unpinnedItems.forEach(p => {
+            homeGrid.appendChild(createItemEl(p, false));
+          });
+        } else {
+          if (adminItem) {
+            homeGrid.appendChild(createItemEl(adminItem, true));
+          }
+          unpinnedItems.forEach(p => {
+            homeGrid.appendChild(createItemEl(p, false));
+          });
+        }
+
+        if (homeGrid.children.length === 0) {
           homeGrid.innerHTML = `<div class="empty-msg">${
             q ? 'Tidak ditemukan' : 'Belum ada menu. Buat dulu di menu ADMIN.'
           }</div>`;
-          return;
         }
-
-        homeGrid.innerHTML = daftar
-          .map((p) => {
-            const name = p.name || p.title || 'Tanpa nama';
-            const slug = p.slug || '';
-            const cls = p.cls || '';
-            const href = p.href || (slug ? `utility/index.html?p=${slug}` : '#');
-            const isAdmin = slug === ADMIN_SLUG || p.isAdmin;
-            return `<a class="item active-modul" href="${href}">
-              ${isAdmin ? tileAdmin() : tileFoto(slug, p.foto_url)}
-              <span>${name}</span>
-            </a>`;
-          })
-          .join('');
       }
 
       async function loadFromSupabase() {
