@@ -114,26 +114,25 @@
 </head>
 <body>
 <div class="wrap">
-  <input type="hidden" id="editId" />
+  <form id="form" onsubmit="return false">
+    <input type="hidden" id="editId" />
+    <div class="judul-row">
+      <input id="f_title" type="text" placeholder="Nama menu, cth: Catatan Penting" autocomplete="off" />
+      <button class="btn-add" type="button" id="btnAdd" title="Tambah menu">+</button>
+    </div>
+  </form>
+
   <div class="table-wrap" id="listWrap" style="margin-top:12px">
     <table class="menu-table">
       <thead>
         <tr>
-          <th class="c-no" style="width:40px;">NO</th>
-          <th>NAMA MENU</th>
-          <th class="c-foto">FOTO</th>
-          <th class="c-aksi" style="text-align:right;padding-right:8px;">
-            <button type="button" id="btnAdd" title="Tambah menu" style="background:var(--mori-bg);color:var(--mori-text);border:1px solid var(--mori-line);border-radius:8px;width:28px;height:28px;font-weight:800;font-size:16px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:1;">+</button>
-          </th>
+          <th class="c-no">No</th>
+          <th>Nama Menu</th>
+          <th class="c-foto">Foto</th>
+          <th class="c-aksi"></th>
         </tr>
       </thead>
       <tbody id="list">
-        <tr class="is-admin">
-          <td class="c-no"></td>
-          <td class="c-nama" colspan="3" style="padding:6px 8px;">
-            <input id="f_title" type="text" placeholder="NAMA MENU..." autocomplete="off" style="width:100%;height:32px;background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:6px;outline:none;font-family:var(--mori-mono);font-size:11px;font-weight:700;text-transform:uppercase;color:var(--mori-text);padding:0 8px;" />
-          </td>
-        </tr>
         <tr><td class="c-no"></td><td class="c-nama"><div class="empty">Memuat...</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>
       </tbody>
     </table>
@@ -247,7 +246,7 @@
   function render(){
     const q=searchEl.value.trim().toLowerCase();
     const filtered=all.filter(m=>!q||(m.title||'').toLowerCase().includes(q));
-    const rows = filtered;
+    const rows = (q ? [] : [barisAdmin]).concat(filtered);
     if(!rows.length){ listEl.innerHTML=barisKosong(all.length?'Tidak ada yang cocok':'Belum ada menu. Tambah di atas.'); return; }
     listEl.innerHTML=rows.map((m,i)=>{
       const url=m.foto_url?fotoBaru(m.foto_url):'';
@@ -262,7 +261,7 @@
       }
       const aksi = isAdmin
         ? '<button type="button" class="ico" data-foto="'+m.id+'" title="Ganti foto ADMIN">↑</button>'
-        : '<button type="button" class="ico" data-foto="'+m.id+'" title="Upload foto">↑</button><button type="button" class="ico ico-danger" data-del="'+m.id+'" title="Hapus">✕</button>';
+        : '<button type="button" class="ico" data-foto="'+m.id+'" title="Upload foto">↑</button><button type="button" class="ico" data-edit="'+m.id+'" title="Edit">✎</button><button type="button" class="ico ico-danger" data-del="'+m.id+'" title="Hapus">✕</button>';
       return '<tr data-id="'+m.id+'"'+(isAdmin?' class="is-admin"':'')+'><td class="c-no">'+(i+1)+'</td><td class="c-nama"><div class="nama">'+(m.title||'')+'</div></td><td class="c-foto">'+thumb+'</td><td class="c-aksi"><div class="acts">'+aksi+'</div></td></tr>';
     }).join('');
     const idDari = v => (v === AKUN_TILE ? AKUN_TILE : parseInt(v, 10));
