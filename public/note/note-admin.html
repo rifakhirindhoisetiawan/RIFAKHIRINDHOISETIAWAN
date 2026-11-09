@@ -178,6 +178,7 @@
   const searchEl = document.getElementById('search');
   const editId = document.getElementById('editId');
   const f_title = document.getElementById('f_title');
+  const f_category = document.getElementById('f_category');
   const btnAdd = document.getElementById('btnAdd');
   const fotoInput = document.getElementById('fotoInput');
   const fotoHint = document.getElementById('fotoHint');
@@ -297,11 +298,13 @@
   function resetForm(){ editId.value=''; f_title.value=''; f_category.value=''; setModeAdd(); f_title.focus(); }
 
   btnAdd.addEventListener('click', async()=>{
-    const title=f_title.value.trim(); if(!title){ setFotoHint('Nama menu wajib diisi'); f_title.focus(); return; }
+    const title=f_title.value.trim();
+    const category=(f_category.value||'').trim().toUpperCase()||'UMUM';
+    if(!title){ setFotoHint('Nama menu wajib diisi'); f_title.focus(); return; }
     const slug=slugify(title);
     let res;
-    if(editId.value) res=await supabase.from(TABLE).update({title,slug}).eq('id',parseInt(editId.value,10));
-    else res=await supabase.from(TABLE).insert([{title,slug,sort_order:all.length+1}]);
+    if(editId.value) res=await supabase.from(TABLE).update({title,slug,category}).eq('id',parseInt(editId.value,10));
+    else res=await supabase.from(TABLE).insert([{title,slug,category,sort_order:all.length+1}]);
     if(res.error){ setFotoHint('Gagal simpan: '+(res.error.message||'error')); return; }
     resetForm(); await load();
   });
