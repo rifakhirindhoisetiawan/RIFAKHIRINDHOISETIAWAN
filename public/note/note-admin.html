@@ -270,9 +270,9 @@
              '<td class="c-no">'+(i+1)+'</td>' +
              '<td class="c-nama"><div class="nama">'+(m.title||'')+'</div></td>' +
              '<td style="font-family:var(--mori-mono); font-size:10px; font-weight:700; text-transform:uppercase; color:var(--mori-text-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">'+catLabel+'</td>' +
-             '<td class="c-foto">'+	humb+'</td>' +
+             '<td class="c-foto">'+thumb+'</td>' +
              '<td class="c-aksi"><div class="acts">'+aksi+'</div></td>' +
-             '</tr>';="acts">'+aksi+'</div></td></tr>';
+             '</tr>';
     }).join('');
     const idDari = v => (v === AKUN_TILE ? AKUN_TILE : parseInt(v, 10));
     listEl.querySelectorAll('[data-foto]').forEach(b=>b.addEventListener('click',()=>pilihFoto(idDari(b.dataset.foto))));
