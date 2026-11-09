@@ -687,15 +687,38 @@
         return comments;
       }
 
+      // Popup reminder (Mori style)
+      const notifPopup = document.createElement('div');
+      notifPopup.id = 'notifPopup';
+      notifPopup.style.cssText = 'display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:1000; align-items:center; justify-content:center; padding:16px;';
+      notifPopup.innerHTML = '<div style="background:#fffbf2; border-radius:8px; padding:20px; max-width:340px; width:90%; box-shadow:0 10px 30px rgba(0,0,0,0.25); border:1px solid rgba(26,25,23,0.14); text-align:center;">' +
+        '<img src="public/kopi/image-index.jpg" alt="Menu Kopi" style="width:100%; height:160px; object-fit:cover; border-radius:6px; margin-bottom:14px; border:1px solid rgba(26,25,23,0.1);" />' +
+        '<div style="font-size:16px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:#1a1917; margin-bottom:6px; font-family:ui-monospace,monospace;">Menu Kopi</div>' +
+        '<div style="font-size:12px; color:#6e6a64; margin-bottom:16px; line-height:1.5;">Ada yang belum diselesaikan di Kopi. Cek catatan & komentar.</div>' +
+        '<div style="display:flex; gap:8px; justify-content:center;">' +
+          '<button id="notifPopupClose" type="button" style="padding:8px 16px; background:#f7f3e9; color:#1a1917; border:1px solid rgba(26,25,23,0.14); border-radius:4px; cursor:pointer; font-weight:600; font-size:13px;">Tutup</button>' +
+          '<a href="public/kopi/kopi.html" style="padding:8px 16px; background:#1a1917; color:#fffbf2; border:none; border-radius:4px; cursor:pointer; font-weight:600; font-size:13px; text-decoration:none; display:inline-flex; align-items:center;">Buka Kopi</a>' +
+        '</div>' +
+      '</div>';
+      document.body.appendChild(notifPopup);
+
       if (notifBtn) {
         notifBtn.addEventListener('click', async (e) => {
           e.preventDefault();
           const comments = await fetchKopiComments();
           if (comments.length) setLastSeen(comments[0].created_at);
           updateNotifBadge();
-          window.location.href = 'public/kopi/kopi.html';
+          notifPopup.style.display = 'flex';
         });
       }
+      document.addEventListener('click', (e) => {
+        if (notifPopup.style.display === 'flex' && !notifPopup.querySelector('div').contains(e.target)) {
+          notifPopup.style.display = 'none';
+        }
+      });
+      const closeBtn = document.getElementById('notifPopupClose');
+      if (closeBtn) closeBtn.addEventListener('click', () => { notifPopup.style.display = 'none'; });
+
 
       updateNotifBadge();
       setInterval(updateNotifBadge, 60000);
