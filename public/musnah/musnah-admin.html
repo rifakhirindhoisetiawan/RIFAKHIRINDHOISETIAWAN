@@ -80,17 +80,13 @@
     border-radius: 12px;
     -webkit-overflow-scrolling: touch;
     background: var(--mori-surface);
-    scrollbar-width: auto;
-    -ms-overflow-style: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
   .table-wrap::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-    display: block;
-  }
-  .table-wrap::-webkit-scrollbar-thumb {
-    background: var(--mori-line);
-    border-radius: 3px;
+    width: 0;
+    height: 0;
+    display: none;
   }
     .menu-table{width:100%;min-width:680px;border-collapse:collapse;font-size:12px;table-layout:fixed;border:0;background:var(--mori-surface);overflow:hidden}
     .c-no{width:36px;text-align:center;padding-left:2px !important;padding-right:2px !important;font-family:var(--mori-mono);color:var(--mori-text-2);font-size:11px}
