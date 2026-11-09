@@ -123,7 +123,7 @@
             data.forEach(d => {
               const menuName = d.menu_name || 'UMUM';
               const commentText = d.comment || '';
-              const t = new Date(d.created_at || Date.now()).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
+              const t = new Date(d.created_at || Date.now()).toLocaleDateString('id-ID', { dateStyle: 'short' });
               const slug = d.slug || slugify(menuName);
               const linkUrl = 'pages/item-' + slug + '.html';
               html += '<tr>';

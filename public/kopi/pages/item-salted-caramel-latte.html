@@ -253,7 +253,7 @@
           return true;
         });
         commentList.innerHTML = uniqList.map((c, idx) => {
-          const t = new Date(c.created_at || Date.now()).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
+          const t = new Date(c.created_at || Date.now()).toLocaleDateString('id-ID', { dateStyle: 'short' });
           return '<div style="background:var(--mori-surface);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:5px;">' +
             '<div style="font-size:13px;color:var(--mori-text);word-break:break-word;">' + escHtml(c.content) + '</div>' +
             '<div style="display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--mori-text-2);font-family:var(--mori-mono);">' +
