@@ -702,7 +702,7 @@
           '<div style="flex:1; min-width:0; text-align:left;">' +
             '<div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; color:#1a1917; font-family:ui-monospace,monospace;">' + it.title + '</div>' +
           '</div>' +
-          '<a href="' + it.link + '" style="padding:6px 12px; background:#1a1917; color:#fffbf2; border:none; border-radius:4px; cursor:pointer; font-weight:600; font-size:12px; text-decoration:none; display:inline-flex; align-items:center; flex-shrink:0;">Buka</a>' +
+          '<a href="' + it.link + '" title="Buka" aria-label="Buka" style="width:28px; height:28px; padding:0; background:#1a1917; color:#fffbf2; border:none; border-radius:4px; cursor:pointer; font-weight:600; font-size:10px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg></a>' +
         '</div>'
       ).join('');
       notifPopup.innerHTML = itemsHtml;
