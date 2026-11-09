@@ -114,9 +114,9 @@
     .menu-table thead th{
       position:sticky;top:0;z-index:1;
       background:var(--mori-surface);color:var(--mori-text-2);
-      font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;
-      font-size:11px;font-weight:800;
-      letter-spacing:0.6px;text-transform:uppercase;text-align:left;
+      font-family:var(--mori-mono);
+      font-size:11px;font-weight:700;
+      letter-spacing:0.5px;text-transform:uppercase;text-align:left;
       height:34px;padding:0 12px;border-bottom:1px solid var(--mori-line);
       white-space:nowrap;
     }
@@ -126,12 +126,13 @@
     }
     .menu-table tbody tr:hover td{background:#faf6ea}
     .menu-table tbody tr:last-child td{border-bottom:0}
-.c-no{width:30px;text-align:center;font-family:var(--mori-mono);color:var(--mori-text-2);font-size:11px}
+.c-no{width:30px;text-align:center;font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var(--mori-text-2);font-size:11px;font-weight:700}
     /* Nama boleh panjang: dipotong ellipsis, bukan memaksa tabel melebar */
     .c-nama{min-width:0;overflow:hidden}
     .menu-table .c-nama .nama{
-      font-family:var(--mori-mono);color:var(--mori-text);font-weight:700;
-      font-size:11px;letter-spacing:.3px;text-transform:uppercase;
+      font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;
+      color:var(--mori-text);font-weight:700;
+      font-size:13px;letter-spacing:0;text-transform:none;
       white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
     }
 .c-foto{width:52px}
