@@ -252,7 +252,10 @@
     const rows = (q ? [] : [barisAdmin]).concat(filtered);
     if(!rows.length){ listEl.innerHTML=barisKosong(all.length?'Tidak ada yang cocok':'Belum ada menu. Tambah di atas.'); return; }
     listEl.innerHTML=rows.map((m,i)=>{
-      const url=m.foto_url?fotoBaru(m.foto_url):'';
+      const isKopi = (m.category || '').toUpperCase() === 'KOPI' || (m.title || '').toUpperCase().includes('KOPI') || (m.title || '').toUpperCase().includes('KOPI & RESEP');
+      const defaultUrl = isKopi ? '../kopi/image-index.jpg' : '';
+      const rawUrl = m.foto_url || defaultUrl;
+      const url=rawUrl?fotoBaru(rawUrl):'';
       const isAdmin = !!m.isAdmin;
       let thumb;
       if (isAdmin) {
