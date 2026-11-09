@@ -396,8 +396,11 @@
             }
 
             const href = `note-view.html?id=${m.id}`;
-            const tileContent = m.foto_url
-              ? `<img src="${m.foto_url}" alt="" loading="lazy" decoding="async" />`
+            const isKopi = (m.category || '').toUpperCase() === 'KOPI' || (m.title || '').toUpperCase().includes('KOPI');
+            const defaultFoto = isKopi ? '../kopi/image-index.jpg' : '';
+            const fotoUrl = m.foto_url || defaultFoto;
+            const tileContent = fotoUrl
+              ? `<img src="${fotoUrl}" alt="" loading="lazy" decoding="async" />`
               : `<div class="tanpa-ikon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -411,7 +414,7 @@
             const pinnedClass = isPinned(m.title) ? ' pinned' : '';
 
             return `<a class="item${pinnedClass}" href="${href}" data-title="${encodeURIComponent(m.title)}">
-              <div class="icon-tile-foto ${m.foto_url ? '' : 'tanpa-foto'}">
+              <div class="icon-tile-foto ${fotoUrl ? '' : 'tanpa-foto'}">
                 ${tileContent}
               </div>
               <span>${m.title}</span>
