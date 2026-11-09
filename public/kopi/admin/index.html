@@ -2145,7 +2145,7 @@
       html += '</div>';
     });
     
-    if (m.catatan) html += '<div class="sheet-section-new"><div class="sheet-section-title-new">Catatan</div><div class="sheet-note-new">' + esc(m.catatan) + '</div></div>';
+    if (m.catatan) html += '<div class="sheet-section-new"><div class="sheet-section-title-new">Catatan</div><div class="sheet-note-new" style="text-transform:uppercase;">' + esc(m.catatan) + '</div></div>';
     if (!bahans.length && !m.catatan) html += '<div class="sheet-empty-new">Belum ada data bahan.</div>';
     
     html += '<button class="sheet-close-btn-main-new" id="sh_close_bottom" type="button">Tutup</button>';
