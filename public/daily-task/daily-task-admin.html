@@ -1,1108 +1,224 @@
 <!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin — Daily Task Supabase</title>
-  <!-- Font sama dengan Admin Stok Opname (Inter + JetBrains Mono) supaya
-       ikon tombol dan teks mono tampil identik. -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{max-width:100%;overflow-x:hidden}
-    html,body{width:100%;height:100%;background:#ffffff}
-    body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;background:#ffffff;color:#1a1917;min-height:100vh;overflow-x:hidden}
-    ::-webkit-scrollbar{width:0;height:0}
-    *{scrollbar-width:none;-ms-overflow-style:none}
-    .wrap{width:100%;max-width:800px;min-height:100vh;margin:0 auto;background:var(--mori-bg);padding:12px 18px 40px;min-width:0;box-sizing:border-box}
-    .grid{display:grid;grid-template-columns:1fr;gap:20px;max-width:100%}
-    .card{background:transparent;border:none;padding:0;max-width:100%;min-width:0}
-    .section-label{font-size:11px;font-weight:800;color:#9aa0ab;letter-spacing:0.6px;text-transform:uppercase;margin:4px 0 14px}
-    .form{display:grid;gap:8px;max-width:100%}
-    .form label{font-size:10px;font-weight:700;color:#374151;display:block;min-width:0;max-width:100%;line-height:1.2}
-    .form input,.form select{display:block;width:100%;max-width:100%;min-width:0;margin-top:3px;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;color:#111827;background:#fff;outline:none;font-family:inherit}
-    .form input:focus,.form select:focus{border-color:#6366f1;box-shadow: none}
-    .form input::placeholder{color:#9ca3af;font-size:12px}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:100%}
-    .row>*{min-width:0}
-    .btn-save-icon{width:100%;height:44px;border-radius:10px;border:none;background:#6366f1;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0;transition:all .15s ease;font-size:14px;font-weight:700;padding:0 16px;font-family:inherit}
-    .btn-save-icon:active{opacity:.85;transform:scale(.93)}
-    .btn-save-icon:disabled{opacity:.6;cursor:not-allowed;transform:none}
-    .btn{padding:10px 16px;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;font-family:inherit}
-    .btn-ghost{background:#eef2ff;color:#4f46e5;border:1px solid #c7d2fe}
-    .btn-danger{background:#fef2f2;color:#ef4444;border:1px solid #fecaca}
-    .btn-small{padding:0;width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center}
-    .form-table{width:100%;border:1px solid #c7d2fe;border-radius:10px;overflow:hidden;background:#fff}
-    .form-table .tr{display:flex;align-items:stretch;border-bottom:1px solid #e5e7eb;min-height:34px}
-    .form-table .tr:last-child{border-bottom:none}
-    .form-table .th{min-width:70px;display:flex;align-items:center;justify-content:center;padding:0 8px;font-size:9px;font-weight:800;color:#4f46e5;background:#eef2ff;border-right:1px solid #e5e7eb;text-align:left;letter-spacing:0.4px;text-transform:uppercase}
-    .form-table .td{flex:1;display:flex;align-items:center;padding:4px 8px}
-    .form-table .td input{width:100%;margin:0 !important;padding:8px 10px;border:1px solid transparent;border-radius:6px;font-size:12px;font-weight:600;color:#111827;background:transparent;outline:none;font-family:inherit;line-height:1.2}
-    .form-table .td input:focus{border-color:#6366f1;background:#fff;box-shadow: none}
-    .empty{text-align:center;color:#9aa0ab;font-size:13px;font-weight:600;padding:40px 0}
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+      name="viewport"
+    />
+    <title>Template Admin - Stok Opname</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --text: #1f2937;
+        --muted: #9ca3af;
+        --line: #e5e7eb;
+        --line-2: #d9dde3;
+        --surface: #f3f4f6;
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --soft: #eef2ff;
+        --soft-2: #c7d2fe;
+        --danger: #ef4444;
+        --row-h: 36px;
+      }
 
-    /* ============================================================
-       TEMA MORI — override di atas, logika JS tidak disentuh.
-       Palet dari public/mori/css/variables.css:
-       bg #fffbf2 · surface #f7f3e9 · primary #1a1917 · text-secondary #6e6a64
-       Gaya: sharp (radius 0), border hitam solid, shadow offset 4px.
-       CATATAN: beberapa elemen punya style inline indigo
-       (#6366f1/#eef2ff/#c7d2fe) -> override di bawah pakai !important.
-       ============================================================ */
-    :root{
-      --mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;
-      --mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;
-      --mori-mono:"JetBrains Mono",ui-monospace,monospace;
-    }
-    html,body{background:var(--mori-bg) !important}
-    body{
-      font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;
-      background:var(--mori-bg) !important;color:var(--mori-text);
-      -webkit-font-smoothing:antialiased;
-      padding:14px 18px 40px;
-      padding-top:max(14px,env(safe-area-inset-top));
-    }
-    .wrap{background:var(--mori-bg) !important;padding:0 !important;max-width:960px;margin:0 auto;}
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    .section-label{
-      font-family:var(--mori-mono);font-size:10px;font-weight:700;
-      color:var(--mori-text);letter-spacing:1.4px;
-    }
+      html,
+      body {
+        min-height: 100%;
+        background: #ffffff;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
 
-    /* ===== TOMBOL SIMPAN / BATAL ===== */
-    .btn-save-icon{
-      border-radius:12px !important;border:1px solid var(--mori-line) !important;
-      font-family:var(--mori-mono);font-weight:700;
-      letter-spacing:1px;text-transform:uppercase;font-size:12px;
-      transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
-    }
-    .btn-save-icon:active{opacity:1;transform:translate(2px,2px)}
+      html::-webkit-scrollbar,
+      body::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+      }
 
-    /* ===== DAFTAR MENU: tabel, sama gaya tabel "Foto Menu SO" di
-         Admin Stok Opname (No | Nama Menu | Foto | Aksi) ===== */
-    .table-wrap{
-      border:1px solid var(--mori-line);border-radius:10px;background:var(--mori-surface);
-      overflow-x:auto;-webkit-overflow-scrolling:touch;
-      scrollbar-width:thin;
-    }
-    /* ===== SEARCH ===== */
-    .search-wrapper{
-      display:flex;align-items:center;gap:10px;width:100%;margin:12px 0 0;
-    }
-    .search-box {
-      flex:1;display:flex;align-items:center;gap:8px;min-width:0;
-      border: 1px solid var(--mori-line);border-radius:12px !important;
-      background:var(--mori-surface) !important;color:var(--mori-text);
-      padding:10px 14px;font-size:14px;
-      transition:box-shadow .2s ease;
-    }
-    .search-box:focus-within{background:#fffdf7 !important;box-shadow: none}
-    .search-box svg{flex-shrink:0;color:var(--mori-text-2) !important;width:18px;height:18px}
-    .search-box input{
-      border:none;background:transparent;outline:none;width:100%;font-size:14px;
-      color:var(--mori-text) !important;font-family:inherit;min-width:0;
-      -webkit-appearance:none;appearance:none;border-radius:0;
-    }
-    .search-box input::placeholder{color:var(--mori-text-2) !important}
-    /* Scrollbar tabel disembunyikan, sama seperti Admin Stok Opname
-       (halaman ini juga sudah menyembunyikan scrollbar global di atas). */
-    .menu-table{
-      width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;
-    }
-    .menu-table thead th{
-      position:sticky;top:0;z-index:1;
-      background:var(--mori-surface);color:var(--mori-text);
-      font-family:var(--mori-mono);font-size:11px;font-weight:700;
-      letter-spacing:.5px;text-transform:uppercase;text-align:left;
-      height:34px;padding:0 12px;border-bottom:1px solid var(--mori-line);
-      white-space:nowrap;
-    }
-    .menu-table tbody td{
-      height:44px;padding:0 10px;border-bottom:1px solid var(--mori-line);
-      vertical-align:middle;
-    }
-    .menu-table tbody tr:hover td{background:#faf6ea}
-    .menu-table tbody tr:last-child td{border-bottom:0}
-.c-no{width:30px;text-align:center;font-family:var(--mori-mono);color:var(--mori-text-2);font-size:11px}
-    /* Nama boleh panjang: dipotong ellipsis, bukan memaksa tabel melebar */
-    .c-nama{min-width:0;overflow:hidden}
-    .menu-table .c-nama .nama{
-      font-family:var(--mori-mono);color:var(--mori-text);font-weight:700;
-      font-size:11px;letter-spacing:.3px;text-transform:uppercase;
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-    }
-.c-foto{width:52px}
-    /* kolom aksi melebar karena ada 3 tombol (sama seperti Admin Stok Opname) */
-    .c-aksi{width:148px}
-    .c-aksi-k{width:52px}
+      body {
+        font-family:
+          "Inter",
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        color: var(--text);
+        min-height: 100vh;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 14px 18px 40px;
+        padding-top: max(14px, env(safe-area-inset-top));
+      }
 
-    /* ===== KEGIATAN (section yang muncul setelah menu diklik) =====
-       Pola sama dengan tabel barang Admin Stok Opname: section tersembunyi
-       sampai menu dipilih, baris menu yang aktif diberi .on */
-    .sec{margin-top:18px}
-    .sec[hidden]{display:none}
-    .menu-table tbody tr.pilih{cursor:pointer}
-    .menu-table tbody tr.pilih:active td{background:#efe9da}
-    .menu-table tbody tr.on td{background:#f2eee2;font-weight:700}
-    .menu-table tbody tr.on .c-nama .nama{color:var(--mori-text)}
+      .section-label {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--muted);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        margin: 4px 0 14px;
+      }
 
-    /* Baris tambah kegiatan: baris terakhir di dalam tabel */
-    .c-teks{width:auto}
-    .menu-table tbody tr.tambah td{background:var(--mori-surface)}
-    .menu-table tbody tr.tambah .c-no::after{content:'+';color:var(--mori-text-2)}
-    .menu-table tbody tr.tambah input{
-      width:100%;padding:9px 10px;font-size:12px;font-family:inherit;
-      color:var(--mori-text);background:var(--mori-bg);
-      border:1px solid var(--mori-line);border-radius:0;outline:none;
-      transition:box-shadow .2s ease;
-    }
-    .menu-table tbody tr.tambah input:focus{background:#fffdf7;box-shadow: none}
-    .menu-table tbody tr.tambah input::placeholder{color:var(--mori-text-2)}
+      .sec + .sec {
+        margin-top: 26px;
+      }
 
-    /* Thumbnail kecil 38x38, persis seperti .c-foto .thumb di stock-admin */
-    .c-foto .thumb{
-      width:38px;height:38px;display:block;cursor:default;
-      border:1px solid var(--mori-line);border-radius:0;
-      background:var(--mori-surface);object-fit:cover;
-    }
-    .c-foto .thumb img{filter:saturate(.4) brightness(1.04)}
-    /* Baris ADMIN: thumbnail hitam + ikon upload (sama seperti tile ADMIN
-       STOCK OPNAME yang tidak pakai foto sebagai bawaan) */
-    .c-foto .thumb.thumb-admin{
-      display:flex;align-items:center;justify-content:center;
-      background:var(--mori-accent);
-    }
-    .c-foto .thumb.thumb-admin svg{width:18px;height:18px;color:var(--mori-bg)}
-    .menu-table tbody tr.is-admin td{background:#faf6ea}
-    .menu-table tbody tr.is-admin .c-nama .nama{color:var(--mori-accent)}
-    .c-foto .kosong{
-      font-family:var(--mori-mono);font-size:11px;font-weight:700;color:var(--mori-text-2);
-    }
-    /* Foto tidak ada -> shimmer krem */
-    .thumb.tanpa-foto,.c-foto .tanpa-foto{
-      background:var(--mori-surface) !important;
-      background-image:linear-gradient(90deg,#f2eee2 25%,#e8e2d2 50%,#f2eee2 75%) !important;
-      background-size:200% 100%;
-      animation:dt-shimmer 1.4s infinite;
-    }
-    @keyframes dt-shimmer{
-      0%{background-position:200% 0}
-      100%{background-position:-200% 0}
-    }
-    /* Foto sedang diunggah */
-    .c-foto .thumb.sibuk{
-      background:var(--mori-surface) !important;
-      background-image:linear-gradient(90deg,#f2eee2 25%,#e8e2d2 50%,#f2eee2 75%) !important;
-      background-size:200% 100%;animation:dt-shimmer 1.4s infinite;
-    }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+      }
 
-    /* .acts: nilai sama persis dengan Admin Stok Opname (line 450) */
-    .acts{display:flex;gap:6px;justify-content:flex-end}
+      .count {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
 
-    /* Catatan hasil upload foto / sync. Default disembunyikan; pesan error
-       muncul sebentar lalu hilang sendiri, jadi tidak nempel di bawah tabel. */
-    .foto-hint{
-      margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;
-      letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger);
-      border-left:3px solid var(--mori-danger);padding:6px 8px;background:#fdf1f1;
-    }
-    .foto-hint[hidden]{display:none}
-    .foto-hint.sembunyi{opacity:0;transition:opacity .4s ease}
-    /* Foto sedang diunggah: kotak krem polos tanpa motif */
-    .c-foto .thumb.sibuk{background:var(--mori-surface) !important}
+      input {
+        width: 100%;
+        min-width: 0;
+        height: var(--row-h);
+        padding: 0 12px;
+        font: inherit;
+        font-size: 13px;
+        color: var(--text);
+        background: #f9f9f9;
+        border: none;
+        border-radius: 10px;
+        text-transform: uppercase;
+      }
 
-    /* ===== TOMBOL EDIT / HAPUS DI TABEL =====
-       Kotak identik 32x32 + border sama, jadi tidak meleset 1px. */
-.btn,.btn-ghost,.btn-danger{
-       border-radius:0 !important;
-       transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
-     }
-    /* Tombol hapus tetap merah, upload/edit tetap hitam ( Admin Stok Opname) */
-    .btn-danger{
-      background:var(--mori-danger) !important;color:#fff !important;
-      border-color:var(--mori-danger) !important;
-    }
-    /* ===== TOMBOL DI TABEL: salinan .ico dari Admin Stok Opname ===== */
-    .ico{
-      width:32px !important;height:32px !important;flex:0 0 32px !important;
-      min-height:32px !important;max-height:32px !important;aspect-ratio:auto !important;
-      padding:0 !important;margin:0 !important;
-      display:flex !important;align-items:center !important;justify-content:center !important;
-      font-family:inherit;font-size:14px;font-weight:800;line-height:1;
-      color:var(--mori-bg);background:var(--mori-accent);
-      border:1px solid var(--mori-line);border-radius:6px;
-      box-shadow: none;
-      cursor:pointer;flex-shrink:0;outline:none;
-      transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
-    }
-    .ico svg{width:14px;height:14px;flex:0 0 auto;display:block}
-    .ico:active{
-      opacity:1;transform:translate(2px,2px);box-shadow:none;
-    }
-    /* tombol hapus tetap merah, tombol upload/edit tetap hitam */
-    .ico-danger{
-      background:var(--mori-danger);border-color:var(--mori-danger);color:#fff;
-      box-shadow: none;
-    }
-    .ico-danger:active{box-shadow:none}
-    .btn-small svg{width:14px !important;height:14px !important;flex:0 0 auto !important;display:block !important}
-    .btn-small:active{transform:translate(2px,2px);box-shadow:none !important}
+      input[type="number"] {
+        text-transform: none;
+      }
 
-    /* ===== BARIS JUDUL: input + tombol "+" (ala Admin Stok Opname) =====
-       Form: Judul [...............] [+]   → tombol + di kanan atas,
-       sama seperti tombol Tambah Menu di Admin Stok Opname. Saat mode
-       edit tombolnya berubah jadi ✓ (Simpan perubahan). */
-    .judul-row {
-      display: flex;
-      align-items: stretch;
-      gap: 8px;
-    }
-    .judul-row #f_title {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-    .btn-add {
-      flex: 0 0 44px;
-      width: 44px;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: inherit;
-      font-size: 22px;
-      font-weight: 700;
-      line-height: 1;
-      color: var(--mori-bg);
-      background: var(--mori-accent);
-      border: 1px solid var(--mori-line);
-      border-radius: 12px;
-      cursor: pointer;
-      box-shadow: none;
-      transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
-    }
-    .btn-add:active {
-      background: #33312f;
-      transform: translate(2px, 2px);
-      box-shadow: none;
-    }
-    /* Input judul: sama dengan kotak search, tinggi ikut tombol + */
-    #f_title{
-      flex:1 1 auto;min-width:0;width:auto;max-width:100%;margin:0;
-      height:44px;padding:0 14px;
-      font-family:var(--mori-mono);font-size:13px;font-weight:700;
-      letter-spacing:.4px;text-transform:uppercase;
-      color:var(--mori-text) !important;background:transparent !important;
-      border:none !important;border-radius:0 !important;
-      outline:none;
-    }
-    #f_title::placeholder{color:var(--mori-text-2) !important;letter-spacing:.4px}
-    #f_title:focus{background:#fffdf7 !important;box-shadow: none}
+      input::placeholder {
+        color: #c3c8d1;
+      }
 
-    .form label{
-      font-family:var(--mori-mono);font-size:9px;font-weight:700;
-      color:var(--mori-text) !important;letter-spacing:1px;text-transform:uppercase;
-    }
-    .form input,.form select{
-      border:1px solid var(--mori-line) !important;border-radius:12px !important;
-      background:var(--mori-bg) !important;color:var(--mori-text) !important;
-      font-family:inherit;
-    }
-    .form input:focus,.form select:focus{
-      border-color:var(--mori-line) !important;background:#fffdf7 !important;
-      box-shadow: none;
-    }
-    .form input::placeholder{color:var(--mori-text-2) !important}
+      input:focus {
+        outline: none;
+        background: #fff;
+        border-color: #888;
+      }
 
-    /* ===== TABEL FORM ===== */
-    .form-table{
-      border:1px solid var(--mori-line) !important;border-radius:12px !important;
-      background:var(--mori-bg) !important;
-      overflow:hidden;
-    }
-    .form-table .tr{border-bottom-color:var(--mori-line) !important}
-    .form-table .th{
-      background:var(--mori-surface) !important;color:var(--mori-text) !important;
-      border-right-color:var(--mori-line) !important;font-family:var(--mori-mono);
-    }
-    .form-table .td input{
-      border-radius:0;font-family:inherit;color:var(--mori-text) !important;
-    }
-    .form-table .td input:focus{
-      border-color:var(--mori-line) !important;background:#fffdf7 !important;
-      box-shadow: none;
-    }
+      button {
+        font-family: inherit;
+        cursor: pointer;
+      }
 
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        height: var(--row-h);
+        padding: 0 14px;
+        background: var(--surface);
+        color: var(--text);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+        transition:
+          background 0.2s ease,
+          border-color 0.2s ease;
+      }
 
-    .empty{
-      font-family:var(--mori-mono);font-size:11px;font-weight:700;
-      color:var(--mori-text-2);letter-spacing:1px;text-transform:uppercase;
-    }
-  /* ===== MODAL PASSWORD HAPUS (sama seperti Admin Stok Opname) =====
-       Pakai modal sendiri, bukan confirm() bawaan: di WebView/PWA
-       confirm/prompt sering dinonaktifkan sehingga popup tak muncul. */
-    .pw-bg{
-      display:none;position:fixed;left:0;right:0;top:0;bottom:0;z-index:200;
-      background:rgba(26,25,23,.45);align-items:center;justify-content:center;
-      padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));
-      overscroll-behavior:contain;
-    }
-    .pw-bg.open{display:flex}
-    html.pw-open{overflow:hidden;overscroll-behavior:none}
-    .pw-card{
-      width:100%;max-width:360px;margin:auto;max-height:100%;overflow-y:auto;
-      background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:0;
-      padding:18px;box-shadow: none;overscroll-behavior:contain;
-    }
-    .pw-title{
-      font-family:var(--mori-mono);font-size:13px;font-weight:700;
-      letter-spacing:1.2px;text-transform:uppercase;color:var(--mori-text);
-      margin-bottom:8px;
-    }
-    .pw-msg{font-size:12px;color:var(--mori-text-2);line-height:1.5;margin-bottom:12px}
-    .pw-input{
-      width:100%;height:auto;padding:11px 12px;
-      font-family:var(--mori-mono);font-size:15px;letter-spacing:2px;text-transform:none;
-      color:var(--mori-text);background:var(--mori-surface);
-      border:1px solid var(--mori-line);border-radius:0;outline:none;
-    }
-    .pw-input:focus{background:#fffdf7;box-shadow: none}
-    .pw-error{
-      margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;
-      letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger);
-    }
-    .pw-error[hidden]{display:none}
-    .pw-actions{display:flex;gap:8px;margin-top:16px}
-    .pw-btn{
-      flex:1;padding:12px;border:1px solid var(--mori-line);border-radius:0;
-      background:var(--mori-surface);color:var(--mori-text);
-      font-family:var(--mori-mono);font-size:11px;font-weight:700;
-      letter-spacing:1px;text-transform:uppercase;cursor:pointer;
-    }
-    .pw-btn:active{transform:translate(2px,2px)}
-    .pw-btn-danger{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff}
-  </style>
-</head>
-<body>
-<div class="wrap">
-  <!-- Satu kolom, urutan sama seperti Admin Stok Opname:
-       [input + "+"] -> tabel Daftar Menu -> search. -->
-  <div class="grid" style="grid-template-columns:1fr;gap:12px">
-    <div class="card">
-      <div class="table-wrap menu-foto-wrap" id="listWrap">
-        <table class="menu-table">
-          <thead>
-            <tr>
-              <th class="c-no">No</th>
-              <th>Nama Menu</th>
-              <th class="c-foto">Foto</th>
-              <th class="c-aksi"></th>
-            </tr>
-          </thead>
-          <tbody class="tulis-body">
-            <tr>
-              <td class="tulis" colspan="3" style="padding:8px 12px;background:var(--mori-surface);border-bottom:1px solid var(--mori-line);">
-                <div class="tulis-in" style="display:flex;align-items:center;gap:8px;width:100%;">
-                  <input
-                    type="text"
-                    id="f_title"
-                    placeholder="NAMA MENU"
-                    autocomplete="off"
-                    aria-label="Nama menu"
-                    style="flex:1;background:transparent;border:none;outline:none;font-size:12px;font-family:var(--mori-mono);text-transform:uppercase;color:var(--mori-text);"
-                  />
-                  <span class="mode" id="mMode"></span>
-                </div>
-              </td>
-              <td class="c-aksi" style="padding:8px 12px;background:var(--mori-surface);border-bottom:1px solid var(--mori-line);">
-                <div class="acts" style="display:flex;align-items:center;justify-content:center;">
-                  <button class="btn" type="button" id="btnAdd" title="Tambah menu" aria-label="Tambah menu" style="width:32px;height:32px;padding:0;display:flex;align-items:center;justify-content:center;background:var(--mori-surface);color:var(--mori-text);border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;font-weight:700;font-size:16px;">+</button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-          <tbody id="list">
-            <tr><td class="c-no"></td><td class="c-nama"><div class="empty">Memuat...</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="foto-hint" id="fotoHint" hidden></div>
+      .btn:hover {
+        background: var(--line);
+      }
 
-      <!-- Search (baris pencarian di bawah tabel seperti stok-opname) -->
-      <div class="table-wrap" style="margin-top:12px;">
-        <table class="menu-table">
-          <tbody class="cari-body">
-            <tr>
-              <td class="cari-sel" colspan="4" style="padding:6px 12px;background:var(--mori-surface);">
-                <div class="cari-dalam" style="display:flex;align-items:center;gap:8px;">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--mori-text-2)"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-                  <input
-                    class="cari"
-                    type="search"
-                    id="search"
-                    placeholder="Cari menu..."
-                    autocomplete="off"
-                    aria-label="Cari menu"
-                    style="width:100%;border:none;background:transparent;outline:none;font-size:12px;font-family:var(--mori-mono);text-transform:uppercase;color:var(--mori-text);"
-                  />
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      .btn-primary {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
 
-      <!-- Tabel kegiatan: baru muncul setelah baris menu diklik, sama
-           seperti tabel barang di Admin Stok Opname. -->
-      <section class="sec" id="kegiatanSec" hidden>
-        <div class="table-wrap" id="kegiatanWrap" style="margin-top:12px">
-          <table class="menu-table">
-            <thead>
-              <tr>
-                <th class="c-no">No</th>
-                <th>Kegiatan</th>
-                <th class="c-aksi-k"></th>
-              </tr>
-            </thead>
-            <tbody id="kegiatanBody"></tbody>
-          </table>
-        </div>
-      </section>
+      .btn-primary:hover {
+        background: var(--primary-dark);
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        overflow-y: hidden;
+        border: none;
+        border-radius: 10px;
+        -webkit-overflow-scrolling: touch;
+        background: #fff;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: #f9f9f9;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        text-align: left;
+        height: 34px;
+        padding: 0 12px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+
+      tbody td {
+        height: 44px;
+        padding: 0 10px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="section-label">Template Admin Panel</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:50px">No</th>
+            <th>Nama Item</th>
+            <th style="width:100px">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--muted);font-family:var(--mori-mono,monospace)">1</td>
+            <td style="font-weight:700">Contoh Item Template</td>
+            <td>
+              <button class="btn btn-primary" type="button">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </div>
-
-<!-- Pilih file foto menu (dipakai tombol ↑ di kolom Aksi) -->
-<input type="file" id="fotoInput" accept="image/*" hidden />
-
-<!-- Modal password hapus (sama seperti Admin Stok Opname) -->
-<div class="pw-bg" id="pwBg">
-  <div class="pw-card" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
-    <div class="pw-title" id="pwTitle">Konfirmasi Hapus</div>
-    <div class="pw-msg" id="pwMsg"></div>
-    <input class="pw-input" id="pwInput" type="password" autocomplete="current-password" placeholder="Password" />
-    <div class="pw-error" id="pwError" hidden>Gagal masuk.</div>
-    <div class="pw-actions">
-      <button class="pw-btn" id="pwCancel" type="button">Batal</button>
-      <button class="pw-btn pw-btn-danger" id="pwOk" type="button">Hapus</button>
-    </div>
-  </div>
-</div>
-
-<script type="module">
-  import { supabase } from '../kopi/supabase.js';
-
-  const listEl = document.getElementById('list');
-  const searchEl = document.getElementById('search');
-  const f_title = document.getElementById('f_title');
-  const btnAdd = document.getElementById('btnAdd');
-  const fotoInput = document.getElementById('fotoInput');
-  const fotoHint = document.getElementById('fotoHint');
-
-  // ===== Upload foto menu (Supabase Storage, bucket yang sama dengan
-  //     Admin Stok Opname supaya tidak perlu bucket/policy baru).
-  //     URL foto disimpan di kolom foto_url tabel daily_tasks. =====
-  const BUCKET = 'stock-foto';
-
-  // ===== MODAL HAPUS =====
-  // Password tidak lagi ditulis di source. Nilai yang tadinya ada di sini
-  // bisa dibaca siapa saja dari DevTools, jadi hanya menahan salah klik;
-  // proteksi sungguhan ada di RLS policy (scripts/build/add-admin-rls.sql).
-  // Validasi sekarang lewat Supabase Auth.
-
-  const pwBg = document.getElementById('pwBg');
-  const pwMsg = document.getElementById('pwMsg');
-  const pwEmail = document.getElementById('pwEmail');
-  const pwInput = document.getElementById('pwInput');
-  const pwError = document.getElementById('pwError');
-  const pwOk = document.getElementById('pwOk');
-  const pwCancel = document.getElementById('pwCancel');
-  let pwResolve = null;
-  let pwScrollY = 0;
-
-  async function sudahMasukAdmin() {
-    try { const { data } = await supabase.auth.getSession(); return !!data.session; }
-    catch { return false; }
-  }
-
-  // Bekukan scroll halaman: keyboard HP suka membuat halaman melompat.
-  function lockScrollPw() {
-    pwScrollY = window.scrollY || window.pageYOffset || 0;
-    document.documentElement.classList.add('pw-open');
-    document.body.style.position = 'fixed';
-    document.body.style.top = -pwScrollY + 'px';
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.width = '100%';
-  }
-  function unlockScrollPw() {
-    document.documentElement.classList.remove('pw-open');
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.left = '';
-    document.body.style.right = '';
-    document.body.style.width = '';
-    window.scrollTo(0, pwScrollY);
-  }
-  // Ikuti tinggi viewport yang terlihat supaya kartu tetap di tengah walau
-  // keyboard HP sudah naik.
-  function syncPwViewport() {
-    const vv = window.visualViewport;
-    if (!vv || !pwBg.classList.contains('open')) return;
-    pwBg.style.height = vv.height + 'px';
-    pwBg.style.top = vv.offsetTop + 'px';
-    pwBg.style.bottom = 'auto';
-  }
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', syncPwViewport);
-    window.visualViewport.addEventListener('scroll', syncPwViewport);
-  }
-
-  async function askDelPassword(msg) {
-    if (await sudahMasukAdmin()) return true;
-    if (pwResolve) closePw(false);
-    pwMsg.textContent = msg || '';
-    pwMsg.style.whiteSpace = 'pre-line';
-    pwInput.value = '';
-    pwError.hidden = true;
-    lockScrollPw();
-    pwBg.classList.add('open');
-    syncPwViewport();
-    try {
-      pwInput.focus({ preventScroll: true });
-    } catch (e) {
-      pwInput.focus();
-    }
-    requestAnimationFrame(syncPwViewport);
-    return new Promise((res) => { pwResolve = res; });
-  }
-  function closePw(ok) {
-    pwBg.classList.remove('open');
-    pwBg.style.height = '';
-    pwBg.style.top = '';
-    pwBg.style.bottom = '';
-    unlockScrollPw();
-    const fn = pwResolve;
-    pwResolve = null;
-    if (fn) fn(ok);
-  }
-  pwOk.addEventListener('click', async () => {
-    const pass = pwInput.value || '';
-    if (!pass) {
-      pwError.textContent = 'Password wajib diisi.';
-      pwError.hidden = false;
-      return;
-    }
-    const email = 'admin@kopi.com';
-    const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
-    if (error) {
-      pwError.textContent = 'Gagal masuk: ' + error.message;
-      pwError.hidden = false;
-      pwInput.value = '';
-      try { pwInput.focus({ preventScroll: true }); } catch (e) {}
-      return;
-    }
-    closePw(true);
-  });
-  pwCancel.addEventListener('click', () => closePw(false));
-  pwBg.addEventListener('click', (e) => {
-    if (e.target === pwBg) closePw(false);
-  });
-  pwInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') pwOk.click();
-    if (e.key === 'Escape') closePw(false);
-  });
-
-  let fotoVersi = Date.now();
-  const fotoBaru = (url) =>
-    url ? url + (url.includes('?') ? '&' : '?') + 'v=' + fotoVersi : '';
-
-  // Baris ADMIN: sama konsepnya dengan tile "ADMIN STOCK OPNAME" di Admin
-  // Stok Opname — bukan record daily_tasks, jadi tidak bisa diedit/dihapus,
-  // hanya boleh ganti foto. Fotonya disimpan di storage (tanpa kolom DB).
-  const AKUN_TILE = 'admin';
-  const fotoAdminUrl = () =>
-    supabase.storage.from(BUCKET).getPublicUrl('daily-task/' + AKUN_TILE + '.jpg').data.publicUrl;
-  const barisAdmin = { id: AKUN_TILE, title: 'ADMIN', slug: AKUN_TILE, isAdmin: true, foto_url: '' };
-
-  const adaFoto = async (url) => {
-    try {
-      const r = await fetch(url, { method: 'HEAD' });
-      return r.ok;
-    } catch {
-      return false;
-    }
-  };
-
-  // Petunjuk di bawah tabel: hanya muncul kalau ada masalah, lalu hilang
-  // sendiri setelah 6 detik supaya tidak dianggap bagian dari halaman.
-  let hintTimer = null;
-  function setFotoHint(pesan) {
-    clearTimeout(hintTimer);
-    if (!pesan) {
-      fotoHint.hidden = true;
-      fotoHint.textContent = '';
-      fotoHint.classList.remove('sembunyi');
-      return;
-    }
-    fotoHint.hidden = false;
-    fotoHint.classList.remove('sembunyi');
-    fotoHint.textContent = pesan;
-    hintTimer = setTimeout(() => {
-      fotoHint.classList.add('sembunyi');
-      setTimeout(() => { fotoHint.hidden = true; }, 400);
-    }, 6000);
-  }
-
-  // Kompres di browser dulu (maks 1200px, JPEG 82%) supaya hemat kuota.
-  async function kompresFoto(file, maxSisi = 1200, kualitas = 0.82) {
-    if (!file || !/^image\//.test(file.type || '')) return file;
-    let gambar = null;
-    try { gambar = await createImageBitmap(file); } catch { return file; }
-    if (!gambar) return file;
-    const sisi = Math.max(gambar.width, gambar.height);
-    const skala = Math.min(1, maxSisi / sisi);
-    if (skala === 1 && file.size < 400 * 1024) {
-      if (gambar.close) gambar.close();
-      return file;
-    }
-    const w = Math.max(1, Math.round(gambar.width * skala));
-    const h = Math.max(1, Math.round(gambar.height * skala));
-    const kanvas = document.createElement('canvas');
-    kanvas.width = w; kanvas.height = h;
-    kanvas.getContext('2d').drawImage(gambar, 0, 0, w, h);
-    if (gambar.close) gambar.close();
-    const blob = await new Promise((res) => kanvas.toBlob(res, 'image/jpeg', kualitas));
-    if (!blob) return file;
-    const nama = (file.name || 'foto').replace(/\.[^.]+$/, '') + '.jpg';
-    return new File([blob], nama, { type: 'image/jpeg', lastModified: Date.now() });
-  }
-
-  let fotoTarget = null;
-  function pilihFoto(id) {
-    fotoTarget = id;
-    fotoInput.value = '';
-    fotoInput.click();
-  }
-
-  fotoInput.addEventListener('change', async () => {
-    const file = fotoInput.files && fotoInput.files[0];
-    if (!file || fotoTarget === null) return;
-    const id = fotoTarget;
-    fotoTarget = null;
-
-    const menu = id === AKUN_TILE ? barisAdmin : all.find((m) => m.id === id);
-    if (!menu) return;
-
-    setFotoHint('');
-    const thumb = listEl.querySelector('tr[data-id="' + id + '"] .c-foto .thumb');
-    if (thumb) {
-      thumb.classList.add('sibuk');
-      thumb.innerHTML = '';
-    }
-
-    try {
-      const kecil = await kompresFoto(file);
-      const path = 'daily-task/' + id + '.jpg';
-      const { error: errUp } = await supabase.storage.from(BUCKET).upload(path, kecil, {
-        upsert: true,
-        contentType: 'image/jpeg',
-      });
-      if (errUp) throw new Error(errUp.message);
-
-      const { data: publik } = supabase.storage.from(BUCKET).getPublicUrl(path);
-      const url = publik.publicUrl;
-
-      // Foto ADMIN tidak disimpan ke DB (tidak ada record-nya), sama seperti
-      // tile ADMIN STOCK OPNAME.
-      if (id !== AKUN_TILE) {
-        const { error: errSimpan } = await supabase
-          .from(CURRENT_TABLE)
-          .update({ foto_url: url })
-          .eq('id', id);
-        if (errSimpan) {
-          setFotoHint(
-            'Foto tersimpan di storage, tapi belum tercatat di DB: ' + errSimpan.message +
-            ' — jalankan: alter table daily_tasks add column if not exists foto_url text;'
-          );
-        } else {
-          setFotoHint('');
-        }
-      } else {
-        setFotoHint('');
-      }
-
-      menu.foto_url = url;
-      // Path-nya tetap, naikkan versi cache supaya foto baru langsung tampil.
-      fotoVersi = Date.now();
-      render();
-    } catch (e) {
-      setFotoHint('Upload foto gagal: ' + (e && e.message ? e.message : e));
-      render();
-    }
-  });
-
-  let all = [];
-  const CURRENT_TABLE = 'daily_tasks';
-  const ITEMS_TABLE = 'daily_task_items';
-
-  // Tabel kegiatan: tersembunyi sampai salah satu baris menu diklik.
-  const kegiatanSec = document.getElementById('kegiatanSec');
-  const kegiatanBody = document.getElementById('kegiatanBody');
-  let menuAktif = null;
-  let kegiatanPeriode = '';
-  let kegiatanAktif = [];
-
-  function slugify(s){ return (s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
-
-  // Baris tabel: No | Nama Menu | Foto (38x38) | Aksi (Upload / Edit / Hapus)
-// Struktur & kelas disamakan dengan tabel Foto Menu SO di Admin Stok Opname.
-function itemHtml(m, no) {
-    const title = m.title || m.name || 'Tanpa judul';
-    const slug = m.slug || m.period || slugify(title);
-    // Foto dari Storage (foto_url) kalau ada; kalau belum, probe folder
-    // lama image-daily-task/<slug>/1.* lalu shimmer krem.
-    const fotoStorage = m.foto_url ? fotoBaru(m.foto_url) : '';
-    const fotoFolder = '../image-daily-task/' + slug + '/1.jpg';
-    const fotoHtml = fotoStorage
-      ? `<div class="thumb"><img src="${fotoStorage}" alt="" loading="lazy" decoding="async" /></div>`
-      : m.isAdmin
-        ? `<div class="thumb thumb-admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>`
-        : `<div class="thumb"><img src="${fotoFolder}" alt="" data-slug="${slug}" loading="lazy" onerror="sqProbe(this)" /></div>`;
-    return `
-      <tr data-id="${m.id}"${m.isAdmin ? ' class="is-admin"' : ''}>
-        <td class="c-no">${no}</td>
-        <td class="c-nama"><div class="nama">${title}</div></td>
-        <td class="c-foto">${fotoHtml}</td>
-        <td class="c-aksi">
-          <div class="acts">
-            <button type="button" class="ico" data-foto="${m.id}" title="${m.foto_url ? 'Ganti foto' : 'Upload foto'} ${title}" aria-label="${m.foto_url ? 'Ganti foto' : 'Upload foto'} ${title}">↑</button>
-            ${m.isAdmin ? '' : `<button type="button" class="ico" data-edit="${m.id}" title="Edit ${title}" aria-label="Edit ${title}">✎</button>
-            <button type="button" class="ico ico-danger" data-del="${m.id}" title="Hapus ${title}" aria-label="Hapus ${title}">✕</button>`}
-          </div>
-        </td>
-      </tr>`;
-  }
-
-  function sqProbe(img) {
-    const slug = img.dataset.slug;
-    const folder = '../image-daily-task/' + slug + '/';
-    const exts = ['.jpg', '.jpeg', '.png', '.webp', '.svg'];
-    let i = 0;
-    function next() {
-      // Foto tidak ditemukan -> thumbnail shimmer krem.
-      if (i >= exts.length) {
-        img.style.display = 'none';
-        img.closest('.thumb').classList.add('tanpa-foto');
-        return;
-      }
-      const url = folder + '1' + exts[i++];
-      const t = new Image();
-      t.onload = () => { img.src = url; };
-      t.onerror = next;
-      t.src = url;
-    }
-    next();
-  }
-  window.sqProbe = sqProbe;
-
-  function render() {
-    const q = searchEl.value.trim().toLowerCase();
-    const filtered = all.filter(m => {
-      if (!q) return true;
-      return (m.title || '').toLowerCase().includes(q) || (m.period || '').toLowerCase().includes(q) || (m.description || '').toLowerCase().includes(q);
-    });
-    // Baris ADMIN selalu jadi baris pertama, seperti tile ADMIN STOCK OPNAME
-    // di Admin Stok Opname.
-    const rows = (q ? [] : [barisAdmin]).concat(filtered);
-    if (!rows.length) {
-      listEl.innerHTML = '<tr><td class="c-no"></td><td class="c-nama"><div class="empty">Tidak ada data</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>';
-      return;
-    }
-    listEl.innerHTML = rows.map((m, i) => itemHtml(m, i + 1)).join('');
-    listEl.querySelectorAll('[data-foto]').forEach(btn => {
-      btn.addEventListener('click', () => pilihFoto(btn.dataset.foto));
-    });
-    const idDari = (v) => (v === AKUN_TILE ? AKUN_TILE : parseInt(v, 10));
-    listEl.querySelectorAll('[data-edit]').forEach(btn => {
-      btn.addEventListener('click', () => editRow(idDari(btn.dataset.edit)));
-    });
-    listEl.querySelectorAll('[data-del]').forEach(btn => {
-      btn.addEventListener('click', () => delRow(idDari(btn.dataset.del)));
-    });
-    // Klik baris menu = buka tabel kegiatan (pemilih menu, seperti di
-    // Admin Stok Opname). Baris ADMIN bukan record menu, jadi tidak bisa diklik.
-    listEl.querySelectorAll('tr[data-id]:not(.is-admin)').forEach(tr => {
-      tr.classList.add('pilih');
-      if (menuAktif != null && String(menuAktif) === tr.dataset.id) tr.classList.add('on');
-      tr.addEventListener('click', (e) => {
-        if (e.target.closest('button')) return;
-        pilihMenu(idDari(tr.dataset.id));
-      });
-    });
-  }
-
-  // ===== Tabel kegiatan (muncul setelah menu diklik) =====
-  async function pilihMenu(id) {
-    if (id === AKUN_TILE) return;
-    menuAktif = id;
-    kegiatanSec.hidden = false;
-    render();
-    await loadKegiatan();
-    kegiatanSec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-
-  function periodOf(m) {
-    return m ? (m.period || m.slug || slugify(m.title || '')) : '';
-  }
-
-  // Semua huruf jadi kapital: "whatsapp business" -> "WHATSAPP BUSINESS".
-  // Dipakai saat mengetik (posisi kursor tetap terjaga) dan saat menyimpan,
-  // termasuk untuk teks yang ditempel (paste).
-  const kapitalKata = (s) => (s || '').toUpperCase();
-
-  async function loadKegiatan() {
-    const menu = all.find((m) => m.id === menuAktif);
-    if (!menu) return;
-    const period = periodOf(menu);
-    kegiatanPeriode = period;
-    const { data, error } = await supabase
-      .from(ITEMS_TABLE)
-      .select('id, text, sort_order')
-      .eq('period', period)
-      .order('sort_order');
-    if (error) {
-      setFotoHint('Gagal memuat kegiatan: ' + error.message);
-      return;
-    }
-    kegiatanAktif = data || [];
-    renderKegiatan();
-  }
-
-  // Baris tambah kegiatan: baris terakhir di dalam tabel (class .tambah),
-  // sama seperti baris input tambah barang di Admin Stok Opname.
-  const barisTambah =
-    '<tr class="tambah">' +
-    '<td class="c-no"></td>' +
-    '<td class="c-teks"><input id="itemTambah" type="text" placeholder="Tulis kegiatan, lalu Enter..." autocomplete="off" aria-label="Kegiatan baru" /></td>' +
-    '<td class="c-aksi-k"><div class="acts">' +
-    '<button type="button" class="ico" id="btnItemTambah" title="Tambah kegiatan" aria-label="Tambah kegiatan">+</button>' +
-    '</div></td>' +
-    '</tr>';
-
-  // Tabel kegiatan tidak punya kotak search sendiri: kotak search di atas
-  // dipakai untuk mencari menu.
-  function renderKegiatan() {
-    const rows = kegiatanAktif;
-    const isi = rows.length
-      ? rows
-          .map(
-            (d, i) =>
-              '<tr data-item="' + d.id + '">' +
-              '<td class="c-no">' + (i + 1) + '</td>' +
-              '<td class="c-teks"><div class="nama">' + kapitalKata(d.text) + '</div></td>' +
-              '<td class="c-aksi-k"><div class="acts">' +
-              '<button type="button" class="ico ico-danger" data-item-del="' + d.id + '" title="Hapus" aria-label="Hapus">✕</button>' +
-              '</div></td></tr>'
-          )
-          .join('')
-      : '<tr><td class="c-no"></td><td class="c-teks"><div class="empty">Belum ada kegiatan</div></td><td class="c-aksi-k"></td></tr>';
-    // Baris tambah di paling atas, persis seperti baris input tambah barang
-    // di Admin Stok Opname.
-    kegiatanBody.innerHTML = barisTambah + isi;
-  }
-
-  async function tambahKegiatan() {
-    const input = kegiatanBody.querySelector('#itemTambah');
-    if (!input) return;
-    // Kapitalkan sekali lagi di sini, supaya data tersimpan rapi walau
-    // teks ditempel (paste) tanpa memicu event input.
-    const teks = kapitalKata((input.value || '').trim());
-    if (!teks || !kegiatanPeriode) return;
-    const { error } = await supabase.from(ITEMS_TABLE).insert({
-      period: kegiatanPeriode,
-      text: teks,
-      sort_order: kegiatanAktif.length + 1
-    });
-    if (error) {
-      setFotoHint('Gagal tambah kegiatan: ' + error.message);
-      return;
-    }
-    await loadKegiatan();
-    // Fokuskan lagi baris input supaya bisa langsung mengetik kegiatan berikutnya.
-    const baru = kegiatanBody.querySelector('#itemTambah');
-    if (baru) baru.focus();
-  }
-
-  async function hapusKegiatan(id) {
-    const kegiatan = kegiatanAktif.find((d) => d.id === id);
-    const ok = await askDelPassword(
-      'Hapus kegiatan "' + (kegiatan ? kegiatan.text : id) + '"?\nTindakan ini tidak bisa dibatalkan.'
-    );
-    if (!ok) return;
-    const { error } = await supabase.from(ITEMS_TABLE).delete().eq('id', id);
-    if (error) {
-      setFotoHint('Gagal hapus kegiatan: ' + error.message);
-      return;
-    }
-    await loadKegiatan();
-  }
-
-  kegiatanBody.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-item-del]');
-    if (btn) hapusKegiatan(parseInt(btn.dataset.itemDel, 10));
-  });
-  // Baris tambah dibuat ulang tiap render, jadi event-nya pakai delegasi.
-  kegiatanBody.addEventListener('click', (e) => {
-    if (e.target.closest('#btnItemTambah')) tambahKegiatan();
-  });
-  kegiatanBody.addEventListener('keydown', (e) => {
-    if (e.target.id !== 'itemTambah' || e.key !== 'Enter') return;
-    e.preventDefault();
-    tambahKegiatan();
-  });
-  // Huruf pertama tiap kata otomatis kapital saat mengetik.
-  kegiatanBody.addEventListener('input', (e) => {
-    const input = e.target;
-    if (input.id !== 'itemTambah') return;
-    const pos = input.selectionStart;
-    const baru = kapitalKata(input.value);
-    if (baru !== input.value) {
-      input.value = baru;
-      const posBaru = Math.min(pos, baru.length);
-      try { input.setSelectionRange(posBaru, posBaru); } catch (err) {}
-    }
-  });
-  // Sama juga untuk input judul menu di baris atas.
-  f_title.addEventListener('input', (e) => {
-    const pos = e.target.selectionStart;
-    const baru = kapitalKata(e.target.value);
-    if (baru !== e.target.value) {
-      e.target.value = baru;
-      const posBaru = Math.min(pos, baru.length);
-      try { e.target.setSelectionRange(posBaru, posBaru); } catch (err) {}
-    }
-  });
-
-  async function load() {
-    try {
-      const { data, error } = await supabase.from(CURRENT_TABLE).select('*').order('id');
-      if (error) {
-        listEl.innerHTML = '<tr><td class="c-no"></td><td class="c-nama"><div class="empty">Error: ' + error.message + '</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>';
-        return;
-      }
-      all = data || [];
-      // Foto baris ADMIN dicek langsung ke storage (tidak ada di DB).
-      const urlAdmin = fotoAdminUrl();
-      barisAdmin.foto_url = (await adaFoto(urlAdmin)) ? urlAdmin : '';
-      render();
-    } catch (e) {
-      listEl.innerHTML = '<tr><td class="c-no"></td><td class="c-nama"><div class="empty">Gagal memuat: ' + e.message + '</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>';
-    }
-  }
-
-  let editingId = null;
-  function resetForm() {
-    editingId = null;
-    f_title.value = '';
-    setModeAdd();
-    f_title.focus();
-  }
-
-  // Tombol "+" di kanan atas: mode tambah (default) atau mode edit.
-  const setModeAdd = () => {
-    btnAdd.textContent = '+';
-    btnAdd.title = 'Tambah menu';
-    btnAdd.setAttribute('aria-label', 'Tambah menu');
-  };
-  const setModeEdit = () => {
-    btnAdd.textContent = '✓';
-    btnAdd.title = 'Simpan perubahan';
-    btnAdd.setAttribute('aria-label', 'Simpan perubahan');
-  };
-
-  async function editRow(id) {
-    const m = all.find(x => x.id === id);
-    if (!m) return;
-    editingId = m.id;
-    f_title.value = kapitalKata(m.title || '');
-    setModeEdit();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  async function delRow(id) {
-    const menu = all.find((m) => m.id === id);
-    const ok = await askDelPassword(
-      'Hapus menu ' + (menu ? menu.title : id) + '?\nSemua kegiatan di menu ini ikut terhapus.'
-    );
-    if (!ok) return;
-    // Kalau menu yang dihapus sedang dibuka, tutup tabel kegiatannya.
-    if (String(menuAktif) === String(id)) {
-      menuAktif = null;
-      kegiatanAktif = [];
-      kegiatanPeriode = '';
-      kegiatanSec.hidden = true;
-    }
-    const { error } = await supabase.from(CURRENT_TABLE).delete().eq('id', id);
-    if (error) alert('Gagal hapus: ' + error.message);
-    else await load();
-  }
-
-  // Tombol "+" (kanan atas) = Tambah Menu / Simpan perubahan, sama
-  // perannya dengan tombol Tambah Menu di Admin Stok Opname.
-  btnAdd.addEventListener('click', async () => {
-    const judul = f_title.value.trim();
-    if (!judul) { alert('Judul wajib'); return; }
-    // Slug & link otomatis dari judul — tidak ada input slug/link lagi.
-    const slug = slugify(judul);
-    const payload = {
-      title: judul,
-      slug: slug,
-      period: slug,
-      description: 'utility/index.html?p=' + slug
-    };
-    let res;
-    if (editingId) {
-      res = await supabase.from(CURRENT_TABLE).update(payload).eq('id', parseInt(editingId));
-    } else {
-      res = await supabase.from(CURRENT_TABLE).insert([payload]);
-    }
-    if (res.error && /PGRST204|Could not find/i.test(res.error.message || '')) {
-      // Kolom slug/icon belum ada di DB: pakai kolom minimal saja.
-      const slim = { title: judul, period: slug, description: payload.description };
-      res = editingId
-        ? await supabase.from(CURRENT_TABLE).update(slim).eq('id', parseInt(editingId))
-        : await supabase.from(CURRENT_TABLE).insert([slim]);
-    }
-    if (res.error) {
-      alert('Gagal simpan: ' + (res.error.message || 'error'));
-      return;
-    }
-
-    resetForm();
-    await load();
-    // Kalau menu yang baru disimpan adalah menu yang sedang dibuka,
-    // muat ulang tabel kegiatannya (period/slug bisa berubah).
-    const aktif = all.find((m) => m.id === menuAktif);
-    if (aktif && periodOf(aktif) !== kegiatanPeriode) {
-      menuAktif = aktif.id;
-      await loadKegiatan();
-    }
-  });
-
-  searchEl.addEventListener('input', render);
-
-  let rtTimer = null;
-  try {
-    supabase.channel('admin_daily_tasks_' + Math.random().toString(36).slice(2))
-      .on('postgres_changes', { event: '*', schema: 'public', table: CURRENT_TABLE }, () => {
-        clearTimeout(rtTimer);
-        rtTimer = setTimeout(() => load(), 300);
-      })
-      .subscribe();
-  } catch(e) {}
-
-  load();
-</script>
-</body>
+  </body>
 </html>
