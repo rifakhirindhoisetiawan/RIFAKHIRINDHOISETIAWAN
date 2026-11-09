@@ -36,7 +36,7 @@
     .btn-add{
       flex:0 0 44px;width:44px;padding:0;display:flex;align-items:center;justify-content:center;
       font-family:inherit;font-size:22px;font-weight:700;line-height:1;
-      color:var(--mori-bg);background:var(--mori-accent);border:1px solid var(--mori-line);border-radius:0;cursor:pointer;
+      color:var(--mori-bg);background:var(--mori-accent);border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;
       box-shadow: none;transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
     }
     .btn-add:active{background:#33312f;transform:translate(2px,2px);box-shadow:none}
@@ -44,7 +44,7 @@
       flex:1 1 auto;min-width:0;width:auto;max-width:100%;margin:0;height:44px;padding:0 14px;
       font-family:var(--mori-mono);font-size:13px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
       color:var(--mori-text) !important;background:var(--mori-surface) !important;
-      border:1px solid var(--mori-line) !important;border-radius:0 !important;outline:none;
+      border:1px solid var(--mori-line) !important;border-radius:8px 0 0 8px !important;outline:none;
     }
     #f_title::placeholder{color:var(--mori-text-2) !important;letter-spacing:.4px;text-transform:none}
     #f_title:focus{background:#fffdf7 !important;box-shadow: none}
@@ -118,7 +118,7 @@
     <input type="hidden" id="editId" />
     <div class="judul-row" style="margin-bottom:8px;">
       <input id="f_title" type="text" placeholder="Nama menu, cth: Catatan Penting" autocomplete="off" />
-      <input id="f_category" type="text" placeholder="Kategori (cth: OPERASIONAL)" autocomplete="off" style="width:160px; height:44px; padding:0 12px; font-family:var(--mori-mono); font-size:12px; font-weight:700; text-transform:uppercase; color:var(--mori-text); background:var(--mori-surface); border:1px solid var(--mori-line); outline:none;" />
+      <input id="f_category" type="text" placeholder="Kategori (cth: OPERASIONAL)" autocomplete="off" style="width:160px; height:44px; padding:0 12px; font-family:var(--mori-mono); font-size:12px; font-weight:700; text-transform:uppercase; color:var(--mori-text); background:var(--mori-surface); border:1px solid var(--mori-line); border-radius:0 8px 8px 0; outline:none;" />
       <button class="btn-add" type="button" id="btnAdd" title="Tambah menu">+</button>
     </div>
   </form>
