@@ -458,7 +458,11 @@
         renderGrid();
       }
 
+      const FILTER_KEY = 'note_selected_category_v1';
       let selectedCategory = '';
+      try {
+        selectedCategory = localStorage.getItem(FILTER_KEY) || '';
+      } catch {}
       
       // Filter popup / modal
       const filterModal = document.createElement('div');
@@ -496,6 +500,7 @@
         listEl.querySelectorAll('.cat-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             selectedCategory = btn.dataset.cat;
+            try { localStorage.setItem(FILTER_KEY, selectedCategory); } catch {}
             filterModal.style.display = 'none';
             renderGrid();
           });
