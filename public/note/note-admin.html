@@ -116,8 +116,9 @@
 <div class="wrap">
   <form id="form" onsubmit="return false">
     <input type="hidden" id="editId" />
-    <div class="judul-row">
+    <div class="judul-row" style="margin-bottom:8px;">
       <input id="f_title" type="text" placeholder="Nama menu, cth: Catatan Penting" autocomplete="off" />
+      <input id="f_category" type="text" placeholder="Kategori (cth: OPERASIONAL)" autocomplete="off" style="width:160px; height:44px; padding:0 12px; font-family:var(--mori-mono); font-size:12px; font-weight:700; text-transform:uppercase; color:var(--mori-text); background:var(--mori-surface); border:1px solid var(--mori-line); outline:none;" />
       <button class="btn-add" type="button" id="btnAdd" title="Tambah menu">+</button>
     </div>
   </form>
@@ -128,6 +129,7 @@
         <tr>
           <th class="c-no">No</th>
           <th>Nama Menu</th>
+          <th style="width:100px; padding:0 6px; font-family:var(--mori-mono); font-size:9px; font-weight:700; text-transform:uppercase;">Kategori</th>
           <th class="c-foto">Foto</th>
           <th class="c-aksi"></th>
         </tr>
@@ -262,7 +264,14 @@
       const aksi = isAdmin
         ? '<button type="button" class="ico" data-foto="'+m.id+'" title="Ganti foto ADMIN">↑</button>'
         : '<button type="button" class="ico" data-foto="'+m.id+'" title="Upload foto">↑</button><button type="button" class="ico" data-edit="'+m.id+'" title="Edit">✎</button><button type="button" class="ico ico-danger" data-del="'+m.id+'" title="Hapus">✕</button>';
-      return '<tr data-id="'+m.id+'"'+(isAdmin?' class="is-admin"':'')+'><td class="c-no">'+(i+1)+'</td><td class="c-nama"><div class="nama">'+(m.title||'')+'</div></td><td class="c-foto">'+thumb+'</td><td class="c-aksi"><div class="acts">'+aksi+'</div></td></tr>';
+      const catLabel = m.category || 'UMUM';
+      return '<tr data-id="'+m.id+'"'+(isAdmin?' class="is-admin"':'')+'>' +
+             '<td class="c-no">'+(i+1)+'</td>' +
+             '<td class="c-nama"><div class="nama">'+(m.title||'')+'</div></td>' +
+             '<td style="font-family:var(--mori-mono); font-size:10px; font-weight:700; text-transform:uppercase; color:var(--mori-text-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">'+catLabel+'</td>' +
+             '<td class="c-foto">'+	humb+'</td>' +
+             '<td class="c-aksi"><div class="acts">'+aksi+'</div></td>' +
+             '</tr>';="acts">'+aksi+'</div></td></tr>';
     }).join('');
     const idDari = v => (v === AKUN_TILE ? AKUN_TILE : parseInt(v, 10));
     listEl.querySelectorAll('[data-foto]').forEach(b=>b.addEventListener('click',()=>pilihFoto(idDari(b.dataset.foto))));
@@ -283,9 +292,9 @@
   const setModeEdit=()=>{ btnAdd.textContent='✓'; btnAdd.title='Simpan perubahan'; };
   function isiForm(id){
     const m=all.find(x=>x.id===id); if(!m) return;
-    editId.value=String(m.id); f_title.value=kapitalKata(m.title||''); setModeEdit(); f_title.focus(); window.scrollTo({top:0,behavior:'smooth'});
+    editId.value=String(m.id); f_title.value=kapitalKata(m.title||''); f_category.value=m.category||''; setModeEdit(); f_title.focus(); window.scrollTo({top:0,behavior:'smooth'});
   }
-  function resetForm(){ editId.value=''; f_title.value=''; setModeAdd(); f_title.focus(); }
+  function resetForm(){ editId.value=''; f_title.value=''; f_category.value=''; setModeAdd(); f_title.focus(); }
 
   btnAdd.addEventListener('click', async()=>{
     const title=f_title.value.trim(); if(!title){ setFotoHint('Nama menu wajib diisi'); f_title.focus(); return; }

@@ -308,6 +308,9 @@
             autocomplete="off"
           />
         </div>
+        <button class="header-pin-btn" id="filterBtn" type="button" aria-label="Filter Kategori" title="Filter Kategori">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        </button>
         <button class="header-pin-btn" id="headerPinBtn" type="button" aria-label="Kelola Sematan Menu" title="Kelola Sematan Menu">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"/></svg>
         </button>
@@ -360,7 +363,12 @@
         const adminMatch = !q || 'admin'.includes(q);
         const list = adminMatch ? [adminTile] : [];
 
-        const filteredMenus = menus.filter((m) => (m.title || '').toLowerCase().includes(q));
+        const filteredMenus = menus.filter((m) => {
+          const matchQ = (m.title || '').toLowerCase().includes(q);
+          const cat = m.category || 'UMUM';
+          const matchCat = !selectedCategory || cat === selectedCategory;
+          return matchQ && matchCat;
+        });
         const rank = (item) => {
           const i = pinned.indexOf(item.title);
           return i === -1 ? Number.MAX_SAFE_INTEGER : i;
@@ -445,6 +453,50 @@
           menus = [];
         }
         renderGrid();
+      }
+
+      let selectedCategory = '';
+      
+      // Filter popup / modal
+      const filterModal = document.createElement('div');
+      filterModal.id = 'filterModal';
+      filterModal.style.cssText = 'display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:1000; align-items:center; justify-content:center; padding:16px;';
+      filterModal.innerHTML = '<div style="background:#fffbf2; border-radius:8px; padding:18px 20px; max-width:320px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.25); border:1px solid rgba(26,25,23,0.14);">' +
+        '<div style="font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:#1a1917; font-family:var(--mori-mono); margin-bottom:12px;">Filter Kategori</div>' +
+        '<div id="filterList" style="display:flex; flex-direction:column; gap:6px; max-height:200px; overflow-y:auto; margin-bottom:14px;"></div>' +
+        '<button id="filterClose" type="button" style="width:100%; padding:8px; background:#1a1917; color:#fffbf2; border:none; border-radius:4px; font-weight:600; font-size:12px; cursor:pointer; font-family:var(--mori-mono);">Tutup</button>' +
+      '</div>';
+      document.body.appendChild(filterModal);
+
+      const filterBtn = document.getElementById('filterBtn');
+      if (filterBtn) {
+        filterBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          updateFilterList();
+          filterModal.style.display = 'flex';
+        });
+      }
+      document.getElementById('filterClose').addEventListener('click', () => { filterModal.style.display = 'none'; });
+      filterModal.addEventListener('click', (e) => { if (e.target === filterModal) filterModal.style.display = 'none'; });
+
+      function updateFilterList() {
+        const cats = [...new Set(menus.map(m => m.category || 'UMUM'))];
+        cats.sort();
+        const listEl = document.getElementById('filterList');
+        let html = '<button type="button" class="cat-btn" data-cat="" style="padding:8px 10px; background:' + (selectedCategory === '' ? '#1a1917' : '#f7f3e9') + '; color:' + (selectedCategory === '' ? '#fffbf2' : '#1a1917') + '; border:1px solid rgba(26,25,23,0.14); border-radius:4px; font-weight:700; font-size:11px; text-align:left; cursor:pointer; font-family:var(--mori-mono); text-transform:uppercase;">SEMUA KATEGORI</button>';
+        cats.forEach(c => {
+          const active = selectedCategory === c;
+          html += '<button type="button" class="cat-btn" data-cat="' + c + '" style="padding:8px 10px; background:' + (active ? '#1a1917' : '#f7f3e9') + '; color:' + (active ? '#fffbf2' : '#1a1917') + '; border:1px solid rgba(26,25,23,0.14); border-radius:4px; font-weight:700; font-size:11px; text-align:left; cursor:pointer; font-family:var(--mori-mono); text-transform:uppercase;">' + c + '</button>';
+        });
+        listEl.innerHTML = html;
+        listEl.querySelectorAll('.cat-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            selectedCategory = btn.dataset.cat;
+            filterModal.style.display = 'none';
+            renderGrid();
+          });
+        });
       }
 
       searchInput.addEventListener('input', renderGrid);
