@@ -248,7 +248,7 @@
         }
         const seen = new Set();
         const uniqList = list.filter(c => {
-          const key = (c.content || '').trim();
+          const key = (c.content || '').trim().toUpperCase();
           if (!key || seen.has(key)) return false;
           seen.add(key);
           return true;
@@ -267,18 +267,32 @@
 
         commentList.querySelectorAll('.del-note-btn').forEach(btn => {
           btn.addEventListener('click', async () => {
-            const content = btn.getAttribute('data-content');
+            const content = (btn.getAttribute('data-content') || '').trim();
             const id = btn.getAttribute('data-id');
             const lokal = getLocalComments();
-            const idx = lokal.findIndex(l => (l.content || '').trim() === content.trim());
-            if (idx !== -1) {
-              lokal.splice(idx, 1);
-              localStorage.setItem(COMMENT_KEY, JSON.stringify(lokal));
-            }
-            renderComments(lokal);
-            if (id) {
-              try { await supabase.from('note_entries').delete().eq('id', id); } catch(e){}
-            }
+            const filteredLokal = lokal.filter(l => (l.content || '').trim().toUpperCase() !== content.toUpperCase());
+            localStorage.setItem(COMMENT_KEY, JSON.stringify(filteredLokal));
+            // tombstone (local)
+            try {
+              const tKey = COMMENT_KEY + '_deleted';
+              const t = JSON.parse(localStorage.getItem(tKey) || '[]');
+              if (!t.map(x=>String(x).toUpperCase()).includes(content.toUpperCase())) t.push(content.toUpperCase());
+              localStorage.setItem(tKey, JSON.stringify(t));
+              // global tombstone for kopi.html sheet
+              const gKey = 'kopi_deleted_comments_global';
+              const g = JSON.parse(localStorage.getItem(gKey) || '[]');
+              const fullC = '[' + NAMA + '] ' + content.toUpperCase();
+              if (!g.map(x=>String(x).toUpperCase()).includes(fullC)) g.push(fullC);
+              localStorage.setItem(gKey, JSON.stringify(g));
+            } catch(e){}
+            renderComments(filteredLokal);
+            try {
+              if (id && !String(id).startsWith('local_')) {
+                await supabase.from('note_entries').delete().eq('id', id);
+              }
+              const fullContent = '[' + NAMA + '] ' + content.toUpperCase();
+              await supabase.from('note_entries').delete().eq('content', fullContent);
+            } catch(e){ console.warn('Gagal hapus di server:', e && e.message); }
             loadComments();
           });
         });
@@ -301,7 +315,11 @@
 
       async function loadComments() {
         const lokal = getLocalComments();
-        renderComments(lokal);
+        let tomb = [];
+        try { tomb = JSON.parse(localStorage.getItem(COMMENT_KEY + '_deleted') || '[]'); } catch(e){}
+        const isTomb = (c) => tomb.map(x=>String(x).toUpperCase()).includes((c.content||'').trim().toUpperCase());
+        const lokalClean = lokal.filter(c => !isTomb(c)).map(c => ({...c, content: (c.content||'').toUpperCase()}));
+        renderComments(lokalClean);
         try {
           const { data, error } = await supabase
             .from('note_entries')
@@ -312,11 +330,18 @@
             const prefix = '[' + NAMA + ']';
             const filtered = data.filter(d => (d.content || '').startsWith(prefix)).map(d => ({
               id: d.id,
-              content: d.content.replace(prefix, '').trim(),
+              content: (d.content.replace(prefix, '').trim()).toUpperCase(),
               created_at: d.created_at
-            }));
-            const combined = [...filtered, ...lokal.filter(l => !filtered.some(f => f.content === l.content))];
-            renderComments(combined);
+            })).filter(c => !isTomb(c));
+            const combined = [...filtered, ...lokalClean.filter(l => !filtered.some(f => f.content === l.content))];
+            const seen = new Set();
+            const uniq = combined.filter(c => {
+              const k = (c.content || '').trim().toUpperCase();
+              if (!k || seen.has(k)) return false;
+              seen.add(k);
+              return true;
+            });
+            renderComments(uniq);
           }
         } catch (e) {}
       }

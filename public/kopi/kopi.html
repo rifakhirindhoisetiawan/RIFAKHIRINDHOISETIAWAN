@@ -1506,8 +1506,13 @@
                 created_at: d.created_at
               };
             }).filter(c => c.comment);
-            allComments = mapped;
-            saveLocalComments(mapped);
+            // filter out globally tombstoned (deleted) comments
+            try {
+              const g = JSON.parse(localStorage.getItem('kopi_deleted_comments_global') || '[]');
+              const gSet = new Set(g.map(x => String(x).trim().toUpperCase()));
+              allComments = mapped.filter(c => !gSet.has(('[' + (c.menu_name || 'UMUM') + '] ' + (c.comment || '')).trim().toUpperCase()));
+            } catch(e) { allComments = mapped; }
+            saveLocalComments(allComments);
           }
         } catch (e) {
           console.info('Gagal sync komentar dari server:', e.message);
