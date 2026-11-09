@@ -53,23 +53,22 @@
       .badge {
         align-self: flex-start;
         font-family: var(--mori-mono);
-        font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: var(--mori-radius, 12px);
+        font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: 4px;
         background: var(--mori-surface); border: 1px solid var(--mori-accent);
         color: var(--mori-text); letter-spacing: 0.8px; text-transform: uppercase;
       }
       /* ===== TABEL PLU ===== */
       .plu-table {
-        border: 1px solid var(--mori-accent); border-radius: var(--mori-radius, 12px);
+        border: 1px solid var(--mori-accent); border-radius: 4px;
         overflow: hidden; background: var(--mori-bg);
       }
       .plu-row { display: flex; align-items: stretch; }
-      .plu-row + .plu-row { border-top: 1px solid var(--mori-line); }
+      .plu-row + .plu-row {  }
       .plu-th {
         display: flex; align-items: center; justify-content: center; text-align: center;
         padding: 8px; font-family: var(--mori-mono); font-size: 10px; font-weight: 700;
         color: var(--mori-text); background: var(--mori-surface);
-        border-right: 1px solid var(--mori-line);
-        letter-spacing: 0.6px; width: 38%; flex-shrink: 0;
+                letter-spacing: 0.6px; width: 38%; flex-shrink: 0;
       }
       .plu-td {
         flex: 1; display: flex; align-items: center; padding: 8px 10px;
@@ -84,24 +83,23 @@
       }
       /* ===== TABEL RESEP / BAHAN ===== */
       .resep {
-        border: 1px solid var(--mori-accent); border-radius: var(--mori-radius, 12px);
+        border: 1px solid var(--mori-accent); border-radius: 4px;
         overflow: hidden; background: var(--mori-bg);
       }
       .resep-row { display: flex; align-items: stretch; }
-      .resep-row + .resep-row { border-top: 1px solid var(--mori-line); }
+      .resep-row + .resep-row {  }
       .resep-no {
         display: flex; align-items: center; justify-content: center; text-align: center;
         padding: 9px 4px; font-family: var(--mori-mono); font-size: 10px; font-weight: 700;
         color: var(--mori-text); background: var(--mori-surface);
-        border-right: 1px solid var(--mori-line);
-        width: 38px; flex-shrink: 0;
+                width: 38px; flex-shrink: 0;
       }
       .resep-nama {
         flex: 1; display: flex; align-items: center; padding: 9px 12px;
         font-size: 13px; font-weight: 600; color: var(--mori-text);
       }
       .catatan {
-        background: var(--mori-surface); border: 1px solid var(--mori-accent); border-radius: var(--mori-radius, 12px);
+        background: var(--mori-surface); border: 1px solid var(--mori-accent); border-radius: 4px;
         padding: 12px 14px; font-size: 13px; color: var(--mori-text); line-height: 1.5;
       }
       .empty {
@@ -110,7 +108,7 @@
         letter-spacing: 0.6px; text-transform: uppercase; padding: 24px 0;
       }
       #status {
-        margin: 10px 0 0; padding: 6px 9px; border-radius: var(--mori-radius, 12px);
+        margin: 10px 0 0; padding: 6px 9px; border-radius: 4px;
         background: var(--mori-surface); border: 1px solid var(--mori-line);
         color: var(--mori-text-2); font-family: var(--mori-mono);
         font-size: 10px; font-weight: 700; letter-spacing: 0.4px;
