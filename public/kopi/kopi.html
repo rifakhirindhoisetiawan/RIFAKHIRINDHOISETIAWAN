@@ -1561,7 +1561,7 @@
             const menuTitle = c.menu_name || c.slug || '';
             html += '<tr style="border-bottom:1px solid rgba(26,25,23,0.08);vertical-align:top;">';
             html += '<td style="padding:8px 6px;font-weight:800;text-transform:uppercase;font-family:var(--mori-mono, monospace);font-size:10.5px;color:#1a1917;">' + escHtml(menuTitle) + '</td>';
-            html += '<td style="padding:8px 6px;color:#1a1917;word-break:break-word;">' + escHtml(c.comment) + '<div style="font-size:9px;color:#6e6a64;font-family:var(--mori-mono, monospace);margin-top:2px;">' + t + '</div></td>';
+            html += '<td style="padding:8px 6px;color:#1a1917;word-break:break-word;text-transform:uppercase;">' + escHtml(c.comment) + '<div style="font-size:9px;color:#6e6a64;font-family:var(--mori-mono, monospace);margin-top:2px;text-transform:none;">' + t + '</div></td>';
             html += '<td style="padding:8px 6px;text-align:right;white-space:nowrap;"><a href="' + linkUrl + '" style="font-size:10px;font-weight:700;text-decoration:none;background:#1a1917;color:#fff;padding:4px 8px;border-radius:6px;font-family:var(--mori-mono, monospace);display:inline-block;">Buka →</a></td>';
             html += '</tr>';
           });
