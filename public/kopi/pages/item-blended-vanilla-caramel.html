@@ -267,6 +267,7 @@
 
         commentList.querySelectorAll('.del-note-btn').forEach(btn => {
           btn.addEventListener('click', async () => {
+            if (!confirm('Hapus catatan ini?')) return;
             const content = (btn.getAttribute('data-content') || '').trim();
             const id = btn.getAttribute('data-id');
             const lokal = getLocalComments();
