@@ -267,7 +267,7 @@
 
         commentList.querySelectorAll('.del-note-btn').forEach(btn => {
           btn.addEventListener('click', async () => {
-            if (!confirm('Hapus catatan ini?')) return;
+            if (!(await moriConfirm('Hapus catatan ini?'))) return;
             const content = (btn.getAttribute('data-content') || '').trim();
             const id = btn.getAttribute('data-id');
             const lokal = getLocalComments();
@@ -329,6 +329,21 @@
         return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       }
 
+      function moriConfirm(message) {
+        return new Promise((resolve) => {
+          const overlay = document.getElementById('moriConfirmOverlay');
+          const msg = document.getElementById('moriConfirmMsg');
+          const ok = document.getElementById('moriConfirmOk');
+          const cancel = document.getElementById('moriConfirmCancel');
+          if (!overlay) { resolve(window.confirm(message)); return; }
+          msg.textContent = message;
+          overlay.style.display = 'flex';
+          const cleanup = () => { overlay.style.display = 'none'; ok.onclick = null; cancel.onclick = null; overlay.onclick = null; };
+          ok.onclick = () => { cleanup(); resolve(true); };
+          cancel.onclick = () => { cleanup(); resolve(false); };
+          overlay.onclick = (e) => { if (e.target === overlay) { cleanup(); resolve(false); } };
+        });
+      }
       async function loadComments() {
         const lokal = getLocalComments();
         let tomb = [];
@@ -465,5 +480,14 @@
         });
       }
     </script>
-  </body>
+  <div id="moriConfirmOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:var(--mori-bg,#fffbf2); border-radius:8px; padding:20px 22px; max-width:320px; width:90%; box-shadow:0 10px 30px rgba(0,0,0,0.25); border:1px solid var(--mori-line,rgba(26,25,23,0.14));">
+    <div id="moriConfirmMsg" style="font-size:14px; font-weight:600; color:var(--mori-text,#1a1917); margin-bottom:16px; line-height:1.4;"></div>
+    <div style="display:flex; gap:8px; justify-content:flex-end;">
+      <button id="moriConfirmCancel" type="button" style="padding:8px 16px; background:var(--mori-surface,#f7f3e9); color:var(--mori-text,#1a1917); border:1px solid var(--mori-line,rgba(26,25,23,0.14)); border-radius:4px; cursor:pointer; font-weight:600; font-size:13px;">Batal</button>
+      <button id="moriConfirmOk" type="button" style="padding:8px 16px; background:var(--mori-accent,#1a1917); color:var(--mori-bg,#fffbf2); border:none; border-radius:4px; cursor:pointer; font-weight:600; font-size:13px;">Hapus</button>
+    </div>
+  </div>
+</div>
+</body>
 </html>

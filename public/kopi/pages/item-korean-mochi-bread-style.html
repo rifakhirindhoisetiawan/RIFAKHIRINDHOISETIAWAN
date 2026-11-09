@@ -220,5 +220,14 @@
         setStatus('Gagal memuat data (' + e.message.slice(0, 50) + ')', 'err');
       }
     </script>
-  </body>
+  <div id="moriConfirmOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:var(--mori-bg,#fffbf2); border-radius:8px; padding:20px 22px; max-width:320px; width:90%; box-shadow:0 10px 30px rgba(0,0,0,0.25); border:1px solid var(--mori-line,rgba(26,25,23,0.14));">
+    <div id="moriConfirmMsg" style="font-size:14px; font-weight:600; color:var(--mori-text,#1a1917); margin-bottom:16px; line-height:1.4;"></div>
+    <div style="display:flex; gap:8px; justify-content:flex-end;">
+      <button id="moriConfirmCancel" type="button" style="padding:8px 16px; background:var(--mori-surface,#f7f3e9); color:var(--mori-text,#1a1917); border:1px solid var(--mori-line,rgba(26,25,23,0.14)); border-radius:4px; cursor:pointer; font-weight:600; font-size:13px;">Batal</button>
+      <button id="moriConfirmOk" type="button" style="padding:8px 16px; background:var(--mori-accent,#1a1917); color:var(--mori-bg,#fffbf2); border:none; border-radius:4px; cursor:pointer; font-weight:600; font-size:13px;">Hapus</button>
+    </div>
+  </div>
+</div>
+</body>
 </html>
