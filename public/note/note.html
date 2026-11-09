@@ -396,7 +396,7 @@
             }
 
             const href = `note-view.html?id=${m.id}`;
-            const isKopi = true;
+            const isKopi = (m.category || '').toUpperCase() === 'KOPI' || (m.title || '').toUpperCase().includes('KOPI') || (m.title || '').toUpperCase().includes('KOPI & RESEP');
             const defaultFoto = isKopi ? '../kopi/image-index.jpg' : '';
             const fotoUrl = m.foto_url || defaultFoto;
             const tileContent = fotoUrl
