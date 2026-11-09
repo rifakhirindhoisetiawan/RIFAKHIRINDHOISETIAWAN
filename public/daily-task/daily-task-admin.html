@@ -460,7 +460,6 @@
   <div class="pw-card" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
     <div class="pw-title" id="pwTitle">Konfirmasi Hapus</div>
     <div class="pw-msg" id="pwMsg"></div>
-    <input class="pw-input" id="pwEmail" type="email" autocomplete="username" placeholder="Email admin" />
     <input class="pw-input" id="pwInput" type="password" autocomplete="current-password" placeholder="Password" />
     <div class="pw-error" id="pwError" hidden>Gagal masuk.</div>
     <div class="pw-actions">
@@ -542,21 +541,19 @@
   }
 
   async function askDelPassword(msg) {
-    // Sudah punya sesi: lewati modal, langsung lanjut.
     if (await sudahMasukAdmin()) return true;
     if (pwResolve) closePw(false);
     pwMsg.textContent = msg || '';
     pwMsg.style.whiteSpace = 'pre-line';
-    pwEmail.value = '';
     pwInput.value = '';
     pwError.hidden = true;
     lockScrollPw();
     pwBg.classList.add('open');
     syncPwViewport();
     try {
-      pwEmail.focus({ preventScroll: true });
+      pwInput.focus({ preventScroll: true });
     } catch (e) {
-      pwEmail.focus();
+      pwInput.focus();
     }
     requestAnimationFrame(syncPwViewport);
     return new Promise((res) => { pwResolve = res; });
@@ -572,13 +569,13 @@
     if (fn) fn(ok);
   }
   pwOk.addEventListener('click', async () => {
-    const email = (pwEmail.value || '').trim();
     const pass = pwInput.value || '';
-    if (!email || !pass) {
-      pwError.textContent = 'Email dan password wajib diisi.';
+    if (!pass) {
+      pwError.textContent = 'Password wajib diisi.';
       pwError.hidden = false;
       return;
     }
+    const email = 'admin@kopi.com';
     const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
     if (error) {
       pwError.textContent = 'Gagal masuk: ' + error.message;
@@ -592,10 +589,6 @@
   pwCancel.addEventListener('click', () => closePw(false));
   pwBg.addEventListener('click', (e) => {
     if (e.target === pwBg) closePw(false);
-  });
-  pwEmail.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') pwOk.click();
-    if (e.key === 'Escape') closePw(false);
   });
   pwInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') pwOk.click();
