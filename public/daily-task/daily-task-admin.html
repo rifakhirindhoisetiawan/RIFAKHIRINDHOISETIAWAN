@@ -987,9 +987,10 @@ function itemHtml(m, no) {
     }
   }
 
+  let editingId = null;
   function resetForm() {
-    editId.value = '';
-    form.reset();
+    editingId = null;
+    f_title.value = '';
     setModeAdd();
     f_title.focus();
   }
@@ -1009,7 +1010,7 @@ function itemHtml(m, no) {
   async function editRow(id) {
     const m = all.find(x => x.id === id);
     if (!m) return;
-    editId.value = m.id;
+    editingId = m.id;
     f_title.value = kapitalKata(m.title || '');
     setModeEdit();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1047,16 +1048,16 @@ function itemHtml(m, no) {
       description: 'utility/index.html?p=' + slug
     };
     let res;
-    if (editId.value) {
-      res = await supabase.from(CURRENT_TABLE).update(payload).eq('id', parseInt(editId.value));
+    if (editingId) {
+      res = await supabase.from(CURRENT_TABLE).update(payload).eq('id', parseInt(editingId));
     } else {
       res = await supabase.from(CURRENT_TABLE).insert([payload]);
     }
     if (res.error && /PGRST204|Could not find/i.test(res.error.message || '')) {
       // Kolom slug/icon belum ada di DB: pakai kolom minimal saja.
       const slim = { title: judul, period: slug, description: payload.description };
-      res = editId.value
-        ? await supabase.from(CURRENT_TABLE).update(slim).eq('id', parseInt(editId.value))
+      res = editingId
+        ? await supabase.from(CURRENT_TABLE).update(slim).eq('id', parseInt(editingId))
         : await supabase.from(CURRENT_TABLE).insert([slim]);
     }
     if (res.error) {
