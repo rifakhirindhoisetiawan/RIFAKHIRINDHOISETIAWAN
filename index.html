@@ -688,17 +688,30 @@
       }
 
       // Popup reminder (Mori style)
+      // Daftar notifikasi (umum, bisa ditambah menu lain nanti)
+      const NOTIF_ITEMS = [
+        { title: 'Menu Kopi', desc: 'Ada yang belum diselesaikan di Kopi. Cek catatan & komentar.', img: 'public/kopi/image-index.jpg', link: 'public/kopi/kopi.html' },
+      ];
+
       const notifPopup = document.createElement('div');
       notifPopup.id = 'notifPopup';
       notifPopup.style.cssText = 'display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:1000; align-items:center; justify-content:center; padding:16px;';
-      notifPopup.innerHTML = '<div style="background:#fffbf2; border-radius:8px; padding:20px; max-width:340px; width:90%; box-shadow:0 10px 30px rgba(0,0,0,0.25); border:1px solid rgba(26,25,23,0.14); text-align:center;">' +
-        '<img src="public/kopi/image-index.jpg" alt="Menu Kopi" style="width:100%; height:160px; object-fit:cover; border-radius:6px; margin-bottom:14px; border:1px solid rgba(26,25,23,0.1);" />' +
-        '<div style="font-size:16px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:#1a1917; margin-bottom:6px; font-family:ui-monospace,monospace;">Menu Kopi</div>' +
-        '<div style="font-size:12px; color:#6e6a64; margin-bottom:16px; line-height:1.5;">Ada yang belum diselesaikan di Kopi. Cek catatan & komentar.</div>' +
-        '<div style="display:flex; gap:8px; justify-content:center;">' +
-          '<button id="notifPopupClose" type="button" style="padding:8px 16px; background:#f7f3e9; color:#1a1917; border:1px solid rgba(26,25,23,0.14); border-radius:4px; cursor:pointer; font-weight:600; font-size:13px;">Tutup</button>' +
-          '<a href="public/kopi/kopi.html" style="padding:8px 16px; background:#1a1917; color:#fffbf2; border:none; border-radius:4px; cursor:pointer; font-weight:600; font-size:13px; text-decoration:none; display:inline-flex; align-items:center;">Buka Kopi</a>' +
+      const itemsHtml = NOTIF_ITEMS.map(it =>
+        '<div style="display:flex; gap:12px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(26,25,23,0.08);">' +
+          '<img src="' + it.img + '" alt="' + it.title + '" style="width:56px; height:56px; object-fit:cover; border-radius:6px; border:1px solid rgba(26,25,23,0.1); flex-shrink:0;" />' +
+          '<div style="flex:1; text-align:left;">' +
+            '<div style="font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:#1a1917; font-family:ui-monospace,monospace;">' + it.title + '</div>' +
+            '<div style="font-size:11px; color:#6e6a64; margin-top:2px; line-height:1.4;">' + it.desc + '</div>' +
+          '</div>' +
+          '<a href="' + it.link + '" style="padding:6px 12px; background:#1a1917; color:#fffbf2; border:none; border-radius:4px; cursor:pointer; font-weight:600; font-size:12px; text-decoration:none; display:inline-flex; align-items:center; flex-shrink:0;">Buka</a>' +
+        '</div>'
+      ).join('');
+      notifPopup.innerHTML = '<div style="background:#fffbf2; border-radius:8px; padding:18px 20px; max-width:400px; width:95%; box-shadow:0 10px 30px rgba(0,0,0,0.25); border:1px solid rgba(26,25,23,0.14);">' +
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">' +
+          '<div style="font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:#1a1917; font-family:ui-monospace,monospace;">Notifikasi</div>' +
+          '<button id="notifPopupClose" type="button" style="background:none; border:none; font-size:18px; cursor:pointer; color:#6e6a64; line-height:1;">&times;</button>' +
         '</div>' +
+        itemsHtml +
       '</div>';
       document.body.appendChild(notifPopup);
 
