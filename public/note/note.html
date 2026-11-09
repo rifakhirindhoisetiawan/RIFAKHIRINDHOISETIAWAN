@@ -458,11 +458,26 @@
         renderGrid();
       }
 
-      const FILTER_KEY = 'note_selected_category_v1';
+      const SETTING_TABLE = 'note_settings';
       let selectedCategory = '';
-      try {
-        selectedCategory = localStorage.getItem(FILTER_KEY) || '';
-      } catch {}
+
+      async function syncCategoryFilter() {
+        try {
+          const { data, error } = await supabase.from(SETTING_TABLE).select('value').eq('key', 'active_category').single();
+          if (!error && data) {
+            selectedCategory = data.value || '';
+            renderGrid();
+          }
+        } catch {}
+      }
+
+      async function setCategoryFilter(cat) {
+        selectedCategory = cat;
+        renderGrid();
+        try {
+          await supabase.from(SETTING_TABLE).upsert({ key: 'active_category', value: cat }, { onConflict: 'key' });
+        } catch {}
+      }
       
       // Filter popup / modal
       const filterModal = document.createElement('div');
@@ -499,10 +514,8 @@
         listEl.innerHTML = html;
         listEl.querySelectorAll('.cat-btn').forEach(btn => {
           btn.addEventListener('click', () => {
-            selectedCategory = btn.dataset.cat;
-            try { localStorage.setItem(FILTER_KEY, selectedCategory); } catch {}
+            setCategoryFilter(btn.dataset.cat);
             filterModal.style.display = 'none';
-            renderGrid();
           });
         });
       }
@@ -510,6 +523,23 @@
       searchInput.addEventListener('input', renderGrid);
       renderGrid();
       loadFromSupabase();
+      syncCategoryFilter();
+
+      try {
+        supabase
+          .channel('note_settings_changes')
+          .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: SETTING_TABLE },
+            (payload) => {
+              if (payload.new && payload.new.key === 'active_category') {
+                selectedCategory = payload.new.value || '';
+                renderGrid();
+              }
+            }
+          )
+          .subscribe();
+      } catch {}
 
       let rtTimer = null;
       try {
