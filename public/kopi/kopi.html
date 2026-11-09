@@ -1468,7 +1468,12 @@
       function loadLocalComments() {
         try {
           const raw = JSON.parse(localStorage.getItem(COMMENT_KEY) || '[]');
-          return Array.isArray(raw) ? raw : [];
+          const list = Array.isArray(raw) ? raw : [];
+          try {
+            const g = JSON.parse(localStorage.getItem('kopi_deleted_comments_global') || '[]');
+            const gSet = new Set(g.map(x => String(x).trim().toUpperCase()));
+            return list.filter(c => !gSet.has(('[' + (c.menu_name || 'UMUM') + '] ' + (c.comment || '')).trim().toUpperCase()));
+          } catch { return list; }
         } catch {
           return [];
         }

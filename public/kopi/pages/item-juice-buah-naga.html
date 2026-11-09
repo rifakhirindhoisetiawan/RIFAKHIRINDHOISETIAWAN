@@ -287,11 +287,24 @@
             } catch(e){}
             renderComments(filteredLokal);
             try {
-              if (id && !String(id).startsWith('local_')) {
-                await supabase.from('note_entries').delete().eq('id', id);
+              // Collect ids to delete (by id and by case-insensitive content match)
+              const idsToDelete = new Set();
+              if (id && !String(id).startsWith('local_')) idsToDelete.add(id);
+              const fullContentUpper = ('[' + NAMA + '] ' + content).toUpperCase();
+              const { data: rows } = await supabase
+                .from('note_entries')
+                .select('id,content')
+                .eq('menu_id', NOTE_MENU_ID);
+              if (rows) {
+                rows.forEach(r => {
+                  if ((r.content || '').toUpperCase() === fullContentUpper) idsToDelete.add(r.id);
+                });
               }
-              const fullContent = '[' + NAMA + '] ' + content.toUpperCase();
-              await supabase.from('note_entries').delete().eq('content', fullContent);
+              for (const rid of idsToDelete) {
+                await supabase.from('note_entries').delete().eq('id', rid);
+              }
+              // fallback: delete by exact content variants
+              await supabase.from('note_entries').delete().eq('content', '[' + NAMA + '] ' + content);
             } catch(e){ console.warn('Gagal hapus di server:', e && e.message); }
             loadComments();
           });
