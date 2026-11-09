@@ -443,8 +443,9 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           <div id="dateTime" style="flex:1;min-width:0;font-family:'Inter',sans-serif;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:space-between">Memuat...</div>
         </div>
-        <button class="notif-btn" type="button" aria-label="Notifikasi" title="Notifikasi (sementara)" onclick="alert('Notifikasi: belum ada (masih ide)')">
+        <button class="notif-btn" id="notifBtn" type="button" aria-label="Notifikasi" title="Notifikasi komentar kopi" style="position:relative;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span id="notifBadge" style="display:none; position:absolute; top:-4px; right:-4px; min-width:16px; height:16px; padding:0 4px; background:#ef4444; color:#fff; font-size:10px; font-weight:700; border-radius:8px; line-height:16px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.3);">0</span>
         </button>
         <button class="notif-btn" id="headerPinBtn" type="button" aria-label="Kelola Sematan Menu" title="Kelola Sematan Menu">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"/></svg>
@@ -647,6 +648,96 @@
       }
       updateDateTime();
       setInterval(updateDateTime, 1000);
+
+      // --- Notifikasi komentar KOPI ---
+      const NOTIF_LAST_KEY = 'portal_kopi_notif_last_v1';
+      const notifBtn = document.getElementById('notifBtn');
+      const notifBadge = document.getElementById('notifBadge');
+
+      function getLastSeen() { try { return localStorage.getItem(NOTIF_LAST_KEY) || ''; } catch { return ''; } }
+      function setLastSeen(ts) { try { localStorage.setItem(NOTIF_LAST_KEY, ts); } catch {} }
+
+      async function fetchKopiComments() {
+        try {
+          const { data, error } = await supabase.from('note_entries').select('*').eq('menu_id', 64).order('created_at', { ascending: false }).limit(50);
+          if (error || !data) return [];
+          return data.map(d => {
+            const text = d.content || '';
+            let menuName = 'UMUM';
+            let commentText = text;
+            const match = text.match(/^\[(.*?)\]\s*(.*)$/);
+            if (match) { menuName = match[1]; commentText = match[2]; }
+            return { id: d.id, menu_name: menuName, comment: commentText, created_at: d.created_at };
+          }).filter(c => c.comment);
+        } catch { return []; }
+      }
+
+      async function updateNotifBadge() {
+        const comments = await fetchKopiComments();
+        const last = getLastSeen();
+        const unseen = last ? comments.filter(c => (c.created_at || '') > last) : comments;
+        if (notifBadge) {
+          if (unseen.length > 0) {
+            notifBadge.textContent = unseen.length > 99 ? '99+' : unseen.length;
+            notifBadge.style.display = 'block';
+          } else {
+            notifBadge.style.display = 'none';
+          }
+        }
+        return comments;
+      }
+
+      const notifPanel = document.createElement('div');
+      notifPanel.id = 'notifPanel';
+      notifPanel.style.cssText = 'display:none; position:fixed; top:64px; right:12px; width:min(380px, calc(100vw - 24px)); max-height:60vh; overflow-y:auto; background:#fffbf2; border:1px solid rgba(26,25,23,0.14); border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.2); z-index:1000; padding:4px 0;';
+      document.body.appendChild(notifPanel);
+
+      function escHtmlN(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+      async function openNotifPanel() {
+        const comments = await updateNotifBadge();
+        if (!comments.length) {
+          notifPanel.innerHTML = '<div style="padding:16px; text-align:center; color:#6e6a64; font-size:13px;">Belum ada komentar.</div>';
+        } else {
+          notifPanel.innerHTML = comments.slice(0, 30).map(c => {
+            const t = new Date(c.created_at || Date.now()).toLocaleString('id-ID', { dateStyle:'short', timeStyle:'short' });
+            const slug = (c.menu_name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            const link = 'public/kopi/pages/item-' + slug + '.html';
+            return '<a href="' + link + '" style="display:block; padding:10px 14px; border-bottom:1px solid rgba(26,25,23,0.08); text-decoration:none; color:#1a1917;">' +
+              '<div style="font-size:10px; font-weight:800; text-transform:uppercase; font-family:ui-monospace,monospace; color:#6e6a64; margin-bottom:2px;">' + escHtmlN(c.menu_name) + '</div>' +
+              '<div style="font-size:13px; font-weight:600; text-transform:uppercase; word-break:break-word;">' + escHtmlN(c.comment) + '</div>' +
+              '<div style="font-size:9px; color:#6e6a64; font-family:ui-monospace,monospace; margin-top:2px;">' + t + '</div>' +
+            '</a>';
+          }).join('');
+        }
+        notifPanel.style.display = 'block';
+        if (comments.length) setLastSeen(comments[0].created_at);
+        updateNotifBadge();
+      }
+
+      if (notifBtn) {
+        notifBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (notifPanel.style.display === 'block') {
+            notifPanel.style.display = 'none';
+          } else {
+            openNotifPanel();
+          }
+        });
+      }
+      document.addEventListener('click', (e) => {
+        if (notifPanel.style.display === 'block' && !notifPanel.contains(e.target) && e.target !== notifBtn && !(notifBtn && notifBtn.contains(e.target))) {
+          notifPanel.style.display = 'none';
+        }
+      });
+
+      updateNotifBadge();
+      setInterval(updateNotifBadge, 60000);
+      try {
+        supabase.channel('kopi_comments_notif')
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'note_entries' }, () => { updateNotifBadge(); })
+          .subscribe();
+      } catch {}
     </script>
   </body>
 </html>
