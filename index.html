@@ -709,13 +709,18 @@
       document.body.appendChild(notifPopup);
 
       if (notifBtn) {
-        notifBtn.addEventListener('click', async (e) => {
+        notifBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          const comments = await fetchKopiComments();
-          if (comments.length) setLastSeen(comments[0].created_at);
-          updateNotifBadge();
-          notifPopup.style.display = 'block';
+          const isOpen = notifPopup.style.display === 'block';
+          notifPopup.style.display = isOpen ? 'none' : 'block';
+          if (!isOpen) {
+            // mark as seen & refresh badge in background (non-blocking)
+            fetchKopiComments().then((comments) => {
+              if (comments.length) setLastSeen(comments[0].created_at);
+              updateNotifBadge();
+            });
+          }
         });
       }
       document.addEventListener('click', (e) => {
