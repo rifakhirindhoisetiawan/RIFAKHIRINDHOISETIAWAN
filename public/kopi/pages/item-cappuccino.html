@@ -254,14 +254,12 @@
         });
         commentList.innerHTML = uniqList.map((c, idx) => {
           const t = new Date(c.created_at || Date.now()).toLocaleDateString('id-ID', { dateStyle: 'short' });
-          return '<div style="background:var(--mori-surface);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:5px;">' +
-            '<div style="font-size:13px;color:var(--mori-text);word-break:break-word;">' + escHtml(c.content) + '</div>' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--mori-text-2);font-family:var(--mori-mono);">' +
-            '<span>' + t + '</span>' +
-            '<div style="display:flex;gap:8px;">' +
+          return '<div style="background:var(--mori-surface);border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:8px;">' +
+            '<div style="flex:1;font-size:13px;color:var(--mori-text);word-break:break-word;">' + escHtml(c.content) + '</div>' +
+            '<span style="font-size:10px;color:var(--mori-text-2);font-family:var(--mori-mono);flex-shrink:0;">' + t + '</span>' +
+            '<div style="display:flex;gap:4px;flex-shrink:0;">' +
             '<button type="button" class="edit-note-btn" data-idx="' + idx + '" data-content="' + escHtml(c.content) + '" title="Edit" aria-label="Edit" style="width:36px; height:36px; background:#1a1917; color:#fff; border:none; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 3 0 1 1 4 4L7.5 20.5 4 22l1.5-3.5L17 3z"></path></svg></button>' +
             '<button type="button" class="del-note-btn" data-idx="' + idx + '" data-id="' + (c.id || '') + '" title="Hapus" aria-label="Hapus" style="width:36px; height:36px; background:#1a1917; color:#fff; border:none; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 6 6 18"></polyline><polyline points="6 6 18 18"></polyline></svg></button>' +
-            '</div>' +
             '</div>' +
             '</div>';
         }).join('');
