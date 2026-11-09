@@ -389,8 +389,8 @@
        [input + "+"] -> tabel Daftar Menu -> search.
        Tabel kegiatan, tombol "Tambah Kegiatan", dan tombol "Batal"
        sudah dihapus (halaman ini hanya mengatur judul menu & foto). -->
-  <div class="grid" style="grid-template-columns:1fr;gap:0">
-    <div class="card" style="order:1">
+  <div class="grid" style="grid-template-columns:1fr;gap:12px">
+    <div class="card" style="order:2">
       <div class="table-wrap" id="listWrap" style="margin-top:0">
         <table class="menu-table">
           <thead>
@@ -424,14 +424,6 @@
       </div>
       <div class="foto-hint" id="fotoHint" hidden></div>
 
-      <!-- Search (jumlah menu di sampingnya sudah dihapus) -->
-      <div class="search-wrapper">
-        <div class="search-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-          <input id="search" type="text" placeholder="Cari menu..." autocomplete="off" />
-        </div>
-      </div>
-
       <!-- Tabel kegiatan: baru muncul setelah baris menu diklik, sama
            seperti tabel barang di Admin Stok Opname. -->
       <section class="sec" id="kegiatanSec" hidden>
@@ -449,6 +441,15 @@
         </div>
       </section>
     </div>
+
+    <!-- Search (jumlah menu di sampingnya sudah dihapus) -->
+    <div class="search-wrapper" style="order:1">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+        <input id="search" type="text" placeholder="Cari menu..." autocomplete="off" />
+      </div>
+    </div>
+  </div>
   </div>
 </div>
 
