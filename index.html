@@ -721,11 +721,11 @@
           const comments = await fetchKopiComments();
           if (comments.length) setLastSeen(comments[0].created_at);
           updateNotifBadge();
-          notifPopup.style.display = 'flex';
+          notifPopup.style.display = 'block';
         });
       }
       document.addEventListener('click', (e) => {
-        if (notifPopup.style.display === 'flex' && !notifPopup.querySelector('div').contains(e.target)) {
+        if (notifPopup.style.display === 'block' && !notifPopup.contains(e.target)) {
           notifPopup.style.display = 'none';
         }
       });
