@@ -303,8 +303,14 @@
     if(!title){ setFotoHint('Nama menu wajib diisi'); f_title.focus(); return; }
     const slug=slugify(title);
     let res;
-    if(editId.value) res=await supabase.from(TABLE).update({title,slug,category}).eq('id',parseInt(editId.value,10));
-    else res=await supabase.from(TABLE).insert([{title,slug,category,sort_order:all.length+1}]);
+    // Coba simpan dengan category, jika error kolom tidak ada, simpan tanpa category
+    if(editId.value) {
+      res=await supabase.from(TABLE).update({title,slug,category}).eq('id',parseInt(editId.value,10));
+      if(res.error) res=await supabase.from(TABLE).update({title,slug}).eq('id',parseInt(editId.value,10));
+    } else {
+      res=await supabase.from(TABLE).insert([{title,slug,category,sort_order:all.length+1}]);
+      if(res.error) res=await supabase.from(TABLE).insert([{title,slug,sort_order:all.length+1}]);
+    }
     if(res.error){ setFotoHint('Gagal simpan: '+(res.error.message||'error')); return; }
     resetForm(); await load();
   });
