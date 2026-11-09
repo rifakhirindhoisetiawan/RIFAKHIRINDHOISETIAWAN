@@ -296,16 +296,19 @@
                 .select('id,content')
                 .eq('menu_id', NOTE_MENU_ID);
               if (rows) {
+                const norm = (s) => (s || '').toUpperCase().replace(/\s+/g, ' ').trim();
+                const targetNorm = norm('[' + NAMA + '] ' + content);
                 rows.forEach(r => {
-                  if ((r.content || '').toUpperCase() === fullContentUpper) idsToDelete.add(r.id);
+                  if (norm(r.content) === targetNorm) idsToDelete.add(r.id);
                 });
               }
               for (const rid of idsToDelete) {
                 await supabase.from('note_entries').delete().eq('id', rid);
               }
+              alert('Dihapus ' + idsToDelete.size + ' baris dari server');
               // fallback: delete by exact content variants
               await supabase.from('note_entries').delete().eq('content', '[' + NAMA + '] ' + content);
-            } catch(e){ console.warn('Gagal hapus di server:', e && e.message); }
+            } catch(e){ console.warn('Gagal hapus di server:', e && e.message); alert('Gagal hapus: '+(e&&e.message)); }
             loadComments();
           });
         });
@@ -330,7 +333,8 @@
         const lokal = getLocalComments();
         let tomb = [];
         try { tomb = JSON.parse(localStorage.getItem(COMMENT_KEY + '_deleted') || '[]'); } catch(e){}
-        const isTomb = (c) => tomb.map(x=>String(x).toUpperCase()).includes((c.content||'').trim().toUpperCase());
+        const norm = (s) => (s || '').toUpperCase().replace(/\s+/g,' ').trim();
+        const isTomb = (c) => tomb.map(x=>norm(x)).includes(norm(c.content));
         const lokalClean = lokal.filter(c => !isTomb(c)).map(c => ({...c, content: (c.content||'').toUpperCase()}));
         renderComments(lokalClean);
         try {
