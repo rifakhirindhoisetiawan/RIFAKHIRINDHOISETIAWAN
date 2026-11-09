@@ -1347,7 +1347,7 @@
         if (p16.length) html += bahanGroup('P16', p16);
         if (b12.length) html += bahanGroup('12OZ', b12);
         if (b16.length) html += bahanGroup('16OZ', b16);
-        if (m.catatan) html += '<div class="sheet-sec">Catatan</div><div class="sheet-note">' + m.catatan + '</div>';
+        if (m.catatan) html += '<div class="sheet-sec">Catatan</div><div class="sheet-note" style="text-transform:uppercase;">' + m.catatan + '</div>';
         if (!bahans.length && !m.catatan) html += '<div class="sheet-empty">Belum ada data bahan.</div>';
         sheetBody.innerHTML = html;
         sheetBg.classList.add('open');
