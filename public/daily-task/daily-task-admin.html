@@ -386,14 +386,42 @@
 <body>
 <div class="wrap">
   <!-- Satu kolom, urutan sama seperti Admin Stok Opname:
-       [input + "+"] -> tabel Daftar Menu -> search.
-       Tabel kegiatan, tombol "Tambah Kegiatan", dan tombol "Batal"
-       sudah dihapus (halaman ini hanya mengatur judul menu & foto). -->
-  <div class="grid" style="grid-template-columns:1fr;gap:0">
-    <div class="card" style="order:1">
-  <div class="table-wrap menu-foto-wrap" id="listWrap">
+       [input + "+"] -> tabel Daftar Menu -> search. -->
+  <div class="grid" style="grid-template-columns:1fr;gap:12px">
+    <div class="card">
+      <div class="table-wrap menu-foto-wrap" id="listWrap">
         <table class="menu-table">
           <thead>
+            <tr>
+              <th colspan="4" style="padding:0;background:transparent;border:0">
+                <div class="table-wrap" style="border:0;border-radius:0;background:transparent;box-shadow:none;">
+                  <table class="menu-table" style="border-collapse:collapse;">
+                    <tbody class="tulis-body">
+                      <tr>
+                        <td class="tulis" colspan="3" style="padding:8px 12px;background:var(--mori-surface);border-bottom:1px solid var(--mori-line);">
+                          <div class="tulis-in" style="display:flex;align-items:center;gap:8px;width:100%;">
+                            <input
+                              type="text"
+                              id="f_title"
+                              placeholder="NAMA MENU"
+                              autocomplete="off"
+                              aria-label="Nama menu"
+                              style="flex:1;background:transparent;border:none;outline:none;font-size:12px;font-family:var(--mori-mono);text-transform:uppercase;color:var(--mori-text);"
+                            />
+                            <span class="mode" id="mMode"></span>
+                          </div>
+                        </td>
+                        <td class="c-aksi" style="padding:8px 12px;background:var(--mori-surface);border-bottom:1px solid var(--mori-line);">
+                          <div class="acts" style="display:flex;align-items:center;justify-content:center;">
+                            <button class="btn" type="button" id="btnAdd" title="Tambah menu" aria-label="Tambah menu" style="width:26px;height:26px;padding:0;display:flex;align-items:center;justify-content:center;background:var(--mori-accent);color:#fff;border:none;border-radius:7px;cursor:pointer;font-weight:700;font-size:14px;">+</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </th>
+            </tr>
             <tr>
               <th class="c-no">No</th>
               <th>Nama Menu</th>
@@ -401,28 +429,6 @@
               <th class="c-aksi"></th>
             </tr>
           </thead>
-          <tbody class="tulis-body">
-            <tr>
-              <td class="tulis" colspan="3">
-                <div class="tulis-in" style="display:flex;align-items:center;gap:8px;width:100%;">
-                  <input
-                    type="text"
-                    id="f_title"
-                    placeholder="NAMA MENU"
-                    autocomplete="off"
-                    aria-label="Nama menu"
-                    style="flex:1;background:transparent;border:none;outline:none;font-size:12px;font-family:var(--mori-mono);text-transform:uppercase;color:var(--mori-text);"
-                  />
-                  <span class="mode" id="mMode"></span>
-                </div>
-              </td>
-              <td class="c-aksi">
-                <div class="acts" style="display:flex;align-items:center;justify-content:center;">
-                  <button class="btn" type="button" id="btnAdd" title="Tambah menu" aria-label="Tambah menu" style="width:26px;height:26px;padding:0;display:flex;align-items:center;justify-content:center;background:var(--mori-accent);color:#fff;border:none;border-radius:7px;cursor:pointer;font-weight:700;font-size:14px;">+</button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
           <tbody id="list">
             <tr><td class="c-no"></td><td class="c-nama"><div class="empty">Memuat...</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>
           </tbody>
@@ -430,7 +436,7 @@
       </div>
       <div class="foto-hint" id="fotoHint" hidden></div>
 
-      <!-- Search (baris pencarian seperti di stok-opname) -->
+      <!-- Search (baris pencarian di bawah tabel seperti stok-opname) -->
       <div class="table-wrap" style="margin-top:12px;">
         <table class="menu-table">
           <tbody class="cari-body">
@@ -453,6 +459,25 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Tabel kegiatan: baru muncul setelah baris menu diklik, sama
+           seperti tabel barang di Admin Stok Opname. -->
+      <section class="sec" id="kegiatanSec" hidden>
+        <div class="table-wrap" id="kegiatanWrap" style="margin-top:12px">
+          <table class="menu-table">
+            <thead>
+              <tr>
+                <th class="c-no">No</th>
+                <th>Kegiatan</th>
+                <th class="c-aksi-k"></th>
+              </tr>
+            </thead>
+            <tbody id="kegiatanBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
     </div>
   </div>
   </div>
