@@ -449,9 +449,10 @@
           }
           editingContent = null;
           editingSupabaseId = null;
-          loadComments();
+          try { loadComments(); } catch (e2) { console.warn('loadComments err', e2); }
         } catch (err) {
-          alert('Gagal menyimpan catatan: ' + err.message);
+          console.error('submit err', err);
+          alert('Gagal menyimpan catatan: ' + (err && err.message ? err.message : err) + '\n' + (err && err.stack ? err.stack.slice(0,300) : ''));
         }
       });
 
