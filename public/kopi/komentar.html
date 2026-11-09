@@ -129,7 +129,7 @@
               html += '<tr>';
               html += '<td class="menu-col">' + menuName + '</td>';
               html += '<td>' + commentText.toUpperCase() + '<div style="font-size:9px;color:var(--mori-text-2);font-family:var(--mori-mono);margin-top:2px;">' + t + '</div></td>';
-              html += '<td class="action-col"><a href="' + linkUrl + '" class="btn-buka" title="Buka">→</a></td>';
+              html += '<td class="action-col"><a href="' + linkUrl + '" class="btn-buka" title="Buka" aria-label="Buka"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg></a></td>';
               html += '</tr>';
             });
             html += '</tbody></table>';
@@ -182,7 +182,7 @@
             html += '<tr>';
             html += '<td class="menu-col">' + menuName + '</td>';
             html += '<td>' + commentText.toUpperCase() + '<div style="font-size:9px;color:var(--mori-text-2);font-family:var(--mori-mono);margin-top:2px;">' + t + '</div></td>';
-            html += '<td class="action-col"><a href="' + linkUrl + '" class="btn-buka">Buka →</a></td>';
+            html += '<td class="action-col"><a href="' + linkUrl + '" class="btn-buka" title="Buka" aria-label="Buka"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg></a></td>';
             html += '</tr>';
           });
           html += '</tbody></table>';
