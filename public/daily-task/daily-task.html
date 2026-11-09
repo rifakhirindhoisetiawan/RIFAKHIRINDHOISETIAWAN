@@ -87,16 +87,18 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        height: 46px;
+        box-sizing: border-box;
         border: 1px solid var(--mori-line);
         border-radius: 8px;
-        padding: 10px 14px;
+        padding: 0 14px;
         color: var(--mori-text);
-        font-size: 14px;
+        font-size: 13px;
         background: var(--mori-surface);
+        transition: background 0.2s ease;
       }
       .search-box:focus-within {
-        border-color: #888;
-        background: #fff;
+        background: #fffdf7;
       }
       .search-box input {
         border: none;
@@ -104,14 +106,14 @@
         outline: none;
         width: 100%;
         font-size: 14px;
-        color: #222;
+        color: var(--mori-text);
         font-family: inherit;
         -webkit-appearance: none;
         appearance: none;
         border-radius: 0;
       }
       .search-box input::placeholder {
-        color: #c3c8d1;
+        color: var(--mori-text-2);
       }
       .pin-row {
         grid-column: 1 / -1;
