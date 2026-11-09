@@ -115,12 +115,20 @@
       background:var(--mori-surface);color:var(--mori-text);
       font-family:var(--mori-mono);font-size:9px;font-weight:700;
       letter-spacing:.6px;text-transform:uppercase;text-align:left;
-      height:34px;padding:0 6px;border-bottom:1px solid #e5e7eb;
+      height:34px;padding:0 6px;border-bottom:1px solid var(--mori-line);
+      border-right:1px solid var(--mori-line);
       white-space:nowrap;
     }
+    .menu-table thead th:last-child{
+      border-right:0;
+    }
     .menu-table tbody td{
-      height:46px;padding:0 6px;border-bottom:1px solid #e5e7eb;
+      height:46px;padding:0 6px;border-bottom:1px solid var(--mori-line);
+      border-right:1px solid var(--mori-line);
       vertical-align:middle;
+    }
+    .menu-table tbody td:last-child{
+      border-right:0;
     }
     .menu-table tbody tr:hover td{background:#faf6ea}
     .menu-table tbody tr:last-child td{border-bottom:0}
