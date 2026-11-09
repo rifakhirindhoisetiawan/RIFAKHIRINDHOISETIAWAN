@@ -655,6 +655,14 @@
       const notifBtn = document.getElementById('notifBtn');
       const notifBadge = document.getElementById('notifBadge');
 
+      async function fetchMusnahCount() {
+        try {
+          const { count, error } = await supabase.from('musnah_menus').select('*', { count: 'exact', head: true }).eq('is_checked', false);
+          if (error) return 0;
+          return count || 0;
+        } catch { return 0; }
+      }
+
       async function fetchKopiComments() {
         try {
           const { data, error } = await supabase.from('note_entries').select('*').eq('menu_id', 64).order('created_at', { ascending: false }).limit(50);
@@ -671,30 +679,28 @@
       }
 
       async function updateNotifBadge() {
-        const comments = await fetchKopiComments();
-        // Titik merah tampil selama MASIH ADA catatan (hilang hanya jika semua catatan terhapus)
+        const [comments, musnahCount] = await Promise.all([fetchKopiComments(), fetchMusnahCount()]);
+        const totalNotif = comments.length + musnahCount;
         if (notifBadge) {
-          notifBadge.style.display = comments.length > 0 ? 'block' : 'none';
+          notifBadge.style.display = totalNotif > 0 ? 'block' : 'none';
         }
-        renderNotifPopup(comments);
-        return comments;
+        renderNotifPopup(comments, musnahCount);
+        return { comments, musnahCount };
       }
 
-      // Popup reminder (Mori style)
-      // Daftar notifikasi (umum, bisa ditambah menu lain nanti)
+      // Daftar notifikasi
       const NOTIF_ITEMS = [
         { title: 'Menu Kopi', menuId: 64, img: 'public/kopi/image-index.jpg', link: 'public/kopi/kopi.html' },
+        { title: 'Musnah', menuId: 'musnah', img: 'assets/images/pagi/1.jpg', link: 'public/musnah/musnah-admin.html' },
       ];
 
       const notifPopup = document.createElement('div');
       notifPopup.id = 'notifPopup';
       notifPopup.style.cssText = 'display:none; position:absolute; top:58px; right:12px; width:min(230px, calc(100vw - 24px)); max-height:60vh; overflow-y:auto; background:#fffbf2; border:1px solid rgba(26,25,23,0.14); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.18); z-index:1000; padding:6px 0;';
-      function renderNotifPopup(comments) {
-        // Jumlah catatan KOPI (menu_id 64). Item hanya tampil kalau ada catatan.
-        const menus = {};
-        NOTIF_ITEMS.forEach(it => { menus[it.menuId] = it.menuId === 64 ? comments.length : 0; });
+      function renderNotifPopup(comments, musnahCount) {
+        const counts = { 64: comments.length, 'musnah': musnahCount };
         const itemsHtml = NOTIF_ITEMS
-          .map(it => ({ it, n: menus[it.menuId] || 0 }))
+          .map(it => ({ it, n: counts[it.menuId] || 0 }))
           .filter(x => x.n > 0)
           .map(x =>
             '<div style="display:flex; gap:6px; align-items:center; padding:5px 8px;">' +
@@ -734,7 +740,8 @@
       setInterval(updateNotifBadge, 60000);
       try {
         supabase.channel('kopi_comments_notif')
-          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'note_entries' }, () => { updateNotifBadge(); })
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'note_entries' }, () => { updateNotifBadge(); })
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'musnah_menus' }, () => { updateNotifBadge(); })
           .subscribe();
       } catch {}
     </script>
