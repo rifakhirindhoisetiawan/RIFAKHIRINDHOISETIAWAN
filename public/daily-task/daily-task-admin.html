@@ -391,33 +391,9 @@
        sudah dihapus (halaman ini hanya mengatur judul menu & foto). -->
   <div class="grid" style="grid-template-columns:1fr;gap:0">
     <div class="card" style="order:1">
-      <div class="table-wrap" id="listWrap" style="margin-top:0">
+  <div class="table-wrap menu-foto-wrap" id="listWrap">
         <table class="menu-table">
           <thead>
-            <tr>
-              <th colspan="4" style="padding:0;background:transparent;border:0">
-                <div class="search-box" style="width:100%;border:0;border-radius:0;background:var(--mori-surface);border-bottom:1px solid var(--mori-line);padding:8px 12px;height:42px;">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--mori-text-2)"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-                  <input id="search" type="text" placeholder="Cari menu..." autocomplete="off" style="font-size:12px;font-family:var(--mori-mono);text-transform:uppercase" />
-                </div>
-              </th>
-            </tr>
-            <tr>
-              <th colspan="4" style="padding:0;background:transparent;border:0">
-                <div class="judul-row" style="display:flex;align-items:center;height:42px;background:var(--mori-bg);border-bottom:1px solid var(--mori-line);padding:0 8px;gap:8px">
-                  <input
-                    id="f_title"
-                    type="text"
-                    placeholder="Judul menu, cth: HARI"
-                    aria-label="Judul menu"
-                    autocomplete="off"
-                    required
-                    style="flex:1;height:32px;padding:0 12px;font-size:12px;font-family:var(--mori-mono);color:var(--mori-text);background:var(--mori-surface);border:1px solid var(--mori-line);border-radius:8px;outline:none;"
-                  />
-                  <button class="btn-add" type="button" id="btnAdd" title="Tambah menu" aria-label="Tambah menu" style="width:32px;height:32px;flex:0 0 32px;display:flex;align-items:center;justify-content:center;font-family:var(--mori-mono);font-size:18px;font-weight:700;color:var(--mori-bg);background:var(--mori-accent);border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;">+</button>
-                </div>
-              </th>
-            </tr>
             <tr>
               <th class="c-no">No</th>
               <th>Nama Menu</th>
@@ -425,6 +401,28 @@
               <th class="c-aksi"></th>
             </tr>
           </thead>
+          <tbody class="tulis-body">
+            <tr>
+              <td class="tulis" colspan="3">
+                <div class="tulis-in" style="display:flex;align-items:center;gap:8px;width:100%;">
+                  <input
+                    type="text"
+                    id="f_title"
+                    placeholder="NAMA MENU"
+                    autocomplete="off"
+                    aria-label="Nama menu"
+                    style="flex:1;background:transparent;border:none;outline:none;font-size:12px;font-family:var(--mori-mono);text-transform:uppercase;color:var(--mori-text);"
+                  />
+                  <span class="mode" id="mMode"></span>
+                </div>
+              </td>
+              <td class="c-aksi">
+                <div class="acts" style="display:flex;align-items:center;justify-content:center;">
+                  <button class="btn" type="button" id="btnAdd" title="Tambah menu" aria-label="Tambah menu" style="width:26px;height:26px;padding:0;display:flex;align-items:center;justify-content:center;background:var(--mori-accent);color:#fff;border:none;border-radius:7px;cursor:pointer;font-weight:700;font-size:14px;">+</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
           <tbody id="list">
             <tr><td class="c-no"></td><td class="c-nama"><div class="empty">Memuat...</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>
           </tbody>
@@ -432,22 +430,29 @@
       </div>
       <div class="foto-hint" id="fotoHint" hidden></div>
 
-      <!-- Tabel kegiatan: baru muncul setelah baris menu diklik, sama
-           seperti tabel barang di Admin Stok Opname. -->
-      <section class="sec" id="kegiatanSec" hidden>
-        <div class="table-wrap" id="kegiatanWrap" style="margin-top:12px">
-          <table class="menu-table">
-            <thead>
-              <tr>
-                <th class="c-no">No</th>
-                <th>Kegiatan</th>
-                <th class="c-aksi-k"></th>
-              </tr>
-            </thead>
-            <tbody id="kegiatanBody"></tbody>
-          </table>
-        </div>
-      </section>
+      <!-- Search (baris pencarian seperti di stok-opname) -->
+      <div class="table-wrap" style="margin-top:12px;">
+        <table class="menu-table">
+          <tbody class="cari-body">
+            <tr>
+              <td class="cari-sel" colspan="4" style="padding:6px 12px;background:var(--mori-surface);">
+                <div class="cari-dalam" style="display:flex;align-items:center;gap:8px;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--mori-text-2)"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                  <input
+                    class="cari"
+                    type="search"
+                    id="search"
+                    placeholder="Cari menu..."
+                    autocomplete="off"
+                    aria-label="Cari menu"
+                    style="width:100%;border:none;background:transparent;outline:none;font-size:12px;font-family:var(--mori-mono);text-transform:uppercase;color:var(--mori-text);"
+                  />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
   </div>
