@@ -688,7 +688,7 @@
 
       const notifPopup = document.createElement('div');
       notifPopup.id = 'notifPopup';
-      notifPopup.style.cssText = 'display:none; position:fixed; top:58px; right:12px; width:min(230px, calc(100vw - 24px)); max-height:60vh; overflow-y:auto; background:#fffbf2; border:1px solid rgba(26,25,23,0.14); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.18); z-index:1000; padding:6px 0;';
+      notifPopup.style.cssText = 'display:none; position:absolute; top:58px; right:12px; width:min(230px, calc(100vw - 24px)); max-height:60vh; overflow-y:auto; background:#fffbf2; border:1px solid rgba(26,25,23,0.14); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.18); z-index:1000; padding:6px 0;';
       function renderNotifPopup(comments) {
         // Jumlah catatan KOPI (menu_id 64). Item hanya tampil kalau ada catatan.
         const menus = {};
