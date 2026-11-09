@@ -174,7 +174,6 @@
   <div class="pw-card" role="dialog" aria-modal="true">
     <div class="pw-title">Konfirmasi Hapus</div>
     <div class="pw-msg" id="pwMsg"></div>
-    <input class="pw-input" id="pwEmail" type="email" autocomplete="username" placeholder="Email admin" style="margin-bottom:8px" />
     <input class="pw-input" id="pwInput" type="password" autocomplete="current-password" placeholder="Password" />
     <div class="pw-error" id="pwError" hidden>Gagal masuk.</div>
     <div class="pw-actions">
@@ -594,7 +593,6 @@
 
   const pwBg = document.getElementById('pwBg');
   const pwMsg = document.getElementById('pwMsg');
-  const pwEmail = document.getElementById('pwEmail');
   const pwInput = document.getElementById('pwInput');
   const pwError = document.getElementById('pwError');
   const pwOk = document.getElementById('pwOk');
@@ -609,11 +607,10 @@
     if (await sudahMasukAdmin()) return true;
     if (pwResolve) closePw(false);
     pwMsg.textContent = msg || 'Konfirmasi Hapus';
-    pwEmail.value = '';
     pwInput.value = '';
     pwError.hidden = true;
     pwBg.classList.add('open');
-    try { pwEmail.focus({ preventScroll: true }); } catch (e) { pwEmail.focus(); }
+    try { pwInput.focus({ preventScroll: true }); } catch (e) { pwInput.focus(); }
     return new Promise(res => { pwResolve = res; });
   }
 
@@ -625,13 +622,13 @@
   }
 
   pwOk.addEventListener('click', async () => {
-    const email = (pwEmail.value || '').trim();
     const pass = pwInput.value || '';
-    if (!email || !pass) {
-      pwError.textContent = 'Email dan password wajib diisi.';
+    if (!pass) {
+      pwError.textContent = 'Password wajib diisi.';
       pwError.hidden = false;
       return;
     }
+    const email = 'admin@kopi.com';
     const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
     if (error) {
       pwError.textContent = 'Gagal masuk: ' + error.message;
