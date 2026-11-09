@@ -687,49 +687,15 @@
         return comments;
       }
 
-      const notifPanel = document.createElement('div');
-      notifPanel.id = 'notifPanel';
-      notifPanel.style.cssText = 'display:none; position:fixed; top:64px; right:12px; width:min(380px, calc(100vw - 24px)); max-height:60vh; overflow-y:auto; background:#fffbf2; border:1px solid rgba(26,25,23,0.14); border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.2); z-index:1000; padding:4px 0;';
-      document.body.appendChild(notifPanel);
-
-      function escHtmlN(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-      async function openNotifPanel() {
-        const comments = await updateNotifBadge();
-        if (!comments.length) {
-          notifPanel.innerHTML = '<div style="padding:16px; text-align:center; color:#6e6a64; font-size:13px;">Belum ada komentar.</div>';
-        } else {
-          notifPanel.innerHTML = comments.slice(0, 30).map(c => {
-            const t = new Date(c.created_at || Date.now()).toLocaleString('id-ID', { dateStyle:'short', timeStyle:'short' });
-            const slug = (c.menu_name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-            const link = 'public/kopi/pages/item-' + slug + '.html';
-            return '<a href="' + link + '" style="display:block; padding:10px 14px; border-bottom:1px solid rgba(26,25,23,0.08); text-decoration:none; color:#1a1917;">' +
-              '<div style="font-size:10px; font-weight:800; text-transform:uppercase; font-family:ui-monospace,monospace; color:#6e6a64; margin-bottom:2px;">' + escHtmlN(c.menu_name) + '</div>' +
-              '<div style="font-size:13px; font-weight:600; text-transform:uppercase; word-break:break-word;">' + escHtmlN(c.comment) + '</div>' +
-              '<div style="font-size:9px; color:#6e6a64; font-family:ui-monospace,monospace; margin-top:2px;">' + t + '</div>' +
-            '</a>';
-          }).join('');
-        }
-        notifPanel.style.display = 'block';
-        if (comments.length) setLastSeen(comments[0].created_at);
-        updateNotifBadge();
-      }
-
       if (notifBtn) {
-        notifBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (notifPanel.style.display === 'block') {
-            notifPanel.style.display = 'none';
-          } else {
-            openNotifPanel();
-          }
+        notifBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const comments = await fetchKopiComments();
+          if (comments.length) setLastSeen(comments[0].created_at);
+          updateNotifBadge();
+          window.location.href = 'public/kopi/kopi.html';
         });
       }
-      document.addEventListener('click', (e) => {
-        if (notifPanel.style.display === 'block' && !notifPanel.contains(e.target) && e.target !== notifBtn && !(notifBtn && notifBtn.contains(e.target))) {
-          notifPanel.style.display = 'none';
-        }
-      });
 
       updateNotifBadge();
       setInterval(updateNotifBadge, 60000);
