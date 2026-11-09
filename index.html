@@ -697,7 +697,7 @@
       notifPopup.id = 'notifPopup';
       notifPopup.style.cssText = 'display:none; position:fixed; top:58px; right:12px; width:min(320px, calc(100vw - 24px)); max-height:60vh; overflow-y:auto; background:#fffbf2; border:1px solid rgba(26,25,23,0.14); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.18); z-index:1000; padding:6px 0;';
       const itemsHtml = NOTIF_ITEMS.map(it =>
-        '<div style="display:flex; gap:8px; align-items:center; padding:5px 10px; border-bottom:1px solid rgba(26,25,23,0.08);">' +
+        '<div style="display:flex; gap:8px; align-items:center; padding:5px 10px;">' +
           '<img src="' + it.img + '" alt="' + it.title + '" style="width:32px; height:32px; object-fit:cover; object-position:center; border-radius:6px; border:1px solid rgba(26,25,23,0.1); flex-shrink:0; background:#f7f3e9;" />' +
           '<div style="flex:1; min-width:0; text-align:left;">' +
             '<div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; color:#1a1917; font-family:ui-monospace,monospace;">' + it.title + '</div>' +
