@@ -650,12 +650,8 @@
       setInterval(updateDateTime, 1000);
 
       // --- Notifikasi komentar KOPI ---
-      const NOTIF_LAST_KEY = 'portal_kopi_notif_last_v1';
       const notifBtn = document.getElementById('notifBtn');
       const notifBadge = document.getElementById('notifBadge');
-
-      function getLastSeen() { try { return localStorage.getItem(NOTIF_LAST_KEY) || ''; } catch { return ''; } }
-      function setLastSeen(ts) { try { localStorage.setItem(NOTIF_LAST_KEY, ts); } catch {} }
 
       async function fetchKopiComments() {
         try {
@@ -674,14 +670,9 @@
 
       async function updateNotifBadge() {
         const comments = await fetchKopiComments();
-        const last = getLastSeen();
-        const unseen = last ? comments.filter(c => (c.created_at || '') > last) : comments;
+        // Titik merah tampil selama MASIH ADA catatan (hilang hanya jika semua catatan terhapus)
         if (notifBadge) {
-          if (unseen.length > 0) {
-            notifBadge.style.display = 'block';
-          } else {
-            notifBadge.style.display = 'none';
-          }
+          notifBadge.style.display = comments.length > 0 ? 'block' : 'none';
         }
         renderNotifPopup(comments);
         return comments;
@@ -723,11 +714,8 @@
           const isOpen = notifPopup.style.display === 'block';
           notifPopup.style.display = isOpen ? 'none' : 'block';
           if (!isOpen) {
-            // mark as seen & refresh badge in background (non-blocking)
-            fetchKopiComments().then((comments) => {
-              if (comments.length) setLastSeen(comments[0].created_at);
-              updateNotifBadge();
-            });
+            // refresh data di background (non-blocking)
+            fetchKopiComments().then(() => updateNotifBadge());
           }
         });
       }
