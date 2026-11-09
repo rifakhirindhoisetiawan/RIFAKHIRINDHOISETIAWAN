@@ -271,19 +271,22 @@
             const content = (btn.getAttribute('data-content') || '').trim();
             const id = btn.getAttribute('data-id');
             const lokal = getLocalComments();
-            const filteredLokal = lokal.filter(l => (l.content || '').trim().toUpperCase() !== content.toUpperCase());
+            const norm = (s) => (s || '').toUpperCase().replace(/\s+/g,' ').trim();
+            const filteredLokal = lokal.filter(l => norm(l.content) !== norm(content));
             localStorage.setItem(COMMENT_KEY, JSON.stringify(filteredLokal));
             // tombstone (local)
             try {
               const tKey = COMMENT_KEY + '_deleted';
               const t = JSON.parse(localStorage.getItem(tKey) || '[]');
-              if (!t.map(x=>String(x).toUpperCase()).includes(content.toUpperCase())) t.push(content.toUpperCase());
+              const normT = (s) => (s || '').toUpperCase().replace(/\s+/g,' ').trim();
+              if (!t.map(x=>normT(x)).includes(normT(content))) t.push(normT(content));
               localStorage.setItem(tKey, JSON.stringify(t));
               // global tombstone for kopi.html sheet
               const gKey = 'kopi_deleted_comments_global';
               const g = JSON.parse(localStorage.getItem(gKey) || '[]');
-              const fullC = '[' + NAMA + '] ' + content.toUpperCase();
-              if (!g.map(x=>String(x).toUpperCase()).includes(fullC)) g.push(fullC);
+              const normT2 = (s) => (s || '').toUpperCase().replace(/\s+/g,' ').trim();
+              const fullC = normT2('[' + NAMA + '] ' + content);
+              if (!g.map(x=>normT2(x)).includes(fullC)) g.push(fullC);
               localStorage.setItem(gKey, JSON.stringify(g));
             } catch(e){}
             renderComments(filteredLokal);

@@ -1471,8 +1471,9 @@
           const list = Array.isArray(raw) ? raw : [];
           try {
             const g = JSON.parse(localStorage.getItem('kopi_deleted_comments_global') || '[]');
-            const gSet = new Set(g.map(x => String(x).trim().toUpperCase()));
-            return list.filter(c => !gSet.has(('[' + (c.menu_name || 'UMUM') + '] ' + (c.comment || '')).trim().toUpperCase()));
+            const normG = (s) => (s || '').toUpperCase().replace(/\s+/g, ' ').trim();
+            const gSet = new Set(g.map(x => normG(x)));
+            return list.filter(c => !gSet.has(normG('[' + (c.menu_name || 'UMUM') + '] ' + (c.comment || ''))));
           } catch { return list; }
         } catch {
           return [];
@@ -1514,8 +1515,9 @@
             // filter out globally tombstoned (deleted) comments
             try {
               const g = JSON.parse(localStorage.getItem('kopi_deleted_comments_global') || '[]');
-              const gSet = new Set(g.map(x => String(x).trim().toUpperCase()));
-              allComments = mapped.filter(c => !gSet.has(('[' + (c.menu_name || 'UMUM') + '] ' + (c.comment || '')).trim().toUpperCase()));
+              const normG = (s) => (s || '').toUpperCase().replace(/\s+/g, ' ').trim();
+             const gSet = new Set(g.map(x => normG(x)));
+              allComments = mapped.filter(c => !gSet.has(normG('[' + (c.menu_name || 'UMUM') + '] ' + (c.comment || ''))));
             } catch(e) { allComments = mapped; }
             saveLocalComments(allComments);
           }
@@ -1524,6 +1526,13 @@
         }
       }
       syncComments();
+      // Re-sync when a note is deleted elsewhere (same origin) or page becomes visible
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'kopi_deleted_comments_global') syncComments();
+      });
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) syncComments();
+      });
 
       async function pushComment(slug, menuName, text) {
         const fullContent = '[' + (menuName || 'UMUM') + '] ' + text;
