@@ -305,11 +305,10 @@
               for (const rid of idsToDelete) {
                 await supabase.from('note_entries').delete().eq('id', rid);
               }
-              alert('Dihapus ' + idsToDelete.size + ' baris dari server');
               // fallback: delete by exact content variants
               await supabase.from('note_entries').delete().eq('content', '[' + NAMA + '] ' + content);
-            } catch(e){ console.warn('Gagal hapus di server:', e && e.message); alert('Gagal hapus: '+(e&&e.message)); }
-            loadComments();
+            } catch(e){ console.warn('Gagal hapus di server:', e && e.message); }
+            // no loadComments() here: keep UI immediate; tombstone + purge handle future loads
           });
         });
 
