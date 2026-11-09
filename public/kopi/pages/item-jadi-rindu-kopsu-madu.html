@@ -335,6 +335,8 @@
         try { tomb = JSON.parse(localStorage.getItem(COMMENT_KEY + '_deleted') || '[]'); } catch(e){}
         const norm = (s) => (s || '').toUpperCase().replace(/\s+/g,' ').trim();
         const isTomb = (c) => tomb.map(x=>norm(x)).includes(norm(c.content));
+        // purge stale local entries not present in supabase (older than 2 min)
+        // We'll do initial render from local (filtered), then reconcile with supabase.
         const lokalClean = lokal.filter(c => !isTomb(c)).map(c => ({...c, content: (c.content||'').toUpperCase()}));
         renderComments(lokalClean);
         try {
@@ -350,7 +352,26 @@
               content: (d.content.replace(prefix, '').trim()).toUpperCase(),
               created_at: d.created_at
             })).filter(c => !isTomb(c));
-            const combined = [...filtered, ...lokalClean.filter(l => !filtered.some(f => f.content === l.content))];
+            // purge stale local entries not present in supabase (older than 2 min)
+            try {
+              const supaSet = new Set(filtered.map(f => norm(f.content)));
+              const now = Date.now();
+              const purged = lokal.filter(l => {
+                if (isTomb(l)) return false;
+                const age = now - new Date(l.created_at || 0).getTime();
+                if (age < 120000) return true;
+                return supaSet.has(norm(l.content));
+              });
+              localStorage.setItem(COMMENT_KEY, JSON.stringify(purged));
+            } catch(e){}
+            const purgedClean = lokal.filter(l => {
+              if (isTomb(l)) return false;
+              const age = Date.now() - new Date(l.created_at || 0).getTime();
+              if (age < 120000) return true;
+              const supaSet = new Set(filtered.map(f => norm(f.content)));
+              return supaSet.has(norm(l.content));
+            }).map(c => ({...c, content: (c.content||'').toUpperCase()}));
+            const combined = [...filtered, ...purgedClean.filter(l => !filtered.some(f => f.content === l.content))];
             const seen = new Set();
             const uniq = combined.filter(c => {
               const k = (c.content || '').trim().toUpperCase();
