@@ -325,8 +325,9 @@
 
       commentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const text = commentInput.value.trim();
-        if (!text) return;
+        const rawText = commentInput.value.trim();
+        if (!rawText) return;
+        const text = rawText.toUpperCase();
         commentInput.value = '';
         const fullContent = '[' + NAMA + '] ' + text;
 
