@@ -111,9 +111,19 @@
         text-transform: uppercase; margin: 18px 0 8px;
       }
       /* ===== TABEL RESEP / BAHAN ===== */
-      .resep {
+      .resep-card {
         border: 1.5px solid rgba(26,25,23,.3); border-radius: 10px;
-        overflow: hidden; background: #fffbf2;
+        overflow: hidden; background: #fffbf2; margin: 18px 0 0;
+      }
+      .resep-head {
+        display: flex; align-items: center; height: 38px; padding: 0 8px;
+        background: var(--mori-surface); border-bottom: 1px solid var(--mori-line);
+        font-family: var(--mori-mono); font-size: 11px; font-weight: 700;
+        letter-spacing: 1.2px; text-transform: uppercase; color: var(--mori-text);
+      }
+      .resep {
+        border: 0; border-radius: 0;
+        overflow: hidden; background: transparent;
       }
       .resep-row { display: flex; align-items: stretch; }
       .resep-row + .resep-row { border-top: 1px solid var(--mori-line); }
@@ -131,7 +141,7 @@
       /* FONT RESEP IKUT NOTE: isi resep memakai huruf mono yang sama
          dengan aplikasi NOTE (JetBrains Mono, tebal, huruf besar). */
       .catatan {
-        background: #fffbf2; border: 1.5px solid rgba(26,25,23,.3); border-radius: 10px;
+        background: transparent; border: 0; border-radius: 0;
         padding: 12px 14px; font-size: 13px; color: var(--mori-text); line-height: 1.5;
       }
       .empty {
@@ -229,13 +239,13 @@
         // tiap grup punya header No | Bahan, nomornya berlanjut per grup.
         let html = '';
         bagian.forEach(([judul, list]) => {
-          html += '<h2>' + judul + '</h2><div class="resep">' +
+          html += '<div class="resep-card"><div class="resep-head">' + judul + '</div><div class="resep">' +
             list.map((b, i) =>
               '<div class="resep-row"><div class="resep-no">' + (i + 1) + '</div>' +
               '<div class="resep-nama">' + b + '</div></div>').join('') +
-            '</div>';
+            '</div></div>';
         });
-        if (m.catatan) html += '<h2>Catatan</h2><div class="catatan">' + m.catatan + '</div>';
+        if (m.catatan) html += '<div class="resep-card"><div class="resep-head">Catatan</div><div class="catatan">' + m.catatan + '</div></div>';
         if (!bagian.length && !m.catatan) html = '<div class="empty">Belum ada data bahan.</div>';
         bahanWrap.innerHTML = html;
       }
