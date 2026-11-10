@@ -116,11 +116,27 @@
         overflow: hidden; background: #fffbf2; margin: 18px 0 0;
       }
       .resep-head {
-        display: flex; align-items: center; height: 38px; padding: 0 8px;
+        display: flex; align-items: center; justify-content: space-between; gap: 8px;
+        height: 38px; padding: 0 4px 0 8px;
         background: var(--mori-surface); border-bottom: 1px solid var(--mori-line);
         font-family: var(--mori-mono); font-size: 11px; font-weight: 700;
         letter-spacing: 1.2px; text-transform: uppercase; color: var(--mori-text);
       }
+      .resep-title {
+        flex: 1 1 auto; min-width: 0;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .resep-toggle {
+        flex: 0 0 28px; width: 28px; height: 28px; min-height: 28px; padding: 0;
+        display: flex; align-items: center; justify-content: center;
+        background: #ffffff; color: #1a1917;
+        border: 1px solid rgba(26,25,23,.3); border-radius: 6px;
+        box-shadow: none; cursor: pointer;
+      }
+      .resep-toggle:active { transform: translate(1px,1px); }
+      .resep-toggle svg { width: 14px; height: 14px; transition: transform .15s ease; }
+      .resep-card.collapsed .resep { display: none; }
+      .resep-card.collapsed .resep-toggle svg { transform: rotate(180deg); }
       .resep {
         border: 0; border-radius: 0;
         overflow: hidden; background: transparent;
@@ -196,6 +212,16 @@
       const badgeWrap = document.getElementById('badgeWrap');
       const pluTable = document.getElementById('pluTable');
       const bahanWrap = document.getElementById('bahanWrap');
+      bahanWrap.addEventListener('click', (e) => {
+        const btn = e.target.closest && e.target.closest('.resep-toggle');
+        if (!btn) return;
+        const card = btn.closest('.resep-card');
+        if (!card) return;
+        const collapsed = card.classList.toggle('collapsed');
+        btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+        btn.title = collapsed ? 'Tampilkan bahan' : 'Sembunyikan bahan';
+        btn.setAttribute('aria-label', btn.title);
+      });
       const statusEl = document.getElementById('status');
 
       const setStatus = (text, tone) => {
@@ -239,7 +265,7 @@
         // tiap grup punya header No | Bahan, nomornya berlanjut per grup.
         let html = '';
         bagian.forEach(([judul, list]) => {
-          html += '<div class="resep-card"><div class="resep-head">' + judul + '</div><div class="resep">' +
+          html += '<div class="resep-card"><div class="resep-head"><span class="resep-title">' + judul + '</span><button type="button" class="resep-toggle" aria-expanded="true" title="Sembunyikan bahan" aria-label="Sembunyikan bahan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 15 12 9 18 15"></polyline></svg></button></div><div class="resep">' +
             list.map((b, i) =>
               '<div class="resep-row"><div class="resep-no">' + (i + 1) + '</div>' +
               '<div class="resep-nama">' + b + '</div></div>').join('') +
