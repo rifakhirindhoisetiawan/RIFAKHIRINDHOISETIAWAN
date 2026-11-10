@@ -30,3 +30,6 @@ PWA menu (Supabase). Entry `index.html` → `public/` modules. Start `start.bat`
 ```
 
 Kanonis: `src/`. Semua `public/*/supabase.js` & `js/` di root cuma shim biar `../kopi/supabase.js` & `../../js/supabase.js` tetap jalan tanpa pecah link.
+
+## Catatan Styling Admin Kopi
+- `public/kopi/admin/index.html`: Diselaraskan dengan Admin Stok Opname (`public/plano/admin.html`) mencakup bingkai tabel sudut meluncur (radius 10px), ketebalan garis luar tabel (`1.5px solid rgba(26,25,23,0.3)`), tinggi baris section header dan tabel menu bawah (`36px`), serta warna teks dan thumbnail foto.
