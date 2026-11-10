@@ -909,12 +909,22 @@
       white-space:nowrap;
     }
     .menu-tabel th.mt-no,.menu-tabel td.mt-no{
-      width:36px;text-align:center;color:var(--mori-text-2);
-      font-family:var(--mori-mono);font-size:11px;
+      width:30px;text-align:center;color:#6e6a64;
+      font-family:var(--mori-mono);font-size:9px;
     }
     .menu-tabel tbody td{
-      padding:0 12px;border-bottom:1px solid var(--mori-line);
-      vertical-align:middle;height:30px;
+      padding:0 8px;border-bottom:1px solid rgba(26,25,23,.14);
+      vertical-align:middle;height:36px;
+    }
+    .menu-tabel .item-name{
+      font-family:var(--mori-mono);font-size:10px;font-weight:700;
+      text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      text-align:left;min-height:0;line-height:1.15;
+    }
+    .menu-tabel .mt-foto{width:52px;text-align:center}
+    .menu-tabel .mt-foto .thumb{
+      width:28px;height:auto;aspect-ratio:9/16!important;margin:0 auto;
+      border:1px solid var(--mori-line);background:#f7f3e9;overflow:hidden;border-radius:0;
     }
     .menu-tabel #list > tr:last-child > td{border-bottom:0}
     .menu-tabel .item{display:table-row!important}
