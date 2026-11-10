@@ -527,8 +527,9 @@
       font-family:inherit !important;font-weight:700 !important;letter-spacing:.2px;
     }
     .form-table,.form-compact,.admin-plu-table,.plu-photo-grid .form-table{
-      border:1px solid var(--mori-line) !important;border-radius:0 !important;
+      border:1.5px solid rgba(26,25,23,0.3) !important;border-radius:10px !important;
       background:var(--mori-bg) !important;
+      overflow:hidden !important;
     }
     .form-table .tr,.form-compact .tr{border-bottom-color:var(--mori-line) !important;
       border-color:var(--mori-line) !important}
@@ -791,13 +792,8 @@
        celahnya yang disatukan.
        ============================================================ */
     .form-frame{
-      /* TEPIAN TABEL FORM KAYAK ADMIN STOK OPNAME: bingkai lembut tipis
-         (--mori-line) + sudut membulat, sama persis dengan tepian tabel
-         daftar menu di bawahnya. */
-      border:1px solid var(--mori-line);border-radius:var(--mori-radius);
+      border:1.5px solid rgba(26,25,23,0.3) !important;border-radius:10px !important;
       overflow:hidden;background:var(--mori-surface);
-      /* WARNA KARTU SATU: latar kartu = warna tabel (krem), supaya tidak
-         ada pita warna beda di dalam kartu (belang). */
       display:flex;flex-direction:column;
       --admin-photo-h:144px;
     }
@@ -911,11 +907,7 @@
        daftar "Foto Menu SO" di Admin Stok Opname.
        ============================================================ */
     .menu-tabel{
-      /* TABEL KAYAK ADMIN STOK OPNAME: bingkai lembut tipis (--mori-line)
-         + sudut membulat — persis bingkai tabel menu "Foto Menu SO" di
-         Admin Stok Opname (bukan garis hitam pekat, bukan pula tanpa
-         bingkai sama sekali). */
-      border:1px solid var(--mori-line);border-radius:var(--mori-radius);
+      border:1.5px solid rgba(26,25,23,0.3) !important;border-radius:10px !important;
       overflow:hidden;background:var(--mori-bg);
     }
     .menu-tabel table{width:100%;border-collapse:collapse;table-layout:fixed}
