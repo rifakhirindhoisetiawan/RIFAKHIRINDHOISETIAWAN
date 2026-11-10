@@ -55,11 +55,22 @@
       }
       .plu-head {
         display: flex; justify-content: space-between; align-items: center;
-        gap: 8px; padding: 8px 10px; background: var(--mori-surface);
+        gap: 8px; height: 38px; min-height: 38px; padding: 0 10px;
+        background: var(--mori-surface);
         border-bottom: 1px solid var(--mori-line);
       }
+      .plu-head h1 {
+        flex: 1 1 auto; min-width: 0; margin: 0;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .plu-head #openCommentModal {
+        width: 28px !important; height: 28px !important; min-height: 28px !important;
+        border-radius: 6px !important; padding: 0 !important;
+      }
+      .plu-head #openCommentModal svg { width: 14px; height: 14px; }
       .side > h1 {
-        margin: 0; padding: 10px; background: var(--mori-surface);
+        margin: 0; height: 38px; min-height: 38px; padding: 0 10px;
+        display: flex; align-items: center; background: var(--mori-surface);
         border-bottom: 1px solid var(--mori-line);
       }
       #badgeWrap { padding: 8px 10px 10px; }
