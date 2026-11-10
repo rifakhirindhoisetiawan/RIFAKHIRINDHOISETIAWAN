@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0" />
     <title>SARI ROTI CHIRO MATCHA PEANUT</title>
     <meta name="theme-color" content="#fffbf2" />
+    <link rel="preconnect" href="https://xsacwgxxoptdrgbbzzib.supabase.co" crossorigin />
+    <link rel="dns-prefetch" href="https://xsacwgxxoptdrgbbzzib.supabase.co" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       /* ============================================================
@@ -207,11 +210,18 @@
     </div>
 
     <script type="module">
-      import { supabase } from '../../../src/js/supabase.js';
+      import { SUPABASE_URL, SUPABASE_KEY } from '../../../src/js/supabase-config.js';
+
+      let supabasePromise = null;
+      function getSupabase() {
+        if (!supabasePromise) supabasePromise = import('../../../src/js/supabase.js').then((m) => m.supabase);
+        return supabasePromise;
+      }
 
       const MENU_ID = 530;
       const NAMA = "SARI ROTI CHIRO MATCHA PEANUT";
 
+      const MENU_CACHE_KEY = 'kopi_menu_v1_' + MENU_ID;
       const namaEl = document.getElementById('nama');
       const badgeWrap = document.getElementById('badgeWrap');
       const pluTable = document.getElementById('pluTable');
@@ -280,13 +290,30 @@
         bahanWrap.innerHTML = html;
       }
 
+      // 1) Tampilkan cache dulu supaya halaman langsung terisi.
+      let punyaData = false;
       try {
-        const { data, error } = await supabase.from('ja_di_menus').select('*').eq('id', MENU_ID).single();
-        if (error) throw error;
+        const cached = JSON.parse(localStorage.getItem(MENU_CACHE_KEY) || 'null');
+        if (cached) { render(cached); punyaData = true; }
+      } catch (e) {}
+
+      // 2) Ambil data terbaru langsung via REST (tanpa menunggu supabase-js).
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/ja_di_menus?id=eq.' + MENU_ID + '&select=*', {
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: 'Bearer ' + SUPABASE_KEY,
+            Accept: 'application/vnd.pgrst.object+json',
+          },
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
         render(data);
+        punyaData = true;
+        try { localStorage.setItem(MENU_CACHE_KEY, JSON.stringify(data)); } catch (e) {}
       } catch (e) {
         console.warn(e);
-        setStatus('Gagal memuat data (' + e.message.slice(0, 50) + ')', 'err');
+        if (!punyaData) setStatus('Gagal memuat data (' + e.message.slice(0, 50) + ')', 'err');
       }
 
       /* ===== SINKRONISASI CATATAN KE NOTE (MENU_ID: 64) ===== */
@@ -357,6 +384,7 @@
             } catch(e){}
             renderComments(filteredLokal);
             try {
+              const supabase = await getSupabase();
               // Collect ids to delete (by id and by case-insensitive content match)
               const idsToDelete = new Set();
               if (id && !String(id).startsWith('local_')) idsToDelete.add(id);
@@ -424,6 +452,7 @@
         const lokalClean = lokal.filter(c => !isTomb(c)).map(c => ({...c, content: (c.content||'').toUpperCase()}));
         renderComments(lokalClean);
         try {
+          const supabase = await getSupabase();
           const { data, error } = await supabase
             .from('note_entries')
             .select('*')
@@ -468,7 +497,6 @@
         } catch (e) {}
       }
 
-      loadComments();
 
       commentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -479,6 +507,7 @@
         const fullContent = '[' + NAMA + '] ' + text;
 
         try {
+          const supabase = await getSupabase();
           const lokal = getLocalComments();
           if (editingContent !== null) {
             // Edit mode: replace existing note
@@ -529,6 +558,7 @@
       if (openCommentModal && commentModal) {
         openCommentModal.addEventListener('click', () => {
           commentModal.style.display = 'flex';
+          loadComments();
         });
       }
       if (closeCommentModal && commentModal) {

@@ -1,9 +1,11 @@
-// supabase.js - klien database + config (standalone, 1 file per folder menu)
+// supabase.js - klien database (config ringan ada di supabase-config.js)
+// Untuk halaman yang cuma baca data: import config + fetch REST langsung,
+// lalu dynamic import file ini saat benar-benar butuh supabase-js.
 // Docs: https://supabase.com/docs/guides/api/api-keys
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { SUPABASE_URL, SUPABASE_KEY } from "./supabase-config.js";
 
-export const SUPABASE_URL = "https://xsacwgxxoptdrgbbzzib.supabase.co";
-export const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzYWN3Z3h4b3B0ZHJnYmJ6emliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU2NTQ1MjksImV4cCI6MjEwMTIzMDUyOX0.aLLM-4TECEm4GDIXy82zhF8Nk8_9ROXFjlUaSgoKCT0";
+export { SUPABASE_URL, SUPABASE_KEY };
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
