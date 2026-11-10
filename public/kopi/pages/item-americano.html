@@ -48,7 +48,22 @@
       }
       /* Foto dihapus: halaman detail hanya berisi tabel PLU + resep. */
       .top-grid { display: block; }
-      .side { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+      .side {
+        min-width: 0; display: flex; flex-direction: column; gap: 0;
+        border: 1px solid var(--mori-line); border-radius: 10px;
+        overflow: hidden; background: #fffbf2;
+      }
+      .plu-head {
+        display: flex; justify-content: space-between; align-items: center;
+        gap: 8px; padding: 8px 10px; background: var(--mori-surface);
+        border-bottom: 1px solid var(--mori-line);
+      }
+      .side > h1 {
+        margin: 0; padding: 10px; background: var(--mori-surface);
+        border-bottom: 1px solid var(--mori-line);
+      }
+      #badgeWrap { padding: 8px 10px 10px; }
+      #badgeWrap:empty { display: none; }
       .badge {
         align-self: flex-start;
         font-family: var(--mori-mono);
@@ -58,8 +73,8 @@
       }
       /* ===== TABEL PLU ===== */
       .plu-table {
-        border: 1px solid var(--mori-line); border-radius: 10px;
-        overflow: hidden; background: #fffbf2;
+        border: 0; border-radius: 0;
+        overflow: hidden; background: transparent;
       }
       .plu-row { display: flex; align-items: stretch; }
       .plu-row + .plu-row { border-top: 1px solid var(--mori-line); }
@@ -127,7 +142,6 @@
          berubah; layout, warna, dan isi tidak disentuh. */
       :root { --mori-radius: 8px; }
       .badge,
-      .plu-table,
       .resep,
       .catatan,
       #status { border-radius: 10px; }

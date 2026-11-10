@@ -33,3 +33,4 @@ Kanonis: `src/`. Semua `public/*/supabase.js` & `js/` di root cuma shim biar `..
 
 ## Catatan Styling Admin Kopi
 - `public/kopi/admin/index.html`: Diselaraskan dengan Admin Stok Opname (`public/plano/admin.html`) mencakup bingkai tabel sudut meluncur (radius 10px), ketebalan garis luar tabel (`1.5px solid rgba(26,25,23,0.3)`), tinggi baris section header dan tabel menu bawah (`36px`), serta warna teks dan thumbnail foto.
+- `public/kopi/pages/item-*.html` (78 halaman): Judul menu dan tabel PLU digabung dalam satu kartu `.side` — garis luar `1px solid var(--mori-line)`, radius `10px`, latar `#fffbf2`. Baris judul memakai `.plu-head` (halaman tanpa tombol komentar memakai `.side > h1`), sedangkan `.plu-table` dibuat tanpa bingkai sendiri agar tidak muncul garis ganda.
