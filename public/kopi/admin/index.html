@@ -953,9 +953,12 @@
       border:1px solid var(--mori-line);
       border-radius:var(--mori-radius)!important;
     }
-    .menu-tabel .mt-aksi{width:88px;white-space:nowrap;text-align:right;padding-right:6px}
-    .menu-tabel .mt-aksi .acts,
-    .menu-tabel .mt-aksi{display:inline-flex;gap:6px;justify-content:flex-end;align-items:center}
+    /* Kolom aksi HARUS tetap table-cell: jangan diberi display:flex/inline-flex,
+       kalau tidak sel ini keluar dari layout tabel dan header jadi terpotong. */
+    .menu-tabel th.mt-aksi,
+    .menu-tabel td.mt-aksi{
+      width:88px;white-space:nowrap;text-align:right;padding-right:6px;
+    }
     /* TOMBOL SEMAT: menu tersemat naik ke baris paling atas daftar.
        Pin hitam = tersemat, pin krem = belum. Sematan disimpan di
        tempat yang sama dengan halaman KOPI (localStorage + kopi_pins). */
