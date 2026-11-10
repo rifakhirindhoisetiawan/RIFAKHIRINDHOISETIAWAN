@@ -265,7 +265,7 @@
         // tiap grup punya header No | Bahan, nomornya berlanjut per grup.
         let html = '';
         bagian.forEach(([judul, list]) => {
-          html += '<div class="resep-card"><div class="resep-head"><span class="resep-title">' + judul + '</span><button type="button" class="resep-toggle" aria-expanded="true" title="Sembunyikan bahan" aria-label="Sembunyikan bahan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 15 12 9 18 15"></polyline></svg></button></div><div class="resep">' +
+          html += '<div class="resep-card collapsed"><div class="resep-head"><span class="resep-title">' + judul + '</span><button type="button" class="resep-toggle" aria-expanded="false" title="Tampilkan bahan" aria-label="Tampilkan bahan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 15 12 9 18 15"></polyline></svg></button></div><div class="resep">' +
             list.map((b, i) =>
               '<div class="resep-row"><div class="resep-no">' + (i + 1) + '</div>' +
               '<div class="resep-nama">' + b + '</div></div>').join('') +
