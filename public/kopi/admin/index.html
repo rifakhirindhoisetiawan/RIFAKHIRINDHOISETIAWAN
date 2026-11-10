@@ -824,23 +824,11 @@
     .form-head-row input::placeholder{
       color:var(--mori-text-2);font-size:10px;font-weight:700;letter-spacing:.6px;
     }
-    .form-head-row .head-add{
-      flex:0 0 32px;width:32px;height:32px;min-height:32px;align-self:center;
-      margin-left:4px;padding:0;
-      display:flex;align-items:center;justify-content:center;
-      /* TOMBOL PLUS TERANG DI BARIS ATAS: tombol +/✓ pakai krem muda,
-         kontras di baris atas yang tan. */
-      background:var(--mori-surface);color:var(--mori-text);
-      border:0;border-radius:var(--mori-radius);
-      font-size:17px;font-weight:800;line-height:1;cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
-    }
-    .form-head-row .head-add:active{transform:scale(.94)}
-    /* Tombol Simpan (dipindah dari baris CATATAN): seukuran tombol + */
+    .form-head-row .head-add,
     .form-head-row .btn-save-icon.btn-save-head{
-      flex:0 0 32px !important;width:32px !important;
-      height:32px !important;min-height:32px !important;
-      align-self:center;margin-left:4px;
+      flex:0 0 30px !important;width:30px !important;
+      height:30px !important;min-height:30px !important;
+      align-self:center;margin-left:2px;
     }
     /* Layar sangat sempit (≤380px): kecilkan placeholder agar
        "PLU 12OZ" tidak terpotong di kolomnya. */
