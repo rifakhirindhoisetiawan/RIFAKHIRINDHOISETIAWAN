@@ -6,7 +6,11 @@
   <title>Admin — NOTE</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://xsacwgxxoptdrgbbzzib.supabase.co" crossorigin />
+  <link rel="dns-prefetch" href="https://xsacwgxxoptdrgbbzzib.supabase.co" />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" /></noscript>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     html,body{max-width:100%;overflow-x:hidden}
@@ -166,9 +170,17 @@
 </div>
 
 <script type="module">
-  import { supabase } from '../kopi/supabase.js';
+  import { SUPABASE_URL, SUPABASE_KEY } from '../../src/js/supabase-config.js';
+
+  let supabasePromise = null;
+  function getSupabase() {
+    if (!supabasePromise) supabasePromise = import('../kopi/supabase.js').then((m) => m.supabase);
+    return supabasePromise;
+  }
+
   const TABLE = 'note_menus';
   const BUCKET = 'note-foto';
+  const MENUS_CACHE_KEY = 'note_admin_menus_v1';
   // Hapus dikunci Supabase Auth. Password tidak lagi ditulis di source:
   // nilai yang tadinya ada di sini bisa dibaca siapa saja dari DevTools, jadi
   // hanya menahan salah klik. Proteksi asli ada di RLS policy
@@ -185,7 +197,7 @@
 
   let all = [];
   const AKUN_TILE = 'admin';
-  const fotoAdminUrl = () => supabase.storage.from(BUCKET).getPublicUrl('note/' + AKUN_TILE + '.jpg').data.publicUrl;
+  const fotoAdminUrl = () => SUPABASE_URL + '/storage/v1/object/public/' + BUCKET + '/note/' + AKUN_TILE + '.jpg';
   const barisAdmin = { id: AKUN_TILE, title: 'ADMIN', slug: AKUN_TILE, isAdmin: true, foto_url: '' };
   const adaFoto = async (url) => { try { const r = await fetch(url, { method: 'HEAD' }); return r.ok; } catch { return false; } };
   let fotoVersi = Date.now();
@@ -203,7 +215,7 @@
 
   const pwBg=document.getElementById('pwBg'), pwMsg=document.getElementById('pwMsg'), pwEmail=document.getElementById('pwEmail'), pwInput=document.getElementById('pwInput'), pwError=document.getElementById('pwError'), pwOk=document.getElementById('pwOk'), pwCancel=document.getElementById('pwCancel');
   let pwResolve=null, pwScrollY=0;
-  async function sudahMasukAdmin(){ try{ const {data}=await supabase.auth.getSession(); return !!data.session; }catch{ return false; } }
+  async function sudahMasukAdmin(){ try{ const supabase = await getSupabase(); const {data}=await supabase.auth.getSession(); return !!data.session; }catch{ return false; } }
   function lockScrollPw(){ pwScrollY=window.scrollY||0; document.documentElement.classList.add('pw-open'); document.body.style.position='fixed'; document.body.style.top=-pwScrollY+'px'; document.body.style.left='0'; document.body.style.right='0'; document.body.style.width='100%'; }
   function unlockScrollPw(){ document.documentElement.classList.remove('pw-open'); document.body.style.position=''; document.body.style.top=''; document.body.style.left=''; document.body.style.right=''; document.body.style.width=''; window.scrollTo(0,pwScrollY); }
   function syncPwViewport(){ const vv=window.visualViewport; if(!vv||!pwBg.classList.contains('open')) return; pwBg.style.height=vv.height+'px'; pwBg.style.top=vv.offsetTop+'px'; pwBg.style.bottom='auto'; }
@@ -222,6 +234,7 @@
   pwOk.addEventListener('click',async()=>{
     const email=(pwEmail.value||'').trim(), pass=pwInput.value||'';
     if(!email||!pass){ pwError.textContent='Email dan password wajib diisi.'; pwError.hidden=false; return; }
+    const supabase = await getSupabase();
     const {error}=await supabase.auth.signInWithPassword({email,password:pass});
     if(error){ pwError.textContent='Gagal masuk: '+error.message; pwError.hidden=false; pwInput.value=''; try{pwInput.focus({preventScroll:true})}catch(e){} return; }
     closePw(true);
@@ -284,12 +297,21 @@
   }
 
   async function load(){
-    const {data,error}=await supabase.from(TABLE).select('*').order('sort_order');
-    if(error){ listEl.innerHTML=barisKosong('Gagal muat: '+error.message); setFotoHint('Gagal memuat: '+error.message); return; }
-    all=data||[];
-    const urlAdmin=fotoAdminUrl();
-    barisAdmin.foto_url=(await adaFoto(urlAdmin))?urlAdmin:'';
-    setFotoHint(''); render();
+    try{
+      const res=await fetch(SUPABASE_URL + '/rest/v1/' + TABLE + '?select=*&order=sort_order', {
+        headers:{apikey:SUPABASE_KEY, Authorization:'Bearer '+SUPABASE_KEY}
+      });
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const data=await res.json();
+      all=Array.isArray(data)?data:[];
+      try{ localStorage.setItem(MENUS_CACHE_KEY, JSON.stringify(all)); }catch(e){}
+      const urlAdmin=fotoAdminUrl();
+      barisAdmin.foto_url=(await adaFoto(urlAdmin))?urlAdmin:'';
+      setFotoHint(''); render();
+    }catch(e){
+      listEl.innerHTML=barisKosong('Gagal muat: '+e.message);
+      setFotoHint('Gagal memuat: '+e.message);
+    }
   }
 
   const setModeAdd=()=>{ btnAdd.textContent='+'; btnAdd.title='Tambah menu'; };
@@ -306,6 +328,7 @@
     if(!title){ setFotoHint('Nama menu wajib diisi'); f_title.focus(); return; }
     const slug=slugify(title);
     let res;
+    const supabase = await getSupabase();
     // Coba simpan dengan category, jika error kolom tidak ada, simpan tanpa category
     if(editId.value) {
       res=await supabase.from(TABLE).update({title,slug,category}).eq('id',parseInt(editId.value,10));
@@ -336,6 +359,7 @@
     const thumb=listEl.querySelector('tr[data-id="'+id+'"] .c-foto .thumb');
     if(thumb){ thumb.classList.add('sibuk'); thumb.innerHTML=''; }
     try{
+      const supabase = await getSupabase();
       const kecil=await kompresFoto(file);
       const path = isAdmin ? 'note/admin.jpg' : 'menu-'+id+'.jpg';
       const {error:errUp}=await supabase.storage.from(BUCKET).upload(path,kecil,{upsert:true,contentType:'image/jpeg'});
@@ -354,18 +378,30 @@
     const m=all.find(x=>x.id===id);
     const ok=await askDelPassword('Hapus menu "'+(m?m.title:id)+'" beserta semua catatannya?');
     if(!ok) return;
+    const supabase = await getSupabase();
     const {error}=await supabase.from(TABLE).delete().eq('id',id);
     if(error){ setFotoHint('Gagal hapus: '+error.message); return; }
     await load();
   }
 
   searchEl.addEventListener('input',render);
-  let rtTimer=null;
   try{
-    supabase.channel('note_menus_admin').on('postgres_changes',{event:'*',schema:'public',table:TABLE},()=>{ clearTimeout(rtTimer); rtTimer=setTimeout(()=>load(),300); }).subscribe();
+    const cached=JSON.parse(localStorage.getItem(MENUS_CACHE_KEY)||'null');
+    if(Array.isArray(cached)){ all=cached; render(); }
   }catch(e){}
-
   load();
+
+  // Realtime dimuat setelah halaman tampil, bukan di jalur kritis.
+  let rtTimer=null;
+  function initRealtime(){
+    getSupabase().then((supabase)=>{
+      try{
+        supabase.channel('note_menus_admin').on('postgres_changes',{event:'*',schema:'public',table:TABLE},()=>{ clearTimeout(rtTimer); rtTimer=setTimeout(()=>load(),300); }).subscribe();
+      }catch(e){}
+    }).catch(()=>{});
+  }
+  if('requestIdleCallback' in window) requestIdleCallback(initRealtime,{timeout:2500});
+  else setTimeout(initRealtime,1500);
 </script>
 </body>
 </html>

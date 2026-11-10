@@ -6,9 +6,15 @@
     <title>Catatan — NOTE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://xsacwgxxoptdrgbbzzib.supabase.co" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="dns-prefetch" href="https://xsacwgxxoptdrgbbzzib.supabase.co" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" /></noscript>
     <!-- Render rumus (pecahan bertumpuk dgn garis bagi) untuk catatan berawalan "Rumus ..." -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" /></noscript>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" onload="window.dispatchEvent(new Event('katex-siap'))"></script>
     <style>
       :root {
@@ -213,7 +219,13 @@
     </div>
 
     <script type="module">
-      import { supabase } from '../kopi/supabase.js';
+      import { SUPABASE_URL, SUPABASE_KEY } from '../../src/js/supabase-config.js';
+
+      let supabasePromise = null;
+      function getSupabase() {
+        if (!supabasePromise) supabasePromise = import('../kopi/supabase.js').then((m) => m.supabase);
+        return supabasePromise;
+      }
 
       const params = new URLSearchParams(location.search);
       const menuId = parseInt(params.get('id'), 10);
@@ -234,18 +246,49 @@
 
       let entries = [];
       let editingId = null;
+      let judul = '';
+
+      const CACHE_KEY = 'note_view_cache_v1_' + menuId;
+      const restHeaders = { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY };
+
+      function simpanCache() {
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify({ title: judul, entries })); } catch {}
+      }
+
+      function bacaCache() {
+        try {
+          const c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+          if (!c) return;
+          if (c.title) { judul = c.title; document.title = judul + ' — NOTE'; }
+          if (Array.isArray(c.entries)) { entries = c.entries; render(); }
+        } catch {}
+      }
 
       async function loadJudul() {
-        const { data } = await supabase.from('note_menus').select('title').eq('id', menuId).single();
-        if (data) document.title = (data.title || 'Catatan') + ' — NOTE';
+        try {
+          const res = await fetch(SUPABASE_URL + '/rest/v1/note_menus?id=eq.' + menuId + '&select=title', { headers: restHeaders });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const data = await res.json();
+          if (Array.isArray(data) && data[0] && data[0].title) {
+            judul = data[0].title;
+            document.title = judul + ' — NOTE';
+            simpanCache();
+          }
+        } catch (e) {}
       }
 
       async function loadEntries() {
-        const { data, error } = await supabase.from('note_entries').select('*').eq('menu_id', menuId).order('created_at');
-        if (error) { setHint('Gagal muat: ' + error.message); return; }
-        entries = data || [];
-        setHint('');
-        render();
+        try {
+          const res = await fetch(SUPABASE_URL + '/rest/v1/note_entries?menu_id=eq.' + menuId + '&select=*&order=created_at', { headers: restHeaders });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const data = await res.json();
+          entries = Array.isArray(data) ? data : [];
+          setHint('');
+          render();
+          simpanCache();
+        } catch (e) {
+          if (!entries.length) setHint('Gagal muat: ' + e.message);
+        }
       }
 
       const escHtml = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -329,6 +372,7 @@
       async function tambah() {
         const content = (f_catatan.value || '').trim();
         if (!content) { setHint('Catatan tidak boleh kosong'); f_catatan.focus(); return; }
+        const supabase = await getSupabase();
         const { error } = await supabase.from('note_entries').insert([{ menu_id: menuId, content }]);
         if (error) { setHint('Gagal simpan: ' + error.message); return; }
         f_catatan.value = '';
@@ -346,6 +390,7 @@
       document.getElementById('editOk').addEventListener('click', async () => {
         const val = (editInput.value || '').trim();
         if (!val) return;
+        const supabase = await getSupabase();
         const { error } = await supabase.from('note_entries').update({ content: val }).eq('id', editingId);
         if (error) { setHint('Gagal edit: ' + error.message); return; }
         editBg.classList.remove('open');
@@ -362,7 +407,7 @@
       // Nilai password yang tadinya ada di sini bisa dibaca siapa saja dari
       // DevTools, jadi hanya menahan salah klik. Proteksi asli ada di RLS
       // policy (scripts/build/add-admin-rls.sql).
-      async function sudahMasukAdmin() { try { const { data } = await supabase.auth.getSession(); return !!data.session; } catch { return false; } }
+      async function sudahMasukAdmin() { try { const supabase = await getSupabase(); const { data } = await supabase.auth.getSession(); return !!data.session; } catch { return false; } }
       async function askPw(msg) {
         if (await sudahMasukAdmin()) return true;
         pwMsg.textContent = msg; pwInput.value = ''; pwError.hidden = true;
@@ -387,6 +432,7 @@
           const row = entries.find(x => x.id === id);
           const ok = await askPw('Hapus catatan "' + (row ? row.content.slice(0,40) : id) + '"?');
           if (!ok) return;
+          const supabase = await getSupabase();
           const { error } = await supabase.from('note_entries').delete().eq('id', id);
           if (error) { setHint('Gagal hapus: ' + error.message); return; }
           await loadEntries();
@@ -404,17 +450,27 @@
         }
       });
 
-      try {
-        supabase.channel('note_entries_' + menuId)
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'note_entries', filter: 'menu_id=eq.' + menuId }, () => loadEntries())
-          .subscribe();
-      } catch(e) {}
+      function initRealtime() {
+        getSupabase().then((supabase) => {
+          try {
+            supabase.channel('note_entries_' + menuId)
+              .on('postgres_changes', { event: '*', schema: 'public', table: 'note_entries', filter: 'menu_id=eq.' + menuId }, () => loadEntries())
+              .subscribe();
+          } catch(e) {}
+        }).catch(() => {});
+      }
 
       // Kalau KaTeX baru termuat belakangan (CDN lambat), render ulang agar
       // rumus langsung tampil bergaya matematika.
       window.addEventListener('katex-siap', () => { if (entries.length) render(); });
 
-      if (menuId) { loadJudul(); loadEntries(); }
+      if (menuId) {
+        bacaCache();
+        loadJudul();
+        loadEntries();
+        if ('requestIdleCallback' in window) requestIdleCallback(initRealtime, { timeout: 2500 });
+        else setTimeout(initRealtime, 1500);
+      }
     </script>
   </body>
 </html>

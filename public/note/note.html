@@ -9,10 +9,18 @@
     <title>NOTE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://xsacwgxxoptdrgbbzzib.supabase.co" crossorigin />
+    <link rel="dns-prefetch" href="https://xsacwgxxoptdrgbbzzib.supabase.co" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap"
-      rel="stylesheet"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+    </noscript>
     <style>
       * {
         box-sizing: border-box;
@@ -322,12 +330,27 @@
     </div>
 
     <script type="module">
-      import { supabase } from '../kopi/supabase.js';
+      import { SUPABASE_URL, SUPABASE_KEY } from '../../src/js/supabase-config.js';
+
+      let supabasePromise = null;
+      function getSupabase() {
+        if (!supabasePromise) supabasePromise = import('../kopi/supabase.js').then((m) => m.supabase);
+        return supabasePromise;
+      }
 
       const homeGrid = document.getElementById('homeGrid');
       const searchInput = document.getElementById('searchInput');
 
+      const MENUS_CACHE_KEY = 'note_menus_cache_v1';
+      const CAT_CACHE_KEY = 'note_active_cat_v1';
+
       let menus = [];
+      let selectedCategory = '';
+      try {
+        const cachedMenus = JSON.parse(localStorage.getItem(MENUS_CACHE_KEY) || 'null');
+        if (Array.isArray(cachedMenus)) menus = cachedMenus;
+        selectedCategory = localStorage.getItem(CAT_CACHE_KEY) || '';
+      } catch {}
 
       const adminTile = {
         id: 'admin',
@@ -443,38 +466,45 @@
         });
       }
 
-      async function loadFromSupabase() {
+      async function loadMenus() {
         try {
-          const { data, error } = await supabase
-            .from('note_menus')
-            .select('*')
-            .order('sort_order');
-          if (!error && data) {
+          const res = await fetch(SUPABASE_URL + '/rest/v1/note_menus?select=*&order=sort_order', {
+            headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY },
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const data = await res.json();
+          if (Array.isArray(data)) {
             menus = data;
+            try { localStorage.setItem(MENUS_CACHE_KEY, JSON.stringify(data)); } catch {}
           }
         } catch (e) {
-          menus = [];
+          console.warn('Gagal memuat menu note:', e);
         }
         renderGrid();
       }
 
       const SETTING_TABLE = 'note_settings';
-      let selectedCategory = '';
 
       async function syncCategoryFilter() {
         try {
-          const { data, error } = await supabase.from(SETTING_TABLE).select('value').eq('key', 'active_category').single();
-          if (!error && data) {
-            selectedCategory = data.value || '';
-            renderGrid();
-          }
+          const res = await fetch(SUPABASE_URL + '/rest/v1/note_settings?select=value&key=eq.active_category', {
+            headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY },
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const data = await res.json();
+          const value = Array.isArray(data) && data[0] ? (data[0].value || '') : '';
+          selectedCategory = value;
+          try { localStorage.setItem(CAT_CACHE_KEY, selectedCategory); } catch {}
+          renderGrid();
         } catch {}
       }
 
       async function setCategoryFilter(cat) {
         selectedCategory = cat;
+        try { localStorage.setItem(CAT_CACHE_KEY, cat); } catch {}
         renderGrid();
         try {
+          const supabase = await getSupabase();
           await supabase.from(SETTING_TABLE).upsert({ key: 'active_category', value: cat }, { onConflict: 'key' });
         } catch {}
       }
@@ -522,39 +552,47 @@
 
       searchInput.addEventListener('input', renderGrid);
       renderGrid();
-      loadFromSupabase();
+      loadMenus();
       syncCategoryFilter();
 
-      try {
-        supabase
-          .channel('note_settings_changes')
-          .on(
-            'postgres_changes',
-            { event: '*', schema: 'public', table: SETTING_TABLE },
-            (payload) => {
-              if (payload.new && payload.new.key === 'active_category') {
-                selectedCategory = payload.new.value || '';
-                renderGrid();
-              }
-            }
-          )
-          .subscribe();
-      } catch {}
-
+      // Realtime (opsional) dimuat setelah halaman tampil, bukan di jalur kritis.
       let rtTimer = null;
-      try {
-        supabase
-          .channel('note_menus_changes')
-          .on(
-            'postgres_changes',
-            { event: '*', schema: 'public', table: 'note_menus' },
-            () => {
-              clearTimeout(rtTimer);
-              rtTimer = setTimeout(() => loadFromSupabase(), 300);
-            }
-          )
-          .subscribe();
-      } catch (e) {}
+      function initRealtime() {
+        getSupabase().then((supabase) => {
+          try {
+            supabase
+              .channel('note_settings_changes')
+              .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: SETTING_TABLE },
+                (payload) => {
+                  if (payload.new && payload.new.key === 'active_category') {
+                    selectedCategory = payload.new.value || '';
+                    try { localStorage.setItem(CAT_CACHE_KEY, selectedCategory); } catch {}
+                    renderGrid();
+                  }
+                }
+              )
+              .subscribe();
+          } catch {}
+
+          try {
+            supabase
+              .channel('note_menus_changes')
+              .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'note_menus' },
+                () => {
+                  clearTimeout(rtTimer);
+                  rtTimer = setTimeout(() => loadMenus(), 300);
+                }
+              )
+              .subscribe();
+          } catch (e) {}
+        }).catch(() => {});
+      }
+      if ('requestIdleCallback' in window) requestIdleCallback(initRealtime, { timeout: 2500 });
+      else setTimeout(initRealtime, 1500);
     </script>
   </body>
 </html>
