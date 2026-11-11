@@ -369,6 +369,9 @@
       }
       .search-box {
         flex: 1;
+        /* min-width:0 -> kolom cari boleh menyusut, jadi tombol di kanan
+           tidak terdorong keluar layar di HP sempit (sama seperti index.html) */
+        min-width: 0;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -390,6 +393,7 @@
         background: transparent;
         outline: none;
         width: 100%;
+        min-width: 0;
         font-size: 14px;
         color: var(--mori-text);
         font-family: inherit;

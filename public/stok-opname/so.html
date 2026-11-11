@@ -119,20 +119,20 @@
         z-index: 1;
         background: #f9f9f9;
         color: var(--muted);
-        font-size: clamp(10px, 2.6vw, 12px);
+        font-size: 11px;
         font-weight: 800;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.6px;
         text-transform: uppercase;
         text-align: left;
-        height: 34px;
-        padding: 0 10px;
+        height: 36px;
+        padding: 0 12px;
         border-bottom: none;
         white-space: nowrap;
       }
 
       tbody td {
-        height: 44px;
-        padding: 0 10px;
+        height: 45px;
+        padding: 0 8px;
         border-bottom: none;
         vertical-align: middle;
       }
@@ -455,6 +455,8 @@
         --plus: #3f6212;
         --mori-bg: #fffbf2;
         --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+        /* sudut kotak (sama dengan index / KOPI / admin KOPI / admin NOTE) */
+        --mori-radius: 10px;
       }
 
       html,
@@ -488,24 +490,29 @@
         box-shadow: none;
       }
 
-      /* ===== TABEL ===== */
+      /* ===== TABEL =====
+         Garis tepi 1.5px warna gelap + radius 10px, sama seperti
+         Admin KOPI (public/kopi/admin/index.html:899-901),
+         Admin NOTE, dan Admin Stok Opname. */
       .table-wrap {
-        border: 1.5px solid var(--mori-line, rgba(26,25,23,0.14));
-        border-radius: 8px;
+        border: 1.5px solid rgba(26, 25, 23, 0.3);
+        border-radius: 10px;
         background: var(--mori-bg);
       }
       thead th {
         background: var(--surface);
         color: var(--text);
         font-family: var(--mori-mono);
-        font-weight: 700;
+        font-weight: 800;
+        letter-spacing: 0.6px;
         border-bottom: 1px solid var(--mori-line, rgba(26,25,23,0.14));
       }
       tbody td {
+        background: var(--mori-bg);
         border-bottom: 1px solid var(--mori-line, rgba(26,25,23,0.14));
       }
       tbody tr:hover td {
-        background: transparent;
+        background: var(--surface);
       }
       tfoot td {
         background: var(--surface);

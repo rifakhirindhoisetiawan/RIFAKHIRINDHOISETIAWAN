@@ -681,8 +681,8 @@
         --danger: #b91c1c;
         --mori-bg: #fffbf2;
         --mori-mono: "JetBrains Mono", ui-monospace, monospace;
-        /* sudut kotak (sama dengan index / KOPI / admin KOPI) */
-        --mori-radius: 8px;
+        /* sudut kotak (sama dengan index / KOPI / admin KOPI / admin NOTE) */
+        --mori-radius: 10px;
       }
 
       html,
@@ -781,15 +781,18 @@
       }
 
       /* ===== TABEL ===== */
+      /* Garis tepi 1.5px warna gelap + radius 10px, sama seperti
+         Admin KOPI (public/kopi/admin/index.html:899-901) dan
+         Admin NOTE. Garis lebih tegas jadi kotak tabel jelas terlihat
+         mengelilingi isi tabel. */
       .table-wrap {
-        border: 1.5px solid var(--mori-line, rgba(26,25,23,0.14));
-        border-radius: 8px;
+        border: 1.5px solid rgba(26, 25, 23, 0.3);
+        border-radius: 10px;
         background: var(--mori-bg);
       }
       .daftar-wrap {
-        border: 1.5px solid var(--mori-line, rgba(26,25,23,0.14));
-        border-radius: 8px;
-        border-color: var(--mori-line, rgba(26,25,23,0.14));
+        border: 1.5px solid rgba(26, 25, 23, 0.3);
+        border-radius: 10px;
       }
       thead th {
         background: var(--surface);
@@ -1281,12 +1284,10 @@
         border-bottom: 1px solid var(--mori-line, rgba(26,25,23,0.14));
         vertical-align: middle;
       }
-      /* garis tabel dari .table-wrap / .daftar-wrap tidak lagi menumpuk
-         dengan border-bottom tiap sel */
-      .table-wrap,
-      .daftar-wrap {
-        border-color: var(--line);
-      }
+      /* Catatan: warna garis tepi tabel (rgba 0.3) sengaja TIDAK di-override
+         di sini. Aturan ini dulu memakai `border-color: var(--line)` (0.14)
+         yang menutupi warna gelap 0.3 yang sudah dipasang di blok .table-wrap
+         di atas. */
       tbody tr:last-child td {
         border-bottom: 0;
       }

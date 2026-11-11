@@ -7,17 +7,31 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <title>PASTRY BAKPAU</title>
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#fffbf2" />
     <style>
+      /* ============================================================
+         TEMA MORI — palet sama dengan seluruh aplikasi:
+         bg #fffbf2 · surface #f7f3e9 · teks #1a1917 · redup #6e6a64
+         Garis #1a1917 30% (bukan abu-abu), radius 10px, mono JetBrains.
+         ============================================================ */
       :root {
-        --background: #f8fafc;
-        --surface: #ffffff;
-        --text: #0f172a;
-        --muted: #64748b;
-        --border: #e2e8f0;
-        --primary: #2563eb;
-        --badge-bg: #dcfce7;
-        --badge-text: #166534;
+        --mori-bg: #fffbf2;
+        --mori-surface: #f7f3e9;
+        --mori-text: #1a1917;
+        --mori-text-2: #6e6a64;
+        --mori-line: rgba(26, 25, 23, 0.14);
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+        --mori-radius: 10px;
+
+        /* alias supaya aturan di bawah tidak perlu diubah semua */
+        --background: var(--mori-bg);
+        --surface: var(--mori-surface);
+        --text: var(--mori-text);
+        --muted: var(--mori-text-2);
+        --border: var(--mori-line);
+        --primary: var(--mori-text);
+        --badge-bg: var(--mori-surface);
+        --badge-text: var(--mori-text);
       }
 
       * {
@@ -29,18 +43,20 @@
       html,
       body {
         min-height: 100%;
-        background: var(--background);
+        background: var(--mori-bg);
       }
 
       body {
-        color: var(--text);
+        color: var(--mori-text);
         font-family:
+          "Inter",
           "Segoe UI",
           system-ui,
           -apple-system,
           BlinkMacSystemFont,
           sans-serif;
         line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
       }
 
       .page {
@@ -48,8 +64,8 @@
         max-width: 800px;
         min-height: 100dvh;
         margin: 0 auto;
-        padding: max(16px, env(safe-area-inset-top)) 18px 28px;
-        background: var(--surface);
+        padding: max(14px, env(safe-area-inset-top)) 18px 40px;
+        background: var(--mori-bg);
       }
 
       .topbar {
@@ -66,17 +82,17 @@
         width: 40px;
         height: 40px;
         flex: 0 0 40px;
-        border: none;
-        border-radius: 12px;
-        color: var(--primary);
-        background: var(--surface);
+        border: 1px solid var(--mori-line);
+        border-radius: var(--mori-radius);
+        color: var(--mori-text);
+        background: var(--mori-surface);
         text-decoration: none;
         font-size: 22px;
         line-height: 1;
       }
 
       .back:active {
-        background: #eff6ff;
+        transform: translate(2px, 2px);
       }
 
       .heading {
@@ -85,24 +101,32 @@
       }
 
       .eyebrow {
-        color: var(--muted);
+        color: var(--mori-text-2);
+        font-family: var(--mori-mono);
         font-size: 10px;
         font-weight: 700;
-        letter-spacing: 0.08em;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
       }
 
       h1 {
-        color: var(--text);
-        font-size: clamp(18px, 5vw, 24px);
-        line-height: 1.15;
-        letter-spacing: -0.02em;
+        color: var(--mori-text);
+        font-family: var(--mori-mono);
+        font-size: clamp(17px, 5vw, 22px);
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        line-height: 1.2;
       }
 
       .count {
         flex: 0 0 auto;
-        color: var(--muted);
-        font-size: 12px;
+        color: var(--mori-text-2);
+        font-family: var(--mori-mono);
+        font-size: 11px;
         font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
         white-space: nowrap;
       }
 
@@ -115,17 +139,19 @@
         align-items: center;
         gap: 8px;
         width: 100%;
-        min-height: 44px;
+        min-width: 0;
+        height: 46px;
+        box-sizing: border-box;
         padding: 0 14px;
         border: 1px solid var(--mori-line);
-        border-radius: 12px;
-        background: #f8fafc;
-        color: #94a3b8;
+        border-radius: var(--mori-radius);
+        background: var(--mori-surface);
+        color: var(--mori-text-2);
+        transition: background 0.2s ease;
       }
 
       .search-box:focus-within {
-        border-color: #93c5fd;
-        background: var(--surface);
+        background: #fffdf7;
       }
 
       .search-box svg {
@@ -140,28 +166,36 @@
         border: 0;
         outline: 0;
         background: transparent;
-        color: var(--text);
-        font: inherit;
-        font-size: 16px;
+        color: var(--mori-text);
+        font-family: inherit;
+        font-size: 14px;
       }
 
       .search-box input::placeholder {
-        color: #94a3b8;
+        color: var(--mori-text-2);
       }
 
+      /* Garis tepi 1.5px warna gelap + radius 10px, sama seperti
+         Admin KOPI / Admin NOTE / Admin Stok Opname. */
       .table-wrap {
         overflow-x: auto;
-        border: 2px solid #1a1917 !important;
-        border-radius: 14px;
-        background: #ffffff !important;
+        border: 1.5px solid rgba(26, 25, 23, 0.3) !important;
+        border-radius: var(--mori-radius);
+        background: var(--mori-bg) !important;
         -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .table-wrap::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
       }
 
       table {
         width: 100%;
         min-width: 500px;
         border-collapse: collapse;
-        background: var(--surface);
+        background: var(--mori-bg);
         font-size: 13px;
       }
 
@@ -169,14 +203,15 @@
         position: sticky;
         top: 0;
         z-index: 1;
-        background: #f1f5f9;
+        background: var(--mori-surface);
       }
 
       th,
       td {
-        padding: 11px 12px;
-        border-bottom: 1.5px solid #1a1917 !important;
-        border-right: 1px solid rgba(26,25,23,0.14);
+        padding: 0 12px;
+        height: 36px;
+        border-bottom: 1px solid var(--mori-line) !important;
+        border-right: none;
         text-align: left;
         vertical-align: middle;
       }
@@ -186,52 +221,65 @@
       }
 
       th {
-        color: var(--muted);
+        background: var(--mori-surface);
+        color: var(--mori-text-2);
+        font-family: var(--mori-mono);
         font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 0.04em;
+        font-weight: 800;
+        letter-spacing: 0.6px;
         text-transform: uppercase;
         white-space: nowrap;
+      }
+
+      tbody td {
+        background: var(--mori-bg);
       }
 
       tbody tr:last-child td {
         border-bottom: 0;
       }
 
-      tbody tr:hover {
-        background: #f8fafc;
+      tbody tr:hover td {
+        background: var(--mori-surface);
       }
 
       .plu {
-        color: var(--primary);
-        font-family: "SF Mono", Consolas, monospace;
+        color: var(--mori-text);
+        font-family: var(--mori-mono);
         font-size: 12px;
         font-weight: 700;
         white-space: nowrap;
       }
-
       .badge {
         display: inline-flex;
         align-items: center;
-        min-height: 24px;
+        min-height: 22px;
         padding: 2px 9px;
-        border-radius: 999px;
-        background: var(--badge-bg);
-        color: var(--badge-text);
-        font-size: 11px;
+        border: 1px solid var(--mori-line);
+        border-radius: 6px;
+        background: var(--mori-surface);
+        color: var(--mori-text);
+        font-family: var(--mori-mono);
+        font-size: 10px;
         font-weight: 700;
+        letter-spacing: 0.6px;
       }
 
       .empty {
         padding: 28px 16px;
-        color: var(--muted);
+        color: var(--mori-text-2);
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
         text-align: center;
       }
 
       @media (min-width: 768px) {
         .page {
-          padding-right: 24px;
-          padding-left: 24px;
+          padding-right: 18px;
+          padding-left: 18px;
         }
       }
     </style>
