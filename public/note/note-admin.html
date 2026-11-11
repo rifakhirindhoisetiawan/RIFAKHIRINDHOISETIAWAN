@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Admin — NOTE</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,138 +22,296 @@
       --mori-bg:#fffbf2;--mori-surface:#f7f3e9;--mori-text:#1a1917;--mori-text-2:#6e6a64;
       --mori-line:rgba(26,25,23,.14);--mori-accent:#1a1917;--mori-danger:#b91c1c;
       --mori-mono:"JetBrains Mono",ui-monospace,monospace;
+      --mori-radius:8px;
     }
     html,body{background:var(--mori-bg) !important}
     body{padding-top:0px;-webkit-font-smoothing:antialiased}
-    .wrap{width:100%;max-width:800px;min-height:100vh;margin:0 auto;background:var(--mori-bg) !important;padding:8px 12px 40px;min-width:0}
-    .back-row{display:flex;justify-content:flex-end;margin-bottom:10px}
-    .btn-back{
-      font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
-      text-decoration:none;color:var(--mori-text);padding:6px 10px;
-      border:1px solid var(--mori-line);background:var(--mori-surface);box-shadow: none;
+    .wrap{
+      width:100%;max-width:800px;min-height:100vh;margin:0 auto;
+      background:var(--mori-bg) !important;
+      padding:max(14px,env(safe-area-inset-top)) 18px 40px;
+      min-width:0;
     }
-    .btn-back:active{transform:translate(1px,1px);box-shadow:none}
 
-    /* baris input + tombol +  — sama daily-task-admin */
-    .judul-row{display:flex;align-items:stretch;gap:8px}
-    .judul-row #f_title{flex:1 1 auto;min-width:0}
-    .btn-add{
-      flex:0 0 44px;width:44px;padding:0;display:flex;align-items:center;justify-content:center;
-      font-family:inherit;font-size:22px;font-weight:700;line-height:1;
-      color:var(--mori-bg);background:var(--mori-accent);border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;
-      box-shadow: none;transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
+    /* ============================================================
+       TABEL MENU — pola sama dengan admin Stok Opname
+       (public/stok-opname/stock-admin.html):
+       - baris tulis (MENU / KATEGORI / +) adalah baris PERTAMA di
+         dalam tabel, bukan form terpisah di atasnya
+       - header krem, teks mono, huruf kecil
+       - tombol aksi memakai krem (bukan hitam) supaya menyatu dengan
+         header tabel
+       - aksi per baris diringkas jadi satu tombol tiga titik (⋮)
+       ============================================================ */
+    .table-wrap{
+      /* Garis tepi 1.5px warna gelap (0.3) + radius 10px, sama seperti
+         Admin KOPI (public/kopi/admin/index.html:899-901). Garis lebih
+         tegas dari 0.14 jadi kotak tabel jelas terlihat mengelilingi
+         isi tabel. */
+      border:1.5px solid rgba(26,25,23,0.3);border-radius:10px;
+      background:var(--mori-bg);overflow-x:auto;overflow-y:hidden;
+      -webkit-overflow-scrolling:touch;scrollbar-width:none;
     }
-    .btn-add:active{background:#33312f;transform:translate(2px,2px);box-shadow:none}
-    #f_title{
-      flex:1 1 auto;min-width:0;width:auto;max-width:100%;margin:0;height:44px;padding:0 14px;
-      font-family:var(--mori-mono);font-size:13px;font-weight:700;letter-spacing:.4px;
-      color:var(--mori-text) !important;background:var(--mori-surface) !important;
-      border:1px solid var(--mori-line) !important;border-radius:8px !important;outline:none;
-    }
-    #f_title::placeholder{color:var(--mori-text-2) !important;letter-spacing:.4px;text-transform:none}
-    #f_title:focus{background:#fffdf7 !important;box-shadow: none}
+    .table-wrap::-webkit-scrollbar{display:none;width:0;height:0}
 
-    /* tabel — sama menu-table daily-task-admin */
-    .table-wrap{border:1px solid var(--mori-line);border-radius:8px;background:var(--mori-bg);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-    .menu-table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+    /* table-layout:fixed -> lebar kolom diambil dari header, jadi tabel
+       SELALU muat di dalam kotak .table-wrap. Tanpa ini, kolom KATEGORI
+       membuat tabel lebih lebar dari kotaknya di HP: kolom FOTO terdorong
+       keluar layar dan border tepi tabel tidak lagi mengelilingi isi. */
+    .menu-table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
     .menu-table thead th{
-      position:sticky;top:0;z-index:1;background:var(--mori-surface);color:var(--mori-text);
-      font-family:var(--mori-mono);font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;text-align:left;
-      height:34px;padding:0 6px;border-bottom:1px solid var(--mori-line);white-space:nowrap;
+      position:sticky;top:0;z-index:1;
+      background:var(--mori-surface);color:var(--mori-text-2);
+      font-family:var(--mori-mono);font-size:11px;font-weight:800;
+      letter-spacing:.6px;text-transform:uppercase;text-align:left;
+      height:36px;padding:0 12px;
+      border-bottom:1px solid var(--mori-line);white-space:nowrap;
     }
-    .menu-table tbody td{height:46px;padding:0 6px;border-bottom:1px solid var(--mori-line);vertical-align:middle}
-    .menu-table tbody tr:hover td{background:#faf6ea}
+    .menu-table tbody td{
+      height:45px;padding:0 8px;
+      border-bottom:1px solid var(--mori-line);
+      background:var(--mori-bg);vertical-align:middle;
+      transition:background .5s ease;
+    }
     .menu-table tbody tr:last-child td{border-bottom:0}
-    .c-no{width:36px;text-align:center;font-family:var(--mori-mono);color:var(--mori-text-2);font-size:11px}
-    .c-nama{min-width:0;overflow:hidden}
-    .menu-table .c-nama .nama{font-family:var(--mori-mono);color:var(--mori-text);font-weight:700;font-size:11px;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .c-foto{width:52px}
-    .c-aksi{width:116px}
-    .c-foto .thumb{width:38px;height:38px;display:block;border:1px solid var(--mori-line);border-radius:8px;background:var(--mori-surface);overflow:hidden}
-    .c-foto .thumb img{width:100%;height:100%;object-fit:cover;filter:saturate(.4) brightness(1.04);display:block}
-    .c-foto .thumb.kosong{background:repeating-linear-gradient(45deg,#f2eee2 0 5px,#ece6d6 5px 10px);border-color:var(--mori-line)}
-    .c-foto .thumb.sibuk{background:var(--mori-surface) !important}
-    .c-foto .thumb.thumb-admin{display:flex;align-items:center;justify-content:center;background:var(--mori-accent);border-radius:8px}
-    .c-foto .thumb.thumb-admin svg{width:18px;height:18px;color:var(--mori-bg)}
-    .menu-table tbody tr.is-admin td{background:#faf6ea}
+    /* Hover memakai --surface (krem) seperti admin Stok Opname.
+       Warna lama #faf6ea dipakai untuk baris ADMIN, tapi di Stok Opname
+       baris biasa juga #faf6ea sehingga ADMIN tidak menonjol; di sini
+       dibalas ke --surface supaya hover terasa dan baris ADMIN tetap
+       seperti baris biasa. */
+    .menu-table tbody tr:hover td{background:var(--mori-surface)}
+    /* Baris ADMIN bukan baris aktif, jadi warnanya sama dengan baris
+       biasa -- persis seperti admin Stok Opname, di mana baris ADMIN
+       juga tidak diberi warna khusus. */
     .menu-table tbody tr.is-admin .c-nama .nama{color:var(--mori-accent)}
+
+    .c-no{
+      width:38px;text-align:center;
+      font-family:var(--mori-mono);color:var(--mori-text-2);font-size:11px;
+    }
+    /* Perataan kolom No / Foto / Aksi harus mengalahkan aturan umum
+       `thead th{text-align:left}` (spesifisitas .menu-table thead th lebih
+       tinggi), jadi ditulisi ulang di level yang sama. */
+    .menu-table th.c-no,
+    .menu-table td.c-no{text-align:center}
+    .menu-table th.c-foto,
+    .menu-table td.c-foto{text-align:center}
+    .menu-table th.c-aksi,
+    .menu-table td.c-aksi{text-align:right}
+    .c-nama{min-width:0;overflow:hidden}
+    .menu-table .c-nama .nama{
+      font-family:var(--mori-mono);color:var(--mori-text);font-weight:700;
+      font-size:11px;letter-spacing:.3px;text-transform:uppercase;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+    .c-kat{width:88px}
+    .menu-table td.c-kat .kat{
+      font-family:var(--mori-mono);font-size:10px;font-weight:700;
+      text-transform:uppercase;color:var(--mori-text-2);
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+    .c-foto{width:53px;text-align:center}
+    .c-aksi{
+      width:48px;text-align:right;
+      position:sticky;right:0;background:var(--mori-bg);
+    }
+    .menu-table thead th.c-aksi{background:var(--mori-surface);z-index:2}
+
+    /* Thumbnail foto: kotak krem TANPA garis, hanya radius 8px.
+       Sama seperti admin Stok Opname, yang thumbnail-nya
+       `border:none` + `border-radius:8px`. */
+    .c-foto .thumb{
+      width:100%;max-width:44px;aspect-ratio:1/1;height:auto;margin:0 auto;
+      display:block;border:none;border-radius:var(--mori-radius);
+      background:var(--mori-surface);object-fit:cover;overflow:hidden;
+    }
+    .c-foto .thumb img{width:100%;height:100%;object-fit:cover;filter:saturate(.4) brightness(1.04);display:block;border-radius:inherit}
+    /* Belum ada foto -> motif garis putus-putus krem */
+    .c-foto .thumb.kosong{
+      background:repeating-linear-gradient(45deg,#f2eee2 0 5px,#ece6d6 5px 10px);
+    }
+    .c-foto .thumb.sibuk{background:var(--mori-surface) !important}
+    .c-foto .thumb.thumb-admin{display:flex;align-items:center;justify-content:center;background:var(--mori-accent)}
+    .c-foto .thumb.thumb-admin svg{width:18px;height:18px;color:var(--mori-bg)}
+    /* Thumbnail ADMIN pakai foto (sama seperti menu NOTE), bukan kotak hitam */
+    .c-foto .thumb.thumb-admin.has-foto{background:var(--mori-surface)}
+
+    /* ============================================================
+       BARIS TULIS DI DALAM TABEL
+       Baris paling atas tabel: kolom MENU + KATEGORI + tombol (+).
+       Input-nya transparan tanpa garis, tinggi sama dengan baris lain,
+       jadi tidak terlihat seperti komponen asing yang ditempel di
+       dalam tabel. Sama persis dengan baris "Tulis Menu" di admin
+       Stok Opname.
+       ============================================================ */
+    /* Garis pemisah antara baris tulis dan daftar.
+       `tbody tr:last-child td{border-bottom:0}` di atas ikut mengenai
+       baris tulis (karena baris itu anak terakhir tbody-nya), jadi di
+       sini dipaksakan kembali pakai !important supaya pemisah tetap
+       terlihat. */
+    .menu-table tbody.tulis-body td{border-bottom:1px solid var(--mori-line) !important}
+    .menu-table tbody.tulis-body td.tulis{padding:0 12px}
+    .menu-table tbody.tulis-body input{
+      width:100%;min-width:0;height:44px;padding:0;
+      font:inherit;font-size:13px;font-weight:700;
+      color:var(--mori-text);background:transparent;border:none;
+      border-radius:0;text-transform:uppercase;
+    }
+    .menu-table tbody.tulis-body input::placeholder{color:var(--mori-text-2)}
+    .menu-table tbody.tulis-body input:focus{
+      background:transparent !important;border:none !important;
+      box-shadow:none;outline:none;
+    }
+    .menu-table tbody.tulis-body input#f_category{
+      font-family:var(--mori-mono);font-size:12px;
+    }
+
+    /* ============================================================
+       TOMBOL AKSI
+       Warna tombol memakai warna yang sama dengan header tabel:
+       latar krem, teks gelap, garis tipis. Tombol hapus tetap merah.
+       ============================================================ */
     .acts{display:flex;gap:6px;justify-content:flex-end}
     .ico{
-      width:32px !important;height:32px !important;flex:0 0 32px !important;min-height:32px !important;max-height:32px !important;
-      padding:0 !important;margin:0 !important;display:flex !important;align-items:center !important;justify-content:center !important;
-      font-family:inherit;font-size:14px;font-weight:800;line-height:1;color:var(--mori-bg);background:var(--mori-accent);
-      border:1px solid var(--mori-line);border-radius:8px;box-shadow: none;cursor:pointer;flex-shrink:0;outline:none;
+      width:32px !important;height:32px !important;flex:0 0 32px !important;
+      min-height:32px !important;max-height:32px !important;
+      padding:0 !important;margin:0 !important;
+      display:flex !important;align-items:center !important;justify-content:center !important;
+      font-family:inherit;font-size:14px;font-weight:800;line-height:1;
+      color:var(--mori-text);background:var(--mori-surface);
+      border:1px solid var(--mori-line);border-radius:var(--mori-radius);
+      box-shadow:none;cursor:pointer;flex-shrink:0;outline:none;
       transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
     }
     .ico:active{opacity:1;transform:translate(2px,2px);box-shadow:none}
-    .ico-danger{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff;box-shadow: none}
+    .ico-danger{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff;box-shadow:none}
     .ico-danger:active{box-shadow:none}
 
-    .search-wrapper{display:flex;align-items:center;gap:10px;width:100%;margin:12px 0 0}
-    .search-box {flex:1;display:flex;align-items:center;gap:8px;min-width:0;border: 1px solid var(--mori-line);border-radius:8px !important;background:var(--mori-surface) !important;color:var(--mori-text);padding:10px 14px;font-size:14px;transition:box-shadow .2s ease}
-    .search-box:focus-within{background:#fffdf7 !important;box-shadow: none}
-    .search-box svg{flex-shrink:0;color:var(--mori-text-2) !important;width:18px;height:18px}
-    .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:var(--mori-text) !important;font-family:inherit;min-width:0;-webkit-appearance:none;appearance:none;border-radius:0}
-    .search-box input::placeholder{color:var(--mori-text-2) !important}
-    .empty{font-family:var(--mori-mono);font-size:11px;font-weight:700;color:var(--mori-text-2);letter-spacing:1px;text-transform:uppercase}
-    .foto-hint{margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger);border-left:3px solid var(--mori-danger);padding:6px 8px;background:#fdf1f1}
+    /* ============================================================
+       MENU AKSI (⋮)
+       Tiap baris cuma satu tombol tiga titik. Saat ditekan, tombol
+       aslinya (upload / edit / hapus) muncul menimpanya, di baris
+       yang sama.
+
+       Popup HARUS di luar tabel: .table-wrap memakai overflow:hidden,
+       jadi tombol yang muncul di dalam tabel akan terpotong batas
+       tabel.
+       ============================================================ */
+    .menu-pop{
+      position:fixed;z-index:150;
+      display:flex;align-items:center;gap:6px;
+      pointer-events:none;
+    }
+    .menu-pop .ico{
+      pointer-events:auto;-webkit-tap-highlight-color:transparent;
+    }
+    .menu-pop[hidden]{display:none}
+
+    .empty{
+      font-family:var(--mori-mono);font-size:11px;font-weight:700;
+      color:var(--mori-text-2);letter-spacing:1px;text-transform:uppercase;
+    }
+    .foto-hint{
+      margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;
+      letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger);
+      border-left:3px solid var(--mori-danger);padding:6px 8px;background:#fdf1f1;
+    }
     .foto-hint[hidden]{display:none}
     .foto-hint.sembunyi{opacity:0;transition:opacity .4s ease}
 
-    .pw-bg{display:none;position:fixed;left:0;right:0;top:0;bottom:0;z-index:200;background:rgba(26,25,23,.45);align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));overscroll-behavior:contain}
+    .pw-bg{
+      display:none;position:fixed;left:0;right:0;top:0;bottom:0;z-index:200;
+      background:rgba(26,25,23,.45);align-items:center;justify-content:center;
+      padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));
+      overscroll-behavior:contain;
+    }
     .pw-bg.open{display:flex}
     html.pw-open{overflow:hidden;overscroll-behavior:none}
-    .pw-card{width:100%;max-width:360px;margin:auto;max-height:100%;overflow-y:auto;background:var(--mori-bg);border:1px solid var(--mori-line);border-radius:12px;padding:18px;box-shadow: none;overscroll-behavior:contain}
-    .pw-title{font-family:var(--mori-mono);font-size:13px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--mori-text);margin-bottom:8px}
+    .pw-card{
+      width:100%;max-width:360px;margin:auto;max-height:100%;overflow-y:auto;
+      background:var(--mori-bg);border:1px solid var(--mori-line);
+      border-radius:var(--mori-radius);padding:18px;box-shadow:none;
+      overscroll-behavior:contain;
+    }
+    .pw-title{
+      font-family:var(--mori-mono);font-size:13px;font-weight:700;letter-spacing:1.2px;
+      text-transform:uppercase;color:var(--mori-text);margin-bottom:8px;
+    }
     .pw-msg{font-size:12px;color:var(--mori-text-2);line-height:1.5;margin-bottom:12px;white-space:pre-line}
-    .pw-input{width:100%;height:auto;padding:11px 12px;font-family:var(--mori-mono);font-size:15px;letter-spacing:2px;color:var(--mori-text);background:var(--mori-surface);border:1px solid var(--mori-line);border-radius:8px;outline:none}
-    .pw-input:focus{background:#fffdf7;box-shadow: none}
-    .pw-error{margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger)}
+    .pw-input{
+      width:100%;height:auto;padding:11px 12px;font-family:var(--mori-mono);
+      font-size:15px;letter-spacing:2px;color:var(--mori-text);
+      background:var(--mori-surface);border:1px solid var(--mori-line);
+      border-radius:var(--mori-radius);outline:none;
+    }
+    .pw-input:focus{background:#fffdf7;box-shadow:none}
+    .pw-error{
+      margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;
+      letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger);
+    }
     .pw-error[hidden]{display:none}
     .pw-actions{display:flex;gap:8px;margin-top:16px}
-    .pw-btn{flex:1;padding:12px;border:1px solid var(--mori-line);border-radius:8px;background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+    .pw-btn{
+      flex:1;padding:12px;border:1px solid var(--mori-line);border-radius:var(--mori-radius);
+      background:var(--mori-surface);color:var(--mori-text);font-family:var(--mori-mono);
+      font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;
+    }
     .pw-btn:active{transform:translate(2px,2px)}
     .pw-btn-danger{background:var(--mori-danger);border-color:var(--mori-danger);color:#fff}
   </style>
 </head>
 <body>
 <div class="wrap">
-  <form id="form" onsubmit="return false">
-    <input type="hidden" id="editId" />
-    <div class="judul-row" style="margin-bottom:8px;">
-      <input id="f_title" type="text" placeholder="MENU" autocomplete="off" />
-      <input id="f_category" type="text" placeholder="Kategori" autocomplete="off" style="width:160px; height:44px; padding:0 12px; font-family:var(--mori-mono); font-size:12px; font-weight:700; text-transform:uppercase; color:var(--mori-text); background:var(--mori-surface); border:1px solid var(--mori-line); border-radius:8px; outline:none;" />
-      <button class="btn-add" type="button" id="btnAdd" title="Tambah menu">+</button>
-    </div>
-  </form>
+  <input type="hidden" id="editId" />
+  <!--
+    Satu tabel untuk dua keperluan: baris paling atas dipakai untuk
+    menulis menu baru (MENU / KATEGORI / +), baris di bawahnya adalah
+    daftar menu. Jadi tidak ada form terpisah di atas tabel.
 
-  <div class="table-wrap" id="listWrap" style="margin-top:12px">
+    Baris tulis harus punya <tbody> sendiri: render() mengosongkan
+    listEl dengan innerHTML = '', dan baris tulis tidak boleh ikut
+    terhapus.
+  -->
+  <div class="table-wrap" id="listWrap">
     <table class="menu-table">
       <thead>
         <tr>
           <th class="c-no">No</th>
           <th>Nama Menu</th>
-          <th style="width:100px; padding:0 6px; font-family:var(--mori-mono); font-size:9px; font-weight:700; text-transform:uppercase;">Kategori</th>
+          <th class="c-kat">Kategori</th>
           <th class="c-foto">Foto</th>
           <th class="c-aksi"></th>
         </tr>
       </thead>
+      <tbody class="tulis-body">
+        <tr>
+          <td class="c-no"></td>
+          <td class="c-nama tulis">
+            <input id="f_title" type="text" placeholder="MENU" autocomplete="off" aria-label="Nama menu" />
+          </td>
+          <td class="c-kat tulis">
+            <input id="f_category" type="text" placeholder="KATEGORI" autocomplete="off" aria-label="Kategori menu" />
+          </td>
+          <td class="c-foto"></td>
+          <td class="c-aksi">
+            <div class="acts">
+              <button class="ico" type="button" id="btnAdd" title="Tambah menu" aria-label="Tambah menu">+</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
       <tbody id="list">
-        <tr><td class="c-no"></td><td class="c-nama"><div class="empty">Memuat...</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>
+        <tr><td class="c-no"></td><td class="c-nama"><div class="empty">Memuat...</div></td><td class="c-kat"></td><td class="c-foto"></td><td class="c-aksi"></td></tr>
       </tbody>
     </table>
   </div>
   <div class="foto-hint" id="fotoHint" hidden></div>
-
-  <div class="search-wrapper" style="display:none;">
-    <div class="search-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-      <input id="search" type="text" placeholder="Cari menu..." autocomplete="off" />
-    </div>
-  </div>
 </div>
 
 <input type="file" id="fotoInput" accept="image/*" hidden />
+
+<!-- Popup aksi (upload / edit / hapus). Harus di luar tabel. -->
+<div class="menu-pop" id="menuPop" hidden role="group" aria-label="Aksi menu"></div>
 
 <div class="pw-bg" id="pwBg">
   <div class="pw-card" role="dialog" aria-modal="true">
@@ -187,7 +345,6 @@
   // (scripts/build/add-admin-rls.sql).
 
   const listEl = document.getElementById('list');
-  const searchEl = document.getElementById('search');
   const editId = document.getElementById('editId');
   const f_title = document.getElementById('f_title');
   const f_category = document.getElementById('f_category');
@@ -257,43 +414,143 @@
     return new File([blob], (file.name||'foto').replace(/\.[^.]+$/,'')+'.jpg', {type:'image/jpeg',lastModified:Date.now()});
   }
 
-  function barisKosong(pesan){ return '<tr><td class="c-no"></td><td class="c-nama"><div class="empty">'+pesan+'</div></td><td class="c-foto"></td><td class="c-aksi"></td></tr>'; }
+  function barisKosong(pesan){ return '<tr><td class="c-no"></td><td class="c-nama"><div class="empty">'+pesan+'</div></td><td class="c-kat"></td><td class="c-foto"></td><td class="c-aksi"></td></tr>'; }
+
+  /* ============================================================
+     MENU AKSI (⋮)
+     Dulu tiap baris punya tiga tombol (upload / edit / hapus)
+     sehingga kolom Aksi lebar sekali dan baris penuh tombol.
+     Sekarang tiap baris cuma satu tombol tiga titik, dan ketika
+     ditekan tombol aslinya muncul menimpanya -- ikon yang sama
+     persis dengan yang dulu, di baris yang sama.
+
+     Popup tetap di luar tabel (position:fixed) karena .table-wrap
+     memakai overflow:hidden, jadi tombol yang muncul di dalam
+     tabel akan terpotong batas tabel.
+     ============================================================ */
+  const menuPop = document.getElementById('menuPop');
+  let menuPopAnchor = null;
+
+  const tutupMenuPop = () => {
+    /* Jangan sentuh DOM kalau memang sudah tertutup -- listener
+       scroll bisa memicu ini sangat sering. */
+    if (menuPop.hidden && !menuPopAnchor) return;
+    menuPop.hidden = true;
+    menuPop.innerHTML = '';
+    if (menuPopAnchor) {
+      menuPopAnchor.setAttribute('aria-expanded', 'false');
+      menuPopAnchor.style.visibility = '';
+    }
+    menuPopAnchor = null;
+  };
+
+  const bukaMenuPop = (anchor, items) => {
+    tutupMenuPop();
+    menuPopAnchor = anchor;
+    anchor.style.visibility = 'hidden';
+    items.forEach((it) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'ico' + (it.bahaya ? ' ico-danger' : '');
+      b.textContent = it.ikon;
+      b.title = it.judul;
+      b.setAttribute('aria-label', it.judul);
+      b.addEventListener('click', () => {
+        tutupMenuPop();
+        it.jalankan();
+      });
+      menuPop.appendChild(b);
+    });
+    menuPop.hidden = false;
+    anchor.setAttribute('aria-expanded', 'true');
+
+    const r = anchor.getBoundingClientRect();
+    menuPop.style.top = r.top + 'px';
+    menuPop.style.right = (window.innerWidth - r.right) + 'px';
+    menuPop.style.left = 'auto';
+  };
+
+  document.addEventListener('click', (e) => {
+    if (menuPop.hidden) return;
+    if (menuPop.contains(e.target)) return;
+    if (menuPopAnchor && menuPopAnchor.contains(e.target)) return;
+    tutupMenuPop();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') tutupMenuPop();
+  });
+  window.addEventListener('resize', tutupMenuPop);
+  /* true = menangkap scroll di semua elemen, bukan hanya window,
+     karena tabelnya yang digulir, bukan halaman. */
+  window.addEventListener('scroll', tutupMenuPop, true);
 
   function render(){
-    const q=searchEl.value.trim().toLowerCase();
-    const filtered=all.filter(m=>!q||(m.title||'').toLowerCase().includes(q));
-    const rows = (q ? [] : [barisAdmin]).concat(filtered);
-    if(!rows.length){ listEl.innerHTML=barisKosong(all.length?'Tidak ada yang cocok':'Belum ada menu. Tambah di atas.'); return; }
+    tutupMenuPop();
+    const rows = [barisAdmin].concat(all);
+    if(!rows.length){ listEl.innerHTML=barisKosong('Belum ada menu. Tambah di atas.'); return; }
     listEl.innerHTML=rows.map((m,i)=>{
       const isKopi = (m.category || '').toUpperCase() === 'KOPI' || (m.title || '').toUpperCase().includes('KOPI') || (m.title || '').toUpperCase().includes('KOPI & RESEP');
-      const defaultUrl = isKopi ? '../kopi/image-index.jpg' : '';
+      const isAdmin = !!m.isAdmin;
+      // Foto default ADMIN disamakan dengan foto menu NOTE (image-index.jpg),
+      // sama seperti tile ADMIN di halaman menu NOTE.
+      const defaultUrl = isAdmin
+        ? 'image-index.jpg'
+        : isKopi ? '../kopi/image-index.jpg' : '';
       const rawUrl = m.foto_url || defaultUrl;
       const url=rawUrl?fotoBaru(rawUrl):'';
-      const isAdmin = !!m.isAdmin;
       let thumb;
       if (isAdmin) {
         thumb = url
-          ? '<div class="thumb thumb-admin"><img src="'+url+'" alt="" loading="lazy" decoding="async" /></div>'
+          ? '<div class="thumb thumb-admin has-foto"><img src="'+url+'" alt="" loading="lazy" decoding="async" /></div>'
           : '<div class="thumb thumb-admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v2" /><path d="M8 9h8" /><rect x="4" y="4" width="16" height="16" rx="1" /></svg></div>';
       } else {
         thumb=url?'<div class="thumb"><img src="'+url+'" alt="" loading="lazy" decoding="async" /></div>':'<div class="thumb kosong"></div>';
       }
-      const aksi = isAdmin
-        ? '<button type="button" class="ico" data-foto="'+m.id+'" title="Ganti foto ADMIN">↑</button>'
-        : '<button type="button" class="ico" data-foto="'+m.id+'" title="Upload foto">↑</button><button type="button" class="ico" data-edit="'+m.id+'" title="Edit">✎</button><button type="button" class="ico ico-danger" data-del="'+m.id+'" title="Hapus">✕</button>';
       const catLabel = m.category || 'UMUM';
-      return '<tr data-id="'+m.id+'"'+(isAdmin?' class="is-admin"':'')+'>' +
+      const idAtas = isAdmin ? AKUN_TILE : String(m.id);
+
+      return '<tr data-id="'+idAtas+'"'+(isAdmin?' class="is-admin"':'')+'>' +
              '<td class="c-no">'+(i+1)+'</td>' +
              '<td class="c-nama"><div class="nama">'+(m.title||'')+'</div></td>' +
-             '<td style="font-family:var(--mori-mono); font-size:10px; font-weight:700; text-transform:uppercase; color:var(--mori-text-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">'+catLabel+'</td>' +
+             '<td class="c-kat"><div class="kat">'+catLabel+'</div></td>' +
              '<td class="c-foto">'+thumb+'</td>' +
-             '<td class="c-aksi"><div class="acts">'+aksi+'</div></td>' +
+             '<td class="c-aksi"><div class="acts">' +
+               '<button type="button" class="ico" data-dots="'+idAtas+'" title="Aksi" aria-label="Aksi" aria-haspopup="true" aria-expanded="false">⋮</button>' +
+             '</div></td>' +
              '</tr>';
     }).join('');
-    const idDari = v => (v === AKUN_TILE ? AKUN_TILE : parseInt(v, 10));
-    listEl.querySelectorAll('[data-foto]').forEach(b=>b.addEventListener('click',()=>pilihFoto(idDari(b.dataset.foto))));
-    listEl.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>isiForm(parseInt(b.dataset.edit,10))));
-    listEl.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>hapusMenu(parseInt(b.dataset.del,10))));
+
+    listEl.querySelectorAll('[data-dots]').forEach(b=>{
+      b.addEventListener('click', () => {
+        const id = b.dataset.dots;
+        const isAdmin = id === AKUN_TILE;
+        const m = isAdmin ? barisAdmin : all.find(x=>String(x.id)===String(id));
+        if (!m) return;
+        const isiMenu = [
+          {
+            ikon: '↑',
+            judul: m.foto_url ? 'Ganti foto ' + kapitalKata(m.title||'') : 'Upload foto ' + kapitalKata(m.title||''),
+            jalankan: () => pilihFoto(isAdmin ? AKUN_TILE : parseInt(m.id, 10)),
+          },
+        ];
+        if (!isAdmin) {
+          isiMenu.push({
+            ikon: '✎',
+            judul: 'Edit ' + kapitalKata(m.title||''),
+            jalankan: () => isiForm(parseInt(m.id, 10)),
+          });
+          isiMenu.push({
+            ikon: '✕',
+            judul: 'Hapus ' + kapitalKata(m.title||''),
+            bahaya: true,
+            jalankan: () => hapusMenu(parseInt(m.id, 10)),
+          });
+        }
+        /* tekan lagi di tombol yang sama = tutup */
+        if (!menuPop.hidden && menuPopAnchor === b) tutupMenuPop();
+        else bukaMenuPop(b, isiMenu);
+      });
+    });
   }
 
   async function load(){
@@ -384,7 +641,6 @@
     await load();
   }
 
-  searchEl.addEventListener('input',render);
   try{
     const cached=JSON.parse(localStorage.getItem(MENUS_CACHE_KEY)||'null');
     if(Array.isArray(cached)){ all=cached; render(); }

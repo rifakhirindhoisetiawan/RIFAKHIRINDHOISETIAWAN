@@ -83,15 +83,23 @@
         }
       }
 
-      /* ===== SEARCH ROW ===== */
+      /* ===== SEARCH ROW =====
+         Jarak (padding) disamakan dengan index.html: gutter 18px kiri-kanan,
+         jarak atas aman untuk notch HP, dan jarak ke grid 14px. */
       .search-row {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 8px 0 14px;
+        padding: max(12px, env(safe-area-inset-top)) 18px 14px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
       }
       .search-box {
         flex: 1;
+        /* min-width:0 -> kolom cari boleh menyusut, jadi tombol di kanan
+           tidak terdorong keluar layar di HP sempit (sama seperti index.html) */
+        min-width: 0;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -114,6 +122,7 @@
         background: transparent;
         outline: none;
         width: 100%;
+        min-width: 0;
         font-size: 14px;
         color: var(--mori-text);
         font-family: inherit;
@@ -131,11 +140,14 @@
         height: 18px;
       }
 
-      /* ===== MENU GRID ===== */
+      /* ===== MENU GRID =====
+         Padding atas 0 karena jarak ke search row sudah diatur di .search-row.
+         Gutter kiri-kanan 18px sama dengan search row supaya keduanya
+         rata kiri (sama seperti index.html). */
       .menu-wrap {
         flex: 1;
         overflow-y: auto;
-        padding: 12px 14px 40px;
+        padding: 0 18px 40px;
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
@@ -184,20 +196,6 @@
         object-fit: cover;
         display: block;
         filter: saturate(0.55) contrast(1.02);
-      }
-
-      /* Tile Admin */
-      .icon-tile-foto.tile-admin {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--mori-accent);
-        box-shadow: none;
-      }
-      .icon-tile-foto.tile-admin svg {
-        width: 36%;
-        height: 36%;
-        color: var(--mori-bg);
       }
 
       /* Tile tanpa foto */
@@ -355,8 +353,25 @@
         id: 'admin',
         title: 'ADMIN',
         isAdmin: true,
-        href: 'note-admin.html'
+        href: 'note-admin.html',
+        // Foto tile ADMIN disamakan dengan foto menu NOTE (image-index.jpg)
+        // supaya dua tile itu kelihatan satu keluarga.
+        foto_url: 'image-index.jpg'
       };
+
+      // Kalau admin sudah mengunggah foto khusus untuk tile ADMIN
+      // (bucket note-foto -> note/admin.jpg), foto itu yang dipakai.
+      // Kalau bucket/file belum ada, tetap pakai foto menu NOTE.
+      const ADMIN_FOTO_URL =
+        SUPABASE_URL + '/storage/v1/object/public/note-foto/note/admin.jpg';
+      async function loadAdminFoto() {
+        try {
+          const res = await fetch(ADMIN_FOTO_URL, { method: 'HEAD' });
+          if (!res.ok) return;
+          adminTile.foto_url = ADMIN_FOTO_URL;
+          renderGrid();
+        } catch {}
+      }
 
       const PIN_KEY = 'note_pinned_v1';
       let pinned = [];
@@ -406,20 +421,16 @@
 
         homeGrid.innerHTML = list
           .map((m) => {
-            if (m.isAdmin) {
-              return `<a class="item" href="${m.href}">
-                <div class="icon-tile-foto tile-admin">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 15v2" /><path d="M8 9h8" /><rect x="4" y="4" width="16" height="16" rx="1" />
-                  </svg>
-                </div>
-                <span>${m.title}</span>
-              </a>`;
-            }
-
-            const href = `note-view.html?id=${m.id}`;
+            const href = m.isAdmin ? m.href : `note-view.html?id=${m.id}`;
             const isKopi = (m.category || '').toUpperCase() === 'KOPI' || (m.title || '').toUpperCase().includes('KOPI') || (m.title || '').toUpperCase().includes('KOPI & RESEP');
-            const defaultFoto = isKopi ? '../kopi/image-index.jpg' : '';
+            // Menu KOPI tanpa foto-upload memakai foto index KOPI; tile ADMIN
+            // memakai foto index NOTE (image-index.jpg) yang sama dengan foto
+            // menu NOTE di halaman utama.
+            const defaultFoto = m.isAdmin
+              ? 'image-index.jpg'
+              : isKopi
+                ? '../kopi/image-index.jpg'
+                : '';
             const fotoUrl = m.foto_url || defaultFoto;
             const tileContent = fotoUrl
               ? `<img src="${fotoUrl}" alt="" loading="lazy" decoding="async" />`
@@ -434,8 +445,9 @@
                 </div>`;
 
             const pinnedClass = isPinned(m.title) ? ' pinned' : '';
+            const dataTitle = m.isAdmin ? '' : ` data-title="${encodeURIComponent(m.title)}"`;
 
-            return `<a class="item${pinnedClass}" href="${href}" data-title="${encodeURIComponent(m.title)}">
+            return `<a class="item${pinnedClass}" href="${href}"${dataTitle}>
               <div class="icon-tile-foto ${fotoUrl ? '' : 'tanpa-foto'}">
                 ${tileContent}
               </div>
@@ -553,6 +565,7 @@
       renderGrid();
       loadMenus();
       syncCategoryFilter();
+      loadAdminFoto();
 
       // Realtime (opsional) dimuat setelah halaman tampil, bukan di jalur kritis.
       let rtTimer = null;

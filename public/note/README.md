@@ -1,15 +1,36 @@
 # Folder NOTE
 
-Menu NOTE berisi dua sub-menu (deretan tile 9:16, gaya MORI):
+Menu NOTE berisi deretan tile 9:16 (gaya MORI) berisi daftar menu catatan.
 
-- **`note/note.html`** — halaman menu NOTE: tile **PLU** dan tile **Admin**.
-  Entry point dari `index.html` (`public/note/note.html`).
-- **`note/plu.html`** + `note/plu.js` + `note/plu.css` — daftar produk (read-only).
-  Data dari Supabase tabel `note_products`; kalau tabelnya belum ada, otomatis
-  pakai `note/seed-note-products.json` supaya halaman tidak kosong.
-- **`note/note-admin.html`** — kelola produk: tambah / edit / hapus (berpassword),
-  upload foto ke bucket `note-foto`. Sumber data yang sama (`note_products`),
-  jadi perubahan di sini langsung tampil di menu PLU.
+- **`note/note.html`** — halaman menu NOTE: daftar menu dari tabel `note_menus`
+  plus tile **ADMIN** di depan. Entry point dari `index.html`
+  (`public/note/note.html`).
+- **`note/note-view.html?id=<menu_id>`** — halaman catatan untuk satu menu:
+  tambah / edit / hapus catatan, dan render rumus LaTeX (KaTeX) untuk catatan
+  berawalan `Rumus ... $$...$$`.
+- **`note/note-admin.html`** — kelola daftar menu: tambah / edit / hapus
+  (berpassword Supabase Auth), upload foto ke bucket `note-foto`.
+- **`note/plu.html`** + `note/plu.js` + `note/plu.css` — daftar produk
+  read-only dari tabel `note_products` (fallback ke
+  `note/seed-note-products.json`).
+
+## Struktur UI admin
+
+`note-admin.html` dan `note-view.html` memakai pola yang sama dengan Admin
+KOPI (`public/kopi/admin/index.html`) dan admin Stok Opname
+(`public/stok-opname/stock-admin.html`):
+
+- Baris tulis (**MENU** / **KATEGORI** / **+**) adalah baris pertama **di
+  dalam tabel** (`tbody.tulis-body`), bukan form terpisah di atas tabel.
+  Input-nya transparan tanpa garis supaya tidak terlihat seperti komponen
+  asing yang ditempel di dalam tabel.
+- Aksi tiap baris diringkas jadi satu tombol tiga titik (⋮). Saat ditekan,
+  tombol aslinya (upload / edit / hapus) muncul menimpanya di baris yang
+  sama. Popup-nya berada di luar tabel (`position:fixed`) karena
+  `.table-wrap` memakai `overflow:hidden`.
+- Tombol aksi memakai warna krem (sama dengan header tabel), bukan hitam.
+  Hapus tetap merah.
+- Garis tepi tabel `1.5px` warna gelap + radius `10px`.
 
 ## Setup Supabase
 
@@ -22,10 +43,9 @@ Menu NOTE berisi dua sub-menu (deretan tile 9:16, gaya MORI):
 
 ## Foto tile menu
 
-Taruh file berikut di `public/note/` kalau ingin memakai gambar pada tile menu:
-
-- `image-plu.jpg` — foto untuk tile PLU
-- `image-admin.jpg` — foto untuk tile Admin
+- `public/note/image-index.jpg` — foto untuk tile menu NOTE, dan juga jadi
+  foto default tile ADMIN (sampai ada foto khusus yang diunggah ke
+  `note-foto/note/admin.jpg`).
 
 Kalau file tidak ada, tile menampilkan motif garis putus-putus krem + ikon.
 
@@ -34,3 +54,5 @@ Kalau file tidak ada, tile menampilkan motif garis putus-putus krem + ikon.
 - `note.html` di root masih ada untuk bookmark lama, tapi yang aktif adalah
   folder `note/`.
 - `note_products` hanya butuh bucket `note-foto`; policy-nya sudah dibuat di SQL.
+- Hapus catatan dan menu dikunci Supabase Auth lewat RLS
+  (`scripts/build/add-admin-rls.sql`), bukan password di dalam file.

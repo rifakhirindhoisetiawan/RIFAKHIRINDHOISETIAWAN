@@ -40,49 +40,50 @@
         width: 100%;
         max-width: 800px;
         margin: 0 auto;
-        padding: 12px 18px 28px;
+        padding: max(14px, env(safe-area-inset-top)) 18px 40px;
         display: flex;
         flex-direction: column;
         flex: 1;
         min-height: 100vh;
       }
-      /* form tambah catatan */
-      .form-tambah { display: flex; gap: 8px; margin-bottom: 12px; }
-      .form-tambah input {
-        flex: 1; padding: 7px 10px; font-size: 13px; font-family: inherit;
-        color: var(--mori-text); background: var(--mori-surface);
-        border: 1px solid var(--mori-line); border-radius: 8px; outline: none;
-        transition: box-shadow .2s ease, background .2s ease;
-      }
-      .form-tambah input:focus { background: #fffdf7; box-shadow: none; }
-      .form-tambah input::placeholder { color: var(--mori-text-2); }
-      .btn-add {
-        flex: 0 0 32px; width: 32px; height: 32px; padding: 0;
-        display: flex; align-items: center; justify-content: center;
-        font-family: inherit; font-size: 18px; line-height: 1;
-        color: var(--mori-bg); background: var(--mori-accent);
-        border: 1px solid var(--mori-line); border-radius: 8px; cursor: pointer;
-        box-shadow: none;
-        transition: box-shadow .2s ease, transform .2s ease;
-      }
-      .btn-add:active { transform: translate(2px,2px); box-shadow: none; }
 
-      /* tabel - sama persis task-mori.css */
+      /* ============================================================
+         TABEL CATATAN — pola sama dengan admin NOTE
+         (public/note/note-admin.html) dan Admin KOPI:
+         - garis tepi 1.5px warna gelap + radius 10px
+         - header krem, teks mono kecil
+         - baris 45px, hover krem
+         - tombol aksi krem (bukan hitam), hapus tetap merah
+         - aksi per baris diringkas jadi satu tombol tiga titik (⋮)
+         ============================================================ */
       .table-wrap {
-        border: 1px solid var(--mori-line); border-radius: 12px;
-        background: var(--mori-bg); overflow-x: auto; -webkit-overflow-scrolling: touch;
+        border: 1.5px solid rgba(26, 25, 23, 0.3); border-radius: 10px;
+        background: var(--mori-bg); overflow-x: auto; overflow-y: hidden;
+        -webkit-overflow-scrolling: touch; scrollbar-width: none;
       }
+      .table-wrap::-webkit-scrollbar { display: none; width: 0; height: 0; }
       .tabel { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
       .tabel thead th {
-        background: var(--mori-surface); color: var(--mori-text);
-        font-family: var(--mori-mono); font-size: 10px; font-weight: 700;
-        letter-spacing: 1px; text-transform: uppercase; text-align: left;
-        height: 34px; padding: 0 8px; border-bottom: 1px solid var(--mori-line); white-space: nowrap;
+        position: sticky; top: 0; z-index: 1;
+        background: var(--mori-surface); color: var(--mori-text-2);
+        font-family: var(--mori-mono); font-size: 11px; font-weight: 800;
+        letter-spacing: .6px; text-transform: uppercase; text-align: left;
+        height: 36px; padding: 0 12px;
+        border-bottom: 1px solid var(--mori-line); white-space: nowrap;
       }
-      .tabel tbody td { height: 46px; padding: 0 8px; border-bottom: 1px solid var(--mori-line); vertical-align: middle; }
+      .tabel tbody td {
+        height: 45px; padding: 0 8px;
+        border-bottom: 1px solid var(--mori-line);
+        background: var(--mori-bg); vertical-align: middle;
+        transition: background .5s ease;
+      }
       .tabel tbody tr:last-child td { border-bottom: 0; }
-      .tabel tbody tr:hover td { background: #faf6ea; }
-      .c-no { width: 34px; text-align: center; font-family: var(--mori-mono); font-size: 11px; color: var(--mori-text-2); }
+      .tabel tbody tr:hover td { background: var(--mori-surface); }
+      .c-no {
+        width: 38px; text-align: center;
+        font-family: var(--mori-mono); font-size: 11px; color: var(--mori-text-2);
+      }
+      .tabel th.c-no, .tabel td.c-no { text-align: center; }
       .c-teks { min-width: 0; overflow: hidden; }
       .tabel .c-teks .isi {
         font-family: var(--mori-mono); font-size: 12px; font-weight: 700;
@@ -123,19 +124,68 @@
         display: block; margin-top: 6px; font-size: 10.5px; line-height: 1.55;
         color: var(--mori-text-2);
       }
-      .c-aksi { width: 72px; }
+      .c-aksi {
+        width: 48px; text-align: right;
+        position: sticky; right: 0; background: var(--mori-bg);
+      }
+      .tabel thead th.c-aksi { background: var(--mori-surface); z-index: 2; }
+      .tabel tbody tr:hover td.c-aksi { background: var(--mori-surface); }
       .acts { display: flex; gap: 6px; justify-content: flex-end; }
+      /* Tombol aksi krem (sama dengan header tabel), hapus tetap merah */
       .ico {
         width: 32px; height: 32px; flex: 0 0 32px;
         display: flex; align-items: center; justify-content: center;
         font-family: inherit; font-size: 14px; font-weight: 800; line-height: 1;
-        color: var(--mori-bg); background: var(--mori-accent);
+        color: var(--mori-text); background: var(--mori-surface);
         border: 1px solid var(--mori-line); border-radius: 8px;
         box-shadow: none; cursor: pointer;
-        transition: box-shadow .2s ease, transform .2s ease;
+        transition: box-shadow .2s ease, transform .2s ease, background .2s ease;
       }
       .ico:active { transform: translate(2px,2px); box-shadow: none; }
       .ico-danger { background: var(--mori-danger); border-color: var(--mori-danger); color: #fff; }
+
+      /* ============================================================
+         BARIS TULIS DI DALAM TABEL
+       Baris paling atas tabel (setelah header) dipakai untuk menulis
+       catatan baru. Input-nya transparan tanpa garis supaya menyatu
+       dengan tabel, bukan terlihat seperti komponen yang ditempel.
+       ============================================================ */
+      /* Garis pemisah antara baris tulis dan daftar.
+         `tbody tr:last-child td{border-bottom:0}` di atas ikut mengenai
+         baris tulis (karena baris itu anak terakhir tbody-nya), jadi
+         di sini dipaksakan kembali pakai !important supaya pemisah
+         tetap terlihat. */
+      .tabel tbody.tulis-body td { border-bottom: 1px solid var(--mori-line) !important; }
+      .tabel tbody.tulis-body td.tulis { padding: 0 12px; }
+      .tabel tbody.tulis-body input {
+        width: 100%; min-width: 0; height: 44px; padding: 0;
+        font: inherit; font-size: 13px; font-weight: 700;
+        color: var(--mori-text); background: transparent; border: none;
+        border-radius: 0;
+      }
+      .tabel tbody.tulis-body input::placeholder { color: var(--mori-text-2); }
+      .tabel tbody.tulis-body input:focus {
+        background: transparent !important; border: none !important;
+        box-shadow: none; outline: none;
+      }
+
+      /* ============================================================
+         MENU AKSI (⋮)
+       Aksi per baris (edit / hapus) diringkas jadi satu tombol tiga
+       titik. Saat ditekan, tombol aslinya muncul menimpanya di baris
+       yang sama. Popup di luar tabel (position:fixed) karena
+       .table-wrap memakai overflow:hidden.
+       ============================================================ */
+      .menu-pop {
+        position: fixed; z-index: 150;
+        display: flex; align-items: center; gap: 6px;
+        pointer-events: none;
+      }
+      .menu-pop .ico {
+        pointer-events: auto; -webkit-tap-highlight-color: transparent;
+      }
+      .menu-pop[hidden] { display: none; }
+
       .empty {
         font-family: var(--mori-mono); font-size: 11px; font-weight: 700;
         letter-spacing: 1px; text-transform: uppercase; color: var(--mori-text-2);
@@ -175,24 +225,45 @@
   </head>
   <body>
     <div class="wrap">
+      <!--
+        Satu tabel untuk dua keperluan: baris paling atas dipakai untuk
+        menulis catatan baru, baris di bawahnya adalah daftar catatan.
+        Jadi tidak ada form terpisah di atas tabel.
+
+        Baris tulis harus punya <tbody> sendiri: render() mengosongkan
+        tbody dengan innerHTML = '', dan baris tulis tidak boleh ikut
+        terhapus.
+      -->
       <div class="table-wrap">
         <table class="tabel">
           <thead>
             <tr>
               <th class="c-no">No</th>
-              <th colspan="2" style="padding: 4px 6px;">
-                <div class="form-tambah" style="margin: 0;">
-                  <input id="f_catatan" type="text" placeholder="Tulis catatan penting..." autocomplete="off" />
-                  <button class="btn-add" type="button" id="btnAdd" title="Tambah catatan">+</button>
-                </div>
-              </th>
+              <th>Catatan</th>
+              <th class="c-aksi"></th>
             </tr>
           </thead>
+          <tbody class="tulis-body">
+            <tr>
+              <td class="c-no"></td>
+              <td class="c-teks tulis">
+                <input id="f_catatan" type="text" placeholder="Tulis catatan penting..." autocomplete="off" aria-label="Tulis catatan" />
+              </td>
+              <td class="c-aksi">
+                <div class="acts">
+                  <button class="ico" type="button" id="btnAdd" title="Tambah catatan" aria-label="Tambah catatan">+</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
           <tbody id="tbody"></tbody>
         </table>
       </div>
       <div class="hint" id="hint" hidden></div>
     </div>
+
+    <!-- Popup aksi (edit / hapus). Harus di luar tabel. -->
+    <div class="menu-pop" id="menuPop" hidden role="group" aria-label="Aksi catatan"></div>
 
     <div class="pw-bg" id="pwBg">
       <div class="pw-card">
@@ -326,15 +397,83 @@
         return '<div class="isi" title="' + escAttr(asli) + '">' + escHtml(asli.toUpperCase()) + '</div>';
       }
 
+      /* ============================================================
+         MENU AKSI (⋮)
+         Dulu tiap baris punya dua tombol (edit / hapus) sehingga kolom
+         Aksi lebar dan baris penuh tombol. Sekarang tiap baris cuma satu
+         tombol tiga titik, dan ketika ditekan tombol aslinya muncul
+         menimpanya -- ikon yang sama persis dengan yang dulu, di baris
+         yang sama.
+
+         Popup tetap di luar tabel (position:fixed) karena .table-wrap
+         memakai overflow:hidden, jadi tombol yang muncul di dalam
+         tabel akan terpotong batas tabel.
+         ============================================================ */
+      const menuPop = document.getElementById('menuPop');
+      let menuPopAnchor = null;
+
+      const tutupMenuPop = () => {
+        /* Jangan sentuh DOM kalau memang sudah tertutup -- listener
+           scroll bisa memicu ini sangat sering. */
+        if (menuPop.hidden && !menuPopAnchor) return;
+        menuPop.hidden = true;
+        menuPop.innerHTML = '';
+        if (menuPopAnchor) {
+          menuPopAnchor.setAttribute('aria-expanded', 'false');
+          menuPopAnchor.style.visibility = '';
+        }
+        menuPopAnchor = null;
+      };
+
+      const bukaMenuPop = (anchor, items) => {
+        tutupMenuPop();
+        menuPopAnchor = anchor;
+        anchor.style.visibility = 'hidden';
+        items.forEach((it) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'ico' + (it.bahaya ? ' ico-danger' : '');
+          b.textContent = it.ikon;
+          b.title = it.judul;
+          b.setAttribute('aria-label', it.judul);
+          b.addEventListener('click', () => {
+            tutupMenuPop();
+            it.jalankan();
+          });
+          menuPop.appendChild(b);
+        });
+        menuPop.hidden = false;
+        anchor.setAttribute('aria-expanded', 'true');
+
+        const r = anchor.getBoundingClientRect();
+        menuPop.style.top = r.top + 'px';
+        menuPop.style.right = (window.innerWidth - r.right) + 'px';
+        menuPop.style.left = 'auto';
+      };
+
+      document.addEventListener('click', (e) => {
+        if (menuPop.hidden) return;
+        if (menuPop.contains(e.target)) return;
+        if (menuPopAnchor && menuPopAnchor.contains(e.target)) return;
+        tutupMenuPop();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') tutupMenuPop();
+      });
+      window.addEventListener('resize', tutupMenuPop);
+      /* true = menangkap scroll di semua elemen, bukan hanya window,
+         karena tabelnya yang digulir, bukan halaman. */
+      window.addEventListener('scroll', tutupMenuPop, true);
+
       function render() {
+        tutupMenuPop();
         if (entries.length === 0) {
           tbody.innerHTML = '<tr><td class="c-no"></td><td class="c-teks"><div class="empty">Belum ada catatan penting</div></td><td class="c-aksi"></td></tr>';
           return;
         }
         tbody.innerHTML = entries.map((e, i) => {
           const aksi = '<td class="c-aksi"><div class="acts">' +
-            '<button type="button" class="ico" data-edit="' + e.id + '" title="Edit">✎</button>' +
-            '<button type="button" class="ico ico-danger" data-del="' + e.id + '" title="Hapus">✕</button>' +
+            '<button type="button" class="ico" data-dots="' + e.id + '" title="Aksi" aria-label="Aksi" aria-haspopup="true" aria-expanded="false">⋮</button>' +
             '</div></td>';
           const fr = bagiRumus(e);
           if (fr) {
@@ -426,27 +565,39 @@
       pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') pwOk.click(); if (e.key === 'Escape') closePw(false); });
 
       tbody.addEventListener('click', async e => {
-        const delBtn = e.target.closest('[data-del]');
-        if (delBtn) {
-          const id = parseInt(delBtn.dataset.del, 10);
-          const row = entries.find(x => x.id === id);
-          const ok = await askPw('Hapus catatan "' + (row ? row.content.slice(0,40) : id) + '"?');
-          if (!ok) return;
-          const supabase = await getSupabase();
-          const { error } = await supabase.from('note_entries').delete().eq('id', id);
-          if (error) { setHint('Gagal hapus: ' + error.message); return; }
-          await loadEntries();
-          return;
-        }
-        const editBtn = e.target.closest('[data-edit]');
-        if (editBtn) {
-          const id = parseInt(editBtn.dataset.edit, 10);
+        const dotsBtn = e.target.closest('[data-dots]');
+        if (dotsBtn) {
+          const id = parseInt(dotsBtn.dataset.dots, 10);
           const row = entries.find(x => x.id === id);
           if (!row) return;
-          editingId = id;
-          editInput.value = row.content || '';
-          editBg.classList.add('open');
-          setTimeout(() => editInput.focus(), 50);
+          const isiMenu = [
+            {
+              ikon: '✎',
+              judul: 'Edit catatan',
+              jalankan: () => {
+                editingId = id;
+                editInput.value = row.content || '';
+                editBg.classList.add('open');
+                setTimeout(() => editInput.focus(), 50);
+              },
+            },
+            {
+              ikon: '✕',
+              judul: 'Hapus catatan',
+              bahaya: true,
+              jalankan: async () => {
+                const ok = await askPw('Hapus catatan "' + String(row.content || '').slice(0, 40) + '"?');
+                if (!ok) return;
+                const supabase = await getSupabase();
+                const { error } = await supabase.from('note_entries').delete().eq('id', id);
+                if (error) { setHint('Gagal hapus: ' + error.message); return; }
+                await loadEntries();
+              },
+            },
+          ];
+          /* tekan lagi di tombol yang sama = tutup */
+          if (!menuPop.hidden && menuPopAnchor === dotsBtn) tutupMenuPop();
+          else bukaMenuPop(dotsBtn, isiMenu);
         }
       });
 
