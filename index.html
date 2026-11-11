@@ -678,14 +678,64 @@
         } catch { return []; }
       }
 
+      /* --- Notifikasi Stok Opname: item yang belum di-SO dalam 1 minggu ---
+         Setiap item di tabel SO punya catatan terakhir di stock_opname.
+         Kalau catatan terakhirnya lebih dari 7 hari (atau belum pernah),
+         item itu masuk daftar notifikasi supaya cepat di-SO lagi. */
+      const SO_BELUM_SO_HARI = 7;
+
+      async function fetchSoBelum() {
+        try {
+          const [produk, riwayat, menu] = await Promise.all([
+            supabase.from('stock_products').select('id, menu_id, kode, name').limit(1000),
+            supabase.from('stock_opname').select('product_plu, menu_id, opname_date, created_at').limit(5000),
+            supabase.from('so_menus').select('id, name'),
+          ]);
+          if (produk.error || riwayat.error) return [];
+
+          const namaMenu = new Map((menu.data || []).map((m) => [m.id, m.name]));
+
+          // Terakhir di-SO per item (menu_id + PLU)
+          const terakhir = new Map();
+          for (const r of riwayat.data || []) {
+            const key = r.menu_id + '|' + r.product_plu;
+            const t = r.opname_date || r.created_at;
+            if (!terakhir.has(key) || t > terakhir.get(key)) terakhir.set(key, t);
+          }
+
+          const now = Date.now();
+          const hasil = [];
+          for (const p of produk.data || []) {
+            const t = terakhir.get(p.menu_id + '|' + p.kode);
+            // null = belum pernah di-SO sama sekali
+            const hari = t ? Math.floor((now - new Date(t).getTime()) / 86400000) : null;
+            if (hari !== null && hari <= SO_BELUM_SO_HARI) continue; // masih dalam 1 minggu
+            hasil.push({
+              menu_id: p.menu_id,
+              menu_name: namaMenu.get(p.menu_id) || 'STOK OPNAME',
+              kode: p.kode,
+              name: p.name,
+              hari,
+            });
+          }
+          // Yang paling lama belum di-SO dulu di atas
+          hasil.sort((a, b) => (b.hari ?? 99999) - (a.hari ?? 99999));
+          return hasil;
+        } catch { return []; }
+      }
+
       async function updateNotifBadge() {
-        const [comments, musnahCount] = await Promise.all([fetchKopiComments(), fetchMusnahCount()]);
-        const totalNotif = comments.length + musnahCount;
+        const [comments, musnahCount, soBelum] = await Promise.all([
+          fetchKopiComments(),
+          fetchMusnahCount(),
+          fetchSoBelum(),
+        ]);
+        const totalNotif = comments.length + musnahCount + soBelum.length;
         if (notifBadge) {
           notifBadge.style.display = totalNotif > 0 ? 'block' : 'none';
         }
-        renderNotifPopup(comments, musnahCount);
-        return { comments, musnahCount };
+        renderNotifPopup(comments, musnahCount, soBelum);
+        return { comments, musnahCount, soBelum };
       }
 
       // Daftar notifikasi
@@ -696,8 +746,28 @@
 
       const notifPopup = document.createElement('div');
       notifPopup.id = 'notifPopup';
-      notifPopup.style.cssText = 'display:none; position:absolute; top:58px; right:12px; width:min(230px, calc(100vw - 24px)); max-height:60vh; overflow-y:auto; background:#fffbf2; border:1px solid rgba(26,25,23,0.14); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.18); z-index:1000; padding:6px 0;';
-      function renderNotifPopup(comments, musnahCount) {
+      notifPopup.style.cssText = 'display:none; position:absolute; top:58px; right:12px; width:min(260px, calc(100vw - 24px)); max-height:70vh; overflow-y:auto; background:#fffbf2; border:1px solid rgba(26,25,23,0.14); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.18); z-index:1000; padding:6px 0;';
+
+      // Daftar item SO yang belum di-opname.
+      // Satu baris per item: PLU + nama, umur SO di kanan.
+      // Item dikelompokkan per menu, dibatasi 10 baris supaya popup ringkas.
+      const SO_MAKS_ITEM = 10;
+      const escNotif = (s) => String(s || '')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+      function soItemHtml(it) {
+        // Kanan: umur SO. "BELUM" = belum pernah di-SO, "47H" = 47 hari lalu.
+        const badge = it.hari === null
+          ? '<span title="Belum pernah di-SO" style="font-size:9px; font-weight:800; letter-spacing:.3px; color:#b91c1c; white-space:nowrap;">BELUM</span>'
+          : '<span title="Terakhir di-SO ' + it.hari + ' hari lalu" style="font-size:9px; font-weight:800; letter-spacing:.2px; color:#b91c1c; white-space:nowrap;">' + it.hari + 'H</span>';
+        return '<a href="public/stok-opname/so.html?m=' + it.menu_id + '" title="' + escNotif(it.kode + ' ' + it.name) + ' — ' + escNotif(it.menu_name) + '" style="display:flex; gap:6px; align-items:center; padding:3px 8px 3px 12px; text-decoration:none;">' +
+          '<span style="flex:1; min-width:0; font-size:10px; font-weight:700; color:#1a1917; font-family:ui-monospace,monospace; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escNotif(it.kode || '-') + ' · ' + escNotif(it.name) + '</span>' +
+          badge +
+        '</a>';
+      }
+
+      function renderNotifPopup(comments, musnahCount, soBelum) {
+        soBelum = soBelum || [];
         const counts = { 64: comments.length, 'musnah': musnahCount };
         const itemsHtml = NOTIF_ITEMS
           .map(it => ({ it, n: counts[it.menuId] || 0 }))
@@ -711,7 +781,45 @@
               '<a href="' + x.it.link + '" title="Buka" aria-label="Buka" style="width:28px; height:28px; padding:0; background:#1a1917; color:#fffbf2; border:none; border-radius:4px; cursor:pointer; font-weight:600; font-size:10px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg></a>' +
             '</div>'
           ).join('');
-        notifPopup.innerHTML = itemsHtml || '<div style="padding:8px 12px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:#6e6a64; text-align:left; font-family:ui-monospace,monospace;">Belum ada catatan</div>';
+
+        // Blok "Belum SO": judul + daftar item, dikelompokkan per menu.
+        let soHtml = '';
+        if (soBelum.length) {
+          const grup = new Map();
+          for (const it of soBelum) {
+            if (!grup.has(it.menu_id)) grup.set(it.menu_id, { nama: it.menu_name, items: [] });
+            grup.get(it.menu_id).items.push(it);
+          }
+          let tampil = 0;
+          let isi = '';
+          for (const g of grup.values()) {
+            if (tampil >= SO_MAKS_ITEM) break;
+            isi += '<div style="padding:6px 8px 1px 12px; font-size:9px; font-weight:800; letter-spacing:.4px; color:#6e6a64; font-family:ui-monospace,monospace; text-transform:uppercase;">' + escNotif(g.nama) + '</div>';
+            for (const it of g.items) {
+              if (tampil >= SO_MAKS_ITEM) break;
+              isi += soItemHtml(it);
+              tampil++;
+            }
+          }
+          const sisa = soBelum.length - tampil;
+          if (sisa > 0) {
+            isi += '<a href="public/stok-opname/so.html" title="Buka" style="display:block; padding:5px 8px 3px 12px; font-size:9px; font-weight:800; letter-spacing:.3px; color:#6e6a64; font-family:ui-monospace,monospace; text-decoration:none; text-transform:uppercase;">+ ' + sisa + ' item lainnya</a>';
+          }
+          soHtml =
+            '<div style="border-top:1px solid rgba(26,25,23,0.14); margin-top:4px; padding-top:2px;">' +
+              '<div style="display:flex; gap:6px; align-items:center; padding:5px 8px;">' +
+                '<img src="assets/images/time-kamera/1.jpg" alt="Stok Opname" style="width:32px; height:32px; object-fit:cover; object-position:center; border-radius:6px; border:1px solid rgba(26,25,23,0.1); flex-shrink:0; background:#f7f3e9;" />' +
+                '<div style="flex:1; min-width:0; text-align:left;">' +
+                  '<div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; color:#1a1917; font-family:ui-monospace,monospace;">Belum SO</div>' +
+                  '<div style="font-size:9px; font-weight:700; letter-spacing:.3px; color:#6e6a64; font-family:ui-monospace,monospace;">' + soBelum.length + ' item &gt; ' + SO_BELUM_SO_HARI + ' hari</div>' +
+                '</div>' +
+                '<a href="public/stok-opname/so.html" title="Buka" aria-label="Buka" style="width:28px; height:28px; padding:0; background:#1a1917; color:#fffbf2; border:none; border-radius:4px; cursor:pointer; font-weight:600; font-size:10px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg></a>' +
+              '</div>' +
+              isi +
+            '</div>';
+        }
+
+        notifPopup.innerHTML = (itemsHtml + soHtml) || '<div style="padding:8px 12px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:#6e6a64; text-align:left; font-family:ui-monospace,monospace;">Belum ada catatan</div>';
       }
       document.body.appendChild(notifPopup);
 
@@ -723,7 +831,7 @@
           notifPopup.style.display = isOpen ? 'none' : 'block';
           if (!isOpen) {
             // refresh data di background (non-blocking)
-            fetchKopiComments().then(() => updateNotifBadge());
+            updateNotifBadge();
           }
         });
       }
@@ -742,6 +850,8 @@
         supabase.channel('kopi_comments_notif')
           .on('postgres_changes', { event: '*', schema: 'public', table: 'note_entries' }, () => { updateNotifBadge(); })
           .on('postgres_changes', { event: '*', schema: 'public', table: 'musnah_menus' }, () => { updateNotifBadge(); })
+          // SO baru/opname baru -> daftar "Belum SO" ikut berubah
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'stock_opname' }, () => { updateNotifBadge(); })
           .subscribe();
       } catch {}
     </script>
