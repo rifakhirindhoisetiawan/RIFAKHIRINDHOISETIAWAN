@@ -131,7 +131,7 @@ async function tambahKegiatan(teks) {
   if (error) {
     setHint('Gagal menambah: ' + error.message);
   } else {
-    inputBaru.value = '';
+    if (inputBaru) inputBaru.value = '';
     setHint('');
     await muatKegiatan();
   }
@@ -142,10 +142,36 @@ body.addEventListener('click', (e) => {
   if (toggle) toggleSelesai(parseInt(toggle.dataset.toggle, 10));
 });
 
-formTambah.addEventListener('submit', (e) => {
-  e.preventDefault();
-  tambahKegiatan(inputBaru.value);
-});
+// Form tambah kegiatan hanya ada di halaman index (utility/index.html).
+// Di hari/minggu/bulan.html form-nya tidak ada, jadi event-nya tidak dipasang
+// supaya script tidak crash sebelum muatKegiatan() dijalankan.
+if (formTambah && inputBaru) {
+  formTambah.addEventListener('submit', (e) => {
+    e.preventDefault();
+    tambahKegiatan(inputBaru.value);
+  });
+  // Baris tambah dibuat ulang tiap render, jadi event-nya pakai delegasi.
+  kegiatanBody.addEventListener('click', (e) => {
+    if (e.target.closest('#btnItemTambah')) tambahKegiatan();
+  });
+  kegiatanBody.addEventListener('keydown', (e) => {
+    if (e.target.id !== 'itemTambah' || e.key !== 'Enter') return;
+    e.preventDefault();
+    tambahKegiatan();
+  });
+  // Huruf pertama tiap kata otomatis kapital saat mengetik.
+  kegiatanBody.addEventListener('input', (e) => {
+    const input = e.target;
+    if (input.id !== 'itemTambah') return;
+    const pos = input.selectionStart;
+    const baru = kapital(input.value);
+    if (baru !== input.value) {
+      input.value = baru;
+      const posBaru = Math.min(pos, baru.length);
+      try { input.setSelectionRange(posBaru, posBaru); } catch (err) {}
+    }
+  });
+}
 
 /* ===== Realtime: sinkron otomatis dengan menu admin ===== */
 try {
