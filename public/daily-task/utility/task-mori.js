@@ -47,7 +47,16 @@ function setHint(pesan) {
 /* ===== Status centang (localStorage, per perangkat) ===== */
 function bacaStatus() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    // Format lama ({id: true}) dinormalisasi ke {id: {c: true, t: 0}}
+    const out = {};
+    for (const id in raw) {
+      const v = raw[id];
+      out[id] = v === true ? { c: true, t: 0 }
+        : (v && typeof v === 'object' ? { c: !!v.c, t: Number(v.t) || 0 }
+        : { c: !!v, t: 0 });
+    }
+    return out;
   } catch (e) {
     return {};
   }
@@ -85,16 +94,28 @@ async function muatKegiatan() {
 function render() {
   const status = bacaStatus();
 
-  // Yang sudah dicentang otomatis pindah ke paling bawah, supaya daftar
-  // yang belum dikerjakan selalu di atas. Urutan di dalam masing-masing
-  // kelompok tetap sama seperti di database (sort_order).
+  // Yang sudah dicentang otomatis pindah ke paling bawah (tetap urut
+  // sort_order). Yang belum di atas; yang baru saja di-uncheck pindah ke
+  // paling atas (paling baru di atas); yang belum pernah disentuh tetap
+  // urut sort_order.
   const terurut = kegiatan
-    .filter((d) => !status[d.id])
-    .concat(kegiatan.filter((d) => status[d.id]));
+    .map((d) => ({ d, st: status[d.id] }))
+    .sort((a, b) => {
+      const ac = !!(a.st && a.st.c), bc = !!(b.st && b.st.c);
+      if (ac === bc) {
+        if (!ac) {
+          const at = (a.st && a.st.t) || 0, bt = (b.st && b.st.t) || 0;
+          if (at || bt) return bt - at;
+        }
+        return (a.d.sort_order || 0) - (b.d.sort_order || 0);
+      }
+      return ac ? 1 : -1;
+    })
+    .map((x) => x.d);
 
   const rows = terurut
     .map((d, i) => {
-      const selesai = !!status[d.id];
+      const selesai = !!(status[d.id] && status[d.id].c);
       return (
         '<tr data-id="' + d.id + '"' + (selesai ? ' class="selesai"' : '') + '>' +
         '<td class="c-no">' + (i + 1) + '</td>' +
@@ -115,8 +136,16 @@ function render() {
 
 function toggleSelesai(id) {
   const status = bacaStatus();
-  if (status[id]) delete status[id];
-  else status[id] = true;
+  const kunci = String(id);
+  const sedang = status[kunci] && status[kunci].c;
+  // Urutan toggle dinaikkan monoton: tidak bergantung pada resolusi milidetik
+  // Date.now(), jadi pengurutan "paling baru di-uncheck paling atas" selalu benar.
+  let maxT = 0;
+  for (const k in status) {
+    const t = (status[k] && status[k].t) || 0;
+    if (t > maxT) maxT = t;
+  }
+  status[kunci] = { c: !sedang, t: maxT + 1 };
   simpanStatus(status);
   render();
 }
