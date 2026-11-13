@@ -83,7 +83,7 @@
     /* ===== DAFTAR MENU: tabel, sama gaya tabel "Foto Menu SO" di
          Admin Stok Opname (No | Nama Menu | Foto | Aksi) ===== */
     .table-wrap{
-      border:1.5px solid var(--mori-line);border-radius:8px;background:var(--mori-bg);
+      border:1.5px solid rgba(26,25,23,0.3);border-radius:10px;background:var(--mori-bg);
       overflow-x:auto;-webkit-overflow-scrolling:touch;
       scrollbar-width:thin;
     }
@@ -124,7 +124,7 @@
       height:44px;padding:0 10px;border-bottom:1px solid var(--mori-line);
       vertical-align:middle;
     }
-    .menu-table tbody tr:hover td{background:#faf6ea}
+    .menu-table tbody tr:hover td{background:var(--mori-surface)}
     .menu-table tbody tr:last-child td{border-bottom:0}
 .c-no{width:30px;text-align:center;font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var(--mori-text-2);font-size:11px;font-weight:700}
     /* Nama boleh panjang: dipotong ellipsis, bukan memaksa tabel melebar */
@@ -156,17 +156,17 @@
     .menu-table tbody tr.tambah .c-no::after{content:'+';color:var(--mori-text-2)}
     .menu-table tbody tr.tambah input{
       width:100%;padding:9px 10px;font-size:12px;font-family:inherit;
-      color:var(--mori-text);background:var(--mori-bg);
-      border:1px solid var(--mori-line);border-radius:0;outline:none;
+      color:var(--mori-text);background:transparent;border:none;border-radius:0;outline:none;
       transition:box-shadow .2s ease;
     }
-    .menu-table tbody tr.tambah input:focus{background:#fffdf7;box-shadow: none}
+    .menu-table tbody tr.tambah input:focus{background:transparent;box-shadow: none}
     .menu-table tbody tr.tambah input::placeholder{color:var(--mori-text-2)}
+    .menu-table tbody tr.tambah:hover td{background:var(--mori-surface)}
 
     /* Thumbnail kecil 38x38, persis seperti .c-foto .thumb di stock-admin */
     .c-foto .thumb{
       width:38px;height:38px;display:block;cursor:default;
-      border:1px solid var(--mori-line);border-radius:0;
+      border:none;border-radius:6px;overflow:hidden;
       background:var(--mori-surface);object-fit:cover;
     }
     .c-foto .thumb img{filter:saturate(.4) brightness(1.04)}
@@ -174,7 +174,7 @@
        STOCK OPNAME yang tidak pakai foto sebagai bawaan) */
     .c-foto .thumb.thumb-admin{
       display:flex;align-items:center;justify-content:center;
-      background:var(--mori-accent);
+      background:var(--mori-accent);border-radius:6px;overflow:hidden;
     }
     .c-foto .thumb.thumb-admin svg{width:18px;height:18px;color:var(--mori-bg)}
     .menu-table tbody tr.is-admin td{background:var(--mori-bg)}
@@ -233,8 +233,8 @@
       padding:0 !important;margin:0 !important;
       display:flex !important;align-items:center !important;justify-content:center !important;
       font-family:inherit;font-size:14px;font-weight:800;line-height:1;
-      color:var(--mori-bg);background:var(--mori-accent);
-      border:1px solid var(--mori-line);border-radius:6px;
+      color:var(--mori-text);background:var(--mori-surface);
+      border:none;border-radius:8px;
       box-shadow: none;
       cursor:pointer;flex-shrink:0;outline:none;
       transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
@@ -276,16 +276,16 @@
       font-size: 22px;
       font-weight: 700;
       line-height: 1;
-      color: var(--mori-bg);
-      background: var(--mori-accent);
+      color: var(--mori-text);
+      background: var(--mori-surface);
       border: 1px solid var(--mori-line);
-      border-radius: 12px;
+      border-radius: 8px;
       cursor: pointer;
       box-shadow: none;
       transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
     }
     .btn-add:active {
-      background: #33312f;
+      background: #e7e2d4;
       transform: translate(2px, 2px);
       box-shadow: none;
     }
@@ -404,7 +404,7 @@
           </thead>
           <tbody class="tulis-body">
             <tr>
-              <td class="tulis" colspan="3" style="padding:4px 8px;background:var(--mori-bg);border-bottom:1px solid var(--mori-line);">
+              <td class="tulis" colspan="3" style="padding:4px 8px;background:var(--mori-surface);">
                 <div class="tulis-in" style="display:flex;align-items:center;gap:8px;width:100%;">
                   <input
                     type="text"
@@ -417,7 +417,7 @@
                   <span class="mode" id="mMode"></span>
                 </div>
               </td>
-              <td class="c-aksi" style="padding:4px 8px;background:var(--mori-bg);border-bottom:1px solid var(--mori-line);">
+              <td class="c-aksi" style="padding:4px 8px;background:var(--mori-surface);">
                 <div class="acts" style="display:flex;align-items:center;justify-content:flex-end;">
                   <button class="btn" type="button" id="btnAdd" title="Tambah menu" aria-label="Tambah menu" style="width:32px;height:32px;padding:0;display:flex;align-items:center;justify-content:center;background:var(--mori-surface);color:var(--mori-text);border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;font-weight:800;font-size:18px;">+</button>
                 </div>
@@ -436,7 +436,7 @@
         <table class="menu-table">
           <tbody class="cari-body">
             <tr>
-              <td class="cari-sel" colspan="4" style="padding:6px 12px;background:var(--mori-surface);">
+              <td class="cari-sel" colspan="4" style="padding:0 12px;background:var(--mori-surface);">
                 <div class="cari-dalam" style="display:flex;align-items:center;gap:8px;">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--mori-text-2)"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
                   <input
@@ -446,7 +446,7 @@
                     placeholder="Cari menu..."
                     autocomplete="off"
                     aria-label="Cari menu"
-                    style="width:100%;border:none;background:transparent;outline:none;font-size:12px;font-family:var(--mori-mono);text-transform:uppercase;color:var(--mori-text);"
+                    style="width:100%;height:44px;padding:0;border:none;background:transparent;outline:none;font-family:var(--mori-mono);font-size:13px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--mori-text);"
                   />
                 </div>
               </td>
@@ -885,9 +885,9 @@ function itemHtml(m, no) {
   // sama seperti baris input tambah barang di Admin Stok Opname.
   const barisTambah =
     '<tr class="tambah">' +
-    '<td class="c-no"></td>' +
-    '<td class="c-teks"><input id="itemTambah" type="text" placeholder="Tulis kegiatan, lalu Enter..." autocomplete="off" aria-label="Kegiatan baru" /></td>' +
-    '<td class="c-aksi-k"><div class="acts">' +
+    '<td class="c-no" style="padding:4px 8px;background:var(--mori-surface);"></td>' +
+    '<td class="c-teks" style="padding:4px 8px;background:var(--mori-surface);"><input id="itemTambah" type="text" placeholder="Tulis kegiatan, lalu Enter..." autocomplete="off" aria-label="Kegiatan baru" /></td>' +
+    '<td class="c-aksi-k" style="padding:4px 8px;background:var(--mori-surface);"><div class="acts">' +
     '<button type="button" class="ico" id="btnItemTambah" title="Tambah kegiatan" aria-label="Tambah kegiatan">+</button>' +
     '</div></td>' +
     '</tr>';
