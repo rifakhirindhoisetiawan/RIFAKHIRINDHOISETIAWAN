@@ -12,13 +12,15 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="task-mori.css?v=3" />
+    <link rel="stylesheet" href="task-mori.css?v=4" />
   </head>
   <body>
     <div class="wrap">
       <div class="table-wrap">
         <table class="tabel">
-          <thead>
+          <!-- Form tambah kegiatan hanya muncul di menu ADMIN; di sini
+               disembunyikan supaya halaman tetap read-only untuk user. -->
+          <thead style="display:none">
             <tr>
               <th colspan="3" style="padding:0;background:transparent;border:0">
                 <form class="form-tambah" id="formTambah" onsubmit="return false" style="display:flex;align-items:center;height:38px;background:var(--mori-surface);border-bottom:1px solid var(--mori-line);padding:0 8px;gap:8px;margin:0">

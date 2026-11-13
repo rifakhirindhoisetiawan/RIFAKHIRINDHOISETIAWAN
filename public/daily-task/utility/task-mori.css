@@ -117,13 +117,20 @@ body {
   box-shadow: none;
 }
 
-/* ===== TABEL KEGIATAN ===== */
+/* ===== TABEL KEGIATAN: gaya sama seperti tabel Admin Stok Opname ===== */
 .table-wrap {
-  border: 1px solid var(--mori-line);
-  border-radius: 12px;
+  border: 1.5px solid rgba(26,25,23,0.3);
+  border-radius: 10px;
   background: var(--mori-bg);
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.table-wrap::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 .tabel {
   width: 100%;
@@ -131,12 +138,32 @@ body {
   font-size: 13px;
   table-layout: fixed;
 }
-.tabel thead { display: none; }
+/* Header seperti Admin Stok Opname: latar --mori-surface, huruf mono kecil
+   tebal, garis bawah tipis; sticky saat tabel digulir. */
+.tabel thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--mori-surface);
+  color: var(--mori-text-2);
+  font-family: var(--mori-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: left;
+  height: 34px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--mori-line);
+  white-space: nowrap;
+  vertical-align: middle;
+}
 .tabel tbody td {
-  height: 46px;
-  padding: 0 8px;
+  height: 44px;
+  padding: 0 12px;
   border-bottom: 1px solid var(--mori-line);
   vertical-align: middle;
+  background: var(--mori-bg);
 }
 .tabel tbody tr:last-child td {
   border-bottom: 0;
@@ -149,9 +176,13 @@ body {
   color: var(--mori-text-2);
   opacity: 0.65;
 }
+/* Hover = --mori-surface, sama seperti hover di Admin Stok Opname */
+.tabel tbody tr:hover td {
+  background: var(--mori-surface);
+}
 
 .c-no {
-  width: 34px;
+  width: 44px;
   text-align: center;
   font-family: var(--mori-mono);
   font-size: 11px;
