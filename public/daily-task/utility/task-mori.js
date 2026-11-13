@@ -85,7 +85,14 @@ async function muatKegiatan() {
 function render() {
   const status = bacaStatus();
 
-  const rows = kegiatan
+  // Yang sudah dicentang otomatis pindah ke paling bawah, supaya daftar
+  // yang belum dikerjakan selalu di atas. Urutan di dalam masing-masing
+  // kelompok tetap sama seperti di database (sort_order).
+  const terurut = kegiatan
+    .filter((d) => !status[d.id])
+    .concat(kegiatan.filter((d) => status[d.id]));
+
+  const rows = terurut
     .map((d, i) => {
       const selesai = !!status[d.id];
       return (
