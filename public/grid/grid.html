@@ -297,6 +297,54 @@
         opacity: 1;
       }
 
+      /* ===== TOMBOL ACAK TATA LETAK =====
+         Tombol kecil di sebelah tombol tata letak. Hanya muncul untuk
+         3/4/5 foto (hanya jumlah itu yang punya tata letak). */
+      .layout-shuffle-btn {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border-radius: 8px;
+        border: none;
+        background: #6366f1;
+        color: #fff;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.15s ease;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .layout-shuffle-btn:active {
+        opacity: 0.85;
+        transform: scale(0.93);
+      }
+
+      /* ===== CARA POTONG FOTO =====
+         "cover" (default): foto memenuhi sel, sisanya dipotong.
+         "contain": seluruh foto terlihat, sisa ruang diisi putih.
+         Preview (object-fit) dan export (canvas) memakai aturan yang sama,
+         jadi dua-duanya selalu sama. */
+      .fit-contain .slot img {
+        object-fit: contain;
+        background: #ffffff;
+      }
+      .dl-btn-fit .fit-contain {
+        display: none;
+      }
+      .dl-btn-fit.contain .fit-cover {
+        display: none;
+      }
+      .dl-btn-fit.contain .fit-contain {
+        display: block;
+      }
+      /* mode "foto utuh" dibalik biar kelihatan aktif */
+      .dl-btn-fit.contain {
+        background: var(--mori-bg);
+        color: var(--mori-accent);
+      }
+
       .canvas-wrap {
         padding: 0 18px 14px;
         max-width: 800px;
@@ -359,6 +407,7 @@
         object-position: center;
         display: block;
         cursor: grab;
+        transform-origin: center center;
         -webkit-user-select: none;
         user-select: none;
         -webkit-user-drag: none;
@@ -468,10 +517,23 @@
       .dl-preview{width:76px;height:76px;flex:0 0 76px;border-radius:0;overflow:hidden;background:var(--mori-bg);border:1px solid var(--mori-line);flex-shrink:0}
       .dl-preview img{width:100%;height:100%;display:block;object-fit:cover}
       .dl-right{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;justify-content:center}
-      .dl-info .dl-title{font-family:var(--mori-mono);font-size:10px;font-weight:700;color:var(--mori-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-      .dl-info .dl-size{font-size:9px;color:var(--mori-text-2)}
       .dl-actions{display:grid;grid-template-columns:repeat(2,32px);gap:3px;justify-content:start;justify-items:start}
-      .dl-btn-save,.dl-btn-wa,.dl-btn-tg{width:32px;height:32px;flex:0 0 32px;border-radius:0;border:1px solid var(--mori-line);background:var(--mori-accent);color:var(--mori-bg);display:flex;align-items:center;justify-content:center;cursor:pointer}
+      .dl-btn-save,
+      .dl-btn-wa,
+      .dl-btn-tg,
+      .dl-btn-fit {
+        width: 32px;
+        height: 32px;
+        flex: 0 0 32px;
+        border-radius: 0;
+        border: 1px solid var(--mori-line);
+        background: var(--mori-accent);
+        color: var(--mori-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
 
       /* ============================================================
          TEMA MORI — override di atas, logika JS tidak disentuh.
@@ -548,10 +610,12 @@
       .add-photo-btn,
       .aspect-btn,
       .layout-cycle,
+      .layout-shuffle-btn,
       .dl-btn,
       .dl-btn-save,
       .dl-btn-wa,
-      .dl-btn-tg {
+      .dl-btn-tg,
+      .dl-btn-fit {
         border-radius: 0;
         border: 1px solid var(--mori-line);
         background: var(--mori-accent);
@@ -564,10 +628,12 @@
       .add-photo-btn:hover:not(:disabled),
       .aspect-btn:hover:not(:disabled),
       .layout-cycle:hover:not(:disabled),
+      .layout-shuffle-btn:hover:not(:disabled),
       .dl-btn:hover:not(:disabled),
       .dl-btn-save:hover:not(:disabled),
       .dl-btn-wa:hover:not(:disabled),
-      .dl-btn-tg:hover:not(:disabled) {
+      .dl-btn-tg:hover:not(:disabled),
+      .dl-btn-fit:hover:not(:disabled) {
         /* bayangan abu-abu (--mori-text-2) dihapus; efek hover tetap
            teras dari border dan warna latar saja */
       }
@@ -577,10 +643,12 @@
       .add-photo-btn:active:not(:disabled),
       .aspect-btn:active:not(:disabled),
       .layout-cycle:active:not(:disabled),
+      .layout-shuffle-btn:active:not(:disabled),
       .dl-btn:active:not(:disabled),
       .dl-btn-save:active:not(:disabled),
       .dl-btn-wa:active:not(:disabled),
-      .dl-btn-tg:active:not(:disabled) {
+      .dl-btn-tg:active:not(:disabled),
+      .dl-btn-fit:active:not(:disabled) {
         /* bayangan abu-abu (--mori-text-2) dihapus; tetap pakai border
            dan warna latar, tanpa box-shadow tebal */
         transform: translate(2px, 2px);
@@ -597,10 +665,12 @@
       .stepper-row .add-photo-btn,
       .stepper-row .aspect-btn,
       .stepper-row .layout-cycle,
+      .stepper-row .layout-shuffle-btn,
       .stepper-row .dl-btn,
       .dl-btn-save,
       .dl-btn-wa,
-      .dl-btn-tg {
+      .dl-btn-tg,
+      .dl-btn-fit {
         border-radius: var(--mori-radius, 5px);
       }
 
@@ -683,6 +753,7 @@
         .add-photo-btn,
         .aspect-btn,
         .layout-cycle,
+        .layout-shuffle-btn,
         .dl-btn {
           width: 30px;
           height: 30px;
@@ -692,6 +763,7 @@
         .add-photo-btn svg,
         .aspect-btn svg,
         .layout-cycle svg,
+        .layout-shuffle-btn svg,
         .dl-btn svg {
           width: 15px;
           height: 15px;
@@ -702,7 +774,7 @@
         }
       }
 
-      /* HP kecil (320px): masih muat 8 kolom dalam satu baris */
+      /* HP kecil (320px): semua tombol masih muat satu baris */
       @media (max-width: 360px) {
         .stepper-row {
           padding-left: 8px;
@@ -722,12 +794,18 @@
           width: 28px;
           height: 28px;
         }
-        .step-btn svg,
+        /* tombol acak dikecilkan biar semua tombol tetap muat
+           satu baris di layar 320px */
+        .layout-shuffle-btn {
+          width: 26px;
+          height: 26px;
+        }
         .step-btn svg,
         .trash-btn svg,
         .add-photo-btn svg,
         .aspect-btn svg,
         .layout-cycle svg,
+        .layout-shuffle-btn svg,
         .dl-btn svg {
           width: 14px;
           height: 14px;
@@ -848,7 +926,12 @@
       <div class="stepper-row">
         <div class="stepper">
           <div class="left-controls">
-            <button class="aspect-btn active" id="aspectBtn" title="Ukuran">
+            <button
+              class="aspect-btn active"
+              id="aspectBtn"
+              title="Ukuran"
+              aria-label="Ubah ukuran bingkai"
+            >
               <svg
                 id="aspectIcon"
                 width="16"
@@ -866,7 +949,12 @@
                 <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
               </svg>
             </button>
-            <button class="layout-cycle" id="layoutCycleBtn" title="Tata letak">
+            <button
+              class="layout-cycle"
+              id="layoutCycleBtn"
+              title="Tata letak"
+              aria-label="Ubah tata letak"
+            >
               <svg
                 id="layoutIcon"
                 width="16"
@@ -885,7 +973,35 @@
                 <line x1="4" y1="4" x2="9" y2="9" />
               </svg>
             </button>
-            <button class="dl-btn" id="downloadBtn" title="Download" disabled>
+            <button
+              class="layout-shuffle-btn"
+              id="layoutShuffleBtn"
+              title="Acak tata letak"
+              aria-label="Acak tata letak"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m17 2 4 4-4 4" />
+                <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
+                <path d="m7 22-4-4 4-4" />
+                <path d="M21 13v1a4 4 0 0 1-4 4H3" />
+              </svg>
+            </button>
+            <button
+              class="dl-btn"
+              id="downloadBtn"
+              title="Download"
+              aria-label="Download hasil grid"
+              disabled
+            >
               <svg
                 width="16"
                 height="16"
@@ -905,6 +1021,7 @@
               class="add-photo-btn"
               id="addPhotoBtn"
               title="Tambah Banyak Foto"
+              aria-label="Tambah banyak foto"
             >
               <svg
                 width="16"
@@ -920,7 +1037,12 @@
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
             </button>
-            <button class="trash-btn" id="trashBtn" title="Hapus Semua Foto">
+            <button
+              class="trash-btn"
+              id="trashBtn"
+              title="Hapus Semua Foto"
+              aria-label="Hapus semua foto"
+            >
               <svg
                 width="16"
                 height="16"
@@ -994,6 +1116,7 @@
                   <button class="dl-btn-save" id="dlSaveBtn" title="Simpan" aria-label="Simpan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
                   <button class="dl-btn-tg" id="dlShareTgBtn" title="Bagikan Telegram" aria-label="Bagikan Telegram"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21.7 3.3a1.2 1.2 0 0 0-1.3-.2L2.9 10.4c-1 .4-1 1.1-.9 1.6.1.4.4.8.9 1l4.4 1.4 1.7 5.2c.2.6.6 1 1.2 1.1.5.1 1 0 1.4-.4l2.6-2.5 4.4 3.2c.5.4 1.2.4 1.7.1.5-.3.8-.9.9-1.5l2.1-14.7c.1-.6-.3-1.2-.7-1.6zM9.6 14.2l8.5-6.3-6.6 7.5-.3 3.4-1.6-4.6z"/></svg></button>
                   <button class="dl-btn-wa" id="dlShareWaBtn" title="Bagikan WA" aria-label="Bagikan WA"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.94A9.91 9.91 0 0 0 12.04 2C6.58 2 2.14 6.45 2.14 11.9c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.9 0-2.64-1.03-5.13-2.9-7zM12.05 20.03h-.01a8.18 8.18 0 0 1-4.17-1.14l-.3-.18-3.12.82.82-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.22-8.24 8.22zm4.52-6.16c-.25-.12-1.47-.73-1.69-.81-.22-.08-.39-.12-.55.12-.16.25-.63.81-.77.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.55-1.33-.75-1.82-.2-.47-.4-.41-.55-.42h-.47c-.16 0-.43.06-.65.31-.22.25-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.17 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.57.18 1.09.16 1.5.1.46-.07 1.47-.6 1.68-1.18.2-.58.2-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg></button>
+                  <button class="dl-btn-fit" id="dlFitBtn" title="Potong foto (penuh sel)" aria-label="Ganti cara potong foto"><svg class="fit-cover" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg class="fit-contain" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><rect x="7.5" y="8.5" width="9" height="7" rx="1"/></svg></button>
                 </div>
               </div>
             </div>
@@ -1008,123 +1131,261 @@
     <div id="dragGhost"></div>
 
     <script>
+      /* ==================================================================
+         GRID — Photo Grid
+         ---------------------------------------------------------------
+         Modul mandiri: seluruh CSS + JS ada di satu file, tanpa build step.
+
+         Susunan file:
+           1. Konstanta & definisi tata letak
+           2. State aplikasi
+           3. Referensi elemen DOM
+           4. Gestur (drag reorder + zoom roda mouse)
+           5. Render grid
+           6. Aksi tombol (jumlah foto, aspect, layout, trash, tambah foto)
+           7. Panel unduhan (bubble, simpan, bagikan)
+           8. Export ke canvas
+         ================================================================== */
+
+      /* ---------- 1. Konstanta ---------- */
+
       const MIN_COUNT = 1;
       const MAX_COUNT = 25;
+      const DRAG_THRESHOLD = 8; // px sebelum tahan-tahan dianggap drag
 
-      let count = 3;
-      let images = {};
+      /** Rasio frame + ukuran canvas hasil export (lebar x tinggi). */
+      const ASPECTS = [
+        { ratio: "1/1", w: 1200, h: 1200 },
+        { ratio: "4/5", w: 1200, h: 1500 },
+        { ratio: "3/4", w: 1200, h: 1600 },
+        { ratio: "16/9", w: 1920, h: 1080 },
+      ];
+
+      /** Urutan tombol "tata letak" (dipakai tombol cycle). */
+      const LAYOUT_NAMES = ["left-big", "right-big", "top-big", "bottom-big"];
+
+      /** Tata letak bawaan (dipakai tombol reset). */
+      const LAYOUT_DEFAULT = "left-big";
+
+      /** Nama tata letak untuk judul tooltip. */
+      const LAYOUT_LABELS = {
+        "left-big": "Kiri Besar",
+        "right-big": "Kanan Besar",
+        "top-big": "Atas Besar",
+        "bottom-big": "Bawah Besar",
+      };
+
+      /* Definisi tata letak — SATU-SATUNYA sumber kebenaran.
+         "areas" berisi grid-area CSS tiap slot: "baris / kolom", penomoran
+         1-based, batas bawah eksklusif (format CSS Grid).
+         Preview (CSS grid) dan hasil export (canvas) dihitung dari definisi
+         yang sama, jadi tampilan di layar dan file unduhan tidak mungkin
+         berbeda. */
+      const LAYOUTS = {
+        3: {
+          "left-big": {
+            cols: 2,
+            rows: 2,
+            areas: ["1 / 1 / 3 / 2", "1 / 2 / 2 / 3", "2 / 2 / 3 / 3"],
+          },
+          "right-big": {
+            cols: 2,
+            rows: 2,
+            areas: ["1 / 1 / 2 / 2", "2 / 1 / 3 / 2", "1 / 2 / 3 / 3"],
+          },
+          "top-big": {
+            cols: 2,
+            rows: 2,
+            areas: ["1 / 1 / 2 / 3", "2 / 1 / 3 / 2", "2 / 2 / 3 / 3"],
+          },
+          "bottom-big": {
+            cols: 2,
+            rows: 2,
+            areas: ["1 / 1 / 2 / 2", "1 / 2 / 2 / 3", "2 / 1 / 3 / 3"],
+          },
+        },
+        4: {
+          "left-big": {
+            cols: 2,
+            rows: 3,
+            areas: ["1 / 1 / 4 / 2", "1 / 2 / 2 / 3", "2 / 2 / 3 / 3", "3 / 2 / 4 / 3"],
+          },
+          "right-big": {
+            cols: 2,
+            rows: 3,
+            areas: ["1 / 1 / 2 / 2", "2 / 1 / 3 / 2", "3 / 1 / 4 / 2", "1 / 2 / 4 / 3"],
+          },
+          "top-big": {
+            cols: 3,
+            rows: 2,
+            areas: ["1 / 1 / 2 / 4", "2 / 1 / 3 / 2", "2 / 2 / 3 / 3", "2 / 3 / 3 / 4"],
+          },
+          "bottom-big": {
+            cols: 3,
+            rows: 2,
+            areas: ["1 / 1 / 2 / 2", "1 / 2 / 2 / 3", "1 / 3 / 2 / 4", "2 / 1 / 3 / 4"],
+          },
+        },
+        5: {
+          "left-big": {
+            cols: 3,
+            rows: 2,
+            areas: [
+              "1 / 1 / 3 / 2",
+              "1 / 2 / 2 / 3",
+              "2 / 2 / 3 / 3",
+              "1 / 3 / 2 / 4",
+              "2 / 3 / 3 / 4",
+            ],
+          },
+          "right-big": {
+            cols: 3,
+            rows: 2,
+            areas: [
+              "1 / 1 / 2 / 2",
+              "1 / 2 / 2 / 3",
+              "2 / 1 / 3 / 2",
+              "2 / 2 / 3 / 3",
+              "1 / 3 / 3 / 4",
+            ],
+          },
+          "top-big": {
+            cols: 4,
+            rows: 2,
+            areas: [
+              "1 / 1 / 2 / 5",
+              "2 / 1 / 3 / 2",
+              "2 / 2 / 3 / 3",
+              "2 / 3 / 3 / 4",
+              "2 / 4 / 3 / 5",
+            ],
+          },
+          "bottom-big": {
+            cols: 4,
+            rows: 2,
+            areas: [
+              "1 / 1 / 2 / 2",
+              "1 / 2 / 2 / 3",
+              "1 / 3 / 2 / 4",
+              "1 / 4 / 2 / 5",
+              "2 / 1 / 3 / 5",
+            ],
+          },
+        },
+      };
+
+      /** Placeholder slot kosong (ikon foto). */
+      const PLACEHOLDER_SVG =
+        '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+        '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9.5" r="1.5"/>' +
+        '<path d="M21 15l-5-5L5 21"/></svg>';
+
+      /* ---------- 2. State ---------- */
+
+      const state = {
+        count: 3, // jumlah slot aktif
+        images: {}, // idx slot -> dataURL foto
+        tx: {}, // idx slot -> { scale, fx, fy } untuk zoom
+        aspectIndex: 0, // index ASPECTS
+        fit: "cover", // "cover" = foto penuh sel (dipotong), "contain" = foto utuh
+        layouts: {
+          // layout terpilih, disimpan per jumlah foto
+          3: LAYOUT_DEFAULT,
+          4: LAYOUT_DEFAULT,
+          5: LAYOUT_DEFAULT,
+        },
+      };
+
+      /** Status gesture yang sedang berjalan (drag / zoom). */
+      const gesture = {
+        idx: null, // slot yang sedang disentuh
+        mode: null, // "reorder" saat mode geser aktif
+        startX: 0,
+        startY: 0,
+        started: false, // masih diam, belum lewat ambang drag
+        pointerId: null,
+        suppressClick: false,
+      };
+
+      /** Slot yang dipilih untuk diisi foto (klik slot kosong). */
       let activeSlot = null;
-      const ASPECTS = ["1/1", "4/5", "3/4", "16/9"];
-      let currentAspectIndex = 0;
-      let currentAspect = ASPECTS[0];
-      let currentLayout3 = "left-big";
-      let currentLayout4 = "left-big";
-      let currentLayout5 = "left-big";
-      const LAYOUTS = ["left-big", "right-big", "top-big", "bottom-big"];
 
-      let dragGhost = null;
-      let suppressClick = false;
+      /** Hasil export terakhir (isi panel unduhan). */
+      const dl = { dataUrl: "", blob: null, fileName: "1.png" };
 
-      let imgTx = {};
-      let gIdx = null;
-      let gMode = null;
-      let gLastX = 0;
-      let gLastY = 0;
-      let gPinchDist = 0;
+      /* ---------- 3. Referensi elemen DOM ---------- */
 
-      const gridFrame = document.getElementById("gridFrame");
-      const fileInput = document.getElementById("fileInput");
-      const multiFileInput = document.getElementById("multiFileInput");
-      const downloadBtn = document.getElementById("downloadBtn");
-      const countValue = document.getElementById("countValue");
-      const minusBtn = document.getElementById("minusBtn");
-      const plusBtn = document.getElementById("plusBtn");
-      const trashBtn = document.getElementById("trashBtn");
-      const addPhotoBtn = document.getElementById("addPhotoBtn");
-      const aspectBtn = document.getElementById("aspectBtn");
-      const layoutCycleBtn = document.getElementById("layoutCycleBtn");
-      dragGhost = document.getElementById("dragGhost");
+      const el = {
+        gridFrame: document.getElementById("gridFrame"),
+        fileInput: document.getElementById("fileInput"),
+        multiFileInput: document.getElementById("multiFileInput"),
+        downloadBtn: document.getElementById("downloadBtn"),
+        countValue: document.getElementById("countValue"),
+        minusBtn: document.getElementById("minusBtn"),
+        plusBtn: document.getElementById("plusBtn"),
+        trashBtn: document.getElementById("trashBtn"),
+        addPhotoBtn: document.getElementById("addPhotoBtn"),
+        aspectBtn: document.getElementById("aspectBtn"),
+        layoutCycleBtn: document.getElementById("layoutCycleBtn"),
+        layoutShuffleBtn: document.getElementById("layoutShuffleBtn"),
+        dragGhost: document.getElementById("dragGhost"),
+        canvas: document.getElementById("hiddenCanvas"),
+        bubble: document.getElementById("downloadBubbleContainer"),
+        dropup: document.getElementById("downloadBubbleDropup"),
+        closeBubbleBtn: document.getElementById("dbdCloseBtn"),
+        badge: document.getElementById("dbdCountBadge"),
+        previewImg: document.getElementById("dlPreviewImg"),
+        saveBtn: document.getElementById("dlSaveBtn"),
+        shareWaBtn: document.getElementById("dlShareWaBtn"),
+        shareTgBtn: document.getElementById("dlShareTgBtn"),
+        fitBtn: document.getElementById("dlFitBtn"),
+      };
 
-      const DRAG_THRESHOLD = 8;
+      const $slot = (idx) =>
+        el.gridFrame.querySelector('.slot[data-slot="' + idx + '"]');
+      const $slotImg = (idx) =>
+        el.gridFrame.querySelector('.slot[data-slot="' + idx + '"] .slot-img');
 
-      let pStartX = 0;
-      let pStartY = 0;
-      let pStarted = false;
-      let pPointerId = null;
+      /* ---------- 4. Gestur ---------- */
 
-      function clearDragHighlights() {
-        document
-          .querySelectorAll(".slot.drag-over, .slot.dragging")
-          .forEach((s) => {
-            s.classList.remove("drag-over", "dragging");
-          });
-      }
-
-      function hideGhost() {
-        if (dragGhost) {
-          dragGhost.style.display = "none";
-          dragGhost.innerHTML = "";
-        }
-      }
-
-      // ✅ Fix showGhost: hapus baris aneh `gImg.appendChild ? 0 : 0`
-      function showGhost(src, size, x, y) {
-        if (!dragGhost) return;
-        dragGhost.innerHTML = "";
-        const gImg = document.createElement("img");
-        gImg.src = src;
-        dragGhost.appendChild(gImg);
-        dragGhost.style.width = size + "px";
-        dragGhost.style.height = size + "px";
-        dragGhost.style.left = x + "px";
-        dragGhost.style.top = y + "px";
-        dragGhost.style.display = "block";
-      }
-
-      function swapSlots(fromIdx, toIdx) {
-        if (fromIdx === null || fromIdx === toIdx) return;
-        const temp = images[fromIdx];
-        images[fromIdx] = images[toIdx];
-        images[toIdx] = temp;
-        if (!images[fromIdx]) delete images[fromIdx];
-        if (!images[toIdx]) delete images[toIdx];
-        const tTemp = imgTx[fromIdx];
-        imgTx[fromIdx] = imgTx[toIdx];
-        imgTx[toIdx] = tTemp;
-        renderGrid();
-        checkReady();
-      }
-
+      /** Transform (zoom/geser) sebuah slot; dibuat otomatis kalau belum ada. */
       function getTx(idx) {
-        return imgTx[idx] || (imgTx[idx] = { scale: 1, fx: 0, fy: 0 });
+        return state.tx[idx] || (state.tx[idx] = { scale: 1, fx: 0, fy: 0 });
       }
 
       function applyTx(img, idx) {
         const t = getTx(idx);
         const r = img.getBoundingClientRect();
-        img.style.transform = "translate(" + (t.fx * r.width) + "px," + (t.fy * r.height) + "px) scale(" + t.scale + ")";
-        img.style.transformOrigin = "center center";
+        img.style.transform =
+          "translate(" +
+          t.fx * r.width +
+          "px," +
+          t.fy * r.height +
+          "px) scale(" +
+          t.scale +
+          ")";
       }
 
+      /** Batasi pergeseran foto supaya tidak keluar dari slotnya. */
       function clampTx(idx) {
         const t = getTx(idx);
         const m = Math.max(0, (t.scale - 1) / 2);
-        if (t.fx > m) t.fx = m;
-        if (t.fx < -m) t.fx = -m;
-        if (t.fy > m) t.fy = m;
-        if (t.fy < -m) t.fy = -m;
+        t.fx = Math.min(m, Math.max(-m, t.fx));
+        t.fy = Math.min(m, Math.max(-m, t.fy));
         return t;
       }
 
-      function anchorFromPoint(el, x, y) {
-        if (!el) return { ax: 0, ay: 0 };
-        const r = el.getBoundingClientRect();
+      /** Posisi titik (x, y) relatif terhadap tengah sebuah elemen. */
+      function anchorFromPoint(node, x, y) {
+        if (!node) return { ax: 0, ay: 0 };
+        const r = node.getBoundingClientRect();
         return {
           ax: (x - r.left) / r.width - 0.5,
           ay: (y - r.top) / r.height - 0.5,
         };
       }
 
+      /** Zoom ke dalam/keluar dengan titik jangkar (tikus/roda mouse). */
       function zoomAt(idx, newScale, ax, ay) {
         const t = getTx(idx);
         const s0 = t.scale || 1;
@@ -1135,90 +1396,126 @@
         t.fy = ay - (ay - t.fy) * ratio;
         t.scale = s1;
         clampTx(idx);
-        const img = document.querySelector('.slot[data-slot="' + idx + '"] .slot-img');
+        const img = $slotImg(idx);
         if (img) applyTx(img, idx);
       }
 
+      /** Slot yang pusatnya paling dekat dengan titik (x, y). */
       function nearestSlot(x, y) {
-        const slots = document.querySelectorAll(".slot");
         let best = null;
         let bestDist = Infinity;
-        slots.forEach((s) => {
-          const r = s.getBoundingClientRect();
-          const cx = r.left + r.width / 2;
-          const cy = r.top + r.height / 2;
-          const d = Math.hypot(x - cx, y - cy);
+        el.gridFrame.querySelectorAll(".slot").forEach((slot) => {
+          const r = slot.getBoundingClientRect();
+          const d = Math.hypot(
+            x - (r.left + r.width / 2),
+            y - (r.top + r.height / 2),
+          );
           if (d < bestDist) {
             bestDist = d;
-            best = parseInt(s.dataset.slot, 10);
+            best = parseInt(slot.dataset.slot, 10);
           }
         });
         return best;
       }
 
-      function endGesture() {
-        const wasReorder = gMode === "reorder";
-        gIdx = null;
-        gMode = null;
-        gPinchDist = 0;
-        pStarted = false;
-        pPointerId = null;
-        hideGhost();
-        clearDragHighlights();
-        return wasReorder;
+      /** Tukar isi dua slot (foto + zoom ikut tertukar). */
+      function swapSlots(fromIdx, toIdx) {
+        if (fromIdx === null || fromIdx === toIdx) return;
+        const temp = state.images[fromIdx];
+        state.images[fromIdx] = state.images[toIdx];
+        state.images[toIdx] = temp;
+        const tTemp = state.tx[fromIdx];
+        state.tx[fromIdx] = state.tx[toIdx];
+        state.tx[toIdx] = tTemp;
+        // slot kosong dibuang supaya tidak ikut terhitung
+        if (!state.images[fromIdx]) delete state.images[fromIdx];
+        if (!state.images[toIdx]) delete state.images[toIdx];
+        renderGrid();
+        checkReady();
       }
 
-      gridFrame.addEventListener("pointerdown", (e) => {
+      /* Bayangan foto yang sedang di-drag. */
+      function hideGhost() {
+        el.dragGhost.style.display = "none";
+        el.dragGhost.innerHTML = "";
+      }
+
+      function showGhost(src, size, x, y) {
+        const gImg = document.createElement("img");
+        gImg.src = src;
+        el.dragGhost.innerHTML = "";
+        el.dragGhost.appendChild(gImg);
+        el.dragGhost.style.width = size + "px";
+        el.dragGhost.style.height = size + "px";
+        el.dragGhost.style.left = x + "px";
+        el.dragGhost.style.top = y + "px";
+        el.dragGhost.style.display = "block";
+      }
+
+      function clearDragHighlights() {
+        el.gridFrame
+          .querySelectorAll(".slot.drag-over, .slot.dragging")
+          .forEach((slot) => {
+            slot.classList.remove("drag-over", "dragging");
+          });
+      }
+
+      function endGesture() {
+        gesture.idx = null;
+        gesture.mode = null;
+        gesture.started = false;
+        gesture.pointerId = null;
+        hideGhost();
+        clearDragHighlights();
+      }
+
+      el.gridFrame.addEventListener("pointerdown", (e) => {
         if (e.button && e.button !== 0) return;
         const slot = e.target.closest(".slot");
         if (!slot) return;
+        if (gesture.suppressClick) return;
+
         const idx = parseInt(slot.dataset.slot, 10);
 
-        if (suppressClick) return;
-
-        if (!images[idx]) {
+        // slot kosong -> langsung buka pemilih file
+        if (!state.images[idx]) {
           activeSlot = idx;
-          fileInput.click();
+          el.fileInput.click();
           return;
         }
 
         e.preventDefault();
-        gIdx = idx;
-        gMode = null;
-        gLastX = e.clientX;
-        gLastY = e.clientY;
-        gPinchDist = 0;
-        pStartX = e.clientX;
-        pStartY = e.clientY;
-        pStarted = true;
-        pPointerId = e.pointerId;
-        suppressClick = false;
-
-        try { slot.setPointerCapture(e.pointerId); } catch (ex) {}
+        gesture.idx = idx;
+        gesture.mode = null;
+        gesture.startX = e.clientX;
+        gesture.startY = e.clientY;
+        gesture.started = true;
+        gesture.pointerId = e.pointerId;
+        try {
+          slot.setPointerCapture(e.pointerId);
+        } catch (err) {
+          /* sebagian browser lama tidak mendukung pointer capture */
+        }
       });
 
       document.addEventListener("pointermove", (e) => {
-        if (gIdx === null) return;
-        if (pPointerId !== null && e.pointerId !== pPointerId) return;
+        if (gesture.idx === null) return;
+        if (gesture.pointerId !== null && e.pointerId !== gesture.pointerId) return;
 
-        const dx = e.clientX - gLastX;
-        const dy = e.clientY - gLastY;
-        gLastX = e.clientX;
-        gLastY = e.clientY;
-
-        if (pStarted && !gMode) {
-          const totalDx = e.clientX - pStartX;
-          const totalDy = e.clientY - pStartY;
-          if (Math.abs(totalDx) + Math.abs(totalDy) > DRAG_THRESHOLD) {
-            pStarted = false;
-            suppressClick = true;
-            gMode = "reorder";
-            const srcSlot = document.querySelector('.slot[data-slot="' + gIdx + '"]');
+        // belum lewat ambang -> belum dianggap drag
+        if (gesture.started && !gesture.mode) {
+          const dx = Math.abs(e.clientX - gesture.startX);
+          const dy = Math.abs(e.clientY - gesture.startY);
+          if (dx + dy > DRAG_THRESHOLD) {
+            gesture.started = false;
+            gesture.suppressClick = true;
+            gesture.mode = "reorder";
+            const srcSlot = $slot(gesture.idx);
             if (srcSlot) {
               srcSlot.classList.add("dragging");
               const rect = srcSlot.getBoundingClientRect();
               showGhost(
-                images[gIdx],
+                state.images[gesture.idx],
                 Math.min(rect.width, rect.height) * 0.55,
                 e.clientX,
                 e.clientY,
@@ -1228,56 +1525,66 @@
           return;
         }
 
-        if (gMode === "reorder") {
+        if (gesture.mode === "reorder") {
           e.preventDefault();
-          if (dragGhost) {
-            dragGhost.style.left = e.clientX + "px";
-            dragGhost.style.top = e.clientY + "px";
-          }
+          el.dragGhost.style.left = e.clientX + "px";
+          el.dragGhost.style.top = e.clientY + "px";
           clearDragHighlights();
-          const srcSlot = document.querySelector('.slot[data-slot="' + gIdx + '"]');
+          const srcSlot = $slot(gesture.idx);
           if (srcSlot) srcSlot.classList.add("dragging");
           const targetIdx = nearestSlot(e.clientX, e.clientY);
-          if (targetIdx !== null && targetIdx !== gIdx) {
-            const ts = document.querySelector('.slot[data-slot="' + targetIdx + '"]');
-            if (ts) ts.classList.add("drag-over");
+          if (targetIdx !== null && targetIdx !== gesture.idx) {
+            const target = $slot(targetIdx);
+            if (target) target.classList.add("drag-over");
           }
         }
       });
 
       document.addEventListener("pointerup", (e) => {
-        if (gIdx === null) return;
-        if (pPointerId !== null && e.pointerId !== pPointerId) return;
+        if (gesture.idx === null) return;
+        if (gesture.pointerId !== null && e.pointerId !== gesture.pointerId) return;
 
-        const wasReorder = gMode === "reorder";
+        const wasReorder = gesture.mode === "reorder";
         if (wasReorder) {
-          if (dragGhost) dragGhost.style.display = "none";
+          el.dragGhost.style.display = "none";
           const targetIdx = nearestSlot(e.clientX, e.clientY);
-          if (targetIdx !== null && targetIdx !== gIdx) {
-            swapSlots(gIdx, targetIdx);
+          if (targetIdx !== null && targetIdx !== gesture.idx) {
+            swapSlots(gesture.idx, targetIdx);
           }
         }
-        suppressClick = wasReorder;
+        gesture.suppressClick = wasReorder;
         endGesture();
-        if (suppressClick) {
-          setTimeout(() => { suppressClick = false; }, 300);
+        if (gesture.suppressClick) {
+          setTimeout(() => {
+            gesture.suppressClick = false;
+          }, 300);
         }
       });
 
-      document.addEventListener("pointercancel", () => {
-        endGesture();
-      });
+      document.addEventListener("pointercancel", endGesture);
 
-      gridFrame.addEventListener("wheel", (e) => {
-        const slot = e.target.closest(".slot");
-        if (!slot) return;
-        const idx = parseInt(slot.dataset.slot, 10);
-        if (!images[idx]) return;
-        e.preventDefault();
-        const img = slot.querySelector(".slot-img");
-        const a = anchorFromPoint(img, e.clientX, e.clientY);
-        zoomAt(idx, getTx(idx).scale + (e.deltaY < 0 ? 0.12 : -0.12), a.ax, a.ay);
-      }, { passive: false });
+      el.gridFrame.addEventListener(
+        "wheel",
+        (e) => {
+          const slot = e.target.closest(".slot");
+          if (!slot) return;
+          const idx = parseInt(slot.dataset.slot, 10);
+          if (!state.images[idx]) return;
+          e.preventDefault();
+          const a = anchorFromPoint(
+            slot.querySelector(".slot-img"),
+            e.clientX,
+            e.clientY,
+          );
+          zoomAt(
+            idx,
+            getTx(idx).scale + (e.deltaY < 0 ? 0.12 : -0.12),
+            a.ax,
+            a.ay,
+          );
+        },
+        { passive: false },
+      );
 
       document.addEventListener(
         "contextmenu",
@@ -1289,153 +1596,46 @@
         { passive: false },
       );
 
-      function renderGrid() {
-        gridFrame.style.aspectRatio = currentAspect;
-        gridFrame.innerHTML = "";
+      /* ---------- 5. Render grid ---------- */
 
-        if (layoutCycleBtn) {
-          const showLayout = count === 3 || count === 4 || count === 5;
-          layoutCycleBtn.style.display = showLayout ? "" : "none";
-          if (showLayout) updateLayoutCycleBtn();
+      /** Definisi tata letak aktif (jumlah kolom/baris + area tiap slot). */
+      function getLayoutDef() {
+        const set = LAYOUTS[state.count];
+        if (set) return set[state.layouts[state.count]];
+
+        // jumlah foto di luar 3/4/5 -> grid sama rata
+        const cols = Math.ceil(Math.sqrt(state.count));
+        const rows = Math.ceil(state.count / cols);
+        const areas = [];
+        for (let i = 0; i < state.count; i++) {
+          const col = (i % cols) + 1;
+          const row = Math.floor(i / cols) + 1;
+          areas.push(row + " / " + col + " / " + (row + 1) + " / " + (col + 1));
         }
+        return { cols, rows, areas };
+      }
 
-        let cols = 2,
-          rows = 2;
-        if (count === 3) {
-          cols = 2;
-          rows = 2;
-          gridFrame.style.gridTemplateColumns = "repeat(2, 1fr)";
-          gridFrame.style.gridTemplateRows = "repeat(2, 1fr)";
-        } else if (count === 4) {
-          if (currentLayout4 === "left-big" || currentLayout4 === "right-big") {
-            cols = 2;
-            rows = 3;
-            gridFrame.style.gridTemplateColumns = "repeat(2, 1fr)";
-            gridFrame.style.gridTemplateRows = "repeat(3, 1fr)";
-          } else {
-            cols = 3;
-            rows = 2;
-            gridFrame.style.gridTemplateColumns = "repeat(3, 1fr)";
-            gridFrame.style.gridTemplateRows = "repeat(2, 1fr)";
-          }
-        } else if (count === 5) {
-          if (currentLayout5 === "left-big" || currentLayout5 === "right-big") {
-            cols = 3;
-            rows = 2;
-            gridFrame.style.gridTemplateColumns = "repeat(3, 1fr)";
-            gridFrame.style.gridTemplateRows = "repeat(2, 1fr)";
-          } else {
-            cols = 4;
-            rows = 2;
-            gridFrame.style.gridTemplateColumns = "repeat(4, 1fr)";
-            gridFrame.style.gridTemplateRows = "repeat(2, 1fr)";
-          }
-        } else {
-          cols = Math.ceil(Math.sqrt(count));
-          rows = Math.ceil(count / cols);
-          gridFrame.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-          gridFrame.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
-        }
+      /** Ubah grid-area CSS ("baris1 / kolom1 / baris2 / kolom2") jadi kotak piksel. */
+      function areaToRect(area, cols, rows, w, h) {
+        const [r1, c1, r2, c2] = area
+          .split("/")
+          .map((v) => parseInt(v.trim(), 10));
+        const cw = w / cols;
+        const ch = h / rows;
+        return {
+          x: (c1 - 1) * cw,
+          y: (r1 - 1) * ch,
+          w: (c2 - c1) * cw,
+          h: (r2 - r1) * ch,
+        };
+      }
 
-        for (let idx = 0; idx < count; idx++) {
-          const slot = document.createElement("div");
-          slot.className = "slot";
-          slot.dataset.slot = idx;
-
-          if (count === 3) {
-            if (currentLayout3 === "left-big") {
-              if (idx === 0) slot.style.gridArea = "1 / 1 / 3 / 2";
-              else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
-              else if (idx === 2) slot.style.gridArea = "2 / 2 / 3 / 3";
-            } else if (currentLayout3 === "right-big") {
-              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 2";
-              else if (idx === 1) slot.style.gridArea = "2 / 1 / 3 / 2";
-              else if (idx === 2) slot.style.gridArea = "1 / 2 / 3 / 3";
-            } else if (currentLayout3 === "top-big") {
-              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 3";
-              else if (idx === 1) slot.style.gridArea = "2 / 1 / 3 / 2";
-              else if (idx === 2) slot.style.gridArea = "2 / 2 / 3 / 3";
-            } else if (currentLayout3 === "bottom-big") {
-              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 2";
-              else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
-              else if (idx === 2) slot.style.gridArea = "2 / 1 / 3 / 3";
-            }
-          } else if (count === 4) {
-            if (currentLayout4 === "left-big") {
-              if (idx === 0) slot.style.gridArea = "1 / 1 / 4 / 2";
-              else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
-              else if (idx === 2) slot.style.gridArea = "2 / 2 / 3 / 3";
-              else if (idx === 3) slot.style.gridArea = "3 / 2 / 4 / 3";
-            } else if (currentLayout4 === "right-big") {
-              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 2";
-              else if (idx === 1) slot.style.gridArea = "2 / 1 / 3 / 2";
-              else if (idx === 2) slot.style.gridArea = "3 / 1 / 4 / 2";
-              else if (idx === 3) slot.style.gridArea = "1 / 2 / 4 / 3";
-            } else if (currentLayout4 === "top-big") {
-              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 4";
-              else if (idx === 1) slot.style.gridArea = "2 / 1 / 3 / 2";
-              else if (idx === 2) slot.style.gridArea = "2 / 2 / 3 / 3";
-              else if (idx === 3) slot.style.gridArea = "2 / 3 / 3 / 4";
-            } else if (currentLayout4 === "bottom-big") {
-              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 2";
-              else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
-              else if (idx === 2) slot.style.gridArea = "1 / 3 / 2 / 4";
-              else if (idx === 3) slot.style.gridArea = "2 / 1 / 4 / 4";
-            }
-          } else if (count === 5) {
-            if (currentLayout5 === "left-big") {
-              if (idx === 0) slot.style.gridArea = "1 / 1 / 3 / 2";
-              else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
-              else if (idx === 2) slot.style.gridArea = "2 / 2 / 3 / 3";
-              else if (idx === 3) slot.style.gridArea = "1 / 3 / 2 / 4";
-              else if (idx === 4) slot.style.gridArea = "2 / 3 / 3 / 4";
-            } else if (currentLayout5 === "right-big") {
-              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 2";
-              else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
-              else if (idx === 2) slot.style.gridArea = "2 / 1 / 3 / 2";
-              else if (idx === 3) slot.style.gridArea = "2 / 2 / 3 / 3";
-              else if (idx === 4) slot.style.gridArea = "1 / 3 / 3 / 4";
-            } else if (currentLayout5 === "top-big") {
-              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 5";
-              else if (idx === 1) slot.style.gridArea = "2 / 1 / 3 / 2";
-              else if (idx === 2) slot.style.gridArea = "2 / 2 / 3 / 3";
-              else if (idx === 3) slot.style.gridArea = "2 / 3 / 3 / 4";
-              else if (idx === 4) slot.style.gridArea = "2 / 4 / 3 / 5";
-            } else if (currentLayout5 === "bottom-big") {
-              if (idx === 0) slot.style.gridArea = "1 / 1 / 2 / 2";
-              else if (idx === 1) slot.style.gridArea = "1 / 2 / 2 / 3";
-              else if (idx === 2) slot.style.gridArea = "1 / 3 / 2 / 4";
-              else if (idx === 3) slot.style.gridArea = "1 / 4 / 2 / 5";
-              else if (idx === 4) slot.style.gridArea = "2 / 1 / 3 / 5";
-            }
-          }
-
-          if (images[idx]) {
-            const img = document.createElement("img");
-            img.className = "slot-img";
-            img.src = images[idx];
-            img.draggable = false;
-            img.style.touchAction = "none";
-
-            slot.appendChild(img);
-          } else {
-            const ph = document.createElement("div");
-            ph.className = "placeholder";
-            ph.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`;
-            slot.appendChild(ph);
-          }
-
-          gridFrame.appendChild(slot);
-          if (images[idx]) {
-            const im = slot.querySelector(".slot-img");
-            if (im) applyTx(im, idx);
-          }
-        }
-        countValue.textContent = count;
-
-        const frameR = gridFrame.getBoundingClientRect();
+      /** Sudut slot yang menempel pinggiran bingkai dibulatkan lebih besar
+          supaya menyatu dengan bingkai (warisan tema sebelum Mori). */
+      function applySlotRadius() {
+        const frameR = el.gridFrame.getBoundingClientRect();
         const tolerance = 2;
-        document.querySelectorAll(".slot").forEach((slot) => {
+        el.gridFrame.querySelectorAll(".slot").forEach((slot) => {
           const r = slot.getBoundingClientRect();
           const onTop = Math.abs(r.top - frameR.top) < tolerance;
           const onBottom = Math.abs(r.bottom - frameR.bottom) < tolerance;
@@ -1454,177 +1654,279 @@
         });
       }
 
+      /** Terapkan cara potong foto: preview (object-fit) + tombol panel. */
+      function applyFitMode() {
+        const contain = state.fit === "contain";
+        el.gridFrame.classList.toggle("fit-contain", contain);
+        el.fitBtn.classList.toggle("contain", contain);
+        el.fitBtn.title = contain
+          ? "Foto utuh (tidak dipotong) — ketuk untuk isi penuh sel"
+          : "Potong foto (penuh sel) — ketuk untuk tampil utuh";
+      }
+
+      function renderGrid() {
+        const def = getLayoutDef();
+        const aspect = ASPECTS[state.aspectIndex];
+
+        el.gridFrame.style.aspectRatio = aspect.ratio;
+        el.gridFrame.style.gridTemplateColumns = "repeat(" + def.cols + ", 1fr)";
+        el.gridFrame.style.gridTemplateRows = "repeat(" + def.rows + ", 1fr)";
+        el.gridFrame.innerHTML = "";
+
+        // tombol tata letak hanya relevan untuk 3/4/5 foto
+        const showLayout = !!LAYOUTS[state.count];
+        el.layoutCycleBtn.style.display = showLayout ? "" : "none";
+        el.layoutShuffleBtn.style.display = showLayout ? "" : "none";
+
+        for (let idx = 0; idx < state.count; idx++) {
+          const slot = document.createElement("div");
+          slot.className = "slot";
+          slot.dataset.slot = idx;
+          slot.style.gridArea = def.areas[idx];
+
+          if (state.images[idx]) {
+            const img = document.createElement("img");
+            img.className = "slot-img";
+            img.src = state.images[idx];
+            img.draggable = false;
+            slot.appendChild(img);
+          } else {
+            const ph = document.createElement("div");
+            ph.className = "placeholder";
+            ph.innerHTML = PLACEHOLDER_SVG;
+            slot.appendChild(ph);
+          }
+
+          el.gridFrame.appendChild(slot);
+        }
+
+        // zoom per slot dipasang ulang setelah DOM dibangun
+        el.gridFrame.querySelectorAll(".slot").forEach((slot) => {
+          const img = slot.querySelector(".slot-img");
+          if (img) applyTx(img, parseInt(slot.dataset.slot, 10));
+        });
+
+        el.countValue.textContent = state.count;
+        applyFitMode();
+        applySlotRadius();
+      }
+
+      /** Tombol unduh aktif kalau ada minimal satu foto terisi. */
       function checkReady() {
-        const filled = Object.keys(images).filter((k) => k < count).length;
-        downloadBtn.disabled = filled === 0;
+        const filled = Object.keys(state.images).filter(
+          (k) => Number(k) < state.count,
+        ).length;
+        el.downloadBtn.disabled = filled === 0;
+      }
+
+      /* ---------- 6. Aksi tombol ---------- */
+
+      function syncCountButtons() {
+        el.minusBtn.disabled = state.count <= MIN_COUNT;
+        el.plusBtn.disabled = state.count >= MAX_COUNT;
       }
 
       function updateCount(delta) {
-        const next = count + delta;
+        const next = state.count + delta;
         if (next < MIN_COUNT || next > MAX_COUNT) return;
-        count = next;
-        minusBtn.disabled = count <= MIN_COUNT;
-        plusBtn.disabled = count >= MAX_COUNT;
-        Object.keys(images).forEach((k) => {
-          if (parseInt(k) >= count) {
-            delete images[k];
-            delete imgTx[k];
+        state.count = next;
+        // foto pada slot yang dihapus ikut dibuang (beserta zoom-nya)
+        Object.keys(state.images).forEach((k) => {
+          if (Number(k) >= state.count) {
+            delete state.images[k];
+            delete state.tx[k];
           }
         });
+        syncCountButtons();
         renderGrid();
         checkReady();
       }
 
-      minusBtn.addEventListener("click", () => updateCount(-1));
-      plusBtn.addEventListener("click", () => updateCount(1));
+      el.minusBtn.addEventListener("click", () => updateCount(-1));
+      el.plusBtn.addEventListener("click", () => updateCount(1));
 
-      trashBtn.addEventListener("click", () => {
-        images = {};
-        imgTx = {};
+      el.trashBtn.addEventListener("click", () => {
+        state.images = {};
+        state.tx = {};
         renderGrid();
         checkReady();
       });
 
-      addPhotoBtn.addEventListener("click", () => {
-        multiFileInput.click();
-      });
+      el.addPhotoBtn.addEventListener("click", () => el.multiFileInput.click());
 
-      aspectBtn.addEventListener("click", () => {
-        currentAspectIndex = (currentAspectIndex + 1) % ASPECTS.length;
-        currentAspect = ASPECTS[currentAspectIndex];
+      /* --- Aspect (rasio bingkai) --- */
+
+      function currentAspect() {
+        return ASPECTS[state.aspectIndex];
+      }
+
+      function updateAspectButton() {
+        const ratio = currentAspect().ratio;
+        el.aspectBtn.title = "Ukuran: " + ratio;
+        el.aspectBtn.setAttribute("aria-label", "Ukuran bingkai " + ratio);
+      }
+
+      el.aspectBtn.addEventListener("click", () => {
+        state.aspectIndex = (state.aspectIndex + 1) % ASPECTS.length;
+        updateAspectButton();
         renderGrid();
       });
 
-      function getCurrentLayout() {
-        if (count === 4) return currentLayout4;
-        if (count === 5) return currentLayout5;
-        return currentLayout3;
+      /* --- Tata letak --- */
+
+      function currentLayout() {
+        return state.layouts[state.count] || LAYOUT_NAMES[0];
       }
 
-      function setCurrentLayout(layout) {
-        if (count === 4) currentLayout4 = layout;
-        else if (count === 5) currentLayout5 = layout;
-        else currentLayout3 = layout;
+      function updateLayoutButton() {
+        const label = LAYOUT_LABELS[currentLayout()];
+        el.layoutCycleBtn.title = "Tata letak: " + label;
+        el.layoutCycleBtn.setAttribute("aria-label", "Tata letak " + label);
       }
 
-      function updateLayoutCycleBtn() {
-        if (!layoutCycleBtn) return;
-        layoutCycleBtn.classList.add("active");
-      }
-
-      layoutCycleBtn.addEventListener("click", () => {
-        const lay = getCurrentLayout();
-        const idx = LAYOUTS.indexOf(lay);
-        const next = LAYOUTS[(idx + 1) % LAYOUTS.length];
-        setCurrentLayout(next);
-        updateLayoutCycleBtn();
+      el.layoutCycleBtn.addEventListener("click", () => {
+        // tata letak khusus hanya untuk 3/4/5 foto (tombol disembunyikan
+        // untuk jumlah lain, jadi guard ini hanya untuk pemanggilan programatik)
+        if (!LAYOUTS[state.count]) return;
+        const idx = LAYOUT_NAMES.indexOf(currentLayout());
+        state.layouts[state.count] = LAYOUT_NAMES[(idx + 1) % LAYOUT_NAMES.length];
+        updateLayoutButton();
         renderGrid();
       });
 
-      fileInput.addEventListener("change", (e) => {
+      /* Acak: pilih tata letak lain secara acak, tidak sama dengan sekarang. */
+      el.layoutShuffleBtn.addEventListener("click", () => {
+        if (!LAYOUTS[state.count]) return;
+        const nama = Object.keys(LAYOUTS[state.count]);
+        let acak = nama[Math.floor(Math.random() * nama.length)];
+        if (nama.length > 1 && acak === state.layouts[state.count]) {
+          acak = nama[(nama.indexOf(acak) + 1) % nama.length];
+        }
+        state.layouts[state.count] = acak;
+        updateLayoutButton();
+        renderGrid();
+      });
+
+      /* --- Pilih foto --- */
+
+      el.fileInput.addEventListener("change", (e) => {
         const file = e.target.files[0];
-        if (!file || activeSlot === null) return;
+        const slotIdx = activeSlot;
+        el.fileInput.value = "";
+        if (!file || slotIdx === null) return;
         const reader = new FileReader();
         reader.onload = (ev) => {
-          images[activeSlot] = ev.target.result;
+          state.images[slotIdx] = ev.target.result;
           renderGrid();
           checkReady();
         };
         reader.readAsDataURL(file);
-        fileInput.value = "";
       });
 
-      multiFileInput.addEventListener("change", (e) => {
+      el.multiFileInput.addEventListener("change", (e) => {
         const files = Array.from(e.target.files);
+        el.multiFileInput.value = "";
         if (files.length === 0) return;
 
-        let filledCount = Object.keys(images).length;
-        let targetCount = Math.max(count, filledCount + files.length);
-        if (targetCount > MAX_COUNT) targetCount = MAX_COUNT;
-
-        if (targetCount !== count) {
-          count = targetCount;
-          minusBtn.disabled = count <= MIN_COUNT;
-          plusBtn.disabled = count >= MAX_COUNT;
+        // tambah slot kalau foto yang ditambahkan tidak cukup tempat
+        const filled = Object.keys(state.images).length;
+        const target = Math.min(
+          MAX_COUNT,
+          Math.max(state.count, filled + files.length),
+        );
+        if (target !== state.count) {
+          state.count = target;
+          syncCountButtons();
+          renderGrid();
         }
 
+        // foto baru mengisi slot kosong pertama
         let fileIdx = 0;
-        for (let i = 0; i < count && fileIdx < files.length; i++) {
-          if (!images[i]) {
-            const slotIdx = i;
-            const file = files[fileIdx++];
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-              images[slotIdx] = ev.target.result;
-              renderGrid();
-              checkReady();
-            };
-            reader.readAsDataURL(file);
-          }
+        for (let i = 0; i < state.count && fileIdx < files.length; i++) {
+          if (state.images[i]) continue;
+          const slotIdx = i;
+          const file = files[fileIdx++];
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            state.images[slotIdx] = ev.target.result;
+            renderGrid();
+            checkReady();
+          };
+          reader.readAsDataURL(file);
         }
-        multiFileInput.value = "";
       });
 
-      const dlPreviewImg = document.getElementById("dlPreviewImg");
-      const dlSaveBtn = document.getElementById("dlSaveBtn");
-      const dlShareWaBtn = document.getElementById("dlShareWaBtn");
-      const dlShareTgBtn = document.getElementById("dlShareTgBtn");
-      const bubbleContainer = document.getElementById("downloadBubbleContainer");
-      const dropup = document.getElementById("downloadBubbleDropup");
-      const dbdCloseBtn = document.getElementById("dbdCloseBtn");
-      let dlDataUrl = "";
-      let dlBlob = null;
-      let dlFileName = "1.png";
-      function getNextFileName(){
-        let n = parseInt(localStorage.getItem("gridDlCounter") || "0", 10) + 1;
-        localStorage.setItem("gridDlCounter", String(n));
-        return n + ".png";
-      }
-      /* Posisikan panel tepat di bawah tombol Unduh, bukan di sudut
-         layar. Dihitung setiap kali panel dibuka supaya ikut kalau
-         layar diputar atau tombol pindah tempat. */
-      function posisikanPanel(){
-        const r = downloadBtn.getBoundingClientRect();
-        const w = dropup.offsetWidth || 320;
-        const lebarLayar = window.innerWidth;
+      /* ---------- 7. Panel unduhan ---------- */
+
+      /* Posisikan panel tepat di bawah tombol Unduh, bukan di sudut layar.
+         Dihitung ulang tiap kali panel dibuka supaya ikut kalau layar
+         diputar atau tombol pindah tempat. */
+      function posisikanPanel() {
+        const r = el.downloadBtn.getBoundingClientRect();
+        const w = el.dropup.offsetWidth || 320;
         const cx = r.left + r.width / 2;
         let left = r.left;
-        /* Usahakan titik panah minimal 20px dari tepi kiri/kanan panel
-           supaya tidak masuk sudut melengkung panel. */
+        /* Titik panah minimal 20px dari tepi kiri/kanan panel supaya tidak
+           masuk sudut melengkung panel. */
         if (left > cx - 20) left = cx - 20;
         if (left + w < cx + 20) left = cx + 20 - w;
         /* Jangan keluar kanan layar. */
-        if (left + w > lebarLayar - 12) left = lebarLayar - w - 12;
+        if (left + w > window.innerWidth - 12) left = window.innerWidth - w - 12;
         if (left < 12) left = 12;
-        bubbleContainer.style.left = left + "px";
-        bubbleContainer.style.top = (r.bottom + 8) + "px";
+        el.bubble.style.left = left + "px";
+        el.bubble.style.top = r.bottom + 8 + "px";
         /* Panah panel menunjuk ke tengah tombol Unduh; titik itu juga
            dipakai sebagai transform-origin supaya animasi buka terlihat
            keluar dari tombolnya. */
         let arrowX = cx - left;
         arrowX = Math.max(20, Math.min(w - 20, arrowX));
-        bubbleContainer.style.setProperty("--arrow-x", arrowX + "px");
-        dropup.style.transformOrigin = arrowX + "px 0";
-        bubbleContainer.classList.remove("above");
+        el.bubble.style.setProperty("--arrow-x", arrowX + "px");
+        el.dropup.style.transformOrigin = arrowX + "px 0";
+        el.bubble.classList.remove("above");
       }
+
       /* Naik ke atas tombol kalau ruang di bawah tidak cukup (HP kecil
          dalam mode landscape). */
-      function posisiAman(){
-        const bawah = bubbleContainer.offsetTop + (dropup.offsetHeight || 0);
+      function posisiAman() {
+        const bawah = el.bubble.offsetTop + (el.dropup.offsetHeight || 0);
         if (bawah <= window.innerHeight - 12) return;
-        const r = downloadBtn.getBoundingClientRect();
-        bubbleContainer.style.top = Math.max(12, r.top - (dropup.offsetHeight || 0) - 8) + "px";
-        bubbleContainer.classList.add("above");
+        const r = el.downloadBtn.getBoundingClientRect();
+        el.bubble.style.top =
+          Math.max(12, r.top - (el.dropup.offsetHeight || 0) - 8) + "px";
+        el.bubble.classList.add("above");
       }
-      function hideBubble(){ dropup.classList.remove("open"); bubbleContainer.classList.remove("visible"); bubbleContainer.classList.remove("above"); }
-      /* Tombol ✕ di kepala panel. e.stopPropagation() penting supaya
-         kliknya tidak ikut ditangkap handler "klik di luar panel" di
-         bawah, yang juga akan menutupnya -- hasilnya sama, tapi ini
-         menjadikan maksudnya jelas. */
-      dbdCloseBtn.addEventListener("click",(e)=>{ e.stopPropagation(); hideBubble(); });
-      function showBubble(){ posisikanPanel(); bubbleContainer.classList.add("visible"); dropup.classList.add("open"); posisiAman(); }
-      document.addEventListener("click",(e)=>{ if(dropup.classList.contains("open") && !bubbleContainer.contains(e.target) && !downloadBtn.contains(e.target)) hideBubble(); });
-      window.addEventListener("resize",()=>{ if(dropup.classList.contains("open")) posisikanPanel(); });
+
+      function hideBubble() {
+        el.dropup.classList.remove("open");
+        el.bubble.classList.remove("visible");
+        el.bubble.classList.remove("above");
+      }
+
+      function showBubble() {
+        posisikanPanel();
+        el.bubble.classList.add("visible");
+        el.dropup.classList.add("open");
+        posisiAman();
+      }
+
+      /* Tombol ✕ di kepala panel. e.stopPropagation() penting supaya kliknya
+         tidak ikut ditangkap handler "klik di luar panel" di bawah, yang juga
+         akan menutupnya -- hasilnya sama, tapi ini menjadikan maksudnya jelas. */
+      el.closeBubbleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        hideBubble();
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!el.dropup.classList.contains("open")) return;
+        if (el.bubble.contains(e.target) || el.downloadBtn.contains(e.target))
+          return;
+        hideBubble();
+      });
+
+      window.addEventListener("resize", () => {
+        if (el.dropup.classList.contains("open")) posisikanPanel();
+      });
 
       /* ===== Toast custom (pola Mori showToast) =====
          Dipakai untuk menggantikan alert() native browser, yang di WebView
@@ -1636,18 +1938,19 @@
         console.log("[TOAST]", pesan);
         document.querySelectorAll(".custom-toast").forEach((t) => t.remove());
 
-        const el = document.createElement("div");
-        el.className = "custom-toast" + (tipe === "err" ? " err" : "");
-        el.textContent = pesan;
-        el.setAttribute("role", "status");
-        document.body.appendChild(el);
+        const node = document.createElement("div");
+        node.className = "custom-toast" + (tipe === "err" ? " err" : "");
+        node.textContent = pesan;
+        node.setAttribute("role", "status");
+        document.body.appendChild(node);
 
-        requestAnimationFrame(() => el.classList.add("show"));
+        requestAnimationFrame(() => node.classList.add("show"));
 
-        const durSec = parseInt(localStorage.getItem("grid_toast_dur") || "3", 10) || 3;
+        const durSec =
+          parseInt(localStorage.getItem("grid_toast_dur") || "3", 10) || 3;
         setTimeout(() => {
-          el.classList.remove("show");
-          setTimeout(() => el.remove(), 300);
+          node.classList.remove("show");
+          setTimeout(() => node.remove(), 300);
         }, durSec * 1000);
       }
 
@@ -1667,10 +1970,10 @@
       // 3. Sisanya: a[download] — notifikasi browser muncul, tidak ada pilihan lain.
       async function simpanBlob(blob) {
         if (window.showSaveFilePicker) {
-          const { ext, mime } = mimeDariName(dlFileName);
+          const { ext, mime } = mimeDariName(dl.fileName);
           try {
             const handle = await window.showSaveFilePicker({
-              suggestedName: dlFileName,
+              suggestedName: dl.fileName,
               types: [{ description: "Gambar", accept: { [mime]: ["." + ext] } }],
             });
             const w = await handle.createWritable();
@@ -1685,11 +1988,11 @@
         }
 
         if (isAndroid && navigator.share) {
-          const { mime } = mimeDariName(dlFileName);
-          const file = new File([blob], dlFileName, { type: mime });
+          const { mime } = mimeDariName(dl.fileName);
+          const file = new File([blob], dl.fileName, { type: mime });
           if (navigator.canShare && navigator.canShare({ files: [file] })) {
             try {
-              await navigator.share({ files: [file], title: dlFileName });
+              await navigator.share({ files: [file], title: dl.fileName });
               return true;
             } catch (err) {
               if (err && err.name === "AbortError") return false;
@@ -1699,7 +2002,7 @@
 
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
-        a.download = dlFileName;
+        a.download = dl.fileName;
         a.href = url;
         document.body.appendChild(a);
         a.click();
@@ -1709,13 +2012,13 @@
       }
 
       async function ambilBlob() {
-        if (dlBlob) return dlBlob;
-        const res = await fetch(dlDataUrl);
+        if (dl.blob) return dl.blob;
+        const res = await fetch(dl.dataUrl);
         return res.blob();
       }
 
-      dlSaveBtn.addEventListener("click", async () => {
-        if (!dlDataUrl && !dlBlob) return;
+      el.saveBtn.addEventListener("click", async () => {
+        if (!dl.dataUrl && !dl.blob) return;
         // Notifikasi "Tersimpan <nama>.png" dihapus (permintaan).
         // Notifikasi GALAT tetap ditampilkan -- kalau gagal diam-diam,
         // user mengira file sudah tersimpan padahal tidak.
@@ -1725,20 +2028,55 @@
           showToast("Gagal menyimpan: " + err.message, "err");
         }
         hideBubble();
-        dlDataUrl = "";
-        dlBlob = null;
-        if (dlPreviewImg) dlPreviewImg.src = "";
+        dl.dataUrl = "";
+        dl.blob = null;
+        el.previewImg.src = "";
       });
 
-      dlShareWaBtn.addEventListener("click", async () => {
-        if (!dlDataUrl && !dlBlob) return;
+      /* ===== Cara potong foto (tombol di panel unduhan) =====
+         "Isi"  (cover)  : foto memenuhi sel, sisanya dipotong.
+         "Utuh" (contain) : seluruh foto terlihat, sisanya ruang kosong.
+         Tombol ini yang menjawab complaint "foto kepotong": di tata letak
+         3/5 foto, sel besar punya bentuk jauh berbeda dari foto (mis.
+         1:2 sementara fotonya 4:3), jadi foto jadi terpotong parah.
+         Mode "Utuh" menampilkan seluruh foto tanpa dipotong. */
+      el.fitBtn.addEventListener("click", async () => {
+        state.fit = state.fit === "cover" ? "contain" : "cover";
+        applyFitMode();
+        // preview + hasil export dihitung ulang supaya ikut berubah,
+        // nama file tetap (tidak menambah counter)
+        if (dl.dataUrl || dl.blob) {
+          await tampilkanExport({ namaBaru: false }).catch((err) =>
+            showToast("Gagal membuat gambar: " + err.message, "err"),
+          );
+        }
+      });
+
+      /* ===== Bagikan (WhatsApp / Telegram) =====
+         Cara yang sama untuk keduanya: navigator.share({ files }) membuka
+         share sheet Android, dan WA maupun Telegram ada di dalamnya. Kalau
+         Telegram yang dipilih, filenya benar-benar ikut terkirim.
+
+         Kenapa tidak ada deep-link langsung ke Telegram dengan file?
+         Protokol tg:// hanya menerima teks/link (mis. tg://msg?text=...),
+         tidak bisa melampirkan file. Jadi share sheet satu-satunya cara
+         dari halaman web yang benar-benar mengirim file ke Telegram.
+
+         Fallback kalau share sheet tidak didukung (mis. sebagian browser
+         desktop): simpan dulu sebagai pengganti. */
+      async function bagikanFile(label) {
+        if (!dl.dataUrl && !dl.blob) return;
         try {
           const blob = await ambilBlob();
-          const file = new File([blob], dlFileName, { type: "image/png" });
-          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            // Tanpa `text` supaya WA cuma menerima file, tidak ikut
-            // menempelkan caption apa pun.
-            await navigator.share({ files: [file], title: dlFileName });
+          const file = new File([blob], dl.fileName, { type: "image/png" });
+          if (
+            navigator.share &&
+            navigator.canShare &&
+            navigator.canShare({ files: [file] })
+          ) {
+            // Tanpa `text` supaya aplikasi tujuan hanya menerima file,
+            // tidak ikut menempelkan caption apa pun.
+            await navigator.share({ files: [file], title: dl.fileName });
             hideBubble();
             return;
           }
@@ -1748,302 +2086,67 @@
           try {
             await simpanBlob(blob);
             hideBubble();
-          } catch (waErr) {
-            showToast("Gagal berbagi: " + waErr.message, "err");
+          } catch (err) {
+            showToast("Gagal berbagi: " + err.message, "err");
           }
         } catch (err) {
           if (err.name !== "AbortError") {
-            showToast("Gagal berbagi ke WA: " + err.message, "err");
+            showToast("Gagal berbagi ke " + label + ": " + err.message, "err");
           }
         }
-      });
-
-      /* ===== Bagikan Telegram =====
-         Cara yang SAMA dengan tombol WA: navigator.share({ files }) membuka
-         share sheet Android, dan Telegram ada di dalamnya. Kalau Telegram
-         yang dipilih, filenya benar-benar ikut terkirim -- persis seperti
-         memilih WhatsApp.
-
-         Kenapa tidak ada deep-link langsung ke Telegram dengan file?
-         Protokol tg:// hanya menerima teks/link (mis. tg://msg?text=...),
-         tidak bisa melampirkan file. Jadi share sheet satu-satunya cara
-         dari halaman web yang benar-benar mengirim file ke Telegram.
-
-         Fallback kalau share sheet tidak didukung (mis. sebagian browser
-         desktop): simpan dulu lalu buka share-url resmi Telegram. */
-      function bukaTelegramShare() {
-        const teks = dlFileName;
-        const url = "https://t.me/share/url?url=&text=" + encodeURIComponent(teks);
-        window.open(url, "_blank", "noopener");
       }
 
-      dlShareTgBtn.addEventListener("click", async () => {
-        if (!dlDataUrl && !dlBlob) return;
-        try {
-          const blob = await ambilBlob();
-          const file = new File([blob], dlFileName, { type: "image/png" });
-          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            // Tanpa `text` supaya Telegram cuma menerima file, tidak ikut
-            // menempelkan caption apa pun.
-            await navigator.share({ files: [file], title: dlFileName });
-            hideBubble();
-            return;
-          }
-          // Tidak ada share sheet: simpan dulu, lalu arahkan ke Telegram.
-          // Notifikasi "File diunduh..." dihapus sesuai permintaan.
-          try {
-            await simpanBlob(blob);
-            hideBubble();
-          } catch (tgErr) {
-            showToast("Gagal berbagi: " + tgErr.message, "err");
-          }
-        } catch (err) {
-          if (err.name !== "AbortError") {
-            showToast("Gagal berbagi ke Telegram: " + err.message, "err");
-          }
+      el.shareWaBtn.addEventListener("click", () => bagikanFile("WA"));
+      el.shareTgBtn.addEventListener("click", () => bagikanFile("Telegram"));
+
+      /* ---------- 8. Export ke canvas ---------- */
+
+      /** Nomor file berikutnya: 1.png, 2.png, ... (urutan via localStorage). */
+      function getNextFileName() {
+        const n =
+          parseInt(localStorage.getItem("gridDlCounter") || "0", 10) + 1;
+        localStorage.setItem("gridDlCounter", String(n));
+        return n + ".png";
+      }
+
+      /** Muat gambar dari dataURL; resolve(null) kalau foto tidak bisa dimuat. */
+      function loadImage(src) {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = () => {
+            console.warn("Gambar gagal dimuat:", src);
+            resolve(null);
+          };
+          img.src = src;
+        });
+      }
+
+      /** Hitung kotak gambar di dalam sel sesuai cara potong.
+          "cover"   : foto memenuhi sel, sisanya dipotong.
+          "contain" : seluruh foto terlihat, sisa ruang diisi warna sel. */
+      function fitRect(img, x, y, w, h) {
+        if (state.fit === "contain") {
+          const skala = Math.min(w / img.width, h / img.height);
+          const dw = img.width * skala;
+          const dh = img.height * skala;
+          return { x: x + (w - dw) / 2, y: y + (h - dh) / 2, w: dw, h: dh };
         }
-      });
-
-      downloadBtn.addEventListener("click", async () => {
-        let baseSize = 1200;
-        let canvasW = baseSize;
-        let canvasH = baseSize;
-
-        if (currentAspect === "4/5") {
-          canvasW = 1200;
-          canvasH = 1500;
-        } else if (currentAspect === "3/4") {
-          canvasW = 1200;
-          canvasH = 1600;
-        } else if (currentAspect === "16/9") {
-          canvasW = 1920;
-          canvasH = 1080;
+        const imgRatio = img.width / img.height;
+        const cellRatio = w / h;
+        if (imgRatio > cellRatio) {
+          const dh = h;
+          const dw = h * imgRatio;
+          return { x: x + (w - dw) / 2, y: y, w: dw, h: dh };
         }
+        const dw = w;
+        const dh = w / imgRatio;
+        return { x: x, y: y + (h - dh) / 2, w: dw, h: dh };
+      }
 
-        const canvas = document.getElementById("hiddenCanvas");
-        canvas.width = canvasW;
-        canvas.height = canvasH;
-        const ctx = canvas.getContext("2d");
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, canvasW, canvasH);
-
-        // Direset tiap export. Kalau naik, ada foto yang gagal dimuat dan
-        // dilewati (bukan crash), lalu dilaporkan lewat toast di bawah.
-        let gagalMuat = 0;
-
-        async function loadImg(src) {
-          return new Promise((res) => {
-            const img = new Image();
-            img.onload = () => res(img);
-            img.onerror = () => {
-              console.warn("Gambar gagal dimuat:", src);
-              gagalMuat++;
-              res(null);
-            };
-            img.src = src;
-          });
-        }
-
-        if (count === 3) {
-          let halfW = canvasW / 2;
-          let halfH = canvasH / 2;
-          let coords = [];
-
-          if (currentLayout3 === "left-big") {
-            coords = [
-              { x: 0, y: 0, w: halfW, h: canvasH },
-              { x: halfW, y: 0, w: halfW, h: halfH },
-              { x: halfW, y: halfH, w: halfW, h: halfH },
-            ];
-          } else if (currentLayout3 === "right-big") {
-            coords = [
-              { x: 0, y: 0, w: halfW, h: halfH },
-              { x: 0, y: halfH, w: halfW, h: halfH },
-              { x: halfW, y: 0, w: halfW, h: canvasH },
-            ];
-          } else if (currentLayout3 === "top-big") {
-            coords = [
-              { x: 0, y: 0, w: canvasW, h: halfH },
-              { x: 0, y: halfH, w: halfW, h: halfH },
-              { x: halfW, y: halfH, w: halfW, h: halfH },
-            ];
-          } else if (currentLayout3 === "bottom-big") {
-            coords = [
-              { x: 0, y: 0, w: halfW, h: halfH },
-              { x: halfW, y: 0, w: halfW, h: halfH },
-              { x: 0, y: halfH, w: canvasW, h: halfH },
-            ];
-          }
-
-          for (let idx = 0; idx < 3; idx++) {
-            if (images[idx]) {
-              let c = coords[idx];
-              const imgObj = await loadImg(images[idx]);
-              drawCover(ctx, imgObj, c.x, c.y, c.w, c.h, idx);
-            }
-          }
-        } else if (count === 4) {
-          if (currentLayout4 === "left-big" || currentLayout4 === "right-big") {
-            let halfW = canvasW / 2;
-            let thirdH = canvasH / 3;
-            let coords = [];
-
-            if (currentLayout4 === "left-big") {
-              coords = [
-                { x: 0, y: 0, w: halfW, h: canvasH },
-                { x: halfW, y: 0, w: halfW, h: thirdH },
-                { x: halfW, y: thirdH, w: halfW, h: thirdH },
-                { x: halfW, y: thirdH * 2, w: halfW, h: thirdH },
-              ];
-            } else if (currentLayout4 === "right-big") {
-              coords = [
-                { x: 0, y: 0, w: halfW, h: thirdH },
-                { x: 0, y: thirdH, w: halfW, h: thirdH },
-                { x: 0, y: thirdH * 2, w: halfW, h: thirdH },
-                { x: halfW, y: 0, w: halfW, h: canvasH },
-              ];
-            }
-
-            for (let idx = 0; idx < 4; idx++) {
-              if (images[idx]) {
-                let c = coords[idx];
-                const imgObj = await loadImg(images[idx]);
-                drawCover(ctx, imgObj, c.x, c.y, c.w, c.h, idx);
-              }
-            }
-          } else {
-            let thirdW = canvasW / 3;
-            let halfH = canvasH / 2;
-            let coords = [];
-
-            if (currentLayout4 === "top-big") {
-              coords = [
-                { x: 0, y: 0, w: canvasW, h: halfH },
-                { x: 0, y: halfH, w: thirdW, h: halfH },
-                { x: thirdW, y: halfH, w: thirdW, h: halfH },
-                { x: thirdW * 2, y: halfH, w: thirdW, h: halfH },
-              ];
-            } else if (currentLayout4 === "bottom-big") {
-              coords = [
-                { x: 0, y: 0, w: thirdW, h: halfH },
-                { x: thirdW, y: 0, w: thirdW, h: halfH },
-                { x: thirdW * 2, y: 0, w: thirdW, h: halfH },
-                { x: 0, y: halfH, w: canvasW, h: halfH },
-              ];
-            }
-
-            for (let idx = 0; idx < 4; idx++) {
-              if (images[idx]) {
-                let c = coords[idx];
-                const imgObj = await loadImg(images[idx]);
-                drawCover(ctx, imgObj, c.x, c.y, c.w, c.h, idx);
-              }
-            }
-          }
-        } else if (count === 5) {
-          if (currentLayout5 === "left-big" || currentLayout5 === "right-big") {
-            let thirdW = canvasW / 3;
-            let halfH = canvasH / 2;
-            let coords = [];
-
-            if (currentLayout5 === "left-big") {
-              coords = [
-                { x: 0, y: 0, w: thirdW, h: canvasH },
-                { x: thirdW, y: 0, w: thirdW, h: halfH },
-                { x: thirdW * 2, y: 0, w: thirdW, h: halfH },
-                { x: thirdW, y: halfH, w: thirdW, h: halfH },
-                { x: thirdW * 2, y: halfH, w: thirdW, h: halfH },
-              ];
-            } else if (currentLayout5 === "right-big") {
-              coords = [
-                { x: 0, y: 0, w: thirdW, h: halfH },
-                { x: thirdW, y: 0, w: thirdW, h: halfH },
-                { x: 0, y: halfH, w: thirdW, h: halfH },
-                { x: thirdW, y: halfH, w: thirdW, h: halfH },
-                { x: thirdW * 2, y: 0, w: thirdW, h: canvasH },
-              ];
-            }
-
-            for (let idx = 0; idx < 5; idx++) {
-              if (images[idx]) {
-                let c = coords[idx];
-                const imgObj = await loadImg(images[idx]);
-                drawCover(ctx, imgObj, c.x, c.y, c.w, c.h, idx);
-              }
-            }
-          } else {
-            let fourthW = canvasW / 4;
-            let halfH = canvasH / 2;
-            let coords = [];
-
-            if (currentLayout5 === "top-big") {
-              coords = [
-                { x: 0, y: 0, w: canvasW, h: halfH },
-                { x: 0, y: halfH, w: fourthW, h: halfH },
-                { x: fourthW, y: halfH, w: fourthW, h: halfH },
-                { x: fourthW * 2, y: halfH, w: fourthW, h: halfH },
-                { x: fourthW * 3, y: halfH, w: fourthW, h: halfH },
-              ];
-            } else if (currentLayout5 === "bottom-big") {
-              coords = [
-                { x: 0, y: 0, w: fourthW, h: halfH },
-                { x: fourthW, y: 0, w: fourthW, h: halfH },
-                { x: fourthW * 2, y: 0, w: fourthW, h: halfH },
-                { x: fourthW * 3, y: 0, w: fourthW, h: halfH },
-                { x: 0, y: halfH, w: canvasW, h: halfH },
-              ];
-            }
-
-            for (let idx = 0; idx < 5; idx++) {
-              if (images[idx]) {
-                let c = coords[idx];
-                const imgObj = await loadImg(images[idx]);
-                drawCover(ctx, imgObj, c.x, c.y, c.w, c.h, idx);
-              }
-            }
-          }
-        } else {
-          let cols = Math.ceil(Math.sqrt(count));
-          let rows = Math.ceil(count / cols);
-          let cellW = canvasW / cols;
-          let cellH = canvasH / rows;
-
-          for (let idx = 0; idx < count; idx++) {
-            if (images[idx]) {
-              let c = idx % cols;
-              let r = Math.floor(idx / cols);
-              const imgObj = await loadImg(images[idx]);
-              drawCover(ctx, imgObj, c * cellW, r * cellH, cellW, cellH, idx);
-            }
-          }
-        }
-
-        dlDataUrl = canvas.toDataURL("image/png");
-        dlPreviewImg.src = dlDataUrl;
-        dlBlob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
-        dlFileName = getNextFileName();
-        const sizeKB = Math.round((dlDataUrl.length * 3) / 4 / 1024);
-        const sizeText = sizeKB > 1024
-          ? (sizeKB / 1024).toFixed(1) + " MB"
-          : sizeKB + " KB";
-        const badge = document.getElementById("dbdCountBadge");
-        if (badge) badge.textContent = dlFileName + "  \u00b7  " + sizeText;
-        showBubble();
-
-        // Notifikasi ini hanya untuk KEGAGALAN (foto rusak), bukan untuk
-        // keberhasilan -- jadi tetap ditampilkan. Kalau sampai dihapus juga,
-        // foto yang gagal dimuat akan terlihat seperti slot kosong biasa
-        // dan user tidak pernah tahu ada yang salah.
-        if (gagalMuat > 0) {
-          showToast(
-            gagalMuat + " foto gagal dimuat, dilewati. Coba pilih ulang fotonya.",
-            "err"
-          );
-        }
-      });
-
-      function drawCover(ctx, img, x, y, w, h, idx) {
-        // loadImg() resolve(null) kalau foto gagal dimuat. Tanpa guard ini
+      /** Gambar foto ke kotak (x, y, w, h) sesuai cara potong yang aktif. */
+      function drawFit(ctx, img, x, y, w, h, idx) {
+        // loadImage() resolve(null) kalau foto gagal dimuat. Tanpa guard ini
         // `img.width` di bawah melempar TypeError dan satu export ikut gagal
         // semua, jadi slot yang fotonya rusak cukup dilewati (sel kosong).
         if (!img) return;
@@ -2053,35 +2156,98 @@
         ctx.rect(x, y, w, h);
         ctx.clip();
 
-        const imgRatio = img.width / img.height;
-        const cellRatio = w / h;
-        let dw, dh, dx, dy;
-        if (imgRatio > cellRatio) {
-          dh = h;
-          dw = h * imgRatio;
-          dx = x + (w - dw) / 2;
-          dy = y;
-        } else {
-          dw = w;
-          dh = w / imgRatio;
-          dx = x;
-          dy = y + (h - dh) / 2;
-        }
-
-        const t = idx != null && imgTx[idx]
-          ? imgTx[idx]
-          : { scale: 1, fx: 0, fy: 0 };
+        const box = fitRect(img, x, y, w, h);
+        const t = state.tx[idx] || { scale: 1, fx: 0, fy: 0 };
         const cx = x + w / 2;
         const cy = y + h / 2;
         ctx.translate(cx + t.fx * w, cy + t.fy * h);
         ctx.scale(t.scale, t.scale);
-        ctx.drawImage(img, dx - cx, dy - cy, dw, dh);
+        ctx.drawImage(img, box.x - cx, box.y - cy, box.w, box.h);
         ctx.restore();
       }
 
-      minusBtn.disabled = count <= MIN_COUNT;
-      plusBtn.disabled = count >= MAX_COUNT;
+      /** Bangun PNG hasil grid (belum menyentuh nama file). */
+      async function buildExport() {
+        const aspect = currentAspect();
+        const canvas = el.canvas;
+        canvas.width = aspect.w;
+        canvas.height = aspect.h;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const def = getLayoutDef();
+        // Direset tiap export. Kalau naik, ada foto yang gagal dimuat dan
+        // dilewati (bukan crash), lalu dilaporkan lewat toast di bawah.
+        let gagalMuat = 0;
+
+        for (let idx = 0; idx < state.count; idx++) {
+          const src = state.images[idx];
+          if (!src) continue;
+          const img = await loadImage(src);
+          if (!img) {
+            gagalMuat++;
+            continue;
+          }
+          const rect = areaToRect(
+            def.areas[idx],
+            def.cols,
+            def.rows,
+            canvas.width,
+            canvas.height,
+          );
+          drawFit(ctx, img, rect.x, rect.y, rect.w, rect.h, idx);
+        }
+
+        const dataUrl = canvas.toDataURL("image/png");
+        const blob = await new Promise((resolve) =>
+          canvas.toBlob(resolve, "image/png"),
+        );
+        return { dataUrl, blob, gagalMuat };
+      }
+
+      /** Tampilkan hasil export di panel unduhan. */
+      async function tampilkanExport({ namaBaru = true } = {}) {
+        const { dataUrl, blob, gagalMuat } = await buildExport();
+        dl.dataUrl = dataUrl;
+        dl.blob = blob;
+        if (namaBaru) dl.fileName = getNextFileName();
+        el.previewImg.src = dl.dataUrl;
+
+        const sizeKB = Math.round((dl.dataUrl.length * 3) / 4 / 1024);
+        const sizeText =
+          sizeKB > 1024
+            ? (sizeKB / 1024).toFixed(1) + " MB"
+            : sizeKB + " KB";
+        el.badge.textContent = dl.fileName + " · " + sizeText;
+        showBubble();
+
+        // Notifikasi ini hanya untuk KEGAGALAN (foto rusak), bukan untuk
+        // keberhasilan -- jadi tetap ditampilkan. Kalau sampai dihapus juga,
+        // foto yang gagal dimuat akan terlihat seperti slot kosong biasa
+        // dan user tidak pernah tahu ada yang salah.
+        if (gagalMuat > 0) {
+          showToast(
+            gagalMuat + " foto gagal dimuat, dilewati. Coba pilih ulang fotonya.",
+            "err",
+          );
+        }
+      }
+
+      el.downloadBtn.addEventListener("click", () =>
+        tampilkanExport().catch((err) =>
+          showToast("Gagal membuat gambar: " + err.message, "err"),
+        ),
+      );
+
+      /* ---------- Init ---------- */
+
+      syncCountButtons();
+      updateAspectButton();
+      updateLayoutButton();
+      applyFitMode();
       renderGrid();
+      checkReady();
     </script>
   </body>
 </html>
