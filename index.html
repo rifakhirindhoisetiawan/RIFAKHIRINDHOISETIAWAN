@@ -748,23 +748,8 @@
       notifPopup.id = 'notifPopup';
       notifPopup.style.cssText = 'display:none; position:absolute; top:58px; right:12px; width:min(260px, calc(100vw - 24px)); max-height:70vh; overflow-y:auto; background:#fffbf2; border:1px solid rgba(26,25,23,0.14); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.18); z-index:1000; padding:6px 0;';
 
-      // Daftar item SO yang belum di-opname.
-      // Satu baris per item: PLU + nama, umur SO di kanan.
-      // Item dikelompokkan per menu, dibatasi 10 baris supaya popup ringkas.
-      const SO_MAKS_ITEM = 10;
-      const escNotif = (s) => String(s || '')
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
-      function soItemHtml(it) {
-        // Kanan: umur SO. "BELUM" = belum pernah di-SO, "47H" = 47 hari lalu.
-        const badge = it.hari === null
-          ? '<span title="Belum pernah di-SO" style="font-size:9px; font-weight:800; letter-spacing:.3px; color:#b91c1c; white-space:nowrap;">BELUM</span>'
-          : '<span title="Terakhir di-SO ' + it.hari + ' hari lalu" style="font-size:9px; font-weight:800; letter-spacing:.2px; color:#b91c1c; white-space:nowrap;">' + it.hari + 'H</span>';
-        return '<a href="public/stok-opname/so.html?m=' + it.menu_id + '" title="' + escNotif(it.kode + ' ' + it.name) + ' — ' + escNotif(it.menu_name) + '" style="display:flex; gap:6px; align-items:center; padding:3px 8px 3px 12px; text-decoration:none;">' +
-          '<span style="flex:1; min-width:0; font-size:10px; font-weight:700; color:#1a1917; font-family:ui-monospace,monospace; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escNotif(it.kode || '-') + ' · ' + escNotif(it.name) + '</span>' +
-          badge +
-        '</a>';
-      }
+      // Blok "Belum SO" diringkas: kartu ringkasan saja (tanpa daftar item)
+      // supaya popup notifikasi tetap pendek. Detail item dibuka dari halaman SO.
 
       function renderNotifPopup(comments, musnahCount, soBelum) {
         soBelum = soBelum || [];
@@ -782,29 +767,9 @@
             '</div>'
           ).join('');
 
-        // Blok "Belum SO": judul + daftar item, dikelompokkan per menu.
+        // Blok "Belum SO": ringkasan saja (jumlah item + tombol buka).
         let soHtml = '';
         if (soBelum.length) {
-          const grup = new Map();
-          for (const it of soBelum) {
-            if (!grup.has(it.menu_id)) grup.set(it.menu_id, { nama: it.menu_name, items: [] });
-            grup.get(it.menu_id).items.push(it);
-          }
-          let tampil = 0;
-          let isi = '';
-          for (const g of grup.values()) {
-            if (tampil >= SO_MAKS_ITEM) break;
-            isi += '<div style="padding:6px 8px 1px 12px; font-size:9px; font-weight:800; letter-spacing:.4px; color:#6e6a64; font-family:ui-monospace,monospace; text-transform:uppercase;">' + escNotif(g.nama) + '</div>';
-            for (const it of g.items) {
-              if (tampil >= SO_MAKS_ITEM) break;
-              isi += soItemHtml(it);
-              tampil++;
-            }
-          }
-          const sisa = soBelum.length - tampil;
-          if (sisa > 0) {
-            isi += '<a href="public/stok-opname/so.html" title="Buka" style="display:block; padding:5px 8px 3px 12px; font-size:9px; font-weight:800; letter-spacing:.3px; color:#6e6a64; font-family:ui-monospace,monospace; text-decoration:none; text-transform:uppercase;">+ ' + sisa + ' item lainnya</a>';
-          }
           soHtml =
             '<div style="border-top:1px solid rgba(26,25,23,0.14); margin-top:4px; padding-top:2px;">' +
               '<div style="display:flex; gap:6px; align-items:center; padding:5px 8px;">' +
@@ -815,7 +780,6 @@
                 '</div>' +
                 '<a href="public/stok-opname/so.html" title="Buka" aria-label="Buka" style="width:28px; height:28px; padding:0; background:#1a1917; color:#fffbf2; border:none; border-radius:4px; cursor:pointer; font-weight:600; font-size:10px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg></a>' +
               '</div>' +
-              isi +
             '</div>';
         }
 
