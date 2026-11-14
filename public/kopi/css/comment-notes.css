@@ -118,3 +118,55 @@
   font-weight: 700;
   color: var(--mori-text-2);
 }
+
+/* ===== BARIS "TULIS CATATAN": gaya seperti baris tambah
+   di Admin Stok Opname — latar krem, input transparan tanpa garis,
+   tombol krem radius 8px ===== */
+.cmt-tulis {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  background: var(--mori-surface);
+  border: 1.5px solid rgba(26,25,23,0.3);
+  border-radius: 10px;
+  padding: 6px;
+  min-width: 0;
+}
+.cmt-tulis input {
+  flex: 1;
+  height: 44px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-family: var(--mori-mono);
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--mori-text);
+  background: transparent;
+  border: none;
+  outline: none;
+  min-width: 0;
+}
+.cmt-tulis input::placeholder {
+  color: var(--mori-text-2);
+}
+.cmt-tulis-btn {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mori-surface);
+  color: var(--mori-text);
+  border: 1px solid var(--mori-line);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: none;
+}
+.cmt-tulis-btn:active {
+  transform: translate(2px, 2px);
+}
