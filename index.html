@@ -407,6 +407,114 @@
         height: 20px;
       }
 
+      /* ===== POP-UP NOTIFIKASI: gaya tabel Admin Stok Opname ===== */
+      .notif-tbl {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        table-layout: fixed;
+        background: var(--mori-bg);
+      }
+      .notif-tbl th, .notif-tbl td {
+        padding: 0 12px;
+        border-bottom: 1px solid var(--mori-line);
+        text-align: left;
+        vertical-align: middle;
+      }
+      .notif-tbl thead th {
+        background: var(--mori-surface);
+        color: var(--mori-text-2);
+        font-family: var(--mori-mono, ui-monospace, monospace);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .5px;
+        text-transform: uppercase;
+        height: 34px;
+        padding: 0 12px;
+        white-space: nowrap;
+      }
+      .notif-tbl tbody td {
+        height: 44px;
+        background: var(--mori-bg);
+      }
+      .notif-tbl tbody tr:last-child td { border-bottom: 0; }
+      .notif-tbl tbody tr:hover td { background: var(--mori-surface); }
+      .notif-aksi {
+        text-align: right;
+        white-space: nowrap;
+        width: 56px;
+      }
+      .notif-sel {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        min-width: 0;
+      }
+      .notif-img {
+        width: 28px;
+        height: 28px;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 6px;
+        flex-shrink: 0;
+        background: var(--mori-surface);
+      }
+      .notif-nm {
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        color: var(--mori-text);
+        font-family: var(--mori-mono, ui-monospace, monospace);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .notif-sub {
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: .3px;
+        color: var(--mori-text-2);
+        font-family: var(--mori-mono, ui-monospace, monospace);
+        text-transform: uppercase;
+        margin-top: 1px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .notif-buka {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        background: var(--mori-surface);
+        color: var(--mori-text);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: none;
+      }
+      .notif-buka:active { transform: translate(2px, 2px); }
+      .notif-buka svg {
+        width: 14px;
+        height: 14px;
+      }
+      .notif-empty {
+        padding: 20px 14px;
+        text-align: center;
+        font-family: var(--mori-mono, ui-monospace, monospace);
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--mori-text-2);
+        text-transform: uppercase;
+        letter-spacing: .4px;
+      }
+
     
       
       
@@ -746,7 +854,7 @@
 
       const notifPopup = document.createElement('div');
       notifPopup.id = 'notifPopup';
-      notifPopup.style.cssText = 'display:none; position:absolute; top:58px; right:12px; width:min(260px, calc(100vw - 24px)); max-height:70vh; overflow-y:auto; background:#fffbf2; border:1px solid rgba(26,25,23,0.14); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.18); z-index:1000; padding:6px 0;';
+      notifPopup.style.cssText = 'display:none; position:absolute; top:58px; right:12px; width:min(280px, calc(100vw - 24px)); max-height:70vh; overflow-y:auto; background:var(--mori-bg); border:1.5px solid rgba(26,25,23,0.3); border-radius:10px; box-shadow:none; z-index:1000; padding:0;';
 
       // Blok "Belum SO" diringkas: kartu ringkasan saja (tanpa daftar item)
       // supaya popup notifikasi tetap pendek. Detail item dibuka dari halaman SO.
@@ -758,32 +866,34 @@
           .map(it => ({ it, n: counts[it.menuId] || 0 }))
           .filter(x => x.n > 0)
           .map(x =>
-            '<div style="display:flex; gap:6px; align-items:center; padding:5px 8px;">' +
-              '<img src="' + x.it.img + '" alt="' + x.it.title + '" style="width:32px; height:32px; object-fit:cover; object-position:center; border-radius:6px; border:1px solid rgba(26,25,23,0.1); flex-shrink:0; background:#f7f3e9;" />' +
-              '<div style="flex:1; min-width:0; text-align:left;">' +
-                '<div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; color:#1a1917; font-family:ui-monospace,monospace;">' + x.it.title + '</div>' +
-              '</div>' +
-              '<a href="' + x.it.link + '" title="Buka" aria-label="Buka" style="width:28px; height:28px; padding:0; background:#1a1917; color:#fffbf2; border:none; border-radius:4px; cursor:pointer; font-weight:600; font-size:10px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg></a>' +
-            '</div>'
+            '<tr>' +
+              '<td><div class="notif-sel">' +
+                '<img class="notif-img" src="' + x.it.img + '" alt="' + x.it.title + '" loading="lazy" decoding="async" />' +
+                '<div class="notif-nm">' + x.it.title + '</div>' +
+              '</div></td>' +
+              '<td class="notif-aksi"><a href="' + x.it.link + '" class="notif-buka" title="Buka" aria-label="Buka"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg></a></td>' +
+            '</tr>'
           ).join('');
 
         // Blok "Belum SO": ringkasan saja (jumlah item + tombol buka).
         let soHtml = '';
         if (soBelum.length) {
           soHtml =
-            '<div style="border-top:1px solid rgba(26,25,23,0.14); margin-top:4px; padding-top:2px;">' +
-              '<div style="display:flex; gap:6px; align-items:center; padding:5px 8px;">' +
-                '<img src="assets/images/time-kamera/1.jpg" alt="Stok Opname" style="width:32px; height:32px; object-fit:cover; object-position:center; border-radius:6px; border:1px solid rgba(26,25,23,0.1); flex-shrink:0; background:#f7f3e9;" />' +
-                '<div style="flex:1; min-width:0; text-align:left;">' +
-                  '<div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; color:#1a1917; font-family:ui-monospace,monospace;">Belum SO</div>' +
-                  '<div style="font-size:9px; font-weight:700; letter-spacing:.3px; color:#6e6a64; font-family:ui-monospace,monospace;">' + soBelum.length + ' item &gt; ' + SO_BELUM_SO_HARI + ' hari</div>' +
+            '<tr>' +
+              '<td><div class="notif-sel">' +
+                '<img class="notif-img" src="assets/images/time-kamera/1.jpg" alt="Stok Opname" loading="lazy" decoding="async" />' +
+                '<div><div class="notif-nm">Belum SO</div>' +
+                  '<div class="notif-sub">' + soBelum.length + ' item &gt; ' + SO_BELUM_SO_HARI + ' hari</div>' +
                 '</div>' +
-                '<a href="public/stok-opname/so.html" title="Buka" aria-label="Buka" style="width:28px; height:28px; padding:0; background:#1a1917; color:#fffbf2; border:none; border-radius:4px; cursor:pointer; font-weight:600; font-size:10px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg></a>' +
-              '</div>' +
-            '</div>';
+              '</div></td>' +
+              '<td class="notif-aksi"><a href="public/stok-opname/so.html" class="notif-buka" title="Buka" aria-label="Buka"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg></a></td>' +
+            '</tr>';
         }
 
-        notifPopup.innerHTML = (itemsHtml + soHtml) || '<div style="padding:8px 12px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:#6e6a64; text-align:left; font-family:ui-monospace,monospace;">Belum ada catatan</div>';
+        const rows = itemsHtml + soHtml;
+        notifPopup.innerHTML = rows
+          ? '<table class="notif-tbl"><thead><tr><th>Info</th><th class="notif-aksi">Aksi</th></tr></thead><tbody>' + rows + '</tbody></table>'
+          : '<div class="notif-empty">Belum ada catatan</div>';
       }
       document.body.appendChild(notifPopup);
 
