@@ -536,16 +536,15 @@
         await loadEntries();
       });
 
-      /* delete modal — dikunci Supabase Auth, bukan password di source */
+      /* delete modal — dikunci Supabase Auth (signInWithPassword),
+         bukan cek manual. Kalau sudah punya sesi admin, modal dilewati. */
       const pwBg = document.getElementById('pwBg');
       const pwMsg = document.getElementById('pwMsg');
       const pwInput = document.getElementById('pwInput');
       const pwError = document.getElementById('pwError');
       const pwOk = document.getElementById('pwOk');
+      const ADMIN_EMAIL = 'admin@kopi.com';
       let pwResolve = null;
-      // Nilai password yang tadinya ada di sini bisa dibaca siapa saja dari
-      // DevTools, jadi hanya menahan salah klik. Proteksi asli ada di RLS
-      // policy (scripts/build/add-admin-rls.sql).
       async function sudahMasukAdmin() { try { const supabase = await getSupabase(); const { data } = await supabase.auth.getSession(); return !!data.session; } catch { return false; } }
       async function askPw(msg) {
         if (await sudahMasukAdmin()) return true;
@@ -557,8 +556,18 @@
       pwOk.addEventListener('click', async () => {
         const pass = pwInput.value || '';
         if (!pass) { pwError.textContent = 'Password wajib diisi.'; pwError.hidden = false; return; }
-        // Langsung hapus data tanpa verifikasi email Supabase Auth jika password bebas/lokal
-        closePw(true);
+        pwError.hidden = true;
+        pwOk.disabled = true;
+        try {
+          const supabase = await getSupabase();
+          const { error } = await supabase.auth.signInWithPassword({ email: ADMIN_EMAIL, password: pass });
+          if (error) { pwError.textContent = 'Password salah.'; pwError.hidden = false; pwInput.value = ''; try { pwInput.focus(); } catch (e) {} return; }
+          closePw(true);
+        } catch (e) {
+          pwError.textContent = 'Gagal masuk — periksa internet.'; pwError.hidden = false;
+        } finally {
+          pwOk.disabled = false;
+        }
       });
       document.getElementById('pwCancel').addEventListener('click', () => closePw(false));
       pwBg.addEventListener('click', e => { if (e.target === pwBg) closePw(false); });
