@@ -23,36 +23,36 @@
     .grow{flex:1;min-width:0}
     .inp{height:36px;padding:0 12px;font-family:var(--mori-mono);font-size:12px;font-weight:700;text-transform:uppercase;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:0;outline:none;transition:box-shadow .2s ease}
     .inp:focus{background:#fffdf7;border-color:var(--mori-line);box-shadow: none}
-    .btn-add,.ico{width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mori-mono);font-size:14px;font-weight:800;line-height:1;color:#fffbf2;background:#1a1917;border:1px solid var(--mori-line);border-radius:3px;cursor:pointer;flex-shrink:0;outline:none;box-shadow: none;transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+    .btn-add,.ico{width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mori-mono);font-size:14px;font-weight:800;line-height:1;color:#1a1917;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;flex-shrink:0;outline:none;box-shadow: none;transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
     .btn-add{font-size:16px}
-    .btn-add:hover,.ico:hover{background:#35322d}
+    .btn-add:hover,.ico:hover{background:#efe9da}
     .ico-danger{background:#b91c1c;border-color:#b91c1c;color:#fff}
     .ico-danger:hover{background:#c81e1e}
     .btn-add:active,.ico:active{transform:translate(2px,2px);box-shadow:none}
     .btn-add:focus-visible,.ico:focus-visible{outline:2px solid var(--mori-line);outline-offset:2px}
     .ico-ghost{background:#f7f3e9;color:#1a1917;border-color:rgba(26,25,23,.3)}
-    .table-wrap{border:1px solid var(--mori-line);border-radius:0;background:#fffbf2;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:0}
+    .table-wrap{border:1.5px solid rgba(26,25,23,.3);border-radius:10px;background:#fffbf2;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:0}
     .table-wrap::-webkit-scrollbar{display:none}
-    .menu-table{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
-    .menu-table thead th{position:sticky;top:0;background:#f7f3e9;font-family:var(--mori-mono);font-size:9px;text-transform:uppercase;height:38px;padding:0 8px;border-bottom:1px solid var(--mori-line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .menu-table tbody td{height:52px;padding:0 8px;border-bottom:1px solid rgba(26,25,23,.14);vertical-align:middle}
+    .menu-table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+    .menu-table thead th{position:sticky;top:0;z-index:1;background:#f7f3e9;color:#6e6a64;font-family:var(--mori-mono);font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;height:36px;padding:0 12px;border-bottom:1px solid var(--mori-line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
+    .menu-table tbody td{height:45px;padding:0 12px;border-bottom:1px solid var(--mori-line);vertical-align:middle}
     /* Baris terakhir tidak perlu garis bawah: wrapper sudah punya border sendiri,
        jadi tanpa ini tepi bawah jadi dua garis begitu ada isi. */
     .menu-table tbody tr:last-child td{border-bottom:none}
-    .menu-table tbody tr:hover td{background:#faf6ea}
-    .c-no{width:30px;text-align:center;font-family:var(--mori-mono);color:#6e6a64}
+    .menu-table tbody tr:hover td{background:#f7f3e9}
+    .c-no{width:44px;text-align:center;font-family:var(--mori-mono);color:#6e6a64}
     .c-nama{overflow:hidden}
-    .menu-table .nama{font-family:var(--mori-mono);font-size:10px;font-weight:700;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .menu-table .nama{font-family:var(--mori-mono);font-size:11px;font-weight:700;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1a1917}
     .c-shelving{width:78px}
-    .c-baris{width:40px}
+    .c-baris{width:44px}
     .c-plu{width:64px}
     .c-barcode{width:88px}
-    .c-foto{width:52px}
-    .c-aksi{width:88px}
-    .c-foto .thumb{width:28px;aspect-ratio:9/16;height:auto;display:block;border:1px solid var(--mori-line);background:#f7f3e9;overflow:hidden;margin:0 auto;flex-shrink:0}
+    .c-foto{width:78px;text-align:center}
+    .c-aksi{width:116px}
+    .c-foto .thumb{width:30px;aspect-ratio:9/16;height:auto;display:block;border:none;border-radius:8px;overflow:hidden;margin:0 auto;flex-shrink:0;background:#f7f3e9}
     .c-foto .thumb img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
     .c-foto .thumb.kosong{background:repeating-linear-gradient(45deg,#f2eee2 0 5px,#ece6d6 5px 10px)}
-    .c-foto .thumb.thumb-admin{display:flex;align-items:center;justify-content:center;background:#1a1917;color:#fffbf2}
+    .c-foto .thumb.thumb-admin{display:flex;align-items:center;justify-content:center;background:#1a1917;color:#fffbf2;border-radius:8px}
     .c-foto .thumb.thumb-admin svg{width:18px;height:18px}
     .acts{display:flex;gap:6px;justify-content:flex-end;align-items:center}
     .search-wrapper{margin-top:12px}
@@ -87,7 +87,7 @@
     .menu-table tbody tr.aktif td{background:#e9e2d0;box-shadow: none}
     .menu-table tbody tr.aktif td.c-nama .nama{color:#1a1917}
     .pilih td{background:#efe9da !important;box-shadow: none}
-    .cell-input{width:100%;min-width:0;height:30px;padding:0 6px;font-family:var(--mori-mono);font-size:9px;font-weight:700;line-height:1;color:#1a1917;background:#f7f3e9;border:1px solid rgba(26,25,23,.28);border-radius:0;cursor:text;-moz-appearance:textfield;appearance:textfield;transition:background .15s ease,border-color .15s ease,box-shadow .15s ease}
+    .cell-input{width:100%;min-width:0;height:30px;padding:0 6px;font-family:var(--mori-mono);font-size:9px;font-weight:700;line-height:1;color:#1a1917;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:4px;cursor:text;-moz-appearance:textfield;appearance:textfield;transition:background .15s ease,border-color .15s ease,box-shadow .15s ease}
     .cell-input:hover{background:#fffdf7;border-color:var(--mori-line)}
     .cell-input:focus{outline:none;background:#fff;border-color:var(--mori-line);box-shadow: none}
     .cell-input::placeholder{color:#a9a49b}
