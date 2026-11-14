@@ -732,6 +732,34 @@
         width: 14px;
         height: 14px;
       }
+      /* ===== SHEET KOMENTAR: kotak luar mengikuti gaya admin SO:
+         bingkai 1.5px solid, radius atas 10px, latar --mori-bg ===== */
+      .sheet.sheet-comment {
+        background: var(--mori-bg);
+        border: 1.5px solid rgba(26,25,23,0.3);
+        border-bottom: none;
+        border-radius: 10px 10px 0 0;
+      }
+      .sheet.sheet-comment .sheet-handle {
+        background: var(--mori-text-2);
+      }
+      /* Tombol tutup (✕) seperti tombol admin SO: krem, ikon gelap, radius 8px */
+      .cmt-close {
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 8px;
+        background: var(--mori-surface);
+        color: var(--mori-text);
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: none;
+        flex: 0 0 auto;
+      }
       .sheet-note {
         background: var(--mori-surface);
         border: 1px solid var(--mori-line);
@@ -1448,6 +1476,8 @@
       }
       function closeSheet() {
         sheetBg.classList.remove('open');
+        const sheetEl = sheetBg.querySelector('.sheet');
+        if (sheetEl) sheetEl.classList.remove('sheet-comment');
       }
       sheetBg.addEventListener('click', (e) => {
         if (e.target === sheetBg) closeSheet();
@@ -1653,15 +1683,15 @@
         const filtered = slug ? allComments.filter(c => c.slug === slug) : allComments;
         let html = '<div class="sheet-top" style="flex-direction:column;gap:12px;">';
         html += '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;">';
-        html += '<h2 id="commentSheetTitle" style="font-size:15px;font-weight:800;text-transform:uppercase;font-family:var(--mori-mono, monospace)">' + (menuName ? 'Komentar: ' + menuName : 'Semua Komentar') + '</h2>';
-        html += '<button id="commentSheetClose" type="button" style="background:none;border:none;font-size:20px;cursor:pointer;font-weight:700">✕</button>';
+        html += '<h2 id="commentSheetTitle" style="font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;font-family:var(--mori-mono, monospace);color:var(--mori-text);">' + (menuName ? 'Komentar: ' + menuName : 'Semua Komentar') + '</h2>';
+        html += '<button id="commentSheetClose" type="button" class="cmt-close" aria-label="Tutup">✕</button>';
         html += '</div>';
 
         html += '<form id="commentForm" style="display:none;"></form>';
 
-        html += '<div style="width:100%;border-top:1px solid rgba(26,25,23,0.1);margin-top:8px;padding-top:12px;max-height:45vh;overflow-y:auto;">';
+        html += '<div style="width:100%;border-top:1px solid var(--mori-line);margin-top:8px;padding-top:12px;max-height:45vh;overflow-y:auto;">';
         if (filtered.length === 0) {
-          html += '<div style="color:#6e6a64;font-size:12px;text-align:center;padding:20px 0;font-family:var(--mori-mono, monospace)">Belum ada komentar.</div>';
+          html += '<p style="color:var(--mori-text-2);font-size:12px;text-align:center;padding:20px 0;font-family:var(--mori-mono, monospace);font-weight:700;">Belum ada komentar.</p>';
         } else {
           html += '<div class="comment-table-wrap"><table class="comment-table">';
           html += '<thead><tr><th>Menu</th><th>Komentar</th><th style="text-align:right">Aksi</th></tr></thead>';
@@ -1683,6 +1713,8 @@
 
         html += '</div>';
         sheetBody.innerHTML = html;
+        const sheetEl = sheetBg.querySelector('.sheet');
+        if (sheetEl) sheetEl.classList.add('sheet-comment');
         sheetBg.classList.add('open');
 
         document.getElementById('commentSheetClose').addEventListener('click', closeSheet);
