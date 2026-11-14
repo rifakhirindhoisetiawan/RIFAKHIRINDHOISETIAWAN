@@ -26,21 +26,22 @@
     .menu-wrap::-webkit-scrollbar{display:none}
     .group-title{font-family:var(--mori-mono);font-size:10px;font-weight:700;color:var(--mori-text);letter-spacing:1.4px;text-transform:uppercase;margin:18px 0 12px}
     .group-title:first-child{margin-top:6px}
-    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 8px;width:100%;align-content:start}
     @media(min-width:768px){.grid{gap:22px 14px}}
-    .item{display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer;background:none;border:none;text-decoration:none}
-    .icon-tile-foto{position:relative;width:100%;max-width:92px;aspect-ratio:9/16;border:none;border-radius:0;overflow:hidden;margin-bottom:8px;background:var(--mori-surface);box-shadow: none;transition:box-shadow .2s ease,transform .2s ease;display:flex;align-items:center;justify-content:center;font-size:28px;line-height:1}
+    .item{display:flex;flex-direction:column;align-items:stretch;text-align:center;cursor:pointer;background:none;border:none;text-decoration:none;color:var(--mori-text);min-width:0;width:100%}
+    .icon-tile-foto{position:relative;width:100%;aspect-ratio:9/16;border:none;border-radius:8px;overflow:hidden;margin-bottom:10px;background:var(--mori-surface);box-shadow: none;transition:transform .2s ease;display:flex;align-items:center;justify-content:center;font-size:28px;line-height:1}
     .icon-tile-foto.tanpa-foto{background-color:var(--mori-surface);background-image:repeating-linear-gradient(45deg,#f2eee2 0 6px,#ece6d6 6px 12px);border:1px dashed var(--mori-text-2);border-color:var(--mori-text-2)}
     .icon-tile-foto.tile-admin{background:var(--mori-accent);box-shadow: none}
+    .item:active .icon-tile-foto{transform:translate(2px,2px)}
     .icon-tile-foto.tile-admin svg{width:36%;height:36%;color:var(--mori-bg)}
-    @media(max-width:768px){.icon-tile-foto{max-width:92px}.grid{gap:12px 10px}}
-    @media(max-width:480px){.icon-tile-foto{max-width:76px}.grid{gap:10px 8px}}
-    @media(max-width:360px){.icon-tile-foto{max-width:68px}.grid{gap:8px 6px}}
-    .item:hover .icon-tile-foto{box-shadow: none}
-    .item:active .icon-tile-foto{transform:translate(2px,2px);box-shadow: none}
     .item span{font-family:var(--mori-mono);font-size:11px;font-weight:700;line-height:1.3;color:var(--mori-text);letter-spacing:.8px;text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
     .item span.desc{color:var(--mori-text-2);font-size:10px;letter-spacing:.4px;-webkit-line-clamp:1}
     @media(min-width:768px){.item span{font-size:12px}}
+    .header-pin-btn{flex:0 0 auto;width:46px;height:46px;display:flex;align-items:center;justify-content:center;background:var(--mori-surface);border:1px solid var(--mori-line);border-radius:8px;color:var(--mori-text-2);cursor:pointer;padding:0;transition:transform .2s ease,background .2s ease,color .2s ease}
+    .header-pin-btn:active{transform:translate(2px,2px)}
+    .header-pin-btn[aria-pressed="true"]{background:var(--mori-text);color:var(--mori-bg);border-color:var(--mori-text)}
+    .header-pin-btn svg{width:18px;height:18px}
+    body.pin-mode .icon-tile-foto{border:1px dashed var(--mori-text-2)!important;cursor:pointer}
     .empty-msg{text-align:center;font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text-2);padding:40px 0}
   </style>
 </head>
@@ -51,6 +52,9 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
         <input id="searchInput" type="text" placeholder="Cari rak..." autocomplete="off" aria-label="Cari rak" />
       </div>
+      <button class="header-pin-btn" id="headerPinBtn" type="button" aria-label="Kelola Sematan Menu" title="Kelola Sematan Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"/></svg>
+      </button>
     </div>
     <div class="menu-wrap" id="menuWrap"></div>
   </div>
@@ -65,7 +69,13 @@
   const ADMIN={name:'ADMIN',link:'admin.html'};
   const menuWrap=document.getElementById('menuWrap');
   const searchInput=document.getElementById('searchInput');
+  const PIN_KEY='plano_pinned_v1';
   let raks=[];
+  let pinned=[]; try{ pinned=JSON.parse(localStorage.getItem(PIN_KEY))||[]; }catch{ pinned=[]; }
+  const isPinned=(n)=>pinned.includes(n);
+  let modeSemat=false;
+  const headerPinBtn=document.getElementById('headerPinBtn');
+  if(headerPinBtn){ headerPinBtn.addEventListener('click',(e)=>{ e.preventDefault(); e.stopPropagation(); modeSemat=!modeSemat; headerPinBtn.setAttribute('aria-pressed',modeSemat?'true':'false'); document.body.classList.toggle('pin-mode',modeSemat); }); }
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   function amanLink(v){v=String(v||'').trim();if(!v)return '#';if(/^[a-z][a-z0-9+.-]*:/i.test(v)||v.indexOf('//')===0||v.indexOf('\\')===0)return '#';return v;}
   function rakLink(name){ return 'shelving/rak/view.html?rak='+encodeURIComponent(String(name||'').trim()); }
@@ -76,7 +86,9 @@
     else if(item.foto_url) head='<div class="icon-tile-foto" style="background:none;padding:0"><img src="'+esc(fotoUrl(item.foto_url))+'" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.parentElement.classList.add(\'tanpa-foto\');this.remove()"/></div>';
     else head='<div class="icon-tile-foto tanpa-foto">🗄️</div>';
     const link=isAdmin?item.link:rakLink(item.name);
-    return '<a class="item" href="'+esc(amanLink(link))+'">'+head+'<span>'+esc(item.name)+'</span>'+(item.desc?'<span class="desc">'+esc(item.desc)+'</span>':'')+'</a>';
+    const pinnedClass='item'+(!isAdmin&&isPinned(item.name)?' pinned':'');
+    const dataName=isAdmin?'':' data-name="'+esc(String(item.name||''))+'"';
+    return '<a class="'+pinnedClass+'" href="'+esc(amanLink(link))+'"'+dataName+'>'+head+'<span>'+esc(item.name)+'</span>'+(item.desc?'<span class="desc">'+esc(item.desc)+'</span>':'')+'</a>';
   }
   function render(){
     const q=searchInput.value.trim().toLowerCase();
@@ -84,9 +96,23 @@
     let html='';
     const tiles=[];
     if(!q||'admin'.includes(q)) tiles.push(tileHtml(ADMIN,true));
-    raks.filter(cocok).forEach(r=>tiles.push(tileHtml(r,false)));
+    // Menu yang disematkan tampil di depan (urutan pin terjaga, sisanya tetap urut asli)
+    const rank=(r)=>{ const i=pinned.indexOf(String(r.name||'')); return i===-1?Number.MAX_SAFE_INTEGER:i; };
+    raks.filter(cocok).slice().sort((a,b)=>rank(a)-rank(b)).forEach(r=>tiles.push(tileHtml(r,false)));
     if(tiles.length) html+='<div class="grid">'+tiles.join('')+'</div>';
     menuWrap.innerHTML=html||'<div class="empty-msg">'+(raks.length?'Tidak ditemukan':'Belum ada rak — tambah di admin.html')+'</div>';
+    // Saat mode semat aktif: tap kartu = semat / lepas, bukan membuka halaman
+    menuWrap.querySelectorAll('.item').forEach(el=>{
+      el.addEventListener('click',(e)=>{
+        if(!modeSemat) return;
+        const name=el.dataset.name;
+        if(!name) return; // ADMIN tidak bisa disematkan
+        e.preventDefault(); e.stopPropagation();
+        if(isPinned(name)) pinned=pinned.filter(t=>t!==name); else pinned.push(name);
+        try{ localStorage.setItem(PIN_KEY,JSON.stringify(pinned)); }catch{}
+        render();
+      });
+    });
   }
   async function load(){
     menuWrap.innerHTML='<div class="empty-msg">Memuat...</div>';
