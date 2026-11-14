@@ -639,6 +639,99 @@
         color: var(--mori-text);
         letter-spacing: 1.2px;
       }
+      /* ===== TABEL KOMENTAR (SHEET): gaya sama
+         seperti tabel Admin Stok Opname ===== */
+      .comment-table-wrap {
+        border: 1.5px solid rgba(26,25,23,0.3);
+        border-radius: 10px;
+        background: var(--mori-bg);
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .comment-table-wrap::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+      }
+      .comment-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        table-layout: fixed;
+        background: var(--mori-bg);
+      }
+      .comment-table th, .comment-table td {
+        padding: 0 12px;
+        border-bottom: 1px solid var(--mori-line);
+        text-align: left;
+        vertical-align: middle;
+      }
+      .comment-table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: var(--mori-surface);
+        color: var(--mori-text-2);
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        height: 34px;
+        padding: 0 12px;
+        border-bottom: 1px solid var(--mori-line);
+        white-space: nowrap;
+      }
+      .comment-table tbody td {
+        height: 44px;
+        background: var(--mori-bg);
+      }
+      .comment-table tbody tr:last-child td { border-bottom: 0; }
+      .comment-table tbody tr:hover td { background: var(--mori-surface); }
+      .comment-table .cmt-menu {
+        font-weight: 700;
+        text-transform: uppercase;
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        width: 128px;
+        overflow-wrap: break-word;
+      }
+      .comment-table .cmt-text {
+        color: var(--mori-text);
+        overflow-wrap: break-word;
+        text-transform: uppercase;
+      }
+      .comment-table .cmt-date {
+        font-size: 9px;
+        color: var(--mori-text-2);
+        font-family: var(--mori-mono);
+        margin-top: 2px;
+        text-transform: none;
+      }
+      .comment-table .cmt-action {
+        text-align: right;
+        white-space: nowrap;
+        width: 72px;
+      }
+      .comment-table .cmt-btn {
+        background: var(--mori-surface);
+        color: var(--mori-text);
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: none;
+      }
+      .comment-table .cmt-btn svg {
+        width: 14px;
+        height: 14px;
+      }
       .sheet-note {
         background: var(--mori-surface);
         border: 1px solid var(--mori-line);
@@ -1570,21 +1663,21 @@
         if (filtered.length === 0) {
           html += '<div style="color:#6e6a64;font-size:12px;text-align:center;padding:20px 0;font-family:var(--mori-mono, monospace)">Belum ada komentar.</div>';
         } else {
-          html += '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
-          html += '<thead><tr style="border-bottom:1px solid rgba(26,25,23,0.2);text-align:left;font-family:var(--mori-mono, monospace);font-size:10px;color:#6e6a64;"><th style="padding:6px;">Menu</th><th style="padding:6px;">Komentar</th><th style="padding:6px;text-align:right;">Aksi</th></tr></thead>';
+          html += '<div class="comment-table-wrap"><table class="comment-table">';
+          html += '<thead><tr><th>Menu</th><th>Komentar</th><th style="text-align:right">Aksi</th></tr></thead>';
           html += '<tbody>';
           filtered.forEach(c => {
             const t = new Date(c.created_at || Date.now()).toLocaleDateString('id-ID', { dateStyle: 'short' });
             const mObj = menus.find(m => slugify(m.name) === c.slug || (m.name || '').toLowerCase() === (c.menu_name || '').toLowerCase());
             const linkUrl = mObj ? (mObj.link || ('pages/item-' + c.slug + '.html')) : ('pages/item-' + c.slug + '.html');
             const menuTitle = c.menu_name || c.slug || '';
-            html += '<tr style="border-bottom:1px solid rgba(26,25,23,0.08);vertical-align:top;">';
-            html += '<td style="padding:8px 6px;font-weight:800;text-transform:uppercase;font-family:var(--mori-mono, monospace);font-size:10.5px;color:#1a1917;">' + escHtml(menuTitle) + '</td>';
-            html += '<td style="padding:8px 6px;color:#1a1917;word-break:break-word;text-transform:uppercase;">' + escHtml(c.comment) + '<div style="font-size:9px;color:#6e6a64;font-family:var(--mori-mono, monospace);margin-top:2px;text-transform:none;">' + t + '</div></td>';
-            html += '<td style="padding:8px 6px;text-align:right;white-space:nowrap;"><a href="' + linkUrl + '" style="font-size:10px;font-weight:700;text-decoration:none;background:#1a1917;color:#fff;padding:4px 8px;border-radius:6px;font-family:var(--mori-mono, monospace);display:inline-block;">Buka →</a></td>';
+            html += '<tr>';
+            html += '<td class="cmt-menu">' + escHtml(menuTitle) + '</td>';
+            html += '<td class="cmt-text">' + escHtml(c.comment) + '<div class="cmt-date">' + t + '</div></td>';
+            html += '<td class="cmt-action"><a href="' + linkUrl + '" class="cmt-btn" title="Buka" aria-label="Buka"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg></a></td>';
             html += '</tr>';
           });
-          html += '</tbody></table>';
+          html += '</tbody></table></div>';
         }
         html += '</div>';
 
