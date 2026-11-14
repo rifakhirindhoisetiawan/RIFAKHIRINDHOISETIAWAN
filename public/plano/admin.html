@@ -276,7 +276,7 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 // supaya kegagalannya kelihatan dan tidak menggantung.
 let supabase=null;
 try{
-  ({supabase}=await import('../../src/js/supabase.js'));
+  const mod = await import('../../src/js/supabase.js'); supabase = mod.supabase;
 }catch(e){
   const pesan='Gagal memuat Supabase. Cek koneksi internet — halaman ini butuh CDN jsdelivr. ('+(e&&e.message||e)+')';
   console.error('[plano admin]',e);
