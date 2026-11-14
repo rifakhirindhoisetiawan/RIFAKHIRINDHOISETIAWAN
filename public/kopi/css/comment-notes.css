@@ -1,0 +1,120 @@
+/* public/kopi/css/comment-notes.css
+   Daftar komentar / catatan di pop-up "Catat / Komentar" pada halaman
+   detail menu — bergaya sama seperti tabel Admin Stok Opname:
+   bingkai 1.5px solid, radius 10px, header --mori-surface, hover --mori-surface,
+   tombol krem (aksi) / merah (hapus). */
+
+.cmt-table-wrap {
+  border: 1.5px solid rgba(26,25,23,0.3);
+  border-radius: 10px;
+  background: var(--mori-bg);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.cmt-table-wrap::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+.cmt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  table-layout: fixed;
+  background: var(--mori-bg);
+}
+.cmt-table th,
+.cmt-table td {
+  padding: 0 12px;
+  border-bottom: 1px solid var(--mori-line);
+  text-align: left;
+  vertical-align: middle;
+}
+.cmt-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--mori-surface);
+  color: var(--mori-text-2);
+  font-family: var(--mori-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  height: 34px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--mori-line);
+  white-space: nowrap;
+}
+.cmt-table tbody td {
+  height: 44px;
+  background: var(--mori-bg);
+}
+.cmt-table tbody tr:last-child td { border-bottom: 0; }
+.cmt-table tbody tr:hover td { background: var(--mori-surface); }
+
+.cmt-table .cmt-no {
+  width: 44px;
+  text-align: center;
+  font-family: var(--mori-mono);
+  font-size: 11px;
+  color: var(--mori-text-2);
+}
+.cmt-table .cmt-text {
+  color: var(--mori-text);
+  overflow-wrap: break-word;
+  text-transform: uppercase;
+}
+.cmt-table .cmt-date {
+  font-size: 9px;
+  color: var(--mori-text-2);
+  font-family: var(--mori-mono);
+  margin-top: 2px;
+  text-transform: none;
+}
+.cmt-table .cmt-action {
+  text-align: right;
+  white-space: nowrap;
+  width: 96px;
+}
+.cmt-table .cmt-acts {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+.cmt-table .cmt-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: var(--mori-surface);
+  color: var(--mori-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+.cmt-table .cmt-btn:active {
+  transform: translate(2px, 2px);
+}
+.cmt-table .cmt-btn-danger {
+  background: var(--mori-danger);
+  color: #fff;
+}
+.cmt-table .cmt-btn svg {
+  width: 14px;
+  height: 14px;
+}
+.cmt-table .cmt-empty {
+  padding: 26px 12px;
+  text-align: center;
+  font-family: var(--mori-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mori-text-2);
+}

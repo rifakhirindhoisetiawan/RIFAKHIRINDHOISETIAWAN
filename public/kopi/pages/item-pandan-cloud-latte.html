@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://xsacwgxxoptdrgbbzzib.supabase.co" crossorigin />
     <link rel="dns-prefetch" href="https://xsacwgxxoptdrgbbzzib.supabase.co" />
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" href="../css/comment-notes.css?v=1" />
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       /* ============================================================
@@ -336,7 +337,7 @@
 
       function renderComments(list) {
         if (!list.length) {
-          commentList.innerHTML = '<div class="empty" style="padding:12px 0;font-size:12px;color:var(--mori-text-2);">Belum ada catatan.</div>';
+          commentList.innerHTML = '<div class="cmt-empty">Belum ada catatan.</div>';
           return;
         }
         const seen = new Set();
@@ -346,17 +347,18 @@
           seen.add(key);
           return true;
         });
-        commentList.innerHTML = uniqList.map((c) => {
-          const t = new Date(c.created_at || Date.now()).toLocaleDateString('id-ID', { dateStyle: 'short' });
-          return '<div style="background:var(--mori-surface);border-radius:4px;padding:8px 10px;display:flex;align-items:center;gap:8px;">' +
-            '<div style="flex:1;font-size:13px;color:var(--mori-text);word-break:break-word;text-transform:uppercase;">' + escHtml(c.content) + '</div>' +
-            '<span style="font-size:10px;color:var(--mori-text-2);font-family:var(--mori-mono);flex-shrink:0;">' + t + '</span>' +
-            '<div style="display:flex;gap:4px;flex-shrink:0;">' +
-            '<button type="button" class="edit-note-btn" data-content="' + escHtml(c.content) + '" data-id="' + (c.id || '') + '" title="Edit" aria-label="Edit" style="width:36px; height:36px; background:#1a1917; color:#fff; border:none; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 3 0 1 1 4 4L7.5 20.5 4 22l1.5-3.5L17 3z"></path></svg></button>' +
-            '<button type="button" class="del-note-btn" data-content="' + escHtml(c.content) + '" data-id="' + (c.id || '') + '" title="Hapus" aria-label="Hapus" style="width:36px; height:36px; background:#1a1917; color:#fff; border:none; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 6 6 18"></polyline><polyline points="6 6 18 18"></polyline></svg></button>' +
-            '</div>' +
-            '</div>';
-        }).join('');
+        commentList.innerHTML = '<div class="cmt-table-wrap"><table class="cmt-table"><thead><tr><th>No</th><th>Catatan</th><th style="text-align:right">Aksi</th></tr></thead><tbody>' +
+          uniqList.map((c, i) => {
+            const t = new Date(c.created_at || Date.now()).toLocaleDateString('id-ID', { dateStyle: 'short' });
+            return '<tr>' +
+              '<td class="cmt-no">' + (i + 1) + '</td>' +
+              '<td class="cmt-text">' + escHtml(c.content) + '<div class="cmt-date">' + t + '</div></td>' +
+              '<td class="cmt-action"><div class="cmt-acts">' +
+              '<button type="button" class="edit-note-btn cmt-btn" data-content="' + escHtml(c.content) + '" data-id="' + (c.id || '') + '" title="Edit" aria-label="Edit"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 3 0 1 1 4 4L7.5 20.5 4 22l1.5-3.5L17 3z"></path></svg></button>' +
+              '<button type="button" class="del-note-btn cmt-btn cmt-btn-danger" data-content="' + escHtml(c.content) + '" data-id="' + (c.id || '') + '" title="Hapus" aria-label="Hapus"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 6 6 18"></polyline><polyline points="6 6 18 18"></polyline></svg></button>' +
+              '</div></td></tr>';
+          }).join('') +
+        '</tbody></table></div>';
 
         commentList.querySelectorAll('.del-note-btn').forEach(btn => {
           btn.addEventListener('click', async () => {
