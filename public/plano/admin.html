@@ -41,7 +41,7 @@
     /* Baris cari: kotak pencarian di dalam tabel, sama seperti Admin Stok Opname
        (baris paling atas). Harus tbody sendiri karena renderList()
        mengosongkan #list. */
-    .menu-table tbody.cari-body td.cari-sel{padding:0 12px;background:var(--mori-surface);border-bottom:1px solid var(--mori-line)}
+    .menu-table tbody.cari-body td.cari-sel{padding:0 12px;background:var(--mori-surface);border-bottom:0}
     .menu-table tbody.cari-body .cari-dalam{display:flex;align-items:center;gap:8px;width:100%;height:44px}
     .menu-table tbody.cari-body .cari-dalam svg{flex-shrink:0;color:var(--mori-text-2)}
     .menu-table tbody.cari-body input.cari{flex:1;min-width:0;height:44px;padding:0;background:transparent;border:none;border-radius:0;outline:none;font:inherit;font-size:13px;font-weight:700;text-transform:uppercase;color:var(--mori-text)}
@@ -50,7 +50,8 @@
     /* Baris tambah: input "Nama Rak" di dalam tabel (bukan kotak terpisah di atas) */
     .menu-table tbody.tambah td{background:var(--mori-surface)}
     .menu-table tbody.tambah:hover td{background:#efe9da}
-    .menu-table tbody.tambah .cell-input{height:44px;background:transparent;border:none;padding:0;font-size:12px;text-transform:uppercase}
+    .menu-table tbody.tambah td.c-aksi .acts{justify-content:center}
+    .menu-table tbody.tambah .cell-input{height:44px;padding:0;background:transparent;border:none;border-radius:0;outline:none;font:inherit;font-size:13px;font-weight:700;line-height:1;text-align:left;text-transform:uppercase;color:var(--mori-text)}
     .menu-table tbody.tambah .cell-input:focus{background:transparent;box-shadow:none;outline:none}
     .c-no{width:44px;text-align:center;font-family:var(--mori-mono);color:#6e6a64}
     .c-nama{overflow:hidden}
