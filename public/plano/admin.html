@@ -237,7 +237,7 @@
     </div>
   </section>
 
-  <section class="sec" id="tambahRow" hidden style="display:none!important">
+  <section class="sec" id="tambahRow" hidden>
     <div class="form-head">
       <div class="form-title">TAMBAH PRODUK</div>
       <button class="pg-toggle" id="f_batal" type="button">BATAL</button>
@@ -270,24 +270,10 @@
   </section>
 
   <section class="sec">
-    <div class="row" style="display:none!important"><button class="btn-add wide" type="button" id="btnBuatProduk">+ BUAT PRODUK</button></div>
+    <div class="row"><button class="btn-add wide" type="button" id="btnBuatProduk">+ BUAT PRODUK</button></div>
     <div class="table-wrap">
       <table class="menu-table detail">
-        <thead><tr><th class="c-no">No</th><th class="c-nama g-start">Produk</th><th class="c-plu">PLU</th><th class="c-barcode">Barcode</th><th class="c-shelving g-start">Shelving</th><th class="c-baris">Baris</th><th class="c-rh g-start" title="Umur barang dalam hari">RH</th><th class="c-tgl" title="Tanggal kedaluwarsa = hari ini + RH">KEDALUWARSA</th><th class="c-foto g-start">Foto</th><th class="c-aksi"></th></tr></thead>
-        <tbody class="tambah">
-          <tr>
-            <td class="c-no"></td>
-            <td class="c-nama g-start"><input class="cell-input mono" type="text" id="a_name" placeholder="NAMA PRODUK" autocomplete="off" /></td>
-            <td class="c-plu"><input class="cell-input mono" type="text" id="a_plu" placeholder="PLU" inputmode="numeric" autocomplete="off" /></td>
-            <td class="c-barcode"><input class="cell-input mono" type="text" id="a_barcode" placeholder="BARCODE" autocomplete="off" /></td>
-            <td class="c-shelving g-start"><input class="cell-input mono" type="text" id="a_shelving" placeholder="SHELVING" autocomplete="off" /></td>
-            <td class="c-baris"><input class="cell-input mono" type="text" id="a_baris" placeholder="BARIS" inputmode="numeric" autocomplete="off" /></td>
-            <td class="c-rh g-start"><input class="cell-input mono" type="text" id="a_rh" placeholder="RH" inputmode="numeric" autocomplete="off" /></td>
-            <td class="c-tgl" id="a_tgl">&mdash;</td>
-            <td class="c-foto g-start"></td>
-            <td class="c-aksi"><div class="acts"><button class="btn-add" type="button" id="a_add" title="Simpan produk" aria-label="Simpan produk">+</button></div></td>
-          </tr>
-        </tbody>
+        <thead><tr><th class="c-no">No</th><th class="c-nama g-start">Produk</th><th class="c-plu">PLU</th><th class="c-barcode">Barcode</th><th class="c-shelving g-start">Shelving</th><th class="c-baris">Baris</th><th class="c-rh g-start" title="Umur barang dalam hari">RH</th><th class="c-tgl" title="Tanggal kedaluwarsa = hari ini + RH">KEDALUWARSA</th><th class="c-foto g-start">Foto</th><th class="c-aksi"><button class="pg-toggle small" id="pgTambah" type="button" title="Tampilkan form tambah produk">+</button></th></tr></thead>
         <tbody id="planoList"><tr><td colspan="10"><div class="empty">Memuat...</div></td></tr></tbody>
       </table>
     </div>
