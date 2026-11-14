@@ -50,8 +50,9 @@
     /* Baris tambah: input "Nama Rak" di dalam tabel (bukan kotak terpisah di atas) */
     .menu-table tbody.tambah td{background:var(--mori-surface)}
     .menu-table tbody.tambah:hover td{background:#efe9da}
-    .menu-table tbody.tambah td.c-aksi .acts{justify-content:center}
-    .menu-table tbody.tambah .cell-input{height:44px;padding:0;background:transparent;border:none;border-radius:0;outline:none;font:inherit;font-size:13px;font-weight:700;line-height:1;text-align:left;text-transform:uppercase;color:var(--mori-text)}
+    .menu-table tbody.tambah .cell-input{height:44px;padding:0;background:transparent;border:none;border-radius:0;outline:none;font:inherit;font-size:13px;font-weight:600;line-height:1;text-align:left;color:var(--mori-text)}
+    .menu-table tbody.tambah .cell-input::placeholder{color:var(--mori-text-2)}
+    .menu-table tbody.tambah .btn-add{margin:0 auto}
     .menu-table tbody.tambah .cell-input:focus{background:transparent;box-shadow:none;outline:none}
     .c-no{width:44px;text-align:center;font-family:var(--mori-mono);color:#6e6a64}
     .c-nama{overflow:hidden}
@@ -227,7 +228,7 @@
             <td class="c-no"></td>
             <td class="c-nama"><input class="cell-input" id="f_name" type="text" placeholder="Nama Rak" autocomplete="off" aria-label="Nama rak" /></td>
             <td class="c-foto"></td>
-            <td class="c-aksi"><div class="acts"><button class="btn-add" type="button" id="f_add" title="Tambah rak" aria-label="Tambah rak">+</button></div></td>
+            <td class="c-aksi"><button class="btn-add" type="button" id="f_add" title="Tambah rak" aria-label="Tambah rak">+</button></td>
           </tr>
         </tbody>
         <tbody id="list"><tr><td colspan="4"><div class="empty">Memuat...</div></td></tr></tbody>
