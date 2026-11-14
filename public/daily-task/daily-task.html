@@ -738,7 +738,9 @@
             .select('label')
             .order('dibuat', { ascending: true });
           if (error) return;
-          const server = (data || []).map(r => r.label).filter(Boolean);
+          // Duplikasi label (mis. dua perangkat menyematkan menu yang sama
+          // sebelum realtime berjalan) dibersihkan di sini.
+          const server = [...new Set((data || []).map(r => r.label).filter(Boolean))];
           try {
             if (localStorage.getItem(PIN_MIGRASI_KEY) !== '1') {
               const lokal = loadPins();
@@ -885,6 +887,25 @@
       searchInput.addEventListener('input', renderGrid);
       renderGrid();
       loadFromSupabase();
+
+      // Realtime untuk pin: sematan dari perangkat lain langsung muncul
+      // di semua halaman yang sedang terbuka (debounce 400ms).
+      let pinRtTimer = null;
+      try {
+        supabase
+          .channel('daily_task_pins_changes')
+          .on('postgres_changes', { event: '*', schema: 'public', table: PIN_TABLE }, () => {
+            clearTimeout(pinRtTimer);
+            pinRtTimer = setTimeout(() => syncPins(), 400);
+          })
+          .subscribe();
+      } catch (e) {
+        console.warn('Realtime pin tidak aktif', e.message);
+      }
+      // Cadangan: sinkron lagi saat tab/halaman terlihat kembali.
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') syncPins();
+      });
 
       // Realtime di-debounce: banyak event beruntun cukup fetch sekali.
       let rtTimer = null;
