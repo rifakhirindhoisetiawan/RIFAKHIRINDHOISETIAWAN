@@ -52,7 +52,7 @@ Semua halaman admin memakai pola tabel yang sama dengan `public/stok-opname/stoc
 
 ## Catatan per modul (hasil penyamaan UI)
 
-- **`public/plano/admin.html`** — tabel Daftar Rak disamakan penuh dengan Admin Stok Opname: baris **CARI RAK** (tanpa ikon kaca pembesar) dan **NAMA RAK** (input di ujung kiri, tombol `+` di ujung kanan) menyatu jadi satu blok krem di dalam tabel; kolom No/Foto/Aksi `44/78/116px`; foto kotak `44×44`; tombol aksi krem radius `8px`; ikon `↑ ✎ ✕` sudah benar.
+- **`public/plano/admin.html`** — tabel Daftar Rak disamakan penuh dengan Admin Stok Opname: baris **CARI RAK** (tanpa ikon kaca pembesar) dan **NAMA RAK** (input di ujung kiri, tombol `+` di ujung kanan) menyatu jadi satu blok krem di dalam tabel; kolom No/Foto/Aksi `44/78/116px`; foto kotak `44×44`; tombol aksi krem radius `8px`; ikon `↑ ✎ ✕` sudah benar. Tabel detail produk admin planogram diperbarui: garis pemisah kolom dihilangkan, baris tambah produk menyatu langsung di dalam tabel produk (`tbody.tambah`) tanpa kotak/border, dan kolom kedaluwarsa dibersihkan dari latar bergaris.
 - **`public/plano/index.html`** — menu rak 4 kolom (tile penuh, radius `8px`) + tombol **semat** di header; menu yang disematkan naik ke baris atas.
 - **`public/daily-task/daily-task.html`** — semat menu **realtime**: tabel `daily_task_pins` disinkron ke Supabase (bisa dilihat semua perangkat), bukan hanya `localStorage`.
 - **`public/daily-task/utility/*`** — tabel kegiatan: baris cari + baris tulis di dalam tabel, dan **kegiatan yang dicentang otomatis turun ke bawah** (tidak dicentang naik lagi ke paling atas). Status centang disimpan di `localStorage` per periode.

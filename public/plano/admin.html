@@ -51,10 +51,11 @@
     /* Baris tambah: input "Nama Rak" di dalam tabel (bukan kotak terpisah di atas) */
     .menu-table tbody.tambah td{background:var(--mori-surface)}
     .menu-table tbody.tambah:hover td{background:var(--mori-surface)}
-    .menu-table tbody.tambah .cell-input{height:44px;padding:0;background:transparent;border:none;border-radius:0;outline:none;font:inherit;font-size:13px;font-weight:700;line-height:1;text-align:left;text-transform:uppercase;color:var(--mori-text)}
+    .menu-table:not(.detail) tbody.tambah .cell-input{height:44px;padding:0;background:transparent;border:none;border-radius:0;outline:none;font:inherit;font-size:13px;font-weight:700;line-height:1;text-align:left;text-transform:uppercase;color:var(--mori-text)}
     .menu-table tbody.tambah .cell-input::placeholder{color:var(--mori-text-2)}
     .menu-table tbody.tambah td.c-aksi .acts{justify-content:flex-end}
-    .menu-table tbody.tambah .cell-input:focus{background:transparent;box-shadow:none;outline:none}
+    .menu-table:not(.detail) tbody.tambah .cell-input:focus{background:transparent;box-shadow:none;outline:none}
+    .menu-table.detail tbody.tambah .cell-input{height:28px;padding:0 3px;background:transparent!important;border:none!important;border-radius:0;outline:none;font:inherit;font-size:11px;font-weight:700;color:var(--mori-text)}
     .c-no{width:44px;text-align:center;font-family:var(--mori-mono);color:#6e6a64}
     .c-nama{overflow:hidden}
     .menu-table .nama{font-family:var(--mori-mono);font-size:11px;font-weight:700;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1a1917}
@@ -145,10 +146,10 @@
     .menu-table.detail td.c-foto{display:flex;align-items:center;justify-content:center;gap:8px}
     .menu-table.detail td.c-foto .thumb{margin:0;width:44px;max-width:44px}
     .menu-table.detail .c-aksi{width:96px}
-    .menu-table.detail th.g-start,.menu-table.detail td.g-start{border-left:1px solid rgba(26,25,23,.22)}
+    .menu-table.detail th.g-start,.menu-table.detail td.g-start{border-left:none}
     /* ED dibaca, bukan diketik: latar bergaris supaya tidak dikira isian. */
-    .c-tgl{background:repeating-linear-gradient(45deg,rgba(26,25,23,.045) 0 5px,rgba(26,25,23,.075) 5px 10px)}
-    .c-tgl .tgl{display:block;font-family:var(--mori-mono);font-size:8px;font-weight:700;letter-spacing:.2px;color:#6e6a64;line-height:1.3}
+    .c-tgl{background:transparent}
+    .c-tgl .tgl{display:block;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.2px;color:#1a1917;line-height:1.2;padding:0 4px}
     .c-tgl .tgl.hari{color:#1a1917}
     .c-tgl .tgl.hampir{color:#b45309}
     .c-tgl .tgl.padat{color:#b91c1c}
@@ -156,6 +157,7 @@
     .menu-table.detail td .val{display:block;font-family:var(--mori-mono);font-size:10px;font-weight:700;line-height:1.2;color:#1a1917;padding:0 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .menu-table.detail td .v-nama{font-size:12px;font-weight:700}
     .menu-table.detail td .cell-input{display:none}
+    .menu-table.detail tbody.tambah td .cell-input{display:block!important;width:100%}
     .menu-table.detail tr.edit td .cell-input{display:block;width:100%}
     .menu-table.detail tr.edit td .val{display:none}
     .menu-table.detail tr.edit td{background:#fffdf7}
@@ -199,6 +201,21 @@
       .sec .menu-table.detail tr[data-id] td.c-aksi .acts{justify-content:flex-end;gap:5px}
       .sec .menu-table.detail tr.pilih td.c-aksi{background:#efe9da}
       .sec .menu-table.detail .cell-input{height:28px;font-size:10px;padding:0 5px}
+      .sec .menu-table.detail tbody.tambah{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border:1px solid var(--mori-line);background:#fffbf2;box-shadow:none;padding:5px 8px;margin-bottom:6px;min-height:44px}
+      .sec .menu-table.detail tbody.tambah::-webkit-scrollbar{display:none}
+      .sec .menu-table.detail tbody.tambah tr{display:contents}
+      .sec .menu-table.detail tbody.tambah td{flex:0 0 auto;width:auto;height:auto;padding:0;border:none;min-width:0;background:transparent}
+      .sec .menu-table.detail tbody.tambah td.c-no{order:1;min-width:18px}
+      .sec .menu-table.detail tbody.tambah td.c-nama{order:2;flex:1 1 130px;min-width:130px}
+      .sec .menu-table.detail tbody.tambah td.c-plu{order:3;width:56px}
+      .sec .menu-table.detail tbody.tambah td.c-barcode{order:4;width:70px}
+      .sec .menu-table.detail tbody.tambah td.c-shelving{order:5;width:60px}
+      .sec .menu-table.detail tbody.tambah td.c-baris{order:6;width:38px}
+      .sec .menu-table.detail tbody.tambah td.c-rh{order:7;width:40px}
+      .sec .menu-table.detail tbody.tambah td.c-tgl{order:8;display:block;width:auto}
+      .sec .menu-table.detail tbody.tambah td.c-foto{order:9;display:flex;align-items:center;gap:8px}
+      .sec .menu-table.detail tbody.tambah td.c-aksi{order:10;display:block;position:sticky;right:0;background:#fffbf2;z-index:2;border:none;border-left:1px solid rgba(26,25,23,.16);box-shadow:none;padding:0 0 0 6px;width:auto}
+      .sec .menu-table.detail tbody.tambah td.c-aksi .acts{justify-content:flex-end;gap:5px}
       .sec .menu-table.detail tr[data-id] .c-nama .cell-input{height:28px;font-size:11px;font-weight:700}
       .sec .menu-table.detail tr[data-id] td .val{font-size:10px}
       .sec .menu-table.detail tr[data-id] td .v-nama{font-size:11px}
@@ -237,54 +254,24 @@
     </div>
   </section>
 
-  <section class="sec" id="tambahRow" hidden style="display:none!important">
-    <div class="form-head">
-      <div class="form-title">TAMBAH PRODUK</div>
-      <button class="pg-toggle" id="f_batal" type="button">BATAL</button>
-    </div>
-    <div class="form-body">
-      <fieldset class="fset">
-        <legend>PRODUK</legend>
-        <div class="fgrid">
-          <label><span>PRODUK</span><input class="cell-input mono" type="text" id="a_name" placeholder="Nama produk" autocomplete="off" /></label>
-          <label><span>PLU</span><input class="cell-input mono" type="text" id="a_plu" placeholder="PLU" inputmode="numeric" autocomplete="off" /></label>
-          <label><span>BARCODE</span><input class="cell-input mono" type="text" id="a_barcode" placeholder="Barcode" autocomplete="off" /></label>
-        </div>
-      </fieldset>
-      <fieldset class="fset">
-        <legend>PENEMPATAN</legend>
-        <div class="fgrid">
-          <label><span>SHELVING</span><input class="cell-input mono" type="text" id="a_shelving" placeholder="Shelving" autocomplete="off" /></label>
-          <label><span>BARIS</span><input class="cell-input mono" type="text" id="a_baris" placeholder="Baris" inputmode="numeric" autocomplete="off" /></label>
-        </div>
-      </fieldset>
-      <fieldset class="fset">
-        <legend>KEDALUWARSA</legend>
-        <div class="fgrid">
-          <label><span>RH / HARI</span><input class="cell-input mono" type="text" id="a_rh" placeholder="30" inputmode="numeric" autocomplete="off" /></label>
-          <label><span>ED</span><span class="tgl" id="a_tgl">&mdash;</span></label>
-        </div>
-      </fieldset>
-      <button class="btn-add wide" type="button" id="a_add">SIMPAN PRODUK</button>
-    </div>
-  </section>
-
   <section class="sec">
-    <div class="row" style="display:none!important"><button class="btn-add wide" type="button" id="btnBuatProduk">+ BUAT PRODUK</button></div>
-    <div class="table-wrap">
+    <div class="sec-head">
+      <div class="sec-title">DAFTAR PRODUK &bull; <span id="rakInfo" style="color:var(--mori-text-2);font-size:10px">PILIH RAK DI ATAS</span></div>
+    </div>
+    <div class="table-wrap" style="margin-top:10px">
       <table class="menu-table detail">
-        <thead><tr><th class="c-no">No</th><th class="c-nama g-start">Produk</th><th class="c-plu">PLU</th><th class="c-barcode">Barcode</th><th class="c-shelving g-start">Shelving</th><th class="c-baris">Baris</th><th class="c-rh g-start" title="Umur barang dalam hari">RH</th><th class="c-tgl" title="Tanggal kedaluwarsa = hari ini + RH">KEDALUWARSA</th><th class="c-foto g-start">Foto</th><th class="c-aksi"></th></tr></thead>
+        <thead><tr><th class="c-no">No</th><th class="c-nama">Produk</th><th class="c-plu">PLU</th><th class="c-barcode">Barcode</th><th class="c-shelving">Shelving</th><th class="c-baris">Baris</th><th class="c-rh" title="Umur barang dalam hari">RH</th><th class="c-tgl" title="Tanggal kedaluwarsa = hari ini + RH">KEDALUWARSA</th><th class="c-foto">Foto</th><th class="c-aksi"></th></tr></thead>
         <tbody class="tambah">
           <tr>
             <td class="c-no"></td>
-            <td class="c-nama g-start"><input class="cell-input mono" type="text" id="a_name" placeholder="NAMA PRODUK" autocomplete="off" /></td>
+            <td class="c-nama"><input class="cell-input mono" type="text" id="a_name" placeholder="NAMA PRODUK" autocomplete="off" /></td>
             <td class="c-plu"><input class="cell-input mono" type="text" id="a_plu" placeholder="PLU" inputmode="numeric" autocomplete="off" /></td>
             <td class="c-barcode"><input class="cell-input mono" type="text" id="a_barcode" placeholder="BARCODE" autocomplete="off" /></td>
-            <td class="c-shelving g-start"><input class="cell-input mono" type="text" id="a_shelving" placeholder="SHELVING" autocomplete="off" /></td>
+            <td class="c-shelving"><input class="cell-input mono" type="text" id="a_shelving" placeholder="SHELVING" autocomplete="off" /></td>
             <td class="c-baris"><input class="cell-input mono" type="text" id="a_baris" placeholder="BARIS" inputmode="numeric" autocomplete="off" /></td>
-            <td class="c-rh g-start"><input class="cell-input mono" type="text" id="a_rh" placeholder="RH" inputmode="numeric" autocomplete="off" /></td>
+            <td class="c-rh"><input class="cell-input mono" type="text" id="a_rh" placeholder="RH" inputmode="numeric" autocomplete="off" /></td>
             <td class="c-tgl" id="a_tgl">&mdash;</td>
-            <td class="c-foto g-start"></td>
+            <td class="c-foto"></td>
             <td class="c-aksi"><div class="acts"><button class="btn-add" type="button" id="a_add" title="Simpan produk" aria-label="Simpan produk">+</button></div></td>
           </tr>
         </tbody>
@@ -423,14 +410,14 @@ function cellInput(id,k,val,ph){
 function rowPlano(r,i){
   const val=(k,v,cls)=>'<span class="val '+(cls||'')+'">'+esc(v||'—')+'</span>'+cellInput(r.id,k,v,'');
   let td='';
-  td+='<td class="c-nama g-start" data-label="Produk">'+val('name',r.name,'v-nama')+'</td>';
+  td+='<td class="c-nama" data-label="Produk">'+val('name',r.name,'v-nama')+'</td>';
   td+='<td class="c-plu" data-label="PLU">'+val('plu',r.plu)+'</td>';
   td+='<td class="c-barcode" data-label="Barcode">'+val('barcode',r.barcode)+'</td>';
-  td+='<td class="c-shelving g-start" data-label="Shelving">'+val('shelving',r.shelving)+'</td>';
+  td+='<td class="c-shelving" data-label="Shelving">'+val('shelving',r.shelving)+'</td>';
   td+='<td class="c-baris" data-label="Baris">'+val('baris',r.baris)+'</td>';
-  td+='<td class="c-rh g-start" data-label="RH">'+val('rh',r.rh)+'</td>';
+  td+='<td class="c-rh" data-label="RH">'+val('rh',r.rh)+'</td>';
   td+='<td class="c-tgl" data-label="KEDALUWARSA" data-tgl-for="'+r.id+'">'+tglHtml(r.rh)+'</td>';
-  td+='<td class="c-foto g-start" data-label="Foto"><div class="thumb'+(r.foto_url?'':' kosong')+'">'+(r.foto_url?'<img src="'+esc(fotoBaru(r.foto_url))+'"/>':'')+'</div>'
+  td+='<td class="c-foto" data-label="Foto"><div class="thumb'+(r.foto_url?'':' kosong')+'">'+(r.foto_url?'<img src="'+esc(fotoBaru(r.foto_url))+'"/>':'')+'</div>'
      +'<button class="ico" type="button" data-foto2="'+r.id+'" title="Upload foto" aria-label="Upload foto">↑</button></td>';
   td+='<td class="c-aksi" data-label=""><div class="acts">'
      +'<button class="ico" type="button" data-edit2="'+r.id+'" title="Edit produk" aria-label="Edit produk">✎</button>'
@@ -462,12 +449,15 @@ function render(){
 }
 let rakAktif='';
 try{ rakAktif=localStorage.getItem('plano_rak')||''; }catch{}
+const rakInfo=document.getElementById('rakInfo');
 function setRakAktif(nama){
   rakAktif=nama||'';
   try{ if(rakAktif) localStorage.setItem('plano_rak',rakAktif); }catch{}
   listEl.querySelectorAll('tr[data-rak]').forEach(tr=>tr.classList.toggle('aktif',tr.dataset.rak===rakAktif));
+  if(rakInfo) rakInfo.textContent=rakAktif?'RAK: '+rakAktif:'PILIH RAK DI ATAS';
   renderPlano(lastFiltered);
 }
+if(rakInfo) rakInfo.textContent=rakAktif?'RAK: '+rakAktif:'PILIH RAK DI ATAS';
 function fokusRak(nama){
   const key=String(nama||'').trim().toUpperCase();
   planoList.querySelectorAll('.pilih').forEach(t=>t.classList.remove('pilih'));
@@ -650,10 +640,6 @@ async function hapusProduk(id){
   if(error){ setHint(tampilErr(error)); return; }
   await load();
 }
-/* Panel tambah produk disembunyikan supaya tabel produk tetap bersih. Muncul
-   hanya saat tombol "+ TAMBAH" ditekan, dan mengunci rak yang sedang aktif. */
-const tambahRow=document.getElementById('tambahRow'), pgTambah=document.getElementById('pgTambah'), btnBuatProduk=document.getElementById('btnBuatProduk');
-const fBatal=document.getElementById('f_batal');
 function segarkanTgl(){
   const a=document.getElementById('a_rh'), out=document.getElementById('a_tgl');
   if(!a||!out) return;
@@ -661,27 +647,17 @@ function segarkanTgl(){
   out.textContent=t.teks;
   out.className=t.kelas;
 }
-function setTambahBaris(buka){
-  tambahRow.hidden=!buka;
-  pgTambah.classList.toggle('on',buka);
-  pgTambah.textContent=buka?'- TUTUP':'+ TAMBAH';
-  if(buka){
-    segarkanTgl();
-    const s=document.getElementById('a_name');
-    if(s) s.focus();
-  }
+const detailTbl=document.querySelector('.sec .menu-table.detail');
+if(detailTbl){
+  detailTbl.addEventListener('input',e=>{ if(e.target&&e.target.id==='a_rh') segarkanTgl(); });
+  detailTbl.addEventListener('keydown',e=>{
+    if(e.key!=='Enter') return;
+    if(e.target&&e.target.tagName==='BUTTON') return;
+    e.preventDefault();
+    tambah();
+  });
 }
-pgTambah.addEventListener('click',()=>setTambahBaris(tambahRow.hidden));
-if(btnBuatProduk) btnBuatProduk.addEventListener('click',()=>{ setTambahBaris(true); tambahRow.scrollIntoView({behavior:'smooth',block:'start'}); });
-fBatal.addEventListener('click',()=>setTambahBaris(false));
-tambahRow.addEventListener('input',e=>{ if(e.target&&e.target.id==='a_rh') segarkanTgl(); });
-// Enter di panel tambah = simpan.
-tambahRow.addEventListener('keydown',e=>{
-  if(e.key!=='Enter') return;
-  if(e.target&&e.target.tagName==='BUTTON') return;
-  e.preventDefault();
-  tambah();
-});
+document.getElementById('a_add').onclick=tambah;
 searchEl.oninput=render;
 listEl.addEventListener('click',e=>{
   if(e.target.closest('[data-foto],[data-del]')) return;
