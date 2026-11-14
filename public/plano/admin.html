@@ -21,7 +21,7 @@
     .sec+.sec{margin-top:22px}
     .row{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
     .grow{flex:1;min-width:0}
-    .btn-add,.ico{width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mori-mono);font-size:14px;font-weight:800;line-height:1;color:#1a1917;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;flex-shrink:0;outline:none;box-shadow: none;transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+    .btn-add,.ico{width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mori-mono);font-size:14px;font-weight:700;line-height:1;color:#1a1917;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;flex-shrink:0;outline:none;box-shadow: none;transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
     .btn-add{font-size:16px}
     .btn-add:hover,.ico:hover{background:#efe9da}
     .ico-danger{background:#b91c1c;border-color:#b91c1c;color:#fff}
@@ -32,7 +32,7 @@
     .table-wrap{border:1.5px solid rgba(26,25,23,.3);border-radius:10px;background:#fffbf2;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:0}
     .table-wrap::-webkit-scrollbar{display:none}
     .menu-table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
-    .menu-table thead th{position:sticky;top:0;z-index:1;background:#f7f3e9;color:#6e6a64;font-family:var(--mori-mono);font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;height:36px;padding:0 12px;border-bottom:1px solid var(--mori-line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
+    .menu-table thead th{position:sticky;top:0;z-index:1;background:#f7f3e9;color:#6e6a64;font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;height:34px;padding:0 12px;border-bottom:1px solid var(--mori-line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
     .menu-table tbody td{height:45px;padding:0 12px;border-bottom:1px solid var(--mori-line);vertical-align:middle}
     /* Baris terakhir tidak perlu garis bawah: wrapper sudah punya border sendiri,
        jadi tanpa ini tepi bawah jadi dua garis begitu ada isi. */
@@ -44,7 +44,7 @@
     .menu-table tbody.cari-body td.cari-sel{padding:0 12px;background:var(--mori-surface);border-bottom:1px solid var(--mori-line)}
     .menu-table tbody.cari-body .cari-dalam{display:flex;align-items:center;gap:8px;width:100%;height:44px}
     .menu-table tbody.cari-body .cari-dalam svg{flex-shrink:0;color:var(--mori-text-2)}
-    .menu-table tbody.cari-body input.cari{flex:1;min-width:0;height:44px;padding:0;background:transparent;border:none;border-radius:0;outline:none;font-family:var(--mori-mono);font-size:13px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text)}
+    .menu-table tbody.cari-body input.cari{flex:1;min-width:0;height:44px;padding:0;background:transparent;border:none;border-radius:0;outline:none;font-family:var(--mori-mono);font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--mori-text)}
     .menu-table tbody.cari-body input.cari::placeholder{color:var(--mori-text-2)}
     .menu-table tbody.cari-body input.cari:focus{background:transparent}
     /* Baris tambah: input "Nama Rak" di dalam tabel (bukan kotak terpisah di atas) */
@@ -64,7 +64,7 @@
     .c-foto .thumb{width:100%;max-width:44px;aspect-ratio:1/1;height:auto;display:block;border:none;border-radius:8px;overflow:hidden;margin:0 auto;flex-shrink:0;background:var(--mori-surface)}
     .c-foto .thumb img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
     .c-foto .thumb.kosong{background:var(--mori-surface);display:flex;align-items:center;justify-content:center;width:44px;height:44px;min-width:44px!important}
-    .c-foto .thumb.kosong::after{content:'-';font-family:var(--mori-mono);font-size:12px;font-weight:800;color:var(--mori-text-2);width:44px;height:44px;min-width:44px!important;display:flex;align-items:center;justify-content:center}
+    .c-foto .thumb.kosong::after{content:'-';font-family:var(--mori-mono);font-size:12px;font-weight:700;color:var(--mori-text-2);width:44px;height:44px;min-width:44px!important;display:flex;align-items:center;justify-content:center}
     .c-foto .thumb.thumb-admin{display:flex;align-items:center;justify-content:center;background:#1a1917;color:#fffbf2;border-radius:8px}
     .c-foto .thumb.thumb-admin svg{width:18px;height:18px}
     .acts{display:flex;gap:6px;justify-content:flex-end;align-items:center}
@@ -77,7 +77,7 @@
     .sec .menu-table tbody.tambah .c-aksi{background:#fffdf7}
     .sec .menu-table tbody.grp .c-aksi{background:#f7f3e9}
     .sec .menu-table tbody.grp:hover .c-aksi,.sec .menu-table tbody.grp:focus-visible .c-aksi{background:#efe9da}
-    .menu-table tfoot td{position:sticky;bottom:0;z-index:1;background:#f7f3e9;border-top:1px solid var(--mori-line);font-family:var(--mori-mono);font-size:11px;font-weight:800;height:44px;padding:0 12px;white-space:nowrap}
+    .menu-table tfoot td{position:sticky;bottom:0;z-index:1;background:#f7f3e9;border-top:1px solid var(--mori-line);font-family:var(--mori-mono);font-size:11px;font-weight:700;height:44px;padding:0 12px;white-space:nowrap}
     .sec .menu-table tfoot td.c-aksi{background:#f7f3e9;box-shadow:none;border-left:1px solid rgba(26,25,23,.16)}
     .menu-table tfoot b{color:#1a1917}
     .tambah td{background:#fffdf7;height:44px}
@@ -85,7 +85,7 @@
     .grp{cursor:pointer}
     .grp:hover td,.grp:focus-visible td{background:#f7f3e9}
     .grp:focus-visible{outline:2px solid var(--mori-line);outline-offset:-2px}
-    .grp .grp-nama{font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:.6px;color:#1a1917}
+    .grp .grp-nama{font-family:var(--mori-mono);font-size:9px;font-weight:700;letter-spacing:.5px;color:#1a1917}
     .grp .grp-jml{float:right;font-family:var(--mori-mono);font-size:8px;font-weight:700;color:#6e6a64}
     .tambah:hover td{background:#fffdf7}
     .tambah .auto{font-family:var(--mori-mono);font-size:11px;font-weight:700;color:#6e6a64}
@@ -109,22 +109,22 @@
     .pw-btn{flex:1;padding:12px;border:none;border-radius:8px;background:#f7f3e9;color:#1a1917;font-family:var(--mori-mono);font-size:11px;font-weight:700;text-transform:uppercase;cursor:pointer}
     .pw-btn-danger{background:#b91c1c;color:#fff;border-color:#b91c1c}
     /* ===== FORM TAMBAH PRODUK ===== */
-    .pg-toggle{padding:5px 9px;font-family:var(--mori-mono);font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#fffbf2;background:#6e6a64;border:1px solid #6e6a64;border-radius:8px;cursor:pointer;flex-shrink:0;transition:transform .12s ease,background .15s ease}
+    .pg-toggle{padding:5px 9px;font-family:var(--mori-mono);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fffbf2;background:#6e6a64;border:1px solid #6e6a64;border-radius:8px;cursor:pointer;flex-shrink:0;transition:transform .12s ease,background .15s ease}
     .pg-toggle:hover{background:#1a1917;border-color:var(--mori-line)}
     .pg-toggle:active{transform:translate(2px,2px)}
     .pg-toggle.on{background:#b91c1c;border-color:#b91c1c}
     .sec-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-    .sec-title{font-family:var(--mori-mono);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#1a1917;flex:1;min-width:0}
+    .sec-title{font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#1a1917;flex:1;min-width:0}
     .form-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-    .form-title{font-family:var(--mori-mono);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#1a1917;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+    .form-title{font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#1a1917;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
     .form-title b{background:#1a1917;color:#fffbf2;padding:2px 6px}
     .fset{border:1px solid rgba(26,25,23,.22);background:#fffdf7;border-radius:8px;padding:10px 10px 12px;margin:0 0 10px;min-width:0}
-    .fset legend{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#6e6a64;padding:0 5px;margin-left:-2px}
+    .fset legend{font-family:var(--mori-mono);font-size:8px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#6e6a64;padding:0 5px;margin-left:-2px}
     .fgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:9px}
     .fgrid label{display:flex;flex-direction:column;gap:4px;min-width:0}
-    .fgrid label>span:first-child{font-family:var(--mori-mono);font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#6e6a64}
+    .fgrid label>span:first-child{font-family:var(--mori-mono);font-size:8px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#6e6a64}
     .fgrid .cell-input{width:100%;height:34px;font-size:11px}
-    .btn-add.wide{width:100%;height:38px;font-family:var(--mori-mono);font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#1a1917;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+    .btn-add.wide{width:100%;height:38px;font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#1a1917;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
     .btn-add.wide:active{transform:translate(2px,2px);box-shadow:none}
     /* ===== KOLOM PRODUK (auto = serap semua sisa lebar) ===== */
     .menu-table.detail .c-nama{width:auto}
@@ -176,7 +176,7 @@
       .sec .menu-table.detail tr[data-id]:hover td{background:transparent}
       .sec .menu-table.detail tr[data-id] td{flex:0 0 auto;width:auto;height:auto;padding:0;border:none;min-width:0;background:transparent}
       .sec .menu-table.detail tr[data-id] td:before{display:none}
-      .sec .menu-table.detail tr[data-id] td.c-no{order:1;font-family:var(--mori-mono);font-size:9px;font-weight:800;color:#6e6a64;min-width:18px}
+      .sec .menu-table.detail tr[data-id] td.c-no{order:1;font-family:var(--mori-mono);font-size:9px;font-weight:700;color:#6e6a64;min-width:18px}
       .sec .menu-table.detail tr[data-id] td.c-nama{order:2;flex:1 1 130px;min-width:130px}
       .sec .menu-table.detail tr[data-id] td.c-plu{order:3;width:56px}
       .sec .menu-table.detail tr[data-id] td.c-barcode{order:4;width:70px}
@@ -194,7 +194,7 @@
       .sec .menu-table.detail tr[data-id] td.c-aksi .acts{justify-content:flex-end;gap:5px}
       .sec .menu-table.detail tr.pilih td.c-aksi{background:#efe9da}
       .sec .menu-table.detail .cell-input{height:28px;font-size:10px;padding:0 5px}
-      .sec .menu-table.detail tr[data-id] .c-nama .cell-input{height:28px;font-size:11px;font-weight:800}
+      .sec .menu-table.detail tr[data-id] .c-nama .cell-input{height:28px;font-size:11px;font-weight:700}
       .sec .menu-table.detail tr[data-id] td .val{font-size:10px}
       .sec .menu-table.detail tr[data-id] td .v-nama{font-size:11px}
     }
