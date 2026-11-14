@@ -423,7 +423,7 @@ function rowPlano(r,i){
      +'<button class="ico" type="button" data-edit2="'+r.id+'" title="Edit produk" aria-label="Edit produk">✎</button>'
      +'<button class="ico ico-danger" type="button" data-del2="'+r.id+'" title="Hapus produk" aria-label="Hapus produk">✕</button>'
      +'</div></td>';
-  return '<tr data-id="'+r.id+'"><td class="c-no" data-label="">'+(i+1)+'</td>'+td+'</tr>';
+  return '<tr data-id="'+r.id+'"><td class="c-no" data-label="">'+i+'</td>'+td+'</tr>';
 }
 const adaRak=m=>!String(m.rak||'').trim();
 function render(){
