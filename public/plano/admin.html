@@ -1,9 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin — PLANO</title>
+  <title>Admin â€” PLANO</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
@@ -21,8 +21,6 @@
     .sec+.sec{margin-top:22px}
     .row{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
     .grow{flex:1;min-width:0}
-    .inp{height:46px;padding:0 12px;font-family:var(--mori-mono);font-size:12px;font-weight:700;text-transform:uppercase;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:8px;outline:none;transition:background .2s ease}
-    .inp:focus{background:#fffdf7;box-shadow: none}
     .btn-add,.ico{width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mori-mono);font-size:14px;font-weight:800;line-height:1;color:#1a1917;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;flex-shrink:0;outline:none;box-shadow: none;transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
     .btn-add{font-size:16px}
     .btn-add:hover,.ico:hover{background:#efe9da}
@@ -40,6 +38,20 @@
        jadi tanpa ini tepi bawah jadi dua garis begitu ada isi. */
     .menu-table tbody tr:last-child td{border-bottom:none}
     .menu-table tbody tr:hover td{background:#f7f3e9}
+    /* Baris cari: kotak pencarian di dalam tabel, sama seperti Admin Stok Opname
+       (baris paling atas). Harus tbody sendiri karena renderList()
+       mengosongkan #list. */
+    .menu-table tbody.cari-body td.cari-sel{padding:0 12px;background:var(--mori-surface);border-bottom:1px solid var(--mori-line)}
+    .menu-table tbody.cari-body .cari-dalam{display:flex;align-items:center;gap:8px;width:100%;height:44px}
+    .menu-table tbody.cari-body .cari-dalam svg{flex-shrink:0;color:var(--mori-text-2)}
+    .menu-table tbody.cari-body input.cari{flex:1;min-width:0;height:44px;padding:0;background:transparent;border:none;border-radius:0;outline:none;font-family:var(--mori-mono);font-size:13px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-text)}
+    .menu-table tbody.cari-body input.cari::placeholder{color:var(--mori-text-2)}
+    .menu-table tbody.cari-body input.cari:focus{background:transparent}
+    /* Baris tambah: input "Nama Rak" di dalam tabel (bukan kotak terpisah di atas) */
+    .menu-table tbody.tambah td{background:var(--mori-surface)}
+    .menu-table tbody.tambah:hover td{background:#efe9da}
+    .menu-table tbody.tambah .cell-input{height:44px;background:transparent;border:none;padding:0;font-size:12px;text-transform:uppercase}
+    .menu-table tbody.tambah .cell-input:focus{background:transparent;box-shadow:none;outline:none}
     .c-no{width:44px;text-align:center;font-family:var(--mori-mono);color:#6e6a64}
     .c-nama{overflow:hidden}
     .menu-table .nama{font-family:var(--mori-mono);font-size:11px;font-weight:700;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1a1917}
@@ -55,11 +67,6 @@
     .c-foto .thumb.thumb-admin{display:flex;align-items:center;justify-content:center;background:#1a1917;color:#fffbf2;border-radius:8px}
     .c-foto .thumb.thumb-admin svg{width:18px;height:18px}
     .acts{display:flex;gap:6px;justify-content:flex-end;align-items:center}
-    .search-wrapper{margin-top:12px}
-    .search-box {display:flex;align-items:center;gap:8px;height:46px;border: 1px solid var(--mori-line);background:#f7f3e9;padding:0 12px;border-radius:8px}
-    .search-box:focus-within{background:#fffdf7;box-shadow: none}
-    .search-box input{border:none;background:transparent;outline:none;width:100%;min-width:0;font-size:14px;font-family:inherit;color:#1a1917}
-    .search-box input::-webkit-search-cancel-button{-webkit-appearance:none}
     .empty{font-family:var(--mori-mono);font-size:11px;font-weight:700;color:#6e6a64;text-transform:uppercase;text-align:center;padding:26px 12px}
     .hint{margin-top:8px;font-family:var(--mori-mono);font-size:10px;color:#b91c1c;border-left:3px solid #b91c1c;background:#fdf1f1;padding:6px 8px}
     .hint[hidden]{display:none}
@@ -195,16 +202,33 @@
 <body>
 <div class="wrap">
   <section class="sec">
-    <div class="row">
-      <div class="search-box grow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="search" type="search" placeholder="Cari rak / produk" autocomplete="off" aria-label="Cari rak atau produk" /></div>
-    </div>
-    <div class="row">
-      <input class="inp grow" id="f_name" type="text" placeholder="Nama rak" autocomplete="off" aria-label="Nama rak" />
-      <button class="btn-add" type="button" id="f_add" title="Tambah rak" aria-label="Tambah rak">+</button>
-    </div>
     <div class="table-wrap">
       <table class="menu-table">
         <thead><tr><th class="c-no">No</th><th>Rak</th><th class="c-foto">Foto</th><th class="c-aksi"></th></tr></thead>
+        <!-- Baris cari: kotak pencarian jadi baris di dalam tabel, sama
+             seperti Admin Stok Opname (cari di paling atas). Harus tbody
+             sendiri: renderList() mengosongkan #list, jadi baris cari tidak
+             boleh ikut terhapus. -->
+        <tbody class="cari-body">
+          <tr>
+            <td class="cari-sel" colspan="4">
+              <div class="cari-dalam">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input class="cari" id="search" type="search" placeholder="Cari rak / produk" autocomplete="off" aria-label="Cari rak atau produk" />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <!-- Baris tambah: input "Nama rak" + tombol +, baris khusus di
+             dalam tabel (bukan kotak terpisah di atas tabel). -->
+        <tbody class="tambah">
+          <tr>
+            <td class="c-no"></td>
+            <td class="c-nama"><input class="cell-input" id="f_name" type="text" placeholder="Nama Rak" autocomplete="off" aria-label="Nama rak" /></td>
+            <td class="c-foto"></td>
+            <td class="c-aksi"><div class="acts"><button class="btn-add" type="button" id="f_add" title="Tambah rak" aria-label="Tambah rak">+</button></div></td>
+          </tr>
+        </tbody>
         <tbody id="list"><tr><td colspan="4"><div class="empty">Memuat...</div></td></tr></tbody>
       </table>
     </div>
@@ -270,7 +294,7 @@ let supabase=null;
 try{
   ({supabase}=await import('../../src/js/supabase.js'));
 }catch(e){
-  const pesan='Gagal memuat Supabase. Cek koneksi internet — halaman ini butuh CDN jsdelivr. ('+(e&&e.message||e)+')';
+  const pesan='Gagal memuat Supabase. Cek koneksi internet â€” halaman ini butuh CDN jsdelivr. ('+(e&&e.message||e)+')';
   console.error('[plano admin]',e);
   listEl.innerHTML='<tr><td colspan="4"><div class="empty">'+esc(pesan)+'</div></td></tr>';
   planoList.innerHTML='<tr><td colspan="10"><div class="empty">'+esc(pesan)+'</div></td></tr>';
@@ -279,7 +303,7 @@ try{
 const AKUN='admin', fotoAdminUrl=()=>supabase.storage.from(BUCKET).getPublicUrl('plano/'+AKUN+'.jpg').data.publicUrl;
 const barisAdmin={id:AKUN,rak:'',shelving:'',baris:'',plu:'',barcode:'',name:'ADMIN',desc:'',isAdmin:true,foto_url:''};
 // Dulu pakai fetch HEAD. Supabase Storage tidak mengizinkan HEAD lintas
-// origin, jadi lempar error CORS dan hasilnya selalu false — foto admin
+// origin, jadi lempar error CORS dan hasilnya selalu false â€” foto admin
 // tidak pernah muncul. Coba list lewat SDK (authorized), lalu jatuh ke
 // render img yang memberi tahu sendiri kalau 404.
 // Foto admin jarang berubah, jadi hasilnya dicache. Sebelumnya tiap load()
@@ -319,7 +343,7 @@ function tampilErr(e){
    Tanggal sengaja TIDAK disimpan supaya tidak basi; yang tersimpan hanya RH. */
 function hitungTglRH(n){
   const v=Number.parseInt(n,10);
-  if(!Number.isFinite(v)) return {teks:'—',kelas:'tgl'};
+  if(!Number.isFinite(v)) return {teks:'â€”',kelas:'tgl'};
   const d=new Date();
   d.setHours(12,0,0,0);
   d.setDate(d.getDate()+v);
@@ -378,9 +402,9 @@ function cellInput(id,k,val,ph){
    kedaluwarsa (RH/ED) -> media (Foto) -> Aksi. Kelas g-start menandai awal
    tiap kelompok supaya ada garis pemisah. Isian dibungkus .val supaya mode
    baca menampilkan teks biasa dan kolom isiannya baru muncul saat baris
-   dibuka lewat tombol edit — supaya mengetuk yang salah tidak menimpa data. */
+   dibuka lewat tombol edit â€” supaya mengetuk yang salah tidak menimpa data. */
 function rowPlano(r,i){
-  const val=(k,v,cls)=>'<span class="val '+(cls||'')+'">'+esc(v||'—')+'</span>'+cellInput(r.id,k,v,'');
+  const val=(k,v,cls)=>'<span class="val '+(cls||'')+'">'+esc(v||'â€”')+'</span>'+cellInput(r.id,k,v,'');
   let td='';
   td+='<td class="c-nama g-start" data-label="Produk">'+val('name',r.name,'v-nama')+'</td>';
   td+='<td class="c-plu" data-label="PLU">'+val('plu',r.plu)+'</td>';
@@ -390,10 +414,10 @@ function rowPlano(r,i){
   td+='<td class="c-rh g-start" data-label="RH">'+val('rh',r.rh)+'</td>';
   td+='<td class="c-tgl" data-label="KEDALUWARSA" data-tgl-for="'+r.id+'">'+tglHtml(r.rh)+'</td>';
   td+='<td class="c-foto g-start" data-label="Foto"><div class="thumb'+(r.foto_url?'':' kosong')+'">'+(r.foto_url?'<img src="'+esc(fotoBaru(r.foto_url))+'"/>':'')+'</div>'
-     +'<button class="ico" type="button" data-foto2="'+r.id+'" title="Upload foto" aria-label="Upload foto">↑</button></td>';
+     +'<button class="ico" type="button" data-foto2="'+r.id+'" title="Upload foto" aria-label="Upload foto">â†‘</button></td>';
   td+='<td class="c-aksi" data-label=""><div class="acts">'
-     +'<button class="ico" type="button" data-edit2="'+r.id+'" title="Edit produk" aria-label="Edit produk">✎</button>'
-     +'<button class="ico ico-danger" type="button" data-del2="'+r.id+'" title="Hapus produk" aria-label="Hapus produk">✕</button>'
+     +'<button class="ico" type="button" data-edit2="'+r.id+'" title="Edit produk" aria-label="Edit produk">âœŽ</button>'
+     +'<button class="ico ico-danger" type="button" data-del2="'+r.id+'" title="Hapus produk" aria-label="Hapus produk">âœ•</button>'
      +'</div></td>';
   return '<tr data-id="'+r.id+'"><td class="c-no" data-label="">'+(i+1)+'</td>'+td+'</tr>';
 }
@@ -408,7 +432,7 @@ function render(){
   listEl.innerHTML=rows.map((m,i)=>{
     const url=m.foto_url?fotoBaru(m.foto_url):'', isA=!!m.isAdmin;
     const thumb=isA?(url?'<div class="thumb thumb-admin"><img src="'+url+'"/>':'<div class="thumb thumb-admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M12 15v2"/><path d="M8 9h8"/></svg></div>'):(url?'<div class="thumb"><img src="'+url+'"/>':'<div class="thumb kosong"></div>');
-    const acts=(isA?'':'<button class="ico ico-danger" data-del="'+m.id+'" title="Hapus" aria-label="Hapus">✕</button>')+'<button class="ico" data-foto="'+m.id+'" title="Upload foto" aria-label="Upload foto">↑</button>';
+    const acts=(isA?'':'<button class="ico ico-danger" data-del="'+m.id+'" title="Hapus" aria-label="Hapus">âœ•</button>')+'<button class="ico" data-foto="'+m.id+'" title="Upload foto" aria-label="Upload foto">â†‘</button>';
     const selRak=isA?'':' data-rak="'+esc(m.name||'')+'" title="Klik baris ini untuk isi produk"';
     return '<tr data-id="'+m.id+'"'+selRak+'><td class="c-no">'+(i+1)+'</td><td class="c-nama"><div class="nama">'+esc(m.name||'')+'</div></td><td class="c-foto">'+thumb+'</td><td class="c-aksi"><div class="acts">'+acts+'</div></td></tr>';
   }).join('');
@@ -509,7 +533,7 @@ function setEditBaris(tr,nyala){
   if(nyala) editIds.add(id); else editIds.delete(id);
   const b=tr.querySelector('[data-edit2]');
   if(b){
-    b.textContent=nyala?'✓':'✎';
+    b.textContent=nyala?'âœ“':'âœŽ';
     b.title=nyala?'Selesai edit':'Edit produk';
     b.setAttribute('aria-label',b.title);
   }
