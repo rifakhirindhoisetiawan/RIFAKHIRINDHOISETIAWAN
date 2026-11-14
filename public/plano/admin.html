@@ -138,8 +138,16 @@
     .menu-table.detail .c-plu{width:78px}
     .menu-table.detail .c-barcode{width:125px}
     .c-barcode .val{white-space:nowrap}
-    .menu-table.detail .c-shelving{width:88px}
-    .menu-table.detail .c-baris{width:48px}
+    .menu-table.detail .c-shelving{width:110px}
+    .menu-table.detail .c-baris{width:100px}
+    .step-wrap{display:none;align-items:center;gap:2px;width:100%}
+    .menu-table.detail tr.edit td.c-shelving .step-wrap,
+    .menu-table.detail tr.edit td.c-baris .step-wrap,
+    .menu-table.detail tbody.tambah td.c-shelving .step-wrap,
+    .menu-table.detail tbody.tambah td.c-baris .step-wrap{display:flex}
+    .btn-step{width:26px;height:26px;padding:0;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:6px;font-family:var(--mori-mono);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1a1917;flex-shrink:0}
+    .btn-step:hover{background:#efe9da}
+    .step-wrap .cell-input{flex:1;min-width:0;height:26px;text-align:center;padding:0 2px;font-size:11px}
     .menu-table.detail .c-rh{width:52px;text-align:center}
     .menu-table.detail .c-rh .cell-input{text-align:center;padding:0 4px}
     .menu-table.detail .c-tgl{width:108px}
@@ -188,8 +196,8 @@
       .sec .menu-table.detail tr[data-id] td.c-nama{order:2;flex:1 1 130px;min-width:130px}
       .sec .menu-table.detail tr[data-id] td.c-plu{order:3;width:56px}
       .sec .menu-table.detail tr[data-id] td.c-barcode{order:4;width:115px;min-width:115px}
-      .sec .menu-table.detail tr[data-id] td.c-shelving{order:5;width:60px}
-      .sec .menu-table.detail tr[data-id] td.c-baris{order:6;width:38px}
+      .sec .menu-table.detail tr[data-id] td.c-shelving{order:5;width:100px;min-width:100px}
+      .sec .menu-table.detail tr[data-id] td.c-baris{order:6;width:95px;min-width:95px}
       .sec .menu-table.detail tr[data-id] td.c-rh{order:7;width:40px}
       .sec .menu-table.detail tr[data-id] td.c-tgl{order:8;display:block;width:auto}
       .sec .menu-table.detail tr[data-id] td.c-tgl .tgl{font-size:8px;white-space:nowrap}
@@ -210,8 +218,8 @@
       .sec .menu-table.detail tbody.tambah td.c-nama{order:2;flex:1 1 130px;min-width:130px}
       .sec .menu-table.detail tbody.tambah td.c-plu{order:3;width:56px}
       .sec .menu-table.detail tbody.tambah td.c-barcode{order:4;width:115px;min-width:115px}
-      .sec .menu-table.detail tbody.tambah td.c-shelving{order:5;width:60px}
-      .sec .menu-table.detail tbody.tambah td.c-baris{order:6;width:38px}
+      .sec .menu-table.detail tbody.tambah td.c-shelving{order:5;width:100px;min-width:100px}
+      .sec .menu-table.detail tbody.tambah td.c-baris{order:6;width:95px;min-width:95px}
       .sec .menu-table.detail tbody.tambah td.c-rh{order:7;width:40px}
       .sec .menu-table.detail tbody.tambah td.c-tgl{order:8;display:block;width:auto}
       .sec .menu-table.detail tbody.tambah td.c-foto{order:9;display:flex;align-items:center;gap:8px}
@@ -268,8 +276,8 @@
             <td class="c-nama"><input class="cell-input mono" type="text" id="a_name" placeholder="NAMA PRODUK" autocomplete="off" /></td>
             <td class="c-plu"><input class="cell-input mono" type="text" id="a_plu" placeholder="PLU" inputmode="numeric" autocomplete="off" /></td>
             <td class="c-barcode"><input class="cell-input mono" type="text" id="a_barcode" placeholder="BARCODE" autocomplete="off" /></td>
-            <td class="c-shelving"><input class="cell-input mono" type="number" min="0" inputmode="numeric" id="a_shelving" placeholder="SHELVING" autocomplete="off" /></td>
-            <td class="c-baris"><input class="cell-input mono" type="number" min="0" inputmode="numeric" id="a_baris" placeholder="BARIS" autocomplete="off" /></td>
+            <td class="c-shelving"><div class="step-wrap"><button type="button" class="btn-step" data-add-step="-1" data-kol="a_shelving">-</button><input class="cell-input mono" type="text" inputmode="numeric" id="a_shelving" placeholder="SHELVING" autocomplete="off" /><button type="button" class="btn-step" data-add-step="1" data-kol="a_shelving">+</button></div></td>
+            <td class="c-baris"><div class="step-wrap"><button type="button" class="btn-step" data-add-step="-1" data-kol="a_baris">-</button><input class="cell-input mono" type="text" inputmode="numeric" id="a_baris" placeholder="BARIS" autocomplete="off" /><button type="button" class="btn-step" data-add-step="1" data-kol="a_baris">+</button></div></td>
             <td class="c-rh"><input class="cell-input mono" type="text" id="a_rh" placeholder="RH" inputmode="numeric" autocomplete="off" /></td>
             <td class="c-tgl" id="a_tgl">&mdash;</td>
             <td class="c-foto"></td>
@@ -400,7 +408,15 @@ pwBg.onclick=e=>{ if(e.target===pwBg) closePw(false); };
 pwBg.onclick=e=>{ if(e.target===pwBg) closePw(false); };
 async function kompresFoto(f){ if(!f||!/^image\//.test(f.type||'')) return f; let g=null; try{g=await createImageBitmap(f)}catch{return f} if(!g) return f; const s=Math.max(g.width,g.height),sc=Math.min(1,1200/s); if(sc===1&&f.size<400*1024){if(g.close)g.close();return f} const w=Math.max(1,Math.round(g.width*sc)),h=Math.max(1,Math.round(g.height*sc)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(g,0,0,w,h);if(g.close)g.close();const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.82)); if(!b) return f; return new File([b],(f.name||'foto').replace(/\.[^.]+$/,'')+'.jpg',{type:'image/jpeg'}) }
 function cellInput(id,k,val,ph){
-  const isNum = (k==='shelving'||k==='baris'||k==='rh');
+  const inp='<input class="cell-input mono" type="text" inputmode="numeric" data-id="'+id+'" data-kol="'+k+'" placeholder="'+ph+'" value="'+esc(val||'')+'" autocomplete="off" />';
+  if(k==='shelving'||k==='baris'){
+    return '<div class="step-wrap">'
+      +'<button type="button" class="btn-step" data-step="-1" data-id="'+id+'" data-kol="'+k+'">-</button>'
+      +inp
+      +'<button type="button" class="btn-step" data-step="1" data-id="'+id+'" data-kol="'+k+'">+</button>'
+      +'</div>';
+  }
+  const isNum = (k==='rh');
   const type = isNum ? 'number' : 'text';
   const mode = isNum ? 'min="0" inputmode="numeric"' : '';
   return '<input class="cell-input mono" type="'+type+'" '+mode+' data-id="'+id+'" data-kol="'+k+'" placeholder="'+ph+'" value="'+esc(val||'')+'" autocomplete="off" />';
@@ -690,6 +706,30 @@ segarkanTgl();
 let loadT=null;
 const loadSegera=()=>{ clearTimeout(loadT); loadT=setTimeout(()=>load(),300); };
 try{ supabase.channel('plano_admin').on('postgres_changes',{event:'*',schema:'public',table:TABLE},()=>loadSegera()).subscribe(); }catch{}
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.btn-step');
+  if(!btn) return;
+  const step=parseInt(btn.dataset.step||btn.dataset.addStep,10);
+  if(btn.dataset.id){
+    const id=btn.dataset.id, kol=btn.dataset.kol;
+    const input=document.querySelector('.menu-table.detail tr[data-id="'+id+'"] input[data-kol="'+kol+'"]');
+    if(input){
+      let v=parseInt(input.value.trim(),10);
+      if(isNaN(v)) v=0;
+      v=Math.max(0,v+step);
+      input.value=v===0?'':v;
+      simpanSel(input);
+    }
+  } else if(btn.dataset.kol){
+    const input=document.getElementById(btn.dataset.kol);
+    if(input){
+      let v=parseInt(input.value.trim(),10);
+      if(isNaN(v)) v=0;
+      v=Math.max(0,v+step);
+      input.value=v===0?'':v;
+    }
+  }
+});
 load();
 </script>
 </body>
