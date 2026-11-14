@@ -237,43 +237,27 @@
     </div>
   </section>
 
-  <section class="sec" id="tambahRow" hidden>
-    <div class="form-head">
-      <div class="form-title">TAMBAH PRODUK</div>
-      <button class="pg-toggle" id="f_batal" type="button">BATAL</button>
-    </div>
-    <div class="form-body">
-      <fieldset class="fset">
-        <legend>PRODUK</legend>
-        <div class="fgrid">
-          <label><span>PRODUK</span><input class="cell-input mono" type="text" id="a_name" placeholder="Nama produk" autocomplete="off" /></label>
-          <label><span>PLU</span><input class="cell-input mono" type="text" id="a_plu" placeholder="PLU" inputmode="numeric" autocomplete="off" /></label>
-          <label><span>BARCODE</span><input class="cell-input mono" type="text" id="a_barcode" placeholder="Barcode" autocomplete="off" /></label>
-        </div>
-      </fieldset>
-      <fieldset class="fset">
-        <legend>PENEMPATAN</legend>
-        <div class="fgrid">
-          <label><span>SHELVING</span><input class="cell-input mono" type="text" id="a_shelving" placeholder="Shelving" autocomplete="off" /></label>
-          <label><span>BARIS</span><input class="cell-input mono" type="text" id="a_baris" placeholder="Baris" inputmode="numeric" autocomplete="off" /></label>
-        </div>
-      </fieldset>
-      <fieldset class="fset">
-        <legend>KEDALUWARSA</legend>
-        <div class="fgrid">
-          <label><span>RH / HARI</span><input class="cell-input mono" type="text" id="a_rh" placeholder="30" inputmode="numeric" autocomplete="off" /></label>
-          <label><span>ED</span><span class="tgl" id="a_tgl">&mdash;</span></label>
-        </div>
-      </fieldset>
-      <button class="btn-add wide" type="button" id="a_add">SIMPAN PRODUK</button>
-    </div>
-  </section>
+  
 
   <section class="sec">
-    <div class="row"><button class="btn-add wide" type="button" id="btnBuatProduk">+ BUAT PRODUK</button></div>
+    
     <div class="table-wrap">
       <table class="menu-table detail">
         <thead><tr><th class="c-no">No</th><th class="c-nama g-start">Produk</th><th class="c-plu">PLU</th><th class="c-barcode">Barcode</th><th class="c-shelving g-start">Shelving</th><th class="c-baris">Baris</th><th class="c-rh g-start" title="Umur barang dalam hari">RH</th><th class="c-tgl" title="Tanggal kedaluwarsa = hari ini + RH">KEDALUWARSA</th><th class="c-foto g-start">Foto</th><th class="c-aksi"><button class="pg-toggle small" id="pgTambah" type="button" title="Tampilkan form tambah produk">+</button></th></tr></thead>
+        <tbody class="tambah">
+          <tr>
+            <td class="c-no"></td>
+            <td class="c-nama g-start"><input class="cell-input mono" type="text" id="a_name" placeholder="NAMA PRODUK" autocomplete="off" /></td>
+            <td class="c-plu"><input class="cell-input mono" type="text" id="a_plu" placeholder="PLU" inputmode="numeric" autocomplete="off" /></td>
+            <td class="c-barcode"><input class="cell-input mono" type="text" id="a_barcode" placeholder="BARCODE" autocomplete="off" /></td>
+            <td class="c-shelving g-start"><input class="cell-input mono" type="text" id="a_shelving" placeholder="SHELVING" autocomplete="off" /></td>
+            <td class="c-baris"><input class="cell-input mono" type="text" id="a_baris" placeholder="BARIS" inputmode="numeric" autocomplete="off" /></td>
+            <td class="c-rh g-start"><input class="cell-input mono" type="text" id="a_rh" placeholder="RH" inputmode="numeric" autocomplete="off" /></td>
+            <td class="c-tgl" id="a_tgl">&mdash;</td>
+            <td class="c-foto g-start"></td>
+            <td class="c-aksi"><div class="acts"><button class="btn-add" type="button" id="a_add" title="Simpan produk" aria-label="Simpan produk">+</button></div></td>
+          </tr>
+        </tbody>
         <tbody id="planoList"><tr><td colspan="10"><div class="empty">Memuat...</div></td></tr></tbody>
       </table>
     </div>
@@ -295,7 +279,7 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 // supaya kegagalannya kelihatan dan tidak menggantung.
 let supabase=null;
 try{
-  ({supabase}=await import('../../src/js/supabase.js'));
+  const mod = await import('../../src/js/supabase.js'); supabase = mod.supabase;
 }catch(e){
   const pesan='Gagal memuat Supabase. Cek koneksi internet — halaman ini butuh CDN jsdelivr. ('+(e&&e.message||e)+')';
   console.error('[plano admin]',e);
@@ -636,39 +620,16 @@ async function hapusProduk(id){
   if(error){ setHint(tampilErr(error)); return; }
   await load();
 }
-/* Panel tambah produk disembunyikan supaya tabel produk tetap bersih. Muncul
-   hanya saat tombol "+ TAMBAH" ditekan, dan mengunci rak yang sedang aktif. */
-const tambahRow=document.getElementById('tambahRow'), pgTambah=document.getElementById('pgTambah'), btnBuatProduk=document.getElementById('btnBuatProduk');
-const fBatal=document.getElementById('f_batal');
-function segarkanTgl(){
-  const a=document.getElementById('a_rh'), out=document.getElementById('a_tgl');
-  if(!a||!out) return;
-  const t=hitungTglRH(a.value);
-  out.textContent=t.teks;
-  out.className=t.kelas;
-}
-function setTambahBaris(buka){
-  tambahRow.hidden=!buka;
-  pgTambah.classList.toggle('on',buka);
-  pgTambah.textContent=buka?'- TUTUP':'+ TAMBAH';
-  if(buka){
-    segarkanTgl();
-    const s=document.getElementById('a_name');
-    if(s) s.focus();
-  }
-}
-pgTambah.addEventListener('click',()=>setTambahBaris(tambahRow.hidden));
-if(btnBuatProduk) btnBuatProduk.addEventListener('click',()=>{ setTambahBaris(true); tambahRow.scrollIntoView({behavior:'smooth',block:'start'}); });
-fBatal.addEventListener('click',()=>setTambahBaris(false));
-tambahRow.addEventListener('input',e=>{ if(e.target&&e.target.id==='a_rh') segarkanTgl(); });
-// Enter di panel tambah = simpan.
-tambahRow.addEventListener('keydown',e=>{
-  if(e.key!=='Enter') return;
-  if(e.target&&e.target.tagName==='BUTTON') return;
-  e.preventDefault();
-  tambah();
-});
-searchEl.oninput=render;
+document.getElementById('a_rh').addEventListener('input', segarkanTgl);
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    if (e.target && e.target.tagName === 'BUTTON') return;
+    if (e.target && e.target.id && e.target.id.startsWith('a_')) {
+      e.preventDefault();
+      tambah();
+    }
+  });
+  searchEl.oninput=render;searchEl.oninput=render;
 listEl.addEventListener('click',e=>{
   if(e.target.closest('[data-foto],[data-del]')) return;
   const tr=e.target.closest('tr[data-rak]'); if(!tr) return;
