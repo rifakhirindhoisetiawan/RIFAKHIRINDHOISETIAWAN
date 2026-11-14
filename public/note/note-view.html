@@ -72,7 +72,7 @@
         border-bottom: 1px solid var(--mori-line); white-space: nowrap;
       }
       .tabel tbody td {
-        height: 45px; padding: 0 8px;
+        height: 45px; padding: 0 12px;
         border-bottom: 1px solid var(--mori-line);
         background: var(--mori-bg); vertical-align: middle;
         transition: background .5s ease;
@@ -80,7 +80,7 @@
       .tabel tbody tr:last-child td { border-bottom: 0; }
       .tabel tbody tr:hover td { background: var(--mori-surface); }
       .c-no {
-        width: 38px; text-align: center;
+        width: 44px; text-align: center;
         font-family: var(--mori-mono); font-size: 11px; color: var(--mori-text-2);
       }
       .tabel th.c-no, .tabel td.c-no { text-align: center; }
@@ -200,25 +200,25 @@
       /* modal password */
       .pw-bg { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(26,25,23,.45); align-items: center; justify-content: center; padding: 16px; }
       .pw-bg.open { display: flex; }
-      .pw-card { width: 100%; max-width: 360px; background: var(--mori-bg); border: 1px solid var(--mori-line); border-radius: 12px; padding: 18px; box-shadow: none; }
+      .pw-card { width: 100%; max-width: 360px; background: var(--mori-bg); border: none; border-radius: 8px; padding: 18px; box-shadow: none; }
       .pw-title { font-family: var(--mori-mono); font-size: 13px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px; }
       .pw-msg { font-size: 12px; color: var(--mori-text-2); line-height: 1.5; margin-bottom: 12px; white-space: pre-line; }
-      .pw-input { width: 100%; padding: 11px 12px; font-family: var(--mori-mono); font-size: 15px; background: var(--mori-surface); border: 1px solid var(--mori-line); border-radius: 8px; outline: none; }
+      .pw-input { width: 100%; padding: 11px 12px; font-family: var(--mori-mono); font-size: 15px; background: var(--mori-surface); border: none; border-radius: 8px; outline: none; }
       .pw-input:focus { background: #fffdf7; box-shadow: none; }
       .pw-error { margin-top: 8px; font-family: var(--mori-mono); font-size: 10px; font-weight: 700; color: var(--mori-danger); }
       .pw-error[hidden] { display: none; }
       .pw-actions { display: flex; gap: 8px; margin-top: 16px; }
-      .pw-btn { flex: 1; padding: 12px; border: 1px solid var(--mori-line); border-radius: 8px; background: var(--mori-surface); color: var(--mori-text); font-family: var(--mori-mono); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+      .pw-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; background: var(--mori-surface); color: var(--mori-text); font-family: var(--mori-mono); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
       .pw-btn:active { transform: translate(2px,2px); }
       .pw-btn-danger { background: var(--mori-danger); border-color: var(--mori-danger); color: #fff; }
 
       /* modal edit */
       .edit-bg { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(26,25,23,.45); align-items: center; justify-content: center; padding: 16px; }
       .edit-bg.open { display: flex; }
-      .edit-card { width: 100%; max-width: 480px; background: var(--mori-bg); border: 1px solid var(--mori-line); border-radius: 12px; padding: 18px; box-shadow: none; }
+      .edit-card { width: 100%; max-width: 480px; background: var(--mori-bg); border: none; border-radius: 8px; padding: 18px; box-shadow: none; }
       .edit-card textarea {
         width: 100%; min-height: 120px; padding: 12px; font-family: inherit; font-size: 13px;
-        border: 1px solid var(--mori-line); background: var(--mori-surface); outline: none; resize: vertical;
+        border: none; border-radius: 8px; background: var(--mori-surface); outline: none; resize: vertical;
       }
       .edit-card textarea:focus { background: #fffdf7; box-shadow: none; }
     </style>
@@ -284,7 +284,7 @@
         <textarea id="editInput"></textarea>
         <div class="pw-actions">
           <button class="pw-btn" id="editCancel" type="button">Batal</button>
-          <button class="pw-btn pw-btn-danger" id="editOk" type="button" style="background:var(--mori-accent);border-color:var(--mori-line);color:var(--mori-bg)">Simpan</button>
+          <button class="pw-btn" id="editOk" type="button">Simpan</button>
         </div>
       </div>
     </div>
