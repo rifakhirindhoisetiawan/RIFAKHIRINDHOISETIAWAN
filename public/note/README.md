@@ -31,6 +31,13 @@ KOPI (`public/kopi/admin/index.html`) dan admin Stok Opname
 - Tombol aksi memakai warna krem (sama dengan header tabel), bukan hitam.
   Hapus tetap merah.
 - Garis tepi tabel `1.5px` warna gelap + radius `10px`.
+- Pop-up (konfirmasi hapus, edit catatan) memakai kartu tanpa border dengan
+  radius `8px`, input transparan tanpa garis, tombol krem — sama seperti
+  Admin Stok Opname.
+- **Hapus catatan dikunci Supabase Auth**: pop-up "Konfirmasi Hapus"
+  memanggil `supabase.auth.signInWithPassword` dengan akun
+  `admin@kopi.com`. Password salah → data **tidak** terhapus. Kalau perangkat
+  sudah punya sesi admin, pop-up dilewati.
 
 ## Setup Supabase
 
