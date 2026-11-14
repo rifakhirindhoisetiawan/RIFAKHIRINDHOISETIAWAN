@@ -136,7 +136,7 @@
     </div>
 
     <div class="card">
-      <h2>Galeri â€” <span id="count">0</span></h2>
+      <h2>Galeri — <span id="count">0</span></h2>
       <div class="filters">
         <button class="btn on" type="button" data-filter="all">Semua</button>
         <button class="btn" type="button" data-filter="today">Hari Ini</button>
@@ -192,7 +192,7 @@
           try {
             localStorage.setItem(KEY, JSON.stringify(shots));
           } catch (e2) {}
-          toast("Penyimpanan penuh â€” foto lama dihapus");
+          toast("Penyimpanan penuh — foto lama dihapus");
         } else {
           toast("Penyimpanan penuh");
         }
@@ -268,9 +268,9 @@
       return (
         '<div class="shot">' +
         '<img class="shot-img" src="' + s.img + '" alt="" />' +
-        '<div class="shot-time">' + fmtDate(s.at) + " Â· " + fmtClock(s.at) + "</div>" +
+        '<div class="shot-time">' + fmtDate(s.at) + " · " + fmtClock(s.at) + "</div>" +
         (meta.length
-          ? '<div class="shot-lokasi">' + meta.join(" Â· ") + "</div>"
+          ? '<div class="shot-lokasi">' + meta.join(" · ") + "</div>"
           : '<div class="shot-lokasi" style="opacity:.6">Tanpa keterangan</div>') +
         (s.catatan ? '<div class="shot-lokasi">' + esc(s.catatan) + "</div>" : "") +
         '<div class="shot-actions">' +
@@ -397,7 +397,7 @@
           const { latitude, longitude, accuracy } = pos.coords;
           inLokasi.value =
             latitude.toFixed(5) + ", " + longitude.toFixed(5) +
-            " (Â±" + Math.round(accuracy) + "m)";
+            " (±" + Math.round(accuracy) + "m)";
           toast("Lokasi diisi");
         },
         () => toast("Gagal ambil lokasi"),

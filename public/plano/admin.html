@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin â€” PLANO</title>
+  <title>Admin — PLANO</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
@@ -292,7 +292,7 @@ let supabase=null;
 try{
   ({supabase}=await import('../../src/js/supabase.js'));
 }catch(e){
-  const pesan='Gagal memuat Supabase. Cek koneksi internet â€” halaman ini butuh CDN jsdelivr. ('+(e&&e.message||e)+')';
+  const pesan='Gagal memuat Supabase. Cek koneksi internet — halaman ini butuh CDN jsdelivr. ('+(e&&e.message||e)+')';
   console.error('[plano admin]',e);
   listEl.innerHTML='<tr><td colspan="4"><div class="empty">'+esc(pesan)+'</div></td></tr>';
   planoList.innerHTML='<tr><td colspan="10"><div class="empty">'+esc(pesan)+'</div></td></tr>';
@@ -301,7 +301,7 @@ try{
 const AKUN='admin', fotoAdminUrl=()=>supabase.storage.from(BUCKET).getPublicUrl('plano/'+AKUN+'.jpg').data.publicUrl;
 const barisAdmin={id:AKUN,rak:'',shelving:'',baris:'',plu:'',barcode:'',name:'ADMIN',desc:'',isAdmin:true,foto_url:''};
 // Dulu pakai fetch HEAD. Supabase Storage tidak mengizinkan HEAD lintas
-// origin, jadi lempar error CORS dan hasilnya selalu false â€” foto admin
+// origin, jadi lempar error CORS dan hasilnya selalu false — foto admin
 // tidak pernah muncul. Coba list lewat SDK (authorized), lalu jatuh ke
 // render img yang memberi tahu sendiri kalau 404.
 // Foto admin jarang berubah, jadi hasilnya dicache. Sebelumnya tiap load()
@@ -341,7 +341,7 @@ function tampilErr(e){
    Tanggal sengaja TIDAK disimpan supaya tidak basi; yang tersimpan hanya RH. */
 function hitungTglRH(n){
   const v=Number.parseInt(n,10);
-  if(!Number.isFinite(v)) return {teks:'â€”',kelas:'tgl'};
+  if(!Number.isFinite(v)) return {teks:'—',kelas:'tgl'};
   const d=new Date();
   d.setHours(12,0,0,0);
   d.setDate(d.getDate()+v);
@@ -400,9 +400,9 @@ function cellInput(id,k,val,ph){
    kedaluwarsa (RH/ED) -> media (Foto) -> Aksi. Kelas g-start menandai awal
    tiap kelompok supaya ada garis pemisah. Isian dibungkus .val supaya mode
    baca menampilkan teks biasa dan kolom isiannya baru muncul saat baris
-   dibuka lewat tombol edit â€” supaya mengetuk yang salah tidak menimpa data. */
+   dibuka lewat tombol edit — supaya mengetuk yang salah tidak menimpa data. */
 function rowPlano(r,i){
-  const val=(k,v,cls)=>'<span class="val '+(cls||'')+'">'+esc(v||'â€”')+'</span>'+cellInput(r.id,k,v,'');
+  const val=(k,v,cls)=>'<span class="val '+(cls||'')+'">'+esc(v||'—')+'</span>'+cellInput(r.id,k,v,'');
   let td='';
   td+='<td class="c-nama g-start" data-label="Produk">'+val('name',r.name,'v-nama')+'</td>';
   td+='<td class="c-plu" data-label="PLU">'+val('plu',r.plu)+'</td>';
@@ -412,10 +412,10 @@ function rowPlano(r,i){
   td+='<td class="c-rh g-start" data-label="RH">'+val('rh',r.rh)+'</td>';
   td+='<td class="c-tgl" data-label="KEDALUWARSA" data-tgl-for="'+r.id+'">'+tglHtml(r.rh)+'</td>';
   td+='<td class="c-foto g-start" data-label="Foto"><div class="thumb'+(r.foto_url?'':' kosong')+'">'+(r.foto_url?'<img src="'+esc(fotoBaru(r.foto_url))+'"/>':'')+'</div>'
-     +'<button class="ico" type="button" data-foto2="'+r.id+'" title="Upload foto" aria-label="Upload foto">â†‘</button></td>';
+     +'<button class="ico" type="button" data-foto2="'+r.id+'" title="Upload foto" aria-label="Upload foto">↑</button></td>';
   td+='<td class="c-aksi" data-label=""><div class="acts">'
-     +'<button class="ico" type="button" data-edit2="'+r.id+'" title="Edit produk" aria-label="Edit produk">âœŽ</button>'
-     +'<button class="ico ico-danger" type="button" data-del2="'+r.id+'" title="Hapus produk" aria-label="Hapus produk">âœ•</button>'
+     +'<button class="ico" type="button" data-edit2="'+r.id+'" title="Edit produk" aria-label="Edit produk">✎</button>'
+     +'<button class="ico ico-danger" type="button" data-del2="'+r.id+'" title="Hapus produk" aria-label="Hapus produk">✕</button>'
      +'</div></td>';
   return '<tr data-id="'+r.id+'"><td class="c-no" data-label="">'+(i+1)+'</td>'+td+'</tr>';
 }
@@ -430,7 +430,7 @@ function render(){
   listEl.innerHTML=rows.map((m,i)=>{
     const url=m.foto_url?fotoBaru(m.foto_url):'', isA=!!m.isAdmin;
     const thumb=isA?(url?'<div class="thumb thumb-admin"><img src="'+url+'"/>':'<div class="thumb thumb-admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M12 15v2"/><path d="M8 9h8"/></svg></div>'):(url?'<div class="thumb"><img src="'+url+'"/>':'<div class="thumb kosong"></div>');
-    const acts=(isA?'':'<button class="ico ico-danger" data-del="'+m.id+'" title="Hapus" aria-label="Hapus">âœ•</button>')+'<button class="ico" data-foto="'+m.id+'" title="Upload foto" aria-label="Upload foto">â†‘</button>';
+    const acts=(isA?'':'<button class="ico ico-danger" data-del="'+m.id+'" title="Hapus" aria-label="Hapus">✕</button>')+'<button class="ico" data-foto="'+m.id+'" title="Upload foto" aria-label="Upload foto">↑</button>';
     const selRak=isA?'':' data-rak="'+esc(m.name||'')+'" title="Klik baris ini untuk isi produk"';
     return '<tr data-id="'+m.id+'"'+selRak+'><td class="c-no">'+(i+1)+'</td><td class="c-nama"><div class="nama">'+esc(m.name||'')+'</div></td><td class="c-foto">'+thumb+'</td><td class="c-aksi"><div class="acts">'+acts+'</div></td></tr>';
   }).join('');
@@ -531,7 +531,7 @@ function setEditBaris(tr,nyala){
   if(nyala) editIds.add(id); else editIds.delete(id);
   const b=tr.querySelector('[data-edit2]');
   if(b){
-    b.textContent=nyala?'âœ“':'âœŽ';
+    b.textContent=nyala?'”':'✎';
     b.title=nyala?'Selesai edit':'Edit produk';
     b.setAttribute('aria-label',b.title);
   }

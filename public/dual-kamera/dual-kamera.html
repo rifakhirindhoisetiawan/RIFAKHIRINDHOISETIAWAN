@@ -170,7 +170,7 @@
     </div>
 
     <div class="card">
-      <h2>Frame Tersimpan â€” <span id="count">0</span></h2>
+      <h2>Frame Tersimpan — <span id="count">0</span></h2>
       <div id="pairs" class="pair-grid"></div>
     </div>
   </div>
@@ -216,7 +216,7 @@
           try {
             localStorage.setItem(KEY, JSON.stringify(pairs));
           } catch (e2) {}
-          toast("Penyimpanan penuh â€” frame lama dihapus");
+          toast("Penyimpanan penuh — frame lama dihapus");
         } else {
           toast("Penyimpanan penuh");
         }
@@ -275,12 +275,12 @@
       const meta = [];
       if (p.lokasi) meta.push(esc(p.lokasi));
       if (p.baris) meta.push(esc(p.baris));
-      const metaHtml = meta.length ? meta.join(" Â· ") : "Tanpa keterangan";
+      const metaHtml = meta.length ? meta.join(" · ") : "Tanpa keterangan";
       return (
         '<div class="pair">' +
         '<img src="' + p.front + '" alt="" />' +
         '<img src="' + p.back + '" alt="" style="margin-top:6px" />' +
-        '<div class="pair-time">' + fmtDate(p.at) + " Â· " + fmtClock(p.at) + "</div>" +
+        '<div class="pair-time">' + fmtDate(p.at) + " · " + fmtClock(p.at) + "</div>" +
         '<div class="single-note">' + metaHtml + "</div>" +
         (p.catatan ? '<div class="single-note">' + esc(p.catatan) + "</div>" : "") +
         '<div class="pair-actions">' +
@@ -376,11 +376,11 @@
           });
           vidBack.srcObject = sBack;
           await vidBack.play().catch(() => {});
-          camNote.textContent = "Dua kamera aktif â€” depan & belakang.";
+          camNote.textContent = "Dua kamera aktif — depan & belakang.";
         } catch (e2) {
           vidBack.srcObject = null;
           camNote.textContent =
-            "Hanya 1 kamera terdeteksi. Pane belakang kosong â€” perangkat ini mungkin tidak punya kamera ganda.";
+            "Hanya 1 kamera terdeteksi. Pane belakang kosong — perangkat ini mungkin tidak punya kamera ganda.";
           toast("Belakangan tidak tersedia");
         }
 
