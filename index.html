@@ -448,8 +448,13 @@
       .notif-aksi {
         text-align: right;
         white-space: nowrap;
-        width: 56px;
+        width: 44px;
       }
+      /* Jarak badge ↔ panah dirapatkan: padding sel Info kanan 8px,
+         sel Aksi kiri/kanan 6px supaya kedua kotak terlihat dempet
+         tapi tidak menempel, dan panah 32px tetap pas muat. */
+      .notif-tbl tbody td:first-child { padding-right: 8px; }
+      .notif-tbl td.notif-aksi, .notif-tbl th.notif-aksi { padding-left: 6px; padding-right: 6px; }
       .notif-sel {
         display: flex;
         gap: 10px;
@@ -489,18 +494,18 @@
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-      /* Badge jumlah notifikasi: kotak kecil bergaya sama dengan tombol
+      /* Badge jumlah notifikasi: kotak 32px SAMA PERSIS dengan tombol
          panah (.notif-buka) — latar krem, garis --mori-line, radius 8px. */
       .notif-cnt {
         flex-shrink: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 24px;
-        height: 24px;
+        min-width: 32px;
+        height: 32px;
         padding: 0 5px;
         font-family: var(--mori-mono, ui-monospace, monospace);
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
         line-height: 1;
         font-variant-numeric: tabular-nums;
