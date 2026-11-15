@@ -531,12 +531,8 @@ function renderPlano(produk){
             const isMin = minimizedSet.has(sh.key);
             return `
               <tr class="grp" data-shelv-sec="${esc(sh.key)}">
-                <td colspan="10" style="background:#f7f3e9;padding:8px 12px;border-top:1px solid var(--mori-line);border-bottom:1px solid var(--mori-line)">
-                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-                    <span style="font-family:var(--mori-mono);font-size:12px;font-weight:700;color:#1a1917;white-space:nowrap">SHELVING: ${esc(sh.nama)}</span>
-                    <button type="button" class="btn-step" data-shelv-tog="${esc(sh.key)}" style="padding:0 12px;height:26px;font-size:11px;font-weight:700;background:#fff;cursor:pointer;white-space:nowrap;flex-shrink:0">${isMin?'▶ Buka':'▼ Tutup'}</button>
-                  </div>
-                </td>
+                <td class="c-no"><button type="button" class="btn-step" data-shelv-tog="${esc(sh.key)}" style="width:24px;height:24px;font-size:11px;font-weight:700;padding:0;background:#fff;cursor:pointer">${isMin?'▶':'▼'}</button></td>
+                <td colspan="9" style="background:#f7f3e9;padding:8px 12px;border-top:1px solid var(--mori-line);border-bottom:1px solid var(--mori-line);font-family:var(--mori-mono);font-size:12px;font-weight:700;color:#1a1917">SHELVING: ${esc(sh.nama)}</td>
               </tr>
               ${isMin ? '' : sh.rows.map(r=>rowPlano(r, ++globalNo)).join('')}
             `;
