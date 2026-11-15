@@ -275,6 +275,30 @@
         align-content: start;
       }
 
+      /* Seluruh menu dilapisi kotak tabel ala Admin Stok Opname:
+         bingkai 1.5px gelap + radius 10px + bar thead krem "MENU". */
+      .menu-frame {
+        width: 100%;
+        background: var(--mori-bg);
+        border: 1.5px solid rgba(26, 25, 23, 0.3);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .menu-frame-head {
+        background: var(--mori-surface);
+        color: var(--mori-text-2);
+        font-family: var(--mori-mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        padding: 9px 12px;
+        border-bottom: 1px solid var(--mori-line);
+      }
+      .menu-frame .menu-list {
+        padding: 14px;
+      }
+
       .menu-item {
         display: flex;
         flex-direction: column;
@@ -620,7 +644,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"/></svg>
         </button>
       </div>
-      <div class="menu-list" id="menuList"></div>
+      <div class="menu-frame">
+        <div class="menu-frame-head">Menu</div>
+        <div class="menu-list" id="menuList"></div>
+      </div>
     </div>
     <script type="module">
       import { loadIndexPhoto, createLazyLoader } from './src/js/image-loader.js';
