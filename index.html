@@ -171,23 +171,19 @@
         align-content: start;
       }
 
-      /* Bar header atas mengikuti kotak tabel Admin Stok Opname:
-         bingkai 1.5px gelap + radius 10px (public/stok-opname/
-         stock-admin.html:788-792), isi menjadi satu baris thead krem. */
+      /* Bar header: kotak tanggal + tombol lonceng + pin terpisah.
+         Kotak tanggal memakai bingkai tabel Admin Stok Opname
+         (1.5px gelap + radius 10px), tombol memakai gaya .ico SO. */
       .search-wrapper {
         display: flex;
-        align-items: stretch;
-        gap: 0;
+        align-items: center;
+        gap: 10px;
         width: 100%;
         margin-bottom: 14px;
-        background: var(--mori-bg);
-        border: 1.5px solid rgba(26, 25, 23, 0.3);
-        border-radius: 10px;
-        overflow: hidden;
       }
 
-      /* Tombol lonceng & pin = sel thead paling kanan, dipisah garis
-         tipis --mori-line seperti kolom tabel Admin Stok Opname. */
+      /* Tombol lonceng & pin = kotak terpisah, gaya tombol .ico
+         Admin Stok Opname (radius 8px + garis --mori-line). */
       .notif-btn {
         flex: 0 0 auto;
         width: 46px;
@@ -196,9 +192,8 @@
         align-items: center;
         justify-content: center;
         background: var(--mori-surface);
-        border: none;
-        border-left: 1px solid var(--mori-line);
-        border-radius: 0;
+        border: 1px solid var(--mori-line);
+        border-radius: 8px;
         color: var(--mori-text);
         cursor: pointer;
         padding: 0;
@@ -212,9 +207,9 @@
         height: 20px;
       }
 
-      /* Kotak tanggal/jam = sel thead: latar krem --mori-surface,
-         teks mono tebal, tanpa garis sendiri — bingkai dari wrapper
-         (sama dengan bar thead tabel Admin Stok Opname). */
+      /* Kotak tanggal/jam = kotak tabel Admin Stok Opname:
+         bingkai 1.5px gelap + radius 10px, latar thead krem,
+         teks mono tebal. */
       .search-box {
         flex: 1;
         display: flex;
@@ -222,8 +217,8 @@
         gap: 8px;
         height: 46px;
         box-sizing: border-box;
-        border: none;
-        border-radius: 0;
+        border: 1.5px solid rgba(26, 25, 23, 0.3);
+        border-radius: 10px;
         padding: 0 14px;
         color: var(--mori-text);
         font-family: var(--mori-mono);
@@ -387,9 +382,8 @@
         align-items: center;
         justify-content: center;
         background: var(--mori-surface);
-        border: none;
-        border-left: 1px solid var(--mori-line);
-        border-radius: 0;
+        border: 1px solid var(--mori-line);
+        border-radius: 8px;
         color: var(--mori-text);
         cursor: pointer;
         padding: 0;
@@ -405,7 +399,7 @@
       .header-pin-btn[aria-pressed="true"] {
         background: var(--mori-text);
         color: var(--mori-bg);
-        border-left-color: var(--mori-text);
+        border-color: var(--mori-text);
       }
       .notif-btn svg {
         width: 20px;
@@ -544,7 +538,7 @@
       .header-pin-btn[aria-pressed="true"], #headerPinBtn[aria-pressed="true"] {
         background: var(--mori-text);
         color: var(--mori-bg);
-        border-left-color: var(--mori-text);
+        border-color: var(--mori-text);
       }
 
     </style>
