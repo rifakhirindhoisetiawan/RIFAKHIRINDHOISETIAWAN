@@ -148,8 +148,13 @@
     .btn-step{width:26px;height:26px;padding:0;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:6px;font-family:var(--mori-mono);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1a1917;flex-shrink:0}
     .btn-step:hover{background:#efe9da}
     .step-wrap .cell-input{flex:1;min-width:0;height:26px;text-align:center;padding:0 2px;font-size:11px}
-    .menu-table.detail .c-rh{width:52px;text-align:center}
-    .menu-table.detail .c-rh .cell-input{text-align:center;padding:0 4px}
+    .menu-table.detail .c-rh{width:115px}
+    .menu-table.detail tr.edit td.c-rh .step-wrap,
+    .menu-table.detail tbody.tambah td.c-rh .step-wrap{display:flex}
+    .menu-table.detail tr.edit td.c-rh .step-wrap,
+    .menu-table.detail tbody.tambah td.c-rh .step-wrap{display:flex}
+    .menu-table.detail td.c-rh, .menu-table.detail th.c-rh{text-align:center}
+    .menu-table.detail td.c-rh .val{text-align:center}
     .menu-table.detail .c-tgl{width:108px}
     .menu-table.detail .c-foto{width:84px}
     .menu-table.detail td.c-foto{display:flex;align-items:center;justify-content:center;gap:8px}
@@ -280,7 +285,7 @@
             <td class="c-barcode"><input class="cell-input mono" type="text" id="a_barcode" placeholder="BARCODE" autocomplete="off" /></td>
             <td class="c-shelving"><div class="step-wrap"><button type="button" class="btn-step" data-add-step="-1" data-kol="a_shelving">-</button><input class="cell-input mono" type="text" inputmode="numeric" id="a_shelving" placeholder="0" autocomplete="off" /><button type="button" class="btn-step" data-add-step="1" data-kol="a_shelving">+</button></div></td>
             <td class="c-baris"><div class="step-wrap"><button type="button" class="btn-step" data-add-step="-1" data-kol="a_baris">-</button><input class="cell-input mono" type="text" inputmode="numeric" id="a_baris" placeholder="0" autocomplete="off" /><button type="button" class="btn-step" data-add-step="1" data-kol="a_baris">+</button></div></td>
-            <td class="c-rh"><input class="cell-input mono" type="text" id="a_rh" placeholder="RH" inputmode="numeric" autocomplete="off" /></td>
+            <td class="c-rh"><div class="step-wrap"><button type="button" class="btn-step" data-add-step="-1" data-kol="a_rh">-</button><input class="cell-input mono" type="text" inputmode="numeric" id="a_rh" placeholder="30" autocomplete="off" /><button type="button" class="btn-step" data-add-step="1" data-kol="a_rh">+</button></div></td>
             <td class="c-tgl" id="a_tgl">&mdash;</td>
             <td class="c-foto"></td>
             <td class="c-aksi"><div class="acts"><button class="btn-add" type="button" id="a_add" title="Simpan produk" aria-label="Simpan produk">+</button></div></td>
@@ -411,7 +416,7 @@ pwBg.onclick=e=>{ if(e.target===pwBg) closePw(false); };
 async function kompresFoto(f){ if(!f||!/^image\//.test(f.type||'')) return f; let g=null; try{g=await createImageBitmap(f)}catch{return f} if(!g) return f; const s=Math.max(g.width,g.height),sc=Math.min(1,1200/s); if(sc===1&&f.size<400*1024){if(g.close)g.close();return f} const w=Math.max(1,Math.round(g.width*sc)),h=Math.max(1,Math.round(g.height*sc)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(g,0,0,w,h);if(g.close)g.close();const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.82)); if(!b) return f; return new File([b],(f.name||'foto').replace(/\.[^.]+$/,'')+'.jpg',{type:'image/jpeg'}) }
 function cellInput(id,k,val,ph){
   const inp='<input class="cell-input mono" type="text" inputmode="numeric" data-id="'+id+'" data-kol="'+k+'" placeholder="'+ph+'" value="'+esc(val||'')+'" autocomplete="off" />';
-  if(k==='shelving'||k==='baris'){
+  if(k==='shelving'||k==='baris'||k==='rh'){
     return '<div class="step-wrap">'
       +'<button type="button" class="btn-step" data-step="-1" data-id="'+id+'" data-kol="'+k+'">-</button>'
       +inp
