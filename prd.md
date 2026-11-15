@@ -52,7 +52,9 @@ isi berupa tabel bertema admin SO.
    (`@media (hover:hover)`) — di layar sentuh hover nyangkut setelah diklik.
 4. Tutup: klik di luar pop-up, atau tombol **Esc**.
 5. Animasi masuk `notifMasuk` 0.16s (turun dari atas, seperti dropdown).
-6. Lebar `min(300px, calc(100vw - 24px))`, `max-height:70vh`, scroll dalam.
+6. Lebar `min(240px, calc(100vw - 24px))` (minimal & dempet), `max-height:70vh`,
+   scroll dalam. Baris 48px, thead 30px, padding sel 10px, gap ikon-teks 8px,
+   jarak badge↔panah 10px (sel Info pr 6px, sel Aksi 42px pl 4 / pr 5).
 7. Badge lonceng `#notifBadge` (titik merah) + refresh data tiap 60s dan saat
    perubahan Supabase (`note_entries`, `musnah_menus`, `stock_opname`).
 
