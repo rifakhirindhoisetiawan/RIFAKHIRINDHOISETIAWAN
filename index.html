@@ -434,11 +434,12 @@
         white-space: nowrap;
       }
       .notif-tbl tbody td {
-        height: 44px;
+        height: 52px;
         background: var(--mori-bg);
       }
       .notif-tbl tbody tr:last-child td { border-bottom: 0; }
       .notif-tbl tbody tr:hover td { background: var(--mori-surface); }
+      .notif-tbl tbody tr[data-href] { cursor: pointer; }
       .notif-aksi {
         text-align: right;
         white-space: nowrap;
@@ -446,20 +447,33 @@
       }
       .notif-sel {
         display: flex;
-        gap: 8px;
+        gap: 10px;
         align-items: center;
         min-width: 0;
       }
       .notif-img {
-        width: 28px;
-        height: 28px;
+        width: 32px;
+        height: 32px;
         object-fit: cover;
         object-position: center;
-        border-radius: 6px;
+        border: 1px solid var(--mori-line);
+        border-radius: 8px;
         flex-shrink: 0;
         background: var(--mori-surface);
       }
+      .notif-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .notif-nmrow {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        min-width: 0;
+      }
       .notif-nm {
+        flex: 1;
+        min-width: 0;
         font-size: 10px;
         font-weight: 800;
         text-transform: uppercase;
@@ -470,6 +484,21 @@
         text-overflow: ellipsis;
         white-space: nowrap;
       }
+      /* Badge jumlah notifikasi, gaya mono krem (theme tabel SO). */
+      .notif-cnt {
+        flex-shrink: 0;
+        font-family: var(--mori-mono, ui-monospace, monospace);
+        font-size: 9px;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--mori-text);
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-line);
+        border-radius: 6px;
+        padding: 3px 6px;
+        min-width: 14px;
+        text-align: center;
+      }
       .notif-sub {
         font-size: 8px;
         font-weight: 700;
@@ -477,7 +506,7 @@
         color: var(--mori-text-2);
         font-family: var(--mori-mono, ui-monospace, monospace);
         text-transform: uppercase;
-        margin-top: 1px;
+        margin-top: 2px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -488,7 +517,7 @@
         padding: 0;
         background: var(--mori-surface);
         color: var(--mori-text);
-        border: none;
+        border: 1px solid var(--mori-line);
         border-radius: 8px;
         cursor: pointer;
         font-size: 0;
@@ -499,11 +528,18 @@
         flex-shrink: 0;
         box-shadow: none;
       }
+      .notif-buka:hover { background: #efe9da; }
       .notif-buka:active { transform: translate(2px, 2px); }
       .notif-buka svg {
-        width: 14px;
-        height: 14px;
+        width: 15px;
+        height: 15px;
       }
+      /* Animasi buka pop-up: muncul dari atas seperti dropdown. */
+      @keyframes notifMasuk {
+        from { opacity: 0; transform: translateY(-6px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      #notifPopup { animation: notifMasuk 0.16s ease; }
       .notif-empty {
         padding: 20px 14px;
         text-align: center;
@@ -848,13 +884,13 @@
 
       // Daftar notifikasi
       const NOTIF_ITEMS = [
-        { title: 'Menu Kopi', menuId: 64, img: 'public/kopi/image-index.jpg', link: 'public/kopi/kopi.html' },
-        { title: 'Musnah', menuId: 'musnah', img: 'assets/images/pagi/1.jpg', link: 'public/musnah/musnah-admin.html' },
+        { title: 'Menu Kopi', sub: 'Komen baru', menuId: 64, img: 'public/kopi/image-index.jpg', link: 'public/kopi/kopi.html' },
+        { title: 'Musnah', sub: 'Item musnah', menuId: 'musnah', img: 'assets/images/pagi/1.jpg', link: 'public/musnah/musnah-admin.html' },
       ];
 
       const notifPopup = document.createElement('div');
       notifPopup.id = 'notifPopup';
-      notifPopup.style.cssText = 'display:none; position:absolute; top:58px; right:12px; width:min(280px, calc(100vw - 24px)); max-height:70vh; overflow-y:auto; background:var(--mori-bg); border:1.5px solid rgba(26,25,23,0.3); border-radius:10px; box-shadow:none; z-index:1000; padding:0;';
+      notifPopup.style.cssText = 'display:none; position:absolute; top:58px; right:12px; width:min(300px, calc(100vw - 24px)); max-height:70vh; overflow-y:auto; background:var(--mori-bg); border:1.5px solid rgba(26,25,23,0.3); border-radius:10px; box-shadow:none; z-index:1000; padding:0;';
 
       // Blok "Belum SO" diringkas: kartu ringkasan saja (tanpa daftar item)
       // supaya popup notifikasi tetap pendek. Detail item dibuka dari halaman SO.
@@ -862,16 +898,20 @@
       function renderNotifPopup(comments, musnahCount, soBelum) {
         soBelum = soBelum || [];
         const counts = { 64: comments.length, 'musnah': musnahCount };
+        const arrowSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg>';
         const itemsHtml = NOTIF_ITEMS
           .map(it => ({ it, n: counts[it.menuId] || 0 }))
           .filter(x => x.n > 0)
           .map(x =>
-            '<tr>' +
+            '<tr data-href="' + x.it.link + '">' +
               '<td><div class="notif-sel">' +
                 '<img class="notif-img" src="' + x.it.img + '" alt="' + x.it.title + '" loading="lazy" decoding="async" />' +
-                '<div class="notif-nm">' + x.it.title + '</div>' +
+                '<div class="notif-info">' +
+                  '<div class="notif-nmrow"><div class="notif-nm">' + x.it.title + '</div><span class="notif-cnt">' + x.n + '</span></div>' +
+                  '<div class="notif-sub">' + x.it.sub + '</div>' +
+                '</div>' +
               '</div></td>' +
-              '<td class="notif-aksi"><a href="' + x.it.link + '" class="notif-buka" title="Buka" aria-label="Buka"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg></a></td>' +
+              '<td class="notif-aksi"><a href="' + x.it.link + '" class="notif-buka" title="Buka" aria-label="Buka">' + arrowSvg + '</a></td>' +
             '</tr>'
           ).join('');
 
@@ -879,14 +919,15 @@
         let soHtml = '';
         if (soBelum.length) {
           soHtml =
-            '<tr>' +
+            '<tr data-href="public/stok-opname/so.html">' +
               '<td><div class="notif-sel">' +
                 '<img class="notif-img" src="assets/images/time-kamera/1.jpg" alt="Stok Opname" loading="lazy" decoding="async" />' +
-                '<div><div class="notif-nm">Belum SO</div>' +
+                '<div class="notif-info">' +
+                  '<div class="notif-nmrow"><div class="notif-nm">Belum SO</div><span class="notif-cnt">' + soBelum.length + '</span></div>' +
                   '<div class="notif-sub">' + soBelum.length + ' item &gt; ' + SO_BELUM_SO_HARI + ' hari</div>' +
                 '</div>' +
               '</div></td>' +
-              '<td class="notif-aksi"><a href="public/stok-opname/so.html" class="notif-buka" title="Buka" aria-label="Buka"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg></a></td>' +
+              '<td class="notif-aksi"><a href="public/stok-opname/so.html" class="notif-buka" title="Buka" aria-label="Buka">' + arrowSvg + '</a></td>' +
             '</tr>';
         }
 
@@ -896,6 +937,14 @@
           : '<div class="notif-empty">Belum ada catatan</div>';
       }
       document.body.appendChild(notifPopup);
+
+      // Seluruh baris bisa diklik untuk buka halamannya (target sentuh
+      // lebih besar). Klik pada tombol panah tetap lewat <a> biasa.
+      notifPopup.addEventListener('click', (e) => {
+        if (e.target.closest('a')) return;
+        const tr = e.target.closest('tr[data-href]');
+        if (tr) window.location.href = tr.dataset.href;
+      });
 
       if (notifBtn) {
         notifBtn.addEventListener('click', (e) => {
@@ -914,8 +963,9 @@
           notifPopup.style.display = 'none';
         }
       });
-      const closeBtn = document.getElementById('notifPopupClose');
-      if (closeBtn) closeBtn.addEventListener('click', () => { notifPopup.style.display = 'none'; });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') notifPopup.style.display = 'none';
+      });
 
 
       updateNotifBadge();
