@@ -29,7 +29,9 @@ isi berupa tabel bertema admin SO.
 ### Struktur
 - Tabel `.notif-tbl`: thead `INFO | AKSI` (krem `--mori-surface`, mono 11px uppercase).
 - Tiap baris (52px): tile ikon/foto **32px** (radius 8px + garis `--mori-line`) →
-  judul mono + **badge jumlah** `.notif-cnt` + sub-keterangan `.notif-sub`.
+  judul mono + **badge jumlah** `.notif-cnt` (**pill hitam solid**, teks krem,
+  mono tebal, radius penuh — kontras jelas, bukan kotak pucat) + sub-keterangan
+  `.notif-sub`.
 - Tombol aksi panah `→` `.notif-buka`: 32px, gaya `.ico` SO (garis `--mori-line`,
   radius 8px, hover `#efe9da`, `:active` geser 2px).
 - Sumber data: `NOTIF_ITEMS` (Menu Kopi → komen baru, Musnah → item musnah) +
@@ -79,6 +81,7 @@ Font global body: Inter. Font JetBrains Mono sudah dimuat via Google Fonts.
 | `ecb42b9` | Tombol lonceng & pin dipisah jadi kotak sendiri |
 | `ed96030` | Lonceng & pin disamakan persis dengan kotak tanggal (1.5px + 10px) |
 | `9114d26` | Optimasi pop-up notifikasi (baris klik, badge, animasi, Esc) |
+| `94a37b0` | Badge jumlah pop-up jadi pill hitam solid (teks krem) |
 | `f4b052f` | Posisi pop-up dari rect tombol lonceng + hover hanya di mouse |
 
 Referensi tema: `public/stok-opname/stock-admin.html` (bingkai tabel 1.5px +
