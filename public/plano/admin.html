@@ -173,9 +173,9 @@
     .c-tgl .tgl.hampir{color:#b45309}
     .c-tgl .tgl.padat{color:#b91c1c}
     /* ===== MODE BACA / EDIT produk ===== */
-    .menu-table.detail td .val{display:block;font-family:var(--mori-mono);font-size:10px;font-weight:700;line-height:1.2;color:#1a1917;padding:0 3px;overflow:visible;text-overflow:clip;white-space:normal;word-break:break-all}
-    .menu-table.detail td .v-nama{font-size:12px;font-weight:700;white-space:nowrap;overflow:visible;text-overflow:clip}
-    .c-barcode .val{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .menu-table.detail td .val{display:block;font-family:var(--mori-mono);font-size:10px;font-weight:700;line-height:1.2;color:#1a1917;padding:0 3px;white-space:nowrap}
+    .menu-table.detail td .v-nama{font-size:12px;font-weight:700}
+    .menu-table.detail td.c-nama, .menu-table.detail td.c-barcode{min-width:max-content}
     .menu-table.detail td .cell-input{display:none}
     .menu-table.detail tbody.tambah td .cell-input{display:block!important;width:100%}
     .menu-table.detail tr.edit td .cell-input{display:block;width:100%}
@@ -186,7 +186,7 @@
        Barisnya strip yang digeser ke samping, jadi tidak ada kolom hilang
        dan tidak perlu baris tinggi seperti kartu. */
     @media(max-width:680px){
-      .sec .menu-table.detail{min-width:0;display:block}
+      .sec .menu-table.detail{min-width:0;display:block;width:auto}
       /* Di HP tiap baris jadi kartu berborder sendiri, jadi frame wrapper
          dilepas supaya tidak jadi dua garis tepi. */
       .sec .table-wrap:has(.menu-table.detail){border:0;background:transparent}
