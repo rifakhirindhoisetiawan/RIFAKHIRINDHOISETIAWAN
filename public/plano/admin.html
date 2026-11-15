@@ -516,15 +516,17 @@ function renderPlano(produk){
 
     return (a.sort_order||0)-(b.sort_order||0);
   });
-  const groups=[];
+  const shelvs=[];
   filtered.forEach(r=>{
-    const key=String(r.rak||'').trim().toUpperCase();
-    let g=groups.find(x=>x.key===key);
-    if(!g){ g={key,nama:r.rak,rows:[]}; groups.push(g); }
-    g.rows.push(r);
+    const sKey=String(r.shelving||'').trim().toUpperCase()||'TANPA SHELVING';
+    let sh=shelvs.find(x=>x.key===sKey);
+    if(!sh){ sh={key:sKey,nama:r.shelving||'TANPA SHELVING',rows:[]}; shelvs.push(sh); }
+    sh.rows.push(r);
   });
-  let no=0;
-  planoList.innerHTML=groups.map(g=>g.rows.map(r=>rowPlano(r,++no)).join('')).join('');
+  let globalNo=0;
+  planoList.innerHTML = shelvs.map(sh=>`
+    <tr class="grp"><td colspan="10" class="grp-nama" style="background:#f7f3e9;font-family:var(--mori-mono);font-size:11px;font-weight:700;padding:8px 12px;border-top:1px solid var(--mori-line);border-bottom:1px solid var(--mori-line);color:#1a1917">SHELVING: ${esc(sh.nama)}</td></tr>
+  `+sh.rows.map(r=>rowPlano(r,++globalNo)).join('')).join('');
 }
 async function simpanSel(el){
   const id=el.dataset.id, kol=el.dataset.kol;
