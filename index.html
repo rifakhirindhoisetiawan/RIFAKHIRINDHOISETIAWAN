@@ -438,7 +438,12 @@
         background: var(--mori-bg);
       }
       .notif-tbl tbody tr:last-child td { border-bottom: 0; }
-      .notif-tbl tbody tr:hover td { background: var(--mori-surface); }
+      /* Sorotan baris hanya untuk perangkat ber-mouse: di layar sentuh
+         :hover nyangkut setelah diklik dan membuat baris terlihat
+         tertumpuk dengan garis pemisah. */
+      @media (hover: hover) {
+        .notif-tbl tbody tr:hover td { background: var(--mori-surface); }
+      }
       .notif-tbl tbody tr[data-href] { cursor: pointer; }
       .notif-aksi {
         text-align: right;
@@ -951,11 +956,20 @@
           e.preventDefault();
           e.stopPropagation();
           const isOpen = notifPopup.style.display === 'block';
-          notifPopup.style.display = isOpen ? 'none' : 'block';
-          if (!isOpen) {
-            // refresh data di background (non-blocking)
-            updateNotifBadge();
+          if (isOpen) {
+            notifPopup.style.display = 'none';
+            return;
           }
+          // Posisi pop-up selalu dihitung dari tombol lonceng: tepat
+          // di BAWAH bar header (garis bingkainya tidak pernah
+          // tertimpa), menempel tepi kanan tombol — aman walau tanggal
+          // membungkus 2 baris atau ada safe-area iPhone.
+          const r = notifBtn.getBoundingClientRect();
+          notifPopup.style.top = Math.round(r.bottom + window.scrollY + 6) + 'px';
+          notifPopup.style.right = Math.max(12, Math.round(window.innerWidth - r.right)) + 'px';
+          notifPopup.style.display = 'block';
+          // refresh data di background (non-blocking)
+          updateNotifBadge();
         });
       }
       document.addEventListener('click', (e) => {
