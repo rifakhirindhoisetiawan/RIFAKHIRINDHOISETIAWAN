@@ -93,7 +93,14 @@ Font global body: Inter. Font JetBrains Mono sudah dimuat via Google Fonts.
   → semua tile jadi bisa diklik untuk **menyematkan/membatalkan** sematan →
   tekan lagi tombol pin untuk keluar; menu re-render otomatis saat toggle.
 
-## 5. Riwayat Commit Terkait
+## 5. Menu Kopi (`public/kopi/kopi.html`)
+
+- **Bar Header Atas (Search & Tombol Aksi)**:
+  - Kotak pencarian (`.search-box`): tinggi 46px, bingkai **1.5px** `rgba(26,25,23,0.3) !important`, radius **10px**, latar `--mori-surface` (#f7f3e9).
+  - Tombol Pin Mode & Cek Komentar (`.pin-mode-btn`): ukuran 46×46px, bingkai **1.5px** `rgba(26,25,23,0.3)`, radius **10px**, latar `--mori-surface`, ikon 20×20px, efek `:active` geser 2px.
+  - Struktur tata letak sejajar horizontal (`.search-row`) dempet 10px di dalam kontainer utama.
+
+## 6. Riwayat Commit Terkait
 
 | Commit | Isi |
 |---|---|
