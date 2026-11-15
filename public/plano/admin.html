@@ -521,19 +521,34 @@ function renderPlano(produk){
     sh.rows.push(r);
   });
   let globalNo=0;
-  planoListWrap.innerHTML = shelvs.map(sh=>`
-    <section class="sec" style="margin-top:14px">
-      <div class="sec-head"><div class="sec-title">SHELVING: ${esc(sh.nama)}</div></div>
+  const minimizedSet = window._minimizedShelv || (window._minimizedShelv = new Set());
+  planoListWrap.innerHTML = shelvs.map(sh=>{
+    const isMin = minimizedSet.has(sh.key);
+    return `
+    <section class="sec" style="margin-top:14px" data-shelv-sec="${esc(sh.key)}">
       <div class="table-wrap" style="margin-top:6px">
         <table class="menu-table detail">
-          <thead><tr><th class="c-no">No</th><th class="c-nama">Produk</th><th class="c-plu">PLU</th><th class="c-barcode">Barcode</th><th class="c-shelving">Shelving</th><th class="c-baris">Baris</th><th class="c-rh" title="Umur barang dalam hari">RH</th><th class="c-tgl" title="Tanggal kedaluwarsa = hari ini + RH">KEDALUWARSA</th><th class="c-foto">Foto</th><th class="c-aksi"></th></tr></thead>
-          <tbody>
+          <thead>
+            <tr>
+              <th class="c-no"><button type="button" class="btn-step btn-min-shelv" data-shelv-tog="${esc(sh.key)}" style="width:20px;height:20px;font-size:10px;padding:0;margin-right:4px">${isMin?'+':'-'}</button>No</th>
+              <th class="c-nama">SHELVING: ${esc(sh.nama)}</th>
+              <th class="c-plu">PLU</th>
+              <th class="c-barcode">Barcode</th>
+              <th class="c-shelving">Shelving</th>
+              <th class="c-baris">Baris</th>
+              <th class="c-rh" title="Umur barang dalam hari">RH</th>
+              <th class="c-tgl" title="Tanggal kedaluwarsa = hari ini + RH">KEDALUWARSA</th>
+              <th class="c-foto">Foto</th>
+              <th class="c-aksi"></th>
+            </tr>
+          </thead>
+          <tbody style="${isMin?'display:none':''}">
             ${sh.rows.map(r=>rowPlano(r, ++globalNo)).join('')}
           </tbody>
         </table>
       </div>
     </section>
-  `).join('');
+  `;}).join('');
 }
 async function simpanSel(el){
   const id=el.dataset.id, kol=el.dataset.kol;
@@ -587,6 +602,15 @@ function pulihkanEdit(){
   editIds.forEach(id=>setEditBaris(planoListWrap.querySelector('tr[data-id="'+id+'"]'),true));
 }
 planoListWrap.addEventListener('click',e=>{
+  const btnMin = e.target.closest('[data-shelv-tog]');
+  if(btnMin){
+    const sKey = btnMin.dataset.shelvTog;
+    const minimizedSet = window._minimizedShelv || (window._minimizedShelv = new Set());
+    if(minimizedSet.has(sKey)) minimizedSet.delete(sKey);
+    else minimizedSet.add(sKey);
+    renderPlano(lastFiltered);
+    return;
+  }
   // Tombol per produk: edit, hapus, upload foto. Dicek lebih dulu supaya klik
   // tombol tidak ikut memicu pindah rak di bawahnya.
   const ed=e.target.closest('[data-edit2]');
