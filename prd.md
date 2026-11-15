@@ -29,9 +29,10 @@ isi berupa tabel bertema admin SO.
 ### Struktur
 - Tabel `.notif-tbl`: thead `INFO | AKSI` (krem `--mori-surface`, mono 11px uppercase).
 - Tiap baris (52px): tile ikon/foto **32px** (radius 8px + garis `--mori-line`) →
-  judul mono + **badge jumlah** `.notif-cnt` (**kotak 24px bergaya sama dengan
+  judul mono + **badge jumlah** `.notif-cnt` (**kotak 32px, ukuran sama dengan
   tombol panah**: krem `--mori-surface`, garis `--mori-line`, radius 8px,
-  angka mono tebal) + sub-keterangan `.notif-sub`.
+  angka mono tebal) + sub-keterangan `.notif-sub`. Jarak badge ↔ panah
+  dirapatkan (padding sel Info kanan 8px, sel Aksi 6px; lebar sel Aksi 44px).
 - Tombol aksi panah `→` `.notif-buka`: 32px, gaya `.ico` SO (garis `--mori-line`,
   radius 8px, hover `#efe9da`, `:active` geser 2px).
 - Sumber data: `NOTIF_ITEMS` (Menu Kopi → komen baru, Musnah → item musnah) +
@@ -82,7 +83,7 @@ Font global body: Inter. Font JetBrains Mono sudah dimuat via Google Fonts.
 | `ed96030` | Lonceng & pin disamakan persis dengan kotak tanggal (1.5px + 10px) |
 | `9114d26` | Optimasi pop-up notifikasi (baris klik, badge, animasi, Esc) |
 | `94a37b0` | Badge jumlah pop-up jadi pill hitam solid (teks krem) |
-| (saat ini) | Badge jumlah dikotakkan gaya sama dengan tombol panah (krem + garis + radius 8px) |
+| (saat ini) | Badge jumlah dikotakkan gaya sama dengan tombol panah (krem + garis + radius 8px), ukuran disamakan 32px, jarak dirapatkan |
 | `f4b052f` | Posisi pop-up dari rect tombol lonceng + hover hanya di mouse |
 
 Referensi tema: `public/stok-opname/stock-admin.html` (bingkai tabel 1.5px +
