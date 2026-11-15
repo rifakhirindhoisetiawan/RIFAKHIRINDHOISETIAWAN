@@ -366,8 +366,8 @@
       }
 
       /* Menu TERKUNCI: yang belum disematkan tidak bisa dibuka orang.
-         Tampilan pudar + lencana gembok di pojok tile. Bisa dibuka
-         setelah disematkan lewat mode semat (tombol pin di header). */
+         Tampilan pudar saja (tanpa lencana gembok — diminta user).
+         Bisa dibuka setelah disematkan lewat mode semat (tombol pin). */
       .menu-item.locked {
         cursor: not-allowed;
         -webkit-tap-highlight-color: transparent;
@@ -378,20 +378,6 @@
       }
       .menu-item.locked .label {
         color: var(--mori-text-2);
-      }
-      .menu-item.locked .icon-box::after {
-        content: "";
-        position: absolute;
-        top: 6px;
-        right: 6px;
-        width: 20px;
-        height: 20px;
-        border-radius: 6px;
-        background-color: var(--mori-text);
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fffbf2' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='9' rx='2'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4'/%3E%3C/svg%3E");
-        background-size: 12px 12px;
-        background-position: center;
-        background-repeat: no-repeat;
       }
 
       @media (max-width: 360px) {
