@@ -399,7 +399,8 @@
        tombol ⋮ diklik dibuat persis 32x32 — sama seperti tombol ⋮. */
     #menuPop .menu-act{
       pointer-events:auto;-webkit-tap-highlight-color:transparent;
-      width:32px;height:32px;min-height:32px;padding:0;margin:0;
+      width:32px;height:32px;min-height:32px;max-height:32px;padding:0;margin:0;
+      box-sizing:border-box;
       display:flex;align-items:center;justify-content:center;
       background:var(--mori-surface);color:var(--mori-text);
       border:1px solid var(--mori-line);border-radius:var(--mori-radius);
