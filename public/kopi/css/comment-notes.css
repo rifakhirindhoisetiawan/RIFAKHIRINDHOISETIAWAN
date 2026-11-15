@@ -78,12 +78,14 @@
   text-align: right;
   white-space: nowrap;
   width: 96px;
+  vertical-align: middle;
 }
 .cmt-table .cmt-acts {
-  display: flex;
+  display: inline-flex;
   gap: 6px;
   justify-content: flex-end;
   align-items: center;
+  vertical-align: middle;
 }
 .cmt-table .cmt-btn {
   width: 32px;
