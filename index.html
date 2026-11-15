@@ -416,7 +416,7 @@
         background: var(--mori-bg);
       }
       .notif-tbl th, .notif-tbl td {
-        padding: 0 12px;
+        padding: 0 10px;
         border-bottom: 1px solid var(--mori-line);
         text-align: left;
         vertical-align: middle;
@@ -429,12 +429,12 @@
         font-weight: 700;
         letter-spacing: .5px;
         text-transform: uppercase;
-        height: 34px;
-        padding: 0 12px;
+        height: 30px;
+        padding: 0 10px;
         white-space: nowrap;
       }
       .notif-tbl tbody td {
-        height: 52px;
+        height: 48px;
         background: var(--mori-bg);
       }
       .notif-tbl tbody tr:last-child td { border-bottom: 0; }
@@ -448,16 +448,16 @@
       .notif-aksi {
         text-align: right;
         white-space: nowrap;
-        width: 44px;
+        width: 42px;
       }
-      /* Jarak badge ↔ panah dirapatkan: padding sel Info kanan 8px,
-         sel Aksi kiri/kanan 6px supaya kedua kotak terlihat dempet
+      /* Jarak badge ↔ panah dirapatkan: padding sel Info kanan 6px,
+         sel Aksi kiri/kanan 4-5px supaya kedua kotak terlihat dempet
          tapi tidak menempel, dan panah 32px tetap pas muat. */
-      .notif-tbl tbody td:first-child { padding-right: 8px; }
-      .notif-tbl td.notif-aksi, .notif-tbl th.notif-aksi { padding-left: 6px; padding-right: 6px; }
+      .notif-tbl tbody td:first-child { padding-right: 6px; }
+      .notif-tbl td.notif-aksi { padding-left: 4px; padding-right: 5px; }
       .notif-sel {
         display: flex;
-        gap: 10px;
+        gap: 8px;
         align-items: center;
         min-width: 0;
       }
@@ -898,7 +898,7 @@
 
       const notifPopup = document.createElement('div');
       notifPopup.id = 'notifPopup';
-      notifPopup.style.cssText = 'display:none; position:absolute; top:58px; right:12px; width:min(300px, calc(100vw - 24px)); max-height:70vh; overflow-y:auto; background:var(--mori-bg); border:1.5px solid rgba(26,25,23,0.3); border-radius:10px; box-shadow:none; z-index:1000; padding:0;';
+      notifPopup.style.cssText = 'display:none; position:absolute; top:58px; right:12px; width:min(240px, calc(100vw - 24px)); max-height:70vh; overflow-y:auto; background:var(--mori-bg); border:1.5px solid rgba(26,25,23,0.3); border-radius:10px; box-shadow:none; z-index:1000; padding:0;';
 
       // Blok "Belum SO" diringkas: kartu ringkasan saja (tanpa daftar item)
       // supaya popup notifikasi tetap pendek. Detail item dibuka dari halaman SO.
