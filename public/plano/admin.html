@@ -522,37 +522,29 @@ function renderPlano(produk){
   });
   let globalNo=0;
   const minimizedSet = window._minimizedShelv || (window._minimizedShelv = new Set());
-  planoListWrap.innerHTML = shelvs.map(sh=>{
-    const isMin = minimizedSet.has(sh.key);
-    return `
-    <section class="sec" style="margin-top:14px" data-shelv-sec="${esc(sh.key)}">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:8px;margin-bottom:6px">
-        <span style="font-family:var(--mori-mono);font-size:12px;font-weight:700;color:#1a1917">SHELVING: ${esc(sh.nama)}</span>
-        <button type="button" class="ico" data-shelv-tog="${esc(sh.key)}" style="width:32px;height:32px;font-size:13px;font-weight:700;padding:0;background:#fff;border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:#1a1917">${isMin?'▶ Buka':'▼ Tutup'}</button>
-      </div>
-      <div class="table-wrap" style="margin-top:0">
-        <table class="menu-table detail" style="${isMin?'display:none':''}">
-          <thead>
-            <tr style="${isMin?'display:none':''}">
-              <th class="c-no">No</th>
-              <th class="c-nama">Produk</th>
-              <th class="c-plu">PLU</th>
-              <th class="c-barcode">Barcode</th>
-              <th class="c-shelving">Shelving</th>
-              <th class="c-baris">Baris</th>
-              <th class="c-rh" title="Umur barang dalam hari">RH</th>
-              <th class="c-tgl" title="Tanggal kedaluwarsa = hari ini + RH">KEDALUWARSA</th>
-              <th class="c-foto">Foto</th>
-              <th class="c-aksi"></th>
-            </tr>
-          </thead>
-          <tbody style="${isMin?'display:none':''}">
-            ${sh.rows.map(r=>rowPlano(r, ++globalNo)).join('')}
-          </tbody>
-        </table>
-      </div>
-    </section>
-  `;}).join('');
+  planoListWrap.innerHTML = `
+    <div class="table-wrap" style="margin-top:10px">
+      <table class="menu-table detail">
+        <thead><tr><th class="c-no">No</th><th class="c-nama">Produk</th><th class="c-plu">PLU</th><th class="c-barcode">Barcode</th><th class="c-shelving">Shelving</th><th class="c-baris">Baris</th><th class="c-rh" title="Umur barang dalam hari">RH</th><th class="c-tgl" title="Tanggal kedaluwarsa = hari ini + RH">KEDALUWARSA</th><th class="c-foto">Foto</th><th class="c-aksi"></th></tr></thead>
+        <tbody>
+          ${shelvs.map(sh=>{
+            const isMin = minimizedSet.has(sh.key);
+            return `
+              <tr class="grp" data-shelv-sec="${esc(sh.key)}">
+                <td colspan="10" style="background:#f7f3e9;padding:8px 12px;border-top:1px solid var(--mori-line);border-bottom:1px solid var(--mori-line)">
+                  <div style="display:flex;align-items:center;justify-content:space-between">
+                    <span style="font-family:var(--mori-mono);font-size:12px;font-weight:700;color:#1a1917">SHELVING: ${esc(sh.nama)}</span>
+                    <button type="button" class="ico" data-shelv-tog="${esc(sh.key)}" style="width:32px;height:32px;font-size:13px;font-weight:700;padding:0;background:#fff;border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:#1a1917">${isMin?'▶ Buka':'▼ Tutup'}</button>
+                  </div>
+                </td>
+              </tr>
+              ${isMin ? '' : sh.rows.map(r=>rowPlano(r, ++globalNo)).join('')}
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 async function simpanSel(el){
   const id=el.dataset.id, kol=el.dataset.kol;
