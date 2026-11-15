@@ -72,10 +72,14 @@ isi berupa tabel bertema admin SO.
 
 Font global body: Inter. Font JetBrains Mono sudah dimuat via Google Fonts.
 
-## 4. Menu Utama (grid tile)
+## 4. Menu Utama (grid tile dalam frame tabel)
 
-- Grid 4 kolom (`repeat(4, 1fr)`, gap `16px 10px`), lazy-load foto via
-  `createLazyLoader` + `loadIndexPhoto`.
+- **Seluruh menu dibungkus frame tabel** ala Admin Stok Opname
+  (`.menu-frame`): bingkai `1.5px` gelap + radius `10px` + bar thead krem
+  `.menu-frame-head` bertuliskan "MENU" (mono uppercase). Jangan dihapus —
+  diminta user agar tema tabel konsisten dari header sampai daftar menu.
+- Grid 4 kolom (`repeat(4, 1fr)`, gap `16px 10px`), padding dalam frame 14px,
+  lazy-load foto via `createLazyLoader` + `loadIndexPhoto`.
 - Fitur sematan (pin): tersinkron Supabase tabel `portal_pins`
   (`PIN_TABLE = 'portal_pins'`), tombol `#headerPinBtn` masuk/keluar mode semat.
 
@@ -95,6 +99,7 @@ Font global body: Inter. Font JetBrains Mono sudah dimuat via Google Fonts.
 | Commit | Isi |
 |---|---|
 | `8072b43` | Header bar bertema tabel admin SO (satu bar menyatu) |
+| `1c5b2f7` | Seluruh menu dibungkus frame tabel SO (bingkai 1.5px + radius 10px + bar "MENU") |
 | `ecb42b9` | Tombol lonceng & pin dipisah jadi kotak sendiri |
 | `ed96030` | Lonceng & pin disamakan persis dengan kotak tanggal (1.5px + 10px) |
 | `9114d26` | Optimasi pop-up notifikasi (baris klik, badge, animasi, Esc) |
