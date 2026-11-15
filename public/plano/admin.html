@@ -76,6 +76,8 @@
     .hint{margin-top:8px;font-family:var(--mori-mono);font-size:10px;color:#b91c1c;border-left:3px solid #b91c1c;background:#fdf1f1;padding:6px 8px}
     .hint[hidden]{display:none}
     .menu-table.detail{min-width:960px;table-layout:auto}
+    .menu-table.detail th.c-aksi,.menu-table.detail td.c-aksi{position:sticky;right:0;z-index:2;background:#fffbf2}
+    .menu-table.detail thead th.c-aksi{background:#f7f3e9}
     .menu-table.detail .c-nama{overflow:visible}
     .sec .menu-table .c-aksi{position:sticky;right:0;background:#fffbf2;box-shadow: none}
     .sec .menu-table thead th.c-aksi{z-index:2;background:#f7f3e9}
@@ -533,9 +535,9 @@ function renderPlano(produk){
       <table class="menu-table detail">
         <thead>
           <tr>
-            <th colspan="2" style="background:#f7f3e9;padding:8px 12px;text-align:left;font-family:var(--mori-mono);font-size:12px;font-weight:700;color:#1a1917;border-bottom:1px solid var(--mori-line)">SHELVING: ${esc(sh.nama)}</th>
+            <th colspan="2" style="background:#f7f3e9;padding:8px 12px;text-align:left;font-family:var(--mori-mono);font-size:12px;font-weight:700;color:#1a1917;border-bottom:1px solid var(--mori-line);position:sticky;left:0;z-index:3">SHELVING: ${esc(sh.nama)}</th>
             <th colspan="7" style="background:#f7f3e9;border-bottom:1px solid var(--mori-line)"></th>
-            <th style="background:#f7f3e9;text-align:right;padding:8px 12px;border-bottom:1px solid var(--mori-line)"><button type="button" class="ico" data-shelv-tog="${esc(sh.key)}" style="width:32px;height:32px;font-size:13px;font-weight:700;padding:0;background:#fff;border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:#1a1917" title="${isMin?'Buka':'Tutup'}" aria-label="${isMin?'Buka':'Tutup'}">${isMin?'▶':'▼'}</button></th>
+            <th style="background:#f7f3e9;text-align:right;padding:8px 12px;border-bottom:1px solid var(--mori-line);position:sticky;right:0;z-index:3"><button type="button" class="ico" data-shelv-tog="${esc(sh.key)}" style="width:32px;height:32px;font-size:13px;font-weight:700;padding:0;background:#fff;border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:#1a1917" title="${isMin?'Buka':'Tutup'}" aria-label="${isMin?'Buka':'Tutup'}">${isMin?'▶':'▼'}</button></th>
           </tr>
           <tr style="${isMin?'display:none':''}">
             <th class="c-no">No</th>
