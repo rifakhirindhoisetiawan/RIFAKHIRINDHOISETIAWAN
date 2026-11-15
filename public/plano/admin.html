@@ -526,12 +526,16 @@ function renderPlano(produk){
     const isMin = minimizedSet.has(sh.key);
     return `
     <section class="sec" style="margin-top:14px" data-shelv-sec="${esc(sh.key)}">
-      <div class="table-wrap" style="margin-top:6px">
-        <table class="menu-table detail">
+      <div class="sec-head" style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:8px 8px 0 0">
+        <div class="sec-title" style="font-family:var(--mori-mono);font-size:12px;font-weight:700;color:#1a1917">SHELVING: ${esc(sh.nama)}</div>
+        <button type="button" class="btn-step" data-shelv-tog="${esc(sh.key)}" style="width:28px;height:24px;font-size:11px;font-weight:700;padding:0;background:#fff">${isMin?'▶ Buka':'▼ Tutup'}</button>
+      </div>
+      <div class="table-wrap" style="margin-top:0">
+        <table class="menu-table detail" style="${isMin?'display:none':''}">
           <thead>
             <tr>
-              <th class="c-no"><button type="button" class="btn-step btn-min-shelv" data-shelv-tog="${esc(sh.key)}" style="width:20px;height:20px;font-size:10px;padding:0;margin-right:4px">${isMin?'+':'-'}</button>No</th>
-              <th class="c-nama">SHELVING: ${esc(sh.nama)}</th>
+              <th class="c-no">No</th>
+              <th class="c-nama">Produk</th>
               <th class="c-plu">PLU</th>
               <th class="c-barcode">Barcode</th>
               <th class="c-shelving">Shelving</th>
@@ -542,7 +546,7 @@ function renderPlano(produk){
               <th class="c-aksi"></th>
             </tr>
           </thead>
-          <tbody style="${isMin?'display:none':''}">
+          <tbody>
             ${sh.rows.map(r=>rowPlano(r, ++globalNo)).join('')}
           </tbody>
         </table>
