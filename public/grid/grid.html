@@ -16,6 +16,16 @@
         padding: 0;
       }
 
+      :root {
+        --mori-bg: #fffbf2;
+        --mori-surface: #f7f3e9;
+        --mori-text: #1a1917;
+        --mori-text-2: #6e6a64;
+        --mori-line: rgba(26, 25, 23, 0.14);
+        --mori-accent: #1a1917;
+        --mori-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+
       html,
       body {
         height: 100%;
@@ -24,26 +34,24 @@
         position: fixed;
         inset: 0;
         width: 100%;
+        background: var(--mori-bg);
       }
 
       body {
-        font-family:
-          "Segoe UI",
-          system-ui,
-          -apple-system,
-          sans-serif;
-        background: #ffffff;
+        font-family: var(--mori-mono), "Segoe UI", system-ui, sans-serif;
+        background: var(--mori-bg);
         display: block;
         padding: 0;
         margin: 0;
         overscroll-behavior: none;
         -webkit-overflow-scrolling: touch;
+        color: var(--mori-text);
       }
 
       .app {
         width: 100%;
         max-width: 100%;
-        background: #ffffff;
+        background: var(--mori-bg);
         border-radius: 0;
         box-shadow: none;
         overflow: hidden;
@@ -142,183 +150,59 @@
         gap: 10px;
         flex-shrink: 0;
       }
-      .stepper .value {
-        font-size: 15px;
-        font-weight: 800;
-        color: #1f2937;
+       .stepper .value {
+        font-size: 13px;
+        font-family: var(--mori-mono);
+        font-weight: 700;
+        color: var(--mori-text);
         min-width: 26px;
         text-align: center;
       }
       .stepper .btns {
         display: flex;
-        gap: 8px;
+        gap: 6px;
         align-items: center;
         flex-shrink: 0;
       }
-      .step-btn {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        border: none;
-        background: #6366f1;
-        color: #fff;
-        font-size: 16px;
-        font-weight: 800;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .step-btn:disabled {
-        background: #d9dde3;
-        box-shadow: none;
-        cursor: not-allowed;
-      }
-
-      .trash-btn {
-        width: 32px;
-        height: 32px;
-        padding: 0;
-        border-radius: 8px;
-        border: none;
-        background: #6366f1;
-        color: #fff;
-        cursor: pointer;
-        outline: none;
-        transition: all 0.15s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-      .trash-btn:active {
-        opacity: 0.85;
-        transform: scale(0.93);
-      }
-
-      .add-photo-btn {
-        width: 32px;
-        height: 32px;
-        padding: 0;
-        border-radius: 8px;
-        border: none;
-        background: #6366f1;
-        color: #fff;
-        cursor: pointer;
-        outline: none;
-        transition: all 0.15s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-      .add-photo-btn:active {
-        opacity: 0.85;
-        transform: scale(0.93);
-      }
-
-      .aspect-btn {
-        width: 32px;
-        height: 32px;
-        padding: 0;
-        border-radius: 8px;
-        border: none;
-        background: #6366f1;
-        color: #fff;
-        font-size: 12px;
-        font-weight: 800;
-        cursor: pointer;
-        outline: none;
-        transition: all 0.15s ease;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
-        letter-spacing: -0.3px;
-      }
-      .aspect-btn:active {
-        opacity: 0.85;
-        transform: scale(0.93);
-      }
-
-      .layout-cycle {
-        width: 32px;
-        height: 32px;
-        padding: 0;
-        border-radius: 8px;
-        border: none;
-        background: #6366f1;
-        color: #fff;
-        font-size: 10px;
-        font-weight: 800;
-        cursor: pointer;
-        outline: none;
-        transition: all 0.15s ease;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        white-space: nowrap;
-        line-height: 1;
-        overflow: hidden;
-      }
-      .layout-cycle:active {
-        opacity: 0.85;
-        transform: scale(0.93);
-      }
-
-      .dl-btn {
-        width: 32px;
-        height: 32px;
-        padding: 0;
-        border-radius: 8px;
-        border: none;
-        background: #6366f1;
-        color: #fff;
-        cursor: pointer;
-        outline: none;
-        transition: all 0.15s ease;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
-      }
-      .dl-btn:active {
-        opacity: 0.85;
-        transform: scale(0.93);
-      }
-      .dl-btn:disabled {
-        background: #d9dde3;
-        box-shadow: none;
-        cursor: not-allowed;
-        transform: none;
-        opacity: 1;
-      }
-
-      /* ===== TOMBOL ACAK TATA LETAK =====
-         Tombol kecil di sebelah tombol tata letak. Hanya muncul untuk
-         3/4/5 foto (hanya jumlah itu yang punya tata letak). */
+      .step-btn,
+      .trash-btn,
+      .add-photo-btn,
+      .aspect-btn,
+      .layout-cycle,
+      .dl-btn,
       .layout-shuffle-btn {
         width: 32px;
         height: 32px;
         padding: 0;
         border-radius: 8px;
-        border: none;
-        background: #6366f1;
-        color: #fff;
+        border: 1px solid var(--mori-line);
+        background: var(--mori-surface);
+        color: var(--mori-text);
+        font-family: var(--mori-mono);
+        font-size: 13px;
+        font-weight: 700;
         cursor: pointer;
-        outline: none;
-        transition: all 0.15s ease;
-        flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: transform .12s ease, background .12s ease;
       }
+      .step-btn:active,
+      .trash-btn:active,
+      .add-photo-btn:active,
+      .aspect-btn:active,
+      .layout-cycle:active,
+      .dl-btn:active,
       .layout-shuffle-btn:active {
-        opacity: 0.85;
-        transform: scale(0.93);
+        transform: translate(2px, 2px);
+      }
+      .step-btn:disabled,
+      .dl-btn:disabled {
+        background: var(--mori-bg);
+        color: var(--mori-text-2);
+        opacity: .4;
+        cursor: not-allowed;
+        transform: none;
       }
 
       /* ===== CARA POTONG FOTO =====
