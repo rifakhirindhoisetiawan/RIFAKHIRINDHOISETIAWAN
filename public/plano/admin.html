@@ -270,10 +270,7 @@
     </div>
   </section>
 
-  <section class="sec">
-    <div class="sec-head" style="display:none">
-      <div class="sec-title">DAFTAR PRODUK &bull; <span id="rakInfo" style="color:var(--mori-text-2);font-size:10px">PILIH RAK DI ATAS</span></div>
-    </div>
+  <section class="sec" id="planoSections">
     <div class="table-wrap" style="margin-top:10px">
       <table class="menu-table detail">
         <thead><tr><th class="c-no">No</th><th class="c-nama">Produk</th><th class="c-plu">PLU</th><th class="c-barcode">Barcode</th><th class="c-shelving">Shelving</th><th class="c-baris">Baris</th><th class="c-rh" title="Umur barang dalam hari">RH</th><th class="c-tgl" title="Tanggal kedaluwarsa = hari ini + RH">KEDALUWARSA</th><th class="c-foto">Foto</th><th class="c-aksi"></th></tr></thead>
@@ -291,17 +288,17 @@
             <td class="c-aksi"><div class="acts"><button class="btn-add" type="button" id="a_add" title="Simpan produk" aria-label="Simpan produk">+</button></div></td>
           </tr>
         </tbody>
-        <tbody id="planoList"><tr><td colspan="10"><div class="empty">Memuat...</div></td></tr></tbody>
       </table>
     </div>
   </section>
+  <div id="planoListWrap"></div>
   <div class="hint" id="hint" hidden></div>
 </div>
 <input type="file" id="fotoInput" accept="image/*" hidden />
 <div class="pw-bg" id="pwBg"><div class="pw-card"><div class="pw-title" id="pwTitle">Hapus?</div><div id="pwMsg" style="font-size:12px;color:#6e6a64;margin-bottom:12px"></div><div id="pwForm"><input class="pw-input" id="pwEmail" type="email" placeholder="Email admin" autocomplete="username" style="margin-bottom:8px" /><input class="pw-input" id="pwInput" type="password" placeholder="Password" autocomplete="current-password" /></div><div class="pw-actions"><button class="pw-btn" id="pwCancel" type="button">Batal</button><button class="pw-btn pw-btn-danger" id="pwOk" type="button">Hapus</button></div></div></div>
 <script type="module">
 const TABLE='plano_items', BUCKET='plano-foto';
-const listEl=document.getElementById('list'), searchEl=document.getElementById('search'), fotoInput=document.getElementById('fotoInput'), hint=document.getElementById('hint'), planoList=document.getElementById('planoList');
+const listEl=document.getElementById('list'), searchEl=document.getElementById('search'), fotoInput=document.getElementById('fotoInput'), hint=document.getElementById('hint'), planoListWrap=document.getElementById('planoListWrap');
 let all=[], lastFiltered=[], fotoVersi=Date.now();
 const fotoBaru=u=>u?u+(u.includes('?')?'&':'?')+'v='+fotoVersi:'';
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -487,8 +484,8 @@ function setRakAktif(nama){
 if(rakInfo) rakInfo.textContent=rakAktif?'RAK: '+rakAktif:'PILIH RAK DI ATAS';
 function fokusRak(nama){
   const key=String(nama||'').trim().toUpperCase();
-  planoList.querySelectorAll('.pilih').forEach(t=>t.classList.remove('pilih'));
-  const grp=planoList.querySelector('tr[data-grup="'+CSS.escape(key)+'"]');
+  planoListWrap.querySelectorAll('.pilih').forEach(t=>t.classList.remove('pilih'));
+  const grp=planoListWrap.querySelector('tr[data-grup="'+CSS.escape(key)+'"]');
   if(grp) grp.classList.add('pilih');
 }
 function renderPlano(produk){
@@ -497,11 +494,11 @@ function renderPlano(produk){
     const k = String(rakAktif).trim().toUpperCase();
     filtered = produk.filter(r=>String(r.rak||'').trim().toUpperCase()===k);
     if(!filtered.length){
-      planoList.innerHTML='';
+      planoListWrap.innerHTML='';
       return;
     }
   }
-  if(!filtered.length){ planoList.innerHTML='<tr><td colspan="10"><div class="empty">Belum ada produk</div></td></tr>'; return; }
+  if(!filtered.length){ planoListWrap.innerHTML='<div class="table-wrap" style="margin-top:10px"><table class="menu-table detail"><tr><td colspan="10"><div class="empty">Belum ada produk</div></td></tr></table></div>'; return; }
   filtered.sort((a,b)=>{
     const sa=String(a.shelving||'').trim(), sb=String(b.shelving||'').trim();
     const na=parseInt(sa,10), nb=parseInt(sb,10);
@@ -524,9 +521,19 @@ function renderPlano(produk){
     sh.rows.push(r);
   });
   let globalNo=0;
-  planoList.innerHTML = shelvs.map(sh=>`
-    <tr class="grp"><td colspan="10" class="grp-nama" style="background:#f7f3e9;font-family:var(--mori-mono);font-size:11px;font-weight:700;padding:8px 12px;border-top:1px solid var(--mori-line);border-bottom:1px solid var(--mori-line);color:#1a1917">SHELVING: ${esc(sh.nama)}</td></tr>
-  `+sh.rows.map(r=>rowPlano(r,++globalNo)).join('')).join('');
+  planoListWrap.innerHTML = shelvs.map(sh=>`
+    <section class="sec" style="margin-top:14px">
+      <div class="sec-head"><div class="sec-title">SHELVING: ${esc(sh.nama)}</div></div>
+      <div class="table-wrap" style="margin-top:6px">
+        <table class="menu-table detail">
+          <thead><tr><th class="c-no">No</th><th class="c-nama">Produk</th><th class="c-plu">PLU</th><th class="c-barcode">Barcode</th><th class="c-shelving">Shelving</th><th class="c-baris">Baris</th><th class="c-rh" title="Umur barang dalam hari">RH</th><th class="c-tgl" title="Tanggal kedaluwarsa = hari ini + RH">KEDALUWARSA</th><th class="c-foto">Foto</th><th class="c-aksi"></th></tr></thead>
+          <tbody>
+            ${sh.rows.map(r=>rowPlano(r, ++globalNo)).join('')}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `).join('');
 }
 async function simpanSel(el){
   const id=el.dataset.id, kol=el.dataset.kol;
@@ -549,15 +556,15 @@ async function simpanSel(el){
   // kolom tersimpan, isiannya langsung berubah jadi teks lagi.
   const masihEdit=editIds.has(String(id));
   renderPlano(lastFiltered);
-  const baru=planoList.querySelector('tr[data-id="'+id+'"]');
+  const baru=planoListWrap.querySelector('tr[data-id="'+id+'"]');
   if(baru){ baru.classList.add('pilih'); if(masihEdit) setEditBaris(baru,true); }
 }
-planoList.addEventListener('change',e=>{ if(e.target.classList.contains('cell-input')) simpanSel(e.target); });
+planoListWrap.addEventListener('change',e=>{ if(e.target.classList.contains('cell-input')) simpanSel(e.target); });
 // RH mengubah tanggal ED seketika, sebelum disimpan.
-planoList.addEventListener('input',e=>{
+planoListWrap.addEventListener('input',e=>{
   const el=e.target;
   if(!el.classList||!el.classList.contains('cell-input')||el.dataset.kol!=='rh') return;
-  const sel=planoList.querySelector('[data-tgl-for="'+el.dataset.id+'"]');
+  const sel=planoListWrap.querySelector('[data-tgl-for="'+el.dataset.id+'"]');
   if(sel) sel.innerHTML=tglHtml(el.value);
 });
 // Mode edit disimpan di luar DOM supaya tetap aktif saat tabel digambar ulang.
@@ -577,24 +584,17 @@ function setEditBaris(tr,nyala){
 }
 function pulihkanEdit(){
   if(!editIds.size) return;
-  editIds.forEach(id=>setEditBaris(planoList.querySelector('tr[data-id="'+id+'"]'),true));
+  editIds.forEach(id=>setEditBaris(planoListWrap.querySelector('tr[data-id="'+id+'"]'),true));
 }
-planoList.addEventListener('click',e=>{
+planoListWrap.addEventListener('click',e=>{
   // Tombol per produk: edit, hapus, upload foto. Dicek lebih dulu supaya klik
   // tombol tidak ikut memicu pindah rak di bawahnya.
   const ed=e.target.closest('[data-edit2]');
-  if(ed){ setEditBaris(planoList.querySelector('tr[data-id="'+ed.dataset.edit2+'"]'),!editIds.has(String(ed.dataset.edit2))); return; }
+  if(ed){ setEditBaris(planoListWrap.querySelector('tr[data-id="'+ed.dataset.edit2+'"]'),!editIds.has(String(ed.dataset.edit2))); return; }
   const del=e.target.closest('[data-del2]');
   if(del){ editIds.delete(String(del.dataset.del2)); hapusProduk(parseInt(del.dataset.del2,10)); return; }
   const fot=e.target.closest('[data-foto2]');
   if(fot){ pilihFoto(parseInt(fot.dataset.foto2,10)); return; }
-  const g=e.target.closest&&e.target.closest('tr.grp');
-  if(g&&!e.target.closest('.cell-input')){ setRakAktif(g.dataset.nama); fokusRak(g.dataset.nama); }
-});
-planoList.addEventListener('keydown',e=>{
-  if(e.key!=='Enter'&&e.key!==' ') return;
-  const g=e.target.closest&&e.target.closest('tr.grp');
-  if(g&&!e.target.closest('.cell-input')){ e.preventDefault(); setRakAktif(g.dataset.nama); fokusRak(g.dataset.nama); }
 });
 const FIELDS_P=['shelving','baris','rh','plu','barcode','name'];
 async function tambah(){
@@ -641,7 +641,7 @@ async function load(){
   if(error){
     const pesan=esc(tampilErr(error));
     listEl.innerHTML='<tr><td colspan="4"><div class="empty">'+pesan+'</div></td></tr>';
-    planoList.innerHTML='<tr><td colspan="10"><div class="empty">'+pesan+'</div></td></tr>';
+    planoListWrap.innerHTML='<div class="table-wrap" style="margin-top:10px"><table class="menu-table detail"><tr><td colspan="10"><div class="empty">'+pesan+'</div></td></tr></table></div>';
     return;
   }
   all=data||[]; barisAdmin.foto_url=(await adaFoto('plano/'+AKUN+'.jpg'))?fotoAdminUrl():''; render();
