@@ -264,11 +264,13 @@
         box-sizing: border-box;
         touch-action: none;
       }
+      /* Tanpa garis dalam (border: none) seperti tabel Admin SO,
+         cukup latar bg dan sudut membulat 8px. */
       .slot {
         position: relative;
         background: var(--mori-bg);
         border-radius: 8px;
-        border: 1.5px solid rgba(26, 25, 23, 0.3);
+        border: none;
         display: flex;
         align-items: center;
         justify-content: center;
