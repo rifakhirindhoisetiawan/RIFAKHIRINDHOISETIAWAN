@@ -133,18 +133,20 @@
     .btn-add.wide{width:100%;height:38px;font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#1a1917;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:8px;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
     .btn-add.wide:active{transform:translate(2px,2px);box-shadow:none}
     /* ===== KOLOM PRODUK (auto = serap semua sisa lebar) ===== */
-    .menu-table.detail .c-nama{width:auto}
+    .menu-table.detail .c-nama{width:220px;min-width:220px}
     .menu-table.detail .c-nama .cell-input{font-size:12px;font-weight:700}
     .menu-table.detail .c-plu{width:78px}
-    .menu-table.detail .c-barcode{width:125px}
-    .c-barcode .val{white-space:nowrap}
+    .menu-table.detail .c-barcode{width:160px;min-width:160px}
+    .c-barcode .val{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .menu-table.detail .c-shelving{width:125px}
     .menu-table.detail .c-baris{width:115px}
     .step-wrap{display:none;align-items:center;gap:2px;width:100%}
     .menu-table.detail tr.edit td.c-shelving .step-wrap,
     .menu-table.detail tr.edit td.c-baris .step-wrap,
+    .menu-table.detail tr.edit td.c-rh .step-wrap,
     .menu-table.detail tbody.tambah td.c-shelving .step-wrap,
-    .menu-table.detail tbody.tambah td.c-baris .step-wrap{display:flex}
+    .menu-table.detail tbody.tambah td.c-baris .step-wrap,
+    .menu-table.detail tbody.tambah td.c-rh .step-wrap{display:flex}
     .btn-step{width:26px;height:26px;padding:0;background:#f7f3e9;border:1px solid var(--mori-line);border-radius:6px;font-family:var(--mori-mono);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1a1917;flex-shrink:0}
     .btn-step:hover{background:#efe9da}
     .step-wrap .cell-input{flex:1;min-width:0;height:26px;text-align:center;padding:0 2px;font-size:11px}
