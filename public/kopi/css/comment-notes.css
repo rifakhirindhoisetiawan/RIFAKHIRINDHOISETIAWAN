@@ -83,10 +83,12 @@
   display: flex;
   gap: 6px;
   justify-content: flex-end;
+  align-items: center;
 }
 .cmt-table .cmt-btn {
   width: 32px;
   height: 32px;
+  box-sizing: border-box;
   border: 1px solid var(--mori-line);
   border-radius: 8px;
   background: var(--mori-surface);
