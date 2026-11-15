@@ -489,23 +489,25 @@
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-      /* Badge jumlah notifikasi: pill hitam tebal (aksen Mori) agar
-         kontras dan jelas — bukan kotak pucat yang susah dibaca. */
+      /* Badge jumlah notifikasi: kotak kecil bergaya sama dengan tombol
+         panah (.notif-buka) — latar krem, garis --mori-line, radius 8px. */
       .notif-cnt {
         flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 24px;
+        height: 24px;
+        padding: 0 5px;
         font-family: var(--mori-mono, ui-monospace, monospace);
-        font-size: 9px;
+        font-size: 10px;
         font-weight: 700;
         line-height: 1;
-        letter-spacing: .3px;
         font-variant-numeric: tabular-nums;
-        color: var(--mori-bg);
-        background: var(--mori-text);
-        border: none;
-        border-radius: 999px;
-        padding: 4px 8px;
-        min-width: 20px;
-        text-align: center;
+        color: var(--mori-text);
+        background: var(--mori-surface);
+        border: 1px solid var(--mori-line);
+        border-radius: 8px;
         box-shadow: none;
       }
       .notif-sub {
