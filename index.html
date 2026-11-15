@@ -475,15 +475,7 @@
         flex: 1;
         min-width: 0;
       }
-      .notif-nmrow {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        min-width: 0;
-      }
       .notif-nm {
-        flex: 1;
-        min-width: 0;
         font-size: 10px;
         font-weight: 800;
         text-transform: uppercase;
@@ -923,9 +915,10 @@
               '<td><div class="notif-sel">' +
                 '<img class="notif-img" src="' + x.it.img + '" alt="' + x.it.title + '" loading="lazy" decoding="async" />' +
                 '<div class="notif-info">' +
-                  '<div class="notif-nmrow"><div class="notif-nm">' + x.it.title + '</div><span class="notif-cnt">' + x.n + '</span></div>' +
+                  '<div class="notif-nm">' + x.it.title + '</div>' +
                   '<div class="notif-sub">' + x.it.sub + '</div>' +
                 '</div>' +
+                '<span class="notif-cnt">' + x.n + '</span>' +
               '</div></td>' +
               '<td class="notif-aksi"><a href="' + x.it.link + '" class="notif-buka" title="Buka" aria-label="Buka">' + arrowSvg + '</a></td>' +
             '</tr>'
@@ -939,9 +932,10 @@
               '<td><div class="notif-sel">' +
                 '<img class="notif-img" src="assets/images/time-kamera/1.jpg" alt="Stok Opname" loading="lazy" decoding="async" />' +
                 '<div class="notif-info">' +
-                  '<div class="notif-nmrow"><div class="notif-nm">Belum SO</div><span class="notif-cnt">' + soBelum.length + '</span></div>' +
+                  '<div class="notif-nm">Belum SO</div>' +
                   '<div class="notif-sub">' + soBelum.length + ' item &gt; ' + SO_BELUM_SO_HARI + ' hari</div>' +
                 '</div>' +
+                '<span class="notif-cnt">' + soBelum.length + '</span>' +
               '</div></td>' +
               '<td class="notif-aksi"><a href="public/stok-opname/so.html" class="notif-buka" title="Buka" aria-label="Buka">' + arrowSvg + '</a></td>' +
             '</tr>';
