@@ -40,33 +40,27 @@
 
       .phone {
         width: 100%;
-        max-width: 100%;
-        background: transparent;
+        max-width: 800px;
+        background: var(--mori-bg, #fffbf2);
         border-radius: 0;
         box-shadow: none;
         overflow: visible;
         display: flex;
         flex-direction: column;
         min-height: 100vh;
+        min-height: 100dvh;
         height: auto;
-        padding-bottom: env(safe-area-inset-bottom, 20px);
-      }
-
-      @media (min-width: 800px) {
-        .phone {
-          max-width: 800px;
-          margin: 0 auto;
-        }
+        padding: 12px 18px 40px;
+        padding-top: max(12px, env(safe-area-inset-top));
+        margin: 0 auto;
       }
 
       .search-row {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 12px 18px 14px;
-        max-width: 800px;
         width: 100%;
-        margin: 0 auto;
+        margin-bottom: 14px;
         flex-shrink: 0;
       }
       .search-box {
@@ -920,6 +914,10 @@
         padding: 0;
         transition: transform 0.2s ease, background 0.2s ease;
       }
+      .pin-mode-btn svg {
+        width: 20px;
+        height: 20px;
+      }
       .pin-mode-btn:active {
         transform: translate(2px, 2px);
       }
@@ -970,53 +968,53 @@
   </head>
   <body>
     <div class="phone">
-      <div class="menu-wrap">
-        <div class="search-row">
-          <div class="search-box">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <circle cx="11" cy="11" r="7" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input
-              id="searchInput"
-              type="text"
-              placeholder="Cari menu..."
-              oninput="renderMenu()"
-            />
-          </div>
-          <!-- Mode Semat: tekan-tahan tidak bisa diandalkan di Android
-               WebView (browser membatalkan gestur sebelum timer aktif),
-               jadi dipakai tombol yang kasat mata di samping pencarian.
-               Nyalakan -> tap kartu mana pun untuk semat/lepas. -->
-          <button
-            class="pin-mode-btn"
-            id="pinModeBtn"
-            type="button"
-            aria-pressed="false"
-            title="Mode Semat"
+      <div class="search-row">
+        <div class="search-box">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
           >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 17v5"></path>
-              <path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"></path>
-            </svg>
-          </button>
-          <button
-            class="pin-mode-btn"
-            id="checkCommentsBtn"
-            type="button"
-            title="Cek Komentar"
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </button>
+            <circle cx="11" cy="11" r="7" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="Cari menu..."
+            oninput="renderMenu()"
+          />
         </div>
+        <!-- Mode Semat: tekan-tahan tidak bisa diandalkan di Android
+             WebView (browser membatalkan gestur sebelum timer aktif),
+             jadi dipakai tombol yang kasat mata di samping pencarian.
+             Nyalakan -> tap kartu mana pun untuk semat/lepas. -->
+        <button
+          class="pin-mode-btn"
+          id="pinModeBtn"
+          type="button"
+          aria-pressed="false"
+          title="Mode Semat"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 17v5"></path>
+            <path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"></path>
+          </svg>
+        </button>
+        <button
+          class="pin-mode-btn"
+          id="checkCommentsBtn"
+          type="button"
+          title="Cek Komentar"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </button>
+      </div>
 
+      <div class="menu-wrap">
         <div class="grid" id="menuGrid"></div>
       </div>
     </div>
