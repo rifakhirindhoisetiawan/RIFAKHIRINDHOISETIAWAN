@@ -70,8 +70,8 @@
         gap: 8px;
         height: 46px;
         box-sizing: border-box;
-        border: 1.5px solid rgba(26, 25, 23, 0.3);
-        border-radius: 10px;
+        border: 1px solid var(--mori-line);
+        border-radius: 8px;
         padding: 0 14px;
         color: var(--mori-text, #1a1917);
         font-size: 13px;
@@ -80,6 +80,7 @@
       }
       .search-box:focus-within {
         background: #fffdf7;
+        box-shadow: none;
       }
       .search-box input {
         border: none;
@@ -902,8 +903,8 @@
         flex: 0 0 auto;
         width: 46px;
         height: 46px;
-        border-radius: 10px;
-        border: 1.5px solid rgba(26, 25, 23, 0.3);
+        border-radius: 8px;
+        border: 1px solid var(--mori-line);
         background: var(--mori-surface, #f7f3e9);
         color: var(--mori-text, #1a1917);
         cursor: pointer;
