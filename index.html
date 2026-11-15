@@ -365,6 +365,35 @@
         color: var(--mori-text-2);
       }
 
+      /* Menu TERKUNCI: yang belum disematkan tidak bisa dibuka orang.
+         Tampilan pudar + lencana gembok di pojok tile. Bisa dibuka
+         setelah disematkan lewat mode semat (tombol pin di header). */
+      .menu-item.locked {
+        cursor: not-allowed;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .menu-item.locked:active .icon-box { transform: none; }
+      .menu-item.locked .icon-box img {
+        filter: grayscale(1) opacity(0.55);
+      }
+      .menu-item.locked .label {
+        color: var(--mori-text-2);
+      }
+      .menu-item.locked .icon-box::after {
+        content: "";
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        background-color: var(--mori-text);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fffbf2' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='9' rx='2'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4'/%3E%3C/svg%3E");
+        background-size: 12px 12px;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
       @media (max-width: 360px) {
         .icon-box {
           max-width: 85px;
@@ -713,6 +742,10 @@
           modeSemat = !modeSemat;
           headerPinBtn.setAttribute('aria-pressed', modeSemat ? 'true' : 'false');
           document.body.classList.toggle('pin-mode', modeSemat);
+          // Render ulang: saat mode semat aktif semua menu terbuka
+          // (klik = semat/batal), saat mati hanya yang tersimatkan
+          // yang bisa diklik, sisanya terkunci.
+          renderMenu();
         });
       }
 
@@ -724,11 +757,16 @@
 
         const createItemEl = (item) => {
           const isDisabled = item.href === "#" || disabledLabels.has(item.label);
+          // Menu yang belum disematkan = TERKUNCI: dirender sebagai div
+          // (bukan <a>) sehingga tidak bisa diklik, kecuali saat mode
+          // semat aktif (untuk menyematkannya).
+          const isLocked = !isDisabled && !isPinned(item.label) && !modeSemat;
 
-          const a = document.createElement(isDisabled ? "div" : "a");
-          a.className = "menu-item" + (isDisabled ? " disabled" : "");
-          if (!isDisabled) a.href = item.href;
-          if (isDisabled) a.setAttribute("aria-disabled", "true");
+          const a = document.createElement(isDisabled || isLocked ? "div" : "a");
+          a.className = "menu-item" + (isDisabled ? " disabled" : "") + (isLocked ? " locked" : "");
+          if (!isDisabled && !isLocked) a.href = item.href;
+          if (isDisabled || isLocked) a.setAttribute("aria-disabled", "true");
+          if (isLocked) a.title = "Menu terkunci — sematkan lewat tombol pin untuk membuka";
           
           a.innerHTML = `
             <div class="icon-box">
