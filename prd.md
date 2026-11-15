@@ -76,8 +76,9 @@ Font global body: Inter. Font JetBrains Mono sudah dimuat via Google Fonts.
 
 - **Seluruh menu dibungkus frame tabel** ala Admin Stok Opname
   (`.menu-frame`): bingkai `1.5px` gelap + radius `10px` + bar thead krem
-  `.menu-frame-head` bertuliskan "MENU" (mono uppercase). Jangan dihapus —
-  diminta user agar tema tabel konsisten dari header sampai daftar menu.
+  `.menu-frame-head` **KOSONG tanpa tulisan** (teks "MENU" dihapus — diminta
+  user; sel header kosong seperti tabel SO). Jangan dihapus — diminta user
+  agar tema tabel konsisten dari header sampai daftar menu.
 - Grid 4 kolom (`repeat(4, 1fr)`, gap `16px 10px`), padding dalam frame 14px,
   lazy-load foto via `createLazyLoader` + `loadIndexPhoto`.
 - Fitur sematan (pin): tersinkron Supabase tabel `portal_pins`
