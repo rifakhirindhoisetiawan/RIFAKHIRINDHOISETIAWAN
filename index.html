@@ -489,20 +489,24 @@
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-      /* Badge jumlah notifikasi, gaya mono krem (theme tabel SO). */
+      /* Badge jumlah notifikasi: pill hitam tebal (aksen Mori) agar
+         kontras dan jelas — bukan kotak pucat yang susah dibaca. */
       .notif-cnt {
         flex-shrink: 0;
         font-family: var(--mori-mono, ui-monospace, monospace);
         font-size: 9px;
         font-weight: 700;
         line-height: 1;
-        color: var(--mori-text);
-        background: var(--mori-surface);
-        border: 1px solid var(--mori-line);
-        border-radius: 6px;
-        padding: 3px 6px;
-        min-width: 14px;
+        letter-spacing: .3px;
+        font-variant-numeric: tabular-nums;
+        color: var(--mori-bg);
+        background: var(--mori-text);
+        border: none;
+        border-radius: 999px;
+        padding: 4px 8px;
+        min-width: 20px;
         text-align: center;
+        box-shadow: none;
       }
       .notif-sub {
         font-size: 8px;
