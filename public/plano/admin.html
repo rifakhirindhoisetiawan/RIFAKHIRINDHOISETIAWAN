@@ -369,7 +369,7 @@ function hitungTglRH(n){
   d.setDate(d.getDate()+v);
   const s=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
   // Makin kecil RH makin mendesak: <=0 lewat, <=7 hampir habis.
-  return {teks:'ED '+s, kelas:v<=0?'tgl padat':(v<=7?'tgl hampir':'tgl hari')};
+  return {teks:s, kelas:v<=0?'tgl padat':(v<=7?'tgl hampir':'tgl hari')};
 }
 function tglHtml(n){ const t=hitungTglRH(n); return '<span class="'+t.kelas+'">'+esc(t.teks)+'</span>'; }
 
