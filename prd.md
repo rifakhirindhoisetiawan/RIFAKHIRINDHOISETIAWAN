@@ -83,8 +83,8 @@ Font global body: Inter. Font JetBrains Mono sudah dimuat via Google Fonts.
 - Menu yang **belum disematkan** dirender sebagai `<div class="menu-item locked">`
   (bukan `<a>`) → **tidak bisa diklik siapa pun** (aria-disabled, title
   "Menu terkunci — sematkan lewat tombol pin untuk membuka").
-- Tampilan terkunci: foto **grayscale + pudar**, label abu, **lencana gembok**
-  hitam (radius 6px, ikon krem) di pojok kanan-atas tile, tanpa efek tekan.
+- Tampilan terkunci: foto **grayscale + pudar**, label abu — **TANPA lencana
+  gembok** (icon dilarang tampil, diminta user), tanpa efek tekan.
 - Hanya menu yang **tersimatkan** (baris `.pin-row` atas) yang bisa dibuka.
 - Cara membuka/mengunci menu: tekan tombol pin di header (mode semat aktif)
   → semua tile jadi bisa diklik untuk **menyematkan/membatalkan** sematan →
