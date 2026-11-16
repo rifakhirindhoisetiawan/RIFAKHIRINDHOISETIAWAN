@@ -140,7 +140,7 @@
 }
 .cmt-tulis input {
   flex: 1;
-  height: 34px;
+  height: 36px;
   padding: 0 10px;
   font-size: 10px;
   font-family: var(--mori-mono);
@@ -157,8 +157,8 @@
   color: var(--mori-text-2);
 }
 .cmt-tulis-btn {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -174,8 +174,8 @@
   box-shadow: none;
 }
 .cmt-tulis-btn svg {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   display: block;
 }
 .cmt-tulis-btn:active {
