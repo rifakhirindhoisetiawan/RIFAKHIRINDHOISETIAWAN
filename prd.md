@@ -100,6 +100,26 @@ Font global body: Inter. Font JetBrains Mono sudah dimuat via Google Fonts.
   - Tombol Pin Mode & Cek Komentar (`.pin-mode-btn`): ukuran 46×46px, bingkai **1.5px** `rgba(26,25,23,0.3)`, radius **10px**, latar `--mori-surface`, ikon 20×20px, efek `:active` geser 2px.
   - Struktur tata letak sejajar horizontal (`.search-row`) dempet 10px di dalam kontainer utama.
 
+### Frame Tabel Menu (disamakan persis dengan index — jangan diubah)
+
+- Frame `.menu-frame`: bingkai **1.5px** `rgba(26,25,23,0.3)`, radius **10px**, latar
+  `--mori-bg`, `overflow: hidden`, **tanpa strip header krem**.
+- Grid `.menu-list`: 4 kolom `repeat(4, 1fr)`, gap `16px 10px`
+  (media ≥768px `22px 14px`), `width: 100%`, `align-content: start`.
+- Padding dalam frame: **14px** (`.menu-frame .menu-list`).
+- Tile `.icon-tile`: `max-width: 100px`, `aspect-ratio: 9/16`, radius **8px**,
+  `margin-bottom: 10px`, shimmer `#f2eee2`/`#e8e2d2`, foto `saturate(0.55) contrast(1.02)`.
+- Label `.item span`: 9px, weight 700, uppercase, `letter-spacing: 1px`,
+  `line-height: 1.3`, clamp 2 baris, `word-break: break-word`.
+- Media ≤360px: tile `85px`, label 8px + `letter-spacing: 0.6px`.
+- Kontainer `.phone` sudah padding `12px 18px 40px` → `.menu-wrap` **TANPA**
+  padding kiri-kanan (padding dobel = frame lebih sempit dari index).
+- Admin (`public/kopi/admin/index.html`) `.menu-tabel`: `width: 100%`,
+  `box-sizing: border-box`, bingkai 1.5px + radius 10px, latar `--mori-bg`,
+  **tanpa padding** (tabel flush ke bingkai, strip judul krem menyatu penuh
+  — ala `.table-wrap` Admin Plano). Baris cari: latar `--mori-surface`,
+  tanpa garis bawah.
+
 ## 6. Riwayat Commit Terkait
 
 | Commit | Isi |
@@ -116,3 +136,11 @@ Font global body: Inter. Font JetBrains Mono sudah dimuat via Google Fonts.
 Referensi tema: `public/stok-opname/stock-admin.html` (bingkai tabel 1.5px +
 radius 10px, thead krem tanpa garis bawah), `public/musnah/musnah.html`
 (search 46px radius 8px).
+
+## 7. Alur Kerja (auto-push — permanen)
+
+- Setiap perubahan yang selesai **langsung di-commit + push ke GitHub**
+  tanpa menunggu perintah user (user tidak perlu mengetik "push" lagi).
+- Commit **kecil per topik**, format: `style(<scope>): <perubahan>` —
+  scope: `kopi`, `kopi-admin`, `prd`, `index`, dst.
+- Push: `git push origin main`.
