@@ -108,9 +108,9 @@
   transform: translate(2px, 2px);
 }
 .cmt-table .cmt-btn-danger {
-  background: var(--mori-danger);
+  background: var(--mori-danger, #b91c1c);
   color: #fff;
-  border-color: var(--mori-danger);
+  border-color: var(--mori-danger, #b91c1c);
 }
 .cmt-table .cmt-btn svg {
   width: 12px;
