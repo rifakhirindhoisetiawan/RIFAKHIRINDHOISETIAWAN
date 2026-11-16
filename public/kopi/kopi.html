@@ -109,8 +109,7 @@
         flex: 1;
         overflow-y: auto;
         overflow-x: visible;
-        padding: 4px 18px 60px 18px;
-        max-width: 800px;
+        padding: 0 0 60px 0;
         width: 100%;
         margin: 0 auto;
         -ms-overflow-style: none;
@@ -127,7 +126,7 @@
         border-radius: 10px;
         overflow: hidden;
       }
-      .menu-frame .grid {
+      .menu-frame .menu-list {
         padding: 14px;
       }
 
@@ -140,14 +139,16 @@
         margin: 4px 0 14px;
       }
 
-      .grid {
+      .menu-list {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 16px 10px;
+        width: 100%;
+        align-content: start;
       }
 
       @media (min-width: 768px) {
-        .grid {
+        .menu-list {
           gap: 22px 14px;
         }
       }
@@ -156,28 +157,34 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        text-align: center;
-        cursor: default;
+        text-decoration: none;
+        color: var(--mori-text);
+        cursor: pointer;
         background: none;
         border: none;
       }
 
       .icon-tile {
         width: 100%;
-        max-width: 110px;
+        max-width: 100px;
         aspect-ratio: 9 / 16;
-        border-radius: 16px;
+        background: linear-gradient(90deg, #f2eee2 25%, #e8e2d2 50%, #f2eee2 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.2s infinite;
+        border: none;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 34px;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         color: #fff;
         position: relative;
         overflow: hidden;
+        transition: transform 0.2s ease;
       }
       .icon-tile:not(.has-photo) {
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background: linear-gradient(90deg, #f2eee2 25%, #e8e2d2 50%, #f2eee2 75%);
         background-size: 200% 100%;
         animation: shimmer 1.2s infinite;
       }
@@ -199,6 +206,7 @@
         border-radius: inherit;
         display: block;
         opacity: 0;
+        filter: saturate(0.55) contrast(1.02);
         transition: opacity 0.25s ease;
       }
       .icon-photo img.loaded {
@@ -215,8 +223,11 @@
 
       @media (max-width: 360px) {
         .icon-tile {
-          max-width: 95px;
-          border-radius: 14px;
+          max-width: 85px;
+        }
+        .item span {
+          font-size: 8px;
+          letter-spacing: 0.6px;
         }
       }
 
@@ -232,8 +243,13 @@
       .item span {
         font-size: 9px;
         font-weight: 700;
-        color: #b6bac2;
-        line-height: 1.2;
+        text-align: center;
+        line-height: 1.3;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--mori-text);
+        max-width: 100%;
+        word-break: break-word;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -245,12 +261,6 @@
         color: #3b82f6;
         font-size: 10px;
         display: block;
-      }
-
-      @media (min-width: 768px) {
-        .item span {
-          font-size: 12px;
-        }
       }
 
       .g-a {
@@ -1035,7 +1045,7 @@
 
       <div class="menu-wrap">
         <div class="menu-frame">
-          <div class="grid" id="menuGrid"></div>
+          <div class="menu-list" id="menuList"></div>
         </div>
       </div>
     </div>
@@ -1054,7 +1064,7 @@
 
       let menus = [];
       let shownMenus = [];
-      const menuGrid = document.getElementById('menuGrid');
+      const menuList = document.getElementById('menuList');
       const searchInput = document.getElementById('searchInput');
       const sheetBg = document.getElementById('sheetBg');
       const sheetBody = document.getElementById('sheetBody');
@@ -1217,7 +1227,7 @@
         renderMenu();
         // denyut di kartu yang baru disentuh — setelah render, cari lagi
         if (el) {
-          const baru = menuGrid.querySelector('[data-slug="' + slug + '"]');
+          const baru = menuList.querySelector('[data-slug="' + slug + '"]');
           const kartu = baru && baru.closest('.item');
           if (kartu) {
             kartu.classList.add('pinned-pop');
@@ -1390,7 +1400,7 @@
             else if (statusMuat === 'gagal') pesanKosong = 'Gagal memuat menu - periksa internet';
             else pesanKosong = 'Menu belum tersedia';
           }
-          menuGrid.innerHTML = '<div class="empty-msg">' + pesanKosong + '</div>';
+          menuList.innerHTML = '<div class="empty-msg">' + pesanKosong + '</div>';
           return;
         }
         shownMenus = filtered;
@@ -1412,8 +1422,8 @@
             .map(i => tileHtml(filtered[i], i)).join('');
         }
 
-        menuGrid.innerHTML = topHtml + mainHtml;
-        menuGrid.querySelectorAll('.js-detail').forEach(el => {
+        menuList.innerHTML = topHtml + mainHtml;
+        menuList.querySelectorAll('.js-detail').forEach(el => {
           const m = shownMenus[parseInt(el.dataset.idx)];
           el.addEventListener('click', (e) => {
             // baru saja long-press -> abaikan klik yg menyusul, TAPI
@@ -1758,7 +1768,7 @@
       }
 
       // Event listener untuk tombol komentar di kartu menu
-      menuGrid.addEventListener('click', (e) => {
+      menuList.addEventListener('click', (e) => {
         const commentBtn = e.target.closest('.tile-comment-btn');
         if (commentBtn) {
           e.preventDefault();
