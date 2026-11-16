@@ -899,24 +899,26 @@
        daftar "Foto Menu SO" di Admin Stok Opname.
        ============================================================ */
     .menu-tabel{
+      width:100%;box-sizing:border-box;
       border:1.5px solid rgba(26,25,23,0.3) !important;border-radius:10px !important;
-      overflow:hidden;background:#fffbf2;
+      overflow:hidden;background:var(--mori-bg);
     }
     .menu-tabel table{width:100%;border-collapse:collapse;table-layout:fixed}
     .menu-tabel thead th{
       background:#f7f3e9;color:#6e6a64;
-      font-family:var(--mori-mono);font-size:9px;font-weight:800;
-      letter-spacing:.6px;text-transform:uppercase;text-align:left;
-      height:38px;padding:0 8px;border-bottom:1px solid var(--mori-line);
+      font-family:var(--mori-mono);font-size:clamp(10px,2.6vw,12px);font-weight:800;
+      letter-spacing:.5px;text-transform:uppercase;text-align:left;
+      height:34px;padding:0 12px;border-bottom:1px solid var(--mori-line);
       white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
     }
     .menu-tabel th.mt-no,.menu-tabel td.mt-no{
       width:30px;text-align:center;color:#6e6a64;
-      font-family:var(--mori-mono);font-size:9px;
+      font-family:var(--mori-mono);font-size:11px;font-weight:700;
+      padding-left:0;padding-right:0;
     }
     .menu-tabel tbody td{
-      padding:4px 8px;border-bottom:1px solid var(--mori-line);
-      vertical-align:middle;height:auto;min-height:36px;
+      padding:4px 10px;border-bottom:1px solid var(--mori-line);
+      vertical-align:middle;height:auto;min-height:44px;
     }
     .menu-tabel .item-name{
       font-family:var(--mori-mono);font-size:10px;font-weight:700;
@@ -939,11 +941,21 @@
     .menu-tabel #list > tr:last-child > td{border-bottom:0}
     .menu-tabel .item{display:table-row!important}
     .menu-tabel tbody tr:active td{background:var(--mori-surface)}
-    .menu-tabel .mt-cari td{padding:0 12px;height:auto!important}
-    .menu-tabel .mt-cari .search-box {
-      border: 0 !important;border-radius:0!important;background:transparent!important;
-      padding:9px 0!important;gap:8px;
+    .menu-tabel .mt-cari td{padding:0 12px;height:auto!important;background:var(--mori-surface);border-bottom:0}
+    /* Bar cari ala Admin Plano: band krem 44px, ikon + input polos
+       (transparent, mono inherit, 13px bold uppercase). */
+    .menu-tabel .mt-cari .search-box{
+      display:flex;align-items:center;gap:8px;width:100%;height:44px;
+      border:0!important;border-radius:0!important;background:transparent!important;
+      padding:0!important;
     }
+    .menu-tabel .mt-cari .search-box svg{flex-shrink:0;width:18px;height:18px;color:var(--mori-text-2)}
+    .menu-tabel .mt-cari .search-box input{
+      flex:1;min-width:0;height:44px;padding:0;background:transparent;border:none;
+      border-radius:0;outline:none;font-family:inherit;font-size:13px;font-weight:700;
+      text-transform:uppercase;color:var(--mori-text);
+    }
+    .menu-tabel .mt-cari .search-box input::placeholder{color:var(--mori-text-2);font-weight:700}
     .menu-tabel .mt-cari .search-box:focus-within{
       background:transparent!important;box-shadow:none!important;
     }
@@ -1112,7 +1124,6 @@
             <tr>
               <td colspan="4">
                 <div class="search-box">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
                   <input id="search" type="text" placeholder="Cari menu..." autocomplete="off" />
                 </div>
               </td>
