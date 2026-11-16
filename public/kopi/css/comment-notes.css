@@ -79,6 +79,7 @@
   white-space: nowrap;
   width: 78px;
   vertical-align: middle;
+  padding-right: 14px;
 }
 .cmt-table .cmt-acts {
   display: inline-flex;
@@ -134,7 +135,7 @@
   background: var(--mori-surface);
   border: 1.5px solid rgba(26,25,23,0.3);
   border-radius: 10px;
-  padding: 3px;
+  padding: 3px 3px 3px 10px;
   min-width: 0;
 }
 .cmt-tulis input {
