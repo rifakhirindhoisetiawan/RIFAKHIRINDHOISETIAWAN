@@ -976,34 +976,36 @@
     /* TOMBOL SEMAT: menu tersemat naik ke baris paling atas daftar.
        Pin hitam = tersemat, pin krem = belum. Sematan disimpan di
        tempat yang sama dengan halaman KOPI (localStorage + kopi_pins). */
+    /* Tombol aksi daftar (hapus / edit / semat): kotak identik 32px,
+       krem + garis 1px + radius sama, ikon 16px, jarak seragam 4px. */
+    .menu-tabel .mt-aksi .btn,
+    .menu-tabel .mt-aksi .btn-ghost,
+    .menu-tabel .mt-aksi .btn-danger,
     .menu-tabel .mt-aksi .btn-pin{
-      display:inline-flex;align-items:center;justify-content:center;
+      width:32px!important;height:32px!important;min-height:32px!important;
+      flex:0 0 32px!important;padding:0!important;margin:0!important;
+      box-sizing:border-box!important;
+      display:inline-flex!important;align-items:center!important;justify-content:center!important;
       vertical-align:middle;
-      width:32px;height:32px;min-height:32px;padding:0;margin:0 4px 0 0;
-      background:var(--mori-surface);color:var(--mori-text);
-      border:1px solid var(--mori-line);border-radius:var(--mori-radius);
+      background:var(--mori-surface)!important;
+      border:1px solid var(--mori-line)!important;
+      border-radius:var(--mori-radius)!important;
+      box-shadow:none!important;
       cursor:pointer;-webkit-tap-highlight-color:transparent;
     }
-    .menu-tabel .mt-aksi .btn-pin svg{width:16px;height:16px}
-    .menu-tabel .mt-aksi .btn-pin:active{transform:scale(.94)}
-    .menu-tabel .mt-aksi .btn-pin[aria-pressed="true"]{
-      background:var(--mori-surface);color:var(--mori-text);
-      border-color:var(--mori-line);
+    .menu-tabel .mt-aksi .btn svg,
+    .menu-tabel .mt-aksi .btn-ghost svg,
+    .menu-tabel .mt-aksi .btn-danger svg,
+    .menu-tabel .mt-aksi .btn-pin svg{
+      width:16px!important;height:16px!important;flex:0 0 auto!important;display:block!important;
+      stroke:var(--mori-text)!important;color:var(--mori-text)!important;
     }
+    .menu-tabel .mt-aksi .btn-pin:active{transform:scale(.94)}
+    .menu-tabel .mt-aksi .btn:active{transform:translate(2px,2px)}
     .menu-tabel .mt-aksi .item-actions{
       margin-top:0!important;justify-content:flex-end;
       flex-direction:row!important;gap:4px!important;
     }
-    /* Tombol Edit & Hapus diseragamkan dengan tombol lain di halaman:
-       krem + garis hitam + sudut membulat (sebelumnya hitam penuh / merah siku). */
-    .menu-tabel .mt-aksi .btn,
-    .menu-tabel .mt-aksi .btn-ghost,
-    .menu-tabel .mt-aksi .btn-danger{
-      background:var(--mori-surface)!important;
-      border:1px solid var(--mori-line)!important;
-      border-radius:var(--mori-radius)!important;
-    }
-    .menu-tabel .mt-aksi .btn svg{stroke:var(--mori-text)!important}
     .menu-tabel .item-name{font-size:11px;text-align:left;min-height:0;line-height:1.15}
     .menu-tabel .col-plu{
       min-height:0!important;display:block!important;white-space:nowrap!important;
