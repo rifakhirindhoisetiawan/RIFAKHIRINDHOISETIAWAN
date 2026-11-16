@@ -200,7 +200,7 @@
       <div id="commentModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:100; align-items:center; justify-content:center; padding:16px;">
         <div style="background:var(--mori-bg); width:100%; max-width:300px; border-radius:8px; border:1px solid var(--mori-line); padding:8px; display:flex; flex-direction:column; gap:5px; box-shadow:0 8px 24px rgba(0,0,0,0.15);">
           <form id="commentForm" class="cmt-tulis">
-              <input type="text" id="commentInput" placeholder="Tulis catatan..." required aria-label="Tulis catatan" />
+              <input type="text" id="commentInput" placeholder="Tulis catatan" required aria-label="Tulis catatan" />
               <button type="submit" class="cmt-tulis-btn" title="Simpan" aria-label="Simpan"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button>
               <button id="closeCommentModal" type="button" class="cmt-tulis-btn" title="Tutup" aria-label="Tutup"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
             </form>
@@ -347,7 +347,7 @@
           seen.add(key);
           return true;
         });
-        commentList.innerHTML = '<div class="cmt-table-wrap"><table class="cmt-table"><thead><tr><th>No</th><th>Catatan</th><th style="text-align:right">Aksi</th></tr></thead><tbody>' +
+        commentList.innerHTML = '<div class="cmt-table-wrap"><table class="cmt-table"><thead><tr><th class="cmt-no">No</th><th>Catatan</th><th class="cmt-action">Aksi</th></tr></thead><tbody>' +
           uniqList.map((c, i) => {
             const t = new Date(c.created_at || Date.now()).toLocaleDateString('id-ID', { dateStyle: 'short' });
             return '<tr>' +
