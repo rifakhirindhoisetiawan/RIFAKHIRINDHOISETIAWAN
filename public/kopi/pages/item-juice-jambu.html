@@ -198,13 +198,13 @@
 
       <!-- Modal Catatan / Komentar -->
       <div id="commentModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:100; align-items:center; justify-content:center; padding:16px;">
-        <div style="background:var(--mori-bg); width:100%; max-width:400px; border-radius:8px; border:1px solid var(--mori-line); padding:14px; display:flex; flex-direction:column; gap:8px; box-shadow:0 8px 24px rgba(0,0,0,0.15);">
+        <div style="background:var(--mori-bg); width:100%; max-width:340px; border-radius:8px; border:1px solid var(--mori-line); padding:10px; display:flex; flex-direction:column; gap:6px; box-shadow:0 8px 24px rgba(0,0,0,0.15);">
           <form id="commentForm" class="cmt-tulis">
               <input type="text" id="commentInput" placeholder="Tulis catatan..." required aria-label="Tulis catatan" />
               <button type="submit" class="cmt-tulis-btn" title="Simpan" aria-label="Simpan"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button>
               <button id="closeCommentModal" type="button" class="cmt-tulis-btn" title="Tutup" aria-label="Tutup">✕</button>
             </form>
-          <div id="commentList" style="display:flex; flex-direction:column; gap:6px; max-height:35vh; overflow-y:auto;"></div>
+          <div id="commentList" style="display:flex; flex-direction:column; gap:6px; max-height:30vh; overflow-y:auto;"></div>
         </div>
       </div>
       <div id="status" role="status" aria-live="polite" hidden></div>
