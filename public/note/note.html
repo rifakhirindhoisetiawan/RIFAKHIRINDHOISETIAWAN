@@ -155,16 +155,35 @@
 
       .grid {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px 8px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 10px;
         width: 100%;
         align-content: start;
+      }
+
+      @media (min-width: 768px) {
+        .grid {
+          gap: 22px 14px;
+        }
+      }
+
+      /* Frame tabel ala menu kopi/index: bingkai 1.5px + radius 10px,
+         padding dalam 14px, tanpa strip header. */
+      .menu-frame {
+        width: 100%;
+        background: var(--mori-bg);
+        border: 1.5px solid rgba(26, 25, 23, 0.3);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .menu-frame .grid {
+        padding: 14px;
       }
 
       .item {
         display: flex;
         flex-direction: column;
-        align-items: stretch;
+        align-items: center;
         text-align: center;
         cursor: pointer;
         text-decoration: none;
@@ -178,6 +197,7 @@
       .icon-tile-foto {
         position: relative;
         width: 100%;
+        max-width: 100px;
         aspect-ratio: 9 / 16;
         border: none;
         border-radius: 8px;
@@ -235,11 +255,11 @@
 
       .item span {
         font-family: var(--mori-mono);
-        font-size: 10px;
+        font-size: 9px;
         font-weight: 700;
-        line-height: 1.2;
+        line-height: 1.3;
         color: var(--mori-text);
-        letter-spacing: 0.3px;
+        letter-spacing: 1px;
         text-transform: uppercase;
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -248,9 +268,14 @@
         width: 100%;
         word-break: break-word;
       }
-      @media (min-width: 768px) {
+
+      @media (max-width: 360px) {
+        .icon-tile-foto {
+          max-width: 85px;
+        }
         .item span {
-          font-size: 12px;
+          font-size: 8px;
+          letter-spacing: 0.6px;
         }
       }
 
@@ -322,7 +347,9 @@
       </div>
 
       <div class="menu-wrap">
-        <div class="grid" id="homeGrid"></div>
+        <div class="menu-frame">
+          <div class="grid" id="homeGrid"></div>
+        </div>
       </div>
     </div>
 
