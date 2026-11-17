@@ -80,10 +80,11 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 12px 18px 14px;
+        padding: max(12px, env(safe-area-inset-top)) 18px 14px;
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
+        flex-shrink: 0;
       }
       .pin-row {
         grid-column: 1 / -1;
@@ -102,13 +103,14 @@
 
       .search-box {
         flex: 1;
+        min-width: 0;
         display: flex;
         align-items: center;
         gap: 8px;
         height: 46px;
         box-sizing: border-box;
-        border: 1px solid var(--mori-line);
-        border-radius: 8px;
+        border: 1.5px solid rgba(26, 25, 23, 0.3);
+        border-radius: 10px;
         padding: 0 14px;
         color: var(--mori-text);
         font-size: 13px;
@@ -117,13 +119,13 @@
       }
       .search-box:focus-within {
         background: #fffdf7;
-        box-shadow: none;
       }
       .search-box input {
         border: none;
         background: transparent;
         outline: none;
         width: 100%;
+        min-width: 0;
         font-size: 14px;
         color: var(--mori-text);
         font-family: inherit;
@@ -133,7 +135,7 @@
       }
       .search-box input::placeholder,
       .search-box svg {
-        color: var(--mori-text-2);
+        color: var(--mori-text);
       }
       .search-box svg {
         flex-shrink: 0;
@@ -149,9 +151,9 @@
         align-items: center;
         justify-content: center;
         background: var(--mori-surface);
-        border: 1px solid var(--mori-line);
-        border-radius: 8px;
-        color: var(--mori-text-2);
+        border: 1.5px solid rgba(26, 25, 23, 0.3);
+        border-radius: 10px;
+        color: var(--mori-text);
         cursor: pointer;
         padding: 0;
         transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
@@ -177,24 +179,50 @@
       .menu-wrap {
         flex: 1;
         overflow-y: auto;
-        padding: 12px 18px 40px;
+        padding: 0 18px 40px;
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .menu-wrap::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+      }
+
+      /* Frame tabel ala menu kopi/index: bingkai 1.5px + radius 10px,
+         padding dalam 14px, tanpa strip header. */
+      .menu-frame {
+        width: 100%;
+        background: var(--mori-bg);
+        border: 1.5px solid rgba(26, 25, 23, 0.3);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .menu-frame .grid {
+        padding: 14px;
       }
 
       .grid {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px 8px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 10px;
         width: 100%;
         align-content: start;
+      }
+
+      @media (min-width: 768px) {
+        .grid {
+          gap: 22px 14px;
+        }
       }
 
       .item {
         display: flex;
         flex-direction: column;
-        align-items: stretch;
+        align-items: center;
         text-align: center;
         cursor: pointer;
         text-decoration: none;
@@ -211,11 +239,12 @@
       .icon-tile-foto {
         position: relative;
         width: 100%;
+        max-width: 100px;
         aspect-ratio: 9 / 16;
-        border: 1px solid var(--mori-line);
+        border: none;
         border-radius: 8px;
         overflow: hidden;
-        margin-bottom: 6px;
+        margin-bottom: 10px;
         background: var(--mori-surface);
         box-shadow: none;
         transition: transform 0.2s ease;
@@ -255,6 +284,7 @@
           transparent 6px,
           transparent 12px
         );
+        border: none;
       }
       .tanpa-ikon {
         position: absolute;
@@ -272,10 +302,10 @@
 
       .item span {
         font-family: var(--mori-mono);
-        font-size: 10px;
+        font-size: 9px;
         font-weight: 700;
-        text-align: center;
         line-height: 1.3;
+        text-align: center;
         letter-spacing: 1px;
         text-transform: uppercase;
         color: var(--mori-text);
@@ -284,10 +314,16 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
+        word-break: break-word;
       }
-      @media (min-width: 768px) {
+
+      @media (max-width: 360px) {
+        .icon-tile-foto {
+          max-width: 85px;
+        }
         .item span {
-          font-size: 12px;
+          font-size: 8px;
+          letter-spacing: 0.6px;
         }
       }
 
@@ -325,7 +361,9 @@
       </div>
 
       <div class="menu-wrap">
-        <div class="grid" id="homeGrid"></div>
+        <div class="menu-frame">
+          <div class="grid" id="homeGrid"></div>
+        </div>
       </div>
     </div>
 
