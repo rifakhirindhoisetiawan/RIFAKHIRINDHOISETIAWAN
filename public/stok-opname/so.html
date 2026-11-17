@@ -856,7 +856,25 @@
       <div class="empty" id="barangEmpty" hidden>Belum ada barang. Tambah lewat menu ADMIN.</div>
     </section>
 
-    <!-- riwayat dihapus -->
+    <!-- Riwayat edit SO: waktu, PLU, selisih tiap edit -->
+    <div class="riwayat-head">
+      <button type="button" class="riwayat-toggle" id="riwayatToggle" aria-expanded="false" aria-controls="riwayatWrap" aria-label="Tampilkan Riwayat SO">
+        Riwayat SO <span class="riwayat-caret">▼</span><span class="riwayat-count" id="riwayatCount"></span>
+      </button>
+    </div>
+    <div class="table-wrap riwayat-wrap" id="riwayatWrap" hidden>
+      <table class="riwayat">
+        <thead>
+          <tr>
+            <th style="width:110px">Waktu</th>
+            <th style="width:130px">PLU</th>
+            <th class="c-total" style="text-align:right">Selisih</th>
+          </tr>
+        </thead>
+        <tbody id="riwayatBody"></tbody>
+      </table>
+      <div class="empty" id="riwayatEmpty" style="text-align:center; padding:14px 12px; color:var(--muted); font-size:11px; font-family:var(--mori-mono); text-transform:uppercase;">Belum ada riwayat edit.</div>
+    </div>
 
     <script type="module">
       import { supabase } from '../../js/supabase.js';
@@ -886,6 +904,23 @@
         saveOverlay.hidden = true;
         saveChoiceCallback = null;
       });
+
+      /* ===== RIWAYAT ===== */
+      const riwayatToggle = document.getElementById('riwayatToggle');
+      const riwayatWrap = document.getElementById('riwayatWrap');
+      const riwayatCount = document.getElementById('riwayatCount');
+      let riwayatTerbuka = false;
+
+      const toggleRiwayat = () => {
+        riwayatTerbuka = !riwayatTerbuka;
+        riwayatWrap.hidden = !riwayatTerbuka;
+        riwayatToggle.setAttribute('aria-expanded', riwayatTerbuka ? 'true' : 'false');
+        const caret = riwayatToggle.querySelector('.riwayat-caret');
+        if (caret) caret.textContent = riwayatTerbuka ? '▲' : '▼';
+        if (riwayatTerbuka) loadRiwayat();
+      };
+
+      riwayatToggle.addEventListener('click', toggleRiwayat);
 
       saveOptFisik.addEventListener('click', () => {
         saveOverlay.hidden = true;
@@ -1457,7 +1492,7 @@
         renderBarang(barang || []);
         renderSelisih(barang || []);
         renderSelisih(barang || []);
-        
+        loadRiwayat();
       };
 
       
