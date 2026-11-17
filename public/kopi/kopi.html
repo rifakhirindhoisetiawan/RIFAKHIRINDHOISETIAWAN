@@ -1203,7 +1203,9 @@
       async function pushPin(slug, nama, add) {
         try {
           if (add) {
-            await supabase.from(PIN_TABLE).insert({ slug, oleh: nama });
+            const { error } = await supabase.from(PIN_TABLE).insert({ slug, oleh: nama });
+            // 23505 = slug sudah ada di server (pin duplikat), abaikan.
+            if (error && error.code !== '23505') throw error;
           } else {
             await supabase.from(PIN_TABLE).delete().eq('slug', slug);
           }
@@ -1234,7 +1236,10 @@
             setTimeout(() => kartu.classList.remove('pinned-pop'), 420);
           }
         }
-        if (pinServerReady) pushPin(slug, nama, akanPin);
+        // Push ke server supaya sematan terlihat di semua perangkat (bukan
+        // cuma lokal). Tidak menunggu pinServerReady agar pin yang baru
+        // dilepas saat halaman masih memuat tetap ikut terkirim.
+        pushPin(slug, nama, akanPin);
       }
 
       /* Satu kartu menu. Dipisah dari renderMenu() supaya baris pin dan
