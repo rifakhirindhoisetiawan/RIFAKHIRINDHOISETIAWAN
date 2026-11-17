@@ -16,31 +16,44 @@
     body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;color:var(--mori-text);min-height:100vh;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:0;-webkit-font-smoothing:antialiased}
     .phone{width:100%;max-width:100%;background:var(--mori-bg);border-radius:0;box-shadow:none;overflow:hidden;display:flex;flex-direction:column;min-height:100vh;position:relative}
     @media(min-width:800px){.phone{max-width:800px;margin:0 auto}}
-    .search-row{display:flex;align-items:center;gap:10px;padding:12px 18px 14px;max-width:800px;width:100%;margin:0 auto;flex-shrink:0}
-    .search-box {flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:46px;box-sizing:border-box;border:1px solid var(--mori-line);border-radius:8px;padding:0 14px;color:var(--mori-text);font-size:13px;background:var(--mori-surface);transition:background .2s ease}
+    .search-row{display:flex;align-items:center;gap:10px;padding:max(12px,env(safe-area-inset-top)) 18px 14px;max-width:800px;width:100%;margin:0 auto;flex-shrink:0}
+    .search-box {flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:46px;box-sizing:border-box;border:1.5px solid rgba(26,25,23,0.3);border-radius:10px;padding:0 14px;color:var(--mori-text);font-size:13px;background:var(--mori-surface);transition:background .2s ease}
     .search-box:focus-within{background:#fffdf7}
-    .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:var(--mori-text);font-family:inherit;-webkit-appearance:none;appearance:none;border-radius:0}
-    .search-box input::placeholder,.search-box svg{color:var(--mori-text-2)}
+    .search-box input{border:none;background:transparent;outline:none;width:100%;min-width:0;font-size:14px;color:var(--mori-text);font-family:inherit;-webkit-appearance:none;appearance:none;border-radius:0}
+    .search-box input::placeholder,.search-box svg{color:var(--mori-text)}
     .search-box svg{flex-shrink:0;width:18px;height:18px}
-    .menu-wrap{flex:1;overflow-y:auto;padding:4px 18px 24px 22px;max-width:800px;width:100%;margin:0 auto;-ms-overflow-style:none;scrollbar-width:none}
-    .menu-wrap::-webkit-scrollbar{display:none}
-    .group-title{font-family:var(--mori-mono);font-size:10px;font-weight:700;color:var(--mori-text);letter-spacing:1.4px;text-transform:uppercase;margin:18px 0 12px}
-    .group-title:first-child{margin-top:6px}
-    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 8px;width:100%;align-content:start}
+    .menu-wrap{flex:1;overflow-y:auto;padding:0 18px 40px;max-width:800px;width:100%;margin:0 auto;-ms-overflow-style:none;scrollbar-width:none}
+    .menu-wrap::-webkit-scrollbar{display:none;width:0;height:0}
+
+    /* Frame tabel ala menu kopi/index: bingkai 1.5px + radius 10px,
+       padding dalam 14px, tanpa strip header. */
+    .menu-frame{
+      width:100%;
+      background:var(--mori-bg);
+      border:1.5px solid rgba(26,25,23,0.3);
+      border-radius:10px;
+      overflow:hidden
+    }
+    .menu-frame .grid{padding:14px}
+
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px;width:100%;align-content:start}
     @media(min-width:768px){.grid{gap:22px 14px}}
-    .item{display:flex;flex-direction:column;align-items:stretch;text-align:center;cursor:pointer;background:none;border:none;text-decoration:none;color:var(--mori-text);min-width:0;width:100%}
-    .icon-tile-foto{position:relative;width:100%;aspect-ratio:9/16;border:none;border-radius:8px;overflow:hidden;margin-bottom:10px;background:var(--mori-surface);box-shadow: none;transition:transform .2s ease;display:flex;align-items:center;justify-content:center;font-size:28px;line-height:1}
+    .item{display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer;background:none;border:none;text-decoration:none;color:var(--mori-text);min-width:0;width:100%}
+    .icon-tile-foto{position:relative;width:100%;max-width:100px;aspect-ratio:9/16;border:none;border-radius:8px;overflow:hidden;margin-bottom:10px;background:var(--mori-surface);box-shadow: none;transition:transform .2s ease;display:flex;align-items:center;justify-content:center;font-size:28px;line-height:1}
     .icon-tile-foto.tanpa-foto{background-color:var(--mori-surface);background-image:repeating-linear-gradient(45deg,#f2eee2 0 6px,#ece6d6 6px 12px);border:1px dashed var(--mori-text-2);border-color:var(--mori-text-2)}
     .icon-tile-foto.tile-admin{background:var(--mori-accent);box-shadow: none}
     .item:active .icon-tile-foto{transform:translate(2px,2px)}
     .icon-tile-foto.tile-admin svg{width:36%;height:36%;color:var(--mori-bg)}
-    .item span{font-family:var(--mori-mono);font-size:11px;font-weight:700;line-height:1.3;color:var(--mori-text);letter-spacing:.8px;text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .item span{font-family:var(--mori-mono);font-size:9px;font-weight:700;line-height:1.3;color:var(--mori-text);letter-spacing:1px;text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
     .item span.desc{color:var(--mori-text-2);font-size:10px;letter-spacing:.4px;-webkit-line-clamp:1}
-    @media(min-width:768px){.item span{font-size:12px}}
-    .header-pin-btn{flex:0 0 auto;width:46px;height:46px;display:flex;align-items:center;justify-content:center;background:var(--mori-surface);border:1px solid var(--mori-line);border-radius:8px;color:var(--mori-text-2);cursor:pointer;padding:0;transition:transform .2s ease,background .2s ease,color .2s ease}
+    @media(max-width:360px){
+      .icon-tile-foto{max-width:85px}
+      .item span{font-size:8px;letter-spacing:0.6px}
+    }
+    .header-pin-btn{flex:0 0 auto;width:46px;height:46px;display:flex;align-items:center;justify-content:center;background:var(--mori-surface);border:1.5px solid rgba(26,25,23,0.3);border-radius:10px;color:var(--mori-text);cursor:pointer;padding:0;transition:transform .2s ease,background .2s ease,color .2s ease}
     .header-pin-btn:active{transform:translate(2px,2px)}
     .header-pin-btn[aria-pressed="true"]{background:var(--mori-text);color:var(--mori-bg);border-color:var(--mori-text)}
-    .header-pin-btn svg{width:18px;height:18px}
+    .header-pin-btn svg{width:20px;height:20px}
     body.pin-mode .icon-tile-foto{border:1px dashed var(--mori-text-2)!important;cursor:pointer}
     .empty-msg{text-align:center;font-family:var(--mori-mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mori-text-2);padding:40px 0}
   </style>
@@ -99,7 +112,7 @@
     // Menu yang disematkan tampil di depan (urutan pin terjaga, sisanya tetap urut asli)
     const rank=(r)=>{ const i=pinned.indexOf(String(r.name||'')); return i===-1?Number.MAX_SAFE_INTEGER:i; };
     raks.filter(cocok).slice().sort((a,b)=>rank(a)-rank(b)).forEach(r=>tiles.push(tileHtml(r,false)));
-    if(tiles.length) html+='<div class="grid">'+tiles.join('')+'</div>';
+    if(tiles.length) html+='<div class="menu-frame"><div class="grid">'+tiles.join('')+'</div></div>';
     menuWrap.innerHTML=html||'<div class="empty-msg">'+(raks.length?'Tidak ditemukan':'Belum ada rak — tambah di admin.html')+'</div>';
     // Saat mode semat aktif: tap kartu = semat / lepas, bukan membuka halaman
     menuWrap.querySelectorAll('.item').forEach(el=>{
