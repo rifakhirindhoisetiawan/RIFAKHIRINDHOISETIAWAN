@@ -51,6 +51,7 @@
         gap: 10px;
         width: 100%;
         margin-bottom: 14px;
+        flex-shrink: 0;
       }
 
       .date-box {
@@ -113,6 +114,19 @@
         gap: 16px 10px;
         width: 100%;
         align-content: start;
+      }
+
+      /* Frame tabel ala menu kopi/index: bingkai 1.5px + radius 10px,
+         padding dalam 14px, tanpa strip header. */
+      .menu-frame {
+        width: 100%;
+        background: var(--mori-bg);
+        border: 1.5px solid rgba(26, 25, 23, 0.3);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .menu-frame .menu-list {
+        padding: 14px;
       }
 
       .menu-item {
@@ -348,8 +362,8 @@
         flex: 0 0 auto;
         width: 46px;
         height: 46px;
-        border-radius: 8px;
-        border: 1px solid var(--mori-line);
+        border-radius: 10px;
+        border: 1.5px solid rgba(26, 25, 23, 0.3);
         background: var(--mori-surface);
         color: var(--mori-text);
         cursor: pointer;
@@ -369,16 +383,14 @@
       }
       .search-box {
         flex: 1;
-        /* min-width:0 -> kolom cari boleh menyusut, jadi tombol di kanan
-           tidak terdorong keluar layar di HP sempit (sama seperti index.html) */
         min-width: 0;
         display: flex;
         align-items: center;
         gap: 8px;
         height: 46px;
         box-sizing: border-box;
-        border: 1px solid var(--mori-line);
-        border-radius: 8px;
+        border: 1.5px solid rgba(26, 25, 23, 0.3);
+        border-radius: 10px;
         padding: 0 14px;
         color: var(--mori-text, #1a1917);
         font-size: 13px;
@@ -402,11 +414,11 @@
         border-radius: 0;
       }
       .search-box input::placeholder {
-        color: var(--mori-text-2);
+        color: var(--mori-text);
       }
       .search-box svg {
         flex-shrink: 0;
-        color: var(--mori-text-2);
+        color: var(--mori-text);
         width: 18px;
         height: 18px;
       }
@@ -447,13 +459,15 @@
           aria-pressed="false"
           title="Mode Semat"
         >
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 17v5"></path>
             <path d="M9 10.8V4h6v6.8l2 3.2H7l2-3.2z"></path>
           </svg>
         </button>
       </div>
-      <div class="menu-list" id="menuList"></div>
+      <div class="menu-frame">
+        <div class="menu-list" id="menuList"></div>
+      </div>
     </div>
     <script type="module">
       import { supabase } from '../kopi/supabase.js';
