@@ -1240,8 +1240,7 @@
           const sistem = num(row.stok_sistem);
           const tr = document.createElement('tr');
           tr.dataset.id = row.id;
-          const savedTgl = localStorage.getItem('so_tgl_' + row.id);
-          const tglVal = savedTgl || row.updated_at;
+          const tglVal = row.updated_at || localStorage.getItem('so_tgl_' + row.id);
           tr.append(cell(String(i + 1), 'c-no'), cell(tglVal ? formatTanggal(tglVal) : '-', 'c-tgl'));
 
           // Kolom foto produk dihapus (data foto tetap diambil dari DB,
@@ -1365,10 +1364,9 @@
             const sistemLama = num(row.stok_sistem);
             const nilaiBaruSistem = mode === 'onhand' ? sistemLama + nilai : sistemLama;
             const updateData = mode === 'onhand' 
-              ? { stok_fisik: 0, stok_sistem: nilaiBaruSistem } 
-              : { stok_fisik: nilai };
+              ? { stok_fisik: 0, stok_sistem: nilaiBaruSistem, updated_at: nowIso } 
+              : { stok_fisik: nilai, updated_at: nowIso };
             row.updated_at = nowIso;
-            localStorage.setItem('so_tgl_' + row.id, nowIso);
 
             const { error } = await supabase
               .from('stock_products')
@@ -1468,7 +1466,7 @@
 
         const { data: barang, error: errBarang } = await supabase
           .from('stock_products')
-          .select('id, menu_id, kode, name, satuan, stok_sistem, stok_fisik, hpp')
+          .select('id, menu_id, kode, name, satuan, stok_sistem, stok_fisik, hpp, updated_at')
           .eq('menu_id', menuId)
           .order('kode');
         if (errBarang) {
