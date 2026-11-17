@@ -408,6 +408,8 @@
       }
 
       const PIN_KEY = 'note_pinned_v1';
+      const PIN_TABLE = 'note_pins';
+      const PIN_MIGRASI_KEY = 'note_pins_migrated_v1';
       let pinned = [];
       try {
         pinned = JSON.parse(localStorage.getItem(PIN_KEY)) || [];
@@ -417,7 +419,68 @@
 
       const isPinned = (title) => pinned.includes(title);
       let modeSemat = false;
+      let pinServerReady = false;
       const headerPinBtn = document.getElementById('headerPinBtn');
+
+      async function loadPins() {
+        try { pinned = JSON.parse(localStorage.getItem(PIN_KEY)) || []; } catch { pinned = []; }
+      }
+      async function savePins(list) {
+        pinned = list;
+        try { localStorage.setItem(PIN_KEY, JSON.stringify(list)); } catch {}
+      }
+      async function pushPin(title, add) {
+        try {
+          if (add) {
+            const { error } = await getSupabase().then(s => s.from(PIN_TABLE).insert({ slug: title, oleh: title }));
+            // 23505 = slug sudah ada di server (pin duplikat), abaikan.
+            if (error && error.code !== '23505') throw error;
+          } else {
+            await (await getSupabase()).from(PIN_TABLE).delete().eq('slug', title);
+          }
+        } catch (e) {
+          console.warn('Gagal menyimpan sematan ke server:', e.message);
+        }
+      }
+      async function syncPins() {
+        try {
+          const supabase = await getSupabase();
+          const { data, error } = await supabase.from(PIN_TABLE).select('slug').order('created_at', { ascending: true });
+          if (error) {
+            console.info('Pin bersama belum aktif:', error.message);
+            return;
+          }
+          const server = (data || []).map(r => r.slug).filter(Boolean);
+          // Migrasi sematan lokal lama ke server sekali saja.
+          if (localStorage.getItem(PIN_MIGRASI_KEY) !== '1') {
+            const lokal = pinned.filter(Boolean);
+            const kurang = lokal.filter(s => !server.includes(s));
+            for (const s of kurang) {
+              try {
+                await supabase.from(PIN_TABLE).insert({ slug: s, oleh: s });
+                server.push(s);
+              } catch (e) {
+                if (e.code !== '23505') console.warn('pin migrate:', e.message);
+              }
+            }
+            if (kurang.length) console.info('Sematan note lama dimigrasi ke server:', kurang.length, 'menu');
+            localStorage.setItem(PIN_MIGRASI_KEY, '1');
+          }
+          await savePins(server);
+          pinServerReady = true;
+          renderGrid();
+        } catch (e) {
+          console.warn('Gagal sinkronisasi sematan note:', e.message);
+        }
+      }
+      async function togglePin(title) {
+        if (!title) return;
+        const akanPin = !isPinned(title);
+        const baru = akanPin ? [...pinned, title] : pinned.filter(t => t !== title);
+        await savePins(baru);
+        renderGrid();
+        pushPin(title, akanPin);
+      }
 
       if (headerPinBtn) {
         headerPinBtn.addEventListener('click', (e) => {
@@ -429,7 +492,7 @@
         });
       }
 
-      function renderGrid() {
+      async function renderGrid() {
         const q = searchInput.value.trim().toLowerCase();
         const adminMatch = !q || 'admin'.includes(q);
         const list = adminMatch ? [adminTile] : [];
@@ -497,15 +560,7 @@
               e.stopPropagation();
               const title = decodeURIComponent(el.dataset.title || '');
               if (!title) return;
-              if (isPinned(title)) {
-                pinned = pinned.filter(t => t !== title);
-              } else {
-                pinned.push(title);
-              }
-              try {
-                localStorage.setItem(PIN_KEY, JSON.stringify(pinned));
-              } catch {}
-              renderGrid();
+              togglePin(title);
             }
           });
         });
@@ -600,6 +655,7 @@
       loadMenus();
       syncCategoryFilter();
       loadAdminFoto();
+      syncPins();
 
       // Realtime (opsional) dimuat setelah halaman tampil, bukan di jalur kritis.
       let rtTimer = null;
@@ -631,6 +687,20 @@
                 () => {
                   clearTimeout(rtTimer);
                   rtTimer = setTimeout(() => loadMenus(), 300);
+                }
+              )
+              .subscribe();
+          } catch (e) {}
+
+          try {
+            supabase
+              .channel('note_pins_changes')
+              .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: PIN_TABLE },
+                () => {
+                  clearTimeout(rtTimer);
+                  rtTimer = setTimeout(() => syncPins(), 300);
                 }
               )
               .subscribe();
