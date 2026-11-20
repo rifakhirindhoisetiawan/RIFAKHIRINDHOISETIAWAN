@@ -145,7 +145,6 @@
         </div>
       </div>
       <div class="btn-row">
-        <button id="btnToggle" class="btn primary" type="button">Nyalakan</button>
         <button id="btnSwitch" class="btn" type="button" disabled>Ganti Kamera</button>
       </div>
       <p class="hint">Butuh izin kamera. Kalau tidak muncul, gunakan <b>HTTPS</b> atau <b>localhost</b>.</p>
@@ -192,7 +191,6 @@
     const video = document.getElementById("video");
     const ovDevice = document.getElementById("ovDevice");
     const ovTime = document.getElementById("ovTime");
-    const btnToggle = document.getElementById("btnToggle");
     const btnSwitch = document.getElementById("btnSwitch");
     const btnSnap = document.getElementById("btnSnap");
     const btnGeo = document.getElementById("btnGeo");
@@ -373,15 +371,10 @@
         video.srcObject = stream;
         await video.play().catch(() => {});
         btnSnap.disabled = false;
-        btnToggle.textContent = "Matikan";
-        btnToggle.classList.remove("primary");
-        btnToggle.classList.add("danger");
         btnSwitch.disabled = false;
         ovDevice.textContent = facing === "user" ? "DEPAN" : "BELAKANG";
         toast("Kamera aktif");
       } catch (e) {
-        btnToggle.textContent = "Nyalakan";
-        btnToggle.disabled = false;
         const msg = (e && e.name) === "NotAllowedError" ? "Izin ditolak" : "Gagal: " + (e && e.name);
         toast(msg);
         console.warn("getUserMedia", e);
@@ -395,21 +388,10 @@
       }
       video.srcObject = null;
       btnSnap.disabled = true;
-      btnToggle.textContent = "Nyalakan";
-      btnToggle.classList.remove("danger");
-      btnToggle.classList.add("primary");
       btnSwitch.disabled = true;
       ovDevice.textContent = "MATI";
     }
 
-    btnToggle.addEventListener("click", () => {
-      if (stream) {
-        stop();
-        toast("Dimatikan");
-      } else {
-        start();
-      }
-    });
     btnSwitch.addEventListener("click", async () => {
       if (!stream) {
         toast("Nyalakan kamera dulu");
