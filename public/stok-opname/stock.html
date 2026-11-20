@@ -676,7 +676,7 @@
       allItems.push({
         label: namaAdmin,
         href: 'stock-admin.html',
-        thumb: (await adaFoto(fotoStorage('admin'))) ? fotoStorage('admin') : THUMB,
+        thumb: THUMB,
         isAdmin: true
       });
 
@@ -685,17 +685,10 @@
         hasil = await supabase.from('so_menus').select('id, name').order('name');
       }
       for (const menu of hasil.data || []) {
-        let thumb = THUMB;
-        if (menu.foto_url) {
-          thumb = menu.foto_url;
-        } else {
-          const cek = fotoStorage(menu.id);
-          if (await adaFoto(cek)) thumb = cek;
-        }
         allItems.push({
           label: menu.name,
           href: 'so.html?m=' + menu.id,
-          thumb: thumb,
+          thumb: THUMB,
           isAdmin: false
         });
       }
