@@ -145,9 +145,8 @@
         </div>
       </div>
       <div class="btn-row">
-        <button id="btnStart" class="btn primary" type="button">Nyalakan</button>
-        <button id="btnSwitch" class="btn" type="button">Ganti Kamera</button>
-        <button id="btnStop" class="btn danger" type="button">Matikan</button>
+        <button id="btnToggle" class="btn primary" type="button">Nyalakan</button>
+        <button id="btnSwitch" class="btn" type="button" disabled>Ganti Kamera</button>
       </div>
       <p class="hint">Butuh izin kamera. Kalau tidak muncul, gunakan <b>HTTPS</b> atau <b>localhost</b>.</p>
     </div>
@@ -193,9 +192,8 @@
     const video = document.getElementById("video");
     const ovDevice = document.getElementById("ovDevice");
     const ovTime = document.getElementById("ovTime");
-    const btnStart = document.getElementById("btnStart");
+    const btnToggle = document.getElementById("btnToggle");
     const btnSwitch = document.getElementById("btnSwitch");
-    const btnStop = document.getElementById("btnStop");
     const btnSnap = document.getElementById("btnSnap");
     const btnGeo = document.getElementById("btnGeo");
     const inLokasi = document.getElementById("inLokasi");
@@ -367,7 +365,6 @@
         toast("Kamera tidak didukung");
         return;
       }
-      btnStart.disabled = true;
       try {
         stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: { ideal: facing }, width: { ideal: 1280 }, height: { ideal: 720 } },
@@ -376,10 +373,15 @@
         video.srcObject = stream;
         await video.play().catch(() => {});
         btnSnap.disabled = false;
+        btnToggle.textContent = "Matikan";
+        btnToggle.classList.remove("primary");
+        btnToggle.classList.add("danger");
+        btnSwitch.disabled = false;
         ovDevice.textContent = facing === "user" ? "DEPAN" : "BELAKANG";
         toast("Kamera aktif");
       } catch (e) {
-        btnStart.disabled = false;
+        btnToggle.textContent = "Nyalakan";
+        btnToggle.disabled = false;
         const msg = (e && e.name) === "NotAllowedError" ? "Izin ditolak" : "Gagal: " + (e && e.name);
         toast(msg);
         console.warn("getUserMedia", e);
@@ -392,15 +394,21 @@
         stream = null;
       }
       video.srcObject = null;
-      btnStart.disabled = false;
       btnSnap.disabled = true;
+      btnToggle.textContent = "Nyalakan";
+      btnToggle.classList.remove("danger");
+      btnToggle.classList.add("primary");
+      btnSwitch.disabled = true;
       ovDevice.textContent = "MATI";
     }
 
-    btnStart.addEventListener("click", start);
-    btnStop.addEventListener("click", () => {
-      stop();
-      toast("Dimatikan");
+    btnToggle.addEventListener("click", () => {
+      if (stream) {
+        stop();
+        toast("Dimatikan");
+      } else {
+        start();
+      }
     });
     btnSwitch.addEventListener("click", async () => {
       if (!stream) {
@@ -468,8 +476,6 @@
     window.addEventListener("beforeunload", stop);
 
     render();
-    // Auto-start kamera saat menu dibuka, biar langsung tampil kayak kamera
-    start().catch(() => {});
   </script>
 </body>
 </html>
