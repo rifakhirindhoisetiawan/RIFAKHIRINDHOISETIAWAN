@@ -75,10 +75,8 @@
     .shot-img-fallback{
       width:100%;
       height:100%;
-      font-family:var(--mori-mono);
-      font-size:28px;
-      line-height:1;
-      color:var(--mori-text-2)
+      object-fit:cover;
+      display:block
     }
     .shot-time{
       font-family:var(--mori-mono);
@@ -321,8 +319,8 @@
       return (
         '<div class="shot">' +
         '<div class="shot-img-wrap">' +
-        '<img class="shot-img" src="' + s.img + '" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'" />' +
-        '<div class="shot-img-fallback" style="display:none">📷</div>' +
+        '<img class="shot-img" src="' + s.img + '" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'" />' +
+        '<img class="shot-img-fallback" src="../../assets/images/time-kamera/1.jpg" alt="Foto menu mori" style="display:none" />' +
         '</div>' +
         '<div class="shot-time">' + fmtDate(s.at) + " · " + fmtClock(s.at) + "</div>" +
         (meta.length
