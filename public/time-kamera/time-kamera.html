@@ -398,15 +398,34 @@
       toast("Terekam " + fmtClock(new Date().toISOString()));
     });
 
-    // Isi lokasi otomatis dari GPS saat halaman dibuka
-    function isiLokasiOtomatis() {
+    // Isi lokasi otomatis sesuai nama tempat dari koordinat GPS (reverse geocoding)
+    async function isiLokasiOtomatis() {
       if (!navigator.geolocation) return;
       navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const { latitude, longitude, accuracy } = pos.coords;
-          inLokasi.value =
-            latitude.toFixed(5) + ", " + longitude.toFixed(5) +
-            " (±" + Math.round(accuracy) + "m)";
+        async (pos) => {
+          const { latitude, longitude } = pos.coords;
+          const koordinat = latitude.toFixed(5) + ", " + longitude.toFixed(5);
+          inLokasi.value = koordinat;
+          try {
+            // Nominatim (OpenStreetMap) — reverse geocoding gratis tanpa API key
+            const res = await fetch(
+              "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" +
+                latitude + "&lon=" + longitude + "&zoom=18&addressdetails=1",
+              { headers: { "Accept-Language": "id" } },
+            );
+            if (!res.ok) return;
+            const data = await res.json();
+            const a = data.address || {};
+            const bagian = [
+              a.road || a.pedestrian || a.footway,
+              a.suburb || a.neighbourhood || a.village,
+              a.city || a.town || a.regency || a.county,
+            ].filter(Boolean);
+            const nama = (bagian.length ? bagian.join(", ") : data.display_name || "").trim();
+            if (nama) inLokasi.value = nama + " (" + koordinat + ")";
+          } catch (e) {
+            // biarkan koordinat kalau gagal ambil nama tempat
+          }
         },
         () => {},
         { enableHighAccuracy: true, timeout: 8000 },
