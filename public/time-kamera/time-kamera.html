@@ -476,6 +476,8 @@
     window.addEventListener("beforeunload", stop);
 
     render();
+    // Selalu nyalakan kamera otomatis saat menu dibuka
+    start().catch(() => {});
   </script>
 </body>
 </html>
