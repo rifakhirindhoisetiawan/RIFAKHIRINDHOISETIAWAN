@@ -159,7 +159,7 @@
       <p class="hint">Lokasi &amp; baris otomatis tersimpan bersama foto. Waktu diambil dari jam device.</p>
     </div>
 
-    <div class="menu-frame card">
+    <div class="menu-frame card" id="galeriCard" hidden>
       <div class="shot-grid" id="shots"></div>
     </div>
   </div>
@@ -178,6 +178,7 @@
     const inBaris = document.getElementById("inBaris");
     const inCatatan = document.getElementById("inCatatan");
     const shotsEl = document.getElementById("shots");
+    const galeriCard = document.getElementById("galeriCard");
 
     const toastEl = document.getElementById("toast");
 
@@ -303,8 +304,10 @@
       const visible = shots.filter((s) => inFilter(s.at));
       if (!visible.length) {
         shotsEl.innerHTML = "";
+        galeriCard.hidden = true;
         return;
       }
+      galeriCard.hidden = false;
       shotsEl.innerHTML = visible.map(shotHtml).join("");
       shotsEl.querySelectorAll("[data-dl]").forEach((b) => {
         b.addEventListener("click", () => download(parseInt(b.dataset.dl)));
