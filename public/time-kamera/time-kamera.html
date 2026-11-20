@@ -58,10 +58,13 @@
       aspect-ratio:9/16;
       object-fit:cover;
       border-radius:8px;
-      background:#0d0d0f;
+      background:var(--mori-surface);
       display:block;
-      margin-bottom:10px
+      margin-bottom:10px;
+      border:none;
+      box-shadow:none;
     }
+    .shot-img.tanpa-foto{background-image:repeating-linear-gradient(45deg,#f2eee2 0 6px,#ece6d6 6px 12px);border:1px dashed var(--mori-text-2);border-color:var(--mori-text-2);font-family:var(--mori-mono);font-size:28px;line-height:1;display:flex;align-items:center;justify-content:center}
     .shot-time{
       font-family:var(--mori-mono);
       font-size:9px;
@@ -302,7 +305,7 @@
       if (s.baris) meta.push(esc(s.baris));
       return (
         '<div class="shot">' +
-        '<img class="shot-img" src="' + s.img + '" alt="" />' +
+        '<img class="shot-img" src="' + s.img + '" alt="" onerror="this.parentElement.classList.add(\'tanpa-foto\');this.remove()" />' +
         '<div class="shot-time">' + fmtDate(s.at) + " · " + fmtClock(s.at) + "</div>" +
         (meta.length
           ? '<div class="shot-lokasi">' + meta.join(" · ") + "</div>"
