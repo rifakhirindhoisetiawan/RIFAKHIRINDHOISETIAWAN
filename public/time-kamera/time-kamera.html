@@ -8,79 +8,114 @@
   <meta content="#fffbf2" name="theme-color" />
   <link rel="stylesheet" href="../mori-style.css" />
   <style>
-    .shot-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+    /* Frame galeri ala menu kopi/index: bingkai 1.5px + radius 10px,
+       padding dalam 14px. */
+    .menu-frame{
+      width:100%;
+      background:var(--mori-bg);
+      border:1.5px solid rgba(26,25,23,0.3);
+      border-radius:10px;
+      overflow:hidden
     }
-    .shot {
-      border: 1px solid var(--mori-line);
-      background: var(--mori-surface);
-      padding: 10px;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
+    .menu-frame .grid{padding:14px}
+
+    .menu-frame.card{padding:14px}
+    .menu-frame.card h2{
+      font-size:9px;
+      font-weight:700;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      color:var(--mori-text-2);
+      margin-bottom:10px
     }
-    .shot-img {
-      width: 100%;
-      aspect-ratio: 9 / 16;
-      object-fit: cover;
-      border: 1px solid var(--mori-line);
-      background: #0d0d0f;
-      display: block;
+
+    .shot-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px 10px;
+      width:100%;
+      align-content:start
     }
-    .shot-time {
-      font-family: var(--mori-mono);
-      font-size: 11px;
-      font-weight: 700;
-      margin-top: 8px;
-      letter-spacing: 0.5px;
+    @media(min-width:768px){.shot-grid{gap:22px 14px}}
+    @media(max-width:360px){.shot-grid{grid-template-columns:repeat(2,1fr);gap:12px 8px}}
+
+    .shot{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      min-width:0;
+      width:100%;
+      background:var(--mori-bg);
+      border:1.5px solid rgba(26,25,23,0.3);
+      border-radius:10px;
+      padding:14px;
+      overflow:hidden
     }
-    .shot-lokasi {
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--mori-text-2);
-      margin-top: 4px;
-      line-height: 1.4;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
+    .shot-img{
+      width:100%;
+      max-width:100px;
+      aspect-ratio:9/16;
+      object-fit:cover;
+      border-radius:8px;
+      background:#0d0d0f;
+      display:block;
+      margin-bottom:10px
     }
-    .shot-actions {
-      display: flex;
-      gap: 6px;
-      margin-top: 8px;
+    .shot-time{
+      font-family:var(--mori-mono);
+      font-size:9px;
+      font-weight:700;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      color:var(--mori-text);
+      margin-top:6px;
+      line-height:1.3
     }
-    .shot-actions .btn {
-      flex: 1;
-      padding: 8px 6px;
-      font-size: 9px;
+    .shot-lokasi{
+      font-size:9px;
+      font-weight:700;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      color:var(--mori-text-2);
+      margin-top:4px;
+      line-height:1.3;
+      overflow:hidden;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical
     }
-    .field-sm {
-      font-size: 12px;
-      padding: 9px 10px;
+    .shot-actions{
+      display:flex;
+      gap:6px;
+      margin-top:8px;
+      width:100%
     }
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
+    .shot-actions .btn{
+      flex:1;
+      padding:8px 6px;
+      font-size:9px
     }
-    .filters .btn {
-      padding: 8px 12px;
-      font-size: 10px;
-      min-width: 0;
+    .field-sm{
+      font-size:12px;
+      padding:9px 10px
     }
-    .filters .btn.on {
-      background: var(--mori-accent);
-      color: var(--mori-bg);
+    .filters{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:12px
     }
-    @media (max-width: 380px) {
-      .shot-grid {
-        grid-template-columns: 1fr;
-      }
+    .filters .btn{
+      padding:8px 12px;
+      font-size:10px;
+      min-width:0
     }
+    .filters .btn.on{
+      background:var(--mori-accent);
+      color:var(--mori-bg)
+    }
+    .cam-stage{border-radius:10px}
   </style>
 </head>
 <body>
@@ -95,7 +130,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="menu-frame card">
       <h2>Kamera</h2>
       <div class="cam-stage">
         <video id="video" class="cam-video" playsinline muted autoplay></video>
@@ -112,7 +147,7 @@
       <p class="hint">Butuh izin kamera. Kalau tidak muncul, gunakan <b>HTTPS</b> atau <b>localhost</b>.</p>
     </div>
 
-    <div class="card">
+    <div class="menu-frame card">
       <h2>Ambil Foto</h2>
       <div class="stack">
         <div>
@@ -135,14 +170,14 @@
       <p class="hint">Lokasi &amp; baris otomatis tersimpan bersama foto. Waktu diambil dari jam device.</p>
     </div>
 
-    <div class="card">
+    <div class="menu-frame card">
       <h2>Galeri — <span id="count">0</span></h2>
       <div class="filters">
         <button class="btn on" type="button" data-filter="all">Semua</button>
         <button class="btn" type="button" data-filter="today">Hari Ini</button>
         <button class="btn" type="button" data-filter="7d">7 Hari</button>
       </div>
-      <div id="shots" class="shot-grid"></div>
+      <div class="shot-grid" id="shots"></div>
     </div>
   </div>
 
