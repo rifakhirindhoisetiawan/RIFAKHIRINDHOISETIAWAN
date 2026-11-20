@@ -302,10 +302,7 @@
     function render() {
       const visible = shots.filter((s) => inFilter(s.at));
       if (!visible.length) {
-        shotsEl.innerHTML =
-          '<div class="shot"><div class="shot-img-wrap">' +
-          '<img class="shot-img" src="../../assets/images/time-kamera/1.jpg" alt="Foto menu mori" />' +
-          '</div><div class="shot-time">TIME KAMERA</div><div class="shot-lokasi">Belum ada foto</div></div>';
+        shotsEl.innerHTML = "";
         return;
       }
       shotsEl.innerHTML = visible.map(shotHtml).join("");
