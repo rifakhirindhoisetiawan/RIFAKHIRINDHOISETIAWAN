@@ -137,7 +137,48 @@ Referensi tema: `public/stok-opname/stock-admin.html` (bingkai tabel 1.5px +
 radius 10px, thead krem tanpa garis bawah), `public/musnah/musnah.html`
 (search 46px radius 8px).
 
-## 7. Alur Kerja (auto-push — permanen)
+## 8. Musnah Admin (`public/musnah/musnah-admin.html`)
+
+- **Hapus menu**: langsung via tombol `✕` (danger, merah) di kolom AKSI,
+  tanpa password konfirmasi dan tanpa menu pop 3-titik.
+- **Edit inline**: title (contenteditable), HPP, QTY auto-save saat blur.
+- **Ceklist item**: qty otomatis jadi 0 (reuse menu tanpa tambah baru).
+- **Tambah menu**: sediakan `id` (UUID) + `created_at` + `updated_at`
+  supaya tidak gagal insert. Kolom `hpp`, `qty`, `is_checked` harus ada
+  di Supabase (`ALTER TABLE musnah_menus ADD COLUMN ...`).
+- **Notifikasi musnah** di index: jumlah item `is_checked = false`.
+- **Commit terkait**: `e2caf8d`, `d91eca4`, `bfd7b0f`, `07e3737`,
+  `2b94ca7`, `a30039e`, `6d7d015`, `5813245`.
+
+## 9. Time Kamera (`public/time-kamera/`)
+
+- **UI kamera**: card krem, control bar krem, tombol senter/grid/ganti kamera
+  kaca putih, shutter ring gelap + isi oranye, zoom pill krem.
+- **Info overlay**: jam, koordinat, alamat di atas gambar (gradient hitam
+  dihapus), teks putih dengan shadow.
+- **Stamp foto**: jam, koordinat, alamat tercetak permanen di foto
+  (drawStamp), tunggu reverse geocoding ≤1.8s sebelum stamp.
+- **Preview**: full-screen review setelah jepret, tombol Ambil ulang (ikon
+  refresh) + Unduh (dark), tanpa X close. Tombol Back menutup review
+  (pushState/popstate), tidak balik ke index.
+- **Riwayat**: halaman terpisah (`riwayat.html`), grid 2 kolom HP
+  (3-4 desktop), tombol Simpan/Hapus rounded 8px sama lebar.
+- **Notif**: semua toast dihapus (time-kamera + riwayat), badge foto di
+  thumbnail dihapus.
+- **Scroll**: kembalikan scroll normal di HP.
+- **Zoom**: 0.5× dihapus (tidak didukung sebagian HP), sisa 1×/2×.
+- **Test laptop**: shutter bisa diklik (file input fallback) + auto-enable
+  saat kamera gagal.
+- **Commit terkait**: `f90fcc4`, `691a108`, `41d33d5`, `2c2f56f`,
+  `f62787f`, `66fa939`, `e1efff2`, `e4829fd`, `62d35ff`, `e4829fd`,
+  `62d35ff`, `e4829fd`, `62d35ff`, `829e0c0`, `6b0f6a8`, `bec6523`,
+  `0d502df`, `4d51318`, `2e5a668`, `36de072`, `2e5a668`, `0919b81`,
+  `c80ca22`, `e786fe1`, `6e0da70`, `db6f490`, `8564d09`, `3a27bed`,
+  `559db56`, `432d5f1`, `caeea2b`, `ecb295f`, `e201741`, `6c19341`,
+  `16175de`, `432d5f1`, `caeea2b`, `ecb295f`, `e201741`, `6c19341`,
+  `16175de`, `432d5f1`, `caeea2b`, `ecb295f`, `e201741`, `6c19341`.
+
+## 10. Alur Kerja (auto-push — permanen)
 
 - Setiap perubahan yang selesai **langsung di-commit + push ke GitHub**
   tanpa menunggu perintah user (user tidak perlu mengetik "push" lagi).
