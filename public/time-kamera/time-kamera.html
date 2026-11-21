@@ -624,10 +624,31 @@
       pendingShot = null;
     }
 
-    btnSnap.addEventListener("click", () => {
+    // Ambil snapshot alamat + koordinat untuk stamp foto, tunggu-lah.
+    function snapLokasi(waktuFoto) {
+      return new Promise((resolve) => {
+        const t0 = Date.now();
+        const check = () => {
+          const v = inLokasi.value.trim();
+          if (v && v !== lokasiKoordinat) {
+            resolve({ waktu: waktuFoto, koordinat: lokasiKoordinat, lokasi: v });
+          } else if (Date.now() - t0 > 1800) {
+            resolve({ waktu: waktuFoto, koordinat: lokasiKoordinat, lokasi: v });
+          } else {
+            setTimeout(check, 120);
+          }
+        };
+        check();
+      });
+    }
+
+    btnSnap.addEventListener("click", async () => {
       if (!stream || snapping) return;
       snapping = true;
-      setTimeout(() => { snapping = false; }, 450);
+
+      const waktuFoto = fmtWaktuLengkap(new Date().toISOString());
+      const meta = await snapLokasi(waktuFoto);
+      setTimeout(() => { snapping = false; }, 600);
 
       // Efek kamera: kilat + getar
       camFlash.classList.remove("on");
@@ -635,18 +656,12 @@
       camFlash.classList.add("on");
       if (navigator.vibrate) navigator.vibrate(12);
 
-      const waktuFoto = fmtWaktuLengkap(new Date().toISOString());
-      const alamat = inLokasi.value.trim();
-      const img = shrink(video, 720, {
-        waktu: waktuFoto,
-        koordinat: lokasiKoordinat,
-        lokasi: alamat && alamat !== lokasiKoordinat ? alamat : "",
-      });
+      const img = shrink(video, 720, meta);
       if (!img) return;
       bukaPreview({
         id: Date.now(),
         img,
-        lokasi: inLokasi.value.trim(),
+        lokasi: meta.lokasi,
         baris: inBaris.value.trim(),
         catatan: inCatatan.value.trim(),
         at: new Date().toISOString(),
