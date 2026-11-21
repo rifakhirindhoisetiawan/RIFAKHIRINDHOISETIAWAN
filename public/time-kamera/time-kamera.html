@@ -199,6 +199,18 @@
     }
     .zoom-btn.on{background:var(--mori-text);color:#fff;border-color:var(--mori-text)}
     .zoom-btn[hidden]{display:none}
+    .zoom-status{
+      font-family:var(--mori-mono);
+      font-size:10px;
+      color:#fff;
+      background:rgba(0,0,0,.5);
+      padding:4px 8px;
+      border-radius:4px;
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
+      white-space:nowrap
+    }
+    .zoom-status[hidden]{display:none}
 
     /* Kilat shutter */
     .cam-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:4}
@@ -269,6 +281,7 @@
           <button class="zoom-btn" data-zoom="0.5" type="button" hidden>0.5×</button>
           <button class="zoom-btn" data-zoom="1" type="button" hidden>1×</button>
           <button class="zoom-btn" data-zoom="2" type="button" hidden>2×</button>
+          <span class="zoom-status" id="zoomStatus" hidden></span>
         </div>
         <div class="cam-info">
           <div class="cam-time" id="ovTime">--:--:--</div>
@@ -326,6 +339,7 @@
     const btnGrid = document.getElementById("btnGrid");
     const zoomRow = document.getElementById("zoomRow");
     const zoomBtns = zoomRow.querySelectorAll(".zoom-btn");
+    const zoomStatus = document.getElementById("zoomStatus");
     const preview = document.getElementById("preview");
     const previewImg = document.getElementById("previewImg");
     const previewInfo = document.getElementById("previewInfo");
@@ -605,6 +619,45 @@
       }
     }
 
+    // Cari kamera ultra-wide dengan mengecek caps.zoom.min tiap device
+    async function findUltraWideByCaps() {
+      if (facing !== "environment") return null;
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const backCams = devices.filter(d => d.kind === "videoinput");
+        for (const dev of backCams) {
+          if (dev.deviceId === currentDeviceId) continue;
+          let stream = null;
+          try {
+            stream = await navigator.mediaDevices.getUserMedia({
+              video: { deviceId: { exact: dev.deviceId }, width: { ideal: 1280 }, height: { ideal: 720 } },
+              audio: false,
+            });
+            const track = stream.getVideoTracks()[0];
+            const caps = track.getCapabilities ? track.getCapabilities() : {};
+            const minZoom = caps.zoom ? caps.zoom.min : 1;
+            if (minZoom < 1) {
+              return dev.deviceId;
+            }
+          } catch (e) {
+            // skip this device
+          } finally {
+            if (stream) stream.getTracks().forEach(t => t.stop());
+          }
+        }
+      } catch (e) {
+        console.warn("findUltraWideByCaps failed", e);
+      }
+      return null;
+    }
+
+    function showZoomStatus(msg) {
+      zoomStatus.textContent = msg;
+      zoomStatus.hidden = false;
+      clearTimeout(zoomStatus._t);
+      zoomStatus._t = setTimeout(() => { zoomStatus.hidden = true; }, 2000);
+    }
+
     function stop() {
       if (stream) {
         stream.getTracks().forEach((t) => t.stop());
@@ -655,6 +708,10 @@
         const z = parseFloat(b.dataset.zoom);
         // 0.5x: coba switch ke kamera ultra-wide (jika ada), fallback ke min zoom
         if (z === 0.5) {
+          // Coba switch ke ultra-wide (label), lalu cari via caps.zoom.min
+          if (!ultraWideDeviceId) {
+            ultraWideDeviceId = await findUltraWideByCaps();
+          }
           if (ultraWideDeviceId && currentDeviceId !== ultraWideDeviceId) {
             stop();
             await start(ultraWideDeviceId);
@@ -662,8 +719,13 @@
             updateZoomActive();
             return;
           }
+          // Fallback: coba zoom 0.5 langsung
+          const before = zoomVal;
           await applyZoom(0.5);
           updateZoomActive();
+          if (Math.abs(zoomVal - 0.5) > 0.06) {
+            showZoomStatus("0.5× tidak didukung");
+          }
           return;
         }
         // 1x/2x: switch balik ke kamera utama belakang (jika sedang di ultra-wide)
