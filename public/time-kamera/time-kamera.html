@@ -118,7 +118,7 @@
     }
     /* Kamera: card hitam edge-to-edge, tanpa padding dalam */
     .cam-card{padding:0;background:#000;border-color:#000;border-radius:14px}
-    .cam-stage{border-radius:12px 12px 0 0;overflow:hidden;background:#000}
+    .cam-stage{position:relative;border-radius:12px 12px 0 0;overflow:hidden;background:#000;touch-action:none}
 
     /* Info rapi: jam paling terang, koordinat & alamat lebih halus */
     .cam-info{padding:14px 16px 4px;background:#000;color:#fff;display:flex;flex-direction:column;align-items:center}
@@ -150,11 +150,14 @@
       margin-top:3px
     }
 
-    /* Bar kontrol: shutter tengah, thumbnail history kanan */
-    .cam-controls{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:8px 16px 20px;background:#000}
-    .cam-controls-side{display:flex;justify-content:flex-end;min-width:0}
+    /* Bar kontrol ala kamera HP: galeri kiri, shutter tengah, ganti kamera kanan */
+    .cam-controls{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 22px 16px;background:#000}
+    .cam-controls-side{display:flex;align-items:center;min-width:0}
+    .cam-controls-side:first-child{justify-content:flex-start}
+    .cam-controls-side:last-child{justify-content:flex-end}
     .cam-controls-side[hidden]{visibility:hidden}
     .gallery-thumb{
+      position:relative;
       width:46px;
       height:46px;
       border-radius:12px;
@@ -167,27 +170,108 @@
       transition:transform .15s ease,border-color .15s ease
     }
     .gallery-thumb:active{transform:scale(.94);border-color:#fff}
-
-    /* Tombol ganti kamera: lingkaran kaca transparan */
-    .switch-btn{
+    .gallery-thumb::after{
+      content:attr(data-count);
       position:absolute;
-      top:12px;
-      right:12px;
+      top:-7px;
+      right:-7px;
+      min-width:17px;
+      height:17px;
+      padding:0 4px;
+      border-radius:99px;
+      background:#ff5436;
+      border:1.5px solid #000;
+      color:#fff;
+      font-family:var(--mori-mono);
+      font-size:9px;
+      font-weight:700;
+      line-height:14px;
+      text-align:center
+    }
+    .gallery-thumb[data-count="0"]::after,.gallery-thumb:not([data-count])::after{display:none}
+
+    /* Tombol ikon kamera (senter, grid, ganti kamera) */
+    .cam-icon-btn{
       width:40px;
       height:40px;
       display:flex;
       align-items:center;
       justify-content:center;
-      background:rgba(0,0,0,.45);
-      border:1px solid rgba(255,255,255,.35);
+      background:rgba(0,0,0,.42);
+      border:1px solid rgba(255,255,255,.3);
       border-radius:50%;
       color:#fff;
       cursor:pointer;
       padding:0;
-      backdrop-filter:blur(6px);
-      -webkit-backdrop-filter:blur(6px)
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+      transition:background .15s ease,color .15s ease,transform .1s ease
     }
-    .switch-btn:disabled{opacity:.4;cursor:not-allowed}
+    .cam-icon-btn:active{transform:scale(.92)}
+    .cam-icon-btn.on{background:#fff;color:#111;border-color:#fff}
+    .cam-icon-btn:disabled{opacity:.4;cursor:not-allowed}
+    .cam-icon-btn[hidden]{display:none}
+
+    /* Bar atas dalam video: senter + grid */
+    .cam-top{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:flex-end;gap:8px;z-index:3}
+
+    /* Grid 3x3 */
+    .cam-grid{position:absolute;inset:0;z-index:2;pointer-events:none}
+    .cam-grid[hidden]{display:none}
+    .cam-grid i{position:absolute;background:rgba(255,255,255,.32)}
+    .cam-grid .gv{top:0;bottom:0;width:1px}
+    .cam-grid .gh{left:0;right:0;height:1px}
+
+    /* Ring fokus saat tap layar */
+    .focus-ring{
+      position:absolute;
+      width:62px;
+      height:62px;
+      margin:-31px 0 0 -31px;
+      border:1.5px solid #ffd60a;
+      border-radius:8px;
+      pointer-events:none;
+      opacity:0;
+      z-index:3
+    }
+    .focus-ring.show{animation:focusPop .8s ease forwards}
+    @keyframes focusPop{
+      0%{opacity:1;transform:scale(1.3)}
+      25%{opacity:1;transform:scale(1)}
+      75%{opacity:1;transform:scale(1)}
+      100%{opacity:0;transform:scale(.9)}
+    }
+
+    /* Pill zoom */
+    .zoom-pill{
+      position:absolute;
+      left:50%;
+      bottom:12px;
+      transform:translateX(-50%);
+      padding:4px 11px;
+      border-radius:99px;
+      background:rgba(0,0,0,.5);
+      border:1px solid rgba(255,255,255,.28);
+      color:#fff;
+      font-family:var(--mori-mono);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.5px;
+      line-height:1;
+      pointer-events:none;
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      z-index:3
+    }
+    .zoom-pill[hidden]{display:none}
+
+    /* Kilat shutter */
+    .cam-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:4}
+    .cam-flash.on{animation:shotFlash .26s ease-out}
+    @keyframes shotFlash{0%{opacity:.85}100%{opacity:0}}
+
+    /* Kamera depan dibalik seperti cermin */
+    .cam-stage.mirror .cam-video{transform:scaleX(-1)}
 
     /* Shutter putih bersih dengan cincin luar */
     .shutter{
@@ -234,17 +318,30 @@
 <body>
   <div class="app">
     <div class="menu-frame card cam-card">
-      <div class="cam-stage">
+      <div class="cam-stage" id="camStage">
         <video id="video" class="cam-video" playsinline muted autoplay></video>
-        <button id="btnSwitch" class="switch-btn" type="button" title="Ganti Kamera" aria-label="Ganti Kamera" disabled>
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.9-4"/><path d="M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14.9 4"/><path d="M20 19v-4h-4"/></svg>
-        </button>
+        <div class="cam-grid" id="camGrid" hidden><i class="gv" style="left:33.33%"></i><i class="gv" style="left:66.66%"></i><i class="gh" style="top:33.33%"></i><i class="gh" style="top:66.66%"></i></div>
+        <div class="cam-top">
+          <button id="btnTorch" class="cam-icon-btn" type="button" title="Senter" aria-label="Senter" hidden>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12l1-8.5z"/></svg>
+          </button>
+          <button id="btnGrid" class="cam-icon-btn" type="button" title="Grid" aria-label="Grid">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+          </button>
+        </div>
+        <div class="focus-ring" id="focusRing"></div>
+        <div class="zoom-pill" id="zoomPill" hidden>1×</div>
+        <div class="cam-flash" id="camFlash"></div>
       </div>
       <div class="cam-controls">
-        <div class="cam-controls-side"></div>
-        <button id="btnSnap" class="shutter" type="button" aria-label="Jepret" disabled></button>
         <div class="cam-controls-side">
           <button id="btnGallery" class="gallery-thumb" type="button" aria-label="Lihat riwayat" title="Lihat riwayat" hidden></button>
+        </div>
+        <button id="btnSnap" class="shutter" type="button" aria-label="Jepret" disabled></button>
+        <div class="cam-controls-side">
+          <button id="btnSwitch" class="cam-icon-btn" type="button" title="Ganti Kamera" aria-label="Ganti Kamera" disabled>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.9-4"/><path d="M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14.9 4"/><path d="M20 19v-4h-4"/></svg>
+          </button>
         </div>
       </div>
       <div class="cam-info">
@@ -289,6 +386,13 @@
     const btnSnap = document.getElementById("btnSnap");
     const btnGallery = document.getElementById("btnGallery");
     const galleryRow = btnGallery.parentElement;
+    const camStage = document.getElementById("camStage");
+    const camGrid = document.getElementById("camGrid");
+    const camFlash = document.getElementById("camFlash");
+    const focusRing = document.getElementById("focusRing");
+    const zoomPill = document.getElementById("zoomPill");
+    const btnTorch = document.getElementById("btnTorch");
+    const btnGrid = document.getElementById("btnGrid");
     const preview = document.getElementById("preview");
     const previewImg = document.getElementById("previewImg");
     const previewInfo = document.getElementById("previewInfo");
@@ -309,6 +413,15 @@
     let filter = "all";
     let lokasiKoordinat = "";
     let pendingShot = null;
+    let zoomCaps = null;
+    let zoomVal = 1;
+    let torchOn = false;
+    let snapping = false;
+    let lastTap = 0;
+    let pinchStartDist = 0;
+    let pinchStartZoom = 1;
+    let wakeLock = null;
+    let starting = false;
 
     function load() {
       try {
@@ -385,19 +498,35 @@
       return true;
     }
 
-    // Resize ke max 720px supaya muat localStorage
+    // Ambil frame persis seperti tampilan (crop tengah 9:16) lalu resize max 720px
     function shrink(source, maxSide) {
-      const w = source.videoWidth || source.width;
-      const h = source.videoHeight || source.height;
-      if (!w || !h) return null;
-      const scale = Math.min(1, maxSide / Math.max(w, h));
-      const cw = Math.max(1, Math.round(w * scale));
-      const ch = Math.max(1, Math.round(h * scale));
+      const vw = source.videoWidth || source.width;
+      const vh = source.videoHeight || source.height;
+      if (!vw || !vh) return null;
+      const targetRatio = 9 / 16;
+      let sw = vw;
+      let sh = vh;
+      let sx = 0;
+      let sy = 0;
+      if (vw / vh > targetRatio) {
+        sw = vh * targetRatio;
+        sx = (vw - sw) / 2;
+      } else {
+        sh = vw / targetRatio;
+        sy = (vh - sh) / 2;
+      }
+      const scale = Math.min(1, maxSide / Math.max(sw, sh));
+      const cw = Math.max(1, Math.round(sw * scale));
+      const ch = Math.max(1, Math.round(sh * scale));
       const c = document.createElement("canvas");
       c.width = cw;
       c.height = ch;
       const ctx = c.getContext("2d");
-      ctx.drawImage(source, 0, 0, cw, ch);
+      if (facing === "user") {
+        ctx.translate(cw, 0);
+        ctx.scale(-1, 1);
+      }
+      ctx.drawImage(source, sx, sy, sw, sh, 0, 0, cw, ch);
       return c.toDataURL("image/jpeg", 0.7);
     }
 
@@ -429,9 +558,12 @@
         shotsEl.innerHTML = "";
         galeriCard.hidden = true;
         galleryRow.hidden = true;
+        btnGallery.hidden = true;
         return;
       }
       galleryRow.hidden = false;
+      btnGallery.hidden = false;
+      btnGallery.dataset.count = String(visible.length);
       btnGallery.style.backgroundImage = 'url("' + visible[0].img + '")';
       shotsEl.innerHTML = visible.map(shotHtml).join("");
       shotsEl.querySelectorAll("[data-dl]").forEach((b) => {
@@ -461,12 +593,56 @@
       toast("Tersimpan");
     }
 
+    function currentTrack() {
+      return stream ? stream.getVideoTracks()[0] : null;
+    }
+
+    function fmtZoom(v) {
+      return String(Math.round(v * 10) / 10).replace(".", ",") + "×";
+    }
+
+    function updateZoomPill() {
+      zoomPill.textContent = fmtZoom(zoomVal);
+    }
+
+    async function applyZoom(v) {
+      const t = currentTrack();
+      if (!t || !zoomCaps) return;
+      const val = Math.min(zoomCaps.max, Math.max(zoomCaps.min, v));
+      try {
+        await t.applyConstraints({ advanced: [{ zoom: val }] });
+        zoomVal = val;
+        updateZoomPill();
+      } catch (e) {}
+    }
+
+    function setupTrackFeatures() {
+      const t = currentTrack();
+      if (!t) return;
+      const caps = t.getCapabilities ? t.getCapabilities() : {};
+      if (caps.zoom && caps.zoom.max > caps.zoom.min) {
+        zoomCaps = caps.zoom;
+        zoomVal = Math.max(caps.zoom.min, 1);
+        zoomPill.hidden = false;
+        updateZoomPill();
+        applyZoom(zoomVal);
+      } else {
+        zoomCaps = null;
+        zoomPill.hidden = true;
+      }
+      btnTorch.hidden = !caps.torch;
+      torchOn = false;
+      btnTorch.classList.remove("on");
+      camStage.classList.toggle("mirror", facing === "user");
+    }
+
     async function start() {
-      if (stream) return;
+      if (stream || starting) return;
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         toast("Kamera tidak didukung");
         return;
       }
+      starting = true;
       try {
         stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: { ideal: facing }, width: { ideal: 1280 }, height: { ideal: 720 } },
@@ -476,10 +652,13 @@
         await video.play().catch(() => {});
         btnSnap.disabled = false;
         btnSwitch.disabled = false;
+        setupTrackFeatures();
       } catch (e) {
-        const msg = (e && e.name) === "NotAllowedError" ? "Izin ditolak" : "Gagal: " + (e && e.name);
+        const msg = (e && e.name) === "NotAllowedError" ? "Izin kamera ditolak" : "Gagal: " + (e && e.name);
         toast(msg);
         console.warn("getUserMedia", e);
+      } finally {
+        starting = false;
       }
     }
 
@@ -491,16 +670,87 @@
       video.srcObject = null;
       btnSnap.disabled = true;
       btnSwitch.disabled = true;
+      zoomCaps = null;
+      zoomVal = 1;
+      zoomPill.hidden = true;
+      torchOn = false;
+      btnTorch.hidden = true;
+      btnTorch.classList.remove("on");
+      camStage.classList.remove("mirror");
     }
 
     btnSwitch.addEventListener("click", async () => {
-      if (!stream) {
-        toast("Nyalakan kamera dulu");
-        return;
-      }
       facing = facing === "environment" ? "user" : "environment";
+      toast(facing === "user" ? "Kamera depan" : "Kamera belakang");
       stop();
       await start();
+    });
+
+    // Senter (torch)
+    btnTorch.addEventListener("click", async () => {
+      const t = currentTrack();
+      if (!t) return;
+      try {
+        await t.applyConstraints({ advanced: [{ torch: !torchOn }] });
+        torchOn = !torchOn;
+        btnTorch.classList.toggle("on", torchOn);
+      } catch (e) {
+        toast("Senter tidak didukung");
+      }
+    });
+
+    // Grid 3x3
+    btnGrid.addEventListener("click", () => {
+      camGrid.hidden = !camGrid.hidden;
+      btnGrid.classList.toggle("on", !camGrid.hidden);
+    });
+
+    function jarak(a, b) {
+      return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    }
+
+    // Pinch untuk zoom (kalau kamera mendukung)
+    camStage.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 2) {
+        pinchStartDist = jarak(e.touches[0], e.touches[1]);
+        pinchStartZoom = zoomVal;
+      }
+    }, { passive: true });
+
+    camStage.addEventListener("touchmove", (e) => {
+      if (e.touches.length === 2 && pinchStartDist && zoomCaps) {
+        e.preventDefault();
+        applyZoom(pinchStartZoom * (jarak(e.touches[0], e.touches[1]) / pinchStartDist));
+      }
+    }, { passive: false });
+
+    camStage.addEventListener("touchend", () => { pinchStartDist = 0; });
+
+    // Tap untuk fokus, double tap untuk zoom 1x/2x
+    camStage.addEventListener("click", (e) => {
+      if (e.target.closest("button")) return;
+      const rect = camStage.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      focusRing.style.left = x + "px";
+      focusRing.style.top = y + "px";
+      focusRing.classList.remove("show");
+      void focusRing.offsetWidth;
+      focusRing.classList.add("show");
+
+      const t = currentTrack();
+      if (t && t.applyConstraints) {
+        const px = Math.min(1, Math.max(0, x / rect.width));
+        const py = Math.min(1, Math.max(0, y / rect.height));
+        t.applyConstraints({ advanced: [{ pointsOfInterest: [{ x: px, y: py }] }] }).catch(() => {});
+      }
+
+      const now = Date.now();
+      if (now - lastTap < 320 && zoomCaps) {
+        const target = zoomVal > zoomCaps.min + 0.01 ? zoomCaps.min : Math.min(2, zoomCaps.max);
+        applyZoom(target);
+      }
+      lastTap = now;
     });
     function fmtWaktuLengkap(iso) {
       const d = new Date(iso);
@@ -533,7 +783,16 @@
     }
 
     btnSnap.addEventListener("click", () => {
-      if (!stream) return;
+      if (!stream || snapping) return;
+      snapping = true;
+      setTimeout(() => { snapping = false; }, 450);
+
+      // Efek kamera: kilat + getar
+      camFlash.classList.remove("on");
+      void camFlash.offsetWidth;
+      camFlash.classList.add("on");
+      if (navigator.vibrate) navigator.vibrate(12);
+
       const img = shrink(video, 720);
       if (!img) {
         toast("Gagal ambil frame");
@@ -604,6 +863,36 @@
 
     btnGallery.addEventListener("click", () => {
       galeriCard.hidden = !galeriCard.hidden;
+      if (!galeriCard.hidden) galeriCard.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    // Layar tetap nyala selama kamera terbuka
+    async function keepAwake() {
+      try {
+        if ("wakeLock" in navigator) {
+          wakeLock = await navigator.wakeLock.request("screen");
+        }
+      } catch (e) {}
+    }
+    keepAwake();
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        keepAwake();
+        start().catch(() => {});
+      } else {
+        stop();
+      }
+    });
+
+    // Spasi untuk jepret, Esc untuk tutup preview (desktop)
+    document.addEventListener("keydown", (e) => {
+      if (e.code === "Space") {
+        if (!preview.hidden) return;
+        e.preventDefault();
+        btnSnap.click();
+      }
+      if (e.key === "Escape" && !preview.hidden) tutupPreview();
     });
 
     // jam overlay (tanggal + bulan + waktu)
