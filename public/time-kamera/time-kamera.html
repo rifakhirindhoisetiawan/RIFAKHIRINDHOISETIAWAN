@@ -131,6 +131,24 @@
       text-overflow:ellipsis;
       white-space:nowrap
     }
+    .switch-btn{
+      position:absolute;
+      top:10px;
+      right:10px;
+      width:38px;
+      height:38px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,0.66);
+      border:none;
+      border-radius:50%;
+      color:#fff;
+      cursor:pointer;
+      pointer-events:auto;
+      padding:0
+    }
+    .switch-btn:disabled{opacity:.45;cursor:not-allowed}
     .shutter{
       position:absolute;
       bottom:22px;
@@ -168,13 +186,13 @@
         <video id="video" class="cam-video" playsinline muted autoplay></video>
         <div class="cam-overlay">
           <div class="cam-badge" id="ovDevice">MENUNGGU</div>
+          <button id="btnSwitch" class="switch-btn" type="button" title="Ganti Kamera" aria-label="Ganti Kamera" disabled>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.9-4"/><path d="M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14.9 4"/><path d="M20 19v-4h-4"/></svg>
+          </button>
           <div class="cam-lokasi" id="ovLokasi">Mencari lokasi...</div>
           <div class="cam-time" id="ovTime">--:--:--</div>
           <button id="btnSnap" class="shutter" type="button" aria-label="Jepret" disabled></button>
         </div>
-      </div>
-      <div class="btn-row">
-        <button id="btnSwitch" class="btn" type="button" disabled>Ganti Kamera</button>
       </div>
     </div>
 
