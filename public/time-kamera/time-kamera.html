@@ -208,12 +208,12 @@
     .preview[hidden]{display:none}
     .preview-top{display:flex;justify-content:flex-start;padding:10px 14px;flex-shrink:0}
     .preview-close{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;color:#fff;font-size:30px;line-height:1;cursor:pointer;padding:0}
-    .preview-body{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;align-items:center}
-    .preview-img{width:100%;max-width:560px;aspect-ratio:9/16;object-fit:contain;display:block;background:#000}
-    .preview-info{width:100%;max-width:560px;padding:14px 18px;font-family:var(--mori-mono);font-size:12px;line-height:1.6;color:#fff;word-break:break-word}
+    .preview-body{flex:1;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center}
+    .preview-img{width:100%;max-width:560px;max-height:100%;object-fit:contain;display:block;background:#000}
+    .preview-info{width:100%;max-width:560px;padding:14px 18px 6px;font-family:var(--mori-mono);font-size:12px;line-height:1.6;color:#fff;word-break:break-word;flex-shrink:0}
     .preview-actions{display:flex;gap:10px;padding:12px 16px calc(16px + env(safe-area-inset-bottom));background:#000;flex-shrink:0}
-    .preview-actions .btn{flex:1;min-width:0;background:#fff;color:#1a1917;border-color:#fff}
-    .preview-actions .btn.primary{background:#ff5436;color:#fff;border-color:#ff5436}
+    .preview-actions .btn{flex:1;min-width:0;background:transparent;color:#fff;border-color:transparent;font-weight:600}
+    .preview-actions .btn.primary{flex:0 0 auto;background:#ff5436;color:#fff;border-color:#ff5436;padding:12px 28px}
   </style>
 </head>
 <body>
@@ -248,9 +248,9 @@
     <div class="preview-top">
       <button id="btnClosePreview" class="preview-close" type="button" aria-label="Tutup">×</button>
     </div>
+    <div class="preview-info" id="previewInfo"></div>
     <div class="preview-body">
       <img id="previewImg" class="preview-img" src="" alt="Hasil jepretan" />
-      <div class="preview-info" id="previewInfo"></div>
     </div>
     <div class="preview-actions">
       <button id="btnRetake" class="btn" type="button">Ambil ulang</button>
@@ -501,7 +501,8 @@
       previewInfo.innerHTML =
         fmtWaktuLengkap(shot.at) + "<br>" +
         (lokasiKoordinat || "-") + "<br>" +
-        lokasi.toUpperCase();
+        lokasi.toUpperCase() + "<br>" +
+        "Nomor Pesanan: " + shot.id;
       preview.hidden = false;
     }
 
