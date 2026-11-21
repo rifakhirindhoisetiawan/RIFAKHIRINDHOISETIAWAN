@@ -8,16 +8,6 @@
   <meta content="#fffbf2" name="theme-color" />
   <link rel="stylesheet" href="../mori-style.css" />
   <style>
-    /* Mobile: cegah scroll agar kamera tidak tergeser */
-    @media (max-width: 767px) {
-      html, body { height: 100%; overflow: hidden; touch-action: none; }
-      .app { height: 100%; min-height: 0; overflow: hidden; }
-    }
-    /* Desktop: biarkan scroll normal */
-    @media (min-width: 768px) {
-      html, body { height: auto; overflow: auto; touch-action: auto; }
-      .app { height: auto; min-height: 100vh; overflow: visible; }
-    }
     /* Frame card ala menu kopi/index: bingkai 1.5px + radius 10px. */
     .menu-frame{
       width:100%;
@@ -1009,11 +999,6 @@
     setInterval(() => {
       ovTime.textContent = fmtWaktuLengkap(new Date().toISOString());
     }, 1000);
-
-    // Cegah scroll di halaman kamera (mobile)
-    document.addEventListener("touchmove", (e) => {
-      if (window.matchMedia("(max-width: 767px)").matches && preview.hidden) e.preventDefault();
-    }, { passive: false });
 
     window.addEventListener("beforeunload", stop);
 
