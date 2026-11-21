@@ -411,7 +411,6 @@
         sel.addRange(range);
       }
     }));
-    listEl.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => mintaHapus(b.dataset.del)));
     listEl.querySelectorAll('[data-qty-minus]').forEach(btn => btn.addEventListener('click', async () => {
       const id = btn.dataset.qtyMinus;
       const item = all.find(x => x.id === id);
@@ -432,46 +431,7 @@
     listEl.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => mintaHapus(b.dataset.del)));
   }
 
-  const menuPop = document.getElementById('menuPop');
-  let menuPopAnchor = null;
-
-  function tutupMenuPop() {
-    if (menuPop.hidden && !menuPopAnchor) return;
-    menuPop.hidden = true;
-    menuPop.innerHTML = '';
-    if (menuPopAnchor) menuPopAnchor.setAttribute('aria-expanded', 'false');
-    menuPopAnchor = null;
-  }
-
-  function bukaMenuPop(anchor, id) {
-    if (!menuPop.hidden && menuPopAnchor === anchor) { tutupMenuPop(); return; }
-    menuPopAnchor = anchor;
-    anchor.setAttribute('aria-expanded', 'true');
-    menuPop.innerHTML = '';
-
-    const bDel = document.createElement('button');
-    bDel.type = 'button';
-    bDel.className = 'menu-act danger';
-    bDel.title = 'Hapus';
-    bDel.innerHTML = 'âœ•';
-    bDel.onclick = () => {
-      tutupMenuPop();
-      mintaHapus(id);
-    };
-
-    menuPop.appendChild(bDel);
-    menuPop.hidden = false;
-
-    const r = anchor.getBoundingClientRect();
-    const p = menuPop.getBoundingClientRect();
-    const top = r.top + (r.height - p.height) / 2;
-    const left = r.right - p.width;
-    menuPop.style.top = Math.max(8, Math.min(top, window.innerHeight - p.height - 8)) + 'px';
-    menuPop.style.left = Math.max(8, Math.min(left, window.innerWidth - p.width - 8)) + 'px';
-  }
-
-    // (menu pop dihapus, langsung hapus via tombol ✕)
-
+    // (menu pop dihapus)
   searchEl.addEventListener('input', render);
 
   async function simpan() {
