@@ -132,16 +132,12 @@
     </div>
   </div>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
   <script type="module">
     const KEY = "mylove_timekamera_v1";
     const shotsEl = document.getElementById("shots");
     const empty = document.getElementById("empty");
-    const toastEl = document.getElementById("toast");
 
     let shots = load();
-    let toastTimer = null;
 
     function load() {
       try {
@@ -158,15 +154,8 @@
       try {
         localStorage.setItem(KEY, JSON.stringify(shots));
       } catch (e) {
-        toast("Gagal menyimpan");
+        console.warn("gagal menyimpan", e);
       }
-    }
-
-    function toast(msg) {
-      toastEl.textContent = msg;
-      toastEl.classList.add("on");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toastEl.classList.remove("on"), 2200);
     }
 
     function esc(s) {
@@ -226,7 +215,6 @@
       a.href = s.img;
       a.download = name;
       a.click();
-      toast("Tersimpan");
     }
 
     function render() {
@@ -240,7 +228,6 @@
           shots = shots.filter((s) => s.id !== parseInt(b.dataset.del));
           persist();
           render();
-          toast("Dihapus");
         });
       });
     }

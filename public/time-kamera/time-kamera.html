@@ -94,26 +94,6 @@
       transition:transform .15s ease,border-color .15s ease
     }
     .gallery-thumb:active{transform:scale(.94);border-color:var(--mori-text)}
-    .gallery-thumb::after{
-      content:attr(data-count);
-      position:absolute;
-      top:2px;
-      right:2px;
-      min-width:15px;
-      height:15px;
-      padding:0 3px;
-      border-radius:99px;
-      background:#ff5436;
-      border:1.5px solid rgba(255,251,242,.95);
-      color:#fff;
-      font-family:var(--mori-mono);
-      font-size:8px;
-      font-weight:700;
-      line-height:12px;
-      text-align:center;
-      box-sizing:border-box
-    }
-    .gallery-thumb[data-count="0"]::after,.gallery-thumb:not([data-count])::after{display:none}
 
     /* Tombol ikon kamera (senter, grid, ganti kamera) */
     .cam-icon-btn{
@@ -295,8 +275,6 @@
     </div>
   </div>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
   <script type="module">
     const KEY = "mylove_timekamera_v1";
     const video = document.getElementById("video");
@@ -323,8 +301,6 @@
     const inLokasi = document.getElementById("inLokasi");
     const inBaris = document.getElementById("inBaris");
     const inCatatan = document.getElementById("inCatatan");
-
-    const toastEl = document.getElementById("toast");
 
     let shots = load();
     let stream = null;
@@ -363,19 +339,8 @@
           try {
             localStorage.setItem(KEY, JSON.stringify(shots));
           } catch (e2) {}
-          toast("Penyimpanan penuh — foto lama dihapus");
-        } else {
-          toast("Penyimpanan penuh");
         }
       }
-    }
-
-    let toastTimer = null;
-    function toast(msg) {
-      toastEl.textContent = msg;
-      toastEl.classList.add("on");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toastEl.classList.remove("on"), 2200);
     }
 
     // Pecah teks jadi beberapa baris sesuai lebar canvas
@@ -470,7 +435,6 @@
       }
       galleryRow.hidden = false;
       btnGallery.hidden = false;
-      btnGallery.dataset.count = String(shots.length);
       btnGallery.style.backgroundImage = 'url("' + shots[0].img + '")';
     }
 
@@ -520,7 +484,7 @@
     async function start() {
       if (stream || starting) return;
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        toast("Kamera tidak didukung");
+        console.warn("kamera tidak didukung");
         return;
       }
       starting = true;
@@ -535,8 +499,6 @@
         btnSwitch.disabled = false;
         setupTrackFeatures();
       } catch (e) {
-        const msg = (e && e.name) === "NotAllowedError" ? "Izin kamera ditolak" : "Gagal: " + (e && e.name);
-        toast(msg);
         console.warn("getUserMedia", e);
       } finally {
         starting = false;
@@ -562,7 +524,6 @@
 
     btnSwitch.addEventListener("click", async () => {
       facing = facing === "environment" ? "user" : "environment";
-      toast(facing === "user" ? "Kamera depan" : "Kamera belakang");
       stop();
       await start();
     });
@@ -576,7 +537,7 @@
         torchOn = !torchOn;
         btnTorch.classList.toggle("on", torchOn);
       } catch (e) {
-        toast("Senter tidak didukung");
+        console.warn("senter tidak didukung", e);
       }
     });
 
@@ -681,10 +642,7 @@
         koordinat: lokasiKoordinat,
         lokasi: alamat && alamat !== lokasiKoordinat ? alamat : "",
       });
-      if (!img) {
-        toast("Gagal ambil frame");
-        return;
-      }
+      if (!img) return;
       bukaPreview({
         id: Date.now(),
         img,
