@@ -644,8 +644,6 @@
   async function mintaHapus(id) {
     const m = all.find(x => x.id === id);
     const title = m ? (m.title || 'Item') : 'Item';
-    const ok = await askDelPassword('Hapus "' + title + '"?');
-    if (!ok) return;
     hapusData(id);
   }
 
@@ -653,6 +651,7 @@
     const { error } = await supabase.from(TABLE).delete().eq('id', id);
     if (error) {
       alert('Gagal hapus: ' + error.message);
+      console.warn('hapus error', error);
       return;
     }
     load();
