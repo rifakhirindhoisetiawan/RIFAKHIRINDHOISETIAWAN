@@ -1,9 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Admin — MUSNAH</title>
+  <title>Admin â€” MUSNAH</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
@@ -181,7 +181,6 @@
     </div>
   </div>
 </div>
-<div class="menu-pop" id="menuPop" hidden role="group" aria-label="Aksi menu"></div>
 
 <div class="wrap">
   <div class="table-wrap" id="listWrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--mori-line);border-radius:12px;background:var(--mori-surface)">
@@ -303,7 +302,7 @@
       const hppVal = m.hpp !== undefined && m.hpp !== null ? m.hpp : '';
       const totalVal = (parseFloat(hppVal) || 0) * (parseFloat(qtyVal) || 0);
       const chk = '<input type="checkbox" class="mori-check" data-check="' + m.id + '" ' + (isChecked ? 'checked' : '') + ' />';
-      const aksi = chk + '<button type="button" class="btn-dots" data-menu="' + m.id + '" title="Aksi" aria-label="Aksi">⋮</button>';
+      const aksi = chk + '<button type="button" class="btn-dots" data-del="' + m.id + '" title="Hapus" aria-label="Hapus" style="color:var(--mori-danger)">âœ•</button>';
       return '<tr data-id="' + m.id + '"' + (isChecked ? ' class="row-checked"' : '') + '>' +
         '<td class="c-no">' + (i + 1) + '</td>' +
         '<td class="c-nama"><div style="display:flex;flex-direction:column;gap:1px"><div class="nama" contenteditable="true" data-edit-title="' + m.id + '" style="outline:none;padding:2px 4px;border-radius:4px">' + (m.title || '') + '</div>' + (tglStr ? '<div style="font-size:9px;color:var(--mori-text-2);font-family:var(--mori-mono);font-weight:700;white-space:nowrap">' + tglStr + '</div>' : '') + '</div></td>' +
@@ -430,10 +429,7 @@
       const { error } = await supabase.from(TABLE).update({ qty, updated_at: new Date().toISOString() }).eq('id', id);
       if (!error) load();
     }));
-    listEl.querySelectorAll('[data-menu]').forEach(b => b.addEventListener('click', e => {
-      e.stopPropagation();
-      bukaMenuPop(b, b.dataset.menu);
-    }));
+    listEl.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => mintaHapus(b.dataset.del)));
   }
 
   const menuPop = document.getElementById('menuPop');
@@ -457,7 +453,7 @@
     bDel.type = 'button';
     bDel.className = 'menu-act danger';
     bDel.title = 'Hapus';
-    bDel.innerHTML = '✕';
+    bDel.innerHTML = 'âœ•';
     bDel.onclick = () => {
       tutupMenuPop();
       mintaHapus(id);
@@ -474,13 +470,7 @@
     menuPop.style.left = Math.max(8, Math.min(left, window.innerWidth - p.width - 8)) + 'px';
   }
 
-  document.addEventListener('click', e => {
-    if (!menuPop.hidden && menuPopAnchor && !menuPop.contains(e.target) && !menuPopAnchor.contains(e.target)) {
-      tutupMenuPop();
-    }
-  });
-
-  window.addEventListener('scroll', () => { if (!menuPop.hidden) tutupMenuPop(); }, { passive: true });
+    // (menu pop dihapus, langsung hapus via tombol ✕)
 
   searchEl.addEventListener('input', render);
 
@@ -564,7 +554,7 @@
     f_title.value = m.title || '';
     f_hpp.value = m.hpp !== undefined && m.hpp !== null ? m.hpp : '';
     f_qty.value = m.qty !== undefined && m.qty !== null ? m.qty : '';
-    btnAdd.textContent = '✓';
+    btnAdd.textContent = 'âœ“';
     const tr = listEl.querySelector('tr[data-id="' + id + '"]');
     if (tr) {
       tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
