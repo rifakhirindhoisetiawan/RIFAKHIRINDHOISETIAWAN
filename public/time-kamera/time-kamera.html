@@ -367,7 +367,6 @@
         btnSnap.disabled = false;
         btnSwitch.disabled = false;
         ovDevice.textContent = facing === "user" ? "DEPAN" : "BELAKANG";
-        toast("Kamera aktif");
       } catch (e) {
         const msg = (e && e.name) === "NotAllowedError" ? "Izin ditolak" : "Gagal: " + (e && e.name);
         toast(msg);
