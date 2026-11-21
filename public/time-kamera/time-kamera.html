@@ -173,7 +173,7 @@
     /* Tombol zoom cepat (0.5x, 1x, 2x) ala kamera HP */
     .zoom-row{
       position:absolute;
-      bottom:100px;
+      top:60px;
       left:50%;
       transform:translateX(-50%);
       display:flex;
@@ -182,18 +182,19 @@
     }
     .zoom-row[hidden]{display:none}
     .zoom-btn{
-      padding:5px 10px;
+      padding:6px 12px;
       border-radius:99px;
-      background:rgba(255,251,242,.92);
-      border:1px solid rgba(26,25,23,.2);
-      color:var(--mori-text);
+      background:rgba(0,0,0,.42);
+      border:1px solid rgba(255,255,255,.3);
+      color:#fff;
       font-family:var(--mori-mono);
-      font-size:11px;
+      font-size:12px;
       font-weight:700;
       letter-spacing:.5px;
       cursor:pointer;
       backdrop-filter:blur(6px);
       -webkit-backdrop-filter:blur(6px);
+      box-shadow:0 1px 4px rgba(0,0,0,.3);
       transition:background .15s ease,color .15s ease
     }
     .zoom-btn.on{background:var(--mori-text);color:#fff;border-color:var(--mori-text)}
