@@ -525,8 +525,9 @@
       const { error } = await supabase.from(TABLE).update({ title, hpp, qty, updated_at: new Date().toISOString() }).eq('id', id);
       if (error) { alert('Gagal ubah: ' + error.message); btnAdd.disabled = false; return; }
     } else {
-      const { error } = await supabase.from(TABLE).insert([{ title, hpp, qty, updated_at: new Date().toISOString() }]);
-      if (error) { alert('Gagal tambah: ' + error.message); btnAdd.disabled = false; return; }
+      const newId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now());
+      const { error } = await supabase.from(TABLE).insert([{ id: newId, title, hpp, qty, created_at: new Date().toISOString(), updated_at: new Date().toISOString() }]);
+      if (error) { alert('Gagal tambah: ' + error.message); console.error('insert error', error); btnAdd.disabled = false; return; }
     }
 
     f_title.value = '';
