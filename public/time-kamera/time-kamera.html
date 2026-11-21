@@ -8,8 +8,7 @@
   <meta content="#fffbf2" name="theme-color" />
   <link rel="stylesheet" href="../mori-style.css" />
   <style>
-    /* Frame galeri ala menu kopi/index: bingkai 1.5px + radius 10px,
-       padding dalam 14px. */
+    /* Frame card ala menu kopi/index: bingkai 1.5px + radius 10px. */
     .menu-frame{
       width:100%;
       background:var(--mori-bg);
@@ -17,105 +16,7 @@
       border-radius:10px;
       overflow:hidden
     }
-    .menu-frame .grid{padding:14px}
 
-    .menu-frame.card{padding:14px}
-    .menu-frame.card h2{
-      font-size:9px;
-      font-weight:700;
-      letter-spacing:1px;
-      text-transform:uppercase;
-      color:var(--mori-text-2);
-      margin-bottom:10px
-    }
-
-    .shot-grid{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:16px 10px;
-      width:100%;
-      align-content:start
-    }
-    @media(min-width:768px){.shot-grid{gap:22px 14px}}
-    @media(max-width:360px){.shot-grid{grid-template-columns:repeat(2,1fr);gap:12px 8px}}
-
-    .shot{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      text-align:center;
-      min-width:0;
-      width:100%;
-      background:var(--mori-bg);
-      border:1.5px solid rgba(26,25,23,0.3);
-      border-radius:10px;
-      padding:14px;
-      overflow:hidden
-    }
-    .shot-img-wrap{
-      width:100%;
-      max-width:100px;
-      aspect-ratio:9/16;
-      border-radius:8px;
-      background:var(--mori-surface);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      margin-bottom:10px;
-      border:none;
-      box-shadow:none;
-      overflow:hidden
-    }
-    .shot-img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block
-    }
-    .shot-img-fallback{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block
-    }
-    .shot-time{
-      font-family:var(--mori-mono);
-      font-size:9px;
-      font-weight:700;
-      letter-spacing:1px;
-      text-transform:uppercase;
-      color:var(--mori-text);
-      margin-top:6px;
-      line-height:1.3
-    }
-    .shot-lokasi{
-      font-size:9px;
-      font-weight:700;
-      letter-spacing:1px;
-      text-transform:uppercase;
-      color:var(--mori-text-2);
-      margin-top:4px;
-      line-height:1.3;
-      overflow:hidden;
-      display:-webkit-box;
-      -webkit-line-clamp:2;
-      -webkit-box-orient:vertical
-    }
-    .shot-actions{
-      display:flex;
-      gap:6px;
-      margin-top:8px;
-      width:100%
-    }
-    .shot-actions .btn{
-      flex:1;
-      padding:8px 6px;
-      font-size:9px
-    }
-    .field-sm{
-      font-size:12px;
-      padding:9px 10px
-    }
     /* Kamera: card krem senada menu kopi */
     .cam-card{padding:0;background:var(--mori-bg);border-color:rgba(26,25,23,0.3);border-radius:10px}
     .cam-stage{position:relative;border-radius:9px 9px 0 0;overflow:hidden;background:var(--mori-surface);touch-action:none}
@@ -376,10 +277,6 @@
     <input id="inLokasi" type="hidden" />
     <input id="inBaris" type="hidden" />
     <input id="inCatatan" type="hidden" />
-
-    <div class="menu-frame card" id="galeriCard" hidden>
-      <div class="shot-grid" id="shots"></div>
-    </div>
   </div>
 
   <div id="preview" class="preview" hidden>
@@ -424,15 +321,12 @@
     const inLokasi = document.getElementById("inLokasi");
     const inBaris = document.getElementById("inBaris");
     const inCatatan = document.getElementById("inCatatan");
-    const shotsEl = document.getElementById("shots");
-    const galeriCard = document.getElementById("galeriCard");
 
     const toastEl = document.getElementById("toast");
 
     let shots = load();
     let stream = null;
     let facing = "environment";
-    let filter = "all";
     let lokasiKoordinat = "";
     let pendingShot = null;
     let zoomCaps = null;
@@ -480,44 +374,6 @@
       toastEl.classList.add("on");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => toastEl.classList.remove("on"), 2200);
-    }
-
-    function esc(s) {
-      return String(s == null ? "" : s)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-    }
-
-    function pad(n) {
-      return String(n).padStart(2, "0");
-    }
-
-    function fmtClock(iso) {
-      const d = new Date(iso);
-      if (isNaN(d.getTime())) return "-";
-      return (
-        pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds())
-      );
-    }
-
-    function fmtDate(iso) {
-      const d = new Date(iso);
-      if (isNaN(d.getTime())) return "-";
-      return d.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "2-digit" });
-    }
-
-    function inFilter(iso) {
-      if (filter === "all") return true;
-      const d = new Date(iso);
-      if (isNaN(d.getTime())) return false;
-      const t = new Date();
-      t.setHours(0, 0, 0, 0);
-      const age = Math.floor((t - d) / 86400000);
-      if (filter === "today") return age === 0;
-      if (filter === "7d") return age >= 0 && age <= 6;
-      return true;
     }
 
     // Pecah teks jadi beberapa baris sesuai lebar canvas
@@ -604,67 +460,16 @@
       return c.toDataURL("image/jpeg", 0.7);
     }
 
-    function shotHtml(s) {
-      const meta = [];
-      if (s.lokasi) meta.push(esc(s.lokasi));
-      if (s.baris) meta.push(esc(s.baris));
-      return (
-        '<div class="shot">' +
-        '<div class="shot-img-wrap">' +
-        '<img class="shot-img" src="' + s.img + '" alt="Hasil jepretan" />' +
-        '</div>' +
-        '<div class="shot-time">' + fmtDate(s.at) + " · " + fmtClock(s.at) + "</div>" +
-        (meta.length
-          ? '<div class="shot-lokasi">' + meta.join(" · ") + "</div>"
-          : '<div class="shot-lokasi" style="opacity:.6">Tanpa keterangan</div>') +
-        (s.catatan ? '<div class="shot-lokasi">' + esc(s.catatan) + "</div>" : "") +
-        '<div class="shot-actions">' +
-        '<button type="button" class="btn sm" data-dl="' + s.id + '">Simpan</button>' +
-        '<button type="button" class="btn sm danger" data-del="' + s.id + '">Hapus</button>' +
-        "</div>" +
-        "</div>"
-      );
-    }
-
     function render() {
-      const visible = shots.filter((s) => inFilter(s.at));
-      if (!visible.length) {
-        shotsEl.innerHTML = "";
-        galeriCard.hidden = true;
+      if (!shots.length) {
         galleryRow.hidden = true;
         btnGallery.hidden = true;
         return;
       }
       galleryRow.hidden = false;
       btnGallery.hidden = false;
-      btnGallery.dataset.count = String(visible.length);
-      btnGallery.style.backgroundImage = 'url("' + visible[0].img + '")';
-      shotsEl.innerHTML = visible.map(shotHtml).join("");
-      shotsEl.querySelectorAll("[data-dl]").forEach((b) => {
-        b.addEventListener("click", () => download(parseInt(b.dataset.dl)));
-      });
-      shotsEl.querySelectorAll("[data-del]").forEach((b) => {
-        b.addEventListener("click", () => {
-          shots = shots.filter((s) => s.id !== parseInt(b.dataset.del));
-          persist();
-          render();
-          toast("Dihapus");
-        });
-      });
-    }
-
-    function download(id) {
-      const s = shots.find((x) => x.id === id);
-      if (!s) return;
-      const name =
-        "timekamera_" +
-        new Date(s.at).toISOString().replace(/[:.]/g, "-") +
-        ".jpg";
-      const a = document.createElement("a");
-      a.href = s.img;
-      a.download = name;
-      a.click();
-      toast("Tersimpan");
+      btnGallery.dataset.count = String(shots.length);
+      btnGallery.style.backgroundImage = 'url("' + shots[0].img + '")';
     }
 
     function currentTrack() {
@@ -942,8 +747,7 @@
     isiLokasiOtomatis();
 
     btnGallery.addEventListener("click", () => {
-      galeriCard.hidden = !galeriCard.hidden;
-      if (!galeriCard.hidden) galeriCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      location.href = "riwayat.html";
     });
 
     // Layar tetap nyala selama kamera terbuka

@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>RIWAYAT TIME KAMERA</title>
+  <link rel="manifest" href="../../manifest.json" />
+  <meta content="#fffbf2" name="theme-color" />
+  <link rel="stylesheet" href="../mori-style.css" />
+  <style>
+    /* Frame ala menu kopi/index: bingkai 1.5px + radius 10px, padding 14px. */
+    .menu-frame{
+      width:100%;
+      background:var(--mori-bg);
+      border:1.5px solid rgba(26,25,23,0.3);
+      border-radius:10px;
+      overflow:hidden
+    }
+    .menu-frame.card{padding:14px}
+    .menu-frame.card h2{
+      font-size:9px;
+      font-weight:700;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      color:var(--mori-text-2);
+      margin-bottom:10px
+    }
+
+    .shot-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px 10px;
+      width:100%;
+      align-content:start
+    }
+    @media(min-width:768px){.shot-grid{gap:22px 14px}}
+    @media(max-width:360px){.shot-grid{grid-template-columns:repeat(2,1fr);gap:12px 8px}}
+
+    .shot{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      min-width:0;
+      width:100%;
+      background:var(--mori-bg);
+      border:1.5px solid rgba(26,25,23,0.3);
+      border-radius:10px;
+      padding:14px;
+      overflow:hidden
+    }
+    .shot-img-wrap{
+      width:100%;
+      max-width:100px;
+      aspect-ratio:9/16;
+      border-radius:8px;
+      background:var(--mori-surface);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:10px;
+      overflow:hidden
+    }
+    .shot-img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block
+    }
+    .shot-time{
+      font-family:var(--mori-mono);
+      font-size:9px;
+      font-weight:700;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      color:var(--mori-text);
+      margin-top:6px;
+      line-height:1.3
+    }
+    .shot-lokasi{
+      font-size:9px;
+      font-weight:700;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      color:var(--mori-text-2);
+      margin-top:4px;
+      line-height:1.3;
+      overflow:hidden;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical
+    }
+    .shot-actions{
+      display:flex;
+      gap:6px;
+      margin-top:8px;
+      width:100%
+    }
+    .shot-actions .btn{
+      flex:1;
+      padding:8px 6px;
+      font-size:9px
+    }
+    .empty{
+      padding:30px 10px;
+      text-align:center;
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      color:var(--mori-text-2)
+    }
+    .empty a{
+      display:inline-block;
+      margin-top:10px;
+      font-size:10px;
+      color:var(--mori-accent);
+      text-decoration:none;
+      border-bottom:1px solid var(--mori-accent)
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="head">
+      <a class="back" href="time-kamera.html" title="Kembali" aria-label="Kembali">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </a>
+      <div>
+        <div class="head-title">Riwayat Kamera</div>
+        <div class="head-sub" id="subCount">0 foto</div>
+      </div>
+    </div>
+
+    <div class="menu-frame card">
+      <h2>Foto Tersimpan</h2>
+      <div class="shot-grid" id="shots"></div>
+      <div class="empty" id="empty" hidden>
+        Belum ada foto<br />
+        <a href="time-kamera.html">Ambil foto</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module">
+    const KEY = "mylove_timekamera_v1";
+    const shotsEl = document.getElementById("shots");
+    const empty = document.getElementById("empty");
+    const subCount = document.getElementById("subCount");
+    const toastEl = document.getElementById("toast");
+
+    let shots = load();
+    let toastTimer = null;
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      } catch (e) {
+        console.warn("gagal baca time kamera", e);
+        return [];
+      }
+    }
+
+    function persist() {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(shots));
+      } catch (e) {
+        toast("Gagal menyimpan");
+      }
+    }
+
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add("on");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.remove("on"), 2200);
+    }
+
+    function esc(s) {
+      return String(s == null ? "" : s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function pad(n) {
+      return String(n).padStart(2, "0");
+    }
+
+    function fmtClock(iso) {
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return "-";
+      return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+    }
+
+    function fmtDate(iso) {
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return "-";
+      return d.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "2-digit" });
+    }
+
+    function shotHtml(s) {
+      const meta = [];
+      if (s.lokasi) meta.push(esc(s.lokasi));
+      if (s.baris) meta.push(esc(s.baris));
+      return (
+        '<div class="shot">' +
+        '<div class="shot-img-wrap">' +
+        '<img class="shot-img" src="' + s.img + '" alt="Hasil jepretan" loading="lazy" />' +
+        "</div>" +
+        '<div class="shot-time">' + fmtDate(s.at) + " · " + fmtClock(s.at) + "</div>" +
+        (meta.length
+          ? '<div class="shot-lokasi">' + meta.join(" · ") + "</div>"
+          : '<div class="shot-lokasi" style="opacity:.6">Tanpa keterangan</div>') +
+        (s.catatan ? '<div class="shot-lokasi">' + esc(s.catatan) + "</div>" : "") +
+        '<div class="shot-actions">' +
+        '<button type="button" class="btn sm" data-dl="' + s.id + '">Simpan</button>' +
+        '<button type="button" class="btn sm danger" data-del="' + s.id + '">Hapus</button>' +
+        "</div>" +
+        "</div>"
+      );
+    }
+
+    function download(id) {
+      const s = shots.find((x) => x.id === id);
+      if (!s) return;
+      const name =
+        "timekamera_" +
+        new Date(s.at).toISOString().replace(/[:.]/g, "-") +
+        ".jpg";
+      const a = document.createElement("a");
+      a.href = s.img;
+      a.download = name;
+      a.click();
+      toast("Tersimpan");
+    }
+
+    function render() {
+      subCount.textContent = shots.length + " foto";
+      empty.hidden = shots.length > 0;
+      shotsEl.innerHTML = shots.map(shotHtml).join("");
+      shotsEl.querySelectorAll("[data-dl]").forEach((b) => {
+        b.addEventListener("click", () => download(parseInt(b.dataset.dl)));
+      });
+      shotsEl.querySelectorAll("[data-del]").forEach((b) => {
+        b.addEventListener("click", () => {
+          shots = shots.filter((s) => s.id !== parseInt(b.dataset.del));
+          persist();
+          render();
+          toast("Dihapus");
+        });
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
