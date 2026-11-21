@@ -622,33 +622,39 @@
     // Cari kamera ultra-wide dengan mengecek caps.zoom.min tiap device
     async function findUltraWideByCaps() {
       if (facing !== "environment") return null;
+      const wasStreaming = !!stream;
+      if (wasStreaming) stop();
+      let found = null;
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
         const backCams = devices.filter(d => d.kind === "videoinput");
         for (const dev of backCams) {
           if (dev.deviceId === currentDeviceId) continue;
-          let stream = null;
+          let s = null;
           try {
-            stream = await navigator.mediaDevices.getUserMedia({
+            s = await navigator.mediaDevices.getUserMedia({
               video: { deviceId: { exact: dev.deviceId }, width: { ideal: 1280 }, height: { ideal: 720 } },
               audio: false,
             });
-            const track = stream.getVideoTracks()[0];
+            const track = s.getVideoTracks()[0];
             const caps = track.getCapabilities ? track.getCapabilities() : {};
             const minZoom = caps.zoom ? caps.zoom.min : 1;
             if (minZoom < 1) {
-              return dev.deviceId;
+              found = dev.deviceId;
+              break;
             }
           } catch (e) {
             // skip this device
           } finally {
-            if (stream) stream.getTracks().forEach(t => t.stop());
+            if (s) s.getTracks().forEach(t => t.stop());
           }
         }
       } catch (e) {
         console.warn("findUltraWideByCaps failed", e);
       }
-      return null;
+      // Restart main camera if we didn't find an ultra-wide
+      if (wasStreaming && !found) await start();
+      return found;
     }
 
     function showZoomStatus(msg) {
@@ -708,9 +714,14 @@
         const z = parseFloat(b.dataset.zoom);
         // 0.5x: coba switch ke kamera ultra-wide (jika ada), fallback ke min zoom
         if (z === 0.5) {
-          // Coba switch ke ultra-wide (label), lalu cari via caps.zoom.min
+          // Coba cari ultra-wide camera (by label atau caps.zoom.min)
           if (!ultraWideDeviceId) {
-            ultraWideDeviceId = await findUltraWideByCaps();
+            // by label dulu
+            await findUltraWide();
+            if (!ultraWideDeviceId) {
+              // by caps.zoom.min (start/stop tiap kamera)
+              ultraWideDeviceId = await findUltraWideByCaps();
+            }
           }
           if (ultraWideDeviceId && currentDeviceId !== ultraWideDeviceId) {
             stop();
@@ -720,7 +731,6 @@
             return;
           }
           // Fallback: coba zoom 0.5 langsung
-          const before = zoomVal;
           await applyZoom(0.5);
           updateZoomActive();
           if (Math.abs(zoomVal - 0.5) > 0.06) {
