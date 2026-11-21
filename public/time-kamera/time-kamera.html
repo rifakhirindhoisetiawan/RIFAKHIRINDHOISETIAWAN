@@ -117,8 +117,7 @@
       padding:9px 10px
     }
     .cam-card{background:#000;border-color:#000}
-    .cam-info{padding:12px 14px 8px;background:#000;color:#fff}
-    .cam-info-row{display:flex;align-items:center;justify-content:space-between}
+    .cam-info{padding:0 14px 14px;background:#000;color:#fff}
     .cam-lokasi{
       font-family:var(--mori-mono);
       font-size:12px;
@@ -158,6 +157,9 @@
       padding:0
     }
     .switch-btn{
+      position:absolute;
+      top:10px;
+      right:10px;
       width:38px;
       height:38px;
       display:flex;
@@ -212,20 +214,18 @@
 <body>
   <div class="app">
     <div class="menu-frame card cam-card">
-      <div class="cam-info">
-        <div class="cam-info-row">
-          <div class="cam-time" id="ovTime">--:--:--</div>
-          <button id="btnSwitch" class="switch-btn" type="button" title="Ganti Kamera" aria-label="Ganti Kamera" disabled>
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.9-4"/><path d="M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14.9 4"/><path d="M20 19v-4h-4"/></svg>
-          </button>
-        </div>
-        <div class="cam-lokasi" id="ovLokasi">Mencari lokasi...</div>
-      </div>
       <div class="cam-stage">
         <video id="video" class="cam-video" playsinline muted autoplay></video>
+        <button id="btnSwitch" class="switch-btn" type="button" title="Ganti Kamera" aria-label="Ganti Kamera" disabled>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.9-4"/><path d="M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14.9 4"/><path d="M20 19v-4h-4"/></svg>
+        </button>
       </div>
       <div class="cam-controls">
         <button id="btnSnap" class="shutter" type="button" aria-label="Jepret" disabled></button>
+      </div>
+      <div class="cam-info">
+        <div class="cam-time" id="ovTime">--:--:--</div>
+        <div class="cam-lokasi" id="ovLokasi">Mencari lokasi...</div>
       </div>
       <div class="gallery-row">
         <button id="btnGallery" class="gallery-thumb" type="button" aria-label="Lihat riwayat" title="Lihat riwayat" hidden></button>
