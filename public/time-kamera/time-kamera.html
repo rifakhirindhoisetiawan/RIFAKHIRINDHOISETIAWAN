@@ -350,6 +350,9 @@
     let pinchStartZoom = 1;
     let wakeLock = null;
     let starting = false;
+    let ultraWideDeviceId = null;
+    let mainBackDeviceId = null;
+    let currentDeviceId = null;
 
     function load() {
       try {
@@ -551,7 +554,7 @@
       zoomBtns.forEach((b) => b.classList.toggle("on", b === best));
     }
 
-    async function start() {
+    async function start(deviceId) {
       if (stream || starting) return;
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         console.warn("kamera tidak didukung");
@@ -559,19 +562,46 @@
       }
       starting = true;
       try {
+        const videoConstraints = { width: { ideal: 1280 }, height: { ideal: 720 } };
+        if (deviceId) {
+          videoConstraints.deviceId = { exact: deviceId };
+        } else {
+          videoConstraints.facingMode = { ideal: facing };
+        }
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { ideal: facing }, width: { ideal: 1280 }, height: { ideal: 720 } },
+          video: videoConstraints,
           audio: false,
         });
         video.srcObject = stream;
         await video.play().catch(() => {});
         btnSnap.disabled = false;
         btnSwitch.disabled = false;
+        const track = currentTrack();
+        if (track) {
+          currentDeviceId = track.getSettings().deviceId || null;
+          if (facing === "environment" && !mainBackDeviceId && !deviceId) {
+            mainBackDeviceId = currentDeviceId;
+          }
+        }
+        await findUltraWide();
         setupTrackFeatures();
       } catch (e) {
         console.warn("getUserMedia", e);
       } finally {
         starting = false;
+      }
+    }
+
+    async function findUltraWide() {
+      if (facing !== "environment") { ultraWideDeviceId = null; return; }
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const uw = devices.find(d => d.kind === "videoinput" && /ultra|wide|0\.[56]/i.test(d.label));
+        if (uw) ultraWideDeviceId = uw.deviceId;
+        else ultraWideDeviceId = null;
+      } catch (e) {
+        console.warn("enumerateDevices failed", e);
+        ultraWideDeviceId = null;
       }
     }
 
@@ -623,12 +653,25 @@
       b.addEventListener("click", async () => {
         if (!zoomCaps) return;
         const z = parseFloat(b.dataset.zoom);
-        // 0.5x = zoom minimum (beberapa HP min zoom 0.6/1.0, bukan 0.5)
+        // 0.5x: coba switch ke kamera ultra-wide (jika ada), fallback ke min zoom
         if (z === 0.5) {
+          if (ultraWideDeviceId && currentDeviceId !== ultraWideDeviceId) {
+            stop();
+            await start(ultraWideDeviceId);
+            await applyZoom(zoomCaps.min);
+            updateZoomActive();
+            return;
+          }
           await applyZoom(zoomCaps.min);
-        } else {
-          await applyZoom(z);
+          updateZoomActive();
+          return;
         }
+        // 1x/2x: switch balik ke kamera utama belakang (jika sedang di ultra-wide)
+        if (currentDeviceId === ultraWideDeviceId && mainBackDeviceId) {
+          stop();
+          await start(mainBackDeviceId);
+        }
+        await applyZoom(z);
         updateZoomActive();
       });
     });
