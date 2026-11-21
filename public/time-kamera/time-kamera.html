@@ -205,29 +205,19 @@
     /* Rasio layar HP 9:16, video mengisi penuh */
     .cam-video{width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;max-height:none}
 
-    /* Bar pilihan jepret: muncul langsung di atas kamera (di atas control bar) */
-    .action-bar{
-      display:flex;
-      justify-content:flex-end;
-      align-items:center;
-      gap:12px;
-      padding:10px 14px 12px;
-      background:rgba(255,251,242,.94);
-      border-top:1px solid rgba(26,25,23,.1);
-      box-shadow:0 1px 6px rgba(26,25,23,.05)
-    }
-    .action-bar[hidden]{display:none}
-    .action-bar .btn{padding:10px 16px}
-    .action-thumb{
-      flex:none;
-      width:74px;
-      height:108px;
-      object-fit:cover;
-      border:1.5px solid rgba(26,25,23,.3);
-      border-radius:8px;
-      background:var(--mori-surface);
-      margin-right:auto
-    }
+    /* Full-screen review foto setelah jepret (seperti kamera HP) */
+    .preview{position:fixed;inset:0;z-index:100;background:#000;display:flex;flex-direction:column}
+    .preview[hidden]{display:none}
+    .preview-body{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:auto}
+    .preview-img{width:100%;max-width:560px;max-height:100%;object-fit:contain;display:block;background:#000}
+    .preview-actions{display:flex;gap:10px;padding:12px 16px calc(16px + env(safe-area-inset-bottom));background:#000;flex-shrink:0}
+    .preview-actions .btn{flex:1;min-width:0;background:transparent;color:#fff;border-color:transparent;font-weight:600}
+    .preview-actions .btn.primary{flex:0 0 auto;background:#ff5436;color:#fff;border-color:#ff5436;padding:12px 28px}
+    .preview-close{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;color:#fff;font-size:30px;line-height:1;cursor:pointer;padding:0}
+    .preview-top{display:flex;justify-content:flex-start;padding:10px 14px;flex-shrink:0}
+    .preview-info{width:100%;max-width:560px;padding:14px 18px 6px;font-family:var(--mori-mono);font-size:12px;line-height:1.5;color:#fff;word-break:break-word;flex-shrink:0}
+    .preview-info .pi-waktu{font-weight:700;letter-spacing:.3px}
+    .preview-info .pi-sub{color:rgba(255,255,255,.7);margin-top:3px}
   </style>
 </head>
 <body>
@@ -253,11 +243,6 @@
         <div class="zoom-pill" id="zoomPill" hidden>1×</div>
         <div class="cam-flash" id="camFlash"></div>
       </div>
-      <div class="action-bar" id="actionBar" hidden>
-        <img id="actionThumb" class="action-thumb" alt="Foto terjepret" />
-        <button id="btnRetake" class="btn" type="button">Ambil ulang</button>
-        <button id="btnSimpan" class="btn primary" type="button">Simpan</button>
-      </div>
       <div class="cam-controls">
         <div class="cam-controls-side">
           <button id="btnGallery" class="gallery-thumb" type="button" aria-label="Lihat riwayat" title="Lihat riwayat" hidden></button>
@@ -268,6 +253,20 @@
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.9-4"/><path d="M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14.9 4"/><path d="M20 19v-4h-4"/></svg>
           </button>
         </div>
+      </div>
+    </div>
+
+    <div id="preview" class="preview" hidden>
+      <div class="preview-top">
+        <button id="btnClosePreview" class="preview-close" type="button" aria-label="Tutup">×</button>
+      </div>
+      <div class="preview-info" id="previewInfo"></div>
+      <div class="preview-body">
+        <img id="previewImg" class="preview-img" src="" alt="Hasil jepretan" />
+      </div>
+      <div class="preview-actions">
+        <button id="btnRetake" class="btn" type="button">Ambil ulang</button>
+        <button id="btnSimpan" class="btn primary" type="button">Simpan</button>
       </div>
     </div>
 
@@ -293,8 +292,10 @@
     const zoomPill = document.getElementById("zoomPill");
     const btnTorch = document.getElementById("btnTorch");
     const btnGrid = document.getElementById("btnGrid");
-    const actionBar = document.getElementById("actionBar");
-    const actionThumb = document.getElementById("actionThumb");
+    const preview = document.getElementById("preview");
+    const previewImg = document.getElementById("previewImg");
+    const previewInfo = document.getElementById("previewInfo");
+    const btnClosePreview = document.getElementById("btnClosePreview");
     const btnRetake = document.getElementById("btnRetake");
     const btnSimpan = document.getElementById("btnSimpan");
     const inLokasi = document.getElementById("inLokasi");
@@ -605,15 +606,21 @@
       return hari + "-" + bulan + "-" + tahun + " " + jam + " WIB";
     }
 
-    function showAction(shot) {
+    function bukaPreview(shot) {
       pendingShot = shot;
-      actionThumb.src = shot.img;
-      actionBar.hidden = false;
+      previewImg.src = shot.img;
+      const lokasi = shot.lokasi || "-";
+      previewInfo.innerHTML =
+        '<div class="pi-waktu">' + fmtWaktuLengkap(shot.at) + '</div>' +
+        '<div class="pi-sub">' + (lokasiKoordinat || "-") + '</div>' +
+        '<div class="pi-sub">' + lokasi.toUpperCase() + '</div>' +
+        '<div class="pi-sub">Nomor Pesanan: ' + shot.id + '</div>';
+      preview.hidden = false;
     }
 
-    function hideAction() {
-      actionBar.hidden = true;
-      actionThumb.src = "";
+    function tutupPreview() {
+      preview.hidden = true;
+      previewImg.src = "";
       pendingShot = null;
     }
 
@@ -651,7 +658,7 @@
 
       const img = shrink(video, 720, meta);
       if (!img) return;
-      showAction({
+      bukaPreview({
         id: Date.now(),
         img,
         lokasi: meta.lokasi,
@@ -661,13 +668,14 @@
       });
     });
 
-    btnRetake.addEventListener("click", hideAction);
+    btnClosePreview.addEventListener("click", tutupPreview);
+    btnRetake.addEventListener("click", tutupPreview);
     btnSimpan.addEventListener("click", () => {
       if (!pendingShot) return;
       shots.unshift(pendingShot);
       persist();
       render();
-      hideAction();
+      tutupPreview();
     });
 
     // Isi lokasi otomatis sesuai nama tempat dari koordinat GPS (reverse geocoding)
@@ -736,13 +744,17 @@
       }
     });
 
-    // Spasi untuk jepret, Esc untuk batal (Ambil ulang)
+    // Spasi untuk jepret, Esc untuk ambil ulang (desktop)
     document.addEventListener("keydown", (e) => {
-      if (e.code === "Space" && actionBar.hidden) {
+      if (e.code === "Space" && preview.hidden) {
         e.preventDefault();
         btnSnap.click();
       }
-      if (e.key === "Escape" && !actionBar.hidden) hideAction();
+      if (e.code === "Space" && !preview.hidden) {
+        e.preventDefault();
+        btnRetake.click();
+      }
+      if (e.key === "Escape" && !preview.hidden) tutupPreview();
     });
 
     // jam overlay (tanggal + bulan + waktu)
