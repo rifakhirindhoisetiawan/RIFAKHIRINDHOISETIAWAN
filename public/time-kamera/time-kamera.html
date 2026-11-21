@@ -303,6 +303,7 @@
     let facing = "environment";
     let lokasiKoordinat = "";
     let pendingShot = null;
+    let previewHistoryPushed = false;
     let zoomCaps = null;
     let zoomVal = 1;
     let torchOn = false;
@@ -607,13 +608,32 @@
       previewImg.src = shot.img;
       previewInfo.innerHTML = "";
       preview.hidden = false;
+      if (!previewHistoryPushed) {
+        try {
+          history.pushState({ timekameraPreview: true }, "", location.href);
+          previewHistoryPushed = true;
+        } catch (e) {}
+      }
     }
 
     function tutupPreview() {
+      if (previewHistoryPushed) {
+        previewHistoryPushed = false;
+        try { history.back(); } catch (e) {}
+      }
       preview.hidden = true;
       previewImg.src = "";
       pendingShot = null;
     }
+
+    window.addEventListener("popstate", () => {
+      if (previewHistoryPushed) {
+        previewHistoryPushed = false;
+        preview.hidden = true;
+        previewImg.src = "";
+        pendingShot = null;
+      }
+    });
 
     // Ambil snapshot alamat + koordinat untuk stamp foto, tunggu-lah.
     function snapLokasi(waktuFoto) {
