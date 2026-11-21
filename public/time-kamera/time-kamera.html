@@ -131,19 +131,20 @@
       text-overflow:ellipsis;
       white-space:nowrap
     }
+    .gallery-row{
+      display:flex;
+      justify-content:flex-end;
+      margin-top:12px
+    }
+    .gallery-row[hidden]{display:none}
     .gallery-thumb{
-      position:absolute;
-      bottom:22px;
-      right:16px;
-      width:56px;
-      height:56px;
+      width:48px;
+      height:48px;
       border-radius:10px;
-      border:2px solid #fff;
-      box-shadow:0 0 0 2px rgba(0,0,0,.35);
+      border:1.5px solid rgba(26,25,23,0.3);
       background-size:cover;
       background-position:center;
-      background-color:#0d0d0f;
-      pointer-events:auto;
+      background-color:var(--mori-surface);
       cursor:pointer;
       padding:0
     }
@@ -207,8 +208,10 @@
           <div class="cam-lokasi" id="ovLokasi">Mencari lokasi...</div>
           <div class="cam-time" id="ovTime">--:--:--</div>
           <button id="btnSnap" class="shutter" type="button" aria-label="Jepret" disabled></button>
-          <button id="btnGallery" class="gallery-thumb" type="button" aria-label="Lihat riwayat" title="Lihat riwayat" hidden></button>
         </div>
+      </div>
+      <div class="gallery-row">
+        <button id="btnGallery" class="gallery-thumb" type="button" aria-label="Lihat riwayat" title="Lihat riwayat" hidden></button>
       </div>
     </div>
 
@@ -231,6 +234,7 @@
     const btnSwitch = document.getElementById("btnSwitch");
     const btnSnap = document.getElementById("btnSnap");
     const btnGallery = document.getElementById("btnGallery");
+    const galleryRow = btnGallery.parentElement;
     const inLokasi = document.getElementById("inLokasi");
     const inBaris = document.getElementById("inBaris");
     const inCatatan = document.getElementById("inCatatan");
@@ -362,10 +366,10 @@
       if (!visible.length) {
         shotsEl.innerHTML = "";
         galeriCard.hidden = true;
-        btnGallery.hidden = true;
+        galleryRow.hidden = true;
         return;
       }
-      btnGallery.hidden = false;
+      galleryRow.hidden = false;
       btnGallery.style.backgroundImage = 'url("' + visible[0].img + '")';
       shotsEl.innerHTML = visible.map(shotHtml).join("");
       shotsEl.querySelectorAll("[data-dl]").forEach((b) => {
