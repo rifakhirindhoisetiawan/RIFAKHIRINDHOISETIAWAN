@@ -528,7 +528,11 @@
     function updateZoomActive() {
       zoomBtns.forEach((b) => {
         const z = parseFloat(b.dataset.zoom);
-        b.classList.toggle("on", Math.abs(z - zoomVal) < 0.06);
+        let active = false;
+        if (z === 0.5) active = zoomVal <= zoomCaps.min + 0.06;
+        else if (z === 1) active = zoomVal > zoomCaps.min + 0.06 && Math.abs(zoomVal - 1) < 0.06;
+        else if (z === 2) active = Math.abs(zoomVal - 2) < 0.06;
+        b.classList.toggle("on", active);
       });
     }
 
