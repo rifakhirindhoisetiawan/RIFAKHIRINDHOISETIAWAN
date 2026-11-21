@@ -131,6 +131,22 @@
       text-overflow:ellipsis;
       white-space:nowrap
     }
+    .gallery-thumb{
+      position:absolute;
+      bottom:22px;
+      right:16px;
+      width:56px;
+      height:56px;
+      border-radius:10px;
+      border:2px solid #fff;
+      box-shadow:0 0 0 2px rgba(0,0,0,.35);
+      background-size:cover;
+      background-position:center;
+      background-color:#0d0d0f;
+      pointer-events:auto;
+      cursor:pointer;
+      padding:0
+    }
     .switch-btn{
       position:absolute;
       top:10px;
@@ -191,6 +207,7 @@
           <div class="cam-lokasi" id="ovLokasi">Mencari lokasi...</div>
           <div class="cam-time" id="ovTime">--:--:--</div>
           <button id="btnSnap" class="shutter" type="button" aria-label="Jepret" disabled></button>
+          <button id="btnGallery" class="gallery-thumb" type="button" aria-label="Lihat riwayat" title="Lihat riwayat" hidden></button>
         </div>
       </div>
     </div>
@@ -213,6 +230,7 @@
     const ovLokasi = document.getElementById("ovLokasi");
     const btnSwitch = document.getElementById("btnSwitch");
     const btnSnap = document.getElementById("btnSnap");
+    const btnGallery = document.getElementById("btnGallery");
     const inLokasi = document.getElementById("inLokasi");
     const inBaris = document.getElementById("inBaris");
     const inCatatan = document.getElementById("inCatatan");
@@ -344,9 +362,11 @@
       if (!visible.length) {
         shotsEl.innerHTML = "";
         galeriCard.hidden = true;
+        btnGallery.hidden = true;
         return;
       }
-      galeriCard.hidden = false;
+      btnGallery.hidden = false;
+      btnGallery.style.backgroundImage = 'url("' + visible[0].img + '")';
       shotsEl.innerHTML = visible.map(shotHtml).join("");
       shotsEl.querySelectorAll("[data-dl]").forEach((b) => {
         b.addEventListener("click", () => download(parseInt(b.dataset.dl)));
@@ -478,6 +498,10 @@
       );
     }
     isiLokasiOtomatis();
+
+    btnGallery.addEventListener("click", () => {
+      galeriCard.hidden = !galeriCard.hidden;
+    });
 
     // jam overlay
     setInterval(() => {
