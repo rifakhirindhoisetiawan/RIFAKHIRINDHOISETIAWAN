@@ -170,6 +170,35 @@
     }
     .zoom-pill[hidden]{display:none}
 
+    /* Tombol zoom cepat (0.5x, 1x, 2x) ala kamera HP */
+    .zoom-row{
+      position:absolute;
+      bottom:100px;
+      left:50%;
+      transform:translateX(-50%);
+      display:flex;
+      gap:6px;
+      z-index:3
+    }
+    .zoom-row[hidden]{display:none}
+    .zoom-btn{
+      padding:5px 10px;
+      border-radius:99px;
+      background:rgba(255,251,242,.92);
+      border:1px solid rgba(26,25,23,.2);
+      color:var(--mori-text);
+      font-family:var(--mori-mono);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.5px;
+      cursor:pointer;
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      transition:background .15s ease,color .15s ease
+    }
+    .zoom-btn.on{background:var(--mori-text);color:#fff;border-color:var(--mori-text)}
+    .zoom-btn[hidden]{display:none}
+
     /* Kilat shutter */
     .cam-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:4}
     .cam-flash.on{animation:shotFlash .26s ease-out}
@@ -235,6 +264,11 @@
           </button>
         </div>
         <div class="focus-ring" id="focusRing"></div>
+        <div class="zoom-row" id="zoomRow" hidden>
+          <button class="zoom-btn" data-zoom="0.5" type="button" hidden>0.5×</button>
+          <button class="zoom-btn" data-zoom="1" type="button" hidden>1×</button>
+          <button class="zoom-btn" data-zoom="2" type="button" hidden>2×</button>
+        </div>
         <div class="cam-info">
           <div class="cam-time" id="ovTime">--:--:--</div>
           <div class="cam-koordinat" id="ovKoordinat">-</div>
@@ -289,6 +323,8 @@
     const zoomPill = document.getElementById("zoomPill");
     const btnTorch = document.getElementById("btnTorch");
     const btnGrid = document.getElementById("btnGrid");
+    const zoomRow = document.getElementById("zoomRow");
+    const zoomBtns = zoomRow.querySelectorAll(".zoom-btn");
     const preview = document.getElementById("preview");
     const previewImg = document.getElementById("previewImg");
     const previewInfo = document.getElementById("previewInfo");
@@ -454,7 +490,7 @@
       try {
         await t.applyConstraints({ advanced: [{ zoom: val }] });
         zoomVal = val;
-        updateZoomPill();
+        updateZoomActive();
       } catch (e) {}
     }
 
@@ -465,17 +501,35 @@
       if (caps.zoom && caps.zoom.max > caps.zoom.min) {
         zoomCaps = caps.zoom;
         zoomVal = Math.max(caps.zoom.min, 1);
-        zoomPill.hidden = false;
-        updateZoomPill();
+        zoomPill.hidden = true;
+        zoomRow.hidden = false;
+        // Show/hide preset buttons based on support
+        zoomBtns.forEach((b) => {
+          const z = parseFloat(b.dataset.zoom);
+          let show = false;
+          if (z === 0.5) show = caps.zoom.min <= 0.5 && facing === "environment";
+          else if (z === 1) show = true;
+          else if (z === 2) show = caps.zoom.max >= 2;
+          b.hidden = !show;
+        });
+        updateZoomActive();
         applyZoom(zoomVal);
       } else {
         zoomCaps = null;
         zoomPill.hidden = true;
+        zoomRow.hidden = true;
       }
       btnTorch.hidden = !caps.torch;
       torchOn = false;
       btnTorch.classList.remove("on");
       camStage.classList.toggle("mirror", facing === "user");
+    }
+
+    function updateZoomActive() {
+      zoomBtns.forEach((b) => {
+        const z = parseFloat(b.dataset.zoom);
+        b.classList.toggle("on", Math.abs(z - zoomVal) < 0.06);
+      });
     }
 
     async function start() {
@@ -513,6 +567,7 @@
       zoomCaps = null;
       zoomVal = 1;
       zoomPill.hidden = true;
+      zoomRow.hidden = true;
       torchOn = false;
       btnTorch.hidden = true;
       btnTorch.classList.remove("on");
@@ -542,6 +597,14 @@
     btnGrid.addEventListener("click", () => {
       camGrid.hidden = !camGrid.hidden;
       btnGrid.classList.toggle("on", !camGrid.hidden);
+    });
+
+    // Zoom cepat
+    zoomBtns.forEach((b) => {
+      b.addEventListener("click", () => {
+        if (!zoomCaps) return;
+        applyZoom(parseFloat(b.dataset.zoom));
+      });
     });
 
     function jarak(a, b) {
