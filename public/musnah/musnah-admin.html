@@ -1,4 +1,4 @@
-﻿﻿<!doctype html>
+﻿<!doctype html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
@@ -143,9 +143,9 @@
       display:inline-flex;align-items:center;justify-content:center;
       vertical-align:middle;
       width:32px;height:32px;min-height:32px;padding:0;margin:0;
-      background:var(--mori-surface);color:var(--mori-text);
-      border:1px solid var(--mori-line);border-radius:8px;
-      font-size:17px;font-weight:700;line-height:1;cursor:pointer;
+      background:var(--mori-surface);color:var(--mori-danger);
+      border:1px solid var(--mori-danger);border-radius:8px;
+      font-size:18px;font-weight:700;line-height:1;cursor:pointer;
       -webkit-tap-highlight-color:transparent;
     }
     .btn-dots:active{transform:scale(.94)}
@@ -302,7 +302,7 @@
       const hppVal = m.hpp !== undefined && m.hpp !== null ? m.hpp : '';
       const totalVal = (parseFloat(hppVal) || 0) * (parseFloat(qtyVal) || 0);
       const chk = '<input type="checkbox" class="mori-check" data-check="' + m.id + '" ' + (isChecked ? 'checked' : '') + ' />';
-      const aksi = chk + '<button type="button" class="btn-dots" data-del="' + m.id + '" title="Hapus" aria-label="Hapus" style="color:var(--mori-danger)">X</button>';
+      const aksi = chk + '<button type="button" class="btn-dots" data-del="' + m.id + '" title="Hapus" aria-label="Hapus">&times;</button>';
       return '<tr data-id="' + m.id + '"' + (isChecked ? ' class="row-checked"' : '') + '>' +
         '<td class="c-no">' + (i + 1) + '</td>' +
         '<td class="c-nama"><div style="display:flex;flex-direction:column;gap:1px"><div class="nama" contenteditable="true" data-edit-title="' + m.id + '" style="outline:none;padding:2px 4px;border-radius:4px">' + (m.title || '') + '</div>' + (tglStr ? '<div style="font-size:9px;color:var(--mori-text-2);font-family:var(--mori-mono);font-weight:700;white-space:nowrap">' + tglStr + '</div>' : '') + '</div></td>' +
