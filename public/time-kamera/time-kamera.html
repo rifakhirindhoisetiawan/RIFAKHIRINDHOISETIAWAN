@@ -131,6 +131,31 @@
       text-overflow:ellipsis;
       white-space:nowrap
     }
+    .shutter{
+      position:absolute;
+      bottom:22px;
+      left:50%;
+      transform:translateX(-50%);
+      width:72px;
+      height:72px;
+      border-radius:50%;
+      background:transparent;
+      border:4px solid #fff;
+      box-shadow:0 0 0 2px rgba(0,0,0,.35);
+      pointer-events:auto;
+      cursor:pointer;
+      padding:0;
+      transition:transform .1s ease
+    }
+    .shutter::after{
+      content:'';
+      position:absolute;
+      inset:5px;
+      border-radius:50%;
+      background:#fff
+    }
+    .shutter:active{transform:translateX(-50%) scale(.92)}
+    .shutter:disabled{opacity:.5;cursor:not-allowed}
     .cam-stage{border-radius:10px}
     /* Rasio layar HP 9:16, video mengisi penuh */
     .cam-video{width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;max-height:none}
@@ -145,6 +170,7 @@
           <div class="cam-badge" id="ovDevice">MENUNGGU</div>
           <div class="cam-lokasi" id="ovLokasi">Mencari lokasi...</div>
           <div class="cam-time" id="ovTime">--:--:--</div>
+          <button id="btnSnap" class="shutter" type="button" aria-label="Jepret" disabled></button>
         </div>
       </div>
       <div class="btn-row">
@@ -152,24 +178,9 @@
       </div>
     </div>
 
-    <div class="menu-frame card">
-      <h2>Ambil Foto</h2>
-      <div class="stack">
-        <input id="inLokasi" type="hidden" />
-        <div>
-          <label class="head-sub" for="inBaris" style="display:block;margin-bottom:6px">Baris / Line</label>
-          <input id="inBaris" class="field field-sm" placeholder="cth: Baris 3, Kolom 2" autocomplete="off" />
-        </div>
-        <div>
-          <label class="head-sub" for="inCatatan" style="display:block;margin-bottom:6px">Catatan</label>
-          <input id="inCatatan" class="field field-sm" placeholder="opsional" autocomplete="off" />
-        </div>
-      </div>
-      <div class="btn-row">
-        <button id="btnSnap" class="btn primary" type="button" disabled>Jepret</button>
-      </div>
-      <p class="hint">Lokasi &amp; baris otomatis tersimpan bersama foto. Waktu diambil dari jam device.</p>
-    </div>
+    <input id="inLokasi" type="hidden" />
+    <input id="inBaris" type="hidden" />
+    <input id="inCatatan" type="hidden" />
 
     <div class="menu-frame card" id="galeriCard" hidden>
       <div class="shot-grid" id="shots"></div>
