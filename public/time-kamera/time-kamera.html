@@ -262,7 +262,9 @@
     .preview-actions{display:flex;align-items:center;gap:12px;padding:14px 16px calc(16px + env(safe-area-inset-bottom));background:var(--mori-bg);border-top:1px solid rgba(26,25,23,.1);flex-shrink:0}
     .preview-actions .btn{flex:1;min-width:0;min-height:50px;background:var(--mori-bg);color:var(--mori-accent);border:1.5px solid var(--mori-line);border-radius:8px;font-weight:700;letter-spacing:.5px;padding:12px 18px;text-transform:none;transition:opacity .15s ease}
     .preview-actions .btn:active{opacity:.8}
-    .preview-actions .btn.primary{flex:1;background:#ff5436;color:#fff;border-color:#ff5436;padding:12px 26px;font-size:12px;text-transform:none}
+    .preview-actions .btn.primary{flex:1;background:var(--mori-text);color:#fff;border-color:var(--mori-text);padding:12px 26px;font-size:12px;text-transform:none}
+    .preview-actions .btn.retake{flex:0 0 auto;width:50px;min-height:50px;padding:0;background:transparent;color:var(--mori-text);border:1.5px solid var(--mori-line);border-radius:8px;display:flex;align-items:center;justify-content:center}
+    .preview-actions .btn.retake svg{width:22px;height:22px;stroke:var(--mori-text)}
     .preview-info{width:100%;max-width:560px;padding:14px 18px 6px;font-family:var(--mori-mono);font-size:12px;line-height:1.5;color:var(--mori-text);word-break:break-word;flex-shrink:0}
     .preview-info:empty{display:none}
     .preview-info .pi-waktu{font-weight:700;letter-spacing:.3px}
@@ -315,7 +317,9 @@
         <img id="previewImg" class="preview-img" src="" alt="Hasil jepretan" />
       </div>
       <div class="preview-actions">
-        <button id="btnRetake" class="btn" type="button">Ambil ulang</button>
+        <button id="btnRetake" class="btn retake" type="button" aria-label="Ambil ulang">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
         <button id="btnSimpan" class="btn primary" type="button">Unduh</button>
       </div>
     </div>
