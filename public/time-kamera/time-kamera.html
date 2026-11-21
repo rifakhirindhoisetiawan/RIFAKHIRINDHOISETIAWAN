@@ -81,35 +81,37 @@
     .cam-controls-side[hidden]{visibility:hidden}
     .gallery-thumb{
       position:relative;
-      width:46px;
-      height:46px;
-      border-radius:12px;
+      width:48px;
+      height:48px;
+      border-radius:10px;
       border:1.5px solid rgba(26,25,23,.3);
       background-size:cover;
       background-position:center;
       background-color:var(--mori-surface);
       cursor:pointer;
       padding:0;
+      box-shadow:0 1px 3px rgba(26,25,23,.12);
       transition:transform .15s ease,border-color .15s ease
     }
     .gallery-thumb:active{transform:scale(.94);border-color:var(--mori-text)}
     .gallery-thumb::after{
       content:attr(data-count);
       position:absolute;
-      top:-7px;
-      right:-7px;
-      min-width:17px;
-      height:17px;
-      padding:0 4px;
+      top:2px;
+      right:2px;
+      min-width:15px;
+      height:15px;
+      padding:0 3px;
       border-radius:99px;
       background:#ff5436;
-      border:1.5px solid var(--mori-bg);
+      border:1.5px solid rgba(255,251,242,.95);
       color:#fff;
       font-family:var(--mori-mono);
-      font-size:9px;
+      font-size:8px;
       font-weight:700;
-      line-height:14px;
-      text-align:center
+      line-height:12px;
+      text-align:center;
+      box-sizing:border-box
     }
     .gallery-thumb[data-count="0"]::after,.gallery-thumb:not([data-count])::after{display:none}
 
