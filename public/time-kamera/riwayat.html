@@ -122,13 +122,6 @@
 </head>
 <body>
   <div class="app">
-    <div class="head">
-      <div>
-        <div class="head-title">Riwayat Kamera</div>
-        <div class="head-sub" id="subCount">0 foto</div>
-      </div>
-    </div>
-
     <div class="menu-frame card">
       <h2>Foto Tersimpan</h2>
       <div class="shot-grid" id="shots"></div>
@@ -145,7 +138,6 @@
     const KEY = "mylove_timekamera_v1";
     const shotsEl = document.getElementById("shots");
     const empty = document.getElementById("empty");
-    const subCount = document.getElementById("subCount");
     const toastEl = document.getElementById("toast");
 
     let shots = load();
@@ -238,7 +230,6 @@
     }
 
     function render() {
-      subCount.textContent = shots.length + " foto";
       empty.hidden = shots.length > 0;
       shotsEl.innerHTML = shots.map(shotHtml).join("");
       shotsEl.querySelectorAll("[data-dl]").forEach((b) => {
