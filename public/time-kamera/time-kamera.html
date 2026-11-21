@@ -343,7 +343,6 @@
     let previewHistoryPushed = false;
     let zoomCaps = null;
     let zoomVal = 1;
-    let activePreset = 1;
     let torchOn = false;
     let snapping = false;
     let lastTap = 0;
@@ -488,11 +487,25 @@
     async function applyZoom(v) {
       const t = currentTrack();
       if (!t || !zoomCaps) return;
-      const val = Math.min(zoomCaps.max, Math.max(zoomCaps.min, v));
+      // Coba zoom yang diminta dulu (tanpa clamp), fallback ke min/max kalau gagal
       try {
-        await t.applyConstraints({ advanced: [{ zoom: val }] });
-        zoomVal = val;
-      } catch (e) {}
+        await t.applyConstraints({ zoom: v });
+        zoomVal = v;
+      } catch (e1) {
+        const val = Math.min(zoomCaps.max, Math.max(zoomCaps.min, v));
+        try {
+          await t.applyConstraints({ zoom: val });
+          zoomVal = val;
+        } catch (e2) {
+          try {
+            await t.applyConstraints({ advanced: [{ zoom: val }] });
+            zoomVal = val;
+          } catch (e3) {
+            console.warn("applyZoom failed", e3);
+          }
+        }
+      }
+      updateZoomActive();
     }
 
     async function setupTrackFeatures() {
@@ -513,7 +526,6 @@
           else if (z === 2) show = caps.zoom.max >= 2;
           b.hidden = !show;
         });
-        activePreset = 1;
         await applyZoom(zoomVal);
         updateZoomActive();
       } else {
@@ -528,10 +540,15 @@
     }
 
     function updateZoomActive() {
+      if (!zoomCaps) return;
+      let best = null, bestDist = Infinity;
       zoomBtns.forEach((b) => {
         const z = parseFloat(b.dataset.zoom);
-        b.classList.toggle("on", z === activePreset);
+        const target = z === 0.5 ? zoomCaps.min : z;
+        const dist = Math.abs(target - zoomVal);
+        if (dist < bestDist) { bestDist = dist; best = b; }
       });
+      zoomBtns.forEach((b) => b.classList.toggle("on", b === best));
     }
 
     async function start() {
@@ -607,7 +624,6 @@
         if (!zoomCaps) return;
         const z = parseFloat(b.dataset.zoom);
         // 0.5x = zoom minimum (beberapa HP min zoom 0.6/1.0, bukan 0.5)
-        activePreset = z;
         if (z === 0.5) {
           await applyZoom(zoomCaps.min);
         } else {
@@ -632,7 +648,6 @@
     camStage.addEventListener("touchmove", (e) => {
       if (e.touches.length === 2 && pinchStartDist && zoomCaps) {
         e.preventDefault();
-        activePreset = null;
         applyZoom(pinchStartZoom * (jarak(e.touches[0], e.touches[1]) / pinchStartDist));
         updateZoomActive();
       }
