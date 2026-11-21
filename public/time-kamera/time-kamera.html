@@ -133,7 +133,7 @@
     }
     .gallery-row{
       display:flex;
-      justify-content:flex-end;
+      justify-content:flex-start;
       margin-top:12px
     }
     .gallery-row[hidden]{display:none}
@@ -194,6 +194,18 @@
     .cam-stage{border-radius:10px}
     /* Rasio layar HP 9:16, video mengisi penuh */
     .cam-video{width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;max-height:none}
+
+    /* Preview hasil jepretan (full-screen ala kamera HP) */
+    .preview{position:fixed;inset:0;z-index:100;background:#000;display:flex;flex-direction:column}
+    .preview[hidden]{display:none}
+    .preview-top{display:flex;justify-content:flex-start;padding:10px 14px;flex-shrink:0}
+    .preview-close{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;color:#fff;font-size:30px;line-height:1;cursor:pointer;padding:0}
+    .preview-body{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;align-items:center}
+    .preview-img{width:100%;max-width:560px;aspect-ratio:9/16;object-fit:contain;display:block;background:#000}
+    .preview-info{width:100%;max-width:560px;padding:14px 18px;font-family:var(--mori-mono);font-size:12px;line-height:1.6;color:#fff;word-break:break-word}
+    .preview-actions{display:flex;gap:10px;padding:12px 16px calc(16px + env(safe-area-inset-bottom));background:#000;flex-shrink:0}
+    .preview-actions .btn{flex:1;min-width:0;background:#fff;color:#1a1917;border-color:#fff}
+    .preview-actions .btn.primary{background:#ff5436;color:#fff;border-color:#ff5436}
   </style>
 </head>
 <body>
@@ -224,6 +236,20 @@
     </div>
   </div>
 
+  <div id="preview" class="preview" hidden>
+    <div class="preview-top">
+      <button id="btnClosePreview" class="preview-close" type="button" aria-label="Tutup">×</button>
+    </div>
+    <div class="preview-body">
+      <img id="previewImg" class="preview-img" src="" alt="Hasil jepretan" />
+      <div class="preview-info" id="previewInfo"></div>
+    </div>
+    <div class="preview-actions">
+      <button id="btnRetake" class="btn" type="button">Ambil ulang</button>
+      <button id="btnLanjut" class="btn primary" type="button">Lanjut</button>
+    </div>
+  </div>
+
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script type="module">
@@ -235,6 +261,12 @@
     const btnSnap = document.getElementById("btnSnap");
     const btnGallery = document.getElementById("btnGallery");
     const galleryRow = btnGallery.parentElement;
+    const preview = document.getElementById("preview");
+    const previewImg = document.getElementById("previewImg");
+    const previewInfo = document.getElementById("previewInfo");
+    const btnRetake = document.getElementById("btnRetake");
+    const btnLanjut = document.getElementById("btnLanjut");
+    const btnClosePreview = document.getElementById("btnClosePreview");
     const inLokasi = document.getElementById("inLokasi");
     const inBaris = document.getElementById("inBaris");
     const inCatatan = document.getElementById("inCatatan");
@@ -247,6 +279,8 @@
     let stream = null;
     let facing = "environment";
     let filter = "all";
+    let lokasiKoordinat = "";
+    let pendingShot = null;
 
     function load() {
       try {
@@ -440,6 +474,35 @@
       stop();
       await start();
     });
+    function fmtWaktuLengkap(iso) {
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return "-";
+      const hari = d.toLocaleDateString("id-ID", { day: "2-digit", timeZone: "Asia/Jakarta" });
+      const bulan = d.toLocaleDateString("id-ID", { month: "long", timeZone: "Asia/Jakarta" });
+      const tahun = d.toLocaleDateString("id-ID", { year: "numeric", timeZone: "Asia/Jakarta" });
+      const jam = d.toLocaleTimeString("id-ID", {
+        hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZone: "Asia/Jakarta",
+      });
+      return hari + "-" + bulan + "-" + tahun + " " + jam + " WIB";
+    }
+
+    function bukaPreview(shot) {
+      pendingShot = shot;
+      previewImg.src = shot.img;
+      const lokasi = shot.lokasi || "-";
+      previewInfo.innerHTML =
+        fmtWaktuLengkap(shot.at) + "<br>" +
+        (lokasiKoordinat || "-") + "<br>" +
+        lokasi.toUpperCase();
+      preview.hidden = false;
+    }
+
+    function tutupPreview() {
+      preview.hidden = true;
+      previewImg.src = "";
+      pendingShot = null;
+    }
+
     btnSnap.addEventListener("click", () => {
       if (!stream) return;
       const img = shrink(video, 720);
@@ -447,7 +510,7 @@
         toast("Gagal ambil frame");
         return;
       }
-      shots.unshift({
+      bukaPreview({
         id: Date.now(),
         img,
         lokasi: inLokasi.value.trim(),
@@ -455,9 +518,16 @@
         catatan: inCatatan.value.trim(),
         at: new Date().toISOString(),
       });
+    });
+
+    btnRetake.addEventListener("click", tutupPreview);
+    btnClosePreview.addEventListener("click", tutupPreview);
+    btnLanjut.addEventListener("click", () => {
+      if (!pendingShot) return;
+      shots.unshift(pendingShot);
       persist();
       render();
-      toast("Terekam " + fmtClock(new Date().toISOString()));
+      tutupPreview();
     });
 
     // Isi lokasi otomatis sesuai nama tempat dari koordinat GPS (reverse geocoding)
@@ -470,6 +540,7 @@
         async (pos) => {
           const { latitude, longitude } = pos.coords;
           const koordinat = latitude.toFixed(5) + ", " + longitude.toFixed(5);
+          lokasiKoordinat = koordinat;
           inLokasi.value = koordinat;
           ovLokasi.textContent = koordinat;
           try {
