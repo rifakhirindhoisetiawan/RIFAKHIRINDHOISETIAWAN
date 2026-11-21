@@ -320,14 +320,15 @@
     listEl.querySelectorAll('[data-check]').forEach(cb => cb.addEventListener('change', async e => {
       const id = cb.dataset.check;
       const is_checked = cb.checked;
-      const { error } = await supabase.from(TABLE).update({ is_checked }).eq('id', id);
+      const item = all.find(x => x.id === id);
+      const newQty = is_checked ? 0 : (item ? item.qty : 1);
+      const { error } = await supabase.from(TABLE).update({ is_checked, qty: newQty, updated_at: new Date().toISOString() }).eq('id', id);
       if (error) {
         alert('Gagal update: ' + error.message);
         cb.checked = !is_checked;
         return;
       }
-      const item = all.find(x => x.id === id);
-      if (item) item.is_checked = is_checked;
+      if (item) { item.is_checked = is_checked; item.qty = newQty; }
       render();
     }));
 
