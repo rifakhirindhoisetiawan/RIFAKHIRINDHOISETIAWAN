@@ -116,78 +116,71 @@
       font-size:12px;
       padding:9px 10px
     }
+    .cam-card{background:#000;border-color:#000}
+    .cam-info{padding:12px 14px 8px;background:#000;color:#fff}
+    .cam-info-row{display:flex;align-items:center;justify-content:space-between}
     .cam-lokasi{
-      position:absolute;
-      bottom:10px;
-      left:10px;
-      max-width:60%;
       font-family:var(--mori-mono);
       font-size:12px;
       line-height:1.6;
       color:#fff;
       overflow:hidden;
       text-overflow:ellipsis;
-      white-space:nowrap
+      white-space:nowrap;
+      margin-top:2px
     }
     .cam-time{
-      left:10px!important;
-      right:auto!important;
-      bottom:30px!important;
+      position:static!important;
       background:transparent!important;
       padding:0!important;
+      font-family:var(--mori-mono);
       font-size:12px!important;
       line-height:1.6!important;
       color:#fff!important
     }
+    .cam-controls{display:flex;align-items:center;justify-content:center;padding:14px 0 18px;background:#000}
     .gallery-row{
       display:flex;
       justify-content:flex-start;
-      margin-top:12px
+      padding:0 14px 14px;
+      background:#000
     }
     .gallery-row[hidden]{display:none}
     .gallery-thumb{
       width:48px;
       height:48px;
       border-radius:10px;
-      border:1.5px solid rgba(26,25,23,0.3);
+      border:1.5px solid rgba(255,255,255,0.4);
       background-size:cover;
       background-position:center;
-      background-color:var(--mori-surface);
+      background-color:#222;
       cursor:pointer;
       padding:0
     }
     .switch-btn{
-      position:absolute;
-      top:10px;
-      right:10px;
       width:38px;
       height:38px;
       display:flex;
       align-items:center;
       justify-content:center;
-      background:rgba(0,0,0,0.66);
+      background:rgba(255,255,255,0.14);
       border:none;
       border-radius:50%;
       color:#fff;
       cursor:pointer;
-      pointer-events:auto;
       padding:0
     }
     .switch-btn:disabled{opacity:.45;cursor:not-allowed}
     .shutter{
-      position:absolute;
-      bottom:22px;
-      left:50%;
-      transform:translateX(-50%);
       width:72px;
       height:72px;
       border-radius:50%;
       background:transparent;
       border:4px solid #fff;
-      box-shadow:0 0 0 2px rgba(0,0,0,.35);
-      pointer-events:auto;
+      box-shadow:0 0 0 2px rgba(255,255,255,.25);
       cursor:pointer;
       padding:0;
+      position:relative;
       transition:transform .1s ease
     }
     .shutter::after{
@@ -197,7 +190,7 @@
       border-radius:50%;
       background:#fff
     }
-    .shutter:active{transform:translateX(-50%) scale(.92)}
+    .shutter:active{transform:scale(.92)}
     .shutter:disabled{opacity:.5;cursor:not-allowed}
     .cam-stage{border-radius:10px}
     /* Rasio layar HP 9:16, video mengisi penuh */
@@ -218,17 +211,21 @@
 </head>
 <body>
   <div class="app">
-    <div class="menu-frame card">
-      <div class="cam-stage">
-        <video id="video" class="cam-video" playsinline muted autoplay></video>
-        <div class="cam-overlay">
+    <div class="menu-frame card cam-card">
+      <div class="cam-info">
+        <div class="cam-info-row">
+          <div class="cam-time" id="ovTime">--:--:--</div>
           <button id="btnSwitch" class="switch-btn" type="button" title="Ganti Kamera" aria-label="Ganti Kamera" disabled>
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.9-4"/><path d="M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14.9 4"/><path d="M20 19v-4h-4"/></svg>
           </button>
-          <div class="cam-lokasi" id="ovLokasi">Mencari lokasi...</div>
-          <div class="cam-time" id="ovTime">--:--:--</div>
-          <button id="btnSnap" class="shutter" type="button" aria-label="Jepret" disabled></button>
         </div>
+        <div class="cam-lokasi" id="ovLokasi">Mencari lokasi...</div>
+      </div>
+      <div class="cam-stage">
+        <video id="video" class="cam-video" playsinline muted autoplay></video>
+      </div>
+      <div class="cam-controls">
+        <button id="btnSnap" class="shutter" type="button" aria-label="Jepret" disabled></button>
       </div>
       <div class="gallery-row">
         <button id="btnGallery" class="gallery-thumb" type="button" aria-label="Lihat riwayat" title="Lihat riwayat" hidden></button>
