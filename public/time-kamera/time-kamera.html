@@ -609,11 +609,9 @@
     function bukaPreview(shot) {
       pendingShot = shot;
       previewImg.src = shot.img;
-      const lokasi = shot.lokasi || "-";
       previewInfo.innerHTML =
         '<div class="pi-waktu">' + fmtWaktuLengkap(shot.at) + '</div>' +
         '<div class="pi-sub">' + (lokasiKoordinat || "-") + '</div>' +
-        '<div class="pi-sub">' + lokasi.toUpperCase() + '</div>' +
         '<div class="pi-sub">Nomor Pesanan: ' + shot.id + '</div>';
       preview.hidden = false;
     }
