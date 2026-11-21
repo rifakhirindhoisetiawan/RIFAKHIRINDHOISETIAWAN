@@ -205,18 +205,29 @@
     /* Rasio layar HP 9:16, video mengisi penuh */
     .cam-video{width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;max-height:none}
 
-    /* Bar pilihan ambil ulang / simpan setelah jepret */
+    /* Bar pilihan ambil ulang / simpan setelah jepret, dengan preview foto */
     .action-bar{
       display:flex;
       justify-content:flex-end;
-      gap:10px;
+      gap:12px;
       padding:10px 14px 12px;
       background:var(--mori-bg);
       border-top:1px solid rgba(26,25,23,.1);
-      box-shadow:0 1px 6px rgba(26,25,23,.05)
+      box-shadow:0 1px 6px rgba(26,25,23,.05);
+      align-items:center
     }
     .action-bar[hidden]{display:none}
     .action-bar .btn{padding:10px 16px}
+    .action-thumb{
+      flex:none;
+      width:76px;
+      height:135px;
+      object-fit:cover;
+      border:1.5px solid rgba(26,25,23,.3);
+      border-radius:8px;
+      background:var(--mori-surface);
+      margin-right:auto
+    }
   </style>
 </head>
 <body>
@@ -254,6 +265,7 @@
         </div>
       </div>
       <div class="action-bar" id="actionBar" hidden>
+        <img id="actionThumb" class="action-thumb" alt="Foto terjepret" />
         <button id="btnRetake" class="btn" type="button">Ambil ulang</button>
         <button id="btnSimpan" class="btn primary" type="button">Simpan</button>
       </div>
@@ -282,6 +294,7 @@
     const btnTorch = document.getElementById("btnTorch");
     const btnGrid = document.getElementById("btnGrid");
     const actionBar = document.getElementById("actionBar");
+    const actionThumb = document.getElementById("actionThumb");
     const btnRetake = document.getElementById("btnRetake");
     const btnSimpan = document.getElementById("btnSimpan");
     const inLokasi = document.getElementById("inLokasi");
@@ -594,11 +607,13 @@
 
     function showAction(shot) {
       pendingShot = shot;
+      actionThumb.src = shot.img;
       actionBar.hidden = false;
     }
 
     function hideAction() {
       actionBar.hidden = true;
+      actionThumb.src = "";
       pendingShot = null;
     }
 
