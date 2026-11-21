@@ -584,9 +584,10 @@
       galeriCard.hidden = !galeriCard.hidden;
     });
 
-    // jam overlay
+    // jam overlay (tanggal + bulan + waktu)
+    ovTime.textContent = fmtWaktuLengkap(new Date().toISOString());
     setInterval(() => {
-      if (stream) ovTime.textContent = fmtClock(new Date().toISOString());
+      ovTime.textContent = fmtWaktuLengkap(new Date().toISOString());
     }, 1000);
 
     window.addEventListener("beforeunload", stop);
