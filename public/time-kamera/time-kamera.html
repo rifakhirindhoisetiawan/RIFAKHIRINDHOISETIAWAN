@@ -213,8 +213,6 @@
     .preview-actions{display:flex;gap:10px;padding:12px 16px calc(16px + env(safe-area-inset-bottom));background:#000;flex-shrink:0}
     .preview-actions .btn{flex:1;min-width:0;background:transparent;color:#fff;border-color:transparent;font-weight:600}
     .preview-actions .btn.primary{flex:0 0 auto;background:#ff5436;color:#fff;border-color:#ff5436;padding:12px 28px}
-    .preview-close{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;color:#fff;font-size:30px;line-height:1;cursor:pointer;padding:0}
-    .preview-top{display:flex;justify-content:flex-start;padding:10px 14px;flex-shrink:0}
     .preview-info{width:100%;max-width:560px;padding:14px 18px 6px;font-family:var(--mori-mono);font-size:12px;line-height:1.5;color:#fff;word-break:break-word;flex-shrink:0}
     .preview-info .pi-waktu{font-weight:700;letter-spacing:.3px}
     .preview-info .pi-sub{color:rgba(255,255,255,.7);margin-top:3px}
@@ -257,9 +255,6 @@
     </div>
 
     <div id="preview" class="preview" hidden>
-      <div class="preview-top">
-        <button id="btnClosePreview" class="preview-close" type="button" aria-label="Tutup">×</button>
-      </div>
       <div class="preview-info" id="previewInfo"></div>
       <div class="preview-body">
         <img id="previewImg" class="preview-img" src="" alt="Hasil jepretan" />
@@ -295,7 +290,6 @@
     const preview = document.getElementById("preview");
     const previewImg = document.getElementById("previewImg");
     const previewInfo = document.getElementById("previewInfo");
-    const btnClosePreview = document.getElementById("btnClosePreview");
     const btnRetake = document.getElementById("btnRetake");
     const btnSimpan = document.getElementById("btnSimpan");
     const inLokasi = document.getElementById("inLokasi");
@@ -663,7 +657,6 @@
       });
     });
 
-    btnClosePreview.addEventListener("click", tutupPreview);
     btnRetake.addEventListener("click", tutupPreview);
     btnSimpan.addEventListener("click", () => {
       if (!pendingShot) return;
