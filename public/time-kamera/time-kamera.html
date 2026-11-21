@@ -271,7 +271,7 @@
     </div>
     <div class="preview-actions">
       <button id="btnRetake" class="btn" type="button">Ambil ulang</button>
-      <button id="btnLanjut" class="btn primary" type="button">Lanjut</button>
+      <button id="btnSimpan" class="btn primary" type="button">Simpan</button>
     </div>
   </div>
 
@@ -296,7 +296,7 @@
     const previewImg = document.getElementById("previewImg");
     const previewInfo = document.getElementById("previewInfo");
     const btnRetake = document.getElementById("btnRetake");
-    const btnLanjut = document.getElementById("btnLanjut");
+    const btnSimpan = document.getElementById("btnSimpan");
     const btnClosePreview = document.getElementById("btnClosePreview");
     const inLokasi = document.getElementById("inLokasi");
     const inBaris = document.getElementById("inBaris");
@@ -670,7 +670,7 @@
 
     btnRetake.addEventListener("click", tutupPreview);
     btnClosePreview.addEventListener("click", tutupPreview);
-    btnLanjut.addEventListener("click", () => {
+    btnSimpan.addEventListener("click", () => {
       if (!pendingShot) return;
       shots.unshift(pendingShot);
       persist();
