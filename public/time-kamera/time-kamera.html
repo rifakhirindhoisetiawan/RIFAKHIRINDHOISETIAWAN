@@ -120,15 +120,42 @@
     .cam-card{padding:0;background:#000;border-color:#000;border-radius:14px}
     .cam-stage{position:relative;border-radius:12px 12px 0 0;overflow:hidden;background:#000;touch-action:none}
 
-    /* Info rapi: jam paling terang, koordinat & alamat lebih halus */
-    .cam-info{padding:14px 16px 4px;background:#000;color:#fff;display:flex;flex-direction:column;align-items:center}
-    .cam-info>div{width:100%;max-width:280px;text-align:left}
+    /* Info overlay di atas gambar: jam, koordinat, alamat */
+    .cam-stage::after{
+      content:'';
+      position:absolute;
+      left:0;right:0;bottom:0;
+      height:34%;
+      background:linear-gradient(to top,rgba(0,0,0,.62),rgba(0,0,0,0));
+      pointer-events:none;
+      z-index:1
+    }
+    .cam-info{
+      position:absolute;
+      left:12px;
+      right:12px;
+      bottom:36px;
+      z-index:3;
+      padding:0;
+      background:transparent;
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      pointer-events:none
+    }
+    .cam-info>div{
+      width:100%;
+      max-width:100%;
+      text-align:left;
+      text-shadow:0 1px 3px rgba(0,0,0,.95),0 0 6px rgba(0,0,0,.7)
+    }
     .cam-time{
       position:static!important;
       background:transparent!important;
       padding:0!important;
       font-family:var(--mori-mono);
-      font-size:12px!important;
+      font-size:13px!important;
       font-weight:700!important;
       letter-spacing:.3px;
       line-height:1.5!important;
@@ -138,7 +165,7 @@
       font-family:var(--mori-mono);
       font-size:11px;
       line-height:1.5;
-      color:rgba(255,255,255,.6);
+      color:rgba(255,255,255,.8);
       word-break:break-all;
       margin-top:3px
     }
@@ -146,8 +173,12 @@
       font-family:var(--mori-mono);
       font-size:11px;
       line-height:1.5;
-      color:rgba(255,255,255,.85);
-      margin-top:3px
+      color:rgba(255,255,255,.92);
+      margin-top:3px;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden
     }
 
     /* Bar kontrol ala kamera HP: galeri kiri, shutter tengah, ganti kamera kanan */
@@ -330,6 +361,11 @@
           </button>
         </div>
         <div class="focus-ring" id="focusRing"></div>
+        <div class="cam-info">
+          <div class="cam-time" id="ovTime">--:--:--</div>
+          <div class="cam-koordinat" id="ovKoordinat">-</div>
+          <div class="cam-lokasi" id="ovLokasi">Mencari lokasi...</div>
+        </div>
         <div class="zoom-pill" id="zoomPill" hidden>1×</div>
         <div class="cam-flash" id="camFlash"></div>
       </div>
@@ -343,11 +379,6 @@
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.9-4"/><path d="M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14.9 4"/><path d="M20 19v-4h-4"/></svg>
           </button>
         </div>
-      </div>
-      <div class="cam-info">
-        <div class="cam-time" id="ovTime">--:--:--</div>
-        <div class="cam-koordinat" id="ovKoordinat">-</div>
-        <div class="cam-lokasi" id="ovLokasi">Mencari lokasi...</div>
       </div>
     </div>
 
@@ -498,8 +529,58 @@
       return true;
     }
 
+    // Pecah teks jadi beberapa baris sesuai lebar canvas
+    function wrapCanvasText(ctx, text, maxWidth) {
+      const words = String(text || "").split(/\s+/).filter(Boolean);
+      const lines = [];
+      let line = "";
+      for (const w of words) {
+        const test = line ? line + " " + w : w;
+        if (ctx.measureText(test).width > maxWidth && line) {
+          lines.push(line);
+          line = w;
+        } else {
+          line = test;
+        }
+      }
+      if (line) lines.push(line);
+      return lines;
+    }
+
+    // Tulis jam/koordinat/alamat langsung ke foto (ala time camera)
+    function drawStamp(ctx, cw, ch, info) {
+      const padX = Math.max(10, Math.round(cw * 0.03));
+      const padBottom = Math.max(24, Math.round(ch * 0.05));
+      const fs = Math.max(12, Math.round(cw * 0.032));
+      const sub = Math.max(10, Math.round(fs * 0.85));
+      ctx.save();
+      ctx.textBaseline = "bottom";
+      ctx.lineJoin = "round";
+      ctx.font = "400 " + sub + "px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace";
+      const rows = [];
+      if (info.waktu) rows.push({ t: info.waktu, f: fs, bold: true });
+      if (info.koordinat) rows.push({ t: info.koordinat, f: sub, bold: false });
+      if (info.lokasi) {
+        wrapCanvasText(ctx, info.lokasi, cw - padX * 2).slice(0, 3).forEach((line) => {
+          rows.push({ t: line, f: sub, bold: false });
+        });
+      }
+      let y = ch - padBottom;
+      for (let i = rows.length - 1; i >= 0; i--) {
+        const r = rows[i];
+        ctx.font = (r.bold ? "700 " : "400 ") + r.f + "px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace";
+        ctx.strokeStyle = "rgba(0,0,0,.85)";
+        ctx.lineWidth = Math.max(2, Math.round(r.f * 0.3));
+        ctx.strokeText(r.t, padX, y);
+        ctx.fillStyle = r.bold ? "#fff" : "rgba(255,255,255,.94)";
+        ctx.fillText(r.t, padX, y);
+        y -= Math.round(r.f * 1.5);
+      }
+      ctx.restore();
+    }
+
     // Ambil frame persis seperti tampilan (crop tengah 9:16) lalu resize max 720px
-    function shrink(source, maxSide) {
+    function shrink(source, maxSide, info) {
       const vw = source.videoWidth || source.width;
       const vh = source.videoHeight || source.height;
       if (!vw || !vh) return null;
@@ -527,6 +608,8 @@
         ctx.scale(-1, 1);
       }
       ctx.drawImage(source, sx, sy, sw, sh, 0, 0, cw, ch);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      drawStamp(ctx, cw, ch, info || {});
       return c.toDataURL("image/jpeg", 0.7);
     }
 
@@ -793,7 +876,13 @@
       camFlash.classList.add("on");
       if (navigator.vibrate) navigator.vibrate(12);
 
-      const img = shrink(video, 720);
+      const waktuFoto = fmtWaktuLengkap(new Date().toISOString());
+      const alamat = inLokasi.value.trim();
+      const img = shrink(video, 720, {
+        waktu: waktuFoto,
+        koordinat: lokasiKoordinat,
+        lokasi: alamat && alamat !== lokasiKoordinat ? alamat : "",
+      });
       if (!img) {
         toast("Gagal ambil frame");
         return;
