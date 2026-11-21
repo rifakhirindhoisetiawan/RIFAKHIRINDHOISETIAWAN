@@ -261,7 +261,7 @@
       </div>
       <div class="preview-actions">
         <button id="btnRetake" class="btn" type="button">Ambil ulang</button>
-        <button id="btnSimpan" class="btn primary" type="button">Simpan</button>
+        <button id="btnSimpan" class="btn primary" type="button">Unduh</button>
       </div>
     </div>
 
@@ -658,11 +658,21 @@
     });
 
     btnRetake.addEventListener("click", tutupPreview);
+    // Unduh foto langsung ke device (cuma download, bukan simpan ke galeri)
+    function downloadShot(shot) {
+      const name =
+        "timekamera_" +
+        new Date(shot.at).toISOString().replace(/[:.]/g, "-") +
+        ".jpg";
+      const a = document.createElement("a");
+      a.href = shot.img;
+      a.download = name;
+      a.click();
+    }
+
     btnSimpan.addEventListener("click", () => {
       if (!pendingShot) return;
-      shots.unshift(pendingShot);
-      persist();
-      render();
+      downloadShot(pendingShot);
       tutupPreview();
     });
 
