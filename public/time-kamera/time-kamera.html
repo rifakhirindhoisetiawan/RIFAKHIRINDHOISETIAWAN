@@ -507,7 +507,7 @@
         zoomBtns.forEach((b) => {
           const z = parseFloat(b.dataset.zoom);
           let show = false;
-          if (z === 0.5) show = caps.zoom.min <= 0.5 && facing === "environment";
+          if (z === 0.5) show = facing === "environment";
           else if (z === 1) show = true;
           else if (z === 2) show = caps.zoom.max >= 2;
           b.hidden = !show;
@@ -601,9 +601,10 @@
 
     // Zoom cepat
     zoomBtns.forEach((b) => {
-      b.addEventListener("click", () => {
+      b.addEventListener("click", async () => {
         if (!zoomCaps) return;
-        applyZoom(parseFloat(b.dataset.zoom));
+        const z = parseFloat(b.dataset.zoom);
+        await applyZoom(z);
       });
     });
 
