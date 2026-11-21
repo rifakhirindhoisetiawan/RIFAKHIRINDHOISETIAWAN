@@ -609,9 +609,7 @@
     function bukaPreview(shot) {
       pendingShot = shot;
       previewImg.src = shot.img;
-      previewInfo.innerHTML =
-        '<div class="pi-sub">' + (lokasiKoordinat || "-") + '</div>' +
-        '<div class="pi-sub">Nomor Pesanan: ' + shot.id + '</div>';
+      previewInfo.innerHTML = "";
       preview.hidden = false;
     }
 
