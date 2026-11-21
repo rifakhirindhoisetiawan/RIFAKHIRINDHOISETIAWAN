@@ -118,6 +118,14 @@
     }
     .cam-card{background:#000;border-color:#000}
     .cam-info{padding:0 14px 14px;background:#000;color:#fff}
+    .cam-koordinat{
+      font-family:var(--mori-mono);
+      font-size:12px;
+      line-height:1.6;
+      color:#fff;
+      word-break:break-all;
+      margin-top:2px
+    }
     .cam-lokasi{
       font-family:var(--mori-mono);
       font-size:12px;
@@ -225,6 +233,7 @@
       </div>
       <div class="cam-info">
         <div class="cam-time" id="ovTime">--:--:--</div>
+        <div class="cam-koordinat" id="ovKoordinat">-</div>
         <div class="cam-lokasi" id="ovLokasi">Mencari lokasi...</div>
       </div>
       <div class="gallery-row">
@@ -261,6 +270,7 @@
     const KEY = "mylove_timekamera_v1";
     const video = document.getElementById("video");
     const ovTime = document.getElementById("ovTime");
+    const ovKoordinat = document.getElementById("ovKoordinat");
     const ovLokasi = document.getElementById("ovLokasi");
     const btnSwitch = document.getElementById("btnSwitch");
     const btnSnap = document.getElementById("btnSnap");
@@ -548,7 +558,7 @@
           const koordinat = latitude.toFixed(5) + ", " + longitude.toFixed(5);
           lokasiKoordinat = koordinat;
           inLokasi.value = koordinat;
-          ovLokasi.textContent = koordinat;
+          ovKoordinat.textContent = koordinat;
           try {
             // Nominatim (OpenStreetMap) — reverse geocoding gratis tanpa API key
             const res = await fetch(
@@ -566,9 +576,8 @@
             ].filter(Boolean);
             const nama = (bagian.length ? bagian.join(", ") : data.display_name || "").trim();
             if (nama) {
-              const teks = nama + " (" + koordinat + ")";
-              inLokasi.value = teks;
-              ovLokasi.textContent = teks;
+              inLokasi.value = nama;
+              ovLokasi.textContent = nama;
             }
           } catch (e) {
             // biarkan koordinat kalau gagal ambil nama tempat
