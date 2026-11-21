@@ -249,6 +249,13 @@
     /* Rasio layar HP 9:16, video mengisi penuh */
     .cam-video{width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;max-height:none}
 
+    /* Desktop: kamera tidak melebihi layar, supaya tombol shutter terlihat */
+    @media (min-width: 768px) {
+      .cam-card { max-width: 420px; margin: 0 auto; }
+      .cam-stage { max-height: 60vh; }
+      .cam-video { max-height: 60vh; }
+    }
+
     /* Full-screen review foto setelah jepret (seperti kamera HP) */
     .preview{position:fixed;inset:0;z-index:100;background:var(--mori-bg);display:flex;flex-direction:column}
     .preview[hidden]{display:none}
@@ -295,7 +302,7 @@
         <div class="cam-controls-side">
           <button id="btnGallery" class="gallery-thumb" type="button" aria-label="Lihat riwayat" title="Lihat riwayat" hidden></button>
         </div>
-        <button id="btnSnap" class="shutter" type="button" aria-label="Jepret" disabled></button>
+        <button id="btnSnap" class="shutter" type="button" aria-label="Jepret"></button>
         <div class="cam-controls-side">
           <button id="btnSwitch" class="cam-icon-btn" type="button" title="Ganti Kamera" aria-label="Ganti Kamera" disabled>
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.9-4"/><path d="M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14.9 4"/><path d="M20 19v-4h-4"/></svg>
@@ -318,6 +325,7 @@
     <input id="inLokasi" type="hidden" />
     <input id="inBaris" type="hidden" />
     <input id="inCatatan" type="hidden" />
+    <input id="fileInput" type="file" accept="image/*" capture="environment" hidden />
   </div>
 
   <script type="module">
@@ -347,6 +355,7 @@
     const inLokasi = document.getElementById("inLokasi");
     const inBaris = document.getElementById("inBaris");
     const inCatatan = document.getElementById("inCatatan");
+    const fileInput = document.getElementById("fileInput");
 
     let shots = load();
     let stream = null;
@@ -599,6 +608,7 @@
         setupTrackFeatures();
       } catch (e) {
         console.warn("getUserMedia", e);
+        btnSnap.disabled = false; // allow file input fallback
       } finally {
         starting = false;
       }
@@ -832,7 +842,11 @@
     }
 
     btnSnap.addEventListener("click", async () => {
-      if (!stream || snapping) return;
+      if (snapping) return;
+      if (!stream) {
+        fileInput.click();
+        return;
+      }
       snapping = true;
 
       const waktuFoto = fmtWaktuLengkap(new Date().toISOString());
@@ -874,6 +888,33 @@
       if (!pendingShot) return;
       downloadShot(pendingShot);
       tutupPreview();
+    });
+
+    // Fallback tes di laptop: pilih foto dari file
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+          const waktuFoto = fmtWaktuLengkap(new Date().toISOString());
+          const meta = { waktu: waktuFoto, koordinat: lokasiKoordinat, lokasi: inLokasi.value.trim() };
+          const dataUrl = shrink(img, 720, meta);
+          if (!dataUrl) return;
+          bukaPreview({
+            id: Date.now(),
+            img: dataUrl,
+            lokasi: meta.lokasi,
+            baris: inBaris.value.trim(),
+            catatan: inCatatan.value.trim(),
+            at: new Date().toISOString(),
+          });
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+      fileInput.value = "";
     });
 
     // Isi lokasi otomatis sesuai nama tempat dari koordinat GPS (reverse geocoding)
