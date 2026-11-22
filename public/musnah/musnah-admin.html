@@ -119,10 +119,10 @@
     .ico-danger{background:#b91c1c !important;border-color:transparent !important;color:#fff !important}
 
     .search-wrapper{display:flex;align-items:center;gap:10px;width:100%;margin:12px 0 0}
-    .search-box {flex:1;display:flex;align-items:center;gap:8px;min-width:0;border:0 !important;border-radius:0 !important;background:transparent !important;color:var(--mori-text);padding:4px 6px;font-size:12px}
+    .search-box {flex:1;display:flex;align-items:center;gap:8px;height:46px;box-sizing:border-box;border:1.5px solid rgba(26,25,23,.3);border-radius:10px;background:var(--mori-surface);color:var(--mori-text);padding:0 14px;font-family:var(--mori-mono);font-size:12px;font-weight:700}
     .search-box:focus-within{background:transparent !important}
     .search-box svg{flex-shrink:0;color:var(--mori-text-2) !important;width:18px;height:18px}
-    .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:12px;color:var(--mori-text) !important;font-family:var(--mori-mono);min-width:0;-webkit-appearance:none;appearance:none;border-radius:0}
+    .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:14px;color:var(--mori-text) !important;font-family:inherit;-webkit-appearance:none;appearance:none;border-radius:0}
     .search-box input::placeholder{color:var(--mori-text-2) !important}
     .empty{font-family:var(--mori-mono);font-size:11px;font-weight:700;color:var(--mori-text-2);letter-spacing:1px;text-transform:uppercase}
     .foto-hint{margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger);border-left:3px solid var(--mori-danger);padding:6px 8px;background:#fdf1f1;border-radius:0 8px 8px 0}
@@ -206,7 +206,7 @@
           <tr>
             <th colspan="6" style="padding:6px 10px;background:var(--mori-bg);border-bottom:1px solid var(--mori-line)">
               <div class="search-box" style="margin:0;width:100%;min-width:0">
-                <input id="search" type="text" placeholder="Cari menu" autocomplete="off" style="font-size:12px;padding:0 6px;height:28px;font-family:var(--mori-mono)" />
+                <input id="search" type="text" placeholder="Cari menu" autocomplete="off" />
               </div>
             </th>
           </tr>
