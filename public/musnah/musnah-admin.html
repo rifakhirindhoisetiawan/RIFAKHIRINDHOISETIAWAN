@@ -119,11 +119,12 @@
     .ico-danger{background:#b91c1c !important;border-color:transparent !important;color:#fff !important}
 
     .search-wrapper{display:flex;align-items:center;gap:10px;width:100%;margin:12px 0 0}
-    .search-box {flex:1;display:flex;align-items:center;gap:8px;height:40px;box-sizing:border-box;border:1px solid var(--mori-line);border-radius:0;background:var(--mori-surface);color:var(--mori-text-2);padding:0 12px;font-family:var(--mori-mono);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
-    .search-box:focus-within{background:var(--mori-surface) !important}
-    .search-box svg{flex-shrink:0;color:var(--mori-text-2) !important;width:18px;height:18px}
-    .search-box input{border:none;background:transparent;outline:none;width:100%;font-size:9px;color:var(--mori-text-2) !important;font-family:inherit;font-weight:700;letter-spacing:1px;-webkit-appearance:none;appearance:none;border-radius:0}
-    .search-box input::placeholder{color:var(--mori-text-2) !important;font-family:var(--mori-mono);font-weight:700;font-size:9px;letter-spacing:1px}
+    /* Baris cari disamakan PERSIS dengan baris "Tulis Menu"/"Cari barang"
+       di Admin Stok Opname: input transparan tanpa kotak, tinggi 44px,
+       huruf 13px tebal, teks gelap, uppercase, menyatu dengan sel tabel. */
+    .search-box {flex:1;display:flex;align-items:center;min-width:0;height:44px;background:transparent;border:none;border-radius:0}
+    .search-box input{flex:1;min-width:0;height:44px;padding:0;font:inherit;font-size:13px;font-weight:700;color:var(--mori-text);background:transparent;border:none;border-radius:0;outline:none;text-transform:uppercase;-webkit-appearance:none;appearance:none}
+    .search-box input::placeholder{color:var(--mori-text);opacity:1}
     .empty{font-family:var(--mori-mono);font-size:11px;font-weight:700;color:var(--mori-text-2);letter-spacing:1px;text-transform:uppercase}
     .foto-hint{margin-top:8px;font-family:var(--mori-mono);font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mori-danger);border-left:3px solid var(--mori-danger);padding:6px 8px;background:#fdf1f1;border-radius:0 8px 8px 0}
     .foto-hint[hidden]{display:none}
@@ -204,7 +205,7 @@
             </th>
           </tr>
           <tr>
-            <th colspan="6" style="padding:0 10px;background:var(--mori-surface)">
+            <th colspan="6" style="padding:0 12px;background:var(--mori-surface);border-bottom:none">
               <div class="search-box" style="margin:0;width:100%;min-width:0">
                 <input id="search" type="text" placeholder="CARI" autocomplete="off" />
               </div>
