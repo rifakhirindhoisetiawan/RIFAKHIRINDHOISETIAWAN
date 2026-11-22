@@ -157,7 +157,7 @@ bukan ditebak dari screenshot.
 | Properti | Nilai final |
 |---|---|
 | Wrapper `.search-box` | flex, `height:44px`, transparan, tanpa border/radius |
-| Sel `<th colspan="6">` | `background:var(--mori-surface)`, `padding:0 12px`, `border-bottom:1px solid var(--mori-line)` (garis atas header NO/NAMA MENU — **jangan dihapus**) |
+| Sel `<th colspan="6">` | `background:var(--mori-surface)`, `padding:0 12px`, `border-bottom:1px solid var(--mori-line)` (garis atas header NO/MENU — **jangan dihapus**) |
 | Input font | **eksplisit** `"Inter","Segoe UI",system-ui,-apple-system,sans-serif`, **13px**, weight **700**, `text-transform:uppercase` |
 | Input warna | `color:var(--mori-text)`; placeholder `var(--mori-text-2)` (#6e6a64) + `!important` |
 | Input box | transparan, `border:none`, `border-radius:0`, `:focus` tanpa outline/box-shadow |
