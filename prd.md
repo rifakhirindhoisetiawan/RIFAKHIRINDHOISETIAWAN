@@ -147,8 +147,33 @@ radius 10px, thead krem tanpa garis bawah), `public/musnah/musnah.html`
   supaya tidak gagal insert. Kolom `hpp`, `qty`, `is_checked` harus ada
   di Supabase (`ALTER TABLE musnah_menus ADD COLUMN ...`).
 - **Notifikasi musnah** di index: jumlah item `is_checked = false`.
+
+### Baris Cari — final (samakan dengan "Cari barang" Admin Stok Opname)
+
+Sumber acuan: `#barangWrap tbody.cari-body input.cari` di
+`public/stok-opname/stock-admin.html` (baris ~1529). Disalin persis,
+bukan ditebak dari screenshot.
+
+| Properti | Nilai final |
+|---|---|
+| Wrapper `.search-box` | flex, `height:44px`, transparan, tanpa border/radius |
+| Sel `<th colspan="6">` | `background:var(--mori-surface)`, `padding:0 12px`, `border-bottom:1px solid var(--mori-line)` (garis atas header NO/NAMA MENU — **jangan dihapus**) |
+| Input font | **eksplisit** `"Inter","Segoe UI",system-ui,-apple-system,sans-serif`, **13px**, weight **700**, `text-transform:uppercase` |
+| Input warna | `color:var(--mori-text)`; placeholder `var(--mori-text-2)` (#6e6a64) + `!important` |
+| Input box | transparan, `border:none`, `border-radius:0`, `:focus` tanpa outline/box-shadow |
+| Placeholder | `CARI` |
+
+**Jebakan penting (sudah diperbaiki di `803ffa1`):** baris cari berada di
+dalam `<thead>`, dan `.menu-table thead th` punya `font-family:var(--mori-mono)`.
+Kalau input memakai `font: inherit`, dia mewarisi **JetBrains Mono** dari `<th>`
+itu — beda dengan Admin SO yang inputnya ada di dalam `<td>` (mewarisi Inter).
+Maka font input **harus ditulis eksplisit** sans-serif, jangan `inherit`.
+Jangan kembalikan ke mono / ke `font:inherit`.
+
 - **Commit terkait**: `e2caf8d`, `d91eca4`, `bfd7b0f`, `07e3737`,
-  `2b94ca7`, `a30039e`, `6d7d015`, `5813245`.
+  `2b94ca7`, `a30039e`, `6d7d015`, `5813245`, `ee5ff9a`, `82faf1d`,
+  `f25b4db`, `ea55127`, `4d5eb34`, `f1dc754`, `b104c93`, `52f7a8a`,
+  `8f87428`, `d2ab7ae`, `29c5e90`, `803ffa1`.
 
 ## 9. Time Kamera (`public/time-kamera/`)
 
