@@ -78,7 +78,8 @@ Semua file logo & ikon aplikasi **dikumpulkan di `assets/images/logo/`** supaya
 mudah di-maintenance (jangan ditaruh langsung di `assets/images/`):
 
 - `favicon.png`
-- `icon-192x192.png`, `icon-512x512.png`
+- `icon-192x192.png`, `icon-512x512.png`, `icon-1024x1024.png` (uploadan user,
+  1024×1024)
 - `apple-touch-icon-152x152.png`, `apple-touch-icon-180x180.png`,
   `apple-touch-icon-192x192.png`
 
