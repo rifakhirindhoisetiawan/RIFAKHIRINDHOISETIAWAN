@@ -91,7 +91,11 @@ dan konstanta manifest `ICON192`/`ICON512`), `memos.html`, dan notifikasi
 dengan **sudut melengkung transparan** (radius ~190px), bukan sudut tajam.
 jadi atribut `sizes` di `<link>` dan di manifest **harus `1024x1024`** — kalau
 masih `192x192`/`512x512`, Chrome menolak ikon saat install PWA dan pakai ikon
-default. `manifest.json` di root juga sudah diberi daftar `icons`. Logo landing Mori (`app-mori/landing/assets/logo.png`)
+default. `manifest.json` di root juga sudah diberi daftar `icons`.
+
+**Jangan pakai `purpose: "maskable"`** — Chrome akan terapkan mask sendiri dan
+sudut melengkungnya hilang lagi di dialog install. Semua icons pakai
+`purpose: "any"` dengan cache-buster `?v=3`. Logo landing Mori (`app-mori/landing/assets/logo.png`)
 tetap di folder landing tersebut.
 
 ## 3b. Splash Screen HP (index.html)

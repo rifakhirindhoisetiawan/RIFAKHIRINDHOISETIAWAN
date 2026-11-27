@@ -46,8 +46,8 @@
     <!-- Font sama dengan Mori (public/mori/index.html:23) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;600&family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
     <script>
-      const ICON192 = "assets/images/logo/icon-192x192.png";
-      const ICON512 = "assets/images/logo/icon-512x512.png";
+      const ICON192 = "assets/images/logo/icon-192x192.png?v=3";
+      const ICON512 = "assets/images/logo/icon-512x512.png?v=3";
       const manifest = {
         name: "My Love",
         short_name: "MyLove",
@@ -60,19 +60,7 @@
         theme_color: "#fffbf2",
         icons: [
           { src: ICON192, sizes: "1024x1024", type: "image/png", purpose: "any" },
-          {
-            src: ICON192,
-            sizes: "1024x1024",
-            type: "image/png",
-            purpose: "maskable",
-          },
           { src: ICON512, sizes: "1024x1024", type: "image/png", purpose: "any" },
-          {
-            src: ICON512,
-            sizes: "1024x1024",
-            type: "image/png",
-            purpose: "maskable",
-          },
         ],
       };
       const blob = new Blob([JSON.stringify(manifest)], {
