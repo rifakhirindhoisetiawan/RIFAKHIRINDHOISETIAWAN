@@ -20,8 +20,10 @@ keputusan tidak hilang. Detail teknis ada di `README-grid.md`.
 - Angka stepper pakai font **Inter** (bukan `--mori-mono`), weight 700,
   `letter-spacing: 1px` — sama seperti label nama menu di `index.html`.
 - Panel unduhan mengikuti pola pop-up index: `position:absolute`, **rata kanan**
-  ke tombol Unduh (bukan segaris tepat di bawahnya), jarak 8px, panah tetap
-  menunjuk ke tengah tombol.
+  ke tombol Unduh (bukan segaris tepat di bawahnya), jarak 8px.
+- **Panah panel sengaja dinonaktifkan** (`::before`/`::after` display:none)
+  karena panel rata kanan sementara tombol Unduh ada di kiri — panah akan
+  menunjuk ke tombol hapus. Jangan diaktifkan lagi.
 
 ## Fitur
 

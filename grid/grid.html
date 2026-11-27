@@ -396,8 +396,10 @@
         background:color-mix(in srgb, var(--mori-text) 4%, var(--mori-surface));
         z-index:2;pointer-events:none;opacity:0;transition:opacity .2s ease;
       }
-      .download-bubble-container.visible::after{opacity:1}
-      /* Kalau panel terpaksa muncul di ATAS tombol, panah pindah ke bawah. */
+      /* Panel di-rata kanan ke tombol, jadi panah tidak bisa menunjuk ke
+         tombol Unduh (ada di kiri) — panah sengaja DINONAKTIFKAN. */
+      .download-bubble-container::before,
+      .download-bubble-container::after{display:none !important}
       .download-bubble-container.above::before{
         top:auto;bottom:0;transform:translateY(50%) rotate(225deg);
       }
@@ -1764,7 +1766,6 @@
       function posisikanPanel() {
         const r = el.downloadBtn.getBoundingClientRect();
         const w = el.dropup.offsetWidth || 196;
-        const cx = r.left + r.width / 2;
         /* Pola pop-up index.html: panel di-RATA KANAN ke tombol, bukan
            segaris tepat di bawahnya. Jadi panel menjulur ke kiri dari
            tombol Unduh. */
@@ -1774,11 +1775,8 @@
         el.bubble.style.left = "auto";
         el.bubble.style.right = right + "px";
         el.bubble.style.top = Math.round(r.bottom + window.scrollY + 8) + "px";
-        /* Panah tetap menunjuk ke tengah tombol Unduh. */
-        let arrowX = cx - left;
-        arrowX = Math.max(20, Math.min(w - 20, arrowX));
-        el.bubble.style.setProperty("--arrow-x", arrowX + "px");
-        el.dropup.style.transformOrigin = arrowX + "px 0";
+        /* Panah sengaja dinonaktifkan (panel rata kanan, tombol di kiri). */
+        el.dropup.style.transformOrigin = "50% 0";
         el.bubble.classList.remove("above");
       }
 
