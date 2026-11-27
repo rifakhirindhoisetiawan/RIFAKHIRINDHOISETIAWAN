@@ -72,6 +72,21 @@ isi berupa tabel bertema admin SO.
 
 Font global body: Inter. Font JetBrains Mono sudah dimuat via Google Fonts.
 
+### Folder Logo / Ikon Aplikasi
+
+Semua file logo & ikon aplikasi **dikumpulkan di `assets/images/logo/`** supaya
+mudah di-maintenance (jangan ditaruh langsung di `assets/images/`):
+
+- `favicon.png`
+- `icon-192x192.png`, `icon-512x512.png`
+- `apple-touch-icon-152x152.png`, `apple-touch-icon-180x180.png`,
+  `apple-touch-icon-192x192.png`
+
+Semua referensi sudah di-update: `index.html` (link favicon, apple-touch-icon,
+dan konstanta manifest `ICON192`/`ICON512`), `memos.html`, dan notifikasi
+`public/exp/exp.html`. Logo landing Mori (`app-mori/landing/assets/logo.png`)
+tetap di folder landing tersebut.
+
 ## 4. Menu Utama (grid tile dalam frame tabel)
 
 - **Seluruh menu dibungkus frame tabel** ala Admin Stok Opname

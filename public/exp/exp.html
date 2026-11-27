@@ -336,7 +336,7 @@ function kirimNotif(manual){
   try{
     if(navigator.serviceWorker&&navigator.serviceWorker.ready){
       navigator.serviceWorker.ready.then(reg=>{
-        if(reg.showNotification) reg.showNotification(judul,{body:isi,tag:'exp-dekat',badge:'assets/images/favicon.png',icon:'assets/images/favicon.png'});
+        if(reg.showNotification) reg.showNotification(judul,{body:isi,tag:'exp-dekat',badge:'assets/images/logo/favicon.png',icon:'assets/images/logo/favicon.png'});
         else new Notification(judul,{body:isi,tag:'exp-dekat'});
       }).catch(()=>{ try{ new Notification(judul,{body:isi,tag:'exp-dekat'}); }catch(e){} });
     } else {
