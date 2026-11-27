@@ -1774,7 +1774,8 @@
         const left = window.innerWidth - right - w;
         el.bubble.style.left = "auto";
         el.bubble.style.right = right + "px";
-        el.bubble.style.top = Math.round(r.bottom + window.scrollY + 8) + "px";
+        /* Jarak 18px supaya panel tidak segaris dengan garis bawah toolbar. */
+        el.bubble.style.top = Math.round(r.bottom + window.scrollY + 18) + "px";
         /* Panah sengaja dinonaktifkan (panel rata kanan, tombol di kiri). */
         el.dropup.style.transformOrigin = "50% 0";
         el.bubble.classList.remove("above");
