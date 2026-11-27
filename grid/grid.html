@@ -1766,15 +1766,12 @@
       function posisikanPanel() {
         const r = el.downloadBtn.getBoundingClientRect();
         const w = el.dropup.offsetWidth || 196;
-        /* Pola pop-up index.html: panel di-RATA KANAN ke tombol, bukan
-           segaris tepat di bawahnya. Jadi panel menjulur ke kiri dari
-           tombol Unduh. */
-        let right = Math.max(12, Math.round(window.innerWidth - r.right));
-        if (right + w > window.innerWidth - 12) right = 12;
-        const left = window.innerWidth - right - w;
-        el.bubble.style.left = "auto";
-        el.bubble.style.right = right + "px";
-        /* Jarak 18px supaya panel tidak segaris dengan garis bawah toolbar. */
+        /* Posisi terbaik: panel di-CENTER horizontal, 18px di bawah toolbar.
+           Tidak rata kiri/kanan ke tombol, tidak segaris dengan garis
+           toolbar, dan tidak perlu panah. */
+        const left = Math.round((window.innerWidth - w) / 2);
+        el.bubble.style.left = left + "px";
+        el.bubble.style.right = "auto";
         el.bubble.style.top = Math.round(r.bottom + window.scrollY + 18) + "px";
         /* Panah sengaja dinonaktifkan (panel rata kanan, tombol di kiri). */
         el.dropup.style.transformOrigin = "50% 0";
