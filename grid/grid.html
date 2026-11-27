@@ -201,7 +201,7 @@
       .layout-cycle:active,
       .dl-btn:active,
       .layout-shuffle-btn:active {
-        transform: translate(2px, 2px);
+        /* tanpa goyang saat diklik */
       }
       .step-btn:disabled,
       .dl-btn:disabled {
@@ -549,8 +549,7 @@
       .dl-btn-tg:active:not(:disabled),
       .dl-btn-fit:active:not(:disabled) {
         /* bayangan abu-abu (--mori-text-2) dihapus; tetap pakai border
-           dan warna latar, tanpa box-shadow tebal */
-        transform: translate(2px, 2px);
+           dan warna latar, tanpa box-shadow tebal. Tanpa goyang saat klik. */
         opacity: 1;
         background: #33312f;
       }
