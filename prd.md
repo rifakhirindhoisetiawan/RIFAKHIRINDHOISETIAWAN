@@ -98,21 +98,6 @@ sudut melengkungnya hilang lagi di dialog install. Semua icons pakai
 `purpose: "any"` dengan cache-buster `?v=3`. Logo landing Mori (`app-mori/landing/assets/logo.png`)
 tetap di folder landing tersebut.
 
-## 3b. Splash Screen HP (index.html)
-
-- Overlay **full-screen** `#splashScreen` (`position:fixed; inset:0; z-index:10000`)
-  berisi foto `assets/images/logo/icon-192x192.png` dengan `object-fit:cover`.
-- **HANYA muncul saat aplikasi dibuka sebagai APK/PWA terpasang** — deteksi
-  `(display-mode: standalone)` **ATAU** `(display-mode: fullscreen)` **ATAU**
-  `(display-mode: minimal-ui)` **ATAU** `navigator.standalone`. Manifest pakai
-  `display: fullscreen`, jadi kalau cuma cek `standalone` splash nggak pernah
-  muncul di PWA yang sudah di-install lewat browser. Kalau dibuka biasa di
-  browser, splash langsung dihapus.
-- Gambar splash pakai `icon-1024x1024.png?v=2` (cache-buster supaya PWA lama
-  nggak pakai gambar lama yang tersimpan).
-- Hilang otomatis setelah `window.load` + 900ms (fallback 2500ms kalau load gagal),
-  fade `opacity 0.35s` lalu elemen dihapus dari DOM. Jangan dikasih tombol close.
-
 ## 4. Menu Utama (grid tile dalam frame tabel)
 
 - **Seluruh menu dibungkus frame tabel** ala Admin Stok Opname
