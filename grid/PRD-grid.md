@@ -1,4 +1,4 @@
-# PRD — Photo Grid (`public/grid/grid.html`)
+# PRD — Photo Grid (`grid/grid.html`)
 
 Spesifikasi final UI & fitur menu **GRID**. Simpan sebagai acuan supaya
 keputusan tidak hilang. Detail teknis ada di `README-grid.md`.
@@ -41,8 +41,8 @@ keputusan tidak hilang. Detail teknis ada di `README-grid.md`.
   Preview memakai `areas` + `cols`/`rows` sebagai CSS Grid; export memakai
   `areaToRect()` dari definisi yang sama. Kalau tata letak diubah, cukup ubah
   `LAYOUTS` — jangan menyalin koordinat ke tempat lain.
-- Edit langsung `public/grid/grid.html`; entri di `index.html`
-  (`href: "public/grid/grid.html"`) sudah pas, jangan diubah.
+- Edit langsung `grid/grid.html`; entri di `index.html`
+  (`href: "grid/grid.html"`) sudah pas, jangan diubah.
 
 ## Alur kerja
 

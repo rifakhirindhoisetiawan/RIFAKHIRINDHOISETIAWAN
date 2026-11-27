@@ -4,15 +4,14 @@ Dokumentasi khusus menu **GRID**. File related lain ada di sini:
 
 | File | Isi |
 |---|---|
+| `grid.html` | Halaman Photo Grid (file utama). |
+| `image-index.jpg` | Thumbnail menu di `index.html`. |
 | `PRD-grid.md` | Spesifikasi final UI & fitur (acuan keputusan). |
 | `README-grid.md` | Detail teknis struktur kode & cara potong foto (file ini). |
 
-Module HTML-nya tetap di `public/grid/grid.html`, gambar thumbnail di
-`public/grid/image-index.jpg`.
-
 Folder ini berisi fitur **Photo Grid** — modul mandiri (satu file HTML, tanpa build step).
 
-- **File utama:** `grid/grid.html` — dibuka dari menu GRID di `index.html` (`public/grid/grid.html`)
+- **File utama:** `grid/grid.html` — dibuka dari menu GRID di `index.html`
 - **UI:** bingkai grid responsif, panel unduhan menempel di tombol Unduh (foto 76x76, tombol 32x32, warna Mori)
 - **Fitur:**
   - tambah foto per slot (klik slot kosong) atau banyak sekaligus
@@ -80,4 +79,4 @@ Karena keduanya dari definisi yang sama, tampilan di layar dan file hasil unduha
 tidak mungkin berbeda. Kalau tata letak diubah, cukup ubah `LAYOUTS` — jangan
 menyalin koordinat ke tempat lain.
 
-> Untuk AI lain: edit langsung `grid/grid.html`. Menu di `../index.html` (`href: "public/grid/grid.html"`) sudah pas.
+> Untuk AI lain: edit langsung `grid/grid.html`. Menu di `../index.html` (`href: "grid/grid.html"`) sudah pas.

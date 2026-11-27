@@ -6,7 +6,7 @@ PWA menu (Supabase). Entry `index.html` → `public/` modules. Start `start.bat`
 .
 ├─ index.html              # grid utama (import → src/js/image-loader.js, assets/)
 ├─ index/                  # dokumentasi khusus index.html (PRD-index.md, README-index.md)
-├─ grid/                   # dokumentasi khusus menu GRID (PRD-grid.md, README-grid.md)
+├─ grid/                   # modul GRID mandiri + dokumentasinya (grid.html, image-index.jpg, PRD-grid.md, README-grid.md)
 ├─ manifest.json           # PWA (start_url ./index.html)
 ├─ memos.html · note.html  # shim redirect
 ├─ assets/images/     # ikon & thumb grid (1.jpg/1.png per folder)
@@ -25,7 +25,7 @@ PWA menu (Supabase). Entry `index.html` → `public/` modules. Start `start.bat`
 │  ├─ daily-task/          # daily-task.html + utility/ (hari/minggu/bulan)
 │  ├─ plano/               # plano/index.html + admin.html + shelving/rak/ (57 rak)
 │  ├─ stok-opname/         # ex pastry-bakpau (stock.html)
-│  └─ mori/ note/ exp/ musnah/ ofo/ grid/ link/ ... # modul standalone
+│  └─ mori/ note/ exp/ musnah/ ofo/ link/ ... # modul standalone (GRID pindah ke grid/)
 ├─ scripts/{build,sync,lib,templates,utils,archive,download}/
 ├─ docs/SETUP_SUPABASE.md
 ├─ data/recipes/
