@@ -8,7 +8,7 @@ dengan README proyek keseluruhan di `README.md`.
 
 | File | Isi |
 |---|---|
-| `prd-index.md` | Spesifikasi final UI: header bar, pop-up notifikasi, variabel tema, grid menu, dan keputusan modul terkait. |
+| `PRD-index.md` | Spesifikasi final UI: header bar, pop-up notifikasi, variabel tema, grid menu, dan keputusan modul terkait. |
 | `PLAN-index.md` | Rencana / TODO singkat untuk pengembangan index selanjutnya. |
 
 ## File terkait di luar folder ini
@@ -20,6 +20,6 @@ dengan README proyek keseluruhan di `README.md`.
 
 ## Aturan
 
-- Setiap perubahan UI yang sudah final **wajib** dicatat di `prd-index.md`
+- Setiap perubahan UI yang sudah final **wajib** dicatat di `PRD-index.md`
   supaya keputusan nggak hilang.
 - Setiap perubahan selesai langsung di-commit + push ke `origin/main`.

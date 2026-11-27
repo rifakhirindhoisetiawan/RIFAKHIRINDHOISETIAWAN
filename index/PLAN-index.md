@@ -1,7 +1,7 @@
 # Rencana / TODO — index.html
 
 Catatan rencana ringkas. Centang setelah selesai dan pindahkan detail finalnya
-ke `prd-index.md`.
+ke `PRD-index.md`.
 
 ## Selesai
 
@@ -21,5 +21,5 @@ ke `prd-index.md`.
 
 ## Catatan
 
-- Jangan mengubah `prd-index.md` tanpa mencatat alasannya di sini atau di commit message.
+- Jangan mengubah `PRD-index.md` tanpa mencatat alasannya di sini atau di commit message.
 - Referensi tema utama: `public/stok-opname/stock-admin.html`.
