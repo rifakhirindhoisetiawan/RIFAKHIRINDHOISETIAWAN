@@ -614,9 +614,50 @@
         border-color: var(--mori-text);
       }
 
+
+      /* Splash full-screen (HP) — foto aplikasi tampil penuh layar sebelum masuk index */
+      #splashScreen {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        background: var(--mori-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.35s ease;
+      }
+      #splashScreen img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      #splashScreen.selesai {
+        opacity: 0;
+        pointer-events: none;
+      }
     </style>
   </head>
   <body>
+    <div id="splashScreen" aria-hidden="true">
+      <img src="assets/images/logo/icon-192x192.png" alt="" />
+    </div>
+    <script>
+      (function () {
+        var s = document.getElementById('splashScreen');
+        if (!s) return;
+        var sudah = false;
+        function tutup() {
+          if (sudah) return;
+          sudah = true;
+          s.classList.add('selesai');
+          setTimeout(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 400);
+        }
+        if (document.readyState === 'complete') setTimeout(tutup, 900);
+        else window.addEventListener('load', function () { setTimeout(tutup, 900); });
+        setTimeout(tutup, 2500);
+      })();
+    </script>
     <div class="container">
       <div class="search-wrapper">
         <div class="search-box" style="flex:1;min-width:0">

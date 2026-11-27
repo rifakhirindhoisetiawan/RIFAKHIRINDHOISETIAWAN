@@ -87,6 +87,14 @@ dan konstanta manifest `ICON192`/`ICON512`), `memos.html`, dan notifikasi
 `public/exp/exp.html`. Logo landing Mori (`app-mori/landing/assets/logo.png`)
 tetap di folder landing tersebut.
 
+## 3b. Splash Screen HP (index.html)
+
+- Saat `index.html` dibuka, langsung tampil overlay **full-screen** `#splashScreen`
+  (`position:fixed; inset:0; z-index:10000`) berisi foto
+  `assets/images/logo/icon-192x192.png` dengan `object-fit:cover` (penuh layar HP).
+- Hilang otomatis setelah `window.load` + 900ms (fallback 2500ms kalau load gagal),
+  fade `opacity 0.35s` lalu elemen dihapus dari DOM. Jangan dikasih tombol close.
+
 ## 4. Menu Utama (grid tile dalam frame tabel)
 
 - **Seluruh menu dibungkus frame tabel** ala Admin Stok Opname
