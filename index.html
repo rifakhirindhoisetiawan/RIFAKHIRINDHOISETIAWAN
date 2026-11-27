@@ -641,13 +641,16 @@
   </head>
   <body>
     <div id="splashScreen" aria-hidden="true">
-      <img src="assets/images/logo/icon-192x192.png" alt="" />
+      <img src="assets/images/logo/icon-1024x1024.png?v=2" alt="" />
     </div>
     <script>
       (function () {
         var s = document.getElementById('splashScreen');
         if (!s) return;
-        varapk = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+        var standalone = window.matchMedia('(display-mode: standalone)').matches;
+        var fullscreen = window.matchMedia('(display-mode: fullscreen)').matches;
+        var minimal = window.matchMedia('(display-mode: minimal-ui)').matches;
+        var varapk = standalone || fullscreen || minimal || navigator.standalone === true;
         if (!varapk) { s.parentNode.removeChild(s); return; }
         var sudah = false;
         function tutup() {
