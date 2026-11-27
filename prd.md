@@ -89,9 +89,11 @@ tetap di folder landing tersebut.
 
 ## 3b. Splash Screen HP (index.html)
 
-- Saat `index.html` dibuka, langsung tampil overlay **full-screen** `#splashScreen`
-  (`position:fixed; inset:0; z-index:10000`) berisi foto
-  `assets/images/logo/icon-192x192.png` dengan `object-fit:cover` (penuh layar HP).
+- Overlay **full-screen** `#splashScreen` (`position:fixed; inset:0; z-index:10000`)
+  berisi foto `assets/images/logo/icon-192x192.png` dengan `object-fit:cover`.
+- **HANYA muncul saat aplikasi dibuka sebagai APK/PWA terpasang** — deteksi
+  `window.matchMedia('(display-mode: standalone)').matches || navigator.standalone`.
+  Kalau dibuka biasa di browser (`index.html`), splash langsung dihapus.
 - Hilang otomatis setelah `window.load` + 900ms (fallback 2500ms kalau load gagal),
   fade `opacity 0.35s` lalu elemen dihapus dari DOM. Jangan dikasih tombol close.
 

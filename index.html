@@ -646,6 +646,8 @@
       (function () {
         var s = document.getElementById('splashScreen');
         if (!s) return;
+        varapk = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+        if (!varapk) { s.parentNode.removeChild(s); return; }
         var sudah = false;
         function tutup() {
           if (sudah) return;
