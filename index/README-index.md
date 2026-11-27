@@ -9,7 +9,6 @@ dengan README proyek keseluruhan di `README.md`.
 | File | Isi |
 |---|---|
 | `PRD-index.md` | Spesifikasi final UI: header bar, pop-up notifikasi, variabel tema, grid menu, dan keputusan modul terkait. |
-| `PLAN-index.md` | Rencana / TODO singkat untuk pengembangan index selanjutnya. |
 
 ## File terkait di luar folder ini
 
