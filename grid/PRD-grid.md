@@ -42,7 +42,9 @@ keputusan tidak hilang. Detail teknis ada di `README-grid.md`.
   `areaToRect()` dari definisi yang sama. Kalau tata letak diubah, cukup ubah
   `LAYOUTS` — jangan menyalin koordinat ke tempat lain.
 - Edit langsung `grid/grid.html`; entri di `index.html`
-  (`href: "grid/grid.html"`) sudah pas, jangan diubah.
+  (`href: "grid/grid.html"`, `thumb: "grid/image-index.jpg"`) sudah pas.
+- Fallback thumbnail di `src/js/image-loader.js` (`loadJaDiPhoto`) pakai
+  `../../grid/image-index.jpg` — jangan dikembalikan ke `public/grid/`.
 
 ## Alur kerja
 

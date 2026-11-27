@@ -168,9 +168,9 @@ export async function loadJaDiPhoto(slug, tileEl) {
     const altUrls = generateUrls(altFolder);
     workingUrl = await findFirstWorkingUrl(altUrls);
   }
-  // Fallback terakhir ke thumbnail grid (pindah ke grid/image-index.jpg)
+  // Fallback terakhir ke thumbnail grid (sekarang di root: grid/image-index.jpg)
   if (!workingUrl) {
-    const defUrl = '../grid/image-index.jpg';
+    const defUrl = '../../grid/image-index.jpg';
     workingUrl = await loadSingleImage(defUrl).then(() => defUrl, () => null);
   }
   
