@@ -13,6 +13,8 @@ keputusan tidak hilang. Detail teknis ada di `README-grid.md`.
 
 - Bingkai grid responsif, panel unduhan menempel di tombol Unduh
   (foto 76×76, tombol 32×32, warna Mori).
+- Tombol toolbar pakai garis **1.5px `rgba(26,25,23,.3)`** (sama dengan garis
+  tabel), radius 8px — bukan garis tipis `--mori-line`.
 
 ## Fitur
 
