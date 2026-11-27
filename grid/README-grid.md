@@ -11,8 +11,19 @@ Dokumentasi khusus menu **GRID**. File related lain ada di sini:
 
 Folder ini berisi fitur **Photo Grid** — modul mandiri (satu file HTML, tanpa build step).
 
+## UI final (keputusan terakhir)
+
+- Judul halaman cukup **GRID** (tanpa "Photo Grid").
+- Tombol toolbar: garis **1.5px rgba(26,25,23,.3)**, radius 8px, **tidak goyang**
+  saat diklik (tanpa `transform: translate`).
+- Angka stepper pakai **Inter** bold + `letter-spacing:1px` (sama seperti
+  label menu di `index.html`), bukan JetBrains Mono.
+- Panel unduhan di-center horizontal, 18px di bawah toolbar, **tanpa panah**
+  (panah dinonaktifkan karena panel tidak lagi di bawah tombol Unduh).
+- Detail lengkap ada di `PRD-grid.md`.
+
 - **File utama:** `grid/grid.html` — dibuka dari menu GRID di `index.html`
-- **UI:** bingkai grid responsif, panel unduhan menempel di tombol Unduh (foto 76x76, tombol 32x32, warna Mori)
+- **UI:** bingkai grid responsif, panel unduhan **di-center horizontal 18px di bawah toolbar** (foto 76x76, tombol 32x32, warna Mori)
 - **Fitur:**
   - tambah foto per slot (klik slot kosong) atau banyak sekaligus
   - drag reorder antar slot (ambang 8px, ada bayangan/ghost + penanda target)
