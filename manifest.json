@@ -7,5 +7,10 @@
   "orientation": "portrait",
   "background_color": "#fffbf2",
   "theme_color": "#fffbf2",
-  "description": "My Love"
+  "description": "My Love",
+  "icons": [
+    { "src": "assets/images/logo/icon-192x192.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any" },
+    { "src": "assets/images/logo/icon-512x512.png", "sizes": "1024x1024", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/images/logo/icon-1024x1024.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any" }
+  ]
 }

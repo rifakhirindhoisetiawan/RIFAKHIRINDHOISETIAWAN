@@ -85,7 +85,12 @@ mudah di-maintenance (jangan ditaruh langsung di `assets/images/`):
 
 Semua referensi sudah di-update: `index.html` (link favicon, apple-touch-icon,
 dan konstanta manifest `ICON192`/`ICON512`), `memos.html`, dan notifikasi
-`public/exp/exp.html`. Logo landing Mori (`app-mori/landing/assets/logo.png`)
+`public/exp/exp.html`.
+
+**Penting:** semua file ikon sekarang berisi gambar 1024×1024 (uploadan user),
+jadi atribut `sizes` di `<link>` dan di manifest **harus `1024x1024`** — kalau
+masih `192x192`/`512x512`, Chrome menolak ikon saat install PWA dan pakai ikon
+default. `manifest.json` di root juga sudah diberi daftar `icons`. Logo landing Mori (`app-mori/landing/assets/logo.png`)
 tetap di folder landing tersebut.
 
 ## 3b. Splash Screen HP (index.html)
