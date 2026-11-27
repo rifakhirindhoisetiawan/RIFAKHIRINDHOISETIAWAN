@@ -17,6 +17,8 @@ keputusan tidak hilang. Detail teknis ada di `README-grid.md`.
   tabel), radius 8px — bukan garis tipis `--mori-line`.
 - Saat diklik tombol **tidak bergeser/goyang** — efek `:active` hanya ubah
   warna latar, `transform: translate(2px,2px)` dilarang.
+- Angka stepper pakai font **Inter** (bukan `--mori-mono`), weight 700,
+  `letter-spacing: 1px` — sama seperti label nama menu di `index.html`.
 
 ## Fitur
 
