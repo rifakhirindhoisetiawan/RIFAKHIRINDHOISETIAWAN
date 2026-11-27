@@ -364,7 +364,7 @@
          selalu muncul tepat di bawah tombolnya, bukan di sudut layar.
          Aman saat layar diputar karena posisi dihitung ulang tiap kali
          panel dibuka. */
-      .download-bubble-container{position:fixed;z-index:1050;display:flex;flex-direction:column;align-items:flex-start;pointer-events:none}
+      .download-bubble-container{position:absolute;z-index:1050;display:flex;flex-direction:column;align-items:flex-start;pointer-events:none}
       .download-bubble-container.visible{pointer-events:auto}
       /* Panelnya ikut mengalir di dalam container (bukan absolute),
          karena container-nya sendiri yang diposisikan ke tombol Unduh.
@@ -1763,21 +1763,18 @@
          diputar atau tombol pindah tempat. */
       function posisikanPanel() {
         const r = el.downloadBtn.getBoundingClientRect();
-        const w = el.dropup.offsetWidth || 320;
+        const w = el.dropup.offsetWidth || 196;
         const cx = r.left + r.width / 2;
-        let left = r.left;
-        /* Titik panah minimal 20px dari tepi kiri/kanan panel supaya tidak
-           masuk sudut melengkung panel. */
-        if (left > cx - 20) left = cx - 20;
-        if (left + w < cx + 20) left = cx + 20 - w;
-        /* Jangan keluar kanan layar. */
-        if (left + w > window.innerWidth - 12) left = window.innerWidth - w - 12;
-        if (left < 12) left = 12;
-        el.bubble.style.left = left + "px";
-        el.bubble.style.top = r.bottom + 8 + "px";
-        /* Panah panel menunjuk ke tengah tombol Unduh; titik itu juga
-           dipakai sebagai transform-origin supaya animasi buka terlihat
-           keluar dari tombolnya. */
+        /* Pola pop-up index.html: panel di-RATA KANAN ke tombol, bukan
+           segaris tepat di bawahnya. Jadi panel menjulur ke kiri dari
+           tombol Unduh. */
+        let right = Math.max(12, Math.round(window.innerWidth - r.right));
+        if (right + w > window.innerWidth - 12) right = 12;
+        const left = window.innerWidth - right - w;
+        el.bubble.style.left = "auto";
+        el.bubble.style.right = right + "px";
+        el.bubble.style.top = Math.round(r.bottom + window.scrollY + 8) + "px";
+        /* Panah tetap menunjuk ke tengah tombol Unduh. */
         let arrowX = cx - left;
         arrowX = Math.max(20, Math.min(w - 20, arrowX));
         el.bubble.style.setProperty("--arrow-x", arrowX + "px");
