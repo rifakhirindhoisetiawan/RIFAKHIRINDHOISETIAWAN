@@ -5,7 +5,8 @@ PWA menu (Supabase). Entry `index.html` → `public/` modules. Start `start.bat`
 ```
 .
 ├─ index.html              # grid utama (import → src/js/image-loader.js, assets/)
-├─ index/                  # dokumentasi khusus index.html (PRD-index.md, README-index.md, )
+├─ index/                  # dokumentasi khusus index.html (PRD-index.md, README-index.md)
+├─ grid/                   # dokumentasi khusus menu GRID (PRD-grid.md, README-grid.md)
 ├─ manifest.json           # PWA (start_url ./index.html)
 ├─ memos.html · note.html  # shim redirect
 ├─ assets/images/     # ikon & thumb grid (1.jpg/1.png per folder)

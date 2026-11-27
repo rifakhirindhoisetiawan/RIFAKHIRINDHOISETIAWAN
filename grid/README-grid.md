@@ -1,5 +1,15 @@
 # Folder GRID
 
+Dokumentasi khusus menu **GRID**. File related lain ada di sini:
+
+| File | Isi |
+|---|---|
+| `PRD-grid.md` | Spesifikasi final UI & fitur (acuan keputusan). |
+| `README-grid.md` | Detail teknis struktur kode & cara potong foto (file ini). |
+
+Module HTML-nya tetap di `public/grid/grid.html`, gambar thumbnail di
+`public/grid/image-index.jpg`.
+
 Folder ini berisi fitur **Photo Grid** — modul mandiri (satu file HTML, tanpa build step).
 
 - **File utama:** `grid/grid.html` — dibuka dari menu GRID di `index.html` (`public/grid/grid.html`)
